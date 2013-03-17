@@ -97,7 +97,7 @@ public class Requirement {
 
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
-		this.log = new LinkedList<>();
+		this.log = new LinkedList<String>();
 	}
 
 	/**
