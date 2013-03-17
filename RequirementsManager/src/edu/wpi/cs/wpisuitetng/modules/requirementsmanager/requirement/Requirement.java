@@ -26,7 +26,7 @@ public class Requirement implements Model {
 
 	// TODO: Reorganize these to make sense
 	private String name;
-	final private int rUID; // Requirement Unique ID
+	private int rUID; // Requirement Unique ID
 	private String description;
 	private int releaseNum = 0; // TODO: Implement Releases
 	private Type type;
@@ -40,17 +40,29 @@ public class Requirement implements Model {
 	private List<Integer> pUID; // Parent unique ID's
 	private List<String> log;
 	private Status status;
-
-	// Static UID field and UID generator
-	private static int UID = 0;
-
+	
 	/**
-	 * Gets the next unique id.
-	 * 
-	 * @return The next unique id.
+	 * Creates a new Requirement, with default values.
 	 */
-	private static int getUID() {
-		return ++UID;
+	public Requirement() {
+		//TODO double-check if these are the right default values
+
+		// Assign all inputs
+		this.name = ""; // TODO: Support length checking, should throw an
+							// exception
+		this.description = "";
+		this.releaseNum = 0;
+		this.type = Type.BLANK;
+		this.subRequirements = new LinkedList<Integer>();
+		this.notes = new LinkedList<String>();
+		this.iteration = 0;
+		this.effort = 0;
+		this.tID = new LinkedList<Integer>();
+		this.pUID = new LinkedList<Integer>();
+
+		// Set the task to new, and create a new linked list for the log
+		this.status = Status.NEW;
+		this.log = new LinkedList<String>();
 	}
 
 	/**
@@ -84,7 +96,6 @@ public class Requirement implements Model {
 			Type type, List<Integer> subRequirements, List<String> notes,
 			int iteration, int effort, List<Integer> tID, List<Integer> pUID) {
 		// Get the next UID for this requirement
-		rUID = getUID();
 
 		// Assign all inputs
 		this.name = name; // TODO: Support length checking, should throw an
@@ -270,19 +281,21 @@ public class Requirement implements Model {
 	public void addNote(String note) {
 		this.notes.add(note);
 	}
-	
+
 	/**
 	 * Remove the given note from the list of notes
-	 * @param note the note to remove
+	 * 
+	 * @param note
+	 *            the note to remove
 	 * @return True if the note in the list, false otherwise
 	 */
-	public boolean removeNote(String note){
+	public boolean removeNote(String note) {
 		return this.notes.remove(note);
 	}
 
 	/**
-	 * Gets the iteration for this requirement.
-	 * TODO: Is this actually going to be an int?
+	 * Gets the iteration for this requirement. TODO: Is this actually going to
+	 * be an int?
 	 * 
 	 * @return the iteration
 	 */
@@ -291,8 +304,7 @@ public class Requirement implements Model {
 	}
 
 	/**
-	 * Sets the current iteration
-	 * TODO: Is this actually going to be an int
+	 * Sets the current iteration TODO: Is this actually going to be an int
 	 * 
 	 * @param iteration
 	 *            the iteration to set
@@ -338,24 +350,27 @@ public class Requirement implements Model {
 	public void settID(List<Integer> tID) {
 		this.tID = tID;
 	}
-	
+
 	/**
 	 * Adds a given team id number to the list of id's
+	 * 
 	 * @param id
 	 */
-	public void addTID(int id){
+	public void addTID(int id) {
 		this.tID.add(id);
 	}
 
 	/**
 	 * Removes the given team member id from the list
-	 * @param id the ID to remove
+	 * 
+	 * @param id
+	 *            the ID to remove
 	 * @return True if the ID was in the list, false otherwise
 	 */
-	public boolean removeTID(int id){
+	public boolean removeTID(int id) {
 		return this.tID.remove(id) != null;
 	}
-	
+
 	/**
 	 * Returns the list of parent requirements
 	 * 
@@ -374,21 +389,25 @@ public class Requirement implements Model {
 	public void setpUID(List<Integer> pUID) {
 		this.pUID = pUID;
 	}
-	
+
 	/**
 	 * Adds the given parent UID to the list of pUID's
-	 * @param id the id to add
+	 * 
+	 * @param id
+	 *            the id to add
 	 */
-	public void addPUID(int id){
+	public void addPUID(int id) {
 		this.pUID.add(id);
 	}
-	
+
 	/**
 	 * Removes the given parent from the list of parents
-	 * @param id the ID to remove
+	 * 
+	 * @param id
+	 *            the ID to remove
 	 * @return if the ID was in the list or not
 	 */
-	public boolean removePUID(int id){
+	public boolean removePUID(int id) {
 		return this.pUID.remove(id) != null;
 	}
 
@@ -402,8 +421,8 @@ public class Requirement implements Model {
 	}
 
 	/**
-	 * Sets the log.  This really should never be called.
-	 * TODO: Determine if this should even exist
+	 * Sets the log. This really should never be called. TODO: Determine if this
+	 * should even exist
 	 * 
 	 * @param log
 	 *            the log to set
@@ -411,12 +430,13 @@ public class Requirement implements Model {
 	public void setLog(List<String> log) {
 		this.log = log;
 	}
-	
+
 	/**
 	 * Add the given log to the list of logs
+	 * 
 	 * @param log
 	 */
-	public void addLog(String log){
+	public void addLog(String log) {
 		this.log.add(log);
 	}
 
@@ -440,7 +460,7 @@ public class Requirement implements Model {
 	}
 
 	/**
-	 * Gets the UID of the requirement
+	 * Gets the rUID of the requirement
 	 * 
 	 * @return the rUID
 	 */
@@ -448,16 +468,26 @@ public class Requirement implements Model {
 		return rUID;
 	}
 
+	/**
+	 * Sets the rUID of the requirement
+	 * 
+	 * @param id
+	 *            the id number to set rUID to
+	 */
+	public void setrUID(int id) {
+		rUID = id;
+	}
+
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -475,7 +505,7 @@ public class Requirement implements Model {
 	@Override
 	public void setPermission(Permission p, User u) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
