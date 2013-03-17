@@ -3,6 +3,7 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
@@ -28,7 +29,8 @@ public class JanewayModule implements IJanewayModule {
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
-		return null;
+		//return an empty list of tabs, for now
+		return new ArrayList<JanewayTabModel>();
 	}
 
 }
