@@ -8,6 +8,10 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.Permission;
+import edu.wpi.cs.wpisuitetng.modules.Model;
+import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 
@@ -18,7 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
  * @author Fredric
  * 
  */
-public class Requirement {
+public class Requirement implements Model {
 
 	// TODO: Reorganize these to make sense
 	private String name;
@@ -442,5 +446,46 @@ public class Requirement {
 	 */
 	public int getrUID() {
 		return rUID;
+	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Boolean identify(Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Permission getPermission(User u) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPermission(Permission p, User u) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Project getProject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProject(Project p) {
+		// TODO Auto-generated method stub
 	}
 }
