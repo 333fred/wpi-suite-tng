@@ -38,7 +38,7 @@ public class JanewayModuleTest {
 	 */
 	@Test
 	public void testTabModel() {
-		List<JanewayTabModel> model = module.getTabs();
+		// TODO: Neet to actually determine what to test
 	}
 
 }
