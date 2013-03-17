@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modues.requirementsmanager;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
 import static org.junit.Assert.assertEquals;
 
