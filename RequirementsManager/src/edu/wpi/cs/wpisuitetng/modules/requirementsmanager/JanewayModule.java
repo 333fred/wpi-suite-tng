@@ -24,10 +24,10 @@ public class JanewayModule implements IJanewayModule {
 
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
+	 * TODO: Implement This
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
