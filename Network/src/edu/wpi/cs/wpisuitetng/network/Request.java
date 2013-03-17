@@ -114,6 +114,8 @@ public class Request extends RequestModel {
 
 		RequestActor requestActor = new RequestActor(this);
 
+		System.out.println("Asychronous: " + isAsynchronous);
+		
 		if (isAsynchronous) {
 			requestActor.start();
 		}

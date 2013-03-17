@@ -54,6 +54,7 @@ public class RequestActor extends Thread {
 		
 		try {
 			// setup connection
+			System.out.println("Opening Connection");
 			connection = (HttpURLConnection) request.getUrl().openConnection();
 			connection.setConnectTimeout(request.getConnectTimeout());
 			connection.setReadTimeout(request.getReadTimeout());
@@ -61,6 +62,7 @@ public class RequestActor extends Thread {
 			connection.setDoInput(true);
 			connection.setRequestProperty("Connection", "close");
 			
+			System.out.println("Opened Connection");
 			// set request headers
 			for (String requestHeaderKey : request.getHeaders().keySet()) {
 				for (String requestHeaderValue : request.getHeaders().get(requestHeaderKey)) {
@@ -104,6 +106,7 @@ public class RequestActor extends Thread {
 			}
 			catch (IOException e) {
 				// do nothing, received a 400, or 500 status code
+				System.out.println("Caught Exception");
 			}
 			
 			// get the response headers
