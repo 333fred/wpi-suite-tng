@@ -15,7 +15,7 @@ import edu.wpi.cs.wpisuitetng.modules.postboard.view.BoardPanel;
 public class MainView extends JPanel {
 
 	/** The panel containing the post board */
-	private final DetailView detailView;
+	private DetailView detailView;
 	
 	/**
 	 * Construct the panel.

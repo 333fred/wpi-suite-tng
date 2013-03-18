@@ -19,7 +19,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
  * 
  */
 public class Requirement {
-
 	// TODO: Reorganize these to make sense
 	private String name;
 	final private int rUID; // Requirement Unique ID
