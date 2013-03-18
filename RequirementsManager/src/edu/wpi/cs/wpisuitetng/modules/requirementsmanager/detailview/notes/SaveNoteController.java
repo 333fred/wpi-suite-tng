@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes;
 
 import javax.swing.JOptionPane;
 
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Comment;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 
@@ -33,9 +34,10 @@ public class SaveNoteController {
 	public void savenote() {
 		final String noteText = view.getnoteField().getText();
 		if (noteText.length() > 0) {
-			this.model.addNote(noteText);
+			this.model.addNote(new Note(noteText));
 			//TODO: Display the note in the main frame
 			JOptionPane.showMessageDialog(parentView, "You're note: "+noteText, "You Added A Note! Oh Boy!", JOptionPane.OK_OPTION);
+			parentView.getNoteList().addElement(noteText);
 		}
 	}
 }

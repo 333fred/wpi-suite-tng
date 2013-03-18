@@ -5,6 +5,11 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview;
 
 import java.awt.*;
 import javax.swing.*;
+
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.defect.defectevents.model.DefectEventListModel;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.NoteList;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 /**
  * @author Alex Woodyard
  *
@@ -16,9 +21,18 @@ public class DetailView extends JPanel{
 	private JTextField name;
 	private JLabel nameLabel;
 	
+	/** The data model for the list */
+	protected DefaultListModel noteList;
+	protected JList notes;
+	private Requirement model;
 	
-	
-	public DetailView(DetailView detailView){
+	public DetailView(DetailView detailView, Requirement model){
+		this.model = model;
+		
+		noteList = new DefaultListModel();
+		notes = new JList(noteList);
+		//JScrollPane notePane = new JScrollPane(notes);
+		
 		top = new JPanel();
 		bottom = new JPanel();
 		//next two lines are temporary fillers for the time being.  
@@ -39,9 +53,7 @@ public class DetailView extends JPanel{
 		
 		//add the ok button to the bottom panel
 		bottom.add(ok);
-		
-		
-		
+				
 		
 		//uncomment these lines when ready to add the notes module and the module
 		// that has the description, status, etc
@@ -54,5 +66,15 @@ public class DetailView extends JPanel{
 		add(left, BorderLayout.WEST);
 		add(right, BorderLayout.EAST);
 		
+		
+		add(notes); //This is for displaying the notes
+	}
+	
+	public DefaultListModel getNoteList() {
+		return noteList;
+	}
+	
+	public Requirement getModel() {
+		return this.model; //TODO: Make sure the Requirement member is in here
 	}
 }
