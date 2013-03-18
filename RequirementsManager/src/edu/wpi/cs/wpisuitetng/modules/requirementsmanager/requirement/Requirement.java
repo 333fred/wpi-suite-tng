@@ -136,6 +136,21 @@ public class Requirement implements Model {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, Requirement[].class);
 	}
+	
+	/**
+	 * method to construct a short string describing this Requirement
+	 * suitable for use in a list view
+	 * @return a short summary of this Requirement
+	 */
+	public String toListString(){
+		
+		// TODO: determine what else to add to this method, if anything
+		String listString = new String();	// the variable to hold the summary
+		listString = listString.concat(this.name + " ");	// add this Requirement's name
+		
+		return listString;
+		
+	}
 
 	/**
 	 * @return the name
@@ -405,8 +420,7 @@ public class Requirement implements Model {
 	 * Sets the log.  This really should never be called.
 	 * TODO: Determine if this should even exist
 	 * 
-	 * @param log
-	 *            the log to set
+	 * @param log the log to set
 	 */
 	public void setLog(List<String> log) {
 		this.log = log;
@@ -414,7 +428,7 @@ public class Requirement implements Model {
 	
 	/**
 	 * Add the given log to the list of logs
-	 * @param log
+	 * @param log the log to add
 	 */
 	public void addLog(String log){
 		this.log.add(log);
@@ -423,7 +437,7 @@ public class Requirement implements Model {
 	/**
 	 * Gets the current status of the requirement
 	 * 
-	 * @return the status
+	 * @return the status object of the requirement
 	 */
 	public Status getStatus() {
 		return status;
@@ -432,8 +446,7 @@ public class Requirement implements Model {
 	/**
 	 * Sets the status of the requirement
 	 * 
-	 * @param status
-	 *            the status to set
+	 * @param status the status to set
 	 */
 	public void setStatus(Status status) {
 		this.status = status;
