@@ -1,6 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers;
 
-import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -15,10 +14,14 @@ import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
 
 public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	Data db;
+	RequirementValidator validator;
+
 
 	/**
 	 * Create a RequirementsEntityManager
@@ -28,6 +31,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 */
 	public RequirementsEntityManager(Data data) {
 		db = data;
+		validator = new RequirementValidator(db);
 	}
 	
 	//TODO testing - these are basically copied from DefectManager right now so they might not fully apply
@@ -38,7 +42,16 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		
 		final Requirement newRequirement = Requirement.fromJSON(content);
 		
-		newRequirement.setrUID(Count()+1); //we have to set the 
+		newRequirement.setrUID(Count()+1); //we have to set the UID
+		
+		List<ValidationIssue> issues = validator.validate(s, newRequirement);
+		if(issues.size() > 0) {
+			// TODO: pass errors to client through exception
+			for (ValidationIssue issue : issues) {
+				System.out.println("Validation issue: " + issue.getMessage());
+			}
+			throw new BadRequestException();
+		}
 
 		if (!db.save(newRequirement, s.getProject())) {
 			throw new WPISuiteException();
