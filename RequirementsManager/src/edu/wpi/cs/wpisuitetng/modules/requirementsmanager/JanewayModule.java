@@ -13,8 +13,6 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
  *
  */
 public class JanewayModule implements IJanewayModule {
-
-	// test comment
 	
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
