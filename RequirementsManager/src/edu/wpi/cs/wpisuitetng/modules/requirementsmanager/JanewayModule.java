@@ -3,6 +3,7 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
@@ -14,6 +15,9 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
  */
 public class JanewayModule implements IJanewayModule {
 
+	//temporarilly does nothing to get rid of the NullPointer
+	List<JanewayTabModel> tabs = new ArrayList<JanewayTabModel>();
+	
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
 	 */
@@ -28,7 +32,7 @@ public class JanewayModule implements IJanewayModule {
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
-		return null;
+		return tabs;
 	}
 
 }

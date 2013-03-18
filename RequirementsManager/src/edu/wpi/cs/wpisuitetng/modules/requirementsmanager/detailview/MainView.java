@@ -5,9 +5,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview;
 
 import javax.swing.JPanel;
 
-import edu.wpi.cs.wpisuitetng.modules.postboard.model.PostBoardModel;
-import edu.wpi.cs.wpisuitetng.modules.postboard.view.BoardPanel;
-
 /**
  * @author Alex
  *
