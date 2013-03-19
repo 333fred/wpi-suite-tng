@@ -13,7 +13,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.Note;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Note;
 
 /**
  * This is the basic requirement model. It contains all the fields that can be
@@ -29,9 +29,6 @@ public class Requirement extends AbstractModel {
 	private int rUID; // Requirement Unique ID
 	private String description;
 	private Type type;
-	private List<Integer> subRequirements;
-	private List<Note> notes;
-	private int iteration = 0; // TODO: Implement Iterations
 	private Status status;
 	// Date and scheduling attributes
 	private int releaseNum; // TODO: Implement Releases
@@ -118,10 +115,6 @@ public class Requirement extends AbstractModel {
 		this.log = new LinkedList<Log>();
 	}
 
-	public Requirement() {
-		// TODO Auto-generated constructor stub
-		rUID = getUID();
-	}
 
 	/**
 	 * Converts this Requirement to a JSON string.
