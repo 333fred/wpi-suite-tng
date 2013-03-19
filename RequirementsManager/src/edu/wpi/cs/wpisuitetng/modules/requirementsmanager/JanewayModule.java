@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.TabController;
 
 /**
  * @author Fredric
@@ -25,6 +27,12 @@ public class JanewayModule implements IJanewayModule {
 	/** The list view that will display the requirements	 */
 	private RequirementListView requirementListView;
 	
+	/** The main view of the module that displays the tabs */
+	private MainTabView tabView;
+	
+	/** The tab controller for tabView */
+	private TabController tabController;
+	
 	/** Creates a new instance of JanewayModule, initializing the tabs to be displayed
 	 * 
 	 */
@@ -36,8 +44,17 @@ public class JanewayModule implements IJanewayModule {
 		//initialize the requirements list view
 		requirementListView = new RequirementListView();
 		
-		//create a new JanewayTabModel, passing in the requirements view, and a new JPanel as the toolbar
-		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), new JPanel(), requirementListView);
+		//initialize the tab view public void insertTab(String title, Icon icon, Component component, String tip, int index) {
+		tabView = new MainTabView();
+		
+		//initialize TabController
+		tabController = new TabController(tabView);
+		
+		tabController.addTab("Requirements List", new ImageIcon(), requirementListView, "The list of requirements");
+		
+		
+		//create a new JanewayTabModel, passing in the tab view, and a new JPanel as the toolbar
+		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), new JPanel(), tabView);
 		
 		//add the tab to the list of tabs
 		tabs.add(tab1);

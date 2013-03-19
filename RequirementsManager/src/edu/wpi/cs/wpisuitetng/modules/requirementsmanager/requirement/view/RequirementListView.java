@@ -2,7 +2,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -19,15 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
 public class RequirementListView extends JPanel {	
 
 	/** JList used to display a list of all the requirements */
-	private JList requirementsList;
-	/** Buttons panel used to hold the 3 buttons */
-	private JPanel buttonsPanel;
-	/** Create button used to open the tab to create a new requirement */
-	private JButton createButton;
-	/** Refresh button, refreshes the list of requirements */
-	private JButton refreshButton;
-	/** Refresh Button, opens the GUI to view a single requirement in detail */
-	private JButton viewButton;
+	private JList requirementsList;	
 	
 	/** List of string values that will be displayed in the list view, requirements[i].getName() for now */
 	private String[] listValues;	// TODO: remove or rename listValues, as it has been replaced by a local-scope variable in the constructor
@@ -43,31 +34,18 @@ public class RequirementListView extends JPanel {
 		
 		//initialize the listValues, preset values right now for testing
 		initialize();
+		/*
 		// retrieve Requirements from the server
 		Requirement[] requirements = getRequirementsFromServer();
 		// produce an array of Strings for viewing
 		String[] listValues = parseRequirements(requirements);
-	
+	*/
 		//set this JPanel to use a border layout
 		setLayout(new BorderLayout(0, 0));
 		
 		//initialize the requirements list
 		requirementsList= new JList(listValues);
 		add(requirementsList, BorderLayout.CENTER);
-		
-		//initialize the panel for holding the buttons, and add it to the main view
-		buttonsPanel = new JPanel();
-		add(buttonsPanel, BorderLayout.SOUTH);
-		
-		//initialize each of the buttons, then add them to the buttons pane
-		createButton = new JButton("Create");
-		buttonsPanel.add(createButton);				
-		
-		viewButton = new JButton("View");
-		buttonsPanel.add(viewButton);
-		
-		refreshButton = new JButton("Refresh");
-		buttonsPanel.add(refreshButton);
 		
 	}
 	
