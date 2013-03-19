@@ -9,13 +9,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-<<<<<<< HEAD
-import edu.wpi.cs.wpisuitetng.Permission;
-import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
-=======
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
->>>>>>> ef43a0f... Refactored Requirement to use lists of users, notes, and logs, instead of lists of ints and strings, respectively
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
@@ -27,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
  * @author Fredric
  * 
  */
-public class Requirement implements Model {
+public class Requirement extends AbstractModel {
 
 	// Requirement Attributes
 	private String name;
@@ -512,33 +506,6 @@ public class Requirement implements Model {
 	 */
 	@Override
 	public Boolean identify(Object o) {
-<<<<<<< HEAD
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Permission getPermission(User u) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPermission(Permission p, User u) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Project getProject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setProject(Project p) {
-		// TODO Auto-generated method stub
-=======
 		// Check to see if o is a requirement
 		if (!(o instanceof Requirement)) {
 			// If it isn't, check to see if it's an ID, and return true if it
@@ -551,6 +518,5 @@ public class Requirement implements Model {
 		} else {
 			return this.rUID == ((Requirement) o).rUID;
 		}
->>>>>>> ef43a0f... Refactored Requirement to use lists of users, notes, and logs, instead of lists of ints and strings, respectively
 	}
 }
