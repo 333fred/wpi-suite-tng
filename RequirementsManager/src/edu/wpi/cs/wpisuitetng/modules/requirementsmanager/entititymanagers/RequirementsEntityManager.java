@@ -13,8 +13,6 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.defect.DefectPanel.Mode;
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
