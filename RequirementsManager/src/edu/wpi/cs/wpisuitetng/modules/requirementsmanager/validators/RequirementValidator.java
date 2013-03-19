@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
  */
 public class RequirementValidator {
 
-	//private Data data;
+	private Data data;
 	private Requirement lastExistingRequirement;
 	
 	/**
@@ -33,23 +33,23 @@ public class RequirementValidator {
 	 * 
 	 * @param data The Data implementation to use
 	 */
-	/*	public RequirementValidator(Data data) {
+	public RequirementValidator(Data data) {
 		this.data = data;
-	}*/
+	}
 	
 	/**
 	 * @return the data
 	 */
-	/*public Data getData() {
+	public Data getData() {
 		return data;
-	}*/
+	}
 
 	/**
 	 * @param data the data to set
 	 */
-	/*public void setData(Data data) {
+	public void setData(Data data) {
 		this.data = data;
-	}*/
+	}
 
 	/**
 	 * Return the User with the given username if they already exist in the database.
@@ -104,7 +104,7 @@ public class RequirementValidator {
 	 */
 	
 	 //TODO: @param mode The mode to validate for
-	public List<ValidationIssue> validate(/*Session session, */Requirement requirement/*, Mode mode TODO: Implement different modes*/) throws WPISuiteException {
+	public List<ValidationIssue> validate(Session session, Requirement requirement/*, Mode mode TODO: Implement different modes*/) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(requirement == null) {
 			issues.add(new ValidationIssue("Requirement cannot be null"));

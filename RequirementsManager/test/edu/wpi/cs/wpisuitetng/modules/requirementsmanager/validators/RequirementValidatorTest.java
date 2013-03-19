@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
 /**
  * @author Jason
  *
@@ -39,10 +40,24 @@ public class RequirementValidatorTest {
 	
 	RequirementValidator validator;
 	Requirement goodRequirement;
+	Project testProject;
+	Session defaultSession;
+	String mockSsid;
+	Data db;
+	User testUser;
+
 	
 	@Before
 	public void init() {
-		validator = new RequirementValidator(); 
+		testUser = new User(null, "testUser", null, -1);
+		testProject = new Project("test", "1");
+		mockSsid = "abc123";
+		defaultSession = new Session(testUser, testProject, mockSsid);
+		db = new MockData(new HashSet<Object>());
+		db.save(testUser);
+
+		
+		validator = new RequirementValidator(db); 
 		goodRequirement = new Requirement();
 		goodRequirement.setName("Name");
 		goodRequirement.setDescription("A quality description");
@@ -51,12 +66,12 @@ public class RequirementValidatorTest {
 	@Test
 	public void testNull() {
 		Requirement r = null;
-		checkNumIssues(1, r);
+		checkNumIssues(1, r, defaultSession);
 	}
 	
 	@Test
 	public void testGood() {
-		checkNoIssues(goodRequirement);
+		checkNoIssues(goodRequirement, defaultSession);
 	}
 	
 	@Test
@@ -64,7 +79,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName(null);
 		r.setDescription("A quality description");
-		checkNumIssues(1, r);
+		checkNumIssues(1, r, defaultSession);
 	}
 	
 	@Test
@@ -72,7 +87,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName(new String(new char[101]));
 		r.setDescription("A quality description");
-		checkNumIssues(1, r);
+		checkNumIssues(1, r, defaultSession);
 	}
 	
 	@Test
@@ -80,7 +95,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription(null);
-		checkNumIssues(1, r);
+		checkNumIssues(1, r, defaultSession);
 	}
 	
 	@Test
@@ -88,7 +103,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r);
+		checkNumIssues(0, r, defaultSession);
 	}
 	
 	@Test
@@ -96,7 +111,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription(new String(new char[5001]));
-		checkNumIssues(1, r);
+		checkNumIssues(1, r, defaultSession);
 	}
 	
 	@Test
@@ -104,7 +119,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r);
+		checkNumIssues(0, r, defaultSession);
 		
 		assertEquals(r.getType(),Type.BLANK);
 	}
@@ -114,7 +129,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r);
+		checkNumIssues(0, r, defaultSession);
 		
 		assertEquals(r.getStatus(),Status.NEW);
 	}
@@ -124,7 +139,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r);
+		checkNumIssues(0, r, defaultSession);
 		
 		assertEquals(r.getLog(), new LinkedList<String>());
 		assertEquals(r.getNotes(), new LinkedList<String>());
@@ -133,10 +148,10 @@ public class RequirementValidatorTest {
 		assertEquals(r.gettID(), new LinkedList<Integer>());
 	}
 	
-	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement) {
+	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session) {
 		List<ValidationIssue> issues;
 		try {
-			issues = validator.validate(requirement);
+			issues = validator.validate(session, requirement);
 			assertEquals(num, issues.size());
 		} catch(WPISuiteException e) {
 			throw new RuntimeException("Unexpected WPISuiteException", e);
@@ -144,8 +159,8 @@ public class RequirementValidatorTest {
 		return issues;
 	}
 	
-	public void checkNoIssues(Requirement requirement) {
-		checkNumIssues(0, requirement);
+	public void checkNoIssues(Requirement requirement, Session session) {
+		checkNumIssues(0, requirement, session);
 	}
 
 }
