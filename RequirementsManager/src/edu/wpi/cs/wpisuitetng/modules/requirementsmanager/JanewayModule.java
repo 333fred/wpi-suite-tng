@@ -13,7 +13,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.TabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
  * @author Fredric
@@ -31,7 +31,7 @@ public class JanewayModule implements IJanewayModule {
 	private MainTabView tabView;
 	
 	/** The tab controller for tabView */
-	private TabController tabController;
+	private MainTabController tabController;
 	
 	/** Creates a new instance of JanewayModule, initializing the tabs to be displayed
 	 * 
@@ -48,7 +48,7 @@ public class JanewayModule implements IJanewayModule {
 		tabView = new MainTabView();
 		
 		//initialize TabController
-		tabController = new TabController(tabView);
+		tabController = new MainTabController(tabView);
 		
 		tabController.addTab("Requirements List", new ImageIcon(), requirementListView, "The list of requirements");
 		

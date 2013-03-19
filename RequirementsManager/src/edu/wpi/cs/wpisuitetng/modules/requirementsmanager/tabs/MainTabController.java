@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 import java.awt.Component;
 
 import javax.swing.Icon;
+import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 
@@ -16,7 +17,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
  *
  */
 
-public class TabController {
+public class MainTabController {
 	
 	/** The MainTabView that this controller manages */
 	private final MainTabView tabView;
@@ -26,7 +27,7 @@ public class TabController {
 	 * @param tabView The view to manage
 	 */
 	
-	public TabController(MainTabView tabView) {
+	public MainTabController(MainTabView tabView) {
 		this.tabView = tabView;
 	}
 	
@@ -76,4 +77,13 @@ public class TabController {
 	public Tab addEditRequirementTab(Requirement requirement) {
 		return null;
 	}
+	
+	/**
+	 * Add a change listener to the view this is controlling.
+	 * @param listener the ChangeListener that should receive ChangeEvents
+	 */
+	public void addChangeListener(ChangeListener listener) {
+		tabView.addChangeListener(listener);
+	}
+	
 }
