@@ -3,11 +3,14 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.Note;
@@ -19,34 +22,50 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.Note;
  * @author Fredric
  * 
  */
-public class Requirement {
-	// TODO: Reorganize these to make sense
+public class Requirement extends AbstractModel {
+
+	// Requirement Attributes
 	private String name;
-	final private int rUID; // Requirement Unique ID
+	private int rUID; // Requirement Unique ID
 	private String description;
-	private int releaseNum = 0; // TODO: Implement Releases
 	private Type type;
 	private List<Integer> subRequirements;
 	private List<Note> notes;
 	private int iteration = 0; // TODO: Implement Iterations
-	private int effort; // Initially zero, if subRequirements.length() > 0, then
-						// null/sum
-						// TODO: Determine if we sum the subrequirements or not
-	private List<Integer> tID; // Team Member ID
-	private List<Integer> pUID; // Parent unique ID's
-	private List<String> log;
 	private Status status;
-
-	// Static UID field and UID generator
-	private static int UID = 0;
+	// Date and scheduling attributes
+	private int releaseNum; // TODO: Implement Releases
+	private int iteration; // TODO: Implement Iterations
+	private int effort; // Initially zero, if subRequirements.length() > 0, then
+						// sum
+	// Assignees, Subrequirements, and Parents
+	private List<User> assignees; // Team Member ID
+	private List<Integer> subRequirements;
+	private List<Integer> pUID; // Parent unique ID's
+	// Notes and the Log
+	private List<Note> notes;
+	private List<Log> log;
 
 	/**
-	 * Gets the next unique id.
-	 * 
-	 * @return The next unique id.
+	 * Creates a new Requirement, with default values.
 	 */
-	private static int getUID() {
-		return ++UID;
+	public Requirement() {
+		// Set everything to either the empty string, empty list, 0, or blank,
+		// depending on the attribute. This is because we don't know anything
+		// about what the requirement is or will have.
+		name = "";
+		rUID = 0;
+		description = "";
+		type = Type.BLANK;
+		status = Status.BLANK;
+		releaseNum = 0;
+		iteration = 0;
+		effort = 0;
+		assignees = new ArrayList<User>();
+		subRequirements = new ArrayList<Integer>();
+		pUID = new ArrayList<Integer>();
+		notes = new ArrayList<Note>();
+		log = new ArrayList<Log>();
 	}
 
 	/**
@@ -71,16 +90,15 @@ public class Requirement {
 	 *            The specified iteration
 	 * @param effort
 	 *            The specified effort
-	 * @param tID
+	 * @param assignees
 	 *            A list of all users assigned to this project
 	 * @param pUID
 	 *            A list of parent requirements
 	 */
 	public Requirement(String name, String description, int releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
-			int iteration, int effort, List<Integer> tID, List<Integer> pUID) {
+			int iteration, int effort, List<User> assignees, List<Integer> pUID) {
 		// Get the next UID for this requirement
-		rUID = getUID();
 
 		// Assign all inputs
 		this.name = name; // TODO: Support length checking, should throw an
@@ -92,12 +110,12 @@ public class Requirement {
 		this.notes = notes;
 		this.iteration = iteration;
 		this.effort = effort;
-		this.tID = tID;
+		this.assignees = assignees;
 		this.pUID = pUID;
 
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
-		this.log = new LinkedList<String>();
+		this.log = new LinkedList<Log>();
 	}
 
 	public Requirement() {
@@ -253,6 +271,16 @@ public class Requirement {
 	}
 
 	/**
+	 * Sets the current notes
+	 * 
+	 * @param notes
+	 *            the notes to set
+	 */
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+
+	/**
 	 * Adds a note to the list of notes.
 	 * 
 	 * @param note
@@ -261,19 +289,21 @@ public class Requirement {
 	public void addNote(Note note) {
 		this.notes.add(note);
 	}
-	
+
 	/**
 	 * Remove the given note from the list of notes
-	 * @param note the note to remove
+	 * 
+	 * @param note
+	 *            the note to remove
 	 * @return True if the note in the list, false otherwise
 	 */
-	public boolean removeNote(String note){
+	public boolean removeNote(String note) {
 		return this.notes.remove(note);
 	}
 
 	/**
-	 * Gets the iteration for this requirement.
-	 * TODO: Is this actually going to be an int?
+	 * Gets the iteration for this requirement. TODO: Is this actually going to
+	 * be an int?
 	 * 
 	 * @return the iteration
 	 */
@@ -282,8 +312,7 @@ public class Requirement {
 	}
 
 	/**
-	 * Sets the current iteration
-	 * TODO: Is this actually going to be an int
+	 * Sets the current iteration TODO: Is this actually going to be an int
 	 * 
 	 * @param iteration
 	 *            the iteration to set
@@ -312,41 +341,47 @@ public class Requirement {
 	}
 
 	/**
-	 * Gets a list of the current team member id's
+	 * Gets a list of the current team member id's TODO: Needs to be switched to
+	 * Users
 	 * 
 	 * @return the tID
 	 */
-	public List<Integer> gettID() {
-		return tID;
+	public List<User> gettID() {
+		return assignees;
 	}
 
 	/**
-	 * Sets the team member id's
+	 * Sets the team member id's TODO: Needs to be switched to users
 	 * 
-	 * @param tID
+	 * @param assignees
 	 *            the tID to set
 	 */
-	public void settID(List<Integer> tID) {
-		this.tID = tID;
-	}
-	
-	/**
-	 * Adds a given team id number to the list of id's
-	 * @param id
-	 */
-	public void addTID(int id){
-		this.tID.add(id);
+	public void settID(List<User> assignees) {
+		this.assignees = assignees;
 	}
 
 	/**
-	 * Removes the given team member id from the list
-	 * @param id the ID to remove
+	 * Adds a given team id number to the list of id's TODO: Needs to be
+	 * switched to users
+	 * 
+	 * @param id
+	 */
+	public void addTID(User newUser) {
+		this.assignees.add(newUser);
+	}
+
+	/**
+	 * Removes the given team member id from the list TODO: Needs to be switched
+	 * to users TODO: Need to look at permission
+	 * 
+	 * @param id
+	 *            the ID to remove
 	 * @return True if the ID was in the list, false otherwise
 	 */
-	public boolean removeTID(int id){
-		return this.tID.remove(id) != null;
+	public boolean removeTID(User user) {
+		return this.assignees.remove(user);
 	}
-	
+
 	/**
 	 * Returns the list of parent requirements
 	 * 
@@ -365,21 +400,25 @@ public class Requirement {
 	public void setpUID(List<Integer> pUID) {
 		this.pUID = pUID;
 	}
-	
+
 	/**
 	 * Adds the given parent UID to the list of pUID's
-	 * @param id the id to add
+	 * 
+	 * @param id
+	 *            the id to add
 	 */
-	public void addPUID(int id){
+	public void addPUID(int id) {
 		this.pUID.add(id);
 	}
-	
+
 	/**
 	 * Removes the given parent from the list of parents
-	 * @param id the ID to remove
+	 * 
+	 * @param id
+	 *            the ID to remove
 	 * @return if the ID was in the list or not
 	 */
-	public boolean removePUID(int id){
+	public boolean removePUID(int id) {
 		return this.pUID.remove(id) != null;
 	}
 
@@ -388,26 +427,28 @@ public class Requirement {
 	 * 
 	 * @return the log
 	 */
-	public List<String> getLog() {
+	public List<Log> getLog() {
 		return log;
 	}
 
 	/**
-	 * Sets the log.  This really should never be called.
-	 * TODO: Determine if this should even exist
+	 * Sets the log. Make sure that you know what you're doing with this, as it
+	 * will erase any logs stored in the manager. If you just want to add a log,
+	 * then use addLog
 	 * 
-	 * @param log
+	 * @param linkedList
 	 *            the log to set
 	 */
-	public void setLog(List<String> log) {
-		this.log = log;
+	public void setLog(List<Log> linkedList) {
+		this.log = linkedList;
 	}
-	
+
 	/**
 	 * Add the given log to the list of logs
+	 * 
 	 * @param log
 	 */
-	public void addLog(String log){
+	public void addLog(Log log) {
 		this.log.add(log);
 	}
 
@@ -431,11 +472,60 @@ public class Requirement {
 	}
 
 	/**
-	 * Gets the UID of the requirement
+	 * Gets the rUID of the requirement
 	 * 
 	 * @return the rUID
 	 */
 	public int getrUID() {
 		return rUID;
+	}
+
+	/**
+	 * Sets the rUID of the requirement
+	 * 
+	 * @param id
+	 *            the id number to set rUID to
+	 */
+	public void setrUID(int id) {
+		rUID = id;
+	}
+
+	/**
+	 * note that save and delete don't do anything at the moment, even in the
+	 * core's models
+	 */
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * note that save and delete don't do anything at the moment, even in the
+	 * core's models
+	 */
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Boolean identify(Object o) {
+		// Check to see if o is a requirement
+		if (!(o instanceof Requirement)) {
+			// If it isn't, check to see if it's an ID, and return true if it
+			// the correct rUID
+			if (o instanceof Integer) {
+				return ((Integer) o).equals(new Integer(this.rUID));
+			} else {
+				return false;
+			}
+		} else {
+			return this.rUID == ((Requirement) o).rUID;
+		}
 	}
 }
