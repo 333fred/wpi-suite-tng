@@ -13,6 +13,8 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.defect.DefectPanel.Mode;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
@@ -31,7 +33,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 */
 	public RequirementsEntityManager(Data data) {
 		db = data;
-		validator = new RequirementValidator(db);
+		validator = new RequirementValidator();
 	}
 	
 	//TODO testing - these are basically copied from DefectManager right now so they might not fully apply
@@ -44,7 +46,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		
 		newRequirement.setrUID(Count()+1); //we have to set the UID
 		
-		List<ValidationIssue> issues = validator.validate(s, newRequirement);
+		List<ValidationIssue> issues = validator.validate(newRequirement);
 		if(issues.size() > 0) {
 			// TODO: pass errors to client through exception
 			for (ValidationIssue issue : issues) {
@@ -121,7 +123,16 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	@Override
 	public Requirement update(Session s, String content)
 			throws WPISuiteException {
+		
+		Requirement updatedRequirement = Requirement.fromJSON(content);
+
+		List<ValidationIssue> issues = validator.validate(updatedRequirement);
+		if(issues.size() > 0) {
+			throw new BadRequestException();
+		}
+		
 		//TODO Add ability to update
+
 		throw new NotImplementedException();
 	}
 

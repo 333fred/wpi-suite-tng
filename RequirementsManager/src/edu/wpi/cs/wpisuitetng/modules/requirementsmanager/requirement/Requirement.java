@@ -45,24 +45,6 @@ public class Requirement implements Model {
 	 * Creates a new Requirement, with default values.
 	 */
 	public Requirement() {
-		//TODO double-check if these are the right default values
-
-		// Assign all inputs
-		this.name = ""; // TODO: Support length checking, should throw an
-							// exception
-		this.description = "";
-		this.releaseNum = 0;
-		this.type = Type.BLANK;
-		this.subRequirements = new LinkedList<Integer>();
-		this.notes = new LinkedList<String>();
-		this.iteration = 0;
-		this.effort = 0;
-		this.tID = new LinkedList<Integer>();
-		this.pUID = new LinkedList<Integer>();
-
-		// Set the task to new, and create a new linked list for the log
-		this.status = Status.NEW;
-		this.log = new LinkedList<String>();
 	}
 
 	/**

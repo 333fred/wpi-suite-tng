@@ -4,15 +4,18 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
+import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 
 /**
@@ -22,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
  */
 public class RequirementValidator {
 
-	private Data data;
+	//private Data data;
 	private Requirement lastExistingRequirement;
 	
 	/**
@@ -30,23 +33,23 @@ public class RequirementValidator {
 	 * 
 	 * @param data The Data implementation to use
 	 */
-	public RequirementValidator(Data data) {
+	/*	public RequirementValidator(Data data) {
 		this.data = data;
-	}
+	}*/
 	
 	/**
 	 * @return the data
 	 */
-	public Data getData() {
+	/*public Data getData() {
 		return data;
-	}
+	}*/
 
 	/**
 	 * @param data the data to set
 	 */
-	public void setData(Data data) {
+	/*public void setData(Data data) {
 		this.data = data;
-	}
+	}*/
 
 	/**
 	 * Return the User with the given username if they already exist in the database.
@@ -58,13 +61,14 @@ public class RequirementValidator {
 	 * @throws WPISuiteException 
 	 */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
-		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
+		/*final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
 			return (User) existingUsers.get(0);
 		} else {
 			issues.add(new ValidationIssue("User doesn't exist", fieldName));
 			return null;
-		}
+		}*/
+		throw new NotImplementedException();
 	}
 	
 	/**
@@ -79,13 +83,14 @@ public class RequirementValidator {
 	 */
 	Requirement getExistingRequirement(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
-		List<Model> oldRequirements = data.retrieve(Requirement.class, "rUID", id, project);
+		throw new NotImplementedException();
+		/*List<Model> oldRequirements = data.retrieve(Requirement.class, "rUID", id, project);
 		if(oldRequirements.size() < 1 || oldRequirements.get(0) == null) {
 			issues.add(new ValidationIssue("Requirement with id does not exist in project", fieldName));
 			return null;
 		} else {
 			return (Requirement) oldRequirements.get(0);
-		}
+		}*/
 	}
 	
 	/**
@@ -99,7 +104,7 @@ public class RequirementValidator {
 	 */
 	
 	 //TODO: @param mode The mode to validate for
-	public List<ValidationIssue> validate(Session session, Requirement requirement/*, Mode mode TODO: Implement different modes*/) throws WPISuiteException {
+	public List<ValidationIssue> validate(/*Session session, */Requirement requirement/*, Mode mode TODO: Implement different modes*/) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(requirement == null) {
 			issues.add(new ValidationIssue("Requirement cannot be null"));
@@ -122,6 +127,32 @@ public class RequirementValidator {
 			issues.add(new ValidationIssue("Required, must be 1-5000 characters", "description"));
 		} else if(requirement.getDescription().length() > 5000) {
 			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
+		}
+		
+		//handle null lists
+		if(requirement.getLog() == null){
+			requirement.setLog(new LinkedList<String>());
+		}
+		
+		if (requirement.getNotes() == null) {
+			requirement.setNotes(new LinkedList<String>());
+		}
+		
+		if (requirement.getpUID() == null) {
+			requirement.setpUID(new LinkedList<Integer>());
+		}
+		
+		if (requirement.getSubRequirements() == null) {
+			requirement.setSubRequirements(new LinkedList<Integer>());
+		}
+		
+		if (requirement.gettID() == null) {
+			requirement.settID(new LinkedList<Integer>());
+		}
+		
+		//Give BLANK type if none is given
+		if(requirement.getType() == null){
+			requirement.setType(Type.BLANK);
 		}
 				
 		return issues;
