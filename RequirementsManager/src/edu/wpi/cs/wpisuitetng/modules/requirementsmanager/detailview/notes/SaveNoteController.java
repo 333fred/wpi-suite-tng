@@ -2,7 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes;
 
 import javax.swing.JOptionPane;
 
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Comment;
+//import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Comment;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 
