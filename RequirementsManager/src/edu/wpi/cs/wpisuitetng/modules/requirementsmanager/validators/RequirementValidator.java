@@ -61,14 +61,13 @@ public class RequirementValidator {
 	 * @throws WPISuiteException 
 	 */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
-		/*final List<Model> existingUsers = data.retrieve(User.class, "username", username);
+		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
 			return (User) existingUsers.get(0);
 		} else {
 			issues.add(new ValidationIssue("User doesn't exist", fieldName));
 			return null;
-		}*/
-		throw new NotImplementedException();
+		}
 	}
 	
 	/**
@@ -83,14 +82,13 @@ public class RequirementValidator {
 	 */
 	Requirement getExistingRequirement(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
-		throw new NotImplementedException();
-		/*List<Model> oldRequirements = data.retrieve(Requirement.class, "rUID", id, project);
+		List<Model> oldRequirements = data.retrieve(Requirement.class, "rUID", id, project);
 		if(oldRequirements.size() < 1 || oldRequirements.get(0) == null) {
 			issues.add(new ValidationIssue("Requirement with id does not exist in project", fieldName));
 			return null;
 		} else {
 			return (Requirement) oldRequirements.get(0);
-		}*/
+		}
 	}
 	
 	/**
