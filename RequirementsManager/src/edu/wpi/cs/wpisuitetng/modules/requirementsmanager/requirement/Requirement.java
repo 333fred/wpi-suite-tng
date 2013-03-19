@@ -3,15 +3,13 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.Permission;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
@@ -25,27 +23,45 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
  */
 public class Requirement extends AbstractModel {
 
-	// TODO: Reorganize these to make sense
+	// Requirement Attributes
 	private String name;
 	private int rUID; // Requirement Unique ID
 	private String description;
-	private int releaseNum = 0; // TODO: Implement Releases
 	private Type type;
-	private List<Integer> subRequirements;
-	private List<String> notes;
-	private int iteration = 0; // TODO: Implement Iterations
-	private int effort; // Initially zero, if subRequirements.length() > 0, then
-						// null/sum
-						// TODO: Determine if we sum the subrequirements or not
-	private List<Integer> tID; // Team Member ID
-	private List<Integer> pUID; // Parent unique ID's
-	private List<String> log;
 	private Status status;
-	
+	// Date and scheduling attributes
+	private int releaseNum; // TODO: Implement Releases
+	private int iteration; // TODO: Implement Iterations
+	private int effort; // Initially zero, if subRequirements.length() > 0, then
+						// sum
+	// Assignees, Subrequirements, and Parents
+	private List<User> assignees; // Team Member ID
+	private List<Integer> subRequirements;
+	private List<Integer> pUID; // Parent unique ID's
+	// Notes and the Log
+	private List<Note> notes;
+	private List<Log> log;
+
 	/**
 	 * Creates a new Requirement, with default values.
 	 */
 	public Requirement() {
+		// Set everything to either the empty string, empty list, 0, or blank,
+		// depending on the attribute. This is because we don't know anything
+		// about what the requirement is or will have.
+		name = "";
+		rUID = 0;
+		description = "";
+		type = Type.BLANK;
+		status = Status.BLANK;
+		releaseNum = 0;
+		iteration = 0;
+		effort = 0;
+		assignees = new ArrayList<User>();
+		subRequirements = new ArrayList<Integer>();
+		pUID = new ArrayList<Integer>();
+		notes = new ArrayList<Note>();
+		log = new ArrayList<Log>();
 	}
 
 	/**
@@ -70,14 +86,14 @@ public class Requirement extends AbstractModel {
 	 *            The specified iteration
 	 * @param effort
 	 *            The specified effort
-	 * @param tID
+	 * @param assignees
 	 *            A list of all users assigned to this project
 	 * @param pUID
 	 *            A list of parent requirements
 	 */
 	public Requirement(String name, String description, int releaseNum,
-			Type type, List<Integer> subRequirements, List<String> notes,
-			int iteration, int effort, List<Integer> tID, List<Integer> pUID) {
+			Type type, List<Integer> subRequirements, List<Note> notes,
+			int iteration, int effort, List<User> assignees, List<Integer> pUID) {
 		// Get the next UID for this requirement
 
 		// Assign all inputs
@@ -90,12 +106,12 @@ public class Requirement extends AbstractModel {
 		this.notes = notes;
 		this.iteration = iteration;
 		this.effort = effort;
-		this.tID = tID;
+		this.assignees = assignees;
 		this.pUID = pUID;
 
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
-		this.log = new LinkedList<String>();
+		this.log = new LinkedList<Log>();
 	}
 
 	/**
@@ -241,7 +257,7 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return the notes
 	 */
-	public List<String> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
 	}
 
@@ -251,7 +267,7 @@ public class Requirement extends AbstractModel {
 	 * @param notes
 	 *            the notes to set
 	 */
-	public void setNotes(List<String> notes) {
+	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
 
@@ -261,7 +277,7 @@ public class Requirement extends AbstractModel {
 	 * @param note
 	 *            the note to add
 	 */
-	public void addNote(String note) {
+	public void addNote(Note note) {
 		this.notes.add(note);
 	}
 
@@ -316,42 +332,45 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * Gets a list of the current team member id's
+	 * Gets a list of the current team member id's TODO: Needs to be switched to
+	 * Users
 	 * 
 	 * @return the tID
 	 */
-	public List<Integer> gettID() {
-		return tID;
+	public List<User> gettID() {
+		return assignees;
 	}
 
 	/**
-	 * Sets the team member id's
+	 * Sets the team member id's TODO: Needs to be switched to users
 	 * 
-	 * @param tID
+	 * @param assignees
 	 *            the tID to set
 	 */
-	public void settID(List<Integer> tID) {
-		this.tID = tID;
+	public void settID(List<User> assignees) {
+		this.assignees = assignees;
 	}
 
 	/**
-	 * Adds a given team id number to the list of id's
+	 * Adds a given team id number to the list of id's TODO: Needs to be
+	 * switched to users
 	 * 
 	 * @param id
 	 */
-	public void addTID(int id) {
-		this.tID.add(id);
+	public void addTID(User newUser) {
+		this.assignees.add(newUser);
 	}
 
 	/**
-	 * Removes the given team member id from the list
+	 * Removes the given team member id from the list TODO: Needs to be switched
+	 * to users TODO: Need to look at permission
 	 * 
 	 * @param id
 	 *            the ID to remove
 	 * @return True if the ID was in the list, false otherwise
 	 */
-	public boolean removeTID(int id) {
-		return this.tID.remove(id) != null;
+	public boolean removeTID(User user) {
+		return this.assignees.remove(user);
 	}
 
 	/**
@@ -399,19 +418,20 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return the log
 	 */
-	public List<String> getLog() {
+	public List<Log> getLog() {
 		return log;
 	}
 
 	/**
-	 * Sets the log. This really should never be called. TODO: Determine if this
-	 * should even exist
+	 * Sets the log. Make sure that you know what you're doing with this, as it
+	 * will erase any logs stored in the manager. If you just want to add a log,
+	 * then use addLog
 	 * 
-	 * @param log
+	 * @param linkedList
 	 *            the log to set
 	 */
-	public void setLog(List<String> log) {
-		this.log = log;
+	public void setLog(List<Log> linkedList) {
+		this.log = linkedList;
 	}
 
 	/**
@@ -419,7 +439,7 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @param log
 	 */
-	public void addLog(String log) {
+	public void addLog(Log log) {
 		this.log.add(log);
 	}
 
@@ -461,39 +481,42 @@ public class Requirement extends AbstractModel {
 		rUID = id;
 	}
 
+	/**
+	 * note that save and delete don't do anything at the moment, even in the
+	 * core's models
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * note that save and delete don't do anything at the moment, even in the
+	 * core's models
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Boolean identify(Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Permission getPermission(User u) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setPermission(Permission p, User u) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setProject(Project p) {
-		// TODO Auto-generated method stub
-		super.setProject(p);
+		// Check to see if o is a requirement
+		if (!(o instanceof Requirement)) {
+			// If it isn't, check to see if it's an ID, and return true if it
+			// the correct rUID
+			if (o instanceof Integer) {
+				return ((Integer) o).equals(new Integer(this.rUID));
+			} else {
+				return false;
+			}
+		} else {
+			return this.rUID == ((Requirement) o).rUID;
+		}
 	}
 }
