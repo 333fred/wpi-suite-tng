@@ -16,6 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Log;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 
 /**
@@ -129,11 +131,11 @@ public class RequirementValidator {
 		
 		//handle null lists
 		if(requirement.getLog() == null){
-			requirement.setLog(new LinkedList<String>());
+			requirement.setLog(new LinkedList<Log>());
 		}
 		
 		if (requirement.getNotes() == null) {
-			requirement.setNotes(new LinkedList<String>());
+			requirement.setNotes(new LinkedList<Note>());
 		}
 		
 		if (requirement.getpUID() == null) {
@@ -145,7 +147,7 @@ public class RequirementValidator {
 		}
 		
 		if (requirement.gettID() == null) {
-			requirement.settID(new LinkedList<Integer>());
+			requirement.settID(new LinkedList<User>());
 		}
 		
 		//Give BLANK type if none is given
