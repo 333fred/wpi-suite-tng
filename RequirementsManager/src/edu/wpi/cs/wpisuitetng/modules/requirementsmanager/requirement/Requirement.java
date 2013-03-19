@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.Note;
 
 /**
  * This is the basic requirement model. It contains all the fields that can be
@@ -26,7 +27,7 @@ public class Requirement {
 	private int releaseNum = 0; // TODO: Implement Releases
 	private Type type;
 	private List<Integer> subRequirements;
-	private List<String> notes;
+	private List<Note> notes;
 	private int iteration = 0; // TODO: Implement Iterations
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// null/sum
@@ -76,7 +77,7 @@ public class Requirement {
 	 *            A list of parent requirements
 	 */
 	public Requirement(String name, String description, int releaseNum,
-			Type type, List<Integer> subRequirements, List<String> notes,
+			Type type, List<Integer> subRequirements, List<Note> notes,
 			int iteration, int effort, List<Integer> tID, List<Integer> pUID) {
 		// Get the next UID for this requirement
 		rUID = getUID();
@@ -97,6 +98,11 @@ public class Requirement {
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
 		this.log = new LinkedList<String>();
+	}
+
+	public Requirement() {
+		// TODO Auto-generated constructor stub
+		rUID = getUID();
 	}
 
 	/**
@@ -242,18 +248,8 @@ public class Requirement {
 	 * 
 	 * @return the notes
 	 */
-	public List<String> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
-	}
-
-	/**
-	 * Sets the current notes
-	 * 
-	 * @param notes
-	 *            the notes to set
-	 */
-	public void setNotes(List<String> notes) {
-		this.notes = notes;
 	}
 
 	/**
@@ -262,7 +258,7 @@ public class Requirement {
 	 * @param note
 	 *            the note to add
 	 */
-	public void addNote(String note) {
+	public void addNote(Note note) {
 		this.notes.add(note);
 	}
 	

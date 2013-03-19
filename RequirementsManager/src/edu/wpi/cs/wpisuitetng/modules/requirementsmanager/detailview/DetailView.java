@@ -8,7 +8,8 @@ import javax.swing.*;
 
 import edu.wpi.cs.wpisuitetng.modules.defecttracker.defect.defectevents.model.DefectEventListModel;
 import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.NoteList;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.Note;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.NotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 /**
  * @author Alex Woodyard
@@ -21,18 +22,26 @@ public class DetailView extends JPanel{
 	private JTextField name;
 	private JLabel nameLabel;
 	
-	/** The data model for the list */
+	/** For Notes */
 	protected DefaultListModel noteList;
 	protected JList notes;
-	private Requirement model;
+	protected NotePanel notePanel;
 	
-	public DetailView(DetailView detailView, Requirement model){
-		this.model = model;
+	Requirement requirement;
+	
+	public DetailView(DetailView detailView, Requirement requirement){
+		this.requirement = requirement;
 		
+		//For displaying the notes and note panel
 		noteList = new DefaultListModel();
 		notes = new JList(noteList);
 		//JScrollPane notePane = new JScrollPane(notes);
-		
+		notePanel = new NotePanel(requirement, this); 
+		//Iterate over the list of existing notes in the requirement, effectively displaying the,
+		for(Note aNote : requirement.getNotes()) {
+			noteList.addElement(aNote);
+		}
+				
 		top = new JPanel();
 		bottom = new JPanel();
 		//next two lines are temporary fillers for the time being.  
@@ -67,6 +76,7 @@ public class DetailView extends JPanel{
 		add(right, BorderLayout.EAST);
 		
 		
+		
 		add(notes); //This is for displaying the notes
 	}
 	
@@ -74,7 +84,7 @@ public class DetailView extends JPanel{
 		return noteList;
 	}
 	
-	public Requirement getModel() {
-		return this.model; //TODO: Make sure the Requirement member is in here
-	}
+	//public Requirement getModel() {
+	//	return this.model; //TODO: Make sure the Requirement member is in here
+	//}
 }
