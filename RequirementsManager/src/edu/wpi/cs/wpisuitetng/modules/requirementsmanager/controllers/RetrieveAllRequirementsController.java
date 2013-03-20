@@ -8,6 +8,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllR
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
+import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
@@ -24,6 +25,10 @@ public class RetrieveAllRequirementsController {
 	public RetrieveAllRequirementsController(IReceivedAllRequirementNotifier requirementNotifier){
 		this.requirementNotifier = requirementNotifier;
 		//You will want to pass your view here
+		
+		final NetworkConfiguration config = new NetworkConfiguration("http://localhost:8080");
+		Network.getInstance().setDefaultNetworkConfiguration(config);
+		
 	}
 	
 	/**

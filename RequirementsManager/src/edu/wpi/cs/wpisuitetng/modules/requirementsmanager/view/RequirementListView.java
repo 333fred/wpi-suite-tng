@@ -157,8 +157,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	}
 	
 	/** Open a new tab containing a view of the selected requirement in the list view
-	 * TODO: Add the code to open a detailed view once it is available
-	 * TODO: Update  
+	   TODO: Possibly implement view requirement mode
 	 */
 	
 	public void viewRequirement() {
@@ -173,7 +172,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 		//indexes should be synced, retreive the requirement from the array
 		Requirement selectedRequirement = requirements[selectedIndex];
 		
-		
+		tabController.addViewRequirementTab(selectedRequirement);
 	}
 
 	/** The updated requirements data has been received, update the list
