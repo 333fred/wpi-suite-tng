@@ -34,7 +34,7 @@ public class SaveNoteController {
 	public void savenote() {
 		final String noteText = view.getnoteField().getText();
 		if (noteText.length() > 0) {
-			this.model.addNote(new Note(noteText, new User("", ConfigManager.getConfig().getUserName(), "", -1)));
+			this.model.addNote(new Note(noteText, ConfigManager.getConfig().getUserName()));
 			//JOptionPane.showMessageDialog(parentView, "You're note: "+noteText, "You Added A Note! Oh Boy!", JOptionPane.OK_OPTION);
 			//parentView.getNoteList().addElement(noteText);
 			parentView.getNoteList().addElement(this.model.getNotes().get(this.model.getNotes().size()-1));

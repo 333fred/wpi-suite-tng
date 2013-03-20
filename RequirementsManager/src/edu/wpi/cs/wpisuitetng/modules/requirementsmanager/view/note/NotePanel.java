@@ -19,7 +19,7 @@ public class NotePanel extends JPanel {
 
 	public NotePanel(Note note) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		title = new JLabel("<html><font size=4><b>" + note.getCreator().getName() + "<font size=.25></b> added on " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(note.getDate()) + "</html>");
+		title = new JLabel("<html><font size=4><b>" + note.getCreator() + "<font size=.25></b> added on " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(note.getDate()) + "</html>");
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
 		content = new JLabel("<html><i>" + note.getNote() + "</i></html>");

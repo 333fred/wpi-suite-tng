@@ -14,7 +14,7 @@ public class Note {
 
 	private String note;
 	private Date date;
-	private User creator;
+	private String creator;
 
 	/**
 	 * Create a new Note with everything specified
@@ -26,7 +26,7 @@ public class Note {
 	 * @param creator
 	 *            The user that created the note
 	 */
-	public Note(String note, Date date, User creator) {
+	public Note(String note, Date date, String creator) {
 		this.note = note;
 		this.date = date;
 		this.creator = creator;
@@ -42,7 +42,7 @@ public class Note {
 	 * @param creator
 	 *            The creator of the note
 	 */
-	public Note(String note, User creator) {
+	public Note(String note, String creator) {
 		this.note = note;
 		this.creator = creator;
 		this.date = new Date();
@@ -89,7 +89,7 @@ public class Note {
 	/**
 	 * @return the creator
 	 */
-	public User getCreator() {
+	public String getCreator() {
 		return creator;
 	}
 
@@ -97,7 +97,7 @@ public class Note {
 	 * @param creator
 	 *            the creator to set
 	 */
-	public void setCreator(User creator) {
+	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 }
