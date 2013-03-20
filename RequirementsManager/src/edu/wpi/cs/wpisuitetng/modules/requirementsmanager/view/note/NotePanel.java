@@ -10,13 +10,20 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
-
+/**
+ * The notePanel class is what displays the note panel in the larger requirements creator pannel 
+ * @author spkordell
+ */
 @SuppressWarnings("serial")
 public class NotePanel extends JPanel {
 	
 	protected JLabel title;
 	protected JLabel content;
-
+	
+	/**
+	 * The note panel is the panel that is used to create and display notes
+	 * @param note the note that is displayed
+	 */
 	public NotePanel(Note note) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		title = new JLabel("<html><font size=4><b>" + note.getCreator() + "<font size=.25></b> added on " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(note.getDate()) + "</html>");

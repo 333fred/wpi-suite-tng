@@ -1,5 +1,5 @@
 /**
- * 
+ * Creates the note panel for the GUI
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
@@ -73,6 +73,7 @@ public class MakeNotePanel extends JPanel{
 	}
 	
 	/**
+	 * A function to the get the text area
 	 * @return the note JTextArea
 	 */
 	public JTextArea getnoteField() {
