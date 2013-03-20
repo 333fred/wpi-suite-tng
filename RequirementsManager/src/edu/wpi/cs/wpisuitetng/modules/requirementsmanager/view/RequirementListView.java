@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
@@ -22,10 +24,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  *
  */
 
-public class RequirementListView extends JPanel implements IToolbarGroupProvider {	
+public class RequirementListView extends JPanel implements IToolbarGroupProvider, IReceivedAllRequirementNotifier {	
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
+	
+	/** Controller for receiving all requirements from the server */
+	private RetrieveAllRequirementsController retreiveAllRequirementsController;
 	
 	/** JList used to display a list of all the requirements */
 	private JList requirementsList;	
@@ -49,11 +54,15 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	
 	public RequirementListView(MainTabController tabController) {
 		this.tabController = tabController;
-		//initialize the listValues, preset values right now for testing
-		initialize();
-		
+		//create the Retreive All Requiments Controller
+		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
 		//init the toolbar group
 		initializeToolbarGroup();
+		
+		//init the list of strings and requirements array
+		listValues = new ArrayList<String>();
+		requirements = new Requirement[0];
+		
 		
 		//set this JPanel to use a border layout
 		setLayout(new BorderLayout(0, 0));
@@ -62,24 +71,12 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 		requirementsList= new JList(listValues.toArray(new String[0]));
 		add(requirementsList, BorderLayout.CENTER);
 		
-	}
-	
-	/** Initializes the Requirements and ListValues, so they can be added to the GUI
-	 *  TODO: repurpose this method to use the retreiveRequirementsFromServer and parseRequirements, once
-	 *  	backend functions for server communication are available.
-	 * 
-	 */
-	private void initialize() {
-		//initialize list values to constant values now just for testing
-		listValues = new ArrayList<String>();
-		listValues.add("Requirement 1");
-		listValues.add("Requirement 2");
-		listValues.add("Requirement 3");	
+		getRequirementsFromServer();
+		
 	}
 	
 	/** Initializes the toolbar group, and adds the buttons that will be displayed to it.
 	 * 
-	 * TODO: Implement actions on the buttons
 	 * 
 	 */
 	
@@ -104,8 +101,11 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	 */
 	
 	private void parseRequirements() {		
-		// for every requirement
 		
+		//clear the current list values
+		listValues.clear();
+		
+		// for every requirement
 		for(int i = 0; i < requirements.length; i++){
 			// produce a summary String for the list
 			listValues.add(requirements[i].toListString());
@@ -116,13 +116,12 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	/** Function to retreive the requirements from the server
 	 * 
 	 * Mostly a place holder function until the backend is implemented
+	 * The list view will automaticaly be updated once the request comes back
 	 * 
-	 * TODO: Implement this function once the backend is completed
 	 */
 	
 	private void getRequirementsFromServer() {
-		this.requirements = new Requirement[0];
-		
+		retreiveAllRequirementsController.getAll();
 	}
 	
 	/** Updates the list view acording to the values in the Requirements Array
@@ -155,11 +154,11 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	public void refresh() {
 		//retreive a new copy of requirements, and update the list view
 		getRequirementsFromServer();
-		updateListView();
 	}
 	
 	/** Open a new tab containing a view of the selected requirement in the list view
 	 * TODO: Add the code to open a detailed view once it is available
+	 * TODO: Update  
 	 */
 	
 	public void viewRequirement() {
@@ -174,6 +173,27 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 		//indexes should be synced, retreive the requirement from the array
 		Requirement selectedRequirement = requirements[selectedIndex];
 		
+		
+	}
+
+	/** The updated requirements data has been received, update the list
+	 * 
+	 * @param requirements The new requirement data
+	 */
+	
+	@Override
+	public void receivedData(Requirement[] requirements) {
+		this.requirements = requirements;
+		updateListView();
+	}
+
+	/** There was an error processing the data request.
+	 * TODO: Implement what we do
+	 *
+	 */
+	
+	@Override
+	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
 		
 	}
 

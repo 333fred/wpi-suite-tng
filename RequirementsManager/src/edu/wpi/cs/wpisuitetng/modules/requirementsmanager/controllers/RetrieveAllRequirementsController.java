@@ -16,12 +16,14 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class RetrieveAllRequirementsController {
 
+	/** Requirement Notifier that will be called when the requirements have been received */
+	IReceivedAllRequirementNotifier requirementNotifier;
 	
 	protected Requirement[] data;
 	//variable connecting with view
 	
-	public RetrieveAllRequirementsController( /*view here?*/){
-		//TODO: Implement connection with view
+	public RetrieveAllRequirementsController(IReceivedAllRequirementNotifier requirementNotifier){
+		this.requirementNotifier = requirementNotifier;
 	}
 	
 	/**
@@ -42,8 +44,7 @@ public class RetrieveAllRequirementsController {
 	 * @param requirements an array of requirements returned by the server
 	 */
 	public void receivedData(Requirement[] requirements){
-		this.data = requirements;
-		//TODO: implement connection with view
+		requirementNotifier.receivedData(requirements);
 	}
 	
 	/**
@@ -51,6 +52,6 @@ public class RetrieveAllRequirementsController {
 	 * error occurs retrieving the requirements from the server.
 	 */
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
-		//TODO: Implement the error display once a view is connected
+		requirementNotifier.errorReceivingData(RetrieveAllRequirementsRequestObserver);
 	}
 }
