@@ -89,4 +89,29 @@ public class MainTabController {
 		tabView.addChangeListener(listener);
 	}
 	
+	/**
+	 * Closes the currently active tab
+	 */
+	public void closeCurrentTab() {
+		try {
+			tabView.removeTabAt(tabView.getSelectedIndex());
+		}
+		catch (IndexOutOfBoundsException e) {
+			// do nothing, tried to close tab that does not exist
+		}
+	}
+	
+	/**
+	 * Changes the selected tab to the tab with the given index
+	 * @param tabIndex the index of the tab to select
+	 */
+	private void switchToTab(int tabIndex) {
+		try {
+			tabView.setSelectedIndex(tabIndex);
+		}
+		catch (IndexOutOfBoundsException e) {
+			// an invalid tab was requested, do nothing
+		}
+	}
+	
 }

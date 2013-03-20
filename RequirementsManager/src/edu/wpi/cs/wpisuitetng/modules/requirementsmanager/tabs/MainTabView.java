@@ -5,6 +5,8 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
+
 /** The JTabbedPane that will be shown in the RequirementsManager Module.
  * 
  * Adapted on the MainTabView from DefectTracker module
@@ -34,10 +36,16 @@ public class MainTabView extends JTabbedPane {
 	 * @param tip The tooltip to be displayed for the tab
 	 * @param index The position to inster the tab
 	 */
+
 	
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		super.insertTab(title,icon,component,tip,index);
+		
+		//if it is not a list view, create a closeable tab
+		if(!(component instanceof RequirementListView)) {
+			setTabComponentAt(index, new ClosableTabComponent(this));
+		}
 	}
 	
 	/** Removes the component at the specified index.
@@ -48,7 +56,9 @@ public class MainTabView extends JTabbedPane {
 	
 	@Override
 	public void removeTabAt(int index) {
-		super.removeTabAt(index);
+		if(getTabComponentAt(index) instanceof ClosableTabComponent) {
+			super.removeTabAt(index);
+		}
 	}
 	
 	/** Sets the component at the given  index, with the given component
