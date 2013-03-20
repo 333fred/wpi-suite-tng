@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -21,9 +22,9 @@ public class RequirementListView extends JPanel {
 	private JList requirementsList;	
 	
 	/** List of string values that will be displayed in the list view, requirements[i].getName() for now */
-	private String[] listValues;	// TODO: remove or rename listValues, as it has been replaced by a local-scope variable in the constructor
+	private ArrayList<String> listValues;
 	/** The list of requirements that the view is displaying */
-	private Requirement[] requirements;	// TODO: remove or rename requirements, as it has been replaced by a local-scope variable in the constructor
+	private Requirement[] requirements;	
 	
 	/** Construct for a RequirementListView
 	 * 
@@ -34,32 +35,26 @@ public class RequirementListView extends JPanel {
 		
 		//initialize the listValues, preset values right now for testing
 		initialize();
-		/*
-		// retrieve Requirements from the server
-		Requirement[] requirements = getRequirementsFromServer();
-		// produce an array of Strings for viewing
-		String[] listValues = parseRequirements(requirements);
-	*/
 		//set this JPanel to use a border layout
 		setLayout(new BorderLayout(0, 0));
 		
-		//initialize the requirements list
-		requirementsList= new JList(listValues);
+		//initialize the requirements list, with an array of strings retreived from the listValues ArrayList
+		requirementsList= new JList(listValues.toArray(new String[0]));
 		add(requirementsList, BorderLayout.CENTER);
 		
 	}
 	
 	/** Initializes the Requirements and ListValues, so they can be added to the GUI
-	 * 
+	 *  TODO: repurpose this method to use the retreiveRequirementsFromServer and parseRequirements, once
+	 *  	backend functions for server communication are available.
 	 * 
 	 */
-	// TODO: remove or repurpose this method, as it is currently replaced by parseRequirements
 	private void initialize() {
 		//initialize list values to constant values now just for testing
-		listValues =  new String[3];
-		listValues[0] = "Requirement 1";
-		listValues[1] = "Requirement 2";
-		listValues[2] = "Requirement 3";	
+		listValues = new ArrayList<String>();
+		listValues.add("Requirement 1");
+		listValues.add("Requirement 2");
+		listValues.add("Requirement 3");	
 	}
 	
 	/** Takes a list of requirements, and turns them into a list of Strings that the View will display
@@ -68,18 +63,16 @@ public class RequirementListView extends JPanel {
 	 * @return a list of requirements in string form, that can be shown on the JList
 	 */
 	
-	private String[] parseRequirements(Requirement[] requirements) {
-		
-		// create an array of Strings, as many as there are requirements
-		String[] listStrings = new String[requirements.length];
+	private void parseRequirements(Requirement[] requirements) {
 		
 		// for every requirement
+		
 		for(int i = 0; i < requirements.length; i++){
 			// produce a summary String for the list
-			listStrings[i] = requirements[i].toListString();
+			listValues.add(requirements[i].toListString());
 		}
 		
-		return listStrings;
+	
 		
 	}
 	
@@ -90,9 +83,8 @@ public class RequirementListView extends JPanel {
 	 * TODO: Implement this function once the backend is completed
 	 */
 	
-	private Requirement[] getRequirementsFromServer() {
-		
-		return null;
+	private void getRequirementsFromServer() {
+		this.requirements = new Requirement[0];
 		
 	}
 
