@@ -23,12 +23,7 @@ public class RetrieveAllRequirementsController {
 	protected Requirement[] data;
 	
 	public RetrieveAllRequirementsController(IReceivedAllRequirementNotifier requirementNotifier){
-		this.requirementNotifier = requirementNotifier;
-		//You will want to pass your view here
-		
-		final NetworkConfiguration config = new NetworkConfiguration("http://localhost:8080");
-		Network.getInstance().setDefaultNetworkConfiguration(config);
-		
+		this.requirementNotifier = requirementNotifier;		
 	}
 	
 	/**

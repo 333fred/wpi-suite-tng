@@ -16,6 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
 /**
  * @author Fredric
@@ -46,6 +48,11 @@ public class JanewayModule implements IJanewayModule {
 	 */
 	
 	public JanewayModule() {
+		
+		//temp fix to init network
+		//TODO: Replace this
+		final NetworkConfiguration config = new NetworkConfiguration("http://localhost:8080");
+		Network.getInstance().setDefaultNetworkConfiguration(config);
 		//initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();	
 		
