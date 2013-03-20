@@ -83,7 +83,7 @@ public class NotePanel extends JPanel{
 		this.add(addnoteLabel);
 		this.add(noteFieldPane);
 		this.add(addnote);	
-		this.add(notesScrollPanel); //This is for displaying the notes
+		//this.add(notesScrollPanel); //This is for displaying the notes
 
 	}
 	
