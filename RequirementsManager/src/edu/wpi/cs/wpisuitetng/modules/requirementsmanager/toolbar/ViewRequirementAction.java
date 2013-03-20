@@ -27,7 +27,7 @@ public class ViewRequirementAction extends AbstractAction {
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
 	public ViewRequirementAction(MainTabController controller) {
-		super("Create Defect");
+		super("View Requirement");
 		this.controller = controller;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
 	}

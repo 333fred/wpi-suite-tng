@@ -63,9 +63,8 @@ public class ToolbarView extends DefaultToolbarView {
 		layout.putConstraint(SpringLayout.WEST, createRequirement, 8, SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.WEST, viewRequirement, 10, SpringLayout.EAST, createRequirement);
 		layout.putConstraint(SpringLayout.VERTICAL_CENTER, viewRequirement, 0, SpringLayout.VERTICAL_CENTER, createRequirement);
-		// TODO: place location constraints on Refresh button
-		// layout.putConstraint(SpringLayout.NORTH, searchField, 15, SpringLayout.SOUTH, createRequirement);
-		// layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, searchField, 5, SpringLayout.EAST, createRequirement);
+		layout.putConstraint(SpringLayout.NORTH, refresh, 15, SpringLayout.SOUTH, createRequirement);
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, refresh, 5, SpringLayout.EAST, createRequirement);
 		
 		// Add buttons to the content panel
 		content.add(createRequirement);

@@ -28,7 +28,7 @@ public class CreateRequirementAction extends AbstractAction {
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
 	public CreateRequirementAction(MainTabController controller) {
-		super("Create Defect");
+		super("Create Requirement");
 		this.controller = controller;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
 	}
