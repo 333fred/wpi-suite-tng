@@ -1,16 +1,28 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+/**
+ * @author Nick Massa
+ *
+ */
+
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class NoteTest {
 	
-	String bob = new String("bob");
+	String bob;
 	Date date;
+	
+	@Before
+	public void setUp(){
+	bob = "bob";
+	date = new Date();
+	}
 
 	@Test
 	public void testGetNote() {
