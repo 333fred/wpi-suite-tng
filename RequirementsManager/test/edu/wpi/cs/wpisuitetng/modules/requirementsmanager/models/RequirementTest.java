@@ -63,6 +63,8 @@ public class RequirementTest {
 		String json = r1.toJSON();
 		Requirement newRequirement = Requirement.fromJSON(json);
 		assertEquals("", newRequirement.getName());
+		assertEquals("", newRequirement.getDescription());
+		assertEquals(0, newRequirement.getrUID());
 	}
 	
 	@Test
