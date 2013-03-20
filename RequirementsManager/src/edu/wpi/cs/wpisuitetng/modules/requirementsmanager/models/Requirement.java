@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
@@ -32,6 +33,7 @@ public class Requirement extends AbstractModel {
 	private String description;
 	private Type type;
 	private Status status;
+	private Priority priority;
 	// Date and scheduling attributes
 	private int releaseNum; // TODO: Implement Releases
 	private int iteration; // TODO: Implement Iterations
@@ -57,6 +59,7 @@ public class Requirement extends AbstractModel {
 		description = "";
 		type = Type.BLANK;
 		status = Status.BLANK;
+		priority = Priority.BLANK;
 		releaseNum = 0;
 		iteration = 0;
 		effort = 0;
@@ -231,6 +234,17 @@ public class Requirement extends AbstractModel {
 		this.type = type;
 	}
 
+	/**
+	 * Sets the priority of the requirement TODO: Determine if we can do this, or if
+	 * the type is final
+	 * 
+	 * @param type
+	 *            the type to set
+	 */
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+	
 	/**
 	 * Return the list of subRequirement ID's
 	 * 

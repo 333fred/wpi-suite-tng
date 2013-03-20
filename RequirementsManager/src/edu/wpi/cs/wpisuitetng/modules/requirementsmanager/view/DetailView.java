@@ -25,6 +25,15 @@ public class DetailView extends JPanel{
 	protected DefaultListModel noteList;
 	protected JList notes;
 	
+	//Textfields
+	JTextArea textName;
+	JTextArea textDescription;
+
+	//combo boxes
+	JComboBox comboBoxType;
+	JComboBox comboBoxStatus;
+	JComboBox comboBoxPriority;
+	
 	private Requirement requirement;
 	
 	private static final int VERTICAL_PADDING = 10;
@@ -57,34 +66,34 @@ public class DetailView extends JPanel{
 		JLabel lblPriority = new JLabel("Priority:");
 		add(lblPriority);
 
-		JTextArea textName = new JTextArea(1,40);
+		textName = new JTextArea(1,40);
 		textName.setLineWrap(false);
 		textName.setBorder((new JTextField()).getBorder());
 		add(textName);
 		
-		JTextArea textDescription = new JTextArea(4,40);
+	    textDescription = new JTextArea(4,40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
 		add(textDescription);
 				
 		String[] availableTypes = { "", "Epic", "Theme", "User Story", "Non-functional","Scenario"};
-		JComboBox comboBoxType = new JComboBox(availableTypes);
+		comboBoxType = new JComboBox(availableTypes);
 		comboBoxType.setPrototypeDisplayValue("Non-functional");
 		add(comboBoxType);
 		
 		String[] availableStatuses = {"","New","In Progress","Open","Complete","Deleted"};
-		JComboBox comboBoxStatus = new JComboBox(availableStatuses);
+		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		add(comboBoxStatus);
 		
 		String[] availablePriorities = {"","High","Medium","Low"};
-		JComboBox comboBoxPriority = new JComboBox(availablePriorities);
+		comboBoxPriority = new JComboBox(availablePriorities);
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		add(comboBoxPriority);
 		
 		JButton btnSave = new JButton("Save Requirement");
-		btnSave.setAction(new SaveRequirementAction());
+		btnSave.setAction(new SaveRequirementAction(requirement,this));
 		add(btnSave);
 		
 		//create note panel
