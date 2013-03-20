@@ -13,6 +13,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
@@ -44,7 +45,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		
 		newRequirement.setrUID(Count()+1); //we have to set the UID
 		
-		List<ValidationIssue> issues = validator.validate(s, newRequirement);
+		List<ValidationIssue> issues = validator.validate(s, newRequirement, RequirementActionMode.CREATE);
 		if(issues.size() > 0) {
 			// TODO: pass errors to client through exception
 			for (ValidationIssue issue : issues) {
@@ -61,7 +62,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	@Override
 	public Requirement[] getEntity(Session s, String id)
-			throws NotFoundException, WPISuiteException {
+			throws NotFoundException {
 		
 		final int intId = Integer.parseInt(id);
 		if(intId < 1) {
@@ -83,12 +84,12 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	}
 
 	@Override
-	public Requirement[] getAll(Session s) throws WPISuiteException {
+	public Requirement[] getAll(Session s) {
 		return db.retrieveAll(new Requirement(), s.getProject()).toArray(new Requirement[0]);
 	}
 
 	@Override
-	public void save(Session s, Requirement model) throws WPISuiteException {
+	public void save(Session s, Requirement model) {
 		db.save(model, s.getProject());
 	}
 
@@ -113,7 +114,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	}
 
 	@Override
-	public int Count() throws WPISuiteException {
+	public int Count() {
 		// note that this is not project-specific - ids are unique across projects
 		return db.retrieveAll(new Requirement()).size();
 	}
@@ -124,7 +125,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		
 		Requirement updatedRequirement = Requirement.fromJSON(content);
 
-		List<ValidationIssue> issues = validator.validate(s, updatedRequirement);
+		List<ValidationIssue> issues = validator.validate(s, updatedRequirement, RequirementActionMode.EDIT);
 		if(issues.size() > 0) {
 			throw new BadRequestException();
 		}

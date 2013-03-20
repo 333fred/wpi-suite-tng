@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
@@ -48,7 +49,7 @@ public class RequirementValidatorTest {
 
 	
 	@Before
-	public void init() {
+	public void init() throws Exception {
 		testUser = new User(null, "testUser", null, -1);
 		testProject = new Project("test", "1");
 		mockSsid = "abc123";
@@ -64,72 +65,72 @@ public class RequirementValidatorTest {
 	}
 	
 	@Test
-	public void testNull() {
+	public void testNullCreate() {
 		Requirement r = null;
-		checkNumIssues(1, r, defaultSession);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testGood() {
-		checkNoIssues(goodRequirement, defaultSession);
+	public void testGoodRequirementCreate() {
+		checkNoIssues(goodRequirement, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testNullName() {
+	public void testNullNameCreate() {
 		Requirement r  = new Requirement();
 		r.setName(null);
 		r.setDescription("A quality description");
-		checkNumIssues(1, r, defaultSession);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testLongName() {
+	public void testLongNameCreate() {
 		Requirement r  = new Requirement();
 		r.setName(new String(new char[101]));
 		r.setDescription("A quality description");
-		checkNumIssues(1, r, defaultSession);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testNoDescription() {
+	public void testNoDescriptionCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription(null);
-		checkNumIssues(1, r, defaultSession);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testLinkedList() {
+	public void testLinkedListCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r, defaultSession);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testLongDescription() {
+	public void testLongDescriptionCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription(new String(new char[5001]));
-		checkNumIssues(1, r, defaultSession);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 	}
 	
 	@Test
-	public void testType() {
+	public void testTypeCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r, defaultSession);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
 		
 		assertEquals(r.getType(),Type.BLANK);
 	}
 	
 	@Test
-	public void testStatus() {
+	public void testStatusCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r, defaultSession);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
 		
 		assertEquals(r.getStatus(),Status.NEW);
 	}
@@ -139,7 +140,7 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		checkNumIssues(0, r, defaultSession);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
 		
 		assertEquals(r.getLog(), new LinkedList<String>());
 		assertEquals(r.getNotes(), new LinkedList<String>());
@@ -148,10 +149,10 @@ public class RequirementValidatorTest {
 		assertEquals(r.gettID(), new LinkedList<Integer>());
 	}
 	
-	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session) {
+	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session, RequirementActionMode mode) {
 		List<ValidationIssue> issues;
 		try {
-			issues = validator.validate(session, requirement);
+			issues = validator.validate(session, requirement, mode);
 			assertEquals(num, issues.size());
 		} catch(WPISuiteException e) {
 			throw new RuntimeException("Unexpected WPISuiteException", e);
@@ -159,8 +160,8 @@ public class RequirementValidatorTest {
 		return issues;
 	}
 	
-	public void checkNoIssues(Requirement requirement, Session session) {
-		checkNumIssues(0, requirement, session);
+	public void checkNoIssues(Requirement requirement, Session session, RequirementActionMode mode) {
+		checkNumIssues(0, requirement, session, mode);
 	}
 
 }
