@@ -9,7 +9,6 @@ import javax.swing.*;
 
 //import edu.wpi.cs.wpisuitetng.modules.defecttracker.defect.defectevents.model.DefectEventListModel;
 //import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.NotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 /**
@@ -65,9 +64,7 @@ public class DetailView extends JPanel{
 		//An ok button at the bottom
 		bottom = new JPanel();
 		bottom.setPreferredSize(new Dimension(100,300));
-		ok = new JButton("OK");
-		//add the ok button to the bottom panel
-		bottom.add(ok);
+		bottom.setLayout(null);
 		
 		
 		//Iterate over the list of existing notes in the requirement, effectively displaying the,
@@ -86,6 +83,9 @@ public class DetailView extends JPanel{
 		//add all the sub panels to the main panel.
 		add(top, BorderLayout.NORTH);
 		add(bottom,BorderLayout.SOUTH);
+		ok = new JButton("OK");
+		ok.setBounds(0, 64, 150, 25);
+		bottom.add(ok);
 		add(left, BorderLayout.WEST);
 		add(right, BorderLayout.EAST);
 		add(notes); //This is for displaying the notes

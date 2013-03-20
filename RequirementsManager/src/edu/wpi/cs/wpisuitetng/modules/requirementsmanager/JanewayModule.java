@@ -29,10 +29,9 @@ public class JanewayModule implements IJanewayModule {
 		
 		Requirement req = new Requirement();
 		DetailView detView = new DetailView(req);
-		MainView main = new MainView(detView,req);
+		RequirementDetailViewGui reqtab = new RequirementDetailViewGui(detView, req);
 		
-		
-		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), new JPanel(), main);
+		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), new JPanel(), reqtab);
 		
 		tabs.add(tab1);
 	}
