@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.defect.DefectPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
 /**
  * @author Jason
@@ -124,7 +125,7 @@ public class RequirementValidatorTest {
 		
 		assertEquals(r.getType(),Type.BLANK);
 	}
-	
+		
 	@Test
 	public void testStatusCreate() {
 		Requirement r  = new Requirement();
@@ -146,7 +147,7 @@ public class RequirementValidatorTest {
 		assertEquals(r.getNotes(), new LinkedList<String>());
 		assertEquals(r.getpUID(), new LinkedList<Integer>());
 		assertEquals(r.getSubRequirements(), new LinkedList<Integer>());
-		assertEquals(r.gettID(), new LinkedList<Integer>());
+		assertEquals(r.gettID(), new LinkedList<User>());
 	}
 	
 	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session, RequirementActionMode mode) {
