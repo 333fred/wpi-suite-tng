@@ -159,8 +159,8 @@ public class Requirement extends AbstractModel {
 	public String toListString(){
 		
 		// TODO: determine what else to add to this method, if anything
-		String listString = new String();	// the variable to hold the summary
-		listString = listString.concat(this.name + " ");	// add this Requirement's name
+		// Add the requirement UID and name
+		String listString = this.rUID + " " + this.name ;	
 		
 		return listString;
 		
