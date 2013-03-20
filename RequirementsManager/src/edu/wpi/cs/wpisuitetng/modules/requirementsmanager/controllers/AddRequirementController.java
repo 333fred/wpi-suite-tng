@@ -5,6 +5,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -17,11 +18,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class AddRequirementController {
 
-	//view here
+	DetailView detailView;
 	
-	public AddRequirementController( /*view here?*/){
-		//TODO: Implement connection with view
-		//Pass your view here
+	public AddRequirementController(DetailView detailView){
+		this.detailView = detailView;
 	}
 	
 	public void AddRequirement(Requirement toAdd) {

@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -22,10 +23,11 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 	private AddRequirementController controller;
 
-	// TODO: Implement view connection
+	DetailView detailView;
 
-	public AddRequirementRequestObserver(AddRequirementController controller) {
+	public AddRequirementRequestObserver(AddRequirementController controller, DetailView detailView) {
 		this.controller = controller;
+		this.detailView = detailView;
 	}
 
 	/*
@@ -53,8 +55,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 			// make sure the requirement isn't null
 			if (requirement != null) {
-				/* Do something with the requirement if wanted
-				 * SwingUtilities.invokeLater(new Runnable() {
+			/*/omething with the requirement if wanted
+				 singUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
 						((DefectPanel) view.getDefectPanel())
@@ -62,13 +64,14 @@ public class AddRequirementRequestObserver implements RequestObserver {
 						view.setEditModeDescriptors(defect);
 					}
 				});*/
+				
+				  JOptionPane.showMessageDialog(detailView, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
 			} else {
-				/*
-				 * Display error in view... here's how defecttracker does it:
-				 * JOptionPane.showMessageDialog(view,
-				 * "Unable to parse defect received from server.",
-				 * "Save Defect Error", JOptionPane.ERROR_MESSAGE);
-				 */
+				
+				 //Display error in view... here's how defecttracker does it:
+				  JOptionPane.showMessageDialog(detailView, "Unable to parse defect received from server.",
+				  "Save Defect Error", JOptionPane.ERROR_MESSAGE);
+				 
 			}
 		} else {
 			/*

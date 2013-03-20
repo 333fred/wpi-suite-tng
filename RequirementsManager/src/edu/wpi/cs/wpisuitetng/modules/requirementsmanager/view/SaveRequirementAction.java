@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -28,7 +29,7 @@ public class SaveRequirementAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		AddRequirementController controller = new AddRequirementController();
+		AddRequirementController controller = new AddRequirementController(parentView);
 		
 		requirement.setName(parentView.textName.getText());
 		requirement.setDescription(parentView.textDescription.getText());
@@ -88,5 +89,6 @@ public class SaveRequirementAction extends AbstractAction {
 		}
 		
 		controller.AddRequirement(requirement);
+		JOptionPane.showMessageDialog(parentView,"MAGIC", "YAY",JOptionPane.OK_OPTION);
 	}
 }
