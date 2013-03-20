@@ -10,7 +10,8 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.NotePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.MakeNotePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.noteCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 /**
  * @author Swagasaurus
@@ -19,16 +20,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
 public class DetailView extends JPanel{
 	
 	/** For Notes */
-//	public DefaultListModel noteList;
-	//protected JList notes;
+	protected DefaultListModel noteList;
+	protected JList notes;
 	
-	Requirement requirement;
+	private Requirement requirement;
 	
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
+	private static final int VERTICAL_FAR = 20;
 	
 	public DetailView(Requirement requirement){
 		this.requirement = requirement;
+		
+		noteList = new DefaultListModel();
+		notes = new JList(noteList);
+		
+		notes.setCellRenderer(new noteCellRenderer());
 		
 		SpringLayout layout = new SpringLayout();
 		this.setLayout(layout);
@@ -67,15 +74,21 @@ public class DetailView extends JPanel{
 	//	textDescription.setBounds(110, 80, 200, 130);
 		add(textDescription);
 				
-		JComboBox comboBoxType = new JComboBox();
+		String[] availableTypes = { "", "Epic", "Theme", "User Story", "Non-functional","Scenario"};
+		JComboBox comboBoxType = new JComboBox(availableTypes);
+		comboBoxType.setPrototypeDisplayValue("Non-functional");
 		//comboBoxType.setBounds(110, 250, 100, 20);
 		add(comboBoxType);
 		
-		JComboBox comboBoxStatus = new JComboBox();
+		String[] availableStatuses = {"","New","In Progress","Open","Complete","Deleted"};
+		JComboBox comboBoxStatus = new JComboBox(availableStatuses);
+		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		//comboBoxStatus.setBounds(110, 300, 100, 20);
 		add(comboBoxStatus);
 		
-		JComboBox comboBoxPriority = new JComboBox();
+		String[] availablePriorities = {"","High","Medium","Low"};
+		JComboBox comboBoxPriority = new JComboBox(availablePriorities);
+		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		//comboBoxPriority.setBounds(110, 350, 100, 20);
 		add(comboBoxPriority);
 		
@@ -86,12 +99,12 @@ public class DetailView extends JPanel{
 		//create note panel
 		//noteList = new DefaultListModel();
 		//notes = new JList(noteList);
-		NotePanel notePanel = new NotePanel(this.requirement, this); 
+		MakeNotePanel makeNotePanel = new MakeNotePanel(this.requirement, this); 
 		//JScrollPane noteScrollPanel = new JScrollPane(notes);
 		
-		//add(this.notes); //This is for displaying the notes
-		add(notePanel);
-		
+		add(notes); //This is for displaying the notes
+		add(makeNotePanel);
+
 		//Align left edges of objects
 	    layout.putConstraint(SpringLayout.WEST, lblName, 0, SpringLayout.WEST, this);
 	    layout.putConstraint(SpringLayout.WEST, lblDescription, 0, SpringLayout.WEST, this);
@@ -104,10 +117,11 @@ public class DetailView extends JPanel{
 	    layout.putConstraint(SpringLayout.WEST, comboBoxStatus, 0, SpringLayout.WEST, this);
 	    layout.putConstraint(SpringLayout.WEST, comboBoxPriority, 0, SpringLayout.WEST, this);
 	    layout.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, notePanel, 0, SpringLayout.WEST, this);	    
+	    layout.putConstraint(SpringLayout.WEST, notes, 0, SpringLayout.WEST, this);	     
+	    layout.putConstraint(SpringLayout.WEST, makeNotePanel, 0, SpringLayout.WEST, this);	    
 	    
 	    //Align Right edges of objects
-	    layout.putConstraint(SpringLayout.EAST, notePanel, 450, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.EAST, makeNotePanel, 450, SpringLayout.WEST, this);
 	    
 	    //Align North Edges of Objects
 	    layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING, SpringLayout.NORTH, this);	  
@@ -119,8 +133,13 @@ public class DetailView extends JPanel{
 	    layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxType);
 	    layout.putConstraint(SpringLayout.NORTH, comboBoxStatus, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblStatus);	    
 	    layout.putConstraint(SpringLayout.NORTH, lblPriority, VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxStatus);	
-	    layout.putConstraint(SpringLayout.NORTH, comboBoxPriority, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblPriority);	  	    
-	    layout.putConstraint(SpringLayout.NORTH, notePanel, VERTICAL_PADDING+20, SpringLayout.SOUTH, comboBoxPriority);	 
-	    layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING, SpringLayout.SOUTH, notePanel);	     
+	    layout.putConstraint(SpringLayout.NORTH, comboBoxPriority, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblPriority); 
+	    layout.putConstraint(SpringLayout.NORTH, notes, VERTICAL_PADDING+VERTICAL_FAR, SpringLayout.SOUTH, comboBoxPriority);	    
+	    layout.putConstraint(SpringLayout.NORTH, makeNotePanel, VERTICAL_PADDING, SpringLayout.SOUTH, notes);
+	    layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING, SpringLayout.SOUTH, makeNotePanel);	  
+	}
+	
+	public DefaultListModel getNoteList() {
+		return noteList;
 	}
 }

@@ -1,115 +1,32 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SpringLayout;
+import javax.swing.ListCellRenderer;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.DetailView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.SaveNoteAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.SaveNoteController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Note;
 
-/**
- * A panel containing a form for adding a new note to a defect
- * @author spkordell
- */
 @SuppressWarnings("serial")
-public class NotePanel extends JPanel{
-
-	private final JTextArea noteField;
-	private final JButton addnote;
-	private final JLabel addnoteLabel;
-
-	private static final int VERTICAL_PADDING = 5;
-	private static final int note_FIELD_HEIGHT = 50;
-
-	DefaultListModel noteList = new DefaultListModel();
-	JList notes = new JList(noteList);
+public class NotePanel extends JPanel {
 	
-	/**
-	 * Construct the panel, add and layout components.
-	 * @param model the defect model
-	 * @param parentView the parent view
-	 */
-	public NotePanel(Requirement model, DetailView parentView) {
-		noteField = new JTextArea();
-		noteField.setLineWrap(true);
-		noteField.setWrapStyleWord(true);
-		noteField.setBorder((new JTextField()).getBorder());
+	protected JLabel title;
+	protected JLabel content;
 
-		addnote = new JButton("Add note");
-		addnoteLabel = new JLabel("Add a new note:");
-		
-		addnote.setAction(new SaveNoteAction(new SaveNoteController(this, model, parentView)));
-		
-		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.black, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-		
-		SpringLayout layout = new SpringLayout();
-		this.setLayout(layout);
-		
-		final JScrollPane noteFieldPane = new JScrollPane(noteField);
-		
-		layout.putConstraint(SpringLayout.NORTH, addnoteLabel, 0, SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.WEST, addnoteLabel, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, noteFieldPane, VERTICAL_PADDING, SpringLayout.SOUTH, addnoteLabel);
-		layout.putConstraint(SpringLayout.WEST, noteFieldPane, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, noteFieldPane, 0, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.SOUTH, noteFieldPane, note_FIELD_HEIGHT, SpringLayout.NORTH, noteFieldPane);
-		layout.putConstraint(SpringLayout.NORTH, addnote, VERTICAL_PADDING, SpringLayout.SOUTH, noteFieldPane);
-		layout.putConstraint(SpringLayout.EAST, addnote, 0, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, addnote);
-		
-		//create note panel
-		this.noteList = new DefaultListModel();
-		this.notes = new JList(noteList);
-		JScrollPane notesScrollPanel = new JScrollPane(this.notes);
-		
-				//Adjust constraints for the label so it's at (5,5).
-		layout.putConstraint(SpringLayout.SOUTH, notesScrollPanel,5, SpringLayout.NORTH, addnoteLabel);
-		
-		this.add(addnoteLabel);
-		this.add(noteFieldPane);
-		this.add(addnote);	
-		//this.add(notesScrollPanel); //This is for displaying the notes
-
+	public NotePanel(Note note) {
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		title = new JLabel("<html><font size=4><b>" + "Doctor Who"/*TODO: Make users*//*note.getCreator().getName()*/ + "<font size=.25></b> added on " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(note.getDate()) + "</html>");
+		title.setFont(title.getFont().deriveFont(9));
+		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+		content = new JLabel("<html><i>" + note.getNote() + "</i></html>");
+		content.setFont(content.getFont().deriveFont(9));
+		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+		this.add(title);
+		this.add(content);
+		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), BorderFactory.createLineBorder(Color.black, 1)), BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 	}
-	
-	/**
-	 * @return the note JTextArea
-	 */
-	public JTextArea getnoteField() {
-		return noteField;
-	}
-	
-	public DefaultListModel getNoteList() {
-		return noteList;
-	}
-	
-	/**
-	 * Enables and disables input on this panel.
-	 * @param value if value is true, input is enabled, otherwise input is disabled.
-	 */
-	public void setInputEnabled(boolean value) {
-		noteField.setEnabled(value);
-		addnote.setEnabled(value);
-		if (value) {
-			addnoteLabel.setForeground(Color.black);
-		}
-		else {
-			addnoteLabel.setForeground(Color.gray);
-		}
-	}	
 }

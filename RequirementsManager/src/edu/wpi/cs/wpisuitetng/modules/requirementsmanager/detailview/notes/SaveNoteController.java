@@ -9,7 +9,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Note;
  */
 public class SaveNoteController {
 
-	private final NotePanel view;
+	private final MakeNotePanel view;
 	private final Requirement model;
 	private final DetailView parentView;
 
@@ -19,7 +19,7 @@ public class SaveNoteController {
 	 * @param model the Defect model being noteed on
 	 * @param parentView the DefectPanel displaying the defect
 	 */
-	public SaveNoteController(NotePanel view, Requirement model, DetailView parentView) {
+	public SaveNoteController(MakeNotePanel view, Requirement model, DetailView parentView) {
 		this.view = view; 
 		this.model = model;
 		this.parentView = parentView;
@@ -33,7 +33,8 @@ public class SaveNoteController {
 		if (noteText.length() > 0) {
 			this.model.addNote(new Note(noteText,null));
 			//JOptionPane.showMessageDialog(parentView, "You're note: "+noteText, "You Added A Note! Oh Boy!", JOptionPane.OK_OPTION);
-			view.getNoteList().addElement(noteText);
+			//parentView.getNoteList().addElement(noteText);
+			parentView.getNoteList().addElement(this.model.getNotes().get(this.model.getNotes().size()-1));
 		}
 	}
 }
