@@ -18,10 +18,10 @@ public class RetrieveAllRequirementsController {
 
 	
 	protected Requirement[] data;
-	//variable connecting with view
 	
 	public RetrieveAllRequirementsController( /*view here?*/){
 		//TODO: Implement connection with view
+		//You will want to pass your view here
 	}
 	
 	/**
@@ -44,10 +44,11 @@ public class RetrieveAllRequirementsController {
 	public void receivedData(Requirement[] requirements){
 		this.data = requirements;
 		//TODO: implement connection with view
+		//You have the requirements, so here somehow update your view to display them
 	}
 	
 	/**
-	 * This method is called by the {@link r} when an
+	 * This method is called by the {@link RetrieveAllRequirementsRequestObserver} when an
 	 * error occurs retrieving the requirements from the server.
 	 */
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
