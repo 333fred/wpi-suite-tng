@@ -25,7 +25,7 @@ public class AddRequirementController {
 	}
 	
 	public void AddRequirement(Requirement toAdd) {
-		final RequestObserver requestObserver = new AddRequirementRequestObserver(this); //you will probably want to pass your view to the observer as well
+		final RequestObserver requestObserver = new AddRequirementRequestObserver(this, detailView); //you will probably want to pass your view to the observer as well
 		Request request;
 		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.PUT);
 		request.setBody(toAdd.toJSON());
