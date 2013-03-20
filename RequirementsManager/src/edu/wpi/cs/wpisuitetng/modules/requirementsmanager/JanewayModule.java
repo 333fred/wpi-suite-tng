@@ -21,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
  *
  */
 public class JanewayModule implements IJanewayModule {
+
 	List<JanewayTabModel> tabs;
 	
 	public JanewayModule() {
