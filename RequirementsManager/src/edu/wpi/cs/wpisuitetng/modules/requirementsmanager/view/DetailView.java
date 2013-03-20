@@ -12,6 +12,8 @@ import javax.swing.*;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.SaveNoteAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.SaveNoteController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
 /**
  * @author Swagasaurus
@@ -41,60 +43,50 @@ public class DetailView extends JPanel{
 		this.setLayout(layout);
 		
 		JLabel lblName = new JLabel("Name:");
-		//lblName.setBounds(12, 50, 55, 16);
 		add(lblName);
 		
 		JLabel lblDescription = new JLabel("Description:");
-		//lblDescription.setBounds(12, 80, 77, 16);
 		add(lblDescription);
 		
 		JLabel lblType = new JLabel("Type:");
-		//lblType.setBounds(12, 250, 55, 16);
 		add(lblType);
 		
 		JLabel lblStatus = new JLabel("Status:");
-		//lblStatus.setBounds(12, 300, 55, 16);
 		add(lblStatus);
 		
 		JLabel lblPriority = new JLabel("Priority:");
-		//lblPriority.setBounds(12, 350, 55, 16);
 		add(lblPriority);
 
 		JTextArea textName = new JTextArea(1,40);
 		textName.setLineWrap(false);
 		textName.setBorder((new JTextField()).getBorder());
-		//textField.setBounds(110, 50, 200, 20);
-		//textName.setColumns(10);
 		add(textName);
 		
 		JTextArea textDescription = new JTextArea(4,40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
-	//	textDescription.setBounds(110, 80, 200, 130);
 		add(textDescription);
 				
 		String[] availableTypes = { "", "Epic", "Theme", "User Story", "Non-functional","Scenario"};
 		JComboBox comboBoxType = new JComboBox(availableTypes);
 		comboBoxType.setPrototypeDisplayValue("Non-functional");
-		//comboBoxType.setBounds(110, 250, 100, 20);
 		add(comboBoxType);
 		
 		String[] availableStatuses = {"","New","In Progress","Open","Complete","Deleted"};
 		JComboBox comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
-		//comboBoxStatus.setBounds(110, 300, 100, 20);
 		add(comboBoxStatus);
 		
 		String[] availablePriorities = {"","High","Medium","Low"};
 		JComboBox comboBoxPriority = new JComboBox(availablePriorities);
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
-		//comboBoxPriority.setBounds(110, 350, 100, 20);
 		add(comboBoxPriority);
 		
 		JButton btnSave = new JButton("Save Requirement");
-		//btnOk.setBounds(410, 296, 200, 25);
+		btnSave.setAction(new SaveRequirementAction());
 		add(btnSave);
+		
 
 		//create note panel
 		//noteList = new DefaultListModel();
