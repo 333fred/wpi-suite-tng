@@ -16,11 +16,13 @@ import org.junit.Test;
 public class NoteTest {
 	
 	String bob;
+	String note;
 	Date date;
 	
 	@Before
 	public void setUp(){
 	bob = "bob";
+	note = "test";
 	date = new Date();
 	}
 
@@ -28,14 +30,14 @@ public class NoteTest {
 	public void testGetNote() {
 		Note noteTest = new Note(null, null, null);
 		assertEquals(noteTest.getNote(),null);
-		noteTest.setNote("Test");
-		assertEquals(noteTest.getCreator(),"Test");
+		noteTest.setNote(note);
+		assertEquals(noteTest.getCreator(),note);
 	}
 	
 	@Test
 	public void testGetNote2() {
-		Note noteTest = new Note("Test", null, null);
-		assertEquals(noteTest.getNote(),"Test");
+		Note noteTest = new Note(note, null, null);
+		assertEquals(noteTest.getNote(),note);
 	}
 	
 	@Test

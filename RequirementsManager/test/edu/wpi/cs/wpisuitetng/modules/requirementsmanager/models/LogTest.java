@@ -18,25 +18,27 @@ public class LogTest {
 	
 	User bob;
 	Date date;
+	String log;
 	
 	@Before
 	public void setUp(){
 	//bob = new User(null, null, null, 0);
 	date = new Date();
+	log = "log";
 	}
 
 	@Test
 	public void testGetLog() {
 		Log logTest = new Log(null, null, null);
 		assertEquals(logTest.getLog(),null);
-		logTest.setLog("Test");
-		assertEquals(logTest.getCreator(),"Test");
+		logTest.setLog(log);
+		assertEquals(logTest.getLog(),log);
 	}
 	
 	@Test
 	public void testGetLog2() {
-		Log logTest = new Log("Test", null, null);
-		assertEquals(logTest.getLog(),"Test");
+		Log logTest = new Log(log, null, null);
+		assertEquals(logTest.getLog(),log);
 	}
 	
 	@Test
@@ -44,7 +46,7 @@ public class LogTest {
 		Log logTest = new Log(null, null, null);
 		assertEquals(logTest.getDate(),null);
 		logTest.setDate(date);
-		assertEquals(logTest.getCreator(),date);
+		assertEquals(logTest.getDate(),date);
 	}
 	
 	@Test
