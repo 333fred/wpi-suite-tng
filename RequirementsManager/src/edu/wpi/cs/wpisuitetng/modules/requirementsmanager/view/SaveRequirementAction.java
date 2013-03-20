@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -28,7 +29,7 @@ public class SaveRequirementAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		AddRequirementController controller = new AddRequirementController();
+		AddRequirementController controller = new AddRequirementController(parentView);
 
 		requirement.setName(parentView.textName.getText());
 		requirement.setDescription(parentView.textDescription.getText());
@@ -70,7 +71,7 @@ public class SaveRequirementAction extends AbstractAction {
 			requirement.setType(Type.SCENARIO);
 			break;
 		default:
-			requirement.setType(Type.BLANK);
+			requirement.setType(Type.SCENARIO);
 		}
 
 		switch (parentView.comboBoxStatus.getSelectedIndex()) {
@@ -89,10 +90,10 @@ public class SaveRequirementAction extends AbstractAction {
 		case 4:
 			requirement.setStatus(Status.DELETED);
 			break;
-		default:
-			requirement.setStatus(Status.BLANK);
 		}
 
 		controller.AddRequirement(requirement);
+		JOptionPane.showMessageDialog(parentView, "MAGIC", "YAY",
+				JOptionPane.OK_OPTION);
 	}
 }

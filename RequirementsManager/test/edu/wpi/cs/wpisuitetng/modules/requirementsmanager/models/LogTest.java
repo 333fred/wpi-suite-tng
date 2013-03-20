@@ -1,9 +1,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+/**
+ * @author Nick Massa
+ *
+ */
+
 import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -12,6 +18,12 @@ public class LogTest {
 	
 	User bob;
 	Date date;
+	
+	@Before
+	public void setUp(){
+	//bob = new User(null, null, null, 0);
+	date = new Date();
+	}
 
 	@Test
 	public void testGetLog() {
