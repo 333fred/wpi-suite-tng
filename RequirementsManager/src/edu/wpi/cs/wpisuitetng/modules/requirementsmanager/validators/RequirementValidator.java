@@ -120,10 +120,10 @@ public class RequirementValidator {
 		requirement.setStatus(Status.NEW);
 		
 		// make sure title and description size are within constraints
-		if(requirement.getName() == null || requirement.getName().length() > 100) {
+		if(requirement.getName() == null || requirement.getName().length() > 100 || requirement.getName().length() == 0) {
 			issues.add(new ValidationIssue("Required, must be 1-100 characters", "name"));
 		}
-		if(requirement.getDescription() == null) {
+		if(requirement.getDescription() == null || requirement.getDescription().length() == 0) {
 			// empty descriptions are not allowed
 			issues.add(new ValidationIssue("Required, must be 1-5000 characters", "description"));
 		} else if(requirement.getDescription().length() > 5000) {
@@ -155,6 +155,11 @@ public class RequirementValidator {
 		if(requirement.getType() == null){
 			requirement.setType(Type.BLANK);
 		}
+		
+		//Make sure all assignees exist
+		/*for (User u : requirement.gettID()){
+			getExistingUser(u);
+		}*/
 				
 		return issues;
 	}

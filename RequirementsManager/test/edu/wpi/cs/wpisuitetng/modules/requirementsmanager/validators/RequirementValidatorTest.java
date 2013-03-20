@@ -124,7 +124,7 @@ public class RequirementValidatorTest {
 		
 		assertEquals(r.getType(),Type.BLANK);
 	}
-	
+		
 	@Test
 	public void testStatusCreate() {
 		Requirement r  = new Requirement();
@@ -146,7 +146,7 @@ public class RequirementValidatorTest {
 		assertEquals(r.getNotes(), new LinkedList<String>());
 		assertEquals(r.getpUID(), new LinkedList<Integer>());
 		assertEquals(r.getSubRequirements(), new LinkedList<Integer>());
-		assertEquals(r.gettID(), new LinkedList<Integer>());
+		assertEquals(r.gettID(), new LinkedList<User>());
 	}
 	
 	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session, RequirementActionMode mode) {
