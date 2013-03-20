@@ -13,7 +13,6 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.MainView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.RequirementDetailViewGui;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 
 /**
