@@ -6,8 +6,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes;
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -33,6 +35,9 @@ public class NotePanel extends JPanel{
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
 
+	DefaultListModel noteList = new DefaultListModel();
+	JList notes = new JList(noteList);
+	
 	/**
 	 * Construct the panel, add and layout components.
 	 * @param model the defect model
@@ -67,9 +72,19 @@ public class NotePanel extends JPanel{
 		layout.putConstraint(SpringLayout.EAST, addnote, 0, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, addnote);
 		
+		//create note panel
+		this.noteList = new DefaultListModel();
+		this.notes = new JList(noteList);
+		JScrollPane notesScrollPanel = new JScrollPane(this.notes);
+		
+				//Adjust constraints for the label so it's at (5,5).
+		layout.putConstraint(SpringLayout.SOUTH, notesScrollPanel,5, SpringLayout.NORTH, addnoteLabel);
+		
 		this.add(addnoteLabel);
 		this.add(noteFieldPane);
-		this.add(addnote);
+		this.add(addnote);	
+		this.add(notesScrollPanel); //This is for displaying the notes
+
 	}
 	
 	/**
@@ -77,6 +92,10 @@ public class NotePanel extends JPanel{
 	 */
 	public JTextArea getnoteField() {
 		return noteField;
+	}
+	
+	public DefaultListModel getNoteList() {
+		return noteList;
 	}
 	
 	/**
