@@ -87,7 +87,6 @@ public class DetailView extends JPanel{
 		btnSave.setAction(new SaveRequirementAction());
 		add(btnSave);
 		
-
 		//create note panel
 		//noteList = new DefaultListModel();
 		//notes = new JList(noteList);
