@@ -5,7 +5,7 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.event.ChangeListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * Controller wrapper around the MainTabView
