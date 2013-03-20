@@ -31,7 +31,7 @@ public class NoteTest {
 		Note noteTest = new Note(null, null, null);
 		assertEquals(noteTest.getNote(),null);
 		noteTest.setNote(note);
-		assertEquals(noteTest.getCreator(),note);
+		assertEquals(noteTest.getNote(),note);
 	}
 	
 	@Test
@@ -45,7 +45,7 @@ public class NoteTest {
 		Note noteTest = new Note(null, null, null);
 		assertEquals(noteTest.getDate(),null);
 		noteTest.setDate(date);
-		assertEquals(noteTest.getCreator(),date);
+		assertEquals(noteTest.getDate(),date);
 	}
 	
 	@Test
