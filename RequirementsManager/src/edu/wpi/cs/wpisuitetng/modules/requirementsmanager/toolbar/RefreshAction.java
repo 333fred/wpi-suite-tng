@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -21,21 +22,21 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class RefreshAction extends AbstractAction {
 
-	private final MainTabController controller;
+	private final RequirementListView requirementList;
 	
 	/**
 	 * Create a CreateDefectAction
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
-	public RefreshAction(MainTabController controller) {
+	public RefreshAction(RequirementListView requirementList) {
 		super("Refresh");
-		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
+		this.requirementList = requirementList;
+		putValue(MNEMONIC_KEY, KeyEvent.VK_F5);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO: implement code for actually refreshing the set of requirements
+		requirementList.refresh();
 	}
 
 }

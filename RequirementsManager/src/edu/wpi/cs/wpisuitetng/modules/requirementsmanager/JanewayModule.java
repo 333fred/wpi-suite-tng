@@ -49,14 +49,14 @@ public class JanewayModule implements IJanewayModule {
 		//initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();	
 		
-		//initialize the requirements list view
-		requirementListView = new RequirementListView();
-		
 		//initialize the tab view public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		tabView = new MainTabView();
 		
 		//initialize TabController
 		tabController = new MainTabController(tabView);
+		
+		//initialize the requirements list view
+		requirementListView = new RequirementListView(tabController);
 		
 		//initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);
