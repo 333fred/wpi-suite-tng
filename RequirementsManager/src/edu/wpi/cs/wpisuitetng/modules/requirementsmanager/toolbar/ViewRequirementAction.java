@@ -12,8 +12,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
 
 /**
  * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
