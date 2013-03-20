@@ -5,14 +5,13 @@
  * @author Alex Gorowara 
  * 
  */
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
