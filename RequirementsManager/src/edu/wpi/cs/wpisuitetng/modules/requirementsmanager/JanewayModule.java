@@ -12,10 +12,10 @@ import javax.swing.text.html.ListView;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.DetailView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.MainView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.MainView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
 
 /**
  * @author Fredric
