@@ -3,9 +3,11 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 import java.awt.Component;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
 
 /**
  * Controller wrapper around the MainTabView
@@ -54,7 +56,8 @@ public class MainTabController {
 	 */
 	
 	public Tab addCreateRequirementTab() {
-		return null;
+		DetailView emptyDetailView = new DetailView(new Requirement()); 
+		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement
