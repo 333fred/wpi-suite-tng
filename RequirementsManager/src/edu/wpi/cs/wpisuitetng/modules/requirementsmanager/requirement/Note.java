@@ -32,6 +32,7 @@ public class Note {
 		this.creator = creator;
 	}
 
+	
 	/**
 	 * Create a new note. The date and time is set to the current system date
 	 * and time.

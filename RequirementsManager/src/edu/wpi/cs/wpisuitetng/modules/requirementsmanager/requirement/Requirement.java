@@ -13,6 +13,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Note;
 
 /**
  * This is the basic requirement model. It contains all the fields that can be
@@ -113,6 +114,7 @@ public class Requirement extends AbstractModel {
 		this.status = Status.NEW;
 		this.log = new LinkedList<Log>();
 	}
+
 
 	/**
 	 * Converts this Requirement to a JSON string.
