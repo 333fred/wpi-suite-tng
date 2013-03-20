@@ -88,6 +88,7 @@ public class SaveRequirementAction extends AbstractAction {
 			break;
 		}
 		
+		System.out.println("HIT DA BUTTON");
 		controller.AddRequirement(requirement);
 		JOptionPane.showMessageDialog(parentView,"MAGIC", "YAY",JOptionPane.OK_OPTION);
 	}
