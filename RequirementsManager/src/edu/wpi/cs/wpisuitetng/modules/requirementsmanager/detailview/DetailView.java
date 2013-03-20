@@ -7,12 +7,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.net.ssl.SSLEngineResult.Status;
 import javax.swing.*;
 
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.notes.NotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
 /**
@@ -20,90 +17,110 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requiremen
  *
  */
 public class DetailView extends JPanel{
-	private JTextField nameField;
 	
 	/** For Notes */
 //	public DefaultListModel noteList;
 	//protected JList notes;
-	protected NotePanel notePanel;
 	
 	Requirement requirement;
 	
+	private static final int VERTICAL_PADDING = 10;
+	private static final int VERTICAL_CLOSE = -5;
+	
 	public DetailView(Requirement requirement){
 		this.requirement = requirement;
-				
-		setLayout(null);
-				
-		// Set up name label
+		
+		SpringLayout layout = new SpringLayout();
+		this.setLayout(layout);
+		
 		JLabel lblName = new JLabel("Name:");
-		lblName.setBounds(12, 50, 55, 16);
+		//lblName.setBounds(12, 50, 55, 16);
 		add(lblName);
 		
-		// Set up description label
 		JLabel lblDescription = new JLabel("Description:");
-		lblDescription.setBounds(12, 80, 77, 16);
+		//lblDescription.setBounds(12, 80, 77, 16);
 		add(lblDescription);
 		
-		// Set up type label
 		JLabel lblType = new JLabel("Type:");
-		lblType.setBounds(12, 250, 55, 16);
+		//lblType.setBounds(12, 250, 55, 16);
 		add(lblType);
 		
-		// Set up status label
 		JLabel lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(12, 300, 55, 16);
+		//lblStatus.setBounds(12, 300, 55, 16);
 		add(lblStatus);
 		
-		// Set up priority label
 		JLabel lblPriority = new JLabel("Priority:");
-		lblPriority.setBounds(12, 350, 55, 16);
+		//lblPriority.setBounds(12, 350, 55, 16);
 		add(lblPriority);
+
+		JTextArea textName = new JTextArea(1,40);
+		textName.setLineWrap(false);
+		textName.setBorder((new JTextField()).getBorder());
+		//textField.setBounds(110, 50, 200, 20);
+		//textName.setColumns(10);
+		add(textName);
 		
-		// This is the name field
-		nameField = new JTextField();
-		nameField.setBounds(110, 50, 200, 20);
-		add(nameField);
-		nameField.setColumns(10);
-		
-		// This is the description box
-		JTextArea textDescription = new JTextArea();
-		textDescription.setBounds(110, 80, 200, 130);
+		JTextArea textDescription = new JTextArea(4,40);
 		textDescription.setLineWrap(true);
+		textDescription.setWrapStyleWord(true);
+		textDescription.setBorder((new JTextField()).getBorder());
+	//	textDescription.setBounds(110, 80, 200, 130);
 		add(textDescription);
 				
-		// This is the Type dropdown box
-		String[] typeValues = {"", "Epic", "Theme", "User Story", "Non Functional", "Scenario"};
-		JComboBox comboBoxType = new JComboBox(typeValues);
-		comboBoxType.setBounds(110, 250, 100, 20);
+		JComboBox comboBoxType = new JComboBox();
+		//comboBoxType.setBounds(110, 250, 100, 20);
 		add(comboBoxType);
 		
-		// This is the status dropdown box
-		String[] statusValues = {"", "New", "In Progress", "Open", "Complete", "Deleted"};
-		JComboBox comboBoxStatus = new JComboBox(statusValues);
-		comboBoxStatus.setBounds(110, 300, 100, 20);
+		JComboBox comboBoxStatus = new JComboBox();
+		//comboBoxStatus.setBounds(110, 300, 100, 20);
 		add(comboBoxStatus);
 		
-		// This is the priority value dropbox box
-		String[] priorityValues = {"", "High", "Medium", "Low"};
-		JComboBox comboBoxPriority = new JComboBox(priorityValues);
-		comboBoxPriority.setBounds(110, 350, 100, 20);
+		JComboBox comboBoxPriority = new JComboBox();
+		//comboBoxPriority.setBounds(110, 350, 100, 20);
 		add(comboBoxPriority);
 		
-		// This is the ok button
-		JButton btnOk = new JButton("OK");
-		btnOk.setBounds(410, 296, 200, 25);
-		add(btnOk);
-		
-		setLayout(new BorderLayout());
-		
+		JButton btnSave = new JButton("Save Requirement");
+		//btnOk.setBounds(410, 296, 200, 25);
+		add(btnSave);
+
 		//create note panel
 		//noteList = new DefaultListModel();
 		//notes = new JList(noteList);
-		notePanel = new NotePanel(this.requirement, this); 
-		//notePanel.setBounds(110, 50, 200, 20);
+		NotePanel notePanel = new NotePanel(this.requirement, this); 
 		//JScrollPane noteScrollPanel = new JScrollPane(notes);
 		
 		//add(this.notes); //This is for displaying the notes
-		add(this.notePanel,BorderLayout.SOUTH);
+		add(notePanel);
+		
+		//Align left edges of objects
+	    layout.putConstraint(SpringLayout.WEST, lblName, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblDescription, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblType, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblStatus, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblPriority, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, textName, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, textDescription, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, comboBoxType, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, comboBoxStatus, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, comboBoxPriority, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, notePanel, 0, SpringLayout.WEST, this);	    
+	    
+	    //Align Right edges of objects
+	    layout.putConstraint(SpringLayout.EAST, notePanel, 450, SpringLayout.WEST, this);
+	    
+	    //Align North Edges of Objects
+	    layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING, SpringLayout.NORTH, this);	  
+	    layout.putConstraint(SpringLayout.NORTH, textName, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblName);	    
+	    layout.putConstraint(SpringLayout.NORTH, lblDescription, VERTICAL_PADDING, SpringLayout.SOUTH, textName);
+	    layout.putConstraint(SpringLayout.NORTH, textDescription, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblDescription);	    
+	    layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING, SpringLayout.SOUTH, textDescription);	
+	    layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblType);	 	    
+	    layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxType);
+	    layout.putConstraint(SpringLayout.NORTH, comboBoxStatus, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblStatus);	    
+	    layout.putConstraint(SpringLayout.NORTH, lblPriority, VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxStatus);	
+	    layout.putConstraint(SpringLayout.NORTH, comboBoxPriority, VERTICAL_PADDING+VERTICAL_CLOSE, SpringLayout.SOUTH, lblPriority);	  	    
+	    layout.putConstraint(SpringLayout.NORTH, notePanel, VERTICAL_PADDING+20, SpringLayout.SOUTH, comboBoxPriority);	 
+	    layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING, SpringLayout.SOUTH, notePanel);	     
 	}
 }
