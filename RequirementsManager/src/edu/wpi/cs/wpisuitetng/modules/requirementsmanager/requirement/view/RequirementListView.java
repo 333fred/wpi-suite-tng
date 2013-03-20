@@ -93,6 +93,7 @@ public class RequirementListView extends JPanel {
 	private String[] parseRequirements(Requirement[] requirements) {
 		
 		// create an array of Strings, as many as there are requirements
+		
 		String[] listStrings = new String[requirements.length];
 		
 		// for every requirement
@@ -114,7 +115,7 @@ public class RequirementListView extends JPanel {
 	
 	private Requirement[] getRequirementsFromServer() {
 		
-		return null;
+		return new Requirement[0];
 		
 	}
 

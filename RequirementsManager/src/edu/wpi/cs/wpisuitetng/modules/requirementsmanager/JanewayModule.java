@@ -8,12 +8,14 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.text.html.ListView;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.detailview.MainView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.requirement.view.RequirementListView;
 
 /**
  * @author Fredric
@@ -28,11 +30,14 @@ public class JanewayModule implements IJanewayModule {
 		
 		Requirement req = new Requirement();
 		DetailView detView = new DetailView(req);
+		RequirementListView listView = new RequirementListView();
 		//RequirementDetailViewGui reqtab = new RequirementDetailViewGui(detView, req);
 		
 		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), new JPanel(), detView);
+		JanewayTabModel tab2 = new JanewayTabModel(getName(), new ImageIcon(), new JPanel(), listView);
 		
 		tabs.add(tab1);
+		tabs.add(tab2);
 	}
 	
 	/* (non-Javadoc)
