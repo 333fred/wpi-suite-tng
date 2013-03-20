@@ -78,7 +78,11 @@ public class Janeway {
 				else {
 					loginGui.setVisible(true);
 					gui.setVisible(false);
-					loginGui.getConnectButton().addActionListener(new LoginController(gui, loginGui));
+				  	loginGui.getConnectButton().addActionListener(new LoginController(gui, loginGui));
+					/* Comment out above and use this if you don't want to display the login screen (for testing)
+					loginGui.setVisible(false); //true
+					gui.setVisible(true); //false
+				  */
 				}
 			}
 		});
