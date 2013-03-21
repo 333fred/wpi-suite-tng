@@ -56,7 +56,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addCreateRequirementTab() {
-		DetailPanel emptyDetailView = new DetailPanel(new Requirement()); 
+		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this); 
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
@@ -68,7 +68,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
-		DetailPanel requirmentDetailView = new DetailPanel(requirement);
+		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
 		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
 	

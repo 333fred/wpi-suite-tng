@@ -13,6 +13,7 @@ import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
 
@@ -36,15 +37,17 @@ public class DetailPanel extends JPanel {
 	JComboBox comboBoxPriority;
 
 	private Requirement requirement;
+	private MainTabController mainTabController;
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
 	private static final int VERTICAL_FAR = 20;
 	private static final int HORIZONTAL_PADDING = 20;
 
-	public DetailPanel(Requirement requirement) {
+	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
-
+		this.mainTabController = mainTabController;
+		
 		JPanel mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0, 2);
 		setLayout(mainLayout);
@@ -264,5 +267,9 @@ public class DetailPanel extends JPanel {
 
 	public DefaultListModel getNoteList() {
 		return noteList;
+	}
+	
+	public MainTabController getMainTabController() {
+		return mainTabController;
 	}
 }

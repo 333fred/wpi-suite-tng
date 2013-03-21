@@ -25,7 +25,7 @@ public class MainView extends JPanel {
 	public MainView(DetailPanel detailView,Requirement requirement) {
 		this.requirement = requirement;
 		// Add the board panel to this view
-		detailView = new DetailPanel(requirement);
+		//detailView = new DetailPanel(requirement);
 		add(detailView);
 	}
 }

@@ -94,6 +94,6 @@ public class SaveRequirementAction extends AbstractAction {
 		}
 		
 		controller.AddRequirement(requirement);
-
+		this.parentView.getMainTabController().closeCurrentTab();
 	}
 }
