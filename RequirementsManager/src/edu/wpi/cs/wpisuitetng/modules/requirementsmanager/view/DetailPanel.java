@@ -208,10 +208,6 @@ public class DetailPanel extends JPanel {
 			break;
 		}
 
-		for (Note aNote : requirement.getNotes()) {
-			this.noteList.addElement(aNote);
-		}
-
 		// Set up the note panel
 		MakeNotePanel makeNotePanel = new MakeNotePanel(this.requirement, this);
 
@@ -229,6 +225,10 @@ public class DetailPanel extends JPanel {
 		notePane.getContentPane().setLayout(new BorderLayout());
 		notePane.getContentPane().add(noteScrollPane, BorderLayout.CENTER);
 		notePane.getContentPane().add(makeNotePanel, BorderLayout.SOUTH);
+		
+		for (Note aNote : requirement.getNotes()) {
+			this.noteList.addElement(aNote);
+		}
 
 		// Add everything to this
 		add(mainPanel);
