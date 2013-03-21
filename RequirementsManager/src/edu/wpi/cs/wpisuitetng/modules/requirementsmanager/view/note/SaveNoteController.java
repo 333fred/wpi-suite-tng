@@ -19,7 +19,7 @@ public class SaveNoteController {
 	/**
 	 * Construct the controller
 	 * @param view the NewnotePanel containing the note field
-	 * @param model the Defect model being noteed on
+	 * @param model the Defect model being note on
 	 * @param parentView the DefectPanel displaying the defect
 	 */
 	public SaveNoteController(MakeNotePanel view, Requirement model, DetailView parentView) {

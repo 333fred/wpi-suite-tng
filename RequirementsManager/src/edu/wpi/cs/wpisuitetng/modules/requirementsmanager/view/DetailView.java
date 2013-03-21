@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.SaveNoteAction;
@@ -197,6 +198,10 @@ public class DetailView extends JPanel{
 	    case LOW:
 	    	comboBoxPriority.setSelectedIndex(3);
 	    	break;
+	    }
+	    
+	    for (Note aNote : requirement.getNotes()) {
+	    	this.noteList.addElement(aNote);
 	    }
 	}
 	
