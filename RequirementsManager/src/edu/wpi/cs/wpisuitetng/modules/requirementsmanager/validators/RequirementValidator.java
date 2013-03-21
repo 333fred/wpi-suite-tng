@@ -125,9 +125,7 @@ public class RequirementValidator {
 		}
 		if(requirement.getDescription() == null || requirement.getDescription().length() == 0) {
 			// empty descriptions are not allowed
-			issues.add(new ValidationIssue("Required, must be 1-5000 characters", "description"));
-		} else if(requirement.getDescription().length() > 5000) {
-			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
+			issues.add(new ValidationIssue("Required, must be 1 or more characters", "description"));
 		}
 		
 		//handle null lists

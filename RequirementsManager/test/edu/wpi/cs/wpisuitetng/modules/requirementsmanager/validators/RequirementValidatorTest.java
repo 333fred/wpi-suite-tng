@@ -108,14 +108,6 @@ public class RequirementValidatorTest {
 	}
 	
 	@Test
-	public void testLongDescriptionCreate() {
-		Requirement r  = new Requirement();
-		r.setName("Name");
-		r.setDescription(new String(new char[5001]));
-		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
-	}
-	
-	@Test
 	public void testTypeCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
