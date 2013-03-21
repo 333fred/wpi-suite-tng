@@ -14,4 +14,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListVi
 //TODO: Learn how to better test GUI panels
 public class ViewTest {
 	
+	// Create a dummy test so that JUnit doesn't break
+	@Test
+	public void testDummy(){
+		assertEquals(1, 1);
+	}
+	
 }
