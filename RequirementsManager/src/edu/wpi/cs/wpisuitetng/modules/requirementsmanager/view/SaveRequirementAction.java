@@ -20,7 +20,7 @@ public class SaveRequirementAction extends AbstractAction {
 	private DetailPanel parentView;
 
 	SaveRequirementAction(Requirement requirement, DetailPanel parentView) {
-		super("Add Requirement");
+		super("Save Requirement");
 		this.requirement = requirement;
 		this.parentView = parentView;
 	}
