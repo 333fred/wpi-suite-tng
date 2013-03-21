@@ -70,6 +70,7 @@ public class DetailView extends JPanel{
 
 		textName = new JTextArea(1,40);
 		textName.setLineWrap(false);
+		textName.setWrapStyleWord(false);
 		textName.setBorder((new JTextField()).getBorder());
 		add(textName);
 		
@@ -84,9 +85,10 @@ public class DetailView extends JPanel{
 		comboBoxType.setPrototypeDisplayValue("Non-functional");
 		add(comboBoxType);
 		
-		String[] availableStatuses = {"","New","In Progress","Open","Complete","Deleted"};
+		String[] availableStatuses = {"New","In Progress","Open","Complete","Deleted",""};
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
+		comboBoxStatus.setEnabled(false);
 		add(comboBoxStatus);
 		
 		String[] availablePriorities = {"","High","Medium","Low"};
@@ -165,22 +167,22 @@ public class DetailView extends JPanel{
 	    }
 	    switch(requirement.getStatus())
 	    {
-	    case BLANK:
+	    case NEW:
 	    	comboBoxStatus.setSelectedIndex(0);
 	    	break;
-	    case NEW:
+	    case IN_PROGRESS:
 	    	comboBoxStatus.setSelectedIndex(1);
 	    	break;
-	    case IN_PROGRESS:
+	    case OPEN:
 	    	comboBoxStatus.setSelectedIndex(2);
 	    	break;
-	    case OPEN:
+	    case COMPLETE:
 	    	comboBoxStatus.setSelectedIndex(3);
 	    	break;
-	    case COMPLETE:
+	    case DELETED:
 	    	comboBoxStatus.setSelectedIndex(4);
 	    	break;
-	    case DELETED:
+	    case BLANK:
 	    	comboBoxStatus.setSelectedIndex(5);
 	    	break;
 	    }

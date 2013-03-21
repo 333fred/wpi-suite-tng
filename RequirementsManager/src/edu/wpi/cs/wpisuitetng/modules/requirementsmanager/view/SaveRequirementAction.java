@@ -76,19 +76,22 @@ public class SaveRequirementAction extends AbstractAction {
 
 		switch (parentView.comboBoxStatus.getSelectedIndex()) {
 		case 0:
-			requirement.setStatus(Status.BLANK);
-			break;
-		case 1:
 			requirement.setStatus(Status.NEW);
 			break;
-		case 2:
+		case 1:
 			requirement.setStatus(Status.IN_PROGRESS);
 			break;
+		case 2:
+			requirement.setStatus(Status.OPEN);
+			break;			
 		case 3:
 			requirement.setStatus(Status.COMPLETE);
 			break;
 		case 4:
 			requirement.setStatus(Status.DELETED);
+			break;
+		case 5:
+			requirement.setStatus(Status.BLANK);
 			break;
 		}
 		
