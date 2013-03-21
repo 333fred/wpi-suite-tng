@@ -93,11 +93,15 @@ public class DetailPanel extends JPanel {
 			}
 		});
 
-		textDescription = new JTextArea(4, 40);
+		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
-		mainPanel.add(textDescription);
+		JScrollPane scroll = new JScrollPane(textDescription);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroll.setSize(400, 450);
+		scroll.setBorder(null);
+		mainPanel.add(scroll);
 
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
 				"Non-functional", "Scenario" };
@@ -168,7 +172,7 @@ public class DetailPanel extends JPanel {
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textDescription,
+		layout.putConstraint(SpringLayout.WEST, scroll,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, comboBoxType,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
@@ -184,11 +188,11 @@ public class DetailPanel extends JPanel {
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblName);
 		layout.putConstraint(SpringLayout.NORTH, lblDescription,
 				VERTICAL_PADDING, SpringLayout.SOUTH, textName);
-		layout.putConstraint(SpringLayout.NORTH, textDescription,
+		layout.putConstraint(SpringLayout.NORTH, scroll,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblDescription);
 		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textDescription);
+				SpringLayout.SOUTH, scroll);
 		layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblType);
 		layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING,
