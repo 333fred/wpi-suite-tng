@@ -207,7 +207,7 @@ public class DetailPanel extends JPanel {
 				lblPriority);
 
 		textName.setText(requirement.getName());
-		textDescription.setText(requirement.getName());
+		textDescription.setText(requirement.getDescription());
 		switch (requirement.getType()) {
 		case BLANK:
 			comboBoxType.setSelectedIndex(0);
