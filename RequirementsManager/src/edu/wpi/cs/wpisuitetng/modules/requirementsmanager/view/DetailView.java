@@ -39,6 +39,7 @@ public class DetailView extends JPanel{
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
 	private static final int VERTICAL_FAR = 20;
+	private static final int HORIZONTAL_PADDING = 20;
 	
 	public DetailView(Requirement requirement){
 		this.requirement = requirement;
@@ -106,19 +107,19 @@ public class DetailView extends JPanel{
 		add(makeNotePanel);
 
 		//Align left edges of objects
-	    layout.putConstraint(SpringLayout.WEST, lblName, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, lblDescription, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, lblType, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, lblStatus, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, lblPriority, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, textName, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, textDescription, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, comboBoxType, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, comboBoxStatus, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, comboBoxPriority, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, this);
-	    layout.putConstraint(SpringLayout.WEST, notes, 0, SpringLayout.WEST, this);	     
-	    layout.putConstraint(SpringLayout.WEST, makeNotePanel, 0, SpringLayout.WEST, this);	    
+	    layout.putConstraint(SpringLayout.WEST, lblName, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblDescription, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblType, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblStatus, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, lblPriority, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, textDescription, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, comboBoxType, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, comboBoxStatus, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+	    layout.putConstraint(SpringLayout.WEST, notes, HORIZONTAL_PADDING, SpringLayout.WEST, this);	     
+	    layout.putConstraint(SpringLayout.WEST, makeNotePanel, HORIZONTAL_PADDING, SpringLayout.WEST, this);	    
 	    
 	    //Align Right edges of objects
 	    layout.putConstraint(SpringLayout.EAST, makeNotePanel, 450, SpringLayout.WEST, this);
