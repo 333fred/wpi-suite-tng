@@ -5,6 +5,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -72,6 +74,21 @@ public class DetailPanel extends JPanel {
 		pDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textName);
+		
+		textName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textName.transferFocus();
+					}
+					else {
+						textName.transferFocusBackward();
+					}
+					event.consume();
+				}
+			}
+		});
 
 		textDescription = new JTextArea(4, 40);
 		textDescription.setLineWrap(true);
