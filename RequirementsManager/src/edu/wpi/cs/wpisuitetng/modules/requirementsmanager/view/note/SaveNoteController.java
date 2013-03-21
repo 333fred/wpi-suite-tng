@@ -36,6 +36,7 @@ public class SaveNoteController {
 		if (noteText.length() > 0) {
 			this.model.addNote(new Note(noteText, ConfigManager.getConfig().getUserName()));
 			parentView.getNoteList().addElement(this.model.getNotes().get(this.model.getNotes().size()-1));
+			view.getnoteField().setText("");
 		}
 	}
 }
