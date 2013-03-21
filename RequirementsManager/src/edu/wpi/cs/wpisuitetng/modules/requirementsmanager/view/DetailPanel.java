@@ -106,18 +106,52 @@ public class DetailPanel extends JPanel {
 				"Complete", "Deleted", "" };
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
-		comboBoxStatus.setEnabled(false);
 		mainPanel.add(comboBoxStatus);
 
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
 		comboBoxPriority = new JComboBox(availablePriorities);
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxPriority);
-
+		
+		if(requirement.getName().equals(""))
+		{
 		JButton btnSave = new JButton("Save Requirement");
 		btnSave.setAction(new SaveRequirementAction(requirement, this));
 		mainPanel.add(btnSave);
-
+		
+		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
+				SpringLayout.SOUTH, comboBoxPriority);
+		
+		comboBoxStatus.setEnabled(false);
+		comboBoxStatus.setSelectedItem("NEW");
+		}
+		else
+		{
+			switch (requirement.getStatus()) {
+			case NEW:
+				comboBoxStatus.setSelectedIndex(0);
+				break;
+			case IN_PROGRESS:
+				comboBoxStatus.setSelectedIndex(1);
+				break;
+			case OPEN:
+				comboBoxStatus.setSelectedIndex(2);
+				break;
+			case COMPLETE:
+				comboBoxStatus.setSelectedIndex(3);
+				break;
+			case DELETED:
+				comboBoxStatus.setSelectedIndex(4);
+				break;
+			case BLANK:
+				comboBoxStatus.setSelectedIndex(5);
+				break;
+			}
+		}
+		
+		
 		// Align left edges of objects
 		layout.putConstraint(SpringLayout.WEST, lblName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
@@ -139,8 +173,6 @@ public class DetailPanel extends JPanel {
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, comboBoxPriority,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
 
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
@@ -166,8 +198,6 @@ public class DetailPanel extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, comboBoxPriority,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblPriority);
-		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, comboBoxPriority);
 
 		textName.setText(requirement.getName());
 		textDescription.setText(requirement.getName());
@@ -189,26 +219,6 @@ public class DetailPanel extends JPanel {
 			break;
 		case SCENARIO:
 			comboBoxType.setSelectedIndex(5);
-		}
-		switch (requirement.getStatus()) {
-		case NEW:
-			comboBoxStatus.setSelectedIndex(0);
-			break;
-		case IN_PROGRESS:
-			comboBoxStatus.setSelectedIndex(1);
-			break;
-		case OPEN:
-			comboBoxStatus.setSelectedIndex(2);
-			break;
-		case COMPLETE:
-			comboBoxStatus.setSelectedIndex(3);
-			break;
-		case DELETED:
-			comboBoxStatus.setSelectedIndex(4);
-			break;
-		case BLANK:
-			comboBoxStatus.setSelectedIndex(5);
-			break;
 		}
 		switch (requirement.getPriority()) {
 		case BLANK:
