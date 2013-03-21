@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
@@ -71,6 +72,8 @@ public class DetailView extends JPanel{
 		textName = new JTextArea(1,40);
 		textName.setLineWrap(false);
 		textName.setWrapStyleWord(false);
+		AbstractDocument pDoc=(AbstractDocument)textName.getDocument();
+		pDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
 		add(textName);
 		
