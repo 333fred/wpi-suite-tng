@@ -2,6 +2,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -71,7 +74,24 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 		requirementsList= new JList(listValues.toArray(new String[0]));
 		add(requirementsList, BorderLayout.CENTER);
 		
-		getRequirementsFromServer();
+		
+		//System.out.println("Constructor, about to get requirement from server");
+		//TODO: Receiving 404 error when this is called here..
+		
+		//QuickFix, works, but not optimal
+		ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
+		
+		Runnable task = new Runnable() {
+		    public void run() {
+		    	System.out.println("Invoking this");
+		    	getRequirementsFromServer();
+		    	
+		    }
+		  };
+		
+		worker.schedule(task, 5, TimeUnit.SECONDS);
+				
+
 		
 	}
 	
@@ -121,6 +141,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	 */
 	
 	private void getRequirementsFromServer() {
+		System.out.println("We are getting requirements from the server");
 		retreiveAllRequirementsController.getAll();
 	}
 	
@@ -129,6 +150,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	 * */
 	
 	private void updateListView() {
+		System.out.println("We are updating the list view");
 		//update the string array
 		parseRequirements();
 		//set the list values of the requirementsList to the values in the String aray
@@ -193,7 +215,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	
 	@Override
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
-		
+		System.out.println("Received an error fecting from server: |" + RetrieveAllRequirementsRequestObserver);
 	}
 
 }
