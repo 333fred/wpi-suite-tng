@@ -16,16 +16,16 @@ public class MainView extends JPanel {
 	Requirement requirement;
 	
 	/** The panel containing the detail view */
-	private DetailView detailView;
+	private DetailPanel detailView;
 	
 	/**
 	 * Construct the panel.
 	 * @param boardModel 
 	 */
-	public MainView(DetailView detailView,Requirement requirement) {
+	public MainView(DetailPanel detailView,Requirement requirement) {
 		this.requirement = requirement;
 		// Add the board panel to this view
-		detailView = new DetailView(requirement);
+		detailView = new DetailPanel(requirement);
 		add(detailView);
 	}
 }

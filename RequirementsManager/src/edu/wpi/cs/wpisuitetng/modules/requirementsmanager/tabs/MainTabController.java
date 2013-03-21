@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * Controller wrapper around the MainTabView
@@ -56,7 +56,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addCreateRequirementTab() {
-		DetailView emptyDetailView = new DetailView(new Requirement()); 
+		DetailPanel emptyDetailView = new DetailPanel(new Requirement()); 
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
@@ -68,7 +68,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
-		DetailView requirmentDetailView = new DetailView(requirement);
+		DetailPanel requirmentDetailView = new DetailPanel(requirement);
 		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
 	

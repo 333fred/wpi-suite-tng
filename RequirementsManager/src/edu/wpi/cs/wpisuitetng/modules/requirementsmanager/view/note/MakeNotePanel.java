@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
