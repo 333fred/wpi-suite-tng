@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
@@ -38,7 +39,7 @@ public class MakeNotePanel extends JPanel{
 	 * @param model the defect model
 	 * @param parentView the parent view
 	 */
-	public MakeNotePanel(Requirement model, DetailView parentView) {
+	public MakeNotePanel(Requirement model, DetailPanel parentView) {
 		noteField = new JTextArea();
 		noteField.setLineWrap(true);
 		noteField.setWrapStyleWord(true);

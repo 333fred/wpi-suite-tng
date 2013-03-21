@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailView;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -23,11 +24,11 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 	private AddRequirementController controller;
 
-	DetailView detailView;
+	DetailPanel detailPanel;
 
-	public AddRequirementRequestObserver(AddRequirementController controller, DetailView detailView) {
+	public AddRequirementRequestObserver(AddRequirementController controller, DetailPanel detailPanel) {
 		this.controller = controller;
-		this.detailView = detailView;
+		this.detailPanel = detailPanel;
 	}
 
 	/*
@@ -65,11 +66,11 @@ public class AddRequirementRequestObserver implements RequestObserver {
 					}
 				});*/
 				
-				  JOptionPane.showMessageDialog(detailView, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
+				  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
 			} else {
 				
 				 //Display error in view... here's how defecttracker does it:
-				  JOptionPane.showMessageDialog(detailView, "Unable to parse defect received from server.",
+				  JOptionPane.showMessageDialog(detailPanel, "Unable to parse defect received from server.",
 				  "Save Defect Error", JOptionPane.ERROR_MESSAGE);
 				 
 			}

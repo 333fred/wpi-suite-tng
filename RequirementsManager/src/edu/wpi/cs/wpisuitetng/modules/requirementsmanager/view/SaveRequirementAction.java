@@ -6,22 +6,20 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 
-import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JOptionPane;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.SaveNoteController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+
 
 public class SaveRequirementAction extends AbstractAction {
 
 	private Requirement requirement;
-	private DetailView parentView;
+	private DetailPanel parentView;
 
-	SaveRequirementAction(Requirement requirement, DetailView parentView) {
+	SaveRequirementAction(Requirement requirement, DetailPanel parentView) {
 		super("Add Requirement");
 		this.requirement = requirement;
 		this.parentView = parentView;
@@ -29,7 +27,7 @@ public class SaveRequirementAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		AddRequirementController controller = new AddRequirementController(parentView);
+		AddRequirementController controller = new AddRequirementController(this.parentView);
 
 		requirement.setName(parentView.textName.getText());
 		requirement.setDescription(parentView.textDescription.getText());
