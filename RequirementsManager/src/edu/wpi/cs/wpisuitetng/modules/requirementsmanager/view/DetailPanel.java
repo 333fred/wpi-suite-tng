@@ -66,8 +66,8 @@ public class DetailPanel extends JPanel {
 		mainPanel.add(lblPriority);
 
 		textName = new JTextArea(1, 40);
-		textName.setLineWrap(false);
-		textName.setWrapStyleWord(false);
+		textName.setLineWrap(true);
+		textName.setWrapStyleWord(true);
 		AbstractDocument pDoc = (AbstractDocument) textName.getDocument();
 		pDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
