@@ -233,6 +233,16 @@ public class Requirement extends AbstractModel {
 	public void setType(Type type) {
 		this.type = type;
 	}
+	
+	/**
+	 * Gets the priority of the Requirement
+	 * @return 
+	 * 
+	 * @return the priority
+	 */
+	public Priority getPriority() {
+		return priority;
+	}
 
 	/**
 	 * Sets the priority of the requirement TODO: Determine if we can do this, or if

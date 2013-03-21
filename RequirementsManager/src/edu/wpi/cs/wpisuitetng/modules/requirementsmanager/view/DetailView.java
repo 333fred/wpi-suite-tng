@@ -138,6 +138,66 @@ public class DetailView extends JPanel{
 	    layout.putConstraint(SpringLayout.NORTH, notes, VERTICAL_PADDING+VERTICAL_FAR, SpringLayout.SOUTH, comboBoxPriority);	    
 	    layout.putConstraint(SpringLayout.NORTH, makeNotePanel, VERTICAL_PADDING, SpringLayout.SOUTH, notes);
 	    layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING, SpringLayout.SOUTH, makeNotePanel);	  
+	    
+	    
+	    textName.setText(requirement.getName());
+	    textDescription.setText(requirement.getName());
+	    switch(requirement.getType())
+	    {
+	    case BLANK:
+	    	comboBoxType.setSelectedIndex(0);
+	    	break;
+	    case EPIC:
+	    	comboBoxType.setSelectedIndex(1);
+	    	break;
+	    case THEME:
+	    	comboBoxType.setSelectedIndex(2);
+	    	break;
+	    case USER_STORY:
+	    	comboBoxType.setSelectedIndex(3);
+	    	break;
+	    case NON_FUNCTIONAL:
+	    	comboBoxType.setSelectedIndex(4);
+	    	break;
+	    case SCENARIO:
+	    	comboBoxType.setSelectedIndex(5);	
+	    }
+	    switch(requirement.getStatus())
+	    {
+	    case BLANK:
+	    	comboBoxStatus.setSelectedIndex(0);
+	    	break;
+	    case NEW:
+	    	comboBoxStatus.setSelectedIndex(1);
+	    	break;
+	    case IN_PROGRESS:
+	    	comboBoxStatus.setSelectedIndex(2);
+	    	break;
+	    case OPEN:
+	    	comboBoxStatus.setSelectedIndex(3);
+	    	break;
+	    case COMPLETE:
+	    	comboBoxStatus.setSelectedIndex(4);
+	    	break;
+	    case DELETED:
+	    	comboBoxStatus.setSelectedIndex(5);
+	    	break;
+	    }
+	    switch(requirement.getPriority())
+	    {
+	    case BLANK:
+	    	comboBoxPriority.setSelectedIndex(0);
+	    	break;
+	    case HIGH:
+	    	comboBoxPriority.setSelectedIndex(1);
+	    	break;
+	    case MEDIUM:
+	    	comboBoxPriority.setSelectedIndex(2);
+	    	break;
+	    case LOW:
+	    	comboBoxPriority.setSelectedIndex(3);
+	    	break;
+	    }
 	}
 	
 	public DefaultListModel getNoteList() {

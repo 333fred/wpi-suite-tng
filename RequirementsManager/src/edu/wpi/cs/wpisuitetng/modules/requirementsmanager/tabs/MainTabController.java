@@ -68,7 +68,8 @@ public class MainTabController {
 	 */
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
-		return null;
+		DetailView requirmentDetailView = new DetailView(requirement);
+		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
 	
 	/** Adds a tab to Edit a given Requirement
