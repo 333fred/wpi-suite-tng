@@ -76,7 +76,7 @@ public class ManagerLayer {
 		map.put("defecttrackerdefect", new DefectManager(data));
 		map.put("defecttrackercomment", new CommentManager(data));
 		map.put("postboardpostboardmessage", new PostBoardEntityManager(data));
-		map.put("requirementmanager", new RequirementsEntityManager(data));
+		map.put("requirementsmanagerrequirement", new RequirementsEntityManager(data));
 
 		//add just your module to this list
 		String[] fullModuleList = {"core","defecttracker","postboard"};

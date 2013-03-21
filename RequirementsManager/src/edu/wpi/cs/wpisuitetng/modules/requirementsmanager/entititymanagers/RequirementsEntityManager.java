@@ -41,8 +41,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	public Requirement makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
 		
-		System.out.println("Called on the Server");
-		
 		final Requirement newRequirement = Requirement.fromJSON(content);
 		
 		newRequirement.setrUID(Count()+1); //we have to set the UID
@@ -59,8 +57,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		if (!db.save(newRequirement, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		
-		System.out.println("Finished on the server, no exceptions");
 		
 		return newRequirement;
 	}
