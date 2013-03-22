@@ -55,7 +55,12 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	 * 
 	 */
 	
+	RequirementTreeView requirementTreeView;
+	
 	public RequirementListView(MainTabController tabController) {
+		
+		this.requirementTreeView = new RequirementTreeView();
+		
 		this.tabController = tabController;
 		//create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
@@ -73,7 +78,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 		//initialize the requirements list, with an array of strings retreived from the listValues ArrayList
 		requirementsList= new JList(listValues.toArray(new String[0]));
 		add(requirementsList, BorderLayout.CENTER);
-		
+		add(requirementTreeView,BorderLayout.WEST);
 		
 		//System.out.println("Constructor, about to get requirement from server");
 		//TODO: Receiving 404 error when this is called here..
@@ -176,6 +181,7 @@ public class RequirementListView extends JPanel implements IToolbarGroupProvider
 	public void refresh() {
 		//retreive a new copy of requirements, and update the list view
 		getRequirementsFromServer();
+		requirementTreeView.refresh();
 	}
 	
 	/** Open a new tab containing a view of the selected requirement in the list view
