@@ -8,7 +8,17 @@ import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
@@ -254,19 +264,24 @@ public class DetailPanel extends JPanel {
 		JScrollPane noteScrollPane = new JScrollPane();
 		noteScrollPane.getViewport().add(notes);
 		
+
+		
 		// Set up the frame
-		JFrame notePane = new JFrame();
-		notePane.getContentPane().setLayout(new BorderLayout());
-		notePane.getContentPane().add(noteScrollPane, BorderLayout.CENTER);
-		notePane.getContentPane().add(makeNotePanel, BorderLayout.SOUTH);
+		JPanel notePane = new JPanel();
+		notePane.setLayout(new BorderLayout());
+		notePane.add(noteScrollPane, BorderLayout.CENTER);
+		notePane.add(makeNotePanel, BorderLayout.SOUTH);
 		
 		for (Note aNote : requirement.getNotes()) {
 			this.noteList.addElement(aNote);
 		}
 
+		//create the new eventPane
+		DetailEventPane eventPane = new DetailEventPane(notePane, new JPanel());
+		
 		// Add everything to this
 		add(mainPanel);
-		add(notePane.getContentPane());
+		add(eventPane);
 	}
 
 	public DefaultListModel getNoteList() {
