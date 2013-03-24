@@ -52,6 +52,7 @@ public class DetailPanel extends FocusableTab {
 	private Requirement requirement;
 	private MainTabController mainTabController;
 	private DetailNoteView noteView;
+	private DetailLogView logView;
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
@@ -257,9 +258,11 @@ public class DetailPanel extends FocusableTab {
 		}
 
 		noteView = new DetailNoteView(this.requirement, this);
+		logView = new DetailLogView(this.requirement, this);
+
 	
 		//create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(noteView, new JPanel());
+		DetailEventPane eventPane = new DetailEventPane(noteView, logView);
 		
 		// Add everything to this
 		add(mainPanel);
