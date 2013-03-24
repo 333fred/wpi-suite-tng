@@ -3,7 +3,6 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
@@ -13,7 +12,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -22,16 +20,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 /**
  * @author Swagasaurus
