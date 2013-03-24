@@ -29,7 +29,7 @@ public class ViewRequirementAction extends AbstractAction {
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
 	public ViewRequirementAction(RequirementListView requirementList) {
-		super("View Requirement");
+		super("Edit Requirement");
 		this.requirementList = requirementList;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_V);
 	}

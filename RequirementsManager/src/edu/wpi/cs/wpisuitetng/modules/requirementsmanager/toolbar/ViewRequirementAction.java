@@ -20,7 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListVi
  */
 @SuppressWarnings("serial")
 public class ViewRequirementAction extends AbstractAction {
-
+	//TODO: Rename all of these to edit requirement
 	/** The requirement list view that this action is operating on */
 	private final RequirementListView requirementList;
 	
@@ -29,7 +29,7 @@ public class ViewRequirementAction extends AbstractAction {
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
 	public ViewRequirementAction(RequirementListView requirementList) {
-		super("View Requirement");
+		super("Edit Requirement");
 		this.requirementList = requirementList;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_V);
 	}
