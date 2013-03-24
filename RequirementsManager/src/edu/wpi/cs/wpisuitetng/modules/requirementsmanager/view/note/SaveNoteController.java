@@ -6,6 +6,8 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
+
 
 /**
  * This controller handles saving defect notes to the server

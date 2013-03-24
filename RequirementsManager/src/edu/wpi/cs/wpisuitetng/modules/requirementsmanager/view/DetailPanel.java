@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
 
 /**
  * @author Swagasaurus
@@ -23,9 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRend
  */
 public class DetailPanel extends JPanel {
 
-	/** For Notes */
-	protected DefaultListModel noteList;
-	protected JList notes;
+
 
 	// Textfields
 	JTextArea textName;
@@ -38,6 +37,7 @@ public class DetailPanel extends JPanel {
 
 	private Requirement requirement;
 	private MainTabController mainTabController;
+	private DetailNoteView noteView;
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
@@ -242,35 +242,17 @@ public class DetailPanel extends JPanel {
 			break;
 		}
 
-		// Set up the note panel
-		MakeNotePanel makeNotePanel = new MakeNotePanel(this.requirement, this);
-
-		// Create the note list
-		noteList = new DefaultListModel();
-		notes = new JList(noteList);
-		notes.setCellRenderer(new noteCellRenderer());
-
-		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(notes);
+	noteView = new DetailNoteView(this.requirement, this);
 		
-		// Set up the frame
-		JFrame notePane = new JFrame();
-		notePane.getContentPane().setLayout(new BorderLayout());
-		notePane.getContentPane().add(noteScrollPane, BorderLayout.CENTER);
-		notePane.getContentPane().add(makeNotePanel, BorderLayout.SOUTH);
-		
-		for (Note aNote : requirement.getNotes()) {
-			this.noteList.addElement(aNote);
-		}
 
 		// Add everything to this
 		add(mainPanel);
-		add(notePane.getContentPane());
+		add(noteView);
 	}
 
+	DefaultListModel listModel = new DefaultListModel();
 	public DefaultListModel getNoteList() {
-		return noteList;
+		return noteView.getNoteList();
 	}
 	
 	public MainTabController getMainTabController() {
