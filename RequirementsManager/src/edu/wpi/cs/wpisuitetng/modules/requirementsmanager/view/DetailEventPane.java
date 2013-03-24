@@ -25,7 +25,7 @@ public class DetailEventPane extends JTabbedPane {
 		this.notesListPane = notesListPane;
 		this.logListPane = logListPane;
 		
-		//create two panes
+		//add the given tabs to the pane
 		addTab("Notes", new ImageIcon(), notesListPane, "The notes for this requirement");		
 		addTab("Log", new ImageIcon(), logListPane, "The log for this requirement");
 		
