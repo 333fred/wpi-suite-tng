@@ -50,7 +50,9 @@ public class Logger {
 
 		/*
 		 * Timestamp and userstamp the log, and insert a newline It will look
-		 * like this: On (DATE) (USERNAME) changed: (CHANGES)
+		 * like this: 
+		 * On (DATE) (USERNAME) changed: 
+		 * 	 (CHANGES)
 		 */
 		Date date = new Date();
 		log = "On " + date.toString() + "\n" + s.getUsername() + " changed:\n";

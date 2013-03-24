@@ -32,6 +32,8 @@ public class DetailNoteView extends JPanel{
 	public DetailNoteView(Requirement requirement, DetailPanel parentView){
 		this.requirement = requirement;
 		this.parentView = parentView;
+		
+		setLayout(new BorderLayout());
 		// Set up the note panel
 		MakeNotePanel makeNotePanel = new MakeNotePanel(requirement, parentView);
 
@@ -50,7 +52,7 @@ public class DetailNoteView extends JPanel{
 		notePane.add(noteScrollPane, BorderLayout.CENTER);
 		notePane.add(makeNotePanel, BorderLayout.SOUTH);
 		
-		add(notePane);
+		add(notePane, BorderLayout.CENTER);
 		
 		
 		for (Note aNote : requirement.getNotes()) {
