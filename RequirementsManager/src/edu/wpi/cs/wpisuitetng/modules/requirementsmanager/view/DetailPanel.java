@@ -145,7 +145,7 @@ public class DetailPanel extends JPanel {
 		mainPanel.add(btnSave);
 		
 		JButton btnCancel = new JButton("Cancel");
-		//btnCancel.setAction(a) TODO: Make cancel action
+		btnCancel.setAction(new CancelAction(requirement, this));
 		mainPanel.add(btnCancel);
 
 		if (requirement.getName().equals("")) {
