@@ -43,7 +43,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addTab(String title, Icon icon, Component component, String tip) {
-		tabView.addTab(title,icon,component,tip); // add the tab to the TabView
+		tabView.addTab(title,icon, component,tip); // add the tab to the TabView
 		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
 		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
 		return new Tab(tabView, tabView.getTabComponentAt(index));
