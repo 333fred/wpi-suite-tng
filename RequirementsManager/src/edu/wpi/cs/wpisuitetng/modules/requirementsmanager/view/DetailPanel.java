@@ -29,6 +29,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePane
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
+
 /**
  * @author Swagasaurus
  * 
@@ -254,9 +256,7 @@ public class DetailPanel extends JPanel {
 		}
 
 	noteView = new DetailNoteView(this.requirement, this);
-		
-
-
+	
 		//create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, new JPanel());
 		
