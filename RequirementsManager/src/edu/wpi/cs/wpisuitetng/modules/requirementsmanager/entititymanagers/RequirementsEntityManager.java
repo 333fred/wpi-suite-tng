@@ -177,7 +177,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 *             If the requirement cannot be found, or is invalid, we throw
 	 *             this
 	 */
-	public Requirement getRequirement(long id, Session s)
+	public Requirement getRequirement(int id, Session s)
 			throws RequirementNotFoundException {
 		try {
 			List<Model> requirement = db.retrieve(Requirement.class, "rUID",
