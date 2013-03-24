@@ -23,6 +23,7 @@ import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
@@ -31,7 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePane
  * @author Swagasaurus
  * 
  */
-public class DetailPanel extends JPanel {
+public class DetailPanel extends FocusableTab {
 
 	/** For Notes */
 	protected DefaultListModel noteList;
