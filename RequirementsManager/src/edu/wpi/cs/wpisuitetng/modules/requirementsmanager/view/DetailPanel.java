@@ -23,19 +23,22 @@ import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 /**
  * @author Swagasaurus
  * 
  */
-public class DetailPanel extends JPanel {
+public class DetailPanel extends FocusableTab {
 
-	/** For Notes */
-	protected DefaultListModel noteList;
-	protected JList notes;
+
 
 	// Textfields
 	JTextArea textName;
@@ -48,6 +51,7 @@ public class DetailPanel extends JPanel {
 
 	private Requirement requirement;
 	private MainTabController mainTabController;
+	private DetailNoteView noteView;
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
@@ -252,40 +256,19 @@ public class DetailPanel extends JPanel {
 			break;
 		}
 
-		// Set up the note panel
-		MakeNotePanel makeNotePanel = new MakeNotePanel(this.requirement, this);
-
-		// Create the note list
-		noteList = new DefaultListModel();
-		notes = new JList(noteList);
-		notes.setCellRenderer(new EventCellRenderer());
-
-		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(notes);
-		
-
-		
-		// Set up the frame
-		JPanel notePane = new JPanel();
-		notePane.setLayout(new BorderLayout());
-		notePane.add(noteScrollPane, BorderLayout.CENTER);
-		notePane.add(makeNotePanel, BorderLayout.SOUTH);
-		
-		for (Note aNote : requirement.getNotes()) {
-			this.noteList.addElement(aNote);
-		}
-
+	noteView = new DetailNoteView(this.requirement, this);
+	
 		//create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(notePane, new JPanel());
+		DetailEventPane eventPane = new DetailEventPane(noteView, new JPanel());
 		
 		// Add everything to this
 		add(mainPanel);
 		add(eventPane);
 	}
 
+	DefaultListModel listModel = new DefaultListModel();
 	public DefaultListModel getNoteList() {
-		return noteList;
+		return noteView.getNoteList();
 	}
 	
 	public MainTabController getMainTabController() {
