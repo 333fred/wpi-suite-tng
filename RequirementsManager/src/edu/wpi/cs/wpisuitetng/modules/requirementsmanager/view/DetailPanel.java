@@ -8,12 +8,23 @@ import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
@@ -245,9 +256,13 @@ public class DetailPanel extends JPanel {
 	noteView = new DetailNoteView(this.requirement, this);
 		
 
+
+		//create the new eventPane
+		DetailEventPane eventPane = new DetailEventPane(noteView, new JPanel());
+		
 		// Add everything to this
 		add(mainPanel);
-		add(noteView);
+		add(eventPane);
 	}
 
 	DefaultListModel listModel = new DefaultListModel();
