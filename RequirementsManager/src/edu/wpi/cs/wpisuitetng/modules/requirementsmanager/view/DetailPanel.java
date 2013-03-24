@@ -141,19 +141,17 @@ public class DetailPanel extends JPanel {
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxPriority);
 		
-		if(requirement.getName().equals(""))
-		{
 		JButton btnSave = new JButton("Save Requirement");
-		btnSave.setAction(new SaveRequirementAction(requirement, this));
 		mainPanel.add(btnSave);
 		
-		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, comboBoxPriority);
-		
-		comboBoxStatus.setEnabled(false);
-		comboBoxStatus.setSelectedItem("NEW");
+		JButton btnCancel = new JButton("Cancel");
+		//btnCancel.setAction(a) TODO: Make cancel action
+		mainPanel.add(btnCancel);
+
+		if (requirement.getName().equals("")) {
+			btnSave.setAction(new SaveRequirementAction(requirement, this));
+			comboBoxStatus.setEnabled(false);
+			comboBoxStatus.setSelectedItem("NEW");
 		}
 		else
 		{
@@ -183,28 +181,34 @@ public class DetailPanel extends JPanel {
 		// Align left edges of objects
 		layout.putConstraint(SpringLayout.WEST, lblName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblDescription,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblDescription,	HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblType, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblStatus, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblPriority,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblPriority, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textNameValid, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, scroll,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxType,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxStatus,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxPriority,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, btnCancel, HORIZONTAL_PADDING, 
+				SpringLayout.EAST, btnSave);
+		layout.putConstraint(SpringLayout.WEST, scroll,	HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textDescriptionValid, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxType,HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxStatus,	HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+
+		
 
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
@@ -235,6 +239,10 @@ public class DetailPanel extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, comboBoxPriority,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblPriority);
+		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
+				SpringLayout.SOUTH, comboBoxPriority);
+		layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
+				SpringLayout.SOUTH, comboBoxPriority);
 
 		textName.setText(requirement.getName());
 		textDescription.setText(requirement.getDescription());
