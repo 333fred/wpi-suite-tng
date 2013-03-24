@@ -103,17 +103,7 @@ public class DetailPanel extends JPanel {
 		textNameValid.setDisabledTextColor(Color.BLACK);
 		textNameValid.setLineWrap(true);
 		textNameValid.setWrapStyleWord(true);
-		//textNameValid.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textNameValid);
-		
-		textDescriptionValid = new JTextArea(1, 40);
-		textDescriptionValid.setOpaque(false);
-		textNameValid.setEnabled(false);
-		textNameValid.setDisabledTextColor(Color.BLACK);
-		textDescriptionValid.setLineWrap(true);
-		textDescriptionValid.setWrapStyleWord(true);
-		//textDescriptionValid.setBorder((new JTextField()).getBorder());
-		mainPanel.add(textDescriptionValid);
 		
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
@@ -124,7 +114,30 @@ public class DetailPanel extends JPanel {
 		scroll.setSize(400, 450);
 		scroll.setBorder(null);
 		mainPanel.add(scroll);
-
+		
+		textDescription.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textDescription.transferFocus();
+					}
+					else {
+						textDescription.transferFocusBackward();
+					}
+					event.consume();
+				}
+			}
+		});
+		
+		textDescriptionValid = new JTextArea(1, 40);
+		textDescriptionValid.setOpaque(false);
+		textDescriptionValid.setEnabled(false);
+		textDescriptionValid.setDisabledTextColor(Color.BLACK);
+		textDescriptionValid.setLineWrap(true);
+		textDescriptionValid.setWrapStyleWord(true);
+		mainPanel.add(textDescriptionValid);
+		
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
 				"Non-functional", "Scenario" };
 		comboBoxType = new JComboBox(availableTypes);
