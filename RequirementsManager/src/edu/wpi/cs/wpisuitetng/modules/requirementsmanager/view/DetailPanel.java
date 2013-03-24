@@ -9,24 +9,37 @@ import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 /**
  * @author Swagasaurus
  * 
  */
-public class DetailPanel extends JPanel {
+public class DetailPanel extends FocusableTab {
 
-	/** For Notes */
-	protected DefaultListModel noteList;
-	protected JList notes;
+
 
 	// Textfields
 	JTextArea textName;
@@ -41,6 +54,7 @@ public class DetailPanel extends JPanel {
 
 	private Requirement requirement;
 	private MainTabController mainTabController;
+	private DetailNoteView noteView;
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
@@ -295,35 +309,19 @@ public class DetailPanel extends JPanel {
 			break;
 		}
 
-		// Set up the note panel
-		MakeNotePanel makeNotePanel = new MakeNotePanel(this.requirement, this);
-
-		// Create the note list
-		noteList = new DefaultListModel();
-		notes = new JList(noteList);
-		notes.setCellRenderer(new noteCellRenderer());
-
-		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(notes);
+		noteView = new DetailNoteView(this.requirement, this);
+	
+		//create the new eventPane
+		DetailEventPane eventPane = new DetailEventPane(noteView, new JPanel());
 		
-		// Set up the frame
-		JFrame notePane = new JFrame();
-		notePane.getContentPane().setLayout(new BorderLayout());
-		notePane.getContentPane().add(noteScrollPane, BorderLayout.CENTER);
-		notePane.getContentPane().add(makeNotePanel, BorderLayout.SOUTH);
-		
-		for (Note aNote : requirement.getNotes()) {
-			this.noteList.addElement(aNote);
-		}
-
 		// Add everything to this
 		add(mainPanel);
-		add(notePane.getContentPane());
+		add(eventPane);
 	}
 
+	DefaultListModel listModel = new DefaultListModel();
 	public DefaultListModel getNoteList() {
-		return noteList;
+		return noteView.getNoteList();
 	}
 	
 	public MainTabController getMainTabController() {

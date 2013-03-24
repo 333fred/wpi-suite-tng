@@ -1,16 +1,19 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import javax.swing.JLabel;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.Event;
 
 /**
  * Simple class to hold a note and any associated metadata
  * 
- * @author Fredrica
+ * @author Fredric
  */
 
-public class Note {
+public class Note implements Event {
 
 	private String note;
 	private Date date;
@@ -99,5 +102,25 @@ public class Note {
 	 */
 	public void setCreator(String creator) {
 		this.creator = creator;
+	}
+	
+	/** Returns the title of this note to be displayed in the GUI, as specified by Event interface 
+	 * 
+	 * @return The title
+	 */
+	
+	public String getTitle() {
+		return "<html><font size=4><b>" + getCreator() + "<font size=.25></b> added on " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(getDate()) + "</html>";
+		
+		
+	}
+	
+	/** Returns the content of this note to be displayed in the GUI, as specified by Event interface 
+	 * 
+	 * @return The content
+	 */
+	
+	public String getContent() {
+		return "<html><i>" + getNote() + "</i></html>";
 	}
 }
