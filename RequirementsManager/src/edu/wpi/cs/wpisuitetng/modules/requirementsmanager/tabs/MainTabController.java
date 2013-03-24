@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -31,7 +32,21 @@ public class MainTabController {
 	
 	public MainTabController(MainTabView tabView) {
 		this.tabView = tabView;
+		
+		
+	    tabView.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				onChangeTab();				
+			}
+	    });
 	}
+	
+
+private void onChangeTab() {
+	((FocusableTab)this.tabView.getSelectedComponent()).onTabFocus();
+}
 	
 	/** Adds a tab to the TabView that this controller manages, and returns a new instance of Tab representing the new tab created
 	 * 
