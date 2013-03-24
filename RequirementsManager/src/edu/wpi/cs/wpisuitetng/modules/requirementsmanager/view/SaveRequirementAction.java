@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
@@ -100,7 +101,9 @@ public class SaveRequirementAction extends AbstractAction {
 		}
 		else
 		{
-			  JOptionPane.showMessageDialog(parentView, "Requirement must have a name in order to save","Save Error", JOptionPane.OK_OPTION);
+			parentView.getTextNameValid().setText("Requirement must have a name in order to save");
+			parentView.getTextName().setBackground(new Color(255,85,85));
+			//JOptionPane.showMessageDialog(parentView, "Requirement must have a name in order to save","Save Error", JOptionPane.OK_OPTION);
 		}
 	}
 }

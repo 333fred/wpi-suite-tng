@@ -30,6 +30,8 @@ public class DetailPanel extends JPanel {
 	// Textfields
 	JTextArea textName;
 	JTextArea textDescription;
+	JTextArea textNameValid;
+	JTextArea textDescriptionValid;
 
 	// combo boxes
 	JComboBox comboBoxType;
@@ -41,6 +43,7 @@ public class DetailPanel extends JPanel {
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
+	private static final int VERTICAL_CLOSE2 = -10;
 	private static final int VERTICAL_FAR = 20;
 	private static final int HORIZONTAL_PADDING = 20;
 
@@ -92,7 +95,23 @@ public class DetailPanel extends JPanel {
 				}
 			}
 		});
-
+		
+		textNameValid = new JTextArea(1, 40);
+		textNameValid.setOpaque(false);
+		textNameValid.setEnabled(false);
+		textNameValid.setLineWrap(true);
+		textNameValid.setWrapStyleWord(true);
+		//textNameValid.setBorder((new JTextField()).getBorder());
+		mainPanel.add(textNameValid);
+		
+		textDescriptionValid = new JTextArea(1, 40);
+		textDescriptionValid.setOpaque(false);
+		textNameValid.setEnabled(false);
+		textDescriptionValid.setLineWrap(true);
+		textDescriptionValid.setWrapStyleWord(true);
+		//textDescriptionValid.setBorder((new JTextField()).getBorder());
+		mainPanel.add(textDescriptionValid);
+		
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
@@ -172,7 +191,11 @@ public class DetailPanel extends JPanel {
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textNameValid, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, scroll,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, comboBoxType,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
@@ -186,13 +209,18 @@ public class DetailPanel extends JPanel {
 				SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.NORTH, textName, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblName);
+		layout.putConstraint(SpringLayout.NORTH, textNameValid, VERTICAL_PADDING
+				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, textName);
 		layout.putConstraint(SpringLayout.NORTH, lblDescription,
-				VERTICAL_PADDING, SpringLayout.SOUTH, textName);
+				VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
 		layout.putConstraint(SpringLayout.NORTH, scroll,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblDescription);
+		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
+				VERTICAL_PADDING + VERTICAL_CLOSE2, SpringLayout.SOUTH,
+				scroll);
 		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
-				SpringLayout.SOUTH, scroll);
+				SpringLayout.SOUTH, textDescriptionValid);
 		layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblType);
 		layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING,
@@ -275,5 +303,17 @@ public class DetailPanel extends JPanel {
 	
 	public MainTabController getMainTabController() {
 		return mainTabController;
+	}
+	
+	public JTextArea getTextName() {
+		return textName;
+	}
+	
+	public JTextArea getTextNameValid() {
+		return textNameValid;
+	}
+	
+	public JTextArea getTextDescriptionValid() {
+		return textDescriptionValid;
 	}
 }
