@@ -99,7 +99,7 @@ public class DetailPanel extends JPanel {
 		
 		textNameValid = new JTextArea(1, 40);
 		textNameValid.setOpaque(false);
-		textNameValid.setEditable(false);
+		textNameValid.setEnabled(false);
 		textNameValid.setDisabledTextColor(Color.BLACK);
 		textNameValid.setLineWrap(true);
 		textNameValid.setWrapStyleWord(true);
@@ -109,6 +109,7 @@ public class DetailPanel extends JPanel {
 		textDescriptionValid = new JTextArea(1, 40);
 		textDescriptionValid.setOpaque(false);
 		textNameValid.setEnabled(false);
+		textNameValid.setDisabledTextColor(Color.BLACK);
 		textDescriptionValid.setLineWrap(true);
 		textDescriptionValid.setWrapStyleWord(true);
 		//textDescriptionValid.setBorder((new JTextField()).getBorder());
