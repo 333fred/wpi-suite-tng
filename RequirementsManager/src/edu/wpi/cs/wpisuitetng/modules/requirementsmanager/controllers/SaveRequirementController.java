@@ -5,6 +5,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -15,14 +16,15 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Controller for updating an existing defect
  */
 public class SaveRequirementController {
-	//add view here
 	
-	public SaveRequirementController (/*view*/){
-		//this.view = view
+	DetailPanel detailPanel;
+	
+	public SaveRequirementController (DetailPanel detailPanel){
+		this.detailPanel = detailPanel;
 	}
 	
 	public void SaveRequirement(Requirement toAdd) {
-		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(/*,view*/);
+		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(detailPanel);
 		Request request;
 		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());

@@ -155,6 +155,7 @@ public class DetailPanel extends JPanel {
 		}
 		else
 		{
+			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
 			case NEW:
 				comboBoxStatus.setSelectedIndex(0);

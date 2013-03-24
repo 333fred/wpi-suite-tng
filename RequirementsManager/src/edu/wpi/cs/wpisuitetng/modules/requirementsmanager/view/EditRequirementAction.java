@@ -10,7 +10,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
@@ -32,6 +34,8 @@ public class EditRequirementAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		SaveRequirementController controller = new SaveRequirementController(this.parentView);
+		
 		requirement.setName(parentView.textName.getText());
 		requirement.setDescription(parentView.textDescription.getText());
 
@@ -96,7 +100,7 @@ public class EditRequirementAction extends AbstractAction {
 			break;
 		}
 
-		//controller.AddRequirement(requirement);
+		controller.SaveRequirement(requirement);
 		this.parentView.getMainTabController().closeCurrentTab();
 		
 	}

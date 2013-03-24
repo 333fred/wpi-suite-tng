@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -14,10 +15,11 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * Controller for updating an existing requirement
  */
 public class UpdateRequirementRequestObserver implements RequestObserver {
-	//view here
 	
-	public UpdateRequirementRequestObserver (/*view here*/) {
-		//this.view = view;	
+	DetailPanel detailPanel;
+	
+	public UpdateRequirementRequestObserver (DetailPanel detailPanel) {
+		this.detailPanel = detailPanel;	
 	}
 	
 	
