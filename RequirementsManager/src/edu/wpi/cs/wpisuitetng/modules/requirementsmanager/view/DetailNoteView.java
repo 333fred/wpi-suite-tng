@@ -6,15 +6,14 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
 
 
 /**
@@ -40,7 +39,7 @@ public class DetailNoteView extends JPanel{
 		// Create the note list
 		noteList = new DefaultListModel();
 		notes = new JList(noteList);
-		notes.setCellRenderer(new noteCellRenderer());
+		notes.setCellRenderer(new EventCellRenderer());
 
 		// Add the list to the scroll pane
 		JScrollPane noteScrollPane = new JScrollPane();

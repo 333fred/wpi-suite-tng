@@ -3,7 +3,7 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -12,7 +12,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -21,16 +20,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.noteCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 /**
  * @author Swagasaurus
@@ -43,6 +35,8 @@ public class DetailPanel extends FocusableTab {
 	// Textfields
 	JTextArea textName;
 	JTextArea textDescription;
+	JTextArea textNameValid;
+	JTextArea textDescriptionValid;
 
 	// combo boxes
 	JComboBox comboBoxType;
@@ -56,6 +50,7 @@ public class DetailPanel extends FocusableTab {
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
+	private static final int VERTICAL_CLOSE2 = -10;
 	private static final int VERTICAL_FAR = 20;
 	private static final int HORIZONTAL_PADDING = 20;
 
@@ -107,7 +102,15 @@ public class DetailPanel extends FocusableTab {
 				}
 			}
 		});
-
+		
+		textNameValid = new JTextArea(1, 40);
+		textNameValid.setOpaque(false);
+		textNameValid.setEnabled(false);
+		textNameValid.setDisabledTextColor(Color.BLACK);
+		textNameValid.setLineWrap(true);
+		textNameValid.setWrapStyleWord(true);
+		mainPanel.add(textNameValid);
+		
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
@@ -117,7 +120,30 @@ public class DetailPanel extends FocusableTab {
 		scroll.setSize(400, 450);
 		scroll.setBorder(null);
 		mainPanel.add(scroll);
-
+		
+		textDescription.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textDescription.transferFocus();
+					}
+					else {
+						textDescription.transferFocusBackward();
+					}
+					event.consume();
+				}
+			}
+		});
+		
+		textDescriptionValid = new JTextArea(1, 40);
+		textDescriptionValid.setOpaque(false);
+		textDescriptionValid.setEnabled(false);
+		textDescriptionValid.setDisabledTextColor(Color.BLACK);
+		textDescriptionValid.setLineWrap(true);
+		textDescriptionValid.setWrapStyleWord(true);
+		mainPanel.add(textDescriptionValid);
+		
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
 				"Non-functional", "Scenario" };
 		comboBoxType = new JComboBox(availableTypes);
@@ -135,22 +161,21 @@ public class DetailPanel extends FocusableTab {
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxPriority);
 		
-		if(requirement.getName().equals(""))
-		{
 		JButton btnSave = new JButton("Save Requirement");
-		btnSave.setAction(new SaveRequirementAction(requirement, this));
 		mainPanel.add(btnSave);
 		
-		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, comboBoxPriority);
-		
-		comboBoxStatus.setEnabled(false);
-		comboBoxStatus.setSelectedItem("NEW");
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setAction(new CancelAction(requirement, this));
+		mainPanel.add(btnCancel);
+
+		if (requirement.getName().equals("")) {
+			btnSave.setAction(new SaveRequirementAction(requirement, this));
+			comboBoxStatus.setEnabled(false);
+			comboBoxStatus.setSelectedItem("NEW");
 		}
 		else
 		{
+			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
 			case NEW:
 				comboBoxStatus.setSelectedIndex(0);
@@ -177,37 +202,52 @@ public class DetailPanel extends FocusableTab {
 		// Align left edges of objects
 		layout.putConstraint(SpringLayout.WEST, lblName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblDescription,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblDescription,	HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblType, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblStatus, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblPriority,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblPriority, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, scroll,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxType,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxStatus,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxPriority,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textNameValid, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, btnCancel, HORIZONTAL_PADDING, 
+				SpringLayout.EAST, btnSave);
+		layout.putConstraint(SpringLayout.WEST, scroll,	HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textDescriptionValid, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxType,HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxStatus,	HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+
+		
 
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
 				SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.NORTH, textName, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblName);
+		layout.putConstraint(SpringLayout.NORTH, textNameValid, VERTICAL_PADDING
+				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, textName);
 		layout.putConstraint(SpringLayout.NORTH, lblDescription,
-				VERTICAL_PADDING, SpringLayout.SOUTH, textName);
+				VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
 		layout.putConstraint(SpringLayout.NORTH, scroll,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblDescription);
+		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
+				VERTICAL_PADDING + VERTICAL_CLOSE2, SpringLayout.SOUTH,
+				scroll);
 		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
-				SpringLayout.SOUTH, scroll);
+				SpringLayout.SOUTH, textDescriptionValid);
 		layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblType);
 		layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING,
@@ -220,6 +260,10 @@ public class DetailPanel extends FocusableTab {
 		layout.putConstraint(SpringLayout.NORTH, comboBoxPriority,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblPriority);
+		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
+				SpringLayout.SOUTH, comboBoxPriority);
+		layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
+				SpringLayout.SOUTH, comboBoxPriority);
 
 		textName.setText(requirement.getName());
 		textDescription.setText(requirement.getDescription());

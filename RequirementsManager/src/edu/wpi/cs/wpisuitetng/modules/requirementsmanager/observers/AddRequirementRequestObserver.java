@@ -65,7 +65,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 					}
 				});*/
 				
-				  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
+				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
 			} else {
 				
 				 //Display error in view... here's how defecttracker does it:

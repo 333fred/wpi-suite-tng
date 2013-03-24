@@ -11,9 +11,11 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
@@ -22,7 +24,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	Data db;
 	RequirementValidator validator;
-
 
 	/**
 	 * Create a RequirementsEntityManager
@@ -34,19 +35,21 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		db = data;
 		validator = new RequirementValidator(db);
 	}
-	
-	//TODO testing - these are basically copied from DefectManager right now so they might not fully apply
+
+	// TODO testing - these are basically copied from DefectManager right now so
+	// they might not fully apply
 
 	@Override
 	public Requirement makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
-		
+
 		final Requirement newRequirement = Requirement.fromJSON(content);
-		
-		newRequirement.setrUID(Count()+1); //we have to set the UID
-		
-		List<ValidationIssue> issues = validator.validate(s, newRequirement, RequirementActionMode.CREATE);
-		if(issues.size() > 0) {
+
+		newRequirement.setrUID(Count() + 1); // we have to set the UID
+
+		List<ValidationIssue> issues = validator.validate(s, newRequirement,
+				RequirementActionMode.CREATE);
+		if (issues.size() > 0) {
 			// TODO: pass errors to client through exception
 			for (ValidationIssue issue : issues) {
 				System.out.println("Validation issue: " + issue.getMessage());
@@ -57,28 +60,29 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		if (!db.save(newRequirement, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		
+
 		return newRequirement;
 	}
 
 	@Override
 	public Requirement[] getEntity(Session s, String id)
 			throws NotFoundException {
-		
+
 		final int intId = Integer.parseInt(id);
-		if(intId < 1) {
+		if (intId < 1) {
 			throw new NotFoundException();
 		}
-		
+
 		Requirement[] requirements = null;
 		try {
-			requirements = db.retrieve(Requirement.class, "rUID", intId, s.getProject()).toArray(new Requirement[0]);
+			requirements = db.retrieve(Requirement.class, "rUID", intId,
+					s.getProject()).toArray(new Requirement[0]);
 		} catch (WPISuiteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if(requirements.length < 1 || requirements[0] == null) {
+
+		if (requirements.length < 1 || requirements[0] == null) {
 			throw new NotFoundException();
 		}
 		return requirements;
@@ -86,7 +90,8 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	@Override
 	public Requirement[] getAll(Session s) {
-		return db.retrieveAll(new Requirement(), s.getProject()).toArray(new Requirement[0]);
+		return db.retrieveAll(new Requirement(), s.getProject()).toArray(
+				new Requirement[0]);
 	}
 
 	@Override
@@ -94,13 +99,15 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		db.save(model, s.getProject());
 	}
 
-	private void ensureRole(Session session, Role role) throws WPISuiteException {
-		User user = (User) db.retrieve(User.class, "username", session.getUsername()).get(0);
-		if(!user.getRole().equals(role)) {
+	private void ensureRole(Session session, Role role)
+			throws WPISuiteException {
+		User user = (User) db.retrieve(User.class, "username",
+				session.getUsername()).get(0);
+		if (!user.getRole().equals(role)) {
 			throw new UnauthorizedException();
 		}
 	}
-	
+
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
 		// TODO should user need to be Admin?
@@ -116,24 +123,134 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	@Override
 	public int Count() {
-		// note that this is not project-specific - ids are unique across projects
+		// Retrieve all from this project
 		return db.retrieveAll(new Requirement()).size();
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Requirement update(Session s, String content)
 			throws WPISuiteException {
-		
-		Requirement updatedRequirement = Requirement.fromJSON(content);
 
-		List<ValidationIssue> issues = validator.validate(s, updatedRequirement, RequirementActionMode.EDIT);
-		if(issues.size() > 0) {
+		// Get updated requirements
+		Requirement updatedRequirement = Requirement.fromJSON(content);
+		Requirement oldReq;
+
+		// Validate the requirement
+		List<ValidationIssue> issues = validator.validate(s,
+				updatedRequirement, RequirementActionMode.EDIT);
+		if (issues.size() > 0) {
 			throw new BadRequestException();
 		}
-		
-		//TODO Add ability to update
 
-		throw new NotImplementedException();
+		// Attempt to get the old version of the requirement
+		try {
+			oldReq = getRequirement(updatedRequirement.getrUID(), s);
+		} catch (RequirementNotFoundException ex) {
+			System.out.println("Error: Requirement "
+					+ updatedRequirement.getrUID() + " not found.");
+			throw new WPISuiteException();
+		}
+
+		// Attempt to update the old requirement
+		oldReq = updateRequirement(oldReq, updatedRequirement);
+
+		// Save the requirement, and throw an exception if if fails
+		if (!db.save(oldReq, s.getProject())) {
+			throw new WPISuiteException();
+		}
+
+		return oldReq;
+	}
+
+	/**
+	 * Gets a requirement given an id
+	 * 
+	 * @param id
+	 *            The ID of the requirement to find
+	 * @param s
+	 *            The session the requirement is in
+	 * @return The requested requirement
+	 * @throws RequirementNotFoundException
+	 *             If the requirement cannot be found, or is invalid, we throw
+	 *             this
+	 */
+	public Requirement getRequirement(int id, Session s)
+			throws RequirementNotFoundException {
+		try {
+			List<Model> requirement = db.retrieve(Requirement.class, "rUID",
+					id, s.getProject());
+			if (requirement.size() < 1 || requirement.get(0) == null) {
+				throw new RequirementNotFoundException(id);
+			}
+
+			if (requirement.get(0) instanceof Requirement) {
+				return ((Requirement) requirement.get(0));
+			} else {
+				throw new WPISuiteException();
+			}
+		} catch (WPISuiteException e) {
+			throw new RequirementNotFoundException(id);
+		}
+	}
+
+	/**
+	 * Updates a given requirement with all diffs, and logs all changes
+	 * 
+	 * @param oldReq
+	 *            The old version of the requirement
+	 * @param newReq
+	 *            The new requirement
+	 * @return the updated requirement
+	 */
+	public Requirement updateRequirement(Requirement oldReq, Requirement newReq) {
+
+		// Update all the fields in the old requirement with the new fields.
+		// TODO: Add in logging here
+
+		if (oldReq.getDescription() != newReq.getDescription()) {
+			oldReq.setDescription(newReq.getDescription());
+		}
+		if (oldReq.getEffort() != newReq.getEffort()) {
+			oldReq.setEffort(newReq.getEffort());
+		}
+		if (oldReq.getIteration() != newReq.getIteration()) {
+			oldReq.setIteration(newReq.getIteration());
+		}
+		if (oldReq.getLog() != newReq.getLog()) {
+			oldReq.setLog(newReq.getLog());
+		}
+		if (oldReq.getName() != newReq.getName()) {
+			oldReq.setName(newReq.getName());
+		}
+		if (oldReq.getNotes() != newReq.getNotes()) {
+			oldReq.setNotes(newReq.getNotes());
+		}
+		if (oldReq.getPriority() != newReq.getPriority()) {
+			oldReq.setPriority(newReq.getPriority());
+		}
+		if (oldReq.getpUID() != newReq.getpUID()) {
+			oldReq.setpUID(newReq.getpUID());
+		}
+		if (oldReq.getReleaseNum() != newReq.getReleaseNum()) {
+			oldReq.setReleaseNum(newReq.getReleaseNum());
+		}
+		if (oldReq.getStatus() != newReq.getStatus()) {
+			oldReq.setStatus(newReq.getStatus());
+		}
+		if (oldReq.getSubRequirements() != newReq.getSubRequirements()) {
+			oldReq.setSubRequirements(newReq.getSubRequirements());
+		}
+		if (oldReq.gettID() != newReq.gettID()) {
+			oldReq.settID(newReq.gettID());
+		}
+		if (oldReq.getType() != newReq.getType()) {
+			oldReq.setType(newReq.getType());
+		}
+
+		return oldReq;
 	}
 
 	@Override
@@ -141,7 +258,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			throws WPISuiteException {
 		throw new NotImplementedException();
 	}
-	
+
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
 			throws WPISuiteException {

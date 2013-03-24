@@ -102,7 +102,7 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	
 	private void initializeToolbarGroup() {
 		toolbarView = new ToolbarGroupView("Requirements");
-		butView = new JButton("View Requirement");
+		butView = new JButton("Edit Requirement");
 		butRefresh = new JButton("Refresh");
 		
 		butRefresh.setAction(new RefreshAction(this));

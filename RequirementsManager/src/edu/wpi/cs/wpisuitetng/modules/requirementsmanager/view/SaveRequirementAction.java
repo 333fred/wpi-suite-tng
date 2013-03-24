@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
@@ -30,6 +31,18 @@ public class SaveRequirementAction extends AbstractAction {
 		AddRequirementController controller = new AddRequirementController(this.parentView);
 
 		if(!parentView.textName.getText().equals(""))
+		{
+			parentView.textName.setBackground(Color.WHITE);
+			parentView.textNameValid.setText("");
+		}
+		
+		if(!parentView.textDescription.getText().equals("")) 
+		{
+			parentView.textDescription.setBackground(Color.WHITE);
+			parentView.textDescriptionValid.setText("");
+		}
+		
+		if(!parentView.textName.getText().equals("") && !parentView.textDescription.getText().equals("")) 
 		{
 			requirement.setName(parentView.textName.getText());
 			requirement.setDescription(parentView.textDescription.getText());
@@ -98,9 +111,17 @@ public class SaveRequirementAction extends AbstractAction {
 			controller.AddRequirement(requirement);
 			this.parentView.getMainTabController().closeCurrentTab();
 		}
-		else
-		{
-			  JOptionPane.showMessageDialog(parentView, "Requirement must have a name in order to save","Save Error", JOptionPane.OK_OPTION);
+		else {
+			if(parentView.textName.getText().equals(""))
+			{
+				parentView.textName.setBackground(new Color(255,100,100));
+				parentView.textNameValid.setText("Requirement must have name in order to save");
+			}
+			if(parentView.textDescription.getText().equals(""))
+			{
+				parentView.textDescription.setBackground(new Color(255,100,100));
+				parentView.textDescriptionValid.setText("Requirement must have description in order to save");
+			}
 		}
 	}
 }
