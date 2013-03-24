@@ -101,8 +101,8 @@ public class SaveRequirementAction extends AbstractAction {
 		}
 		else
 		{
-			parentView.getTextNameValid().setText("Requirement must have a name in order to save");
-			parentView.getTextName().setBackground(new Color(255,85,85));
+			parentView.textNameValid.setText("Requirement must have a name in order to save");
+			parentView.textName.setBackground(new Color(255,100,100));
 			//JOptionPane.showMessageDialog(parentView, "Requirement must have a name in order to save","Save Error", JOptionPane.OK_OPTION);
 		}
 	}

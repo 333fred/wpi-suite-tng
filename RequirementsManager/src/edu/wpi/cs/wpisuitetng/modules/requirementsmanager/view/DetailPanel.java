@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -98,7 +99,8 @@ public class DetailPanel extends JPanel {
 		
 		textNameValid = new JTextArea(1, 40);
 		textNameValid.setOpaque(false);
-		textNameValid.setEnabled(false);
+		textNameValid.setEditable(false);
+		textNameValid.setDisabledTextColor(Color.BLACK);
 		textNameValid.setLineWrap(true);
 		textNameValid.setWrapStyleWord(true);
 		//textNameValid.setBorder((new JTextField()).getBorder());
@@ -303,17 +305,5 @@ public class DetailPanel extends JPanel {
 	
 	public MainTabController getMainTabController() {
 		return mainTabController;
-	}
-	
-	public JTextArea getTextName() {
-		return textName;
-	}
-	
-	public JTextArea getTextNameValid() {
-		return textNameValid;
-	}
-	
-	public JTextArea getTextDescriptionValid() {
-		return textDescriptionValid;
 	}
 }
