@@ -10,7 +10,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.Event;
 /**
  * Simple class to hold a note and any associated metadata
  * 
- * @author Fredrica
+ * @author Fredric
  */
 
 public class Note implements Event {

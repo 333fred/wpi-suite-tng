@@ -256,7 +256,7 @@ public class DetailPanel extends FocusableTab {
 			break;
 		}
 
-	noteView = new DetailNoteView(this.requirement, this);
+		noteView = new DetailNoteView(this.requirement, this);
 	
 		//create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, new JPanel());
