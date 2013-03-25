@@ -140,7 +140,7 @@ public class RequirementValidatorTest {
 		assertEquals(r.getNotes(), new LinkedList<String>());
 		assertEquals(r.getpUID(), new LinkedList<Integer>());
 		assertEquals(r.getSubRequirements(), new LinkedList<Integer>());
-		assertEquals(r.gettID(), new LinkedList<String>());
+		assertEquals(r.getUsers(), new LinkedList<String>());
 	}
 	
 	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session, RequirementActionMode mode) {

@@ -273,10 +273,10 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 					.getSubRequirements(), EventType.SUB_CHANGE));
 			oldReq.setSubRequirements(newReq.getSubRequirements());
 		}
-		if (!oldReq.gettID().equals(newReq.gettID())) {
-			events.add(logger.new Event(oldReq.gettID(), newReq.gettID(),
+		if (!oldReq.getUsers().equals(newReq.getUsers())) {
+			events.add(logger.new Event(oldReq.getUsers(), newReq.getUsers(),
 					EventType.ASSIGN_CHANGE));
-			oldReq.settID(newReq.gettID());
+			oldReq.setUsers(newReq.getUsers());
 		}
 		if (oldReq.getType() != newReq.getType()) {
 			events.add(logger.new Event(oldReq.getType(), newReq.getType(), EventType.TYPE_CHANGE));

@@ -40,7 +40,7 @@ public class Requirement extends AbstractModel {
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
 	// Assignees, Subrequirements, and Parents
-	private List<String> assignees; // Team Member ID
+	private List<String> assignees; // Team Member usernames
 	private List<Integer> subRequirements;
 	private List<Integer> pUID; // Parent unique ID's
 	// Notes and the Log
@@ -375,44 +375,39 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * Gets a list of the current team member id's TODO: Needs to be switched to
-	 * Users
+	 * Gets a list of the current users assigned to this requirement
 	 * 
-	 * @return the tID
+	 * @return the list of usernames
 	 */
-	public List<String> gettID() {
+	public List<String> getUsers() {
 		return assignees;
 	}
 
 	/**
-	 * Sets the team member id's TODO: Needs to be switched to users
+	 * Sets the list of users assigned to this requirement
 	 * 
-	 * @param assignees
-	 *            the tID to set
+	 * @param assignees the list of usernames
 	 */
-	public void settID(List<String> assignees) {
+	public void setUsers(List<String> assignees) {
 		this.assignees = assignees;
 	}
 
 	/**
-	 * Adds a given team id number to the list of id's TODO: Needs to be
-	 * switched to users
+	 * Adds a given user to the list of of assignees to this requirement
 	 * 
-	 * @param id
+	 * @param newUser the username of the user to be added
 	 */
-	public void addTID(String newUser) {
+	public void addUser(String newUser) {
 		this.assignees.add(newUser);
 	}
 
 	/**
-	 * Removes the given team member id from the list TODO: Needs to be switched
-	 * to users TODO: Need to look at permission
+	 * Removes the given assignee from this requirement's list TODO: Need to look at permission
 	 * 
-	 * @param id
-	 *            the ID to remove
-	 * @return True if the ID was in the list, false otherwise
+	 * @param user the username of the user to remove
+	 * @return True if the username was in the list, false otherwise
 	 */
-	public boolean removeTID(User user) {
+	public boolean removeUser(String user) {
 		return this.assignees.remove(user);
 	}
 
@@ -477,7 +472,8 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * Add the given log to the list of logs
+	 * Add the given log to the front of the list of logs,
+	 * ensuring that logs will be stored in reverse chronological order
 	 * @param log the log to add
 	 */
 	public void addLog(Log log) {
