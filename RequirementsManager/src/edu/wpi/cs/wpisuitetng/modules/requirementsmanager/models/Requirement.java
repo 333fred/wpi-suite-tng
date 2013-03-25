@@ -481,7 +481,7 @@ public class Requirement extends AbstractModel {
 	 * @param log the log to add
 	 */
 	public void addLog(Log log) {
-		this.log.add(log);
+		this.log.addFirst(log);
 	}
 
 	/**
