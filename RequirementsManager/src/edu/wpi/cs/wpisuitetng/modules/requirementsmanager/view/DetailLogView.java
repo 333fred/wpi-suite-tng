@@ -17,8 +17,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRe
 
 
 /**
+ * A panel containing a form for adding a new log to a requirement
  * @author Zac Chupka, Maddie Burris
- *
  */
 public class DetailLogView extends JPanel{
 	/** For Notes */
@@ -34,7 +34,7 @@ public class DetailLogView extends JPanel{
 		
 		setLayout(new BorderLayout());
 
-		// Create the note list
+		// Create the log list
 		logList = new DefaultListModel();
 		log = new JList(logList);
 		log.setCellRenderer(new EventCellRenderer());
