@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -17,6 +17,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 
+
 /**
  * @author Chris
  *
@@ -24,9 +25,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 public class EditRequirementAction extends AbstractAction {
 
 	private Requirement requirement;
-	private DetailPanel parentView;
+    private DetailPanel parentView;
 
-	EditRequirementAction(Requirement requirement, DetailPanel parentView) {
+    public EditRequirementAction(Requirement requirement, DetailPanel parentView) {
 		super("Save Requirement");
 		this.requirement = requirement;
 		this.parentView = parentView;
@@ -36,24 +37,24 @@ public class EditRequirementAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		SaveRequirementController controller = new SaveRequirementController(this.parentView);
 		
-		if(!parentView.textName.getText().equals(""))
+		if(!parentView.getTextName().getText().equals(""))
 		{
-			parentView.textName.setBackground(Color.WHITE);
-			parentView.textNameValid.setText("");
+			parentView.getTextName().setBackground(Color.WHITE);
+			parentView.getTextNameValid().setText("");
 		}
 		
-		if(!parentView.textDescription.getText().equals("")) 
+		if(!parentView.getTextDescription().getText().equals("")) 
 		{
-			parentView.textDescription.setBackground(Color.WHITE);
-			parentView.textDescriptionValid.setText("");
+			parentView.getTextDescription().setBackground(Color.WHITE);
+			parentView.getTextDescriptionValid().setText("");
 		}
 		
-		if(!parentView.textName.getText().equals("") && !parentView.textDescription.getText().equals("")) 
+		if(!parentView.getTextName().getText().equals("") && !parentView.getTextDescription().getText().equals("")) 
 		{
-			requirement.setName(parentView.textName.getText());
-			requirement.setDescription(parentView.textDescription.getText());
+			requirement.setName(parentView.getTextName().getText());
+			requirement.setDescription(parentView.getTextDescription().getText());
 
-			switch (parentView.comboBoxPriority.getSelectedIndex()) {
+			switch (parentView.getComboBoxPriority().getSelectedIndex()) {
 			case 0:
 				requirement.setPriority(Priority.BLANK);
 				break;
@@ -70,7 +71,7 @@ public class EditRequirementAction extends AbstractAction {
 				requirement.setPriority(Priority.BLANK);
 			}
 
-			switch (parentView.comboBoxType.getSelectedIndex()) {
+			switch (parentView.getComboBoxType().getSelectedIndex()) {
 			case 0:
 				requirement.setType(Type.BLANK);
 				break;
@@ -93,7 +94,7 @@ public class EditRequirementAction extends AbstractAction {
 				requirement.setType(Type.SCENARIO);
 			}
 
-			switch (parentView.comboBoxStatus.getSelectedIndex()) {
+			switch (parentView.getComboBoxStatus().getSelectedIndex()) {
 			case 0:
 				requirement.setStatus(Status.NEW);
 				break;
@@ -119,15 +120,15 @@ public class EditRequirementAction extends AbstractAction {
 			//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
 		}
 		else {
-			if(parentView.textName.getText().equals(""))
+			if(parentView.getTextName().getText().equals(""))
 			{
-				parentView.textName.setBackground(new Color (255,255,170));
-				parentView.textNameValid.setText("**Requirement must have name in order to save**");
+				parentView.getTextName().setBackground(new Color (255,255,170));
+				parentView.getTextNameValid().setText("**Requirement must have name in order to save**");
 			}
-			if(parentView.textDescription.getText().equals(""))
+			if(parentView.getTextDescription().getText().equals(""))
 			{
-				parentView.textDescription.setBackground(new Color (255,255,170));
-				parentView.textDescriptionValid.setText("**Requirement must have description in order to save**");
+				parentView.getTextDescription().setBackground(new Color (255,255,170));
+				parentView.getTextDescriptionValid().setText("**Requirement must have description in order to save**");
 			}
 		}		
 	}
