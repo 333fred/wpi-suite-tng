@@ -7,9 +7,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.Event;
 /**
- * The notePanel class is what displays the note panel in the larger requirements creator pannel 
+ * The EventPanel class displays the individual event panels
  * @author spkordell
  */
 @SuppressWarnings("serial")

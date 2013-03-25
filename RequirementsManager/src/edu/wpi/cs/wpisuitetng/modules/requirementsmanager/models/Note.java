@@ -5,7 +5,7 @@ import java.util.Date;
 
 import javax.swing.JLabel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.Event;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
  * Simple class to hold a note and any associated metadata

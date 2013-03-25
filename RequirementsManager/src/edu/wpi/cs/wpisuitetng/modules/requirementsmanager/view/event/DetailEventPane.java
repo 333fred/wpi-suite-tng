@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;

@@ -6,7 +6,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.Event;
 
 public class EventCellRenderer implements ListCellRenderer {
 

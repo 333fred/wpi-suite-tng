@@ -23,6 +23,8 @@ import javax.swing.text.AbstractDocument;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEventPane;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 
 /**
  * @author Swagasaurus

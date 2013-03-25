@@ -1,12 +1,18 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
+import java.awt.Color;
+
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.janeway.config.Configuration;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailNoteView;
 
 
 /**
@@ -39,6 +45,11 @@ public class SaveNoteController {
 			this.model.addNote(new Note(noteText, ConfigManager.getConfig().getUserName()));
 			parentView.getNoteList().addElement(this.model.getNotes().get(this.model.getNotes().size()-1));
 			view.getnoteField().setText("");
+			view.getnoteField().requestFocusInWindow();
+			
+			//We want to save the note to the server immediately
+			SaveRequirementController controller = new SaveRequirementController(this.parentView);
+			controller.SaveRequirement(model);
 		}
 	}
 }

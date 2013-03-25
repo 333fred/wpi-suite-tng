@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 /** Interface for rendering event panels (Notes and Logs) 
  * 

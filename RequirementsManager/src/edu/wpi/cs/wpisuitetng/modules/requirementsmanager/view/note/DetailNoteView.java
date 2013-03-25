@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.BorderLayout;
 
@@ -12,8 +12,8 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 
 /**
