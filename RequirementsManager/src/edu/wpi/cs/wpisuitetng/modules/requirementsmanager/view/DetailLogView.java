@@ -28,6 +28,11 @@ public class DetailLogView extends JPanel{
 	private DetailPanel parentView;
 	
 	
+	/**
+ 	* Construct the panel and add layout components
+ 	* @param requirement the requirement 
+ 	* @param parentView the parent view
+ 	*/
 	public DetailLogView(Requirement requirement, DetailPanel parentView){
 		this.requirement = requirement;
 		this.parentView = parentView;
