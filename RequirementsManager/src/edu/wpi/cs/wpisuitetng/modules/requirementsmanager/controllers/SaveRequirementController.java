@@ -23,8 +23,8 @@ public class SaveRequirementController {
 		this.detailPanel = detailPanel;
 	}
 	
-	public void SaveRequirement(Requirement toAdd) {
-		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(detailPanel);
+	public void SaveRequirement(Requirement toAdd, boolean closeTab) {
+		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(detailPanel,closeTab);
 		Request request;
 		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());

@@ -50,6 +50,9 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	private JButton butView;
 	private JButton butRefresh;
 	
+	/** Flag used to make paint only refresh the requirements once, on load */
+	private boolean firstPaint;
+	
 	/** Construct for a RequirementListView
 	 * 
 	 * 
@@ -57,6 +60,7 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	
 	public RequirementListView(MainTabController tabController) {
 		this.tabController = tabController;
+		firstPaint = false;
 		//create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
 		//init the toolbar group
@@ -239,9 +243,11 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	public void paint(Graphics g) {
 		//call super so there is no change to functionality
 		super.paint(g);
-		System.out.println("Paint has been called");
-		//refresh the requirements
-		refresh();
+		//refresh the requirements, the first time this is called
+		if (!firstPaint) {
+			refresh();
+			firstPaint = true;
+		}
 	}
 
 }

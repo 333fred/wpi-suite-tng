@@ -48,14 +48,16 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		// print the body
 		System.out.println("Received response: " + response.getBody());
 
-		if (response.getStatusCode() == 201) {
+		this.detailPanel.getMainTabController().closeCurrentTab();
+		
+/*		if (response.getStatusCode() == 201) {
 			// parse the Requirement from the body
 			final Requirement requirement = Requirement.fromJSON(response
 					.getBody());
 
 			// make sure the requirement isn't null
 			if (requirement != null) {
-			/*/omething with the requirement if wanted
+			/omething with the requirement if wanted
 				 singUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
@@ -63,7 +65,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 								.updateModel(defect);
 						view.setEditModeDescriptors(defect);
 					}
-				});*/
+				});
 				
 				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
 			} else {
@@ -80,8 +82,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 			 * iReq.getResponse().getStatusCode() + " status from server: " +
 			 * iReq.getResponse().getStatusMessage(), "Save Defect Error",
 			 * JOptionPane.ERROR_MESSAGE);
-			 */
-		}
+			 
+		}*/
 
 	}
 
@@ -94,9 +96,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Display error in view
 		System.out.println("Error: " + iReq.getResponse().getBody());
-
+		this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
 	}
 
 	/*
@@ -108,8 +109,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Display error in view
-		System.out.println("Fail: " + iReq.getResponse().getBody());
+		this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
 	}
 
 }
