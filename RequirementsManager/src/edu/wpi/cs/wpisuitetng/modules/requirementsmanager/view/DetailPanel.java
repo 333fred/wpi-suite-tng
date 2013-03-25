@@ -40,6 +40,7 @@ public class DetailPanel extends FocusableTab {
 	JTextArea textDescription;
 	JTextArea textNameValid;
 	JTextArea textDescriptionValid;
+	JTextArea saveError;
 
 	// combo boxes
 	JComboBox comboBoxType;
@@ -148,6 +149,15 @@ public class DetailPanel extends FocusableTab {
 		textDescriptionValid.setLineWrap(true);
 		textDescriptionValid.setWrapStyleWord(true);
 		mainPanel.add(textDescriptionValid);
+		
+		saveError = new JTextArea(1, 40);
+		saveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		saveError.setOpaque(false);
+		saveError.setEnabled(false);
+		saveError.setDisabledTextColor(Color.BLACK);
+		saveError.setLineWrap(true);
+		saveError.setWrapStyleWord(true);
+		mainPanel.add(saveError);
 		
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
 				"Non-functional", "Scenario" };
@@ -325,5 +335,9 @@ public class DetailPanel extends FocusableTab {
 	
 	public MainTabController getMainTabController() {
 		return mainTabController;
+	}
+	
+	public void displaySaveError(String error) {
+		this.saveError.setText("**Requirement must have name in order to save**");
 	}
 }
