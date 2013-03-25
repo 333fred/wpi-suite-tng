@@ -60,7 +60,7 @@ public class Logger {
 	 * @param s the session of the requirement
 	 */
 	public static void logCreation(Requirement req, Session s){
-		Log log = new Log("Created requirement\n", s.getUser());
+		Log log = new Log("Created requirement<br>", s.getUser());
 		req.addLog(log);
 	}
 
@@ -88,7 +88,7 @@ public class Logger {
 				// We will add the whole change to the log, since it would take
 				// up a lot of space. This is the only one that we don't fall
 				// through
-				logMsg += ("Updated the Description\n");
+				logMsg += ("Updated the Description<br>");
 				break;
 			case NOTE_CHANGE:
 				// TODO: Need to loop through the notes, find all different, and
@@ -96,12 +96,12 @@ public class Logger {
 				break;
 			case SUB_CHANGE:
 				// TODO: Determine how to display the changes
-				logMsg += ("Changed Subrequirements\n");
+				logMsg += ("Changed Subrequirements<br>");
 				break;
 			case ITER_CHANGE:
 				// TODO: Once we implement iterations, we can determine how to
 				// log
-				logMsg += ("Changed Iteration\n");
+				logMsg += ("Changed Iteration<br>");
 				break;
 			case RELEASE_CHANGE:
 				// TODO: Implement Releases, then we can log them
@@ -113,6 +113,9 @@ public class Logger {
 			case NAME_CHANGE:
 				if (type == null) {
 					type = "Name: ";
+					logMsg += type +  "<b>\"" + event.oldVal.toString() + "\"</b>" + " to <b>\""
+							+ event.newVal.toString() + "\"</b><br>";
+					break;
 				}
 			case TYPE_CHANGE:
 				if (type == null) {
@@ -134,8 +137,8 @@ public class Logger {
 				if (type == null) {
 					type = "Assign: ";
 				}
-				logMsg += type + event.oldVal.toString() + " to "
-						+ event.newVal.toString() + "\n";
+				logMsg += type +  "<b>" + event.oldVal.toString() + "</b>" + " to <b>"
+						+ event.newVal.toString() + "</b><br>";
 			default:
 				break;
 			}
