@@ -17,8 +17,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRe
 
 
 /**
+ * Panel containing a note for a requirement
  * @author Zac Chupka, Maddie Burris
- *
  */
 public class DetailNoteView extends JPanel{
 	/** For Notes */
@@ -27,7 +27,11 @@ public class DetailNoteView extends JPanel{
 	private Requirement requirement;
 	private DetailPanel parentView;
 	
-	
+	/**
+	 * Construct the panel and add layout components
+	 * @param requirement the requirement 
+	 * @param parentView the parent view
+	 */
 	public DetailNoteView(Requirement requirement, DetailPanel parentView){
 		this.requirement = requirement;
 		this.parentView = parentView;
@@ -59,6 +63,10 @@ public class DetailNoteView extends JPanel{
 		}
 	}
 	
+	/**
+	 * A function to get the list of notes added
+	 * @return the list of notes
+	 */
 	public DefaultListModel getNoteList() {
 		return noteList;
 	}

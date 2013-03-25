@@ -20,7 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
- * A panel containing a form for adding a new note to a defect
+ * A panel containing a form for adding a new note to a requirement
  * @author spkordell
  */
 @SuppressWarnings("serial")

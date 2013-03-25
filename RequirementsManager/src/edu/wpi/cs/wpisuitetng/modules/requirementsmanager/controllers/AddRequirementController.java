@@ -25,6 +25,10 @@ public class AddRequirementController {
 		this.detailPanel = detailPanel;
 	}
 	
+	/**
+	 * Adds a requirement to the database
+	 * @param toAdd requirement that will be added
+	 */
 	public void AddRequirement(Requirement toAdd) {
 		final RequestObserver requestObserver = new AddRequirementRequestObserver(this, detailPanel); //you will probably want to pass your view to the observer as well
 		Request request;
