@@ -21,6 +21,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -51,6 +52,9 @@ public class DetailPanel extends FocusableTab {
 	private MainTabController mainTabController;
 	private DetailNoteView noteView;
 	private DetailLogView logView;
+	
+	protected final TextUpdateListener txtTitleListener;
+	protected final TextUpdateListener txtDescriptionListener;
 
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
@@ -92,6 +96,7 @@ public class DetailPanel extends FocusableTab {
 		textName.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textName);
 		
+		
 		textName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -115,6 +120,11 @@ public class DetailPanel extends FocusableTab {
 		textNameValid.setLineWrap(true);
 		textNameValid.setWrapStyleWord(true);
 		mainPanel.add(textNameValid);
+		
+		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// model and highlights them accordingly every time a key is pressed.
+		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
+		textName.addKeyListener(txtTitleListener);
 		
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
@@ -149,6 +159,11 @@ public class DetailPanel extends FocusableTab {
 		textDescriptionValid.setLineWrap(true);
 		textDescriptionValid.setWrapStyleWord(true);
 		mainPanel.add(textDescriptionValid);
+		
+		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// model and highlights them accordingly every time a key is pressed.
+		txtDescriptionListener = new TextUpdateListener(this, textDescription, textDescriptionValid);
+		textDescription.addKeyListener(txtDescriptionListener);
 		
 		saveError = new JTextArea(1, 40);
 		saveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -339,5 +354,9 @@ public class DetailPanel extends FocusableTab {
 	
 	public void displaySaveError(String error) {
 		this.saveError.setText(error);
+	}
+	
+	public Requirement getModel(){
+		return requirement;
 	}
 }
