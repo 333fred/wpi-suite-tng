@@ -1,6 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -74,6 +76,15 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 		requirementsList= new JList(listValues.toArray(new String[0]));
 		add(requirementsList, BorderLayout.CENTER);
 		
+		//Add double click event listener
+		requirementsList.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent e) {
+		        JList list = (JList)e.getSource();
+		        if (e.getClickCount() == 2) {
+		            onDoubleClick(list.locationToIndex(e.getPoint()));
+		        }
+		    }
+		});
 		
 		//System.out.println("Constructor, about to get requirement from server");
 		//TODO: Receiving 404 error when this is called here..
@@ -89,17 +100,28 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 		    }
 		  };
 		
-		worker.schedule(task, 5, TimeUnit.SECONDS);
-				
-
-		
+		worker.schedule(task, 5, TimeUnit.SECONDS);	
+	}
+	
+	
+	/*
+	 * @author Steve Kordell
+	 * 
+	 */
+	//TODO: More documentation
+	void onDoubleClick(int index) {
+		try {
+			Requirement selectedRequirement = requirements[index];		    		
+			tabController.addViewRequirementTab(selectedRequirement);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			//If this has occurred, the list is empty, we can just ignore the mouse click
+		} 
 	}
 	
 	/** Initializes the toolbar group, and adds the buttons that will be displayed to it.
 	 * 
 	 * 
 	 */
-	
 	private void initializeToolbarGroup() {
 		toolbarView = new ToolbarGroupView("Requirements");
 		butView = new JButton("Edit Requirement");
