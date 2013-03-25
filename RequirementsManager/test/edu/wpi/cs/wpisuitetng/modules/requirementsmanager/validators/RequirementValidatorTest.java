@@ -118,6 +118,7 @@ public class RequirementValidatorTest {
 	}
 		
 	@Test
+	//Ensure that the status of any created requirement is 'NEW'
 	public void testStatusCreate() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
@@ -128,6 +129,7 @@ public class RequirementValidatorTest {
 	}
 	
 	@Test
+	//ensure that null linkedlists are properly initialized
 	public void testNullLinkedLists() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
@@ -138,7 +140,7 @@ public class RequirementValidatorTest {
 		assertEquals(r.getNotes(), new LinkedList<String>());
 		assertEquals(r.getpUID(), new LinkedList<Integer>());
 		assertEquals(r.getSubRequirements(), new LinkedList<Integer>());
-		assertEquals(r.gettID(), new LinkedList<User>());
+		assertEquals(r.gettID(), new LinkedList<String>());
 	}
 	
 	public List<ValidationIssue> checkNumIssues(int num, Requirement requirement, Session session, RequirementActionMode mode) {

@@ -35,7 +35,7 @@ public class RequirementTest {
 	Status status;
 	private int iteration;
 	private int effort;
-	private List<User> assignees;
+	private List<String> assignees;
 	private List<Integer> subRequirements;
 	private List<Integer> pUID;
 	private List<Note> notes;
