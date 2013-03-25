@@ -338,6 +338,6 @@ public class DetailPanel extends FocusableTab {
 	}
 	
 	public void displaySaveError(String error) {
-		this.saveError.setText("**Requirement must have name in order to save**");
+		this.saveError.setText(error);
 	}
 }
