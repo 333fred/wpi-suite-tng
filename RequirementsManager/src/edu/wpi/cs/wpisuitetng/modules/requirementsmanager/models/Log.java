@@ -1,8 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
  * Simple class to hold a log and any associated metadata
@@ -10,7 +12,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * @author Fredric
  */
 
-public class Log {
+public class Log implements Event {
 
 	private String log;
 	private Date date;
@@ -98,6 +100,16 @@ public class Log {
 	 */
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+
+	@Override
+	public String getTitle() {
+		return "<html><font size=4><b>" + getCreator().getName() + " on<font size=.25></b> " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(getDate()) + "</html>";	
+	}
+
+	@Override
+	public String getContent() {
+		return "<html><i>" + getLog() + "</i></html>";
 	}
 	
 }
