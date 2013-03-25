@@ -109,7 +109,7 @@ public class Log implements Event {
 
 	@Override
 	public String getContent() {
-		return "<html><i>" + getLog() + "</i></html>";
+		return "<html>" + getLog() + "</html>";
 	}
 	
 }

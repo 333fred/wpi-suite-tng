@@ -114,13 +114,13 @@ public class SaveRequirementAction extends AbstractAction {
 		else {
 			if(parentView.getTextName().getText().equals(""))
 			{
-				parentView.getTextName().setBackground(new Color (255,255,170));
-				parentView.getTextNameValid().setText("**Requirement must have name in order to save**");
+				parentView.getTextName().setBackground(new Color(243, 243, 209));
+				parentView.getTextNameValid().setText("Field must be non-blank");
 			}
 			if(parentView.getTextDescription().getText().equals(""))
 			{
-				parentView.getTextDescription().setBackground(new Color (255,255,170));
-				parentView.getTextDescriptionValid().setText("**Requirement must have description in order to save**");
+				parentView.getTextDescription().setBackground(new Color(243, 243, 209));
+				parentView.getTextDescriptionValid().setText("Field must be non-blank");
 			}
 		}
 	}

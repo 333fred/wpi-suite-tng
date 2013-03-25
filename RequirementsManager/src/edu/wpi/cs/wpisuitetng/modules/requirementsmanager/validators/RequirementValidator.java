@@ -144,8 +144,8 @@ public class RequirementValidator {
 			requirement.setSubRequirements(new LinkedList<Integer>());
 		}
 		
-		if (requirement.gettID() == null) {
-			requirement.settID(new LinkedList<String>());
+		if (requirement.getUsers() == null) {
+			requirement.setUsers(new LinkedList<String>());
 		}
 		
 		//Give BLANK type if none is given
@@ -154,7 +154,7 @@ public class RequirementValidator {
 		}
 		
 		//Make sure all assignees actually exist
-		for (String u : requirement.gettID()){
+		for (String u : requirement.getUsers()){
 			getExistingUser(u, issues, "Assignee");
 		}
 				

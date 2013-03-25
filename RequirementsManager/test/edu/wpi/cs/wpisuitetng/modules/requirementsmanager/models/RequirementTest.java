@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 
@@ -27,12 +28,13 @@ public class RequirementTest {
 	Requirement r2;
 	Project project;
 	
-	String name;
-	String name2;
+	String name = "name";
+	String name2 = "name2";
 	int rUID; 
 	String description;
 	Type type;
 	Status status;
+	Priority priority;
 	private int iteration;
 	private int effort;
 	private List<String> assignees;
@@ -62,7 +64,7 @@ public class RequirementTest {
 	public void testfromJSON() {
 		String json = r1.toJSON();
 		Requirement newRequirement = Requirement.fromJSON(json);
-		assertEquals("", newRequirement.getName());
+		assertEquals("name", newRequirement.getName());
 		assertEquals("", newRequirement.getDescription());
 		assertEquals(0, newRequirement.getrUID());
 	}
@@ -72,5 +74,41 @@ public class RequirementTest {
 		r1.setProject(project);
 		assertSame(project, r1.getProject());
 	}
-
+	
+	@Test
+	public void testSetName() {
+		r1.setName(name2);
+		assertSame(name2,r1.getName());
+	}
+	
+	@Test
+	public void testToListString() {
+		r1.setName(name);
+		r1.setrUID(1);
+		assertEquals("1 name", r1.toListString());
+	}
+	
+	@Test
+	public void testSetDescription() {
+		r1.setDescription("desc");
+		assertEquals("desc",r1.getDescription());
+	}
+	
+	@Test
+	public void testSetreleaseNum() {
+		r1.setReleaseNum(1);
+		assertEquals(1,r1.getReleaseNum());
+	}
+	
+	@Test
+	public void testSetType() {
+		r1.setType(type);
+		assertSame(type,r1.getType());
+	}
+	
+	@Test
+	public void testSetPriority() {
+		r1.setPriority(priority);
+		assertSame(priority ,r1.getPriority());
+	}
 }

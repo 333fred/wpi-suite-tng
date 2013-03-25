@@ -21,6 +21,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -60,6 +61,9 @@ public class DetailPanel extends FocusableTab {
 	private DetailNoteView noteView;
 	//the view that shows the notes
 	private DetailLogView logView;
+	
+	protected final TextUpdateListener txtTitleListener;
+	protected final TextUpdateListener txtDescriptionListener;
 
 	//swing constants
 	private static final int VERTICAL_PADDING = 10;
@@ -104,8 +108,10 @@ public class DetailPanel extends FocusableTab {
 		getTextName().setBorder((new JTextField()).getBorder());
 		mainPanel.add(getTextName());
 		
+
 		//add listener for textName
-		getTextName().addKeyListener(new KeyAdapter() {
+		//getTextName().addKeyListener(new KeyAdapter() {
+		textName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -130,12 +136,18 @@ public class DetailPanel extends FocusableTab {
 		getTextNameValid().setWrapStyleWord(true);
 		mainPanel.add(getTextNameValid());
 		
+
 		//textDescription formatting
 		setTextDescription(new JTextArea(8, 40));
 		getTextDescription().setLineWrap(true);
 		getTextDescription().setWrapStyleWord(true);
 		getTextDescription().setBorder((new JTextField()).getBorder());
 		JScrollPane scroll = new JScrollPane(getTextDescription());
+
+		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// model and highlights them accordingly every time a key is pressed.
+		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
+		textName.addKeyListener(txtTitleListener);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.setSize(400, 450);
 		scroll.setBorder(null);
@@ -165,6 +177,11 @@ public class DetailPanel extends FocusableTab {
 		getTextDescriptionValid().setLineWrap(true);
 		getTextDescriptionValid().setWrapStyleWord(true);
 		mainPanel.add(getTextDescriptionValid());
+		
+		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// model and highlights them accordingly every time a key is pressed.
+		txtDescriptionListener = new TextUpdateListener(this, textDescription, textDescriptionValid);
+		textDescription.addKeyListener(txtDescriptionListener);
 		
 		saveError = new JTextArea(1, 40);
 		saveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -361,6 +378,7 @@ public class DetailPanel extends FocusableTab {
 		this.saveError.setText(error);
 	}
 
+
 	/**
 	 * @return the textName
 	 */
@@ -457,5 +475,9 @@ public class DetailPanel extends FocusableTab {
 	 */
 	public void setComboBoxStatus(JComboBox comboBoxStatus) {
 		this.comboBoxStatus = comboBoxStatus;
+	}
+	
+	public Requirement getModel(){
+		return requirement;
 	}
 }
