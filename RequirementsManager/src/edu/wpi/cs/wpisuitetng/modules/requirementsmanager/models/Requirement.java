@@ -40,7 +40,7 @@ public class Requirement extends AbstractModel {
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
 	// Assignees, Subrequirements, and Parents
-	private List<User> assignees; // Team Member ID
+	private List<String> assignees; // Team Member ID
 	private List<Integer> subRequirements;
 	private List<Integer> pUID; // Parent unique ID's
 	// Notes and the Log
@@ -63,7 +63,7 @@ public class Requirement extends AbstractModel {
 		releaseNum = 0;
 		iteration = 0;
 		effort = 0;
-		assignees = new ArrayList<User>();
+		assignees = new ArrayList<String>();
 		subRequirements = new ArrayList<Integer>();
 		pUID = new ArrayList<Integer>();
 		notes = new ArrayList<Note>();
@@ -99,7 +99,7 @@ public class Requirement extends AbstractModel {
 	 */
 	public Requirement(String name, String description, int releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
-			int iteration, int effort, List<User> assignees, List<Integer> pUID) {
+			int iteration, int effort, List<String> assignees, List<Integer> pUID) {
 		// Get the next UID for this requirement
 
 		// Assign all inputs
@@ -380,7 +380,7 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return the tID
 	 */
-	public List<User> gettID() {
+	public List<String> gettID() {
 		return assignees;
 	}
 
@@ -390,7 +390,7 @@ public class Requirement extends AbstractModel {
 	 * @param assignees
 	 *            the tID to set
 	 */
-	public void settID(List<User> assignees) {
+	public void settID(List<String> assignees) {
 		this.assignees = assignees;
 	}
 
@@ -400,7 +400,7 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @param id
 	 */
-	public void addTID(User newUser) {
+	public void addTID(String newUser) {
 		this.assignees.add(newUser);
 	}
 

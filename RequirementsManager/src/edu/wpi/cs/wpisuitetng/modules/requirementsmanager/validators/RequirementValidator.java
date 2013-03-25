@@ -28,7 +28,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 public class RequirementValidator {
 
 	private Data data;
-	private Requirement lastExistingRequirement;
 	
 	/**
 	 * Create a Requirement Validator
@@ -105,19 +104,19 @@ public class RequirementValidator {
 	
 	 //TODO: @param mode The mode to validate for
 	public List<ValidationIssue> validate(Session session, Requirement requirement, RequirementActionMode mode) throws WPISuiteException {
-		//TODO: Make mode actually do something
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
+		
+		//Null requirements are invalid
 		if(requirement == null) {
 			issues.add(new ValidationIssue("Requirement cannot be null"));
 			return issues;
 		}
 		
 		//TODO: validate the rest of the fields once they are implemented
-		Requirement oldRequirement = null;
-		lastExistingRequirement = oldRequirement;
 		
 		// new requirements should always have new status
-		requirement.setStatus(Status.NEW);
+		if(mode == RequirementActionMode.CREATE)
+			requirement.setStatus(Status.NEW);
 		
 		// make sure title and description size are within constraints
 		if(requirement.getName() == null || requirement.getName().length() > 100 || requirement.getName().length() == 0) {
@@ -128,7 +127,7 @@ public class RequirementValidator {
 			issues.add(new ValidationIssue("Required, must be 1 or more characters", "description"));
 		}
 		
-		//handle null lists
+		//Initialize any null lists to be empty
 		if(requirement.getLog() == null){
 			requirement.setLog(new LinkedList<Log>());
 		}
@@ -146,7 +145,7 @@ public class RequirementValidator {
 		}
 		
 		if (requirement.gettID() == null) {
-			requirement.settID(new LinkedList<User>());
+			requirement.settID(new LinkedList<String>());
 		}
 		
 		//Give BLANK type if none is given
@@ -154,19 +153,11 @@ public class RequirementValidator {
 			requirement.setType(Type.BLANK);
 		}
 		
-		//Make sure all assignees exist
-		/*for (User u : requirement.gettID()){
-			getExistingUser(u);
-		}*/
+		//Make sure all assignees actually exist
+		for (String u : requirement.gettID()){
+			getExistingUser(u, issues, "Assignee");
+		}
 				
 		return issues;
-	}
-
-	/**
-	 * @return The last existing requirement the validator fetched if in edit mode
-	 */
-	public Requirement getLastExistingRequirement() {
-		return lastExistingRequirement;
-	}
-	
+	}	
 }

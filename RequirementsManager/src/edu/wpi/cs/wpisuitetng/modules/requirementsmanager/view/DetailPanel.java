@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -106,6 +107,7 @@ public class DetailPanel extends FocusableTab {
 		});
 		
 		textNameValid = new JTextArea(1, 40);
+		textNameValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		textNameValid.setOpaque(false);
 		textNameValid.setEnabled(false);
 		textNameValid.setDisabledTextColor(Color.BLACK);
@@ -139,6 +141,7 @@ public class DetailPanel extends FocusableTab {
 		});
 		
 		textDescriptionValid = new JTextArea(1, 40);
+		textDescriptionValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		textDescriptionValid.setOpaque(false);
 		textDescriptionValid.setEnabled(false);
 		textDescriptionValid.setDisabledTextColor(Color.BLACK);

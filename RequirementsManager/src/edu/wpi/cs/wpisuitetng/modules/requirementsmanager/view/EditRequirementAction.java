@@ -120,13 +120,13 @@ public class EditRequirementAction extends AbstractAction {
 		else {
 			if(parentView.textName.getText().equals(""))
 			{
-				parentView.textName.setBackground(new Color(255,100,100));
-				parentView.textNameValid.setText("Requirement must have name in order to save");
+				parentView.textName.setBackground(new Color (255,255,170));
+				parentView.textNameValid.setText("**Requirement must have name in order to save**");
 			}
 			if(parentView.textDescription.getText().equals(""))
 			{
-				parentView.textDescription.setBackground(new Color(255,100,100));
-				parentView.textDescriptionValid.setText("Requirement must have description in order to save");
+				parentView.textDescription.setBackground(new Color (255,255,170));
+				parentView.textDescriptionValid.setText("**Requirement must have description in order to save**");
 			}
 		}		
 	}
