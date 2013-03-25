@@ -114,8 +114,9 @@ public class EditRequirementAction extends AbstractAction {
 				break;
 			}
 
-			controller.SaveRequirement(requirement);
-			this.parentView.getMainTabController().closeCurrentTab();
+			
+			controller.SaveRequirement(requirement,true);
+			//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
 		}
 		else {
 			if(parentView.textName.getText().equals(""))

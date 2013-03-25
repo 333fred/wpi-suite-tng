@@ -198,7 +198,7 @@ public class DetailPanel extends FocusableTab {
 		btnCancel.setAction(new CancelAction(requirement, this));
 		mainPanel.add(btnCancel);
 
-		if (requirement.getName().equals("")) {
+		if (requirement.getName().trim().equals("")) {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");

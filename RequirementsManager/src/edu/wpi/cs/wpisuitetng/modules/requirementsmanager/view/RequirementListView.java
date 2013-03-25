@@ -1,12 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -52,6 +50,9 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	private JButton butView;
 	private JButton butRefresh;
 	
+	/** Flag used to make paint only refresh the requirements once, on load */
+	private boolean firstPaint;
+	
 	/** Construct for a RequirementListView
 	 * 
 	 * 
@@ -59,6 +60,7 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	
 	public RequirementListView(MainTabController tabController) {
 		this.tabController = tabController;
+		firstPaint = false;
 		//create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
 		//init the toolbar group
@@ -85,22 +87,6 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 		        }
 		    }
 		});
-		
-		//System.out.println("Constructor, about to get requirement from server");
-		//TODO: Receiving 404 error when this is called here..
-		
-		//QuickFix, works, but not optimal
-		ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-		
-		Runnable task = new Runnable() {
-		    public void run() {
-		    	System.out.println("Invoking this");
-		    	getRequirementsFromServer();
-		    	
-		    }
-		  };
-		
-		worker.schedule(task, 5, TimeUnit.SECONDS);	
 	}
 	
 	
@@ -245,8 +231,23 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	 */
 	
 	public void onTabFocus() {
-		refresh();
-		
+		refresh();		
+	}
+	
+	/** Retrieve the requirements from the server when the GUI is first painted
+	 * 
+	 * @param g The Graphics object
+	 * 
+	 */
+	
+	public void paint(Graphics g) {
+		//call super so there is no change to functionality
+		super.paint(g);
+		//refresh the requirements, the first time this is called
+		if (!firstPaint) {
+			refresh();
+			firstPaint = true;
+		}
 	}
 
 }
