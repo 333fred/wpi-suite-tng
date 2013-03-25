@@ -218,4 +218,13 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 		System.out.println("Received an error fecting from server: |" + RetrieveAllRequirementsRequestObserver);
 	}
 
+	/** Method that updates the content of the list view when this tab gains focus
+	 * 
+	 */
+	
+	public void onTabFocus() {
+		refresh();
+		
+	}
+
 }
