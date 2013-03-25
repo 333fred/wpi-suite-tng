@@ -36,19 +36,22 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 
 		// print the body
 		System.out.println("Received response: " + response.getBody()); //TODO change this to logger
-		if (response.getStatusCode() == 200) {
-			// parse the defect from the body
-			final Requirement defect = Requirement.fromJSON(response.getBody());
+		
+		this.detailPanel.getMainTabController().closeCurrentTab();
+		
+		/*if (response.getStatusCode() == 200) {
+			// parse the requirement from the body
+			final Requirement requirement = Requirement.fromJSON(response.getBody());
 
-			// make sure the defect isn't null
-			if (defect != null) {
+			// make sure the requirement isn't null
+			if (requirement != null) {
 				//success here!
 			} else {
 				//Display error
 			}
 		} else {
 			//Display Error
-		}
+		}*/
 	}
 
 	/* (non-Javadoc)
@@ -56,8 +59,7 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Display error
-
+		this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
 	}
 
 	/* (non-Javadoc)
@@ -65,8 +67,7 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Display error
-
+		this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
 	}
 
 }
