@@ -146,7 +146,7 @@ public class RequirementValidatorTest {
 	public void testInvalidUser() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
-		r.addTID("NotAUser");
+		r.addUser("NotAUser");
 		r.setDescription("Description");
 		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 	}
@@ -203,7 +203,7 @@ public class RequirementValidatorTest {
 		assertEquals(r.getNotes(), new LinkedList<String>());
 		assertEquals(r.getpUID(), new LinkedList<Integer>());
 		assertEquals(r.getSubRequirements(), new LinkedList<Integer>());
-		assertEquals(r.gettID(), new LinkedList<String>());
+		assertEquals(r.getUsers(), new LinkedList<String>());
 	}
 	
 	/**

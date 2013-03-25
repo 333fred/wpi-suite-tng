@@ -80,6 +80,10 @@ public class Logger {
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
+		
+		//flag for wether a change/log has been made
+		boolean logMade = false;
+		
 		for (Event event : events) {
 			String type = null;
 			System.out.println("Event type " + event.type.toString());
@@ -89,6 +93,7 @@ public class Logger {
 				// up a lot of space. This is the only one that we don't fall
 				// through
 				logMsg += ("Updated the Description<br>");
+				logMade = true;
 				break;
 			case NOTE_CHANGE:
 				// TODO: Need to loop through the notes, find all different, and
@@ -102,6 +107,7 @@ public class Logger {
 				// TODO: Once we implement iterations, we can determine how to
 				// log
 				logMsg += ("Changed Iteration<br>");
+				logMade = true;
 				break;
 			case RELEASE_CHANGE:
 				// TODO: Implement Releases, then we can log them
@@ -115,6 +121,7 @@ public class Logger {
 					type = "Name: ";
 					logMsg += type +  "<b>\"" + event.oldVal.toString() + "\"</b>" + " to <b>\""
 							+ event.newVal.toString() + "\"</b><br>";
+					logMade = true;
 					break;
 				}
 			case TYPE_CHANGE:
@@ -139,14 +146,17 @@ public class Logger {
 				}
 				logMsg += type +  "<b>" + event.oldVal.toString() + "</b>" + " to <b>"
 						+ event.newVal.toString() + "</b><br>";
+				logMade = true;
 			default:
 				break;
 			}
 		}
 
-		// Now we need to actually log the event
-		Log log = new Log(logMsg, s.getUser());
-		req.addLog(log);
+		// Now we need to actually log the event, if there was actualy a change made
+		if (logMade) {
+			Log log = new Log(logMsg, s.getUser());
+			req.addLog(log);
+		}
 	}
 
 }
