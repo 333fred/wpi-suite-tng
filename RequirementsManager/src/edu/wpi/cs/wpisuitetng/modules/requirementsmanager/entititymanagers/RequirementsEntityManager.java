@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -16,6 +17,9 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger.Event;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger.EventType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
@@ -155,7 +159,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		}
 
 		// Attempt to update the old requirement
-		oldReq = updateRequirement(oldReq, updatedRequirement);
+		oldReq = updateRequirement(oldReq, updatedRequirement, s);
 
 		// Save the requirement, and throw an exception if if fails
 		if (!db.save(oldReq, s.getProject())) {
@@ -205,51 +209,80 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 *            The new requirement
 	 * @return the updated requirement
 	 */
-	public Requirement updateRequirement(Requirement oldReq, Requirement newReq) {
+	public Requirement updateRequirement(Requirement oldReq, Requirement newReq, Session s) {
 
 		// Update all the fields in the old requirement with the new fields.
-		// TODO: Add in logging here
+		// Collect changes for the log
+		List<Event> events = new ArrayList<Event>();
+		Logger logger = Logger.getInstance();
 
-		if (oldReq.getDescription() != newReq.getDescription()) {
+		if (!oldReq.getDescription().equals(newReq.getDescription())){
+			events.add(logger.new Event(oldReq.getDescription(), newReq
+					.getDescription(), EventType.DESC_CHANGE));
 			oldReq.setDescription(newReq.getDescription());
 		}
 		if (oldReq.getEffort() != newReq.getEffort()) {
+			events.add(logger.new Event(oldReq.getEffort(), newReq.getEffort(),
+					EventType.EFFORT_CHANGE));
 			oldReq.setEffort(newReq.getEffort());
 		}
 		if (oldReq.getIteration() != newReq.getIteration()) {
+			events.add(logger.new Event(oldReq.getIteration(), newReq
+					.getIteration(), EventType.ITER_CHANGE));
 			oldReq.setIteration(newReq.getIteration());
 		}
 		if (oldReq.getLog() != newReq.getLog()) {
+			// We don't need to log the log changing
 			oldReq.setLog(newReq.getLog());
 		}
-		if (oldReq.getName() != newReq.getName()) {
+		if (!oldReq.getName().equals(newReq.getName())) {
+			events.add(logger.new Event(oldReq.getName(), newReq.getName(),
+					EventType.NAME_CHANGE));
 			oldReq.setName(newReq.getName());
 		}
-		if (oldReq.getNotes() != newReq.getNotes()) {
+		if (!oldReq.getNotes().equals(newReq.getNotes())) {
+			events.add(logger.new Event(oldReq.getNotes(), newReq.getNotes(),
+					EventType.NOTE_CHANGE));
 			oldReq.setNotes(newReq.getNotes());
 		}
 		if (oldReq.getPriority() != newReq.getPriority()) {
+			events.add(logger.new Event(oldReq.getPriority(), newReq
+					.getPriority(), EventType.PRIORITY_CHANGE));
 			oldReq.setPriority(newReq.getPriority());
 		}
-		if (oldReq.getpUID() != newReq.getpUID()) {
+		if (!oldReq.getpUID().equals(newReq.getpUID())) {
+			events.add(logger.new Event(oldReq.getpUID(), newReq.getpUID(),
+					EventType.PARENT_CHANGE));
 			oldReq.setpUID(newReq.getpUID());
 		}
 		if (oldReq.getReleaseNum() != newReq.getReleaseNum()) {
+			events.add(logger.new Event(oldReq.getReleaseNum(), newReq
+					.getReleaseNum(), EventType.RELEASE_CHANGE));
 			oldReq.setReleaseNum(newReq.getReleaseNum());
 		}
 		if (oldReq.getStatus() != newReq.getStatus()) {
+			events.add(logger.new Event(oldReq.getStatus(), newReq.getStatus(),
+					EventType.STATUS_CHANGE));
 			oldReq.setStatus(newReq.getStatus());
 		}
-		if (oldReq.getSubRequirements() != newReq.getSubRequirements()) {
+		if (!oldReq.getSubRequirements().equals(newReq.getSubRequirements())){
+			events.add(logger.new Event(oldReq.getSubRequirements(), newReq
+					.getSubRequirements(), EventType.SUB_CHANGE));
 			oldReq.setSubRequirements(newReq.getSubRequirements());
 		}
-		if (oldReq.gettID() != newReq.gettID()) {
+		if (!oldReq.gettID().equals(newReq.gettID())) {
+			events.add(logger.new Event(oldReq.gettID(), newReq.gettID(),
+					EventType.ASSIGN_CHANGE));
 			oldReq.settID(newReq.gettID());
 		}
 		if (oldReq.getType() != newReq.getType()) {
+			events.add(logger.new Event(oldReq.getType(), newReq.getType(), EventType.TYPE_CHANGE));
 			oldReq.setType(newReq.getType());
 		}
-
+		
+		// Add all of the changes to the log
+		Logger.logEvents(oldReq, events, s);
+		
 		return oldReq;
 	}
 
