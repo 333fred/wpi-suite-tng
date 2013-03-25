@@ -17,9 +17,11 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 public class UpdateRequirementRequestObserver implements RequestObserver {
 	
 	DetailPanel detailPanel;
+	boolean closeTab;
 	
-	public UpdateRequirementRequestObserver (DetailPanel detailPanel) {
+	public UpdateRequirementRequestObserver (DetailPanel detailPanel, boolean closeTab) {
 		this.detailPanel = detailPanel;	
+		this.closeTab = closeTab;
 	}
 	
 	
@@ -37,7 +39,9 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 		// print the body
 		System.out.println("Received response: " + response.getBody()); //TODO change this to logger
 		
-		this.detailPanel.getMainTabController().closeCurrentTab();
+		if (this.closeTab) {
+			this.detailPanel.getMainTabController().closeCurrentTab();
+		}
 		
 		/*if (response.getStatusCode() == 200) {
 			// parse the requirement from the body

@@ -49,7 +49,7 @@ public class SaveNoteController {
 			
 			//We want to save the note to the server immediately
 			SaveRequirementController controller = new SaveRequirementController(this.parentView);
-			controller.SaveRequirement(model);
+			controller.SaveRequirement(model,false);
 		}
 	}
 }
