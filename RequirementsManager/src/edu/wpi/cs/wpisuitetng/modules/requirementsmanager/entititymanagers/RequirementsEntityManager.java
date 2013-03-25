@@ -60,6 +60,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			}
 			throw new BadRequestException();
 		}
+		
+		// Log the creation of a new requirement
+		Logger.logCreation(newRequirement, s);
 
 		if (!db.save(newRequirement, s.getProject())) {
 			throw new WPISuiteException();

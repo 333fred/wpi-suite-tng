@@ -53,6 +53,16 @@ public class Logger {
 	public enum EventType {
 		NAME_CHANGE, DESC_CHANGE, TYPE_CHANGE, STATUS_CHANGE, PRIORITY_CHANGE, RELEASE_CHANGE, ITER_CHANGE, EFFORT_CHANGE, ASSIGN_CHANGE, SUB_CHANGE, PARENT_CHANGE, NOTE_CHANGE
 	}
+	
+	/**
+	 * Logs the creation of a requirement
+	 * @param req the new requirement
+	 * @param s the session of the requirement
+	 */
+	public static void logCreation(Requirement req, Session s){
+		Log log = new Log("Created requirement\n", s.getUser());
+		req.addLog(log);
+	}
 
 	/**
 	 * Static method that processes a list of changes, and adds them to a
@@ -66,15 +76,7 @@ public class Logger {
 	public static void logEvents(Requirement req, List<Event> events, Session s) {
 
 		// Log of all events
-		String logMsg;
-
-		/*
-		 * Timestamp and userstamp the log, and insert a newline It will look
-		 * like this: On (DATE) (USERNAME) changed: (CHANGES)
-		 */
-		Date date = new Date();
-		logMsg = "On " + date.toString() + "\n" + s.getUsername()
-				+ " changed:\n";
+		String logMsg = "";
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
@@ -86,7 +88,7 @@ public class Logger {
 				// We will add the whole change to the log, since it would take
 				// up a lot of space. This is the only one that we don't fall
 				// through
-				logMsg += ("\tUpdated the Description\n");
+				logMsg += ("Updated the Description\n");
 				break;
 			case NOTE_CHANGE:
 				// TODO: Need to loop through the notes, find all different, and
@@ -94,12 +96,12 @@ public class Logger {
 				break;
 			case SUB_CHANGE:
 				// TODO: Determine how to display the changes
-				logMsg.concat("\tChanged Subrequirements");
+				logMsg += ("Changed Subrequirements\n");
 				break;
 			case ITER_CHANGE:
 				// TODO: Once we implement iterations, we can determine how to
 				// log
-				logMsg += ("\tChanged Iteration");
+				logMsg += ("Changed Iteration\n");
 				break;
 			case RELEASE_CHANGE:
 				// TODO: Implement Releases, then we can log them
