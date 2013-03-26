@@ -114,7 +114,7 @@ public class TextUpdateListener implements KeyListener {
 		// Compare base to the component's text to determine whether or not to highlight the field.
 		if (base.equals(component.getText())) {
 			component.setBackground(new Color(243, 243, 209));
-			errorComponent.setText("Field must be non-blank");
+			errorComponent.setText("** Field must be non-blank **");
 			
 		}
 		else {

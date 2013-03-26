@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
@@ -113,16 +114,16 @@ public class DetailPanel extends FocusableTab {
 
 		//formatting for textName area
 		setTextName(new JTextArea(1, 40));
-		getTextName().setLineWrap(true);
-		getTextName().setWrapStyleWord(true);
-		AbstractDocument pDoc = (AbstractDocument) getTextName().getDocument();
+		textName.setLineWrap(true);
+		textName.setWrapStyleWord(true);
+		textName.setMaximumSize(new Dimension(40, 2));
+		AbstractDocument pDoc = (AbstractDocument) textName.getDocument();
 		pDoc.setDocumentFilter(new DocumentSizeFilter(100));
-		getTextName().setBorder((new JTextField()).getBorder());
-		mainPanel.add(getTextName());
+		textName.setBorder((new JTextField()).getBorder());
+		mainPanel.add(textName);
 		
 
 		//add listener for textName
-		//getTextName().addKeyListener(new KeyAdapter() {
 		textName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -135,37 +136,41 @@ public class DetailPanel extends FocusableTab {
 					}
 					event.consume();
 				}
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+					event.consume(); // consume the event and do nothing
+				}
 			}
 		});
 		
 		//textName validator formatting
-		setTextNameValid(new JTextArea(1, 40));
-		getTextNameValid().setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		getTextNameValid().setOpaque(false);
-		getTextNameValid().setEnabled(false);
-		getTextNameValid().setDisabledTextColor(Color.BLACK);
-		getTextNameValid().setLineWrap(true);
-		getTextNameValid().setWrapStyleWord(true);
-		mainPanel.add(getTextNameValid());
+		textNameValid = new JTextArea(1, 40);
+		textNameValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textNameValid.setOpaque(false);
+		textNameValid.setEnabled(false);
+		textNameValid.setDisabledTextColor(Color.BLACK);
+		textNameValid.setLineWrap(true);
+		textNameValid.setWrapStyleWord(true);
+		mainPanel.add(textNameValid);
 		
 
 		//textDescription formatting
-		setTextDescription(new JTextArea(8, 40));
-		getTextDescription().setLineWrap(true);
-		getTextDescription().setWrapStyleWord(true);
-		getTextDescription().setBorder((new JTextField()).getBorder());
-		JScrollPane scroll = new JScrollPane(getTextDescription());
+		textDescription = new JTextArea(8, 40);
+		textDescription.setLineWrap(true);
+		textDescription.setWrapStyleWord(true);
+		textDescription.setBorder((new JTextField()).getBorder());
+		JScrollPane scroll = new JScrollPane(textDescription);
 
 		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
 		// model and highlights them accordingly every time a key is pressed.
 		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
 		textName.addKeyListener(txtTitleListener);
+		
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.setSize(400, 450);
 		scroll.setBorder(null);
 		mainPanel.add(scroll);
 		
-		getTextDescription().addKeyListener(new KeyAdapter() {
+		textDescription.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -181,14 +186,14 @@ public class DetailPanel extends FocusableTab {
 		});
 		
 		//description validator formatting
-		setTextDescriptionValid(new JTextArea(1, 40));
-		getTextDescriptionValid().setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		getTextDescriptionValid().setOpaque(false);
-		getTextDescriptionValid().setEnabled(false);
-		getTextDescriptionValid().setDisabledTextColor(Color.BLACK);
-		getTextDescriptionValid().setLineWrap(true);
-		getTextDescriptionValid().setWrapStyleWord(true);
-		mainPanel.add(getTextDescriptionValid());
+		textDescriptionValid = new JTextArea(1, 40);
+		textDescriptionValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textDescriptionValid.setOpaque(false);
+		textDescriptionValid.setEnabled(false);
+		textDescriptionValid.setDisabledTextColor(Color.BLACK);
+		textDescriptionValid.setLineWrap(true);
+		textDescriptionValid.setWrapStyleWord(true);
+		mainPanel.add(textDescriptionValid);
 		
 		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
 		// model and highlights them accordingly every time a key is pressed.
