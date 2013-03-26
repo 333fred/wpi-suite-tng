@@ -234,10 +234,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 					.getIteration(), EventType.ITER_CHANGE));
 			oldReq.setIteration(newReq.getIteration());
 		}
-		if (oldReq.getLog() != newReq.getLog()) {
-			// We don't need to log the log changing
-			oldReq.setLog(newReq.getLog());
-		}
 		if (!oldReq.getName().equals(newReq.getName())) {
 			events.add(logger.new Event(oldReq.getName(), newReq.getName(),
 					EventType.NAME_CHANGE));

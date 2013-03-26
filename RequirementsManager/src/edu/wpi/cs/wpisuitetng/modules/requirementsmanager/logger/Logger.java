@@ -79,11 +79,10 @@ public class Logger {
 	 *            The events to log
 	 */
 	public static void logEvents(Requirement req, List<Event> events, Session s) {
-
+		
 		// Log of all events
 		String logMsg = "";
 		boolean logged = false;
-		System.out.println("Events: " + events.size());
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
@@ -160,8 +159,6 @@ public class Logger {
 						addedCount++;
 					}
 				}
-				System.out.println("Added " + addedCount);
-				System.out.println("Removed " + deletedCount);
 				// Put added and deleted in the log based on whether or not they
 				// exist
 				if (addedCount > 0) {
