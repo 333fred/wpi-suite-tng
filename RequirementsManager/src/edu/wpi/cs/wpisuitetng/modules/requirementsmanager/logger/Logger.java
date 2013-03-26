@@ -82,13 +82,11 @@ public class Logger {
 
 		// Log of all events
 		String logMsg = "";
+		boolean logged = false;
+		System.out.println("Events: " + events.size());
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
-
-		// flag for wether a change/log has been made
-		boolean logMade = false;
-
 		for (Event event : events) {
 			String type = null;
 			System.out.println("Event type " + event.type.toString());
@@ -98,16 +96,16 @@ public class Logger {
 				// up a lot of space. This is the only one that we don't fall
 				// through
 				logMsg += ("Updated the Description<br>");
-				logMade = true;
+				logged = true;
 				break;
 			case NOTE_CHANGE:
 				// Set type
-				if (type == null){
+				if (type == null) {
 					type = "Note(s)";
 				}
 			case SUB_CHANGE:
 				// Set type
-				if(type == null){
+				if (type == null) {
 					type = "Sub-Requirement(s)";
 				}
 			case ASSIGN_CHANGE:
@@ -162,30 +160,34 @@ public class Logger {
 						addedCount++;
 					}
 				}
+				System.out.println("Added " + addedCount);
+				System.out.println("Removed " + deletedCount);
 				// Put added and deleted in the log based on whether or not they
 				// exist
 				if (addedCount > 0) {
 					logMsg += "Added " + addedCount + " " + type + "<br>";
+					System.out.println(logMsg);
 				}
 				if (deletedCount > 0) {
-					logMsg += "Removed " + deletedCount
-							+ " Sub-Requirements<br>";
+					logMsg += "Removed " + deletedCount + " " + type + "<br>";
 				}
+				logged = true;
 				break;
 			case ITER_CHANGE:
 				// TODO: Once we implement iterations, we can determine how to
 				// log
 				logMsg += ("Changed Iteration<br>");
-				logMade = true;
+				logged = true;
 				break;
 			case RELEASE_CHANGE:
 				// TODO: Implement Releases, then we can log them
+				logged = true;
 				break;
 			case NAME_CHANGE:
 				logMsg += "Name: " + "<b>\"" + event.oldVal.toString()
 						+ "\"</b>" + " to <b>\"" + event.newVal.toString()
 						+ "\"</b><br>";
-				logMade = true;
+				logged = true;
 				break;
 			case PARENT_CHANGE:
 				if (type == null) {
@@ -209,15 +211,12 @@ public class Logger {
 				}
 				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
 						+ " to <b>" + event.newVal.toString() + "</b><br>";
-				logMade = true;
+				logged = true;
 			default:
 				break;
 			}
 		}
-
-		// Now we need to actually log the event, if there was actually a change
-		// made
-		if (logMade) {
+		if (logged) {
 			Log log = new Log(logMsg, s.getUser());
 			req.addLog(log);
 		}
