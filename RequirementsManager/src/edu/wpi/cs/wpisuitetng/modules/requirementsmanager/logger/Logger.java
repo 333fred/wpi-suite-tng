@@ -101,47 +101,34 @@ public class Logger {
 				logMade = true;
 				break;
 			case NOTE_CHANGE:
-				// Loop through each thing of notes, and find all deletions, and
-				// report them all. This way, if we delete two and add two, it
-				// won't report deleting 0 notes
-				int deletedCount = 0;
-				List<Note> oldNotes = (List<Note>) event.oldVal;
-				List<Note> newNotes = (List<Note>) event.newVal;
-				for (Note oldNote : oldNotes) {
-					boolean detected = false;
-					for (Note newNote : newNotes) {
-						if (newNote.equals(oldNote)) {
-							// In this case, we've confirmed that the new list
-							// of notes has the given note from the old list, so
-							// break and set the detected variable to true
-							detected = true;
-							break;
-						}
-					}
-					// If we didn't detect the old note in the new list,
-					// increase the count
-					if (!detected) {
-						deletedCount++;
-					}
+				// Set type
+				if (type == null){
+					type = "Note(s)";
 				}
-
-				// Log the number of notes deleted. This case should never
-				// happen unless the number of notes changes
-				logMsg += "Removed " + deletedCount + " notes<br>";
-				break;
 			case SUB_CHANGE:
-				// Loop through each list of requirements, and find all
+				// Set type
+				if(type == null){
+					type = "Sub-Requirement(s)";
+				}
+			case ASSIGN_CHANGE:
+				// Set type
+				if (type == null) {
+					type = "Assignee(s)";
+				}
+				// Loop through each list of objects, and find all
 				// deletions, additions, and report them all. This way, if we
-				// delete two and add two, it won't report deleting 0
-				// requirements
-				deletedCount = 0;
+				// delete two and add two, it won't report deleting/adding 0
+				// objects. This is a general case loop, that supports looping
+				// through all of our lists and reporting the number of
+				// deletions and additions to any of them
+				int deletedCount = 0;
 				int addedCount = 0;
-				List<Integer> oldReqs = (List<Integer>) event.oldVal;
-				List<Integer> newReqs = (List<Integer>) event.newVal;
-				for (Integer oldReq : oldReqs) {
+				List<Object> oldList = (List<Object>) event.oldVal;
+				List<Object> newList = (List<Object>) event.newVal;
+				for (Object oldObj : oldList) {
 					boolean detected = false;
-					for (Integer newReq : newReqs) {
-						if (oldReq.equals(newReq)) {
+					for (Object newObj : newList) {
+						if (oldObj.equals(newObj)) {
 							// In this case, we've confirmed that the new list
 							// of requirements has the given requirement from
 							// the old list, so break and set the detected
@@ -157,10 +144,10 @@ public class Logger {
 					}
 				}
 				// Now check for newly added requirements
-				for (Integer newReq : newReqs) {
+				for (Object newObj : newList) {
 					boolean detected = false;
-					for (Integer oldReq : oldReqs) {
-						if (newReq.equals(oldReq)) {
+					for (Object oldObj : oldList) {
+						if (newObj.equals(oldObj)) {
 							// In this case, we've confirmed that the old list
 							// of requirements has the given requirement from
 							// the old list, so break and set the detected
@@ -178,7 +165,7 @@ public class Logger {
 				// Put added and deleted in the log based on whether or not they
 				// exist
 				if (addedCount > 0) {
-					logMsg += "Added " + addedCount + " Sub-Requirements<br>";
+					logMsg += "Added " + addedCount + " " + type + "<br>";
 				}
 				if (deletedCount > 0) {
 					logMsg += "Removed " + deletedCount
@@ -219,10 +206,6 @@ public class Logger {
 			case EFFORT_CHANGE:
 				if (type == null) {
 					type = "Effort: ";
-				}
-			case ASSIGN_CHANGE:
-				if (type == null) {
-					type = "Assign: ";
 				}
 				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
 						+ " to <b>" + event.newVal.toString() + "</b><br>";
