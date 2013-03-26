@@ -4,6 +4,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -43,6 +45,26 @@ public class MakeNotePanel extends JPanel{
 		noteField.setLineWrap(true);
 		noteField.setWrapStyleWord(true);
 		noteField.setBorder((new JTextField()).getBorder());
+		
+		noteField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						noteField.transferFocus();
+					}
+					else {
+						noteField.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// save the note
+					addnote.doClick(0);
+					event.consume();
+				}
+			}
+		});
 
 		addnote = new JButton("Add note");
 		addnoteLabel = new JLabel("Add a new note:");

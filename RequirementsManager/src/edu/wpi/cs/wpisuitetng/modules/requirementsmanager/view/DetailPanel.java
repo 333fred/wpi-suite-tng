@@ -304,6 +304,8 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.EAST, comboBoxType);
 		layout.putConstraint(SpringLayout.WEST, comboBoxIteration, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxStatus);
+		layout.putConstraint(SpringLayout.WEST, saveError, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
 
 
 		
@@ -347,6 +349,8 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.SOUTH, comboBoxStatus);
 		layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
 				SpringLayout.SOUTH, comboBoxStatus);
+		layout.putConstraint(SpringLayout.NORTH, saveError, VERTICAL_PADDING
+				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
 
 
 		getTextName().setText(requirement.getName());
