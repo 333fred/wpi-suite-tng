@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockNetwork;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockRequest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
@@ -20,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class RequirementControllerTest {
 
@@ -29,6 +31,7 @@ public class RequirementControllerTest {
 	SaveRequirementController controller2;
 	DetailPanel view;
 	Requirement r1;
+	Requirement r2;
 	
 	String name;
 	int rUID; 
@@ -59,6 +62,21 @@ public class RequirementControllerTest {
 	public void contructorSetsViewFieldCorrectly() {
 		assertEquals(view, controller.detailPanel);
 		assertEquals(view, controller2.detailPanel);
+	}
+	
+	@Test
+	public void requestBuiltCorrectly() {
+		// See if the request was sent
+			MockRequest request = ((MockNetwork)Network.getInstance()).getLastRequestMade();
+			assertEquals(request,null); //No request should be sent
+			
+			r2 = new Requirement();
+			controller.AddRequirement(r2);
+			request = ((MockNetwork)Network.getInstance()).getLastRequestMade();
+
+			// Validate the request
+			assertEquals("/requirementsmanager/requirement", request.getUrl().getPath());
+			assertEquals(HttpMethod.PUT, request.getHttpMethod());			
 	}
 
 	/*@Test
