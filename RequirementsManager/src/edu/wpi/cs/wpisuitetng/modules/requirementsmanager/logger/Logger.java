@@ -1,7 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Log;
@@ -53,13 +55,16 @@ public class Logger {
 	public enum EventType {
 		NAME_CHANGE, DESC_CHANGE, TYPE_CHANGE, STATUS_CHANGE, PRIORITY_CHANGE, RELEASE_CHANGE, ITER_CHANGE, EFFORT_CHANGE, ASSIGN_CHANGE, SUB_CHANGE, PARENT_CHANGE, NOTE_CHANGE
 	}
-	
+
 	/**
 	 * Logs the creation of a requirement
-	 * @param req the new requirement
-	 * @param s the session of the requirement
+	 * 
+	 * @param req
+	 *            the new requirement
+	 * @param s
+	 *            the session of the requirement
 	 */
-	public static void logCreation(Requirement req, Session s){
+	public static void logCreation(Requirement req, Session s) {
 		Log log = new Log("Created requirement<br>", s.getUser());
 		req.addLog(log);
 	}
@@ -80,10 +85,10 @@ public class Logger {
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
-		
-		//flag for wether a change/log has been made
+
+		// flag for wether a change/log has been made
 		boolean logMade = false;
-		
+
 		for (Event event : events) {
 			String type = null;
 			System.out.println("Event type " + event.type.toString());
@@ -96,12 +101,89 @@ public class Logger {
 				logMade = true;
 				break;
 			case NOTE_CHANGE:
-				// TODO: Need to loop through the notes, find all different, and
-				// make a log of each change
+				// Loop through each thing of notes, and find all deletions, and
+				// report them all. This way, if we delete two and add two, it
+				// won't report deleting 0 notes
+				int deletedCount = 0;
+				List<Note> oldNotes = (List<Note>) event.oldVal;
+				List<Note> newNotes = (List<Note>) event.newVal;
+				for (Note oldNote : oldNotes) {
+					boolean detected = false;
+					for (Note newNote : newNotes) {
+						if (newNote.equals(oldNote)) {
+							// In this case, we've confirmed that the new list
+							// of notes has the given note from the old list, so
+							// break and set the detected variable to true
+							detected = true;
+							break;
+						}
+					}
+					// If we didn't detect the old note in the new list,
+					// increase the count
+					if (!detected) {
+						deletedCount++;
+					}
+				}
+
+				// Log the number of notes deleted. This case should never
+				// happen unless the number of notes changes
+				logMsg += "Removed " + deletedCount + " notes<br>";
 				break;
 			case SUB_CHANGE:
-				// TODO: Determine how to display the changes
-				logMsg += ("Changed Subrequirements<br>");
+				// Loop through each list of requirements, and find all
+				// deletions, additions, and report them all. This way, if we
+				// delete two and add two, it won't report deleting 0
+				// requirements
+				deletedCount = 0;
+				int addedCount = 0;
+				List<Integer> oldReqs = (List<Integer>) event.oldVal;
+				List<Integer> newReqs = (List<Integer>) event.newVal;
+				for (Integer oldReq : oldReqs) {
+					boolean detected = false;
+					for (Integer newReq : newReqs) {
+						if (oldReq.equals(newReq)) {
+							// In this case, we've confirmed that the new list
+							// of requirements has the given requirement from
+							// the old list, so break and set the detected
+							// variable to true
+							detected = true;
+							break;
+						}
+					}
+					// If we didn't detect the old requirement in the new list,
+					// increase the count
+					if (!detected) {
+						deletedCount++;
+					}
+				}
+				// Now check for newly added requirements
+				for (Integer newReq : newReqs) {
+					boolean detected = false;
+					for (Integer oldReq : oldReqs) {
+						if (newReq.equals(oldReq)) {
+							// In this case, we've confirmed that the old list
+							// of requirements has the given requirement from
+							// the old list, so break and set the detected
+							// variable to true
+							detected = true;
+							break;
+						}
+					}
+					// If we didn't detect the new requirement in the oldF list,
+					// increase the count
+					if (!detected) {
+						addedCount++;
+					}
+				}
+				// Put added and deleted in the log based on whether or not they
+				// exist
+				if (addedCount > 0) {
+					logMsg += "Added " + addedCount + " Sub-Requirements<br>";
+				}
+				if (deletedCount > 0) {
+					logMsg += "Removed " + deletedCount
+							+ " Sub-Requirements<br>";
+				}
 				break;
 			case ITER_CHANGE:
 				// TODO: Once we implement iterations, we can determine how to
@@ -112,17 +194,15 @@ public class Logger {
 			case RELEASE_CHANGE:
 				// TODO: Implement Releases, then we can log them
 				break;
+			case NAME_CHANGE:
+				logMsg += "Name: " + "<b>\"" + event.oldVal.toString()
+						+ "\"</b>" + " to <b>\"" + event.newVal.toString()
+						+ "\"</b><br>";
+				logMade = true;
+				break;
 			case PARENT_CHANGE:
 				if (type == null) {
 					type = "Parent Requirement: ";
-				}
-			case NAME_CHANGE:
-				if (type == null) {
-					type = "Name: ";
-					logMsg += type +  "<b>\"" + event.oldVal.toString() + "\"</b>" + " to <b>\""
-							+ event.newVal.toString() + "\"</b><br>";
-					logMade = true;
-					break;
 				}
 			case TYPE_CHANGE:
 				if (type == null) {
@@ -144,19 +224,19 @@ public class Logger {
 				if (type == null) {
 					type = "Assign: ";
 				}
-				logMsg += type +  "<b>" + event.oldVal.toString() + "</b>" + " to <b>"
-						+ event.newVal.toString() + "</b><br>";
+				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
+						+ " to <b>" + event.newVal.toString() + "</b><br>";
 				logMade = true;
 			default:
 				break;
 			}
 		}
 
-		// Now we need to actually log the event, if there was actualy a change made
+		// Now we need to actually log the event, if there was actually a change
+		// made
 		if (logMade) {
 			Log log = new Log(logMsg, s.getUser());
 			req.addLog(log);
 		}
 	}
-
 }
