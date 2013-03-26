@@ -4,7 +4,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -41,17 +40,17 @@ public class RetrieveIterationsController {
 	 * This method is called by the {@link RetrieveAllIterationRequestObserver} when the
 	 * response is received
 	 * 
-	 * @param requirements an array of requirements returned by the server
+	 * @param iterations an array of iterations returned by the server
 	 */
-	public void receivedData(Iteration[] requirements){
+	public void receivedData(Iteration[] iterations){
 		//You have the iterations, so here somehow update your view to display them
 	}
 	
 	/**
 	 * This method is called by the {@link RetrieveAllIterationRequestObserver} when an
-	 * error occurs retrieving the requirements from the server.
+	 * error occurs retrieving the iterations from the server.
 	 */
-	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
+	public void errorReceivingData(String error) {
 		//now update your view to show the error however you prefer
 	}
 }
