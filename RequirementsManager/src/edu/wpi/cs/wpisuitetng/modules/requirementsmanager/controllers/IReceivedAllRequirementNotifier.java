@@ -10,7 +10,7 @@ public interface IReceivedAllRequirementNotifier {
 	
 	/** Called when the requirements data has been received by the server
 	 *  
-	 * @param requirements The receied data
+	 * @param requirements The received data
 	 */
 	
 	public void receivedData(Requirement[] requirements);

@@ -43,21 +43,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEvent
  */
 public class DetailPanel extends FocusableTab {
 
-
-
 	// Textfields
 	private JTextArea textName;
 	private JTextArea textDescription;
 	private JTextArea textNameValid;
 	private JTextArea textDescriptionValid;
+	private JTextArea textIteration;
 	JTextArea saveError;
 
 	// combo boxes
-
 	JComboBox comboBoxType;
 	JComboBox comboBoxStatus;
 	JComboBox comboBoxPriority;
-	JComboBox comboBoxIteration;
 
 	//requirement that is displayed
 	private Requirement requirement;
@@ -77,7 +74,6 @@ public class DetailPanel extends FocusableTab {
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
 	private static final int VERTICAL_CLOSE2 = -10;
-	private static final int VERTICAL_FAR = 20;
 	private static final int HORIZONTAL_PADDING = 20;
 
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
@@ -226,11 +222,11 @@ public class DetailPanel extends FocusableTab {
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxPriority);
 		
-		String[] availableIterations = { "", "Iteration 1", "Iteration 2",
-				"Iteration 3", "Iteration 4"};
-		comboBoxIteration = new JComboBox(availableIterations);
-		comboBoxIteration.setPrototypeDisplayValue("Non-functional");
-		mainPanel.add(comboBoxIteration);
+		textIteration = new JTextArea(1,9);
+		textIteration.setLineWrap(true);
+		textIteration.setWrapStyleWord(true);
+		textIteration.setBorder((new JTextField()).getBorder());
+		mainPanel.add(textIteration);
 		
 		JButton btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
@@ -244,8 +240,7 @@ public class DetailPanel extends FocusableTab {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");
-			comboBoxIteration.setEnabled(false);
-			comboBoxIteration.setSelectedItem("");
+			textIteration.setEnabled(false);
 		}
 		else
 		{
@@ -304,7 +299,7 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxType);
-		layout.putConstraint(SpringLayout.WEST, comboBoxIteration, HORIZONTAL_PADDING, 
+		layout.putConstraint(SpringLayout.WEST, textIteration, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, saveError, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
@@ -344,7 +339,7 @@ public class DetailPanel extends FocusableTab {
 		layout.putConstraint(SpringLayout.NORTH, lblIteration,
 				VERTICAL_PADDING , SpringLayout.SOUTH,
 				comboBoxPriority);
-		layout.putConstraint(SpringLayout.NORTH, comboBoxIteration,
+		layout.putConstraint(SpringLayout.NORTH, textIteration,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblIteration);
 		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
@@ -357,6 +352,7 @@ public class DetailPanel extends FocusableTab {
 
 		textName.setText(requirement.getName());
 		textDescription.setText(requirement.getDescription());
+		textIteration.setText(Integer.toString(requirement.getIteration()));
 		switch (requirement.getType()) {
 		case BLANK:
 			comboBoxType.setSelectedIndex(0);
@@ -516,5 +512,9 @@ public class DetailPanel extends FocusableTab {
 	
 	public Requirement getModel(){
 		return requirement;
+	}
+	
+	public JTextArea getTextIteration() {
+		return this.textIteration;
 	}
 }

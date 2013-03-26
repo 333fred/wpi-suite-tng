@@ -112,11 +112,23 @@ public class RequirementValidator {
 			return issues;
 		}
 		
-		//TODO: validate the rest of the fields once they are implemented
 		
 		// new requirements should always have new status
-		if(mode == RequirementActionMode.CREATE)
+		if(mode == RequirementActionMode.CREATE) {
 			requirement.setStatus(Status.NEW);
+		} else if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE){
+			//Automatic status changes
+			
+			//If a new or open requirement is assigned to an iteration then set it to in progress
+			if((requirement.getStatus() == Status.NEW || requirement.getStatus() == Status.OPEN) && requirement.getIteration() != 0)
+				requirement.setStatus(Status.IN_PROGRESS);
+			
+			//if an in-progress requirement is removed from an iteration, it is set to open
+			if(requirement.getStatus() == Status.IN_PROGRESS && requirement.getIteration() == 0){
+				requirement.setStatus(Status.OPEN);
+			}
+
+		}
 		
 		// make sure title and description size are within constraints
 		if(requirement.getName() == null || requirement.getName().length() > 100 || requirement.getName().length() == 0) {

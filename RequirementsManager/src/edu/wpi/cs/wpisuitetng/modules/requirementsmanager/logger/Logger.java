@@ -1,14 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.LogManager;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Log;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * 

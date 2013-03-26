@@ -23,6 +23,11 @@ public class SaveRequirementController {
 		this.detailPanel = detailPanel;
 	}
 	
+	/**
+	 * Saves a requirement
+	 * @param toAdd requirement that will be saved
+	 * @param closeTab tab that will be closed
+	 */
 	public void SaveRequirement(Requirement toAdd, boolean closeTab) {
 		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(detailPanel,closeTab);
 		Request request;
