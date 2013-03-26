@@ -36,7 +36,7 @@ public class TextUpdateListener implements KeyListener {
 	protected final DetailPanel panel;
 	protected final JTextComponent component;
 	protected final JTextComponent errorComponent;
-	//protected final Border defaultBorder;
+	protected boolean firstKeyPress; 
 
 	/**
 	 * Constructs a TextUpdateListener.
@@ -51,76 +51,53 @@ public class TextUpdateListener implements KeyListener {
 		this.panel = panel;
 		this.component = component;
 		this.errorComponent = errorComponent;
-		//this.defaultBorder = component.getBorder();
+		this.firstKeyPress = false;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-
+		//checkIfUpdated();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		checkIfUpdated();
+		checkIfOneCharacter(); 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		if (firstKeyPress) {
+			checkIfUpdated();		
+		}
 	}
 
 	/**
-	 * Checks if the field differs from the DefectPanel's model and changes the style of the field accordingly.
+	 * Checks if the field is empty and changes the style of the field accordingly.
 	 */
 	public void checkIfUpdated() {
-		String base = ""; // the String value of the field in the panel's Defect model that corresponds to the component
-/*
-		// Get the base String to compare to the text of the JTextComponent
-		try {
-			// Get the field from the Defect model that corresponds with the name of component.
-			// For instance, if the component's name is "Title" Defect#getTitle will be called.
-			Object field = panel.getModel().getClass().getDeclaredMethod("get" + component.getName()).invoke(panel.getModel());
-			
-			// If field is null, set base to an empty String.
-			if (field == null) {
-				base = "";
-			}
-			// If field is an instance of String, set base to that String.
-			else if (field instanceof String) {
-				base = (String) field;
-			}
-			// If field is an instance of User, set base to its username.
-			else if (field instanceof User) {
-				base = ((User) field).getUsername();
-			}
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/
+		String base = ""; // base of empty string to compare to
+
 		// Compare base to the component's text to determine whether or not to highlight the field.
 		if (base.equals(component.getText())) {
 			component.setBackground(new Color(243, 243, 209));
 			errorComponent.setText("** Field must be non-blank **");
-			
 		}
 		else {
 			component.setBackground(Color.WHITE);
 			errorComponent.setText("");
-			component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+			//component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		}
+	}
+	
+	public void checkIfOneCharacter() {
+		String base = "";
+		
+		if (!base.equals(component.getText())) {
+			component.setBackground(Color.WHITE);
+			errorComponent.setText("");
+			firstKeyPress = true;
 		}
 	}
 }

@@ -79,8 +79,6 @@ public class DetailPanel extends FocusableTab {
 	private static final int VERTICAL_CLOSE2 = -10;
 	private static final int VERTICAL_FAR = 20;
 	private static final int HORIZONTAL_PADDING = 20;
-	private static final int HORIZONTAL_PADDING2 = 100;
-	private static final int HORIZONTAL_CLOSE = -7;
 
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
@@ -113,7 +111,7 @@ public class DetailPanel extends FocusableTab {
 		mainPanel.add(lblIteration);
 
 		//formatting for textName area
-		setTextName(new JTextArea(1, 40));
+		textName = new JTextArea(1, 40);
 		textName.setLineWrap(true);
 		textName.setWrapStyleWord(true);
 		textName.setMaximumSize(new Dimension(40, 2));
@@ -129,10 +127,10 @@ public class DetailPanel extends FocusableTab {
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						getTextName().transferFocus();
+						textName.transferFocus();
 					}
 					else {
-						getTextName().transferFocusBackward();
+						textName.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -152,18 +150,17 @@ public class DetailPanel extends FocusableTab {
 		textNameValid.setWrapStyleWord(true);
 		mainPanel.add(textNameValid);
 		
-
+		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// model and highlights them accordingly every time a key is pressed.
+		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
+		textName.addKeyListener(txtTitleListener);
+		
 		//textDescription formatting
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
 		JScrollPane scroll = new JScrollPane(textDescription);
-
-		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
-		// model and highlights them accordingly every time a key is pressed.
-		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
-		textName.addKeyListener(txtTitleListener);
 		
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.setSize(400, 450);
@@ -175,10 +172,10 @@ public class DetailPanel extends FocusableTab {
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						getTextDescription().transferFocus();
+						textDescription.transferFocus();
 					}
 					else {
-						getTextDescription().transferFocusBackward();
+						textDescription.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -212,22 +209,22 @@ public class DetailPanel extends FocusableTab {
 		//set up and add type combobox
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
 				"Non-functional", "Scenario" };
-		setComboBoxType(new JComboBox(availableTypes));
-		getComboBoxType().setPrototypeDisplayValue("Non-functional");
-		mainPanel.add(getComboBoxType());
+		comboBoxType = new JComboBox(availableTypes);
+		comboBoxType.setPrototypeDisplayValue("Non-functional");
+		mainPanel.add(comboBoxType);
 		
 		//set up and add status combobox
 		String[] availableStatuses = { "New", "In Progress", "Open",
 				"Complete", "Deleted", "" };
-		setComboBoxStatus(new JComboBox(availableStatuses));
-		getComboBoxStatus().setPrototypeDisplayValue("Non-functional");
-		mainPanel.add(getComboBoxStatus());
+		comboBoxStatus = new JComboBox(availableStatuses);
+		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
+		mainPanel.add(comboBoxStatus);
 
 		//setup and add priorities combobox
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
-		setComboBoxPriority(new JComboBox(availablePriorities));
-		getComboBoxPriority().setPrototypeDisplayValue("Non-functional");
-		mainPanel.add(getComboBoxPriority());
+		comboBoxPriority = new JComboBox(availablePriorities);
+		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
+		mainPanel.add(comboBoxPriority);
 		
 		String[] availableIterations = { "", "Iteration 1", "Iteration 2",
 				"Iteration 3", "Iteration 4"};
@@ -255,22 +252,22 @@ public class DetailPanel extends FocusableTab {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
 			case NEW:
-				getComboBoxStatus().setSelectedIndex(0);
+				comboBoxStatus.setSelectedIndex(0);
 				break;
 			case IN_PROGRESS:
-				getComboBoxStatus().setSelectedIndex(1);
+				comboBoxStatus.setSelectedIndex(1);
 				break;
 			case OPEN:
-				getComboBoxStatus().setSelectedIndex(2);
+				comboBoxStatus.setSelectedIndex(2);
 				break;
 			case COMPLETE:
-				getComboBoxStatus().setSelectedIndex(3);
+				comboBoxStatus.setSelectedIndex(3);
 				break;
 			case DELETED:
-				getComboBoxStatus().setSelectedIndex(4);
+				comboBoxStatus.setSelectedIndex(4);
 				break;
 			case BLANK:
-				getComboBoxStatus().setSelectedIndex(5);
+				comboBoxStatus.setSelectedIndex(5);
 				break;
 			}
 		}
@@ -285,13 +282,9 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblStatus, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblPriority, HORIZONTAL_PADDING2, 
-				SpringLayout.EAST, lblType);
-		layout.putConstraint(SpringLayout.WEST, lblIteration, HORIZONTAL_PADDING2 + HORIZONTAL_CLOSE, 
-				SpringLayout.EAST, lblStatus);
 		layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, getTextNameValid(), HORIZONTAL_PADDING,
+		layout.putConstraint(SpringLayout.WEST, textNameValid, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
@@ -299,12 +292,16 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.EAST, btnSave);
 		layout.putConstraint(SpringLayout.WEST, scroll,	HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, getTextDescriptionValid(), HORIZONTAL_PADDING, 
+		layout.putConstraint(SpringLayout.WEST, textDescriptionValid, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, getComboBoxType(),HORIZONTAL_PADDING, 
+		layout.putConstraint(SpringLayout.WEST, comboBoxType, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, getComboBoxStatus(),	HORIZONTAL_PADDING, 
+		layout.putConstraint(SpringLayout.WEST, comboBoxStatus, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblPriority, HORIZONTAL_PADDING, 
+				SpringLayout.EAST, comboBoxType);
+		layout.putConstraint(SpringLayout.WEST, lblIteration, HORIZONTAL_PADDING, 
+				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxType);
 		layout.putConstraint(SpringLayout.WEST, comboBoxIteration, HORIZONTAL_PADDING, 
@@ -318,25 +315,25 @@ public class DetailPanel extends FocusableTab {
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
 				SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.NORTH, getTextName(), VERTICAL_PADDING
+		layout.putConstraint(SpringLayout.NORTH, textName, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblName);
-		layout.putConstraint(SpringLayout.NORTH, getTextNameValid(), VERTICAL_PADDING
-				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, getTextName());
+		layout.putConstraint(SpringLayout.NORTH, textNameValid, VERTICAL_PADDING
+				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, textName);
 		layout.putConstraint(SpringLayout.NORTH, lblDescription,
-				VERTICAL_PADDING, SpringLayout.SOUTH, getTextNameValid());
+				VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
 		layout.putConstraint(SpringLayout.NORTH, scroll,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblDescription);
-		layout.putConstraint(SpringLayout.NORTH, getTextDescriptionValid(),
+		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
 				VERTICAL_PADDING + VERTICAL_CLOSE2, SpringLayout.SOUTH,
 				scroll);
 		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
-				SpringLayout.SOUTH, getTextDescriptionValid());
-		layout.putConstraint(SpringLayout.NORTH, getComboBoxType(), VERTICAL_PADDING
+				SpringLayout.SOUTH, textDescriptionValid);
+		layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblType);
 		layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING,
-				SpringLayout.SOUTH, getComboBoxType());
-		layout.putConstraint(SpringLayout.NORTH, getComboBoxStatus(),
+				SpringLayout.SOUTH, comboBoxType);
+		layout.putConstraint(SpringLayout.NORTH, comboBoxStatus,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblStatus);
 		layout.putConstraint(SpringLayout.NORTH, lblPriority, VERTICAL_PADDING,
@@ -358,39 +355,39 @@ public class DetailPanel extends FocusableTab {
 				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
 
 
-		getTextName().setText(requirement.getName());
-		getTextDescription().setText(requirement.getDescription());
+		textName.setText(requirement.getName());
+		textDescription.setText(requirement.getDescription());
 		switch (requirement.getType()) {
 		case BLANK:
-			getComboBoxType().setSelectedIndex(0);
+			comboBoxType.setSelectedIndex(0);
 			break;
 		case EPIC:
-			getComboBoxType().setSelectedIndex(1);
+			comboBoxType.setSelectedIndex(1);
 			break;
 		case THEME:
-			getComboBoxType().setSelectedIndex(2);
+			comboBoxType.setSelectedIndex(2);
 			break;
 		case USER_STORY:
-			getComboBoxType().setSelectedIndex(3);
+			comboBoxType.setSelectedIndex(3);
 			break;
 		case NON_FUNCTIONAL:
-			getComboBoxType().setSelectedIndex(4);
+			comboBoxType.setSelectedIndex(4);
 			break;
 		case SCENARIO:
-			getComboBoxType().setSelectedIndex(5);
+			comboBoxType.setSelectedIndex(5);
 		}
 		switch (requirement.getPriority()) {
 		case BLANK:
-			getComboBoxPriority().setSelectedIndex(0);
+			comboBoxPriority.setSelectedIndex(0);
 			break;
 		case HIGH:
-			getComboBoxPriority().setSelectedIndex(1);
+			comboBoxPriority.setSelectedIndex(1);
 			break;
 		case MEDIUM:
-			getComboBoxPriority().setSelectedIndex(2);
+			comboBoxPriority.setSelectedIndex(2);
 			break;
 		case LOW:
-			getComboBoxPriority().setSelectedIndex(3);
+			comboBoxPriority.setSelectedIndex(3);
 			break;
 		}
 
@@ -418,7 +415,6 @@ public class DetailPanel extends FocusableTab {
 	public void displaySaveError(String error) {
 		this.saveError.setText(error);
 	}
-
 
 	/**
 	 * @return the textName
