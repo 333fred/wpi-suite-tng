@@ -2,9 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -13,11 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.SpringLayout;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
 
 @SuppressWarnings("serial")
 public class AssigneePanel extends JPanel {
@@ -87,9 +81,9 @@ public class AssigneePanel extends JPanel {
 
 
 		//initialize the buttons
-		assignSelectedUsers = new JButton(">>");
+		assignSelectedUsers = new JButton(">");
 		assignSelectedUsers.addActionListener(new AssignUserAction());
-		unassignSelectedUsers = new JButton("<<");
+		unassignSelectedUsers = new JButton("<");
 		unassignSelectedUsers.addActionListener(new UnassignUserAction());
 		
 
