@@ -19,8 +19,8 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
- * The Defect tab's toolbar panel.
- * Always has a group of global commands (Create Defect, Search).
+ * The Requirement tab's toolbar panel.
+ * Always has a group of global commands (Create Requirement, Search).
  */
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
@@ -40,13 +40,13 @@ public class ToolbarView extends DefaultToolbarView {
 		content.setLayout(layout);
 		content.setOpaque(false);
 				
-		// Construct the create defect button
+		// Construct the create Requirement button
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
 			
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
-		// searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
+		// searchField.addActionListener(new LookupRequirementController(tabController, searchField, this));
 		
 		// Configure the layout of the buttons on the content panel
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5, SpringLayout.NORTH, content);
