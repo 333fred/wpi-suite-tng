@@ -80,6 +80,11 @@ public class Logger {
 	 */
 	public static void logEvents(Requirement req, List<Event> events, Session s) {
 		
+		// Check for no events occurring
+		if(events == null){
+			return;
+		}
+		
 		// Log of all events
 		String logMsg = "";
 		boolean logged = false;
