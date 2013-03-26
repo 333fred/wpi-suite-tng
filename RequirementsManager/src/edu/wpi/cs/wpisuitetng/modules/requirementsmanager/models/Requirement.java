@@ -9,11 +9,15 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.Session;
+import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger.Event;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Log;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -45,7 +49,7 @@ public class Requirement extends AbstractModel {
 	private List<Integer> pUID; // Parent unique ID's
 	// Notes and the Log
 	private List<Note> notes;
-	private List<Log> log;
+	private Logger logger;
 
 	/**
 	 * Creates a new Requirement, with default values.
@@ -67,7 +71,7 @@ public class Requirement extends AbstractModel {
 		subRequirements = new ArrayList<Integer>();
 		pUID = new ArrayList<Integer>();
 		notes = new ArrayList<Note>();
-		log = new ArrayList<Log>();
+		logger = new Logger();
 	}
 
 	/**
@@ -117,7 +121,7 @@ public class Requirement extends AbstractModel {
 
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
-		this.log = new LinkedList<Log>();
+		logger = new Logger();
 	}
 
 
@@ -456,8 +460,10 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return the log
 	 */
+	@Deprecated
 	public List<Log> getLog() {
-		return log;
+		// TODO: Remove this, when we modify the API
+		return logger.getLogs();
 	}
 
 	/**
@@ -467,8 +473,9 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @param log the log to set
 	 */
+	@Deprecated
 	public void setLog(List<Log> linkedList) {
-		this.log = linkedList;
+		// TODO: Remove this, when we modify the API
 	}
 
 	/**
@@ -476,8 +483,33 @@ public class Requirement extends AbstractModel {
 	 * ensuring that logs will be stored in reverse chronological order
 	 * @param log the log to add
 	 */
+	@Deprecated
 	public void addLog(Log log) {
-		this.log.add(0, log);
+		// TODO: Remove this, when we modify the API
+	}
+	
+	/**
+	 * @return The class logger
+	 */
+	public Logger getLogger(){
+		return logger;
+	}
+	
+	/**
+	 * Log events contained in a list
+	 * @param events the events to log
+	 * @param s the session containing the current user
+	 */
+	public void logEvents(List<Event> events, Session s){
+		logger.logEvents(events, s);
+	}
+	
+	/**
+	 * Logs the creation of the requirement
+	 * @param s the session containing the current user
+	 */
+	public void logCreation(Session s){
+		logger.logCreation(s);
 	}
 
 	/**

@@ -40,9 +40,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		validator = new RequirementValidator(db);
 	}
 
-	// TODO testing - these are basically copied from DefectManager right now so
-	// they might not fully apply
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Requirement makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
@@ -60,9 +60,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			}
 			throw new BadRequestException();
 		}
-		
+
 		// Log the creation of a new requirement
-		Logger.logCreation(newRequirement, s);
+		newRequirement.logCreation(s);
 
 		if (!db.save(newRequirement, s.getProject())) {
 			throw new WPISuiteException();
@@ -71,6 +71,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		return newRequirement;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Requirement[] getEntity(Session s, String id)
 			throws NotFoundException {
@@ -95,17 +98,33 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		return requirements;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Requirement[] getAll(Session s) {
 		return db.retrieveAll(new Requirement(), s.getProject()).toArray(
 				new Requirement[0]);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void save(Session s, Requirement model) {
 		db.save(model, s.getProject());
 	}
 
+	/**
+	 * Ensures that a given user has given permissions
+	 * 
+	 * @param session
+	 *            the session of the current user
+	 * @param role
+	 *            the role we are checking
+	 * @throws WPISuiteException
+	 *             the unauthorized exception
+	 */
 	private void ensureRole(Session session, Role role)
 			throws WPISuiteException {
 		User user = (User) db.retrieve(User.class, "username",
@@ -115,6 +134,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
 		// TODO should user need to be Admin?
@@ -122,12 +144,18 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
 		ensureRole(s, Role.ADMIN);
 		db.deleteAll(new Requirement(), s.getProject());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int Count() {
 		// Retrieve all from this project
@@ -187,18 +215,25 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	public Requirement getRequirement(int id, Session s)
 			throws RequirementNotFoundException {
 		try {
+			// Attempt to get the requirement
 			List<Model> requirement = db.retrieve(Requirement.class, "rUID",
 					id, s.getProject());
+
+			// Check that the requirement was actually found
 			if (requirement.size() < 1 || requirement.get(0) == null) {
 				throw new RequirementNotFoundException(id);
 			}
 
+			// Make sure we actually got a requirement, and return if we have
+			// Otherwise, throw an exception
 			if (requirement.get(0) instanceof Requirement) {
 				return ((Requirement) requirement.get(0));
 			} else {
 				throw new WPISuiteException();
 			}
 		} catch (WPISuiteException e) {
+			// If we thew an exception, we didn't find the requirement, so throw
+			// a requirement not found exception
 			throw new RequirementNotFoundException(id);
 		}
 	}
@@ -212,76 +247,90 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 *            The new requirement
 	 * @return the updated requirement
 	 */
-	public Requirement updateRequirement(Requirement oldReq, Requirement newReq, Session s) {
+	public Requirement updateRequirement(Requirement oldReq,
+			Requirement newReq, Session s) {
 
 		// Update all the fields in the old requirement with the new fields.
 		// Collect changes for the log
 		List<Event> events = new ArrayList<Event>();
-		Logger logger = Logger.getInstance();
+		Logger logger = oldReq.getLogger();
 
-		if (!oldReq.getDescription().equals(newReq.getDescription())){
+		// Description
+		if (!oldReq.getDescription().equals(newReq.getDescription())) {
 			events.add(logger.new Event(oldReq.getDescription(), newReq
 					.getDescription(), EventType.DESC_CHANGE));
 			oldReq.setDescription(newReq.getDescription());
 		}
+		// Effort
 		if (oldReq.getEffort() != newReq.getEffort()) {
 			events.add(logger.new Event(oldReq.getEffort(), newReq.getEffort(),
 					EventType.EFFORT_CHANGE));
 			oldReq.setEffort(newReq.getEffort());
 		}
+		// Iteration
 		if (oldReq.getIteration() != newReq.getIteration()) {
 			events.add(logger.new Event(oldReq.getIteration(), newReq
 					.getIteration(), EventType.ITER_CHANGE));
 			oldReq.setIteration(newReq.getIteration());
 		}
+		// Name
 		if (!oldReq.getName().equals(newReq.getName())) {
 			events.add(logger.new Event(oldReq.getName(), newReq.getName(),
 					EventType.NAME_CHANGE));
 			oldReq.setName(newReq.getName());
 		}
+		// Notes
 		if (!oldReq.getNotes().equals(newReq.getNotes())) {
 			events.add(logger.new Event(oldReq.getNotes(), newReq.getNotes(),
 					EventType.NOTE_CHANGE));
 			oldReq.setNotes(newReq.getNotes());
 		}
+		// Priority
 		if (oldReq.getPriority() != newReq.getPriority()) {
 			events.add(logger.new Event(oldReq.getPriority(), newReq
 					.getPriority(), EventType.PRIORITY_CHANGE));
 			oldReq.setPriority(newReq.getPriority());
 		}
+		// Parents
 		if (!oldReq.getpUID().equals(newReq.getpUID())) {
 			events.add(logger.new Event(oldReq.getpUID(), newReq.getpUID(),
 					EventType.PARENT_CHANGE));
 			oldReq.setpUID(newReq.getpUID());
 		}
+		// Release Number
 		if (oldReq.getReleaseNum() != newReq.getReleaseNum()) {
 			events.add(logger.new Event(oldReq.getReleaseNum(), newReq
 					.getReleaseNum(), EventType.RELEASE_CHANGE));
 			oldReq.setReleaseNum(newReq.getReleaseNum());
 		}
+		// Status
 		if (oldReq.getStatus() != newReq.getStatus()) {
 			events.add(logger.new Event(oldReq.getStatus(), newReq.getStatus(),
 					EventType.STATUS_CHANGE));
 			oldReq.setStatus(newReq.getStatus());
 		}
-		if (!oldReq.getSubRequirements().equals(newReq.getSubRequirements())){
+		// Subrequirements
+		if (!oldReq.getSubRequirements().equals(newReq.getSubRequirements())) {
 			events.add(logger.new Event(oldReq.getSubRequirements(), newReq
 					.getSubRequirements(), EventType.SUB_CHANGE));
 			oldReq.setSubRequirements(newReq.getSubRequirements());
 		}
+		// Assignees
 		if (!oldReq.getUsers().equals(newReq.getUsers())) {
 			events.add(logger.new Event(oldReq.getUsers(), newReq.getUsers(),
 					EventType.ASSIGN_CHANGE));
 			oldReq.setUsers(newReq.getUsers());
 		}
+		// Type
 		if (oldReq.getType() != newReq.getType()) {
-			events.add(logger.new Event(oldReq.getType(), newReq.getType(), EventType.TYPE_CHANGE));
+			events.add(logger.new Event(oldReq.getType(), newReq.getType(),
+					EventType.TYPE_CHANGE));
 			oldReq.setType(newReq.getType());
 		}
-		
+
 		// Add all of the changes to the log
-		Logger.logEvents(oldReq, events, s);
-		
+		oldReq.logEvents(events, s);
+
 		return oldReq;
 	}
 

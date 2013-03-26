@@ -16,8 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.SpringLayout;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
+//import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
+//import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
 
 @SuppressWarnings("serial")
 public class AssigneePanel extends JPanel {

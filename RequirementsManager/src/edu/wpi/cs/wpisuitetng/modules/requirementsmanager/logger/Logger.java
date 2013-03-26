@@ -17,14 +17,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 public class Logger {
 
-	// Singleton instance of the logger
-	private static Logger logger;
+	// This object's list of logs
+	List<Log> logs;
 
-	public static Logger getInstance() {
-		if (logger == null) {
-			logger = new Logger();
-		}
-		return logger;
+	/**
+	 * Creates a new logger, with the log implemented as an array list of logs
+	 */
+	public Logger() {
+		logs = new ArrayList<Log>();
 	}
 
 	/**
@@ -64,9 +64,9 @@ public class Logger {
 	 * @param s
 	 *            the session of the requirement
 	 */
-	public static void logCreation(Requirement req, Session s) {
+	public void logCreation(Session s) {
 		Log log = new Log("Created requirement<br>", s.getUser());
-		req.addLog(log);
+		logs.add(0, log);
 	}
 
 	/**
@@ -78,11 +78,10 @@ public class Logger {
 	 * @param events
 	 *            The events to log
 	 */
-	public static void logEvents(Requirement req, List<Event> events, Session s) {
-		
+	public void logEvents(List<Event> events, Session s) {
+
 		// Log of all events
 		String logMsg = "";
-		boolean logged = false;
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
@@ -95,7 +94,6 @@ public class Logger {
 				// up a lot of space. This is the only one that we don't fall
 				// through
 				logMsg += ("Updated the Description<br>");
-				logged = true;
 				break;
 			case NOTE_CHANGE:
 				// Set type
@@ -168,23 +166,18 @@ public class Logger {
 				if (deletedCount > 0) {
 					logMsg += "Removed " + deletedCount + " " + type + "<br>";
 				}
-				logged = true;
 				break;
 			case ITER_CHANGE:
 				// TODO: Once we implement iterations, we can determine how to
 				// log
 				logMsg += ("Changed Iteration<br>");
-				logged = true;
 				break;
 			case RELEASE_CHANGE:
-				// TODO: Implement Releases, then we can log them
-				logged = true;
 				break;
 			case NAME_CHANGE:
 				logMsg += "Name: " + "<b>\"" + event.oldVal.toString()
 						+ "\"</b>" + " to <b>\"" + event.newVal.toString()
 						+ "\"</b><br>";
-				logged = true;
 				break;
 			case PARENT_CHANGE:
 				if (type == null) {
@@ -208,14 +201,15 @@ public class Logger {
 				}
 				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
 						+ " to <b>" + event.newVal.toString() + "</b><br>";
-				logged = true;
 			default:
 				break;
 			}
 		}
-		if (logged) {
-			Log log = new Log(logMsg, s.getUser());
-			req.addLog(log);
-		}
+		// Add a new log to the list of logs
+		logs.add(0, new Log(logMsg, s.getUser()));
+	}
+
+	public List<Log> getLogs() {
+		return logs;
 	}
 }
