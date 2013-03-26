@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailLogView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.CancelAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEventPane;
 
 /**
  * JPanel class to display the different fields of the requirement
@@ -65,6 +66,8 @@ public class DetailPanel extends FocusableTab {
 	private DetailNoteView noteView;
 	//the view that shows the notes
 	private DetailLogView logView;
+	//the view that shows the users assigned to the requirement
+	private AssigneePanel userView;
 	
 	protected final TextUpdateListener txtTitleListener;
 	protected final TextUpdateListener txtDescriptionListener;
@@ -384,10 +387,10 @@ public class DetailPanel extends FocusableTab {
 
 		noteView = new DetailNoteView(this.requirement, this);
 		logView = new DetailLogView(this.requirement, this);
-		JPanel userView = new /*AssigneePanel();*/JPanel();
+		userView = new AssigneePanel();
 	
 		//create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(noteView, logView);
+		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
 		
 		// Add everything to this
 		add(mainPanel);

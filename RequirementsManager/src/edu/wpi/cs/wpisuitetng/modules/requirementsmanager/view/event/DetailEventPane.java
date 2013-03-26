@@ -15,23 +15,22 @@ public class DetailEventPane extends JTabbedPane {
 	JPanel notesListPane;
 	JPanel logListPane;
 	JPanel userListPane;
-	
+
 	/** Creates a new DetailEvent pane, that displays the given NotesListPane, and LogListPane
 	 * 
 	 * @param notesListPane The JPanel that represents the list of notes to represent
 	 * @param logListPane TheJPanel that represents the list of logs to represent
 	 */
-	
+
 	public DetailEventPane(JPanel notesListPane, JPanel logListPane, JPanel userListPane) {
 		this.notesListPane = notesListPane;
 		this.logListPane = logListPane;
 		this.userListPane = userListPane;
-		
+
 		//add the given tabs to the pane
 		addTab("Notes", new ImageIcon(), notesListPane, "The notes for this requirement");		
 		addTab("Log", new ImageIcon(), logListPane, "The log for this requirement");
 		addTab("Users", new ImageIcon(), userListPane, "The users assigned to this requirement");
-		
+
 	}
-	
 }
