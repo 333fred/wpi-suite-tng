@@ -123,12 +123,12 @@ public class EditRequirementAction extends AbstractAction {
 			if(parentView.getTextName().getText().equals(""))
 			{
 				parentView.getTextName().setBackground(new Color(243, 243, 209));
-				parentView.getTextNameValid().setText("**Field must be non-blank**");
+				parentView.getTextNameValid().setText("** Field must be non-blank **");
 			}
 			if(parentView.getTextDescription().getText().equals(""))
 			{
 				parentView.getTextDescription().setBackground(new Color(243, 243, 209));
-				parentView.getTextDescriptionValid().setText("**Field must be non-blank**");
+				parentView.getTextDescriptionValid().setText("** Field must be non-blank **");
 
 			}
 		}		
