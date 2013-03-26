@@ -64,19 +64,15 @@ public class Note implements Event {
 		if (o instanceof Note) {
 			note = (Note) o;
 		} else {
-			System.out.println("Not a note");
 			return false;
 		}
 		if(!note.creator.equals(this.creator)){
-			System.out.println("Creator not the same");
 			return false;
 		}
 		if(!note.date.equals(this.date)){
-			System.out.println("Date not the same");
 			return false;
 		}
 		if(!note.note.equals(this.note)){
-			System.out.println("Text not the same");
 			return false;
 		}
 		return true;
