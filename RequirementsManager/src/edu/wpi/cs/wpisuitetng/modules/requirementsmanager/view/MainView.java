@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
- * @author Alex
+ * Shell class to call detail views from main Requirement GUI
+ * 
+ * @author Alex W
  *
  */
 public class MainView extends JPanel {
