@@ -59,8 +59,14 @@ public class MakeNotePanel extends JPanel{
 					event.consume();
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					// save the note
-					addnote.doClick(0);
+					if (event.isShiftDown()) {
+						// user is doing a shift + enter
+						noteField.append("\n");
+					}
+					else {
+						// save the note
+						addnote.doClick(0);
+					}
 					event.consume();
 				}
 			}
