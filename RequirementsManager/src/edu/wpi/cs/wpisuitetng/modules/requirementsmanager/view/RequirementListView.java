@@ -13,9 +13,11 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvide
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequirementAction;
 
@@ -95,13 +97,10 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	 * 
 	 */
 	//TODO: More documentation
-	void onDoubleClick(int index) {
-		try {
-			Requirement selectedRequirement = requirements[index];		    		
-			tabController.addViewRequirementTab(selectedRequirement);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			//If this has occurred, the list is empty, we can just ignore the mouse click
-		} 
+	void onDoubleClick(int index) {	
+		//update to use this function instead
+		viewRequirement(index);
+
 	}
 	
 	/** Initializes the toolbar group, and adds the buttons that will be displayed to it.
@@ -199,10 +198,30 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 			return;
 		}
 		
-		//indexes should be synced, retreive the requirement from the array
-		Requirement selectedRequirement = requirements[selectedIndex];
+		viewRequirement(selectedIndex);
+	}
+	
+	/** Views a requirement with the given index
+	 * 
+	 * @param index Index of the requirement to view
+	 */
+	
+	public void viewRequirement(int index) {
 		
-		tabController.addViewRequirementTab(selectedRequirement);
+		if (index <0 || index >= requirements.length) {
+			//invalid index
+			System.out.println("Invalid index");
+		}
+		
+		//get the requirement to update from the array
+		Requirement requirementToFetch = requirements[index];
+		
+		// create the controller for fetching the new requirement
+		RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
+				new OpenRequirementTabAction(tabController, requirementToFetch));
+		
+		//get the requirement from the server
+		retreiveRequirementController.get(requirementToFetch.getrUID());
 	}
 
 	/** The updated requirements data has been received, update the list
