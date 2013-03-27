@@ -25,8 +25,9 @@ public class RefreshAction extends AbstractAction {
 	private final RequirementListView requirementList;
 	
 	/**
-	 * Create a CreateDefectAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * Create a RefreshAction object which operates on a specific RequirementListView
+	 * @param RequirementListView the current view, which is to be refreshed
+	 * 
 	 */
 	public RefreshAction(RequirementListView requirementList) {
 		super("Refresh");
@@ -34,6 +35,10 @@ public class RefreshAction extends AbstractAction {
 		putValue(MNEMONIC_KEY, KeyEvent.VK_F5);
 	}
 	
+	/**
+	 * Method to refresh the view upon receiving any ActionEvent
+	 * @e any ActionEvent
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		requirementList.refresh();

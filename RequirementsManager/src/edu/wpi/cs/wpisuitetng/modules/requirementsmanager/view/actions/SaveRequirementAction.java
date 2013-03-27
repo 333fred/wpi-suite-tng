@@ -14,7 +14,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequire
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
-
+/**
+ * 
+ * @author Swagasaurus
+ * 
+ * Action to save a requirement
+ */
 public class SaveRequirementAction extends AbstractAction {
 
 	private Requirement requirement;
@@ -26,6 +31,11 @@ public class SaveRequirementAction extends AbstractAction {
 		this.parentView = parentView;
 	}
 
+	/**
+	 * Method to save a requirement if it is of acceptable format
+	 * 
+	 * @e any ActionEvent
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		AddRequirementController controller = new AddRequirementController(this.parentView);
