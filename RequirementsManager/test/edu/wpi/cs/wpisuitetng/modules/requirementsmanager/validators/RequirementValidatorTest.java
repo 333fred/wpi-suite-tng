@@ -274,8 +274,9 @@ public class RequirementValidatorTest {
 	}
 	
 	@Test
-	//ensure that when a new requirement is assigned to an iteration
+	// ensure that when a new requirement is assigned to an iteration
 	// it will be changed to in progress
+	// dependent on further implementation of setIteration
 	public void testInProgressRemoveFromIteration() {
 		Requirement r = new Requirement();
 		r.setName("Name");

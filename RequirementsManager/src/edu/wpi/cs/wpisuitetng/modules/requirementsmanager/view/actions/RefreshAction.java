@@ -17,7 +17,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
 
 /**
- * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
+ * Action that calls {@link MainTabController#addCreateRequirementTab()}, default mnemonic key is C. 
  */
 @SuppressWarnings("serial")
 public class RefreshAction extends AbstractAction {
