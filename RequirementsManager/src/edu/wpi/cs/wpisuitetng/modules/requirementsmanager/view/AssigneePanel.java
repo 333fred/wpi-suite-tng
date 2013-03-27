@@ -23,8 +23,8 @@ import javax.swing.SpringLayout;
 public class AssigneePanel extends JPanel {
 
 	/** A JList for the unassigned users, and assigned users */
-	private JList<String> unassignedUsers;
-	private JList<String> assignedUsers;
+	private JList unassignedUsers;
+	private JList assignedUsers;
 
 	/** Buttons for assigning and unassigning users */
 	private JButton assignSelectedUsers;
@@ -39,27 +39,27 @@ public class AssigneePanel extends JPanel {
 	private JScrollPane assignedScroll;
 
 	/** Lists to store the assigned and unassigned users*/
-	private DefaultListModel<String> assignedUsersList;
-	private DefaultListModel<String> unassignedUsersList;
+	private DefaultListModel assignedUsersList;
+	private DefaultListModel unassignedUsersList;
 
 	public AssigneePanel() {
 
 		//initialize the two test string arrays
-		unassignedUsersList = new DefaultListModel<String>();
+		unassignedUsersList = new DefaultListModel();
 
 		for (int i=0;i<50;i++) {
 			unassignedUsersList.add(i, "Value " + (i+1));
 		}
 
-		assignedUsersList = new DefaultListModel<String>();
+		assignedUsersList = new DefaultListModel();
 		assignedUsersList.addElement("Value 1a");
 		assignedUsersList.addElement("Value 2a");
 		assignedUsersList.addElement("Value 3a");
 		assignedUsersList.addElement("Value 4a");
 
 		//initialize the list of the assigned and unassigned users
-		unassignedUsers = new JList<String>(unassignedUsersList);
-		assignedUsers = new JList<String>(assignedUsersList);		
+		unassignedUsers = new JList(unassignedUsersList);
+		assignedUsers = new JList(assignedUsersList);		
 
 		//initialize the labels
 		unassignedLabel = new JLabel("Unassigned");
@@ -143,16 +143,16 @@ public class AssigneePanel extends JPanel {
 
 	}
 
-	public DefaultListModel<String> getUnassignedUsersList(){
+	public DefaultListModel getUnassignedUsersList(){
 		return unassignedUsersList;
 	}
-	public void setUnassignedUsersList(DefaultListModel<String> list){
+	public void setUnassignedUsersList(DefaultListModel list){
 		unassignedUsersList = list;
 	}
-	public DefaultListModel<String> getAssignedUsersList(){
+	public DefaultListModel getAssignedUsersList(){
 		return assignedUsersList;
 	}
-	public void setAssignedUsersList(DefaultListModel<String> list){
+	public void setAssignedUsersList(DefaultListModel list){
 		assignedUsersList = list;
 	}
 
@@ -160,16 +160,16 @@ public class AssigneePanel extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for(String m: unassignedUsers.getSelectedValuesList()){
+			for(Object m: unassignedUsers.getSelectedValues()){
 				//add the selected element(s) in alphabetical order
 				int i = 0;
-				while(i < (assignedUsersList.getSize() - 1) && assignedUsersList.get(i).compareTo(m) < 0){
+				while(i < (assignedUsersList.getSize() - 1) && assignedUsersList.get(i).toString().compareTo(m.toString()) < 0){
 					i++;
 				}
 				assignedUsersList.add(i,m);
 			}		
 			//remove selected element(s)
-			for(String m: unassignedUsers.getSelectedValuesList()){
+			for(Object m: unassignedUsers.getSelectedValues()){
 				unassignedUsersList.removeElement(m);
 			}
 		}
@@ -178,16 +178,16 @@ public class AssigneePanel extends JPanel {
 	
 		@Override
 		public void actionPerformed(ActionEvent e){
-			for(String m : assignedUsers.getSelectedValuesList()){
+			for(Object m : assignedUsers.getSelectedValues()){
 				//add the selected element(s) in alphabetical order
 				int i = 0;
-				while(i < (unassignedUsersList.getSize() - 1) && unassignedUsersList.get(i).compareTo(m) < 0 ){
+				while(i < (unassignedUsersList.getSize() - 1) && unassignedUsersList.get(i).toString().compareTo(m.toString()) < 0 ){
 					i++;
 				}
 				unassignedUsersList.add(i, m);
 			}	
 			//remove selected element(s)
-			for(String m: assignedUsers.getSelectedValuesList()){
+			for(Object m: assignedUsers.getSelectedValues()){
 				assignedUsersList.removeElement(m);
 			}
 		}

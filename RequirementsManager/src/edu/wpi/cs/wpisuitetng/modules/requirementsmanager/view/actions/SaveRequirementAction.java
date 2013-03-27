@@ -49,12 +49,22 @@ public class SaveRequirementAction extends AbstractAction {
 			try {
 				requirement.setIteration(Integer.parseInt(parentView.getTextIteration().getText()));	
 
-				requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
-				requirement.setType(Type.valueOf(parentView.getComboBoxType().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				try {
+					requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				} catch(IllegalArgumentException except) {
+					requirement.setPriority(Priority.BLANK);
+				}
+				
+				try {
+					requirement.setType(Type.valueOf(parentView.getComboBoxType().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				} catch(IllegalArgumentException except) {
+					requirement.setType(Type.BLANK);
+				}
+				
 				requirement.setStatus(Status.valueOf(parentView.getComboBoxStatus().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
 				
 				controller.AddRequirement(requirement);
-			//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
+				//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
 			} catch (NumberFormatException excep) {
 				parentView.displaySaveError("Iteration must be an integer value");
 			}
