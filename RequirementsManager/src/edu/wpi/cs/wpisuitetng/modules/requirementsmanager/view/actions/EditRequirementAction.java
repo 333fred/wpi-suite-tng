@@ -37,22 +37,22 @@ public class EditRequirementAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		SaveRequirementController controller = new SaveRequirementController(this.parentView);
 		
-		if(!parentView.getTextName().getText().equals(""))
+		if(!parentView.getTextName().getText().trim().equals(""))
 		{
 			parentView.getTextName().setBackground(Color.WHITE);
 			parentView.getTextNameValid().setText("");
 		}
 		
-		if(!parentView.getTextDescription().getText().equals("")) 
+		if(!parentView.getTextDescription().getText().trim().equals("")) 
 		{
 			parentView.getTextDescription().setBackground(Color.WHITE);
 			parentView.getTextDescriptionValid().setText("");
 		}
 		
-		if(!parentView.getTextName().getText().equals("") && !parentView.getTextDescription().getText().equals("")) 
+		if(!parentView.getTextName().getText().trim().equals("") && !parentView.getTextDescription().getText().trim().equals("")) 
 		{
-			requirement.setName(parentView.getTextName().getText());
-			requirement.setDescription(parentView.getTextDescription().getText());
+			requirement.setName(parentView.getTextName().getText().trim());
+			requirement.setDescription(parentView.getTextDescription().getText().trim());
 			try {
 				requirement.setIteration(Integer.parseInt(parentView.getTextIteration().getText()));
 	
@@ -119,12 +119,12 @@ public class EditRequirementAction extends AbstractAction {
 			}
 		}
 		else {
-			if(parentView.getTextName().getText().equals(""))
+			if(parentView.getTextName().getText().trim().equals(""))
 			{
 				parentView.getTextName().setBackground(new Color(243, 243, 209));
 				parentView.getTextNameValid().setText("** Field must be non-blank **");
 			}
-			if(parentView.getTextDescription().getText().equals(""))
+			if(parentView.getTextDescription().getText().trim().equals(""))
 			{
 				parentView.getTextDescription().setBackground(new Color(243, 243, 209));
 				parentView.getTextDescriptionValid().setText("** Field must be non-blank **");

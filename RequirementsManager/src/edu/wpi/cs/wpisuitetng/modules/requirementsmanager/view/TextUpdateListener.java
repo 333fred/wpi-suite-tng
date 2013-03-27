@@ -64,7 +64,6 @@ public class TextUpdateListener implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		checkIfOneCharacter(); 
-
 	}
 
 	@Override
@@ -82,7 +81,7 @@ public class TextUpdateListener implements KeyListener {
 
 		// Compare base to the component's text to determine whether or not to highlight the field.
 		if (base.equals(component.getText().trim())) {
-			if (errorComponent != null) {
+			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
 				panel.disableSaveButton();
@@ -110,20 +109,16 @@ public class TextUpdateListener implements KeyListener {
 	public void checkIfOneCharacter() {
 		String base = "";
 		
-		if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
+		if (!(base.equals(component.getText().trim()))) {
 			component.setBackground(Color.WHITE);
-			if (errorComponent != null) {
+			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
 			firstKeyPress = true;
 			panel.enableSaveButton();
 		}
-		else {
-			panel.disableSaveButton();
-		}
-		
 		if (base.equals(component.getText().trim())) {
-			if (errorComponent != null) {
+			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
 			}
