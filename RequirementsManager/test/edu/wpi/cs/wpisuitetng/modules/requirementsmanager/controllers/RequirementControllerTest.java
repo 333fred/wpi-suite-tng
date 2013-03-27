@@ -18,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
@@ -25,11 +26,21 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class RequirementControllerTest {
 
-	//TODO: Test the requirement controllers
+	//TODO: Test the requirement controllers, and separate into other files
 
 	AddRequirementController controller;
 	SaveRequirementController controller2;
+	
+	RetrieveAllUsersController controller3;
+	SaveRequirementController controller4;
+	
+	RetrieveAllRequirementsController controller5; //Cannot test these controllers yet
+	RetrieveIterationsController controller6;
+	
+	
 	DetailPanel view;
+	AssigneePanel view2;
+	IReceivedAllRequirementNotifier requirementNotifier; //Needs to be replaced by an object that extends this
 	Requirement r1;
 	Requirement r2;
 	
@@ -46,22 +57,20 @@ public class RequirementControllerTest {
 		Network.initNetwork(new MockNetwork());
 		Network.getInstance().setDefaultNetworkConfiguration(new NetworkConfiguration("http://wpisuitetng"));
 		view = new DetailPanel(r1, new MainTabController(new MainTabView()));
+		view2 = new AssigneePanel(r1);
 		controller = new AddRequirementController(view);
 		controller2 = new SaveRequirementController(view);
-	}
-	
-	// This is here so that JUnit won't say that this failed
-	// TODO: Replace with an actual test
-	@Test
-	public void notATest(){
-		assertEquals(1, 1);
-		
+		controller3 = new RetrieveAllUsersController(view2);
+		controller4 = new SaveRequirementController(view);
+		//controller5 = new RetrieveAllRequirementsController(null);		
 	}
 
 	@Test
 	public void contructorSetsViewFieldCorrectly() {
 		assertEquals(view, controller.detailPanel);
 		assertEquals(view, controller2.detailPanel);
+		//assertEquals(view2, controller3.view);  This field is not private and can't be seen
+		assertEquals(view, controller4.detailPanel);
 	}
 	
 	@Test
@@ -76,7 +85,14 @@ public class RequirementControllerTest {
 
 			// Validate the request
 			assertEquals("/requirementsmanager/requirement", request.getUrl().getPath());
-			assertEquals(HttpMethod.PUT, request.getHttpMethod());			
+			assertEquals(HttpMethod.PUT, request.getHttpMethod());
+			
+			r2 = new Requirement("name", "description", 1, type.BLANK, new ArrayList(), new ArrayList(), 1, 1, new ArrayList(), new ArrayList());
+			controller.AddRequirement(r2);
+			MockRequest request2 = ((MockNetwork)Network.getInstance()).getLastRequestMade();
+
+			//Show that the requests are not equal
+			assertTrue(!request.equals(request2));
 	}
 
 	/*@Test

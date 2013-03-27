@@ -75,12 +75,13 @@ public class Logger {
 	public void logEvents(List<Event> events, Session s) {
 
 		// Check for a null list of events
-		if(events == null){
+		if (events == null) {
 			return;
 		}
-		
+
 		// Log of all events
 		String logMsg = "";
+		boolean updated = false;
 
 		// Loop through all events, and add them to the log based on
 		// what type of event occurred.
@@ -93,6 +94,7 @@ public class Logger {
 				// up a lot of space. This is the only one that we don't fall
 				// through
 				logMsg += ("Updated the Description<br>");
+				updated = true;
 				break;
 			case NOTE_CHANGE:
 				// Set type
@@ -165,18 +167,22 @@ public class Logger {
 				if (deletedCount > 0) {
 					logMsg += "Removed " + deletedCount + " " + type + "<br>";
 				}
+				updated = true;
 				break;
 			case ITER_CHANGE:
 				// TODO: Once we implement iterations, we can determine how to
 				// log
 				logMsg += ("Changed Iteration<br>");
+				updated = true;
 				break;
 			case RELEASE_CHANGE:
+				updated = true;
 				break;
 			case NAME_CHANGE:
 				logMsg += "Name: " + "<b>\"" + event.oldVal.toString()
 						+ "\"</b>" + " to <b>\"" + event.newVal.toString()
 						+ "\"</b><br>";
+				updated = true;
 				break;
 			case PARENT_CHANGE:
 				if (type == null) {
@@ -200,12 +206,16 @@ public class Logger {
 				}
 				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
 						+ " to <b>" + event.newVal.toString() + "</b><br>";
+				updated = true;
 			default:
 				break;
 			}
 		}
-		// Add a new log to the list of logs
-		logs.add(0, new Log(logMsg, s.getUser()));
+
+		if (updated) {
+			// Add a new log to the list of logs
+			logs.add(0, new Log(logMsg, s.getUser()));
+		}
 	}
 
 	public List<Log> getLogs() {

@@ -56,14 +56,14 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		//checkIfUpdated();
+		if (firstKeyPress) {
+			checkIfUpdated();
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		checkIfOneCharacter(); 
-
 	}
 
 	@Override
@@ -81,29 +81,56 @@ public class TextUpdateListener implements KeyListener {
 		String base = ""; // base of empty string to compare to
 
 		// Compare base to the component's text to determine whether or not to highlight the field.
-		if (base.equals(component.getText())) {
-			component.setBackground(new Color(243, 243, 209));
-			errorComponent.setText("** Field must be non-blank **");
-			panel.disableSaveButton();
+		if (base.equals(component.getText().trim())) {
+			if (errorComponent != null) { // if there's an error panel to write to
+				component.setBackground(new Color(243, 243, 209));
+				errorComponent.setText("** Field must be non-blank **");
+				panel.disableSaveButton();
+			}
+			else {
+				// current a null errorComponenet is a flag for the iteration next box
+				// iteration next box should not be colored and no error box exists (can have no iteration)
+				// should enable save if there's no iteration
+				panel.enableSaveButton();
+			}
 		}
 		else {
 			component.setBackground(Color.WHITE);
-			errorComponent.setText("");
-			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
+
+			//errorComponent.setText("");
+	/*		if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
 				panel.enableSaveButton();
 			} else {
 				panel.disableSaveButton();
-			}
+			}*/
 			//component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+			if (errorComponent != null) { // if there's an error panel to write to
+				errorComponent.setText("");
+			}
 		}
 	}
 	
 	public void checkIfOneCharacter() {
 		String base = "";
 		
-		if (!base.equals(component.getText())) {
+		if (!(base.equals(component.getText().trim()))) {
 			component.setBackground(Color.WHITE);
-			errorComponent.setText("");
+			if (errorComponent != null) { // if there's an error panel to write to
+				errorComponent.setText("");
+			}
+			firstKeyPress = true;
+			panel.enableSaveButton();
+		}
+		if (base.equals(component.getText().trim())) {
+			component.setBackground(new Color(243, 243, 209));
+			if (errorComponent != null) { // if there's an error panel to write to
+				errorComponent.setText("** Field must be non-blank **");
+			}
+			firstKeyPress = true;
+		}
+		
+		if (errorComponent == null){
 			firstKeyPress = true;
 			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
 				panel.enableSaveButton();
