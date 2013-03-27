@@ -141,18 +141,25 @@ public class RequirementValidator {
 		// new requirements should always have new status
 		if(mode == RequirementActionMode.CREATE) {
 			requirement.setStatus(Status.NEW);
+			//and no iteration
+			requirement.setIteration(-1);
 		} else if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE){
 			//Automatic status changes
 			
 			//If a new or open requirement is assigned to an iteration then set it to in progress
-			if((requirement.getStatus() == Status.NEW || requirement.getStatus() == Status.OPEN) && requirement.getIteration() != 0)
+			if((requirement.getStatus() == Status.NEW || requirement.getStatus() == Status.OPEN) && requirement.getIteration() != -1)
 				requirement.setStatus(Status.IN_PROGRESS);
 			
 			//if an in-progress requirement is removed from an iteration, it is set to open
-			if(requirement.getStatus() == Status.IN_PROGRESS && requirement.getIteration() == 0){
+			if(requirement.getStatus() == Status.IN_PROGRESS && requirement.getIteration() == -1){
 				requirement.setStatus(Status.OPEN);
 			}
 
+		}
+		
+		//deleted requirements should not have an iteration
+		if(requirement.getStatus() == Status.DELETED){
+			requirement.setIteration(-1);
 		}
 		
 		//trim whitespace if possible
