@@ -247,6 +247,45 @@ public class RequirementValidatorTest {
 		assertEquals(r.getUsers(), new LinkedList<String>());
 	}
 	
+	@Test
+	//ensure that when an open requirement is assigned to an iteration
+	//it will be changed to in progress
+	public void testOpenAssignIteration() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("Description");
+		r.setStatus(Status.OPEN);
+		r.setIteration(1);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
+		assertEquals(r.getStatus(), Status.IN_PROGRESS);
+	}
+	
+	@Test
+	//ensure that when a new requirement is assigned to an iteration
+	// it will be changed to in progress
+	public void testNewAssignIteration() {
+		Requirement r = new Requirement();
+		r.setName("Name");
+		r.setDescription("Description");
+		r.setStatus(Status.NEW);
+		r.setIteration(1);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
+		assertEquals(r.getStatus(), Status.IN_PROGRESS);
+	}
+	
+	@Test
+	//ensure that when a new requirement is assigned to an iteration
+	// it will be changed to in progress
+	public void testInProgressRemoveFromIteration() {
+		Requirement r = new Requirement();
+		r.setName("Name");
+		r.setDescription("Description");
+		r.setStatus(Status.IN_PROGRESS);
+		r.setIteration(0);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
+		assertEquals(r.getStatus(), Status.OPEN);
+	}
+	
 	/**
 	 * 
 	 * @param num number of issues expected, if any other number are found will cause test failure
