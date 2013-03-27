@@ -40,7 +40,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteVi
  * @author Swagasaurus
  * 
  */
-public class DetailPanel extends FocusableTab implements IRetreiveRequirementByIDControllerNotifier {
+public class DetailPanel extends FocusableTab {
 
 	// Textfields
 	private JTextArea textName;
@@ -85,9 +85,6 @@ public class DetailPanel extends FocusableTab implements IRetreiveRequirementByI
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
 		this.mainTabController = mainTabController;
-		
-		//initize the retreive requirement controller
-		retreiveRequirementController = new RetrieveRequirementByIDController(this);
 		
 		JPanel mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0, 2);
@@ -412,9 +409,6 @@ public class DetailPanel extends FocusableTab implements IRetreiveRequirementByI
 		this.determineAvailableStatusOptions();
 		this.disableSaveButton();
 		
-		//retrive an updated copy of the requirement from the server 
-		//do it after everythign is initialized.
-		retreiveRequirementFromSever();
 	}
 	/**
 	 * Method to determine to which statuses the currently viewed requirement 
@@ -580,125 +574,5 @@ public class DetailPanel extends FocusableTab implements IRetreiveRequirementByI
 	public void enableSaveButton() {
 		this.btnSave.setEnabled(true);
 	}
-	
-	/** Updates the requirement from the server 
-	 * TODO: Implement this 
-	 */
-	private void retreiveRequirementFromSever() {
-		//get the requirement from the server with the id
-		retreiveRequirementController.get(requirement.getrUID());
-	}
-	
-	/** Updates all of the fields in the pane from the new Requirement
-	 * 
-	 * @param requirement The new requirement
-	 * TODO: Implement this
-	 * 
-	 * Note - The requirement edit and save actions, pull all of the requirement data from this panel,
-	 * 	Should be no need to update thier copy of requirement, assuming that the requiremetn ID never changes,
-	 *  which this function should not do.
-	 */
-	
-	private void updateFromRequirement(Requirement requirement) {
-		this.requirement = requirement;
-		
-		//updates the nameField with the new name
-		textName.setText(requirement.getName());
-		//updates the description with the new description
-		textDescription.setText(requirement.getDescription());
-		//updates the interation with the new interation
-		textIteration.setText(Integer.toString(requirement.getIteration()));
-		
-		//update the type of requirement
-		switch (requirement.getType()) {
-		
-		case BLANK:
-			comboBoxType.setSelectedIndex(0);
-			break;
-		case EPIC:
-			comboBoxType.setSelectedIndex(1);
-			break;
-		case THEME:
-			comboBoxType.setSelectedIndex(2);
-			break;
-		case USER_STORY:
-			comboBoxType.setSelectedIndex(3);
-			break;
-		case NON_FUNCTIONAL:
-			comboBoxType.setSelectedIndex(4);
-			break;
-		case SCENARIO:
-			comboBoxType.setSelectedIndex(5);
-		}
-		
-		//update the requirement priority
-		switch (requirement.getPriority()) {
-		
-		case BLANK:
-			comboBoxPriority.setSelectedIndex(0);
-			break;
-		case HIGH:
-			comboBoxPriority.setSelectedIndex(1);
-			break;
-		case MEDIUM:
-			comboBoxPriority.setSelectedIndex(2);
-			break;
-		case LOW:
-			comboBoxPriority.setSelectedIndex(3);
-			break;
-		}
-		
-		//update the status
-		switch (requirement.getStatus()) {
-		
-		case NEW:
-			comboBoxStatus.setSelectedIndex(0);
-			break;
-		case IN_PROGRESS:
-			comboBoxStatus.setSelectedIndex(1);
-			break;
-		case OPEN:
-			comboBoxStatus.setSelectedIndex(2);
-			break;
-		case COMPLETE:
-			comboBoxStatus.setSelectedIndex(3);
-			break;
-		case DELETED:
-			comboBoxStatus.setSelectedIndex(4);
-			break;
-		case BLANK:
-			comboBoxStatus.setSelectedIndex(5);
-			break;
-		}
-		
-		//update the status combo box options
-		determineAvailableStatusOptions();
-		
-		//update the noteview, logview, and userview.
-		
-		noteView.updateRequirement(requirement);
-		logView.updateRequirement(requirement);
-		userView.updateRequirement(requirement);
-	}
-	
-	/** The server returned the updated requirement
-	 * 
-	 * @param requirement The updated requirement
-	 */
-	
-	public void receivedData(Requirement requirement) {
-		//update the requirement
-		//TODO: uncomment this
-		//updateFromRequirement(requirement);		
-	}
-	
-	/** Server returned with an error, Print it out for now
-	 * 
-	 * @param errorMessage The error message received
-	 */
-	
-	public void errorReceivingData(String errorMessage) {
-		//we can just print an error
-		System.out.println("Received error updating requirement: " + errorMessage);		
-	}
+
 }
