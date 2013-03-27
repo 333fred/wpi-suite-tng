@@ -282,7 +282,7 @@ public class RequirementValidatorTest {
 		r.setName("Name");
 		r.setDescription("Description");
 		r.setStatus(Status.IN_PROGRESS);
-		r.setIteration(0);
+		r.setIteration(-1);
 		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
 		assertEquals(r.getStatus(), Status.OPEN);
 	}

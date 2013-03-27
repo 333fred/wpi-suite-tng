@@ -13,16 +13,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 /**
  * @author Chris
  *
- * Action which concerns cancelling the creation/editing of a requirement
+ * Action which concerns canceling the creation/editing of a requirement
  */
 public class CancelAction extends AbstractAction {
 
-	private Requirement requirement;
+
 	private DetailPanel parentView;
 
-	public CancelAction(Requirement requirement, DetailPanel parentView) {
+	public CancelAction(DetailPanel parentView) {
 		super("Cancel");
-		this.requirement = requirement;
 		this.parentView = parentView;
 	}
 	
