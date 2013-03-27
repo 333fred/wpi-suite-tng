@@ -168,10 +168,10 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
-		r.setStatus(Status.IN_PROGRESS);
+		r.setStatus(Status.OPEN);
 		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
 		
-		assertEquals(r.getStatus(),Status.IN_PROGRESS);
+		assertEquals(r.getStatus(),Status.OPEN);
 	}
 	
 	@Test
