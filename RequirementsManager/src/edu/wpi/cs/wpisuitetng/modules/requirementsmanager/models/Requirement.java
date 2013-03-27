@@ -350,7 +350,7 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * Sets the current iteration TODO: Is this actually going to be an int
+	 * Sets the current iteration TODO: change this to work on an Iteration object
 	 * 
 	 * @param iteration
 	 *            the iteration to set
