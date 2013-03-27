@@ -56,8 +56,7 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		//checkIfUpdated();
+		checkIfUpdated();
 	}
 
 	@Override
@@ -81,15 +80,25 @@ public class TextUpdateListener implements KeyListener {
 
 		// Compare base to the component's text to determine whether or not to highlight the field.
 		if (base.equals(component.getText())) {
-			component.setBackground(new Color(243, 243, 209));
-			errorComponent.setText("** Field must be non-blank **");
-			panel.disableSaveButton();
+			if (errorComponent != null) { // if there's an error panel to write to
+				component.setBackground(new Color(243, 243, 209));
+				errorComponent.setText("** Field must be non-blank **");
+				panel.disableSaveButton();
+			}
+			else {
+				// current a null errorComponenet is a flag for the iteration next box
+				// iteration next box should not be colored and no error box exists (can have no iteration)
+				// should enable save if there's no iteration
+				panel.enableSaveButton();
+				
+			}
 		}
 		else {
 			component.setBackground(Color.WHITE);
-			errorComponent.setText("");
+			if (errorComponent != null) { // if there's an error panel to write to
+				errorComponent.setText("");
+			}
 			panel.enableSaveButton();
-			//component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		}
 	}
 	
@@ -98,7 +107,9 @@ public class TextUpdateListener implements KeyListener {
 		
 		if (!base.equals(component.getText())) {
 			component.setBackground(Color.WHITE);
-			errorComponent.setText("");
+			if (errorComponent != null) { // if there's an error panel to write to
+				errorComponent.setText("");
+			}
 			firstKeyPress = true;
 			panel.enableSaveButton();
 		}

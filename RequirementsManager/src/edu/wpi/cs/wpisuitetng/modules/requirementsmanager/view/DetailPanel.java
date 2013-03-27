@@ -73,6 +73,7 @@ public class DetailPanel extends FocusableTab {
 	
 	protected final TextUpdateListener txtTitleListener;
 	protected final TextUpdateListener txtDescriptionListener;
+	protected final TextUpdateListener txtIterationListener;
 
 	//swing constants
 	private static final int VERTICAL_PADDING = 10;
@@ -232,6 +233,9 @@ public class DetailPanel extends FocusableTab {
 		textIteration.setWrapStyleWord(true);
 		textIteration.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textIteration);
+		
+		txtIterationListener = new TextUpdateListener(this, textIteration, null);
+		textIteration.addKeyListener(txtIterationListener);
 		
 		btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
