@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    JPage
- ******************************************************************************/
-
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Color;
@@ -32,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * differs, the style of the component is changed to show that it differs from the relevant field in the model.
  * Otherwise, the component's style is changed to be normal.
  */
+
 public class TextUpdateListener implements KeyListener {
 	protected final DetailPanel panel;
 	protected final JTextComponent component;
@@ -63,11 +52,12 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		checkIfOneCharacter(); 
+			checkIfOneCharacter(); 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
 		if (firstKeyPress) {
 			checkIfUpdated();		
 		}
@@ -95,32 +85,24 @@ public class TextUpdateListener implements KeyListener {
 		}
 		else {
 			component.setBackground(Color.WHITE);
-			if (errorComponent != null) {
+			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
-			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
-				panel.enableSaveButton();
-			} else {
-				panel.disableSaveButton();
-			}
+			panel.enableSaveButton();
 		}
 	}
-	
+
 	public void checkIfOneCharacter() {
 		String base = "";
-		
-		if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
+
+		if (!(base.equals(component.getText().trim()))) {
 			component.setBackground(Color.WHITE);
-			if (errorComponent != null) {
+			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
 			firstKeyPress = true;
 			panel.enableSaveButton();
 		}
-		else {
-			panel.disableSaveButton();
-		}
-		
 		if (base.equals(component.getText().trim())) {
 			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
@@ -128,7 +110,7 @@ public class TextUpdateListener implements KeyListener {
 			}
 			firstKeyPress = true;
 		}
-		
+
 		if (errorComponent == null){
 			firstKeyPress = true;
 			panel.enableSaveButton();
