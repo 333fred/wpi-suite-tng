@@ -13,7 +13,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,19 +22,17 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveIterationsController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreiveRequirementByIDControllerNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailLogView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.CancelAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEventPane;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 
 /**
  * JPanel class to display the different fields of the requirement
@@ -43,7 +40,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEvent
  * @author Swagasaurus
  * 
  */
-public class DetailPanel extends FocusableTab {
+public class DetailPanel extends FocusableTab implements IRetreiveRequirementByIDControllerNotifier {
 
 	// Textfields
 	private JTextArea textName;
@@ -80,10 +77,16 @@ public class DetailPanel extends FocusableTab {
 	private static final int VERTICAL_CLOSE = -5;
 	private static final int VERTICAL_CLOSE2 = -10;
 	private static final int HORIZONTAL_PADDING = 20;
+	
+	/** The controller for retreiving the requirement from the sever */
+	private RetrieveRequirementByIDController retreiveRequirementController;
 
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
 		this.mainTabController = mainTabController;
+		
+		//initize the retreive requirement controller
+		retreiveRequirementController = new RetrieveRequirementByIDController(this);
 		
 		JPanel mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0, 2);
@@ -581,7 +584,8 @@ public class DetailPanel extends FocusableTab {
 	 * TODO: Implement this 
 	 */
 	private void retreiveRequirementFromSever() {
-		
+		//get the requirement from the server with the id
+		retreiveRequirementController.get(requirement.getrUID());
 	}
 	
 	/** Updates all of the fields in the pane from the new Requirement
@@ -670,5 +674,30 @@ public class DetailPanel extends FocusableTab {
 		determineAvailableStatusOptions();
 		
 		//update the noteview, logview, and userview.
+		
+		noteView.updateRequirement(requirement);
+		logView.updateRequirement(requirement);
+		userView.updateRequirement(requirement);
+	}
+	
+	/** The server returned the updated requirement
+	 * 
+	 * @param requirement The updated requirement
+	 */
+	
+	public void receivedData(Requirement requirement) {
+		//update the requirement
+		//TODO: uncomment this
+		//updateFromRequirement(requirement);		
+	}
+	
+	/** Server returned with an error, Print it out for now
+	 * 
+	 * @param errorMessage The error message received
+	 */
+	
+	public void errorReceivingData(String errorMessage) {
+		//we can just print an error
+		System.out.println("Received error updating requirement: " + errorMessage);		
 	}
 }
