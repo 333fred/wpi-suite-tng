@@ -69,6 +69,8 @@ public class DetailPanel extends FocusableTab {
 	//the view that shows the users assigned to the requirement
 	private AssigneePanel userView;
 	
+	JButton btnSave;
+	
 	protected final TextUpdateListener txtTitleListener;
 	protected final TextUpdateListener txtDescriptionListener;
 
@@ -231,7 +233,7 @@ public class DetailPanel extends FocusableTab {
 		textIteration.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textIteration);
 		
-		JButton btnSave = new JButton("Save Requirement");
+		btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -400,6 +402,7 @@ public class DetailPanel extends FocusableTab {
 		add(eventPane);
 		
 		this.determineAvailableStatusOptions();
+		this.disableSaveButton();
 	}
 
 	private void determineAvailableStatusOptions() {
@@ -551,5 +554,14 @@ public class DetailPanel extends FocusableTab {
 	
 	public JTextArea getTextIteration() {
 		return this.textIteration;
+	}
+	
+	public void disableSaveButton() {
+		this.btnSave.setEnabled(false);
+	}
+	
+	public void enableSaveButton() {
+		this.btnSave.setEnabled(true);
+		
 	}
 }

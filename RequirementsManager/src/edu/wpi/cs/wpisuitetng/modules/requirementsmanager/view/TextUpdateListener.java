@@ -83,10 +83,12 @@ public class TextUpdateListener implements KeyListener {
 		if (base.equals(component.getText())) {
 			component.setBackground(new Color(243, 243, 209));
 			errorComponent.setText("** Field must be non-blank **");
+			panel.disableSaveButton();
 		}
 		else {
 			component.setBackground(Color.WHITE);
 			errorComponent.setText("");
+			panel.enableSaveButton();
 			//component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		}
 	}
@@ -98,6 +100,7 @@ public class TextUpdateListener implements KeyListener {
 			component.setBackground(Color.WHITE);
 			errorComponent.setText("");
 			firstKeyPress = true;
+			panel.enableSaveButton();
 		}
 	}
 }
