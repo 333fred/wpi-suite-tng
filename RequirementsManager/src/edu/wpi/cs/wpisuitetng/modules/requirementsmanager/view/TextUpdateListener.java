@@ -74,46 +74,46 @@ public class TextUpdateListener implements KeyListener {
 			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
-				panel.disableSaveButton();
 			}
-			else {
-				// current a null errorComponenet is a flag for the iteration next box
-				// iteration next box should not be colored and no error box exists (can have no iteration)
-				// should enable save if there's no iteration
-				panel.enableSaveButton();
-			}
+			panel.disableSaveButton();
 		}
 		else {
 			component.setBackground(Color.WHITE);
 			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
-			panel.enableSaveButton();
+			if (base.equals(panel.getTextName().getText().trim()) || base.equals(panel.getTextDescription().getText().trim())) {
+				panel.disableSaveButton();
+			}
+			else 
+				panel.enableSaveButton();
 		}
 	}
 
 	public void checkIfOneCharacter() {
 		String base = "";
-
+		firstKeyPress = true;
+		
 		if (!(base.equals(component.getText().trim()))) {
 			component.setBackground(Color.WHITE);
 			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
-			firstKeyPress = true;
-			panel.enableSaveButton();
+			if(base.equals(panel.getTextName().getText().trim()) || base.equals(panel.getTextDescription().getText().trim())) {
+				panel.disableSaveButton();
+			}
+			else {
+				panel.enableSaveButton();
+			}
 		}
+		
+		
 		if (base.equals(component.getText().trim())) {
 			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
 			}
 			firstKeyPress = true;
-		}
-
-		if (errorComponent == null){
-			firstKeyPress = true;
-			panel.enableSaveButton();
 		}
 	}
 }
