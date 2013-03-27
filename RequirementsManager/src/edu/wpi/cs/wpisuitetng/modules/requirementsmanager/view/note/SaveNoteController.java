@@ -47,9 +47,11 @@ public class SaveNoteController {
 			view.getnoteField().setText("");
 			view.getnoteField().requestFocusInWindow();
 			
-			//We want to save the note to the server immediately
-			SaveRequirementController controller = new SaveRequirementController(this.parentView);
-			controller.SaveRequirement(model,false);
+			//We want to save the note to the server immediately, but only if the requirement hasn't been just created
+			if (model.getName().length() > 0) {
+				SaveRequirementController controller = new SaveRequirementController(this.parentView);
+				controller.SaveRequirement(model,false);
+			}
 		}
 	}
 }

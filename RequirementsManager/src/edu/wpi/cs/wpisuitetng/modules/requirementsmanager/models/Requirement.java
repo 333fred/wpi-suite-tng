@@ -65,7 +65,7 @@ public class Requirement extends AbstractModel {
 		status = Status.BLANK;
 		priority = Priority.BLANK;
 		releaseNum = 0;
-		iteration = 0;
+		iteration = -1;
 		effort = 0;
 		assignees = new ArrayList<String>();
 		subRequirements = new ArrayList<Integer>();
