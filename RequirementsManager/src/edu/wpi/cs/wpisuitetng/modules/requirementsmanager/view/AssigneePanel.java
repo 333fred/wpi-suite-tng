@@ -15,7 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.QueryUserController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
@@ -49,18 +51,20 @@ public class AssigneePanel extends JPanel {
 	public AssigneePanel(Requirement requirement) {
 		this.requirement = requirement;
 		
+		QueryUserController userController = new QueryUserController(this);
+		
 		//initialize the two test string arrays
 		unassignedUsersList = new DefaultListModel();
 
-		for (int i=0;i<50;i++) {
+	/*	for (int i=0;i<50;i++) {
 			unassignedUsersList.add(i, "Value " + (i+1));
-		}
+		}*/
 
 		assignedUsersList = new DefaultListModel();
-		assignedUsersList.addElement("Value 1a");
-		assignedUsersList.addElement("Value 2a");
-		assignedUsersList.addElement("Value 3a");
-		assignedUsersList.addElement("Value 4a");
+		//assignedUsersList.addElement("Value 1a");
+		//assignedUsersList.addElement("Value 2a");
+		//assignedUsersList.addElement("Value 3a");
+		//assignedUsersList.addElement("Value 4a");
 
 		//initialize the list of the assigned and unassigned users
 		unassignedUsers = new JList(unassignedUsersList);
@@ -146,6 +150,7 @@ public class AssigneePanel extends JPanel {
 		add(assignedLabel);
 		add(assignedScroll);
 
+		userController.getUsers();
 	}
 	
 	/** Initializes the unassigned and assign lists.
@@ -216,15 +221,24 @@ public class AssigneePanel extends JPanel {
 	public DefaultListModel getUnassignedUsersList(){
 		return unassignedUsersList;
 	}
-	public void setUnassignedUsersList(DefaultListModel list){
-		unassignedUsersList = list;
+	
+	
+	public void setUnassignedUsersList(StringListModel list){
+		unassignedUsersList.clear();
+		for (int i = 0; i < list.getUsers().size(); i++) {
+			unassignedUsersList.addElement(list.getUsers().get(i));
+		}
 	}
+	
+	
 	public DefaultListModel getAssignedUsersList(){
 		return assignedUsersList;
 	}
 	public void setAssignedUsersList(DefaultListModel list){
 		assignedUsersList = list;
 	}
+	
+	
 	
 	/**
 	 *  Class used as the Action Listener for the Assigned User button

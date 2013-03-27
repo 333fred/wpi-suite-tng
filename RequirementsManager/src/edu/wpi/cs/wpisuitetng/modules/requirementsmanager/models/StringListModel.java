@@ -3,6 +3,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
+
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.Permission;
@@ -16,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * @author Fredric
  */
 
+@SuppressWarnings("serial")
 public class StringListModel implements Model {
 
 	List<String> users;
@@ -55,7 +58,6 @@ public class StringListModel implements Model {
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
-	@Override
 	public void save() {
 		// Unnecessary function for this model
 	}
@@ -63,7 +65,6 @@ public class StringListModel implements Model {
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
-	@Override
 	public void delete() {
 		// Unnecessary function for this model
 	}
@@ -71,7 +72,6 @@ public class StringListModel implements Model {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public String toJSON() {
 		return new Gson().toJson(this, StringListModel.class);
 	}
@@ -91,7 +91,6 @@ public class StringListModel implements Model {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Boolean identify(Object o) {
 		return this.equals(o);
 	}
@@ -99,7 +98,6 @@ public class StringListModel implements Model {
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
-	@Override
 	public Permission getPermission(User u) {
 		return null;
 	}
@@ -107,7 +105,6 @@ public class StringListModel implements Model {
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
-	@Override
 	public void setPermission(Permission p, User u) {
 		// TODO Auto-generated method stub
 
@@ -116,7 +113,6 @@ public class StringListModel implements Model {
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
-	@Override
 	public Project getProject() {
 		// TODO Auto-generated method stub
 		return null;
@@ -125,7 +121,6 @@ public class StringListModel implements Model {
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
-	@Override
 	public void setProject(Project p) {
 		// TODO Auto-generated method stub
 

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
+
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -40,8 +42,9 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 		// list, then return a new model with the list
 		List<String> users = new ArrayList<String>();
 		List<User> userList = Arrays.asList(s.getProject().getTeam());
+		users.add(s.getUsername());
 		if (userList.get(0) == null) {
-			return new StringListModel();
+			return new StringListModel(users);
 		} else {
 			for (User user : userList) {
 				users.add(user.getName());
@@ -81,8 +84,9 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 			throws WPISuiteException {
 		List<String> users = new ArrayList<String>();
 		List<User> userList = Arrays.asList(s.getProject().getTeam());
+		users.add(s.getUsername());
 		if (userList.get(0) == null) {
-			return new StringListModel();
+			return new StringListModel(users);
 		} else {
 			for (User user : userList) {
 				users.add(user.getName());
