@@ -72,6 +72,31 @@ public class RequirementValidator {
 	}
 	
 	/**
+	 * Checks if the given string is valid. Valid means that it is not null, has length greater 
+	 * than 0 but less than maxLength
+	 * 
+	 * @param toCheck the string to check
+	 * @param maxLength maximum valid length of the string, negative value means there is no max
+	 * @return whether or not the string is valid
+	 */
+	boolean stringValid (String toCheck, int maxLength) {
+		if(toCheck == null) return false;
+		if(toCheck.length() > maxLength && maxLength > 0) return false;
+		if(toCheck.length() == 0) return false;
+		
+	/*	//iterate through characters in string
+		for (int i = 0; i < toCheck.length(); i++){
+			//if we find a character which is not whitespace, then we know it must be valid
+		    char c = toCheck.charAt(i);        
+		    if (!Character.isWhitespace(c))
+		    	return true;
+		}*/
+		
+		//if we fail to find a an issue return true
+		return true;
+	}
+	
+	/**
 	 * Return the Requirement with the given id if it already exists in the database.
 	 * 
 	 * @param id the id of the Requirement
@@ -130,14 +155,19 @@ public class RequirementValidator {
 
 		}
 		
+		//trim whitespace if possible
+		if(requirement.getName() != null)
+			requirement.setName(requirement.getName().trim());
+		if(requirement.getDescription() != null)
+			requirement.setDescription(requirement.getDescription().trim());
+		
 		// make sure title and description size are within constraints
-		if(requirement.getName() == null || requirement.getName().length() > 100 || requirement.getName().length() == 0) {
+		if(!stringValid(requirement.getName(), 100))
 			issues.add(new ValidationIssue("Required, must be 1-100 characters", "name"));
-		}
-		if(requirement.getDescription() == null || requirement.getDescription().length() == 0) {
-			// empty descriptions are not allowed
+		
+		if(!stringValid(requirement.getDescription(), 0))
 			issues.add(new ValidationIssue("Required, must be 1 or more characters", "description"));
-		}
+
 		
 		//Initialize any null lists to be empty
 		if(requirement.getLog() == null){

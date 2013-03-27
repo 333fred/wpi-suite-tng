@@ -82,7 +82,7 @@ public class RequirementValidatorTest {
 	
 	@Test
 	//Ensure that a null name will cause rejection
-	public void testNullNameCreate() {
+	public void testNullName() {
 		Requirement r  = new Requirement();
 		r.setName(null);
 		r.setDescription("A quality description");
@@ -92,7 +92,7 @@ public class RequirementValidatorTest {
 	
 	@Test
 	//Ensure that an empty name will cause rejection
-	public void testEmptyNameCreate() {
+	public void testEmptyName() {
 		Requirement r  = new Requirement();
 		r.setName("");
 		r.setDescription("A quality description");
@@ -102,7 +102,7 @@ public class RequirementValidatorTest {
 	
 	@Test
 	//Ensure that a name longer than 100 characters is rejected
-	public void testLongNameCreate() {
+	public void testLongName() {
 		Requirement r  = new Requirement();
 		r.setName(new String(new char[101]));
 		r.setDescription("A quality description");
@@ -112,7 +112,7 @@ public class RequirementValidatorTest {
 	
 	@Test
 	//Test that a null description will be rejected
-	public void testNoDescriptionCreate() {
+	public void testNoDescription() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription(null);
@@ -122,12 +122,53 @@ public class RequirementValidatorTest {
 	
 	@Test
 	//Test that an empty description will be rejected
-	public void testEmptyDescriptionCreate() {
+	public void testEmptyDescription() {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("");
 		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
 		checkNumIssues(1, r, defaultSession, RequirementActionMode.EDIT);
+	}
+	
+	@Test
+	//Test that a whitespace description will be rejected
+	public void testWhitespaceDescription() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("      ");
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.EDIT);
+	}
+	
+	@Test
+	//Test that a tab whitespace description will be rejected
+	public void testTabDescription() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("			");
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.EDIT);
+	}
+	
+	@Test
+	//Test that a tab whitespace description will be rejected
+	public void testNewlineDescription() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("\n\n\n");
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.EDIT);
+	}
+	
+	@Test
+	//Test that a tab whitespace description will be rejected
+	public void testWhitespaceTrim() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("   testing   ");
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
+		assertEquals("testing", r.getDescription());
 	}
 		
 	@Test
