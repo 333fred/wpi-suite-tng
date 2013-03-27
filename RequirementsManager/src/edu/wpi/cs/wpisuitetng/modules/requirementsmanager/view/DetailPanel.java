@@ -390,7 +390,7 @@ public class DetailPanel extends FocusableTab {
 
 		noteView = new DetailNoteView(this.requirement, this);
 		logView = new DetailLogView(this.requirement, this);
-		userView = new AssigneePanel();
+		userView = new AssigneePanel(requirement);
 	
 		//create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);

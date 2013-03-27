@@ -3,8 +3,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -13,8 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.SpringLayout;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
@@ -42,8 +43,12 @@ public class AssigneePanel extends JPanel {
 	private DefaultListModel assignedUsersList;
 	private DefaultListModel unassignedUsersList;
 
-	public AssigneePanel() {
+	/** The requirement that this view will operate on */
+	private Requirement requirement;
 
+	public AssigneePanel(Requirement requirement) {
+		this.requirement = requirement;
+		
 		//initialize the two test string arrays
 		unassignedUsersList = new DefaultListModel();
 
@@ -142,6 +147,58 @@ public class AssigneePanel extends JPanel {
 		add(assignedScroll);
 
 	}
+	
+	/** Initializes the unassigned and assign lists.
+	 * Assigned USers list will be populated from this requirement
+	 * Unassigned Users list will be pulled from the sever, then filtered to filter out the assigned users from
+	 * 	the assigned users list
+	 */
+	
+	public void initializeLists() {
+		//lists for assignedUsers and unassigned users
+		List<String> assignedUsers = requirement.getUsers();
+		List<String> allUsers = getUsersFromServer();
+		
+		//create a new list to store the unassigned users;
+		List<String> unassignedUsers = new ArrayList<String>();
+		
+		//loop through all users, and filter out the unassigned users
+		for (String user: allUsers) {
+			//check if this user is contained in assignedUsers
+			if (!assignedUsers.contains(user)) {
+				//if not add it to unassigned users list
+				unassignedUsers.add(user);
+			}
+		}
+		
+		//clear the old values from the list, and add the new values
+		assignedUsersList.clear();
+		unassignedUsersList.clear();
+		
+		//iterate through and add them to the list
+		for (String user: assignedUsers) {
+			assignedUsersList.addElement(user);
+		}
+		
+		for (String user: unassignedUsers) {
+			unassignedUsersList.addElement(user);
+		}
+		
+		
+	}
+	
+	
+	/** Returns a list of all the users on the server, in string format 
+	 * 
+	 * @return The list of all users from the server
+	 * 
+	 * TODO: Implement this
+	 */
+	public List<String> getUsersFromServer() {
+		return null;
+	}
+	
+	
 
 	public DefaultListModel getUnassignedUsersList(){
 		return unassignedUsersList;
@@ -155,8 +212,17 @@ public class AssigneePanel extends JPanel {
 	public void setAssignedUsersList(DefaultListModel list){
 		assignedUsersList = list;
 	}
+	
+	/**
+	 *  Class used as the Action Listener for the Assigned User button
+	 *  
+	 *  Moves users from the unassigned list to the Assigned list when the assign button is pressed
+	 * 
+	 * 
+	 *
+	 */
 
-	class AssignUserAction implements ActionListener{
+	private class AssignUserAction implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -174,7 +240,17 @@ public class AssigneePanel extends JPanel {
 			}
 		}
 	}
-	class UnassignUserAction implements ActionListener{
+	
+	
+	/**
+	 *  Class used as the Action Listener for the Unassigned Uuser button
+	 *  
+	 *  Moves users from the assigned list to the unassigned list when the unassign button is pressed
+	 * 
+	 * 
+	 *
+	 */
+	private class UnassignUserAction implements ActionListener{
 	
 		@Override
 		public void actionPerformed(ActionEvent e){
