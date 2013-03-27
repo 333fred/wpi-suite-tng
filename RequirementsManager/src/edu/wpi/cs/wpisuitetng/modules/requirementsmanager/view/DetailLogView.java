@@ -55,11 +55,13 @@ public class DetailLogView extends JPanel{
 		
 		add(logPane, BorderLayout.CENTER);
 		
+
 		this.refresh(this.requirement);
 	}
 
 	public void refresh(Requirement requirement) {
 		this.logList.clear();
+		this.requirement = requirement;
 		for (Log aLog : requirement.getLogger().getLogs()) {
 			this.logList.addElement(aLog);
 		}

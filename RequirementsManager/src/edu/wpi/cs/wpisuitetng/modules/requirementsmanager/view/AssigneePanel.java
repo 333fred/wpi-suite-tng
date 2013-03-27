@@ -187,6 +187,19 @@ public class AssigneePanel extends JPanel {
 		
 	}
 	
+	/** Updates the requirement with an updated version
+	 * 
+	 * @param newRequirement The updated requirement
+	 */
+	
+	public void updateRequirement(Requirement newRequirement) {
+		this.requirement = newRequirement;
+		
+		//initialize the user lists
+		//TODO: uncomment this when requirements can be fetched from the server
+		//initializeLists();
+	}
+	
 	
 	/** Returns a list of all the users on the server, in string format 
 	 * 
