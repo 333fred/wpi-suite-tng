@@ -407,8 +407,17 @@ public class DetailPanel extends FocusableTab {
 		
 		this.determineAvailableStatusOptions();
 		this.disableSaveButton();
+		
+		//retrive an updated copy of the requirement from the server 
+		//do it after everythign is initialized.
+		retreiveRequirementFromSever();
 	}
-
+	/** Determines the AVailable Status Options
+	 * 
+	 * TODO: Change so it adds items to the combobox, rather than removes items
+	 * 
+	 */
+	
 	private void determineAvailableStatusOptions() {
 		//String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
 		if (requirement.getStatus() == Status.NEW) {
@@ -566,6 +575,100 @@ public class DetailPanel extends FocusableTab {
 	
 	public void enableSaveButton() {
 		this.btnSave.setEnabled(true);
+	}
+	
+	/** Updates the requirement from the server 
+	 * TODO: Implement this 
+	 */
+	private void retreiveRequirementFromSever() {
 		
+	}
+	
+	/** Updates all of the fields in the pane from the new Requirement
+	 * 
+	 * @param requirement The new requirement
+	 * TODO: Implement this
+	 * 
+	 * Note - The requirement edit and save actions, pull all of the requirement data from this panel,
+	 * 	Should be no need to update thier copy of requirement, assuming that the requiremetn ID never changes,
+	 *  which this function should not do.
+	 */
+	
+	private void updateFromRequirement(Requirement requirement) {
+		this.requirement = requirement;
+		
+		//updates the nameField with the new name
+		textName.setText(requirement.getName());
+		//updates the description with the new description
+		textDescription.setText(requirement.getDescription());
+		//updates the interation with the new interation
+		textIteration.setText(Integer.toString(requirement.getIteration()));
+		
+		//update the type of requirement
+		switch (requirement.getType()) {
+		
+		case BLANK:
+			comboBoxType.setSelectedIndex(0);
+			break;
+		case EPIC:
+			comboBoxType.setSelectedIndex(1);
+			break;
+		case THEME:
+			comboBoxType.setSelectedIndex(2);
+			break;
+		case USER_STORY:
+			comboBoxType.setSelectedIndex(3);
+			break;
+		case NON_FUNCTIONAL:
+			comboBoxType.setSelectedIndex(4);
+			break;
+		case SCENARIO:
+			comboBoxType.setSelectedIndex(5);
+		}
+		
+		//update the requirement priority
+		switch (requirement.getPriority()) {
+		
+		case BLANK:
+			comboBoxPriority.setSelectedIndex(0);
+			break;
+		case HIGH:
+			comboBoxPriority.setSelectedIndex(1);
+			break;
+		case MEDIUM:
+			comboBoxPriority.setSelectedIndex(2);
+			break;
+		case LOW:
+			comboBoxPriority.setSelectedIndex(3);
+			break;
+		}
+		
+		//update the status
+		switch (requirement.getStatus()) {
+		
+		case NEW:
+			comboBoxStatus.setSelectedIndex(0);
+			break;
+		case IN_PROGRESS:
+			comboBoxStatus.setSelectedIndex(1);
+			break;
+		case OPEN:
+			comboBoxStatus.setSelectedIndex(2);
+			break;
+		case COMPLETE:
+			comboBoxStatus.setSelectedIndex(3);
+			break;
+		case DELETED:
+			comboBoxStatus.setSelectedIndex(4);
+			break;
+		case BLANK:
+			comboBoxStatus.setSelectedIndex(5);
+			break;
+		}
+		
+		//update the status combo box options
+		determineAvailableStatusOptions();
+		
+		//update the noteview, logview, and userview.
 	}
 }

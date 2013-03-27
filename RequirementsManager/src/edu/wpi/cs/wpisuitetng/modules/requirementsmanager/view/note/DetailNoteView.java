@@ -57,7 +57,14 @@ public class DetailNoteView extends JPanel{
 		
 		add(notePane, BorderLayout.CENTER);
 		
+		//adds the notes to the list model
+		addNotesToList();
+	}
+	
+	private void addNotesToList() {
+		noteList.clear();
 		
+		//add the notes to the list model.
 		for (Note aNote : requirement.getNotes()) {
 			this.noteList.addElement(aNote);
 		}
@@ -69,6 +76,18 @@ public class DetailNoteView extends JPanel{
 	 */
 	public DefaultListModel getNoteList() {
 		return noteList;
+	}
+	
+	/** Updates the requirement that is being displayed
+	 * 
+	 * @param newRequirement The updated version of the requirement
+	 */
+	
+	public void updateRequirement(Requirement newRequirement) {
+		this.requirement = newRequirement;
+		
+		//updates the notes list
+		addNotesToList();
 	}
 	
 }

@@ -56,9 +56,33 @@ public class DetailLogView extends JPanel{
 		add(logPane, BorderLayout.CENTER);
 		
 		
+		
+	}
+	
+	/** Adds the log from the requirement to the list 
+	 * 
+	 */
+	
+	private void updateLogList() {		
+		logList.clear(); //clear the old list
+		
+		//add the logs to the list
+		//TODO: Possibly change getLog() when we deterime how to refactor requirement
 		for (Log aLog : requirement.getLog()) {
 			this.logList.addElement(aLog);
 		}
+	}
+	
+	/** Updates the requirement with the given new requirement
+	 * 
+	 * @param newRequirement The updated requirement
+	 */
+	
+	public void updateRequirement(Requirement newRequirement) {
+		this.requirement = newRequirement;
+		
+		//update the list of logs
+		updateLogList();
 	}
 
 	
