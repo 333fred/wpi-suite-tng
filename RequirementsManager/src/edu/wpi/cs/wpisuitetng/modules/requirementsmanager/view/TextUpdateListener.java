@@ -68,7 +68,6 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
 		if (firstKeyPress) {
 			checkIfUpdated();		
 		}
@@ -96,17 +95,13 @@ public class TextUpdateListener implements KeyListener {
 		}
 		else {
 			component.setBackground(Color.WHITE);
-
-			//errorComponent.setText("");
-	/*		if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
+			if (errorComponent != null) {
+				errorComponent.setText("");
+			}
+			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
 				panel.enableSaveButton();
 			} else {
 				panel.disableSaveButton();
-			}*/
-			//component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-
-			if (errorComponent != null) { // if there's an error panel to write to
-				errorComponent.setText("");
 			}
 		}
 	}
@@ -132,11 +127,7 @@ public class TextUpdateListener implements KeyListener {
 		
 		if (errorComponent == null){
 			firstKeyPress = true;
-			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
-				panel.enableSaveButton();
-			} else {
-				panel.disableSaveButton();
-			}
+			panel.enableSaveButton();
 		}
 	}
 }
