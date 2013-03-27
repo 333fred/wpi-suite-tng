@@ -140,6 +140,18 @@ public class Note implements Event {
 	 */
 	
 	public String getContent() {
-		return "<html><i>" + getNote() + "</i></html>";
+		return "<html><i>" + parseNewLines(getNote()) + "</i></html>";
+	}
+	
+	/** Changes the new line characters (\n) in the given string to html new line tags (<br>)
+	 * 
+	 * @param The string to parse
+	 * @return The new string with <br>'s
+	 */
+	
+	private String parseNewLines(String text) {
+		text = text.replaceAll("\n", "<br>");
+		return text;
+
 	}
 }
