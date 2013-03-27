@@ -18,11 +18,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class RetrieveRequirementByIDController {
 
-	//view here
+	IRetreiveRequirementByIDControllerNotifier notifier;
 	
-	
-	public RetrieveRequirementByIDController(/*view*/){
-		//this.view = view
+	public RetrieveRequirementByIDController(IRetreiveRequirementByIDControllerNotifier notifier){
+		this.notifier = notifier;
 	}
 	
 	/**
@@ -43,7 +42,7 @@ public class RetrieveRequirementByIDController {
 	 * @param requirements an array of requirements returned by the server
 	 */
 	public void receivedData(Requirement requirement){
-		//You have the requirements, so here somehow update your view to display them
+		notifier.receivedData(requirement);
 	}
 	
 	/**
@@ -51,6 +50,6 @@ public class RetrieveRequirementByIDController {
 	 * error occurs retrieving the requirements from the server.
 	 */
 	public void errorReceivingData(String errMsg) {
-		//use your view
+		notifier.errorReceivingData(errMsg);
 	}
 }
