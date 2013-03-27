@@ -92,9 +92,9 @@ public class AssigneePanel extends JPanel {
 
 
 		//initialize the buttons
-		assignSelectedUsers = new JButton(">>");
+		assignSelectedUsers = new JButton(">");
 		assignSelectedUsers.addActionListener(new AssignUserAction());
-		unassignSelectedUsers = new JButton("<<");
+		unassignSelectedUsers = new JButton("<");
 		unassignSelectedUsers.addActionListener(new UnassignUserAction());
 		
 
