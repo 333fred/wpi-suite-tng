@@ -59,7 +59,7 @@ public class DetailPanel extends FocusableTab {
 	JComboBox comboBoxPriority;
 
 	//requirement that is displayed
-	private Requirement requirement;
+	Requirement requirement;
 	//controller for all the tabs
 	private MainTabController mainTabController;
 	//the view that shows the notes

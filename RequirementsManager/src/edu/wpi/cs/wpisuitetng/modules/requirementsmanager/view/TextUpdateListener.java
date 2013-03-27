@@ -63,6 +63,7 @@ public class TextUpdateListener implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		checkIfOneCharacter(); 
+
 	}
 
 	@Override
@@ -88,7 +89,11 @@ public class TextUpdateListener implements KeyListener {
 		else {
 			component.setBackground(Color.WHITE);
 			errorComponent.setText("");
-			panel.enableSaveButton();
+			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
+				panel.enableSaveButton();
+			} else {
+				panel.disableSaveButton();
+			}
 			//component.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		}
 	}
@@ -100,7 +105,11 @@ public class TextUpdateListener implements KeyListener {
 			component.setBackground(Color.WHITE);
 			errorComponent.setText("");
 			firstKeyPress = true;
-			panel.enableSaveButton();
+			if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
+				panel.enableSaveButton();
+			} else {
+				panel.disableSaveButton();
+			}
 		}
 	}
 }
