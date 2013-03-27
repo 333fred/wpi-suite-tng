@@ -58,15 +58,15 @@ public class DetailPanel extends FocusableTab {
 	JComboBox comboBoxStatus;
 	JComboBox comboBoxPriority;
 
-	//requirement that is displayed
+	// requirement that is displayed
 	Requirement requirement;
-	//controller for all the tabs
+	// controller for all the tabs
 	private MainTabController mainTabController;
-	//the view that shows the notes
+	// the view that shows the notes
 	private DetailNoteView noteView;
-	//the view that shows the notes
+	// the view that shows the notes
 	private DetailLogView logView;
-	//the view that shows the users assigned to the requirement
+	// the view that shows the users assigned to the requirement
 	private AssigneePanel userView;
 	
 	JButton btnSave;
@@ -74,7 +74,7 @@ public class DetailPanel extends FocusableTab {
 	protected final TextUpdateListener txtTitleListener;
 	protected final TextUpdateListener txtDescriptionListener;
 
-	//swing constants
+	// swing constants
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
 	private static final int VERTICAL_CLOSE2 = -10;
@@ -91,7 +91,7 @@ public class DetailPanel extends FocusableTab {
 		SpringLayout layout = new SpringLayout();
 		mainPanel.setLayout(layout);
 
-		//add labels to the overal panel
+		// add labels to the overall panel
 		JLabel lblName = new JLabel("Name:");
 		mainPanel.add(lblName);
 
@@ -110,7 +110,7 @@ public class DetailPanel extends FocusableTab {
 		JLabel lblIteration = new JLabel("Iteration:");
 		mainPanel.add(lblIteration);
 
-		//formatting for textName area
+		// formatting for textName area
 		textName = new JTextArea(1, 40);
 		textName.setLineWrap(true);
 		textName.setWrapStyleWord(true);
@@ -121,7 +121,7 @@ public class DetailPanel extends FocusableTab {
 		mainPanel.add(textName);
 		
 
-		//add listener for textName
+		// add listener for textName
 		textName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -140,7 +140,7 @@ public class DetailPanel extends FocusableTab {
 			}
 		});
 		
-		//textName validator formatting
+		// textName validator formatting
 		textNameValid = new JTextArea(1, 40);
 		textNameValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		textNameValid.setOpaque(false);
@@ -150,12 +150,12 @@ public class DetailPanel extends FocusableTab {
 		textNameValid.setWrapStyleWord(true);
 		mainPanel.add(textNameValid);
 		
-		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// Add TextUpdateListeners, which check if the text component's text differs from the panel's requirement
 		// model and highlights them accordingly every time a key is pressed.
 		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
 		textName.addKeyListener(txtTitleListener);
 		
-		//textDescription formatting
+		// textDescription formatting
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
@@ -182,7 +182,7 @@ public class DetailPanel extends FocusableTab {
 			}
 		});
 		
-		//description validator formatting
+		// description validator formatting
 		textDescriptionValid = new JTextArea(1, 40);
 		textDescriptionValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		textDescriptionValid.setOpaque(false);
@@ -192,7 +192,7 @@ public class DetailPanel extends FocusableTab {
 		textDescriptionValid.setWrapStyleWord(true);
 		mainPanel.add(textDescriptionValid);
 		
-		// Add TextUpdateListeners. These check if the text component's text differs from the panel's Defect 
+		// Add TextUpdateListeners, which check if the text component's text differs from the panel's requirement
 		// model and highlights them accordingly every time a key is pressed.
 		txtDescriptionListener = new TextUpdateListener(this, textDescription, textDescriptionValid);
 		textDescription.addKeyListener(txtDescriptionListener);
@@ -206,14 +206,14 @@ public class DetailPanel extends FocusableTab {
 		saveError.setWrapStyleWord(true);
 		mainPanel.add(saveError);
 		
-		//set up and add type combobox
+		// set up and add type combobox
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
 				"Non-functional", "Scenario" };
 		comboBoxType = new JComboBox(availableTypes);
 		comboBoxType.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxType);
 		
-		//set up and add status combobox
+		// set up and add status combobox
 		String[] availableStatuses = { "New", "In Progress", "Open",
 				"Complete", "Deleted"};
 
@@ -221,7 +221,7 @@ public class DetailPanel extends FocusableTab {
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxStatus);
 				
-		//setup and add priorities combobox
+		// setup and add priorities combobox
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
 		comboBoxPriority = new JComboBox(availablePriorities);
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
@@ -240,7 +240,7 @@ public class DetailPanel extends FocusableTab {
 		btnCancel.setAction(new CancelAction(requirement, this));
 		mainPanel.add(btnCancel);
 
-		//check if name field is blank
+		// check if name field is blank
 		if (requirement.getName().trim().equals("")) {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
 			comboBoxStatus.setEnabled(false);
@@ -394,7 +394,7 @@ public class DetailPanel extends FocusableTab {
 		logView = new DetailLogView(this.requirement, this);
 		userView = new AssigneePanel(requirement);
 	
-		//create the new eventPane
+		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
 		
 		// Add everything to this
@@ -405,8 +405,12 @@ public class DetailPanel extends FocusableTab {
 		this.disableSaveButton();
 	}
 
+	/**
+	 * Method to determine to which statuses the currently viewed requirement 
+	 * can manually be set based on its current status as governed by the stakeholders' specs
+	 */
 	private void determineAvailableStatusOptions() {
-		//String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
+		// String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
 		if (requirement.getStatus() == Status.NEW) {
 			//New: New, Deleted
 			this.comboBoxStatus.removeItem("In Progress");
@@ -438,6 +442,7 @@ public class DetailPanel extends FocusableTab {
 	}
 
 	DefaultListModel listModel = new DefaultListModel();
+	
 	public DefaultListModel getNoteList() {
 		return noteView.getNoteList();
 	}

@@ -38,8 +38,8 @@ public class MakeNotePanel extends JPanel{
 	
 	/**
 	 * Construct the panel, add and layout components.
-	 * @param model the defect model
-	 * @param parentView the parent view
+	 * @param model the requirement to which a notes made with this class will be saved
+	 * @param parentView the view of the requirement in question
 	 */
 	public MakeNotePanel(Requirement model, DetailPanel parentView) {
 		noteField = new JTextArea();
