@@ -55,8 +55,6 @@ public class Logger {
 	/**
 	 * Logs the creation of a requirement
 	 * 
-	 * @param req
-	 *            the new requirement
 	 * @param s
 	 *            the session of the requirement
 	 */
@@ -69,13 +67,18 @@ public class Logger {
 	 * Static method that processes a list of changes, and adds them to a
 	 * requirement, timestamping them
 	 * 
-	 * @param req
-	 *            The requirement to log
 	 * @param events
 	 *            The events to log
+	 * @param s
+	 *            The current session, including user information
 	 */
 	public void logEvents(List<Event> events, Session s) {
 
+		// Check for a null list of events
+		if(events == null){
+			return;
+		}
+		
 		// Log of all events
 		String logMsg = "";
 

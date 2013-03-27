@@ -84,4 +84,40 @@ public class LoggerTest {
 		assertEquals(requirement.getLogger().getLogs().size(), 1);
 		// TODO: add assertion that the log is what is expected		
 	}
+	
+	/**
+	 * Test to confirm that a series of events can be added to a log as a single log.
+	 */
+	@Test
+	public void testMultipleEvents(){
+		
+		requirement = new Requirement();
+		List<Logger.Event> eventList = new ArrayList<Logger.Event>();
+		Logger.Event eventZero = requirement.getLogger().new Event("1", "2", Logger.EventType.ITER_CHANGE);
+		Logger.Event eventOne = requirement.getLogger().new Event("A", "B", Logger.EventType.RELEASE_CHANGE);
+		Logger.Event eventTwo = requirement.getLogger().new Event("Alpha", "Beta", Logger.EventType.PARENT_CHANGE);
+		eventList.add(eventZero);
+		eventList.add(eventOne);
+		eventList.add(eventTwo);
+		requirement.logEvents(eventList, session);
+		
+		System.out.println(requirement.getLogger().getLogs().size());
+		assertEquals(requirement.getLogger().getLogs().size(), 1);
+		
+	}
+	
+	/**
+	 * Test to confirm that a series of separate changes can be added as multiple logs.
+	 */
+	@Test
+	public void testMultipleLogs(){
+		
+		requirement = new Requirement();
+		requirement.logCreation(session);
+		requirement.logCreation(session);
+		requirement.logCreation(session);
+		
+		assertEquals(requirement.getLogger().getLogs().size(), 3);
+		
+	}
 }
