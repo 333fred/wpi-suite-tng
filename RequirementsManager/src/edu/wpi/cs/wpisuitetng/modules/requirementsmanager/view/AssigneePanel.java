@@ -148,6 +148,12 @@ public class AssigneePanel extends JPanel {
 
 	}
 	
+	/** Initializes the unassigned and assign lists.
+	 * Assigned USers list will be populated from this requirement
+	 * Unassigned Users list will be pulled from the sever, then filtered to filter out the assigned users from
+	 * 	the assigned users list
+	 */
+	
 	public void initializeLists() {
 		//lists for assignedUsers and unassigned users
 		List<String> assignedUsers = requirement.getUsers();
@@ -192,6 +198,7 @@ public class AssigneePanel extends JPanel {
 		return null;
 	}
 	
+	
 
 	public DefaultListModel<String> getUnassignedUsersList(){
 		return unassignedUsersList;
@@ -205,8 +212,17 @@ public class AssigneePanel extends JPanel {
 	public void setAssignedUsersList(DefaultListModel<String> list){
 		assignedUsersList = list;
 	}
+	
+	/**
+	 *  Class used as the Action Listener for the Assigned User button
+	 *  
+	 *  Moves users from the unassigned list to the Assigned list when the assign button is pressed
+	 * 
+	 * 
+	 *
+	 */
 
-	class AssignUserAction implements ActionListener{
+	private class AssignUserAction implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -224,7 +240,17 @@ public class AssigneePanel extends JPanel {
 			}
 		}
 	}
-	class UnassignUserAction implements ActionListener{
+	
+	
+	/**
+	 *  Class used as the Action Listener for the Unassigned Uuser button
+	 *  
+	 *  Moves users from the assigned list to the unassigned list when the unassign button is pressed
+	 * 
+	 * 
+	 *
+	 */
+	private class UnassignUserAction implements ActionListener{
 	
 		@Override
 		public void actionPerformed(ActionEvent e){
