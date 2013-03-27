@@ -56,12 +56,14 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		checkIfUpdated();
+		if (firstKeyPress) {
+			checkIfUpdated();
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		checkIfOneCharacter(); 
+			checkIfOneCharacter(); 
 	}
 
 	@Override
@@ -90,7 +92,6 @@ public class TextUpdateListener implements KeyListener {
 				// iteration next box should not be colored and no error box exists (can have no iteration)
 				// should enable save if there's no iteration
 				panel.enableSaveButton();
-				
 			}
 		}
 		else {
@@ -105,11 +106,15 @@ public class TextUpdateListener implements KeyListener {
 	public void checkIfOneCharacter() {
 		String base = "";
 		
-		if (!base.equals(component.getText())) {
+		if (!(base.equals(component.getText()))) {
 			component.setBackground(Color.WHITE);
 			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
+			firstKeyPress = true;
+			panel.enableSaveButton();
+		}
+		if (errorComponent == null){
 			firstKeyPress = true;
 			panel.enableSaveButton();
 		}
