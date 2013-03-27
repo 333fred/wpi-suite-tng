@@ -16,7 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 
 /**
- * This controller handles saving defect notes to the server
+ * This controller handles saving requirement notes to the server
  */
 public class SaveNoteController {
 
@@ -26,9 +26,9 @@ public class SaveNoteController {
 
 	/**
 	 * Construct the controller
-	 * @param view the NewnotePanel containing the note field
-	 * @param model the Defect model being note on
-	 * @param parentView the DefectPanel displaying the defect
+	 * @param view the MakeNotePanel containing the note field
+	 * @param model the requirement to which notes are being added
+	 * @param parentView the DetailPanel displaying the current requirement
 	 */
 	public SaveNoteController(MakeNotePanel view, Requirement model, DetailPanel parentView) {
 		this.view = view; 
