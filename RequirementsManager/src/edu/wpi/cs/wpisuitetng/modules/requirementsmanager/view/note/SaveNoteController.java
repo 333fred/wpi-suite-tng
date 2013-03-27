@@ -52,6 +52,8 @@ public class SaveNoteController {
 				SaveRequirementController controller = new SaveRequirementController(this.parentView);
 				controller.SaveRequirement(model,false);
 			}
+			
+			
 		}
 	}
 }

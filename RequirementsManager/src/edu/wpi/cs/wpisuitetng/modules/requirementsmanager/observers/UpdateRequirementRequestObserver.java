@@ -43,6 +43,8 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 			this.detailPanel.getMainTabController().closeCurrentTab();
 		}
 		
+		detailPanel.logView.refresh(Requirement.fromJSON(response.getBody()));
+				
 		/*if (response.getStatusCode() == 200) {
 			// parse the requirement from the body
 			final Requirement requirement = Requirement.fromJSON(response.getBody());

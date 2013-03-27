@@ -64,9 +64,10 @@ public class DetailPanel extends FocusableTab {
 	private MainTabController mainTabController;
 	// the view that shows the notes
 	private DetailNoteView noteView;
-	// the view that shows the notes
-	private DetailLogView logView;
-	// the view that shows the users assigned to the requirement
+
+	//the view that shows the notes
+	public DetailLogView logView;
+	//the view that shows the users assigned to the requirement
 	private AssigneePanel userView;
 	
 	JButton btnSave;
