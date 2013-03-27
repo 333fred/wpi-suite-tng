@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,6 +24,7 @@ import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -211,11 +213,12 @@ public class DetailPanel extends FocusableTab {
 		
 		//set up and add status combobox
 		String[] availableStatuses = { "New", "In Progress", "Open",
-				"Complete", "Deleted", "" };
+				"Complete", "Deleted"};
+
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxStatus);
-
+				
 		//setup and add priorities combobox
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
 		comboBoxPriority = new JComboBox(availablePriorities);
@@ -241,9 +244,7 @@ public class DetailPanel extends FocusableTab {
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");
 			textIteration.setEnabled(false);
-		}
-		else
-		{
+		} else {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
 			case NEW:
@@ -397,6 +398,40 @@ public class DetailPanel extends FocusableTab {
 		// Add everything to this
 		add(mainPanel);
 		add(eventPane);
+		
+		this.determineAvailableStatusOptions();
+	}
+
+	private void determineAvailableStatusOptions() {
+		//String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
+		if (requirement.getStatus() == Status.NEW) {
+			//New: New, Deleted
+			this.comboBoxStatus.removeItem("In Progress");
+			this.comboBoxStatus.removeItem("Open");
+			this.comboBoxStatus.removeItem("Complete");
+		}
+		if (requirement.getStatus() == Status.IN_PROGRESS) {
+			//In Progress: In Progress, Complete, Deleted	
+			this.comboBoxStatus.removeItem("New");
+			this.comboBoxStatus.removeItem("Open");
+		}
+		if (requirement.getStatus() == Status.OPEN) {
+			//Open: Open, Deleted		
+			this.comboBoxStatus.removeItem("New");
+			this.comboBoxStatus.removeItem("In Progress");
+			this.comboBoxStatus.removeItem("Complete");
+		}
+		if (requirement.getStatus() == Status.COMPLETE) {
+			//Complete: Open, Complete, Deleted		
+			this.comboBoxStatus.removeItem("New");
+			this.comboBoxStatus.removeItem("In Progress");
+		}
+		if (requirement.getStatus() == Status.DELETED) {
+			//Deleted: Open, Deleted
+			this.comboBoxStatus.removeItem("New");
+			this.comboBoxStatus.removeItem("In Progress");
+			this.comboBoxStatus.removeItem("Complete");		
+		}
 	}
 
 	DefaultListModel listModel = new DefaultListModel();

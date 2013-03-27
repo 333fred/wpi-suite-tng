@@ -48,68 +48,11 @@ public class SaveRequirementAction extends AbstractAction {
 			requirement.setDescription(parentView.getTextDescription().getText());
 			try {
 				requirement.setIteration(Integer.parseInt(parentView.getTextIteration().getText()));	
-			
-				switch (parentView.getComboBoxPriority().getSelectedIndex()) {
-				case 0:
-					requirement.setPriority(Priority.BLANK);
-					break;
-				case 1:
-					requirement.setPriority(Priority.HIGH);
-					break;
-				case 2:
-					requirement.setPriority(Priority.MEDIUM);
-					break;
-				case 3:
-					requirement.setPriority(Priority.LOW);
-					break;
-				default:
-					requirement.setPriority(Priority.BLANK);
-				}
-	
-				switch (parentView.getComboBoxType().getSelectedIndex()) {
-				case 0:
-					requirement.setType(Type.BLANK);
-					break;
-				case 1:
-					requirement.setType(Type.EPIC);
-					break;
-				case 2:
-					requirement.setType(Type.THEME);
-					break;
-				case 3:
-					requirement.setType(Type.USER_STORY);
-					break;
-				case 4:
-					requirement.setType(Type.NON_FUNCTIONAL);
-					break;
-				case 5:
-					requirement.setType(Type.SCENARIO);
-					break;
-				default:
-					requirement.setType(Type.SCENARIO);
-				}
-	
-				switch (parentView.getComboBoxStatus().getSelectedIndex()) {
-				case 0:
-					requirement.setStatus(Status.NEW);
-					break;
-				case 1:
-					requirement.setStatus(Status.IN_PROGRESS);
-					break;
-				case 2:
-					requirement.setStatus(Status.OPEN);
-					break;			
-				case 3:
-					requirement.setStatus(Status.COMPLETE);
-					break;
-				case 4:
-					requirement.setStatus(Status.DELETED);
-					break;
-				case 5:
-					requirement.setStatus(Status.BLANK);
-					break;
-				}
-	
+
+				requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				requirement.setType(Type.valueOf(parentView.getComboBoxType().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				requirement.setStatus(Status.valueOf(parentView.getComboBoxStatus().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				
 				controller.AddRequirement(requirement);
 			//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
 			} catch (NumberFormatException excep) {

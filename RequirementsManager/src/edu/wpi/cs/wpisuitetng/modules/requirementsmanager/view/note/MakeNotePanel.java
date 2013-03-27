@@ -30,6 +30,7 @@ public class MakeNotePanel extends JPanel{
 
 	private final JTextArea noteField;
 	private final JButton addnote;
+	//private final JButton deleteNote;
 	private final JLabel addnoteLabel;
 
 	private static final int VERTICAL_PADDING = 5;
@@ -58,7 +59,9 @@ public class MakeNotePanel extends JPanel{
 					}
 					event.consume();
 				}
-				/*if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+				 	noteField.append("\n");
+				 	/*
 					if (event.isShiftDown()) {
 						// user is doing a shift + enter
 						noteField.append("\n");
@@ -66,14 +69,16 @@ public class MakeNotePanel extends JPanel{
 					else {
 						// save the note
 						addnote.doClick(0);
-					}
+					}*/
 					event.consume();
-				}*/
+				}
 			}
 		});
 
 		addnote = new JButton("Add note");
 		addnoteLabel = new JLabel("Add a new note:");
+		
+		//deleteNote = new JButton("Delete note");
 		
 		addnote.setAction(new SaveNoteAction(new SaveNoteController(this, model, parentView)));
 		

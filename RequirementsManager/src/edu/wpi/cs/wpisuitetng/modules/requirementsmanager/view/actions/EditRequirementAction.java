@@ -55,7 +55,8 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setDescription(parentView.getTextDescription().getText());
 			try {
 				requirement.setIteration(Integer.parseInt(parentView.getTextIteration().getText()));
-
+	
+				/*
 				switch (parentView.getComboBoxPriority().getSelectedIndex()) {
 				case 0:
 					requirement.setPriority(Priority.BLANK);
@@ -73,6 +74,7 @@ public class EditRequirementAction extends AbstractAction {
 					requirement.setPriority(Priority.BLANK);
 				}
 	
+				
 				switch (parentView.getComboBoxType().getSelectedIndex()) {
 				case 0:
 					requirement.setType(Type.BLANK);
@@ -95,28 +97,10 @@ public class EditRequirementAction extends AbstractAction {
 				default:
 					requirement.setType(Type.SCENARIO);
 				}
-	
-				switch (parentView.getComboBoxStatus().getSelectedIndex()) {
-				case 0:
-					requirement.setStatus(Status.NEW);
-					break;
-				case 1:
-					requirement.setStatus(Status.IN_PROGRESS);
-					break;
-				case 2:
-					requirement.setStatus(Status.OPEN);
-					break;			
-				case 3:
-					requirement.setStatus(Status.COMPLETE);
-					break;
-				case 4:
-					requirement.setStatus(Status.DELETED);
-					break;
-				case 5:
-					requirement.setStatus(Status.BLANK);
-					break;
-				}
-
+				*/
+				requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				requirement.setType(Type.valueOf(parentView.getComboBoxType().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
+				requirement.setStatus(Status.valueOf(parentView.getComboBoxStatus().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
 			
 				controller.SaveRequirement(requirement,true);
 			//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
