@@ -109,14 +109,18 @@ public class TextUpdateListener implements KeyListener {
 	public void checkIfOneCharacter() {
 		String base = "";
 		
-		if (!(base.equals(component.getText().trim()))) {
+		if (panel.getTextDescription().getText().length() > 0 && panel.getTextName().getText().length() > 0) {
 			component.setBackground(Color.WHITE);
-			if (errorComponent != null) { // if there's an error panel to write to
+			if (errorComponent != null) {
 				errorComponent.setText("");
 			}
 			firstKeyPress = true;
 			panel.enableSaveButton();
 		}
+		else {
+			panel.disableSaveButton();
+		}
+		
 		if (base.equals(component.getText().trim())) {
 			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
