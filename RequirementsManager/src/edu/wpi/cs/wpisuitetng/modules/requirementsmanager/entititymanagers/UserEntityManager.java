@@ -42,12 +42,11 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 		// list, then return a new model with the list
 		List<String> users = new ArrayList<String>();
 		List<User> userList = Arrays.asList(s.getProject().getTeam());
-		users.add(s.getUsername());
 		if (userList.get(0) == null) {
 			return new StringListModel(users);
 		} else {
 			for (User user : userList) {
-				users.add(user.getName());
+				users.add(user.getUsername());
 			}
 		}
 
@@ -84,12 +83,11 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 			throws WPISuiteException {
 		List<String> users = new ArrayList<String>();
 		List<User> userList = Arrays.asList(s.getProject().getTeam());
-		users.add(s.getUsername());
 		if (userList.get(0) == null) {
 			return new StringListModel(users);
 		} else {
 			for (User user : userList) {
-				users.add(user.getName());
+				users.add(user.getUsername());
 			}
 		}
 
