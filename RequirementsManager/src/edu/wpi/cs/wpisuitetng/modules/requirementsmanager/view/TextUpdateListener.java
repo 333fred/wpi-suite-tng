@@ -56,7 +56,9 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-			checkIfOneCharacter(); 
+		if (!firstKeyPress) {	
+			checkIfOneCharacter();
+		}
 	}
 
 	@Override
@@ -109,14 +111,13 @@ public class TextUpdateListener implements KeyListener {
 				panel.enableSaveButton();
 			}
 		}
-		
-		
+		/*
 		if (base.equals(component.getText().trim())) {
 			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
 			}
 			firstKeyPress = true;
-		}
+		}*/
 	}
 }
