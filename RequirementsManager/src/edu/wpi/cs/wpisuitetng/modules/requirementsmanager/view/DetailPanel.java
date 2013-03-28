@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
@@ -80,7 +81,7 @@ public class DetailPanel extends FocusableTab {
 	private static final int VERTICAL_CLOSE2 = -10;
 	private static final int HORIZONTAL_PADDING = 20;
 	
-	/** The controller for retreiving the requirement from the sever */
+	/** The controller for retrieving the requirement from the sever */
 	private RetrieveRequirementByIDController retreiveRequirementController;
 
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
@@ -88,7 +89,10 @@ public class DetailPanel extends FocusableTab {
 		this.mainTabController = mainTabController;
 		
 		JPanel mainPanel = new JPanel();
-		GridLayout mainLayout = new GridLayout(0, 2);
+		//GridLayout mainLayout = new GridLayout(0, 2);
+			
+		GridLayout mainLayout = new GridLayout(0, 1);
+		
 		setLayout(mainLayout);
 
 		SpringLayout layout = new SpringLayout();
@@ -314,8 +318,6 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.WEST, this);
 
 
-		
-
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
 				SpringLayout.NORTH, this);
@@ -404,8 +406,17 @@ public class DetailPanel extends FocusableTab {
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
 		
 		// Add everything to this
-		add(mainPanel);
-		add(eventPane);
+		
+		//add(mainPanel);
+		//add(eventPane);
+		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,mainPanel, eventPane);
+		
+		
+		//mainLayout = new SpringLayout();
+		add(splitPane);
+
+		splitPane.setResizeWeight(0.5);
 		
 		this.determineAvailableStatusOptions();
 		this.disableSaveButton();
