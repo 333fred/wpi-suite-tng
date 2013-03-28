@@ -56,9 +56,7 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if (!firstKeyPress) {	
 			checkIfOneCharacter();
-		}
 	}
 
 	@Override
@@ -87,7 +85,9 @@ public class TextUpdateListener implements KeyListener {
 			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
-			if (base.equals(panel.getTextName().getText().trim()) || base.equals(panel.getTextDescription().getText().trim())) {
+			if (base.equals(panel.getTextName().getText().trim())
+					|| base.equals(panel.getTextDescription().getText().trim())
+					|| base.equals(panel.getTextIteration().getText().trim())) {
 				panel.disableSaveButton();
 			}
 			else 
@@ -97,19 +97,21 @@ public class TextUpdateListener implements KeyListener {
 
 	public void checkIfOneCharacter() {
 		String base = "";
-		firstKeyPress = true;
 		
 		if (!(base.equals(component.getText().trim()))) {
 			component.setBackground(Color.WHITE);
 			if (errorComponent != null) { // if there's an error panel to write to
 				errorComponent.setText("");
 			}
-			if(base.equals(panel.getTextName().getText().trim()) || base.equals(panel.getTextDescription().getText().trim())) {
+			if(base.equals(panel.getTextName().getText().trim()) 
+					|| base.equals(panel.getTextDescription().getText().trim())
+					|| base.equals(panel.getTextIteration().getText().trim())) {
 				panel.disableSaveButton();
 			}
 			else {
 				panel.enableSaveButton();
 			}
+			firstKeyPress = true;
 		}
 		/*
 		if (base.equals(component.getText().trim())) {
