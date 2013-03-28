@@ -96,6 +96,7 @@ public class DetailPanel extends FocusableTab {
 		this.mainTabController = mainTabController;
 		
 		JPanel mainPanel = new JPanel();
+		Color defaultColor = mainPanel.getBackground();
 		//GridLayout mainLayout = new GridLayout(0, 2);
 			
 		GridLayout mainLayout = new GridLayout(0, 1);
@@ -292,6 +293,7 @@ public class DetailPanel extends FocusableTab {
 		textEstimate = new JTextArea(1,9);
 		textEstimate.setBorder((new JTextField()).getBorder());
 		textEstimate.setEnabled(false); // SET DISABLED FOR THIS ITERATION
+		textEstimate.setBackground(defaultColor);
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
@@ -318,6 +320,7 @@ public class DetailPanel extends FocusableTab {
 		textActual = new JTextArea(1,9);
 		textActual.setBorder((new JTextField()).getBorder());
 		textActual.setEnabled(false); // DISABLE THIS ITERATION
+		textActual.setBackground(defaultColor);
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
 		textActualDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textActual);
@@ -344,6 +347,7 @@ public class DetailPanel extends FocusableTab {
 		textRelease = new JTextArea(1,9);
 		textRelease.setBorder((new JTextField()).getBorder());
 		textRelease.setEnabled(false); // DISABLE THIS ITERATION
+		textRelease.setBackground(defaultColor);
 		AbstractDocument textReleaseDoc = (AbstractDocument) textRelease.getDocument();
 		textReleaseDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textRelease);
@@ -380,6 +384,7 @@ public class DetailPanel extends FocusableTab {
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");
 			textIteration.setEnabled(false);
+			textIteration.setBackground(defaultColor);
 		} else {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
@@ -566,6 +571,7 @@ public class DetailPanel extends FocusableTab {
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		scrollPane.getViewport().add(mainPanel);		
 
 		
