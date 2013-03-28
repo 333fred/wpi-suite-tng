@@ -332,12 +332,12 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, lblEstimate, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblActual, HORIZONTAL_PADDING + 8, 
-				SpringLayout.EAST, textEstimate);
+		layout.putConstraint(SpringLayout.WEST, lblActual, HORIZONTAL_PADDING, 
+				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, textEstimate, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textActual, HORIZONTAL_PADDING + 8, 
-				SpringLayout.EAST, textEstimate);
+		layout.putConstraint(SpringLayout.WEST, textActual, HORIZONTAL_PADDING, 
+				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, saveError, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
 
