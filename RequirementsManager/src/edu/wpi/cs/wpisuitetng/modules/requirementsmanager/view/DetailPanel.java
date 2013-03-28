@@ -138,8 +138,8 @@ public class DetailPanel extends FocusableTab {
 		textName.setLineWrap(true);
 		textName.setWrapStyleWord(true);
 		textName.setMaximumSize(new Dimension(40, 2));
-		AbstractDocument pDoc = (AbstractDocument) textName.getDocument();
-		pDoc.setDocumentFilter(new DocumentSizeFilter(100));
+		AbstractDocument textNameDoc = (AbstractDocument) textName.getDocument();
+		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textName);
 		
@@ -263,22 +263,109 @@ public class DetailPanel extends FocusableTab {
 		textIteration.setLineWrap(true);
 		textIteration.setWrapStyleWord(true);
 		textIteration.setBorder((new JTextField()).getBorder());
+		AbstractDocument textIterationDoc = (AbstractDocument) textIteration.getDocument();
+		textIterationDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textIteration);
+		
+		textIteration.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textIteration.transferFocus();
+					}
+					else {
+						textIteration.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// don't allow enter, consume the event, do nothing
+					event.consume();
+				}
+			}
+		});
 		
 		txtIterationListener = new TextUpdateListener(this, textIteration, null);
 		textIteration.addKeyListener(txtIterationListener);
 		
 		textEstimate = new JTextArea(1,9);
 		textEstimate.setBorder((new JTextField()).getBorder());
+		textEstimate.setEnabled(false); // SET DISABLED FOR THIS ITERATION
+		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
+		textEstimateDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
+		
+		textEstimate.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textEstimate.transferFocus();
+					}
+					else {
+						textEstimate.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// don't allow enter, consume the event, do nothing
+					event.consume();
+				}
+			}
+		});
 		
 		textActual = new JTextArea(1,9);
 		textActual.setBorder((new JTextField()).getBorder());
+		textActual.setEnabled(false); // DISABLE THIS ITERATION
+		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
+		textActualDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textActual);
+		
+		textActual.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textActual.transferFocus();
+					}
+					else {
+						textActual.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// don't allow enter, consume the event, do nothing
+					event.consume();
+				}
+			}
+		});
 		
 		textRelease = new JTextArea(1,9);
 		textRelease.setBorder((new JTextField()).getBorder());
+		textRelease.setEnabled(false); // DISABLE THIS ITERATION
+		AbstractDocument textReleaseDoc = (AbstractDocument) textRelease.getDocument();
+		textReleaseDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textRelease);
+		
+		textRelease.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textRelease.transferFocus();
+					}
+					else {
+						textRelease.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// don't allow enter, consume the event, do nothing
+					event.consume();
+				}
+			}
+		});
 		
 		btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
