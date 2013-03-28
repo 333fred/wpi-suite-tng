@@ -47,9 +47,12 @@ public class AssigneePanel extends JPanel {
 
 	/** The requirement that this view will operate on */
 	private Requirement requirement;
-
-	public AssigneePanel(Requirement requirement) {
+	private DetailPanel detailPanel;
+	
+	
+	public AssigneePanel(Requirement requirement, DetailPanel detailPanel) {
 		this.requirement = requirement;
+		this.detailPanel = detailPanel;
 		
 		QueryUserController userController = new QueryUserController(this);
 		
@@ -262,6 +265,7 @@ public class AssigneePanel extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			detailPanel.enableSaveButton();
 			for(Object m: unassignedUsers.getSelectedValues()){
 				//add the selected element(s) in alphabetical order
 				int i = 0;
@@ -287,9 +291,9 @@ public class AssigneePanel extends JPanel {
 	 *
 	 */
 	private class UnassignUserAction implements ActionListener{
-	
 		@Override
 		public void actionPerformed(ActionEvent e){
+			detailPanel.enableSaveButton();
 			for(Object m : assignedUsers.getSelectedValues()){
 				//add the selected element(s) in alphabetical order
 				int i = 0;
