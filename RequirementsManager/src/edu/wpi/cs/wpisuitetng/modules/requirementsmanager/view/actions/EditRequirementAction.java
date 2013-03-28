@@ -71,7 +71,7 @@ public class EditRequirementAction extends AbstractAction {
 		if(!parentView.getTextName().getText().trim().equals("") && !parentView.getTextDescription().getText().trim().equals("")) 
 		{
 			requirement.setName(parentView.getTextName().getText().trim());
-			requirement.setDescription(parentView.getTextDescription().getText().trim());
+			requirement.setDescription(parentView.getTextDescription().getText());
 			requirement.setUsers(parentView.getAssignedUsers());
 			
 			try {
