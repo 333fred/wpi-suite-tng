@@ -235,6 +235,7 @@ public class DetailPanel extends FocusableTab {
 				"Non-functional", "Scenario" };
 		comboBoxType = new JComboBox(availableTypes);
 		comboBoxType.setPrototypeDisplayValue("Non-functional");
+		comboBoxType.setBackground(Color.WHITE);
 		mainPanel.add(comboBoxType);
 		
 		comboBoxTypeListener = new ItemStateListener(this, comboBoxType);
@@ -246,6 +247,7 @@ public class DetailPanel extends FocusableTab {
 
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
+		comboBoxStatus.setBackground(Color.WHITE);
 		mainPanel.add(comboBoxStatus);
 		
 		comboBoxStatusListener = new ItemStateListener(this, comboBoxStatus);
@@ -255,6 +257,7 @@ public class DetailPanel extends FocusableTab {
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
 		comboBoxPriority = new JComboBox(availablePriorities);
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
+		comboBoxPriority.setBackground(Color.WHITE);
 		mainPanel.add(comboBoxPriority);
 		
 		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
