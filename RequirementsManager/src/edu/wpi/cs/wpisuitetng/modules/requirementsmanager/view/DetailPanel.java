@@ -566,18 +566,19 @@ public class DetailPanel extends FocusableTab {
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getViewport().add(mainPanel);
-		
+		scrollPane.getViewport().add(mainPanel);		
 
+		
 		//TODO: Implement a proper preferredHeight, but Width works
 		//set the preffered size of mainPanel
-		int preferredHeight = (int) (btnCancel.getLocation().getY() + btnCancel.getPreferredSize().getHeight() + VERTICAL_PADDING * 2);
-		//int preferredHeight = 470;
+		//int preferredHeight = (int) (btnCancel.getLocation().getY() + btnCancel.getPreferredSize().getHeight() + VERTICAL_PADDING * 2);
+		int preferredHeight = 515;
 		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
 		
 		//set the preferred size
-		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));		
 		
+
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scrollPane, eventPane);
 		//mainLayout = new SpringLayout();
 		add(splitPane);
