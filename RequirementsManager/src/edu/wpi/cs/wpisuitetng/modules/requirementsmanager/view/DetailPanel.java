@@ -77,6 +77,10 @@ public class DetailPanel extends FocusableTab {
 	protected final TextUpdateListener txtTitleListener;
 	protected final TextUpdateListener txtDescriptionListener;
 	protected final TextUpdateListener txtIterationListener;
+	
+	protected final ItemStateListener comboBoxTypeListener;
+	protected final ItemStateListener comboBoxStatusListener;
+	protected final ItemStateListener comboBoxPriorityListener;
 
 	// swing constants
 	private static final int VERTICAL_PADDING = 10;
@@ -232,6 +236,9 @@ public class DetailPanel extends FocusableTab {
 		comboBoxType.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxType);
 		
+		comboBoxTypeListener = new ItemStateListener(this, comboBoxType);
+		comboBoxType.addItemListener(comboBoxTypeListener);
+		
 		// set up and add status combobox
 		String[] availableStatuses = { "New", "In Progress", "Open",
 				"Complete", "Deleted"};
@@ -239,12 +246,18 @@ public class DetailPanel extends FocusableTab {
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxStatus);
+		
+		comboBoxStatusListener = new ItemStateListener(this, comboBoxStatus);
+		comboBoxStatus.addItemListener(comboBoxStatusListener);
 				
 		// setup and add priorities combobox
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
 		comboBoxPriority = new JComboBox(availablePriorities);
 		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
 		mainPanel.add(comboBoxPriority);
+		
+		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
+		comboBoxPriority.addItemListener(comboBoxPriorityListener);
 		
 		textIteration = new JTextArea(1,9);
 		textIteration.setLineWrap(true);

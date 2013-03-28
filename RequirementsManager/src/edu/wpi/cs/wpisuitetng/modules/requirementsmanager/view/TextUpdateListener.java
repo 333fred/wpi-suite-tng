@@ -19,6 +19,8 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * compares this value to the component's text to see if the text differs from the model. If the text 
  * differs, the style of the component is changed to show that it differs from the relevant field in the model.
  * Otherwise, the component's style is changed to be normal.
+ * 
+ * @author Alex C
  */
 
 public class TextUpdateListener implements KeyListener {
@@ -35,6 +37,8 @@ public class TextUpdateListener implements KeyListener {
 	 * 						of the JTextComponent must match the name of a getter in Defect after the 
 	 * 						"get". For instance: for the method "getTitle", the name of the 
 	 * 						JTextComponent must be "Title".
+	 * @param errorComponent The error box to write an error message to
+	 * 						 if null, then no box exists for this component
 	 */
 	public TextUpdateListener(DetailPanel panel, JTextComponent component, JTextComponent errorComponent) {
 		this.panel = panel;
