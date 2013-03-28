@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -608,6 +609,9 @@ public class DetailPanel extends FocusableTab {
 	
 	public void enableSaveButton() {
 		this.btnSave.setEnabled(true);
+	}
+	public List<String> getAssignedUsers() {
+		return this.userView.getAssignedUsersList();
 	}
 
 }
