@@ -61,6 +61,10 @@ public class DetailNoteView extends JPanel{
 		addNotesToList();
 	}
 	
+	/**
+	 * Method to populate this object's list of notes
+	 * from the current requirement's list of notes
+	 */
 	private void addNotesToList() {
 		noteList.clear();
 		
@@ -71,18 +75,17 @@ public class DetailNoteView extends JPanel{
 	}
 	
 	/**
-	 * A function to get the list of notes added
+	 * simple getter for the list of notes of which this view is currently aware
 	 * @return the list of notes
 	 */
 	public DefaultListModel getNoteList() {
 		return noteList;
 	}
 	
-	/** Updates the requirement that is being displayed
+	/** Updates the local display of the current requirement's notes
 	 * 
-	 * @param newRequirement The updated version of the requirement
+	 * @param newRequirement the most recent version of the current requirement
 	 */
-	
 	public void updateRequirement(Requirement newRequirement) {
 		this.requirement = newRequirement;
 		
