@@ -150,6 +150,8 @@ public class AssigneePanel extends JPanel {
 		add(assignedLabel);
 		add(assignedScroll);
 
+		
+		this.initializeLists(new ArrayList<String>());
 		userController.getUsers();
 	}
 	
@@ -159,10 +161,9 @@ public class AssigneePanel extends JPanel {
 	 * 	the assigned users list
 	 */
 	
-	public void initializeLists() {
+	public void initializeLists(List<String> allUsers) {
 		//lists for assignedUsers and unassigned users
 		List<String> assignedUsers = requirement.getUsers();
-		List<String> allUsers = getUsersFromServer();
 		
 		//create a new list to store the unassigned users;
 		List<String> unassignedUsers = new ArrayList<String>();
@@ -224,16 +225,24 @@ public class AssigneePanel extends JPanel {
 	
 	
 	public void setUnassignedUsersList(StringListModel list){
+		/*
 		unassignedUsersList.clear();
 		for (int i = 0; i < list.getUsers().size(); i++) {
 			unassignedUsersList.addElement(list.getUsers().get(i));
 		}
+		*/
+		initializeLists(list.getUsers());
 	}
 	
 	
-	public DefaultListModel getAssignedUsersList(){
-		return assignedUsersList;
+	public List<String> getAssignedUsersList(){
+		List<String> users = new ArrayList<String>();
+		for (Object aUser : this.assignedUsersList.toArray()) {
+			users.add(aUser.toString());
+		}
+		return users;
 	}
+	
 	public void setAssignedUsersList(DefaultListModel list){
 		assignedUsersList = list;
 	}
