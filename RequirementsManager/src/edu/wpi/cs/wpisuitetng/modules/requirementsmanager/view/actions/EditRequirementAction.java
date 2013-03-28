@@ -19,6 +19,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 
 /**
+ * The action for saving an edited requirement, used when "Save Requirement" button is pressed
+ * 
  * @author Chris
  *
  */
@@ -27,80 +29,52 @@ public class EditRequirementAction extends AbstractAction {
 	private Requirement requirement;
     private DetailPanel parentView;
 
+    /**
+     * Constructor for EditRequirementAction
+     * Parent view is used to interact with the GUI
+     * Requirement is used to update the requirement being edited
+     *
+     * @param requirement
+     * @param parentView
+     */
     public EditRequirementAction(Requirement requirement, DetailPanel parentView) {
 		super("Save Requirement");
 		this.requirement = requirement;
 		this.parentView = parentView;
 	}
 
+    /**
+     * This function is called when the save requirement button is pressed on a requirement being edited
+     * It validates input in sets responses to the user if an error is made
+     *
+     * @param e 
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		SaveRequirementController controller = new SaveRequirementController(this.parentView);
 		
+		//Checks to make sure the name entered is valid and updates the GUI if it is
 		if(!parentView.getTextName().getText().trim().equals(""))
 		{
 			parentView.getTextName().setBackground(Color.WHITE);
 			parentView.getTextNameValid().setText("");
 		}
 		
+		//Checks to make sure the description entered is valid and updates the GUI if it is
 		if(!parentView.getTextDescription().getText().trim().equals("")) 
 		{
 			parentView.getTextDescription().setBackground(Color.WHITE);
 			parentView.getTextDescriptionValid().setText("");
 		}
 		
+		//Checks to make sure that both the name and descriptions are not empty, and attempts to save the requirements
 		if(!parentView.getTextName().getText().trim().equals("") && !parentView.getTextDescription().getText().trim().equals("")) 
 		{
 			requirement.setName(parentView.getTextName().getText().trim());
 			requirement.setDescription(parentView.getTextDescription().getText().trim());
-			
-			requirement.setUsers(parentView.getAssignedUsers());
-			
 			try {
 				requirement.setIteration(Integer.parseInt(parentView.getTextIteration().getText()));
-	
-				/*
-				switch (parentView.getComboBoxPriority().getSelectedIndex()) {
-				case 0:
-					requirement.setPriority(Priority.BLANK);
-					break;
-				case 1:
-					requirement.setPriority(Priority.HIGH);
-					break;
-				case 2:
-					requirement.setPriority(Priority.MEDIUM);
-					break;
-				case 3:
-					requirement.setPriority(Priority.LOW);
-					break;
-				default:
-					requirement.setPriority(Priority.BLANK);
-				}
-	
 				
-				switch (parentView.getComboBoxType().getSelectedIndex()) {
-				case 0:
-					requirement.setType(Type.BLANK);
-					break;
-				case 1:
-					requirement.setType(Type.EPIC);
-					break;
-				case 2:
-					requirement.setType(Type.THEME);
-					break;
-				case 3:
-					requirement.setType(Type.USER_STORY);
-					break;
-				case 4:
-					requirement.setType(Type.NON_FUNCTIONAL);
-					break;
-				case 5:
-					requirement.setType(Type.SCENARIO);
-					break;
-				default:
-					requirement.setType(Type.SCENARIO);
-				}
-				*/
 				try {
 					requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
 				} catch(IllegalArgumentException except) {
@@ -137,3 +111,4 @@ public class EditRequirementAction extends AbstractAction {
 	}
 
 }
+

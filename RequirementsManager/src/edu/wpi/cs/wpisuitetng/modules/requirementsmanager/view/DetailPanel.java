@@ -52,6 +52,7 @@ public class DetailPanel extends FocusableTab {
 	private JTextArea textIteration;
 	private JTextArea textEstimate;
 	private JTextArea textActual;
+	private JTextArea textRelease;
 	JTextArea saveError;
 
 	// combo boxes
@@ -124,6 +125,9 @@ public class DetailPanel extends FocusableTab {
 		
 		JLabel lblActual = new JLabel("Actual:");
 		mainPanel.add(lblActual);
+		
+		JLabel lblRelease = new JLabel("Release Number:");
+		mainPanel.add(lblRelease);
 
 		// formatting for textName area
 		textName = new JTextArea(1, 40);
@@ -259,6 +263,10 @@ public class DetailPanel extends FocusableTab {
 		textActual.setBorder((new JTextField()).getBorder());
 		mainPanel.add(textActual);
 		
+		textRelease = new JTextArea(1,9);
+		textRelease.setBorder((new JTextField()).getBorder());
+		mainPanel.add(textRelease);
+		
 		btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
 		
@@ -338,6 +346,10 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textActual, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxStatus);
+		layout.putConstraint(SpringLayout.WEST, lblRelease, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textRelease, HORIZONTAL_PADDING, 
+				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, saveError, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
 
@@ -388,10 +400,16 @@ public class DetailPanel extends FocusableTab {
 		layout.putConstraint(SpringLayout.NORTH, textActual,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblActual);
+		layout.putConstraint(SpringLayout.NORTH, lblRelease,
+				VERTICAL_PADDING , SpringLayout.SOUTH,
+				textEstimate);
+		layout.putConstraint(SpringLayout.NORTH, textRelease,
+				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
+				lblRelease);
 		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textActual);
+				SpringLayout.SOUTH, textRelease);
 		layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textActual);
+				SpringLayout.SOUTH, textRelease);
 		layout.putConstraint(SpringLayout.NORTH, saveError, VERTICAL_PADDING
 				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
 
