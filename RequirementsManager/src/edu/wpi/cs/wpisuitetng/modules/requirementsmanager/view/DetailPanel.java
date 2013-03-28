@@ -242,7 +242,7 @@ public class DetailPanel extends FocusableTab {
 		mainPanel.add(btnSave);
 		
 		JButton btnCancel = new JButton("Cancel");
-	//	btnCancel.setAction(new CancelAction(this));
+		btnCancel.setAction(new CancelAction(this));
 		mainPanel.add(btnCancel);
 
 		// check if name field is blank

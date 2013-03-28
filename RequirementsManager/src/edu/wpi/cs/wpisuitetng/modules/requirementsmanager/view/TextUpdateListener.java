@@ -12,7 +12,7 @@ import javax.swing.text.JTextComponent;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 /**
- * Checks for whether or not the text in a given JTextComponent differs from the current model (a Defect).
+ * Checks for whether or not the text in a given JTextComponent differs from the current model.
  * 
  * Whenever a key is released in the TextUpdateListener's component, checkIfUpdated() is called. This method 
  * gets the component's name and looks up the value of the relevant field in panel's Defect model. It then 
