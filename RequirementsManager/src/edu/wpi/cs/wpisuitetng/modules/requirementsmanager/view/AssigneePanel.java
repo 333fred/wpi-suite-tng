@@ -265,8 +265,8 @@ public class AssigneePanel extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			detailPanel.enableSaveButton();
 			for(Object m: unassignedUsers.getSelectedValues()){
+				detailPanel.enableSaveButton();
 				//add the selected element(s) in alphabetical order
 				int i = 0;
 				while(i < (assignedUsersList.getSize() - 1) && assignedUsersList.get(i).toString().compareTo(m.toString()) < 0){
@@ -293,8 +293,8 @@ public class AssigneePanel extends JPanel {
 	private class UnassignUserAction implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			detailPanel.enableSaveButton();
 			for(Object m : assignedUsers.getSelectedValues()){
+				detailPanel.enableSaveButton();
 				//add the selected element(s) in alphabetical order
 				int i = 0;
 				while(i < (unassignedUsersList.getSize() - 1) && unassignedUsersList.get(i).toString().compareTo(m.toString()) < 0 ){
