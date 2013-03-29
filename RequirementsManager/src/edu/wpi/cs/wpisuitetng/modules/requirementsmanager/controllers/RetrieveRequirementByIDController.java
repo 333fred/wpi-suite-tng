@@ -30,7 +30,7 @@ public class RetrieveRequirementByIDController {
 	public void get(int id) {	
 		final RequestObserver requestObserver = new RetrieveRequirementByIDRequestObserver(this);
 		Request request;
-		request = Network.getInstance().makeRequest("requirementsmanager/requirement"+id, HttpMethod.GET);
+		request = Network.getInstance().makeRequest("requirementsmanager/requirement/" + id, HttpMethod.GET);
 		request.addObserver(requestObserver);
 		request.send();
 	}
