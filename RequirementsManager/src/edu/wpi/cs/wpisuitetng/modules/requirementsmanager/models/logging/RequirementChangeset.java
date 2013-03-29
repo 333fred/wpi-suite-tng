@@ -98,24 +98,22 @@ public class RequirementChangeset extends Changeset implements Event {
 			// Get the default string for a old and new value
 			content += oldToNew("Effort", changes.get("effort"));
 		}
-		if (changes.get("assignees") != null) {
+		if (changes.get("users") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change
 			List<Object> added = new ArrayList<Object>();
 			List<Object> removed = new ArrayList<Object>();
-			oldToNewList(added, removed, changes.get("assignees"));
+			oldToNewList(added, removed, changes.get("users"));
 			if (added.size() > 0) {
 				content += "Added " + added.size() + " assignee(s)<br>";
 				for (Object o : added) {
-					User u = (User) o;
-					content += u.getName() + "<br>";
+					content += "   " + o.toString() + "<br>";
 				}
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + removed.size() + " assignee(s)<br>";
 				for (Object o : removed) {
-					User u = (User) o;
-					content += u.getName() + "<br>";
+					content += "   " + o.toString() + "<br>";
 				}
 			}
 		}

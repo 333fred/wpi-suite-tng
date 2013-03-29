@@ -11,9 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.OldLog;
 import edu.wpi.cs.wpisuitetng.Session;
 
 

@@ -15,7 +15,7 @@ import org.junit.Test;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class LogTest {
-	
+	/* TODO: Reimplement for the new log
 	User bob;
 	Date date;
 	String log;
@@ -74,6 +74,6 @@ public class LogTest {
 		OldLog logTest = new OldLog(null, null, bob);
 		assertEquals(logTest.getCreator(),bob);
 		
-	}
+	}*/
 
 }
