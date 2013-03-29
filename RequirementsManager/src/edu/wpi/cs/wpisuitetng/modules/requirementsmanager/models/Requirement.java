@@ -4,23 +4,18 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.Session;
-import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
+import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger.Event;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Log;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 
 /**
  * This is the basic requirement model. It contains all the fields that can be
@@ -47,9 +42,10 @@ public class Requirement extends AbstractModel {
 	private List<String> assignees; // Team Member usernames
 	private List<Integer> subRequirements;
 	private List<Integer> pUID; // Parent unique ID's
-	// Notes and the Log
+	// Notes and the OldLog
 	private List<Note> notes;
-	private Logger logger;
+	private List<RequirementChangeset> logs;
+	//private Logger logger;
 
 	/**
 	 * Creates a new Requirement, with default values.
@@ -71,7 +67,8 @@ public class Requirement extends AbstractModel {
 		subRequirements = new ArrayList<Integer>();
 		pUID = new ArrayList<Integer>();
 		notes = new ArrayList<Note>();
-		logger = new Logger();
+		logs = new ArrayList<RequirementChangeset>();
+		//logger = new Logger();
 	}
 
 	/**
@@ -103,7 +100,8 @@ public class Requirement extends AbstractModel {
 	 */
 	public Requirement(String name, String description, int releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
-			int iteration, int effort, List<String> assignees, List<Integer> pUID) {
+			int iteration, int effort, List<String> assignees,
+			List<Integer> pUID) {
 		// Get the next UID for this requirement
 
 		// Assign all inputs
@@ -121,9 +119,8 @@ public class Requirement extends AbstractModel {
 
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
-		logger = new Logger();
+		this.logs = new ArrayList<RequirementChangeset>();
 	}
-
 
 	/**
 	 * Converts this Requirement to a JSON string.
@@ -157,20 +154,46 @@ public class Requirement extends AbstractModel {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, Requirement[].class);
 	}
-	
+
 	/**
-	 * method to construct a short string describing this Requirement
-	 * suitable for use in a list view
+	 * method to construct a short string describing this Requirement suitable
+	 * for use in a list view
+	 * 
 	 * @return a short summary of this Requirement
 	 */
-	public String toListString(){
-		
+	public String toListString() {
+
 		// TODO: determine what else to add to this method, if anything
 		// Add the requirement UID and name
-		String listString = this.rUID + " " + this.name ;	
-		
+		String listString = this.rUID + " " + this.name;
+
 		return listString;
-		
+
+	}
+
+	/**
+	 * OldLog events contained in a list
+	 * 
+	 * @param events
+	 *            the events to log
+	 * @param s
+	 *            the session containing the current user
+	 */
+	public void logEvents(RequirementChangeset changes) {
+		logs.add(0, changes);
+	}
+
+	/**
+	 * Logs the creation of the requirement
+	 * 
+	 * @param s
+	 *            the session containing the current user
+	 */
+	public void logCreation(Session s) {
+		RequirementChangeset creation = new RequirementChangeset(s.getUser());
+		creation.getChanges().put("creation", new FieldChange<String>("creation", "creation"));
+		logs = new ArrayList<RequirementChangeset>();
+		logs.add(creation);
 	}
 
 	/**
@@ -237,10 +260,11 @@ public class Requirement extends AbstractModel {
 	public void setType(Type type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * Gets the priority of the Requirement
-	 * @return 
+	 * 
+	 * @return
 	 * 
 	 * @return the priority
 	 */
@@ -249,8 +273,8 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * Sets the priority of the requirement TODO: Determine if we can do this, or if
-	 * the type is final
+	 * Sets the priority of the requirement TODO: Determine if we can do this,
+	 * or if the type is final
 	 * 
 	 * @param type
 	 *            the type to set
@@ -258,7 +282,7 @@ public class Requirement extends AbstractModel {
 	public void setPriority(Priority priority) {
 		this.priority = priority;
 	}
-	
+
 	/**
 	 * Return the list of subRequirement ID's
 	 * 
@@ -350,7 +374,8 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * Sets the current iteration TODO: change this to work on an Iteration object
+	 * Sets the current iteration TODO: change this to work on an Iteration
+	 * object
 	 * 
 	 * @param iteration
 	 *            the iteration to set
@@ -390,7 +415,8 @@ public class Requirement extends AbstractModel {
 	/**
 	 * Sets the list of users assigned to this requirement
 	 * 
-	 * @param assignees the list of usernames
+	 * @param assignees
+	 *            the list of usernames
 	 */
 	public void setUsers(List<String> assignees) {
 		this.assignees = assignees;
@@ -399,16 +425,19 @@ public class Requirement extends AbstractModel {
 	/**
 	 * Adds a given user to the list of of assignees to this requirement
 	 * 
-	 * @param newUser the username of the user to be added
+	 * @param newUser
+	 *            the username of the user to be added
 	 */
 	public void addUser(String newUser) {
 		this.assignees.add(newUser);
 	}
 
 	/**
-	 * Removes the given assignee from this requirement's list TODO: Need to look at permission
+	 * Removes the given assignee from this requirement's list TODO: Need to
+	 * look at permission
 	 * 
-	 * @param user the username of the user to remove
+	 * @param user
+	 *            the username of the user to remove
 	 * @return True if the username was in the list, false otherwise
 	 */
 	public boolean removeUser(String user) {
@@ -460,10 +489,9 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return the log
 	 */
-	@Deprecated
-	public List<Log> getLog() {
-		// TODO: Remove this, when we modify the API
-		return logger.getLogs();
+	public List<RequirementChangeset> getLogs() {
+		//return logger.getLogs();
+		return logs;
 	}
 
 	/**
@@ -471,45 +499,11 @@ public class Requirement extends AbstractModel {
 	 * will erase any logs stored in the manager. If you just want to add a log,
 	 * then use addLog
 	 * 
-	 * @param log the log to set
+	 * @param log
+	 *            the log to set
 	 */
-	@Deprecated
-	public void setLog(List<Log> linkedList) {
-		// TODO: Remove this, when we modify the API
-	}
-
-	/**
-	 * Add the given log to the front of the list of logs,
-	 * ensuring that logs will be stored in reverse chronological order
-	 * @param log the log to add
-	 */
-	@Deprecated
-	public void addLog(Log log) {
-		// TODO: Remove this, when we modify the API
-	}
-	
-	/**
-	 * @return The class logger
-	 */
-	public Logger getLogger(){
-		return logger;
-	}
-	
-	/**
-	 * Log events contained in a list
-	 * @param events the events to log
-	 * @param s the session containing the current user
-	 */
-	public void logEvents(List<Event> events, Session s){
-		logger.logEvents(events, s);
-	}
-	
-	/**
-	 * Logs the creation of the requirement
-	 * @param s the session containing the current user
-	 */
-	public void logCreation(Session s){
-		logger.logCreation(s);
+	public void setLog(List<RequirementChangeset> linkedList) {
+		this.logs = linkedList;
 	}
 
 	/**
@@ -524,7 +518,8 @@ public class Requirement extends AbstractModel {
 	/**
 	 * Sets the status of the requirement
 	 * 
-	 * @param status the status to set
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatus(Status status) {
 		this.status = status;

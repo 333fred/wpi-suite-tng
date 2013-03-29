@@ -29,7 +29,7 @@ public class LogTest {
 
 	@Test
 	public void testGetLog() {
-		Log logTest = new Log(null, null, null);
+		OldLog logTest = new OldLog(null, null, null);
 		assertEquals(logTest.getLog(),null);
 		logTest.setLog(log);
 		assertEquals(logTest.getLog(),log);
@@ -37,13 +37,13 @@ public class LogTest {
 	
 	@Test
 	public void testGetLog2() {
-		Log logTest = new Log(log, null, null);
+		OldLog logTest = new OldLog(log, null, null);
 		assertEquals(logTest.getLog(),log);
 	}
 	
 	@Test
 	public void testGetDate() {
-		Log logTest = new Log(null, null, null);
+		OldLog logTest = new OldLog(null, null, null);
 		assertEquals(logTest.getDate(),null);
 		logTest.setDate(date);
 		assertEquals(logTest.getDate(),date);
@@ -51,19 +51,19 @@ public class LogTest {
 	
 	@Test
 	public void testGetDate2() {
-		Log logTest = new Log(null, date, null);
+		OldLog logTest = new OldLog(null, date, null);
 		assertEquals(logTest.getDate(),date);
 	}
 	
 	@Test
 	public void testGetDate3() {
-		Log logTest = new Log("Log",bob);
+		OldLog logTest = new OldLog("OldLog",bob);
 		assertTrue(!logTest.getDate().equals(null));
 	}
 	
 	@Test
 	public void testGetCreator() {
-		Log logTest = new Log(null, null, null);
+		OldLog logTest = new OldLog(null, null, null);
 		assertEquals(logTest.getCreator(),null);
 		logTest.setCreator(bob);
 		assertEquals(logTest.getCreator(),bob);
@@ -71,7 +71,7 @@ public class LogTest {
 	
 	@Test
 	public void testGetCreator2() {
-		Log logTest = new Log(null, null, bob);
+		OldLog logTest = new OldLog(null, null, bob);
 		assertEquals(logTest.getCreator(),bob);
 		
 	}

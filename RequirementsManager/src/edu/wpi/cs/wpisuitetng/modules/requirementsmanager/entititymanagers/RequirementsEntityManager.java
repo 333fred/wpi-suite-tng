@@ -1,6 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -15,12 +14,12 @@ import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.logger.ChangesetCallback;
+import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger.Event;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger.Logger.EventType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
 
@@ -28,6 +27,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	Data db;
 	RequirementValidator validator;
+	ModelMapper updateMapper;
 
 	/**
 	 * Create a RequirementsEntityManager
@@ -38,6 +38,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	public RequirementsEntityManager(Data data) {
 		db = data;
 		validator = new RequirementValidator(db);
+		updateMapper = new ModelMapper();
 	}
 
 	/**
@@ -61,7 +62,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			throw new BadRequestException();
 		}
 
-		// Log the creation of a new requirement
 		newRequirement.logCreation(s);
 
 		if (!db.save(newRequirement, s.getProject())) {
@@ -189,12 +189,21 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			throw new WPISuiteException();
 		}
 
-		// Attempt to update the old requirement
-		oldReq = updateRequirement(oldReq, updatedRequirement, s);
+		// Set up the changeset callback
+		RequirementChangeset changeset = new RequirementChangeset(s.getUser());
+		ChangesetCallback callback = new ChangesetCallback(changeset);
 
-		// Save the requirement, and throw an exception if if fails
-		if (!db.save(oldReq, s.getProject())) {
-			throw new WPISuiteException();
+		// Copy values from the new requirement to the old requirement
+		updateMapper.map(updatedRequirement, oldReq, callback);
+
+		// If the user actually changed something, add the changeset to the
+		// requirement and save the requirement. Otherwise, do nothing
+		if (changeset.getChanges().size() > 0) {
+			oldReq.logEvents(changeset);
+			// Save the requirement, and throw an exception if if fails
+			if (!db.save(oldReq, s.getProject())) {
+				throw new WPISuiteException();
+			}
 		}
 
 		return oldReq;
@@ -246,7 +255,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 * @param newReq
 	 *            The new requirement
 	 * @return the updated requirement
-	 */
+	 *//*
 	public Requirement updateRequirement(Requirement oldReq,
 			Requirement newReq, Session s) {
 
@@ -332,7 +341,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		oldReq.logEvents(events, s);
 
 		return oldReq;
-	}
+	}*/
 
 	@Override
 	public String advancedGet(Session s, String[] args)

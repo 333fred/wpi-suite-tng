@@ -10,9 +10,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Log;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 
 
@@ -62,7 +62,7 @@ public class DetailLogView extends JPanel{
 	public void refresh(Requirement requirement) {
 		this.logList.clear();
 		this.requirement = requirement;
-		for (Log aLog : requirement.getLogger().getLogs()) {
+		for (RequirementChangeset aLog : requirement.getLogs()) {
 			this.logList.addElement(aLog);
 		}
 	}

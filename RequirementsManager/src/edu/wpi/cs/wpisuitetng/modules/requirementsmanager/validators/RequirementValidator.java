@@ -16,9 +16,9 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Log;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 
 /**
  * Validates Requirements so that they fit in with the given Data implementation.
@@ -177,8 +177,8 @@ public class RequirementValidator {
 
 		
 		//Initialize any null lists to be empty
-		if(requirement.getLog() == null){
-			requirement.setLog(new LinkedList<Log>());
+		if(requirement.getLogs() == null){
+			requirement.setLog(new LinkedList<RequirementChangeset>());
 		}
 		
 		if (requirement.getNotes() == null) {
