@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
  * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
@@ -22,13 +22,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListVi
 @SuppressWarnings("serial")
 public class RefreshAction extends AbstractAction {
 
-	private final RequirementListView requirementList;
+	private final RequirementTableView requirementList;
 	
 	/**
 	 * Create a CreateDefectAction
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
-	public RefreshAction(RequirementListView requirementList) {
+	public RefreshAction(RequirementTableView requirementList) {
 		super("Refresh");
 		this.requirementList = requirementList;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_F5);

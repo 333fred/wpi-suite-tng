@@ -15,7 +15,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
@@ -29,7 +29,7 @@ public class JanewayModule implements IJanewayModule {
 	private List<JanewayTabModel> tabs;
 	
 	/** The list view that will display the requirements	 */
-	private RequirementListView requirementListView;
+	private RequirementTableView requirementListView;
 	
 	/** The main view of the module that displays the tabs */
 	private MainTabView tabView;
@@ -63,7 +63,7 @@ public class JanewayModule implements IJanewayModule {
 		tabController = new MainTabController(tabView);
 		
 		//initialize the requirements list view
-		requirementListView = new RequirementListView(tabController);
+		requirementListView = new RequirementTableView(tabController);
 		
 		//initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);

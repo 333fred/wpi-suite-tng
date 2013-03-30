@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
  * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
@@ -22,13 +22,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListVi
 public class ViewRequirementAction extends AbstractAction {
 	//TODO: Rename all of these to edit requirement
 	/** The requirement list view that this action is operating on */
-	private final RequirementListView requirementList;
+	private final RequirementTableView requirementList;
 	
 	/**
 	 * Create a CreateDefectAction
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
-	public ViewRequirementAction(RequirementListView requirementList) {
+	public ViewRequirementAction(RequirementTableView requirementList) {
 		super("Edit Requirement");
 		this.requirementList = requirementList;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_V);

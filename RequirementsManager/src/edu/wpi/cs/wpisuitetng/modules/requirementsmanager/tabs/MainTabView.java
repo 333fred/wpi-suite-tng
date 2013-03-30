@@ -5,7 +5,7 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementListView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /** The JTabbedPane that will be shown in the RequirementsManager Module.
  * 
@@ -43,7 +43,7 @@ public class MainTabView extends JTabbedPane {
 		super.insertTab(title,icon,component,tip,index);
 		
 		//if it is not a list view, create a closeable tab
-		if(!(component instanceof RequirementListView)) {
+		if(!(component instanceof RequirementTableView)) {
 			setTabComponentAt(index, new ClosableTabComponent(this));
 		}
 	}

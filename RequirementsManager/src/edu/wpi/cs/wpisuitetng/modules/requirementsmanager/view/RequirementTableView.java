@@ -5,9 +5,12 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
@@ -25,11 +28,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * It will allow the user to select a given requirement and view/edit it.
  * It also allows users to create new requirements, and refresh the list of requirements
  * 
- * @author Mitchell
+ * @author Steve, Mitchell
  *
  */
 
-public class RequirementListView extends FocusableTab implements IToolbarGroupProvider, IReceivedAllRequirementNotifier {	
+@SuppressWarnings("serial")
+public class RequirementTableView extends FocusableTab implements IToolbarGroupProvider, IReceivedAllRequirementNotifier {	
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
@@ -37,11 +41,6 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	/** Controller for receiving all requirements from the server */
 	private RetrieveAllRequirementsController retreiveAllRequirementsController;
 	
-	/** JList used to display a list of all the requirements */
-	private JList requirementsList;	
-	
-	/** List of string values that will be displayed in the list view, requirements[i].getName() for now */
-	private ArrayList<String> listValues;
 	/** The list of requirements that the view is displaying */
 	private Requirement[] requirements;	
 	
@@ -55,12 +54,17 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	/** Flag used to make paint only refresh the requirements once, on load */
 	private boolean firstPaint;
 	
+	@SuppressWarnings("rawtypes")
+	private Vector<Vector> rowData;
+
+	private JTable table;
 	/** Construct for a RequirementListView
 	 * 
 	 * 
 	 */
-	
-	public RequirementListView(MainTabController tabController) {
+		
+	@SuppressWarnings("rawtypes")
+	public RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
 		firstPaint = false;
 		//create the Retreive All Requiments Controller
@@ -68,27 +72,46 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 		//init the toolbar group
 		initializeToolbarGroup();
 		
-		//init the list of strings and requirements array
-		listValues = new ArrayList<String>();
 		requirements = new Requirement[0];
-		
-		
+	
 		//set this JPanel to use a border layout
 		setLayout(new BorderLayout(0, 0));
+			
+	    Vector<String> columnNames = new Vector<String>();
+	    columnNames.addElement("Name");
+	    columnNames.addElement("Type");
+	    columnNames.addElement("Priority");
+	    columnNames.addElement("Status");
+	    columnNames.addElement("Iteration");
+	    //TODO: columnNames.addElement("Estimate");
+	    columnNames.addElement("Actual");
+	    columnNames.addElement("Release Number");
 		
-		//initialize the requirements list, with an array of strings retreived from the listValues ArrayList
-		requirementsList= new JList(listValues.toArray(new String[0]));
-		add(requirementsList, BorderLayout.CENTER);
+	    this.rowData = new Vector<Vector>();
+	    
+		this.table = new JTable(rowData, columnNames) {
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	        	return false;               
+		    };
+		};
+				
+		JScrollPane scrollPane = new JScrollPane(table);
+		table.setFillsViewportHeight(true);
 		
-		//Add double click event listener
-		requirementsList.addMouseListener(new MouseAdapter() {
-		    public void mouseClicked(MouseEvent e) {
-		        JList list = (JList)e.getSource();
-		        if (e.getClickCount() == 2) {
-		            onDoubleClick(list.locationToIndex(e.getPoint()));
-		        }
-		    }
-		});
+		add(scrollPane,BorderLayout.CENTER);
+		
+		//Add double click event listener		
+		  this.table.addMouseListener(new MouseAdapter() {
+			   public void mouseClicked(MouseEvent e) {
+			      if (e.getClickCount() == 2) {
+			         JTable target = (JTable)e.getSource();
+			         int row = target.getSelectedRow();
+			         onDoubleClick(row);
+			         }
+			   }
+			});
+		  
 	}
 	
 	
@@ -128,16 +151,19 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	 */
 	
 	private void parseRequirements() {		
-		
-		//clear the current list values
-		listValues.clear();
-		
-		// for every requirement
+	
+		this.rowData.clear();
 		for(int i = 0; i < requirements.length; i++){
-			// produce a summary String for the list
-			listValues.add(requirements[i].toListString());
-		}	
-		
+			Vector<String> row = new Vector<String>();
+			row.addElement(requirements[i].getName());
+			row.addElement(requirements[i].getType().toString());
+			row.addElement(requirements[i].getPriority().toString());
+			row.addElement(requirements[i].getStatus().toString());
+			row.addElement(String.valueOf(requirements[i].getIteration()));
+			row.addElement(String.valueOf(requirements[i].getEffort()));
+			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
+			this.rowData.add(row);
+		}
 	}
 	
 	/** Function to retreive the requirements from the server
@@ -157,14 +183,14 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	 * */
 	
 	private void updateListView() {
-		System.out.println("We are updating the list view");
+		System.out.println("We are updating the table view");
 		//update the string array
 		parseRequirements();
 		//set the list values of the requirementsList to the values in the String aray
-		requirementsList.setListData(listValues.toArray(new String[0]));
+		//requirementsList.setListData(listValues.toArray(new String[0]));
 		//invalidate the list so it is forced to be redrawn
-		requirementsList.invalidate();
-		
+		//this.table.invalidate();
+		this.table.repaint();
 	}
 
 	/** Inherited from IToolBarGroup Provider, Provides the toolbar buttons used by this view
@@ -191,8 +217,8 @@ public class RequirementListView extends FocusableTab implements IToolbarGroupPr
 	
 	public void viewRequirement() {
 		//obtain the currently selected requirement
-		int selectedIndex = requirementsList.getSelectedIndex();
-		
+		int selectedIndex = this.table.getSelectedRow();
+						
 		if (selectedIndex < 0) {
 			//nothing is currently selected
 			return;
