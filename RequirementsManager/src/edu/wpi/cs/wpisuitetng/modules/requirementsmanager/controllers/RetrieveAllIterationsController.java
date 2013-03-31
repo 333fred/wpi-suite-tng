@@ -47,7 +47,6 @@ public class RetrieveAllIterationsController {
 	 * @param iterations an array of iterations returned by the server
 	 */
 	public void receivedData(Iteration[] iterations){
-		IterationDatabase.setIterations(Arrays.asList(iterations));
 		view.refresh();
 	}
 	

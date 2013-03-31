@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -40,6 +41,8 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 			// parse the response				
 			Requirement[] requirements = Requirement.fromJSONArray(response.getBody());
 
+			RequirementDatabase.getInstance().addRequirement(requirements[0]);
+			
 			// notify the controller
 			controller.receivedData(requirements[0]);
 		}
