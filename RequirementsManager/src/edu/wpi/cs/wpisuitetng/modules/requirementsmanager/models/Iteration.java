@@ -243,6 +243,10 @@ public class Iteration extends AbstractModel {
 			throw new InvalidDateException(endDate);
 		}
 	}
+	
+	public boolean validateDate(){
+		return startDate.compareTo(endDate) > 0 ? false : true;
+	}
 
 	/**
 	 * @return the id

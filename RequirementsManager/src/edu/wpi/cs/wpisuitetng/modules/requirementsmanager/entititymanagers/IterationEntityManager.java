@@ -48,7 +48,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 
 		// Validate the new iteration
 		List<ValidationIssue> issues = validator.validate(s, newIteration,
-				IterationActionMode.CREATE);
+				IterationActionMode.CREATE, db);
 
 		// If there were issues, then print the errors and notify the client
 		if (issues.size() > 0) {
@@ -116,7 +116,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 
 		// Validate the iteration
 		List<ValidationIssue> issues = validator.validate(s, updatedIteration,
-				IterationActionMode.EDIT);
+				IterationActionMode.EDIT, db);
 		if (issues.size() > 0) {
 			throw new BadRequestException();
 		}
