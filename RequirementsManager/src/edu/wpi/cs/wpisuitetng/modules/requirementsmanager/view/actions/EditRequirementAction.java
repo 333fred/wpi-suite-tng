@@ -15,11 +15,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
+import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
+
 /**
  * The action for saving an edited requirement, used when "Save Requirement"
  * button is pressed
  * 
- * @author Chris
+ * @author Chris, Alex Gorowara
  * 
  */
 public class EditRequirementAction extends AbstractAction {
@@ -105,38 +107,50 @@ public class EditRequirementAction extends AbstractAction {
 
 				try {
 					requirement.setIteration(Integer.parseInt(parentView
-							.getTextIteration().getText()));
-
-					try {
-						requirement
-								.setPriority(Priority.valueOf(parentView
-										.getComboBoxPriority()
-										.getSelectedItem().toString()
-										.toUpperCase().replaceAll(" ", "_")));
-					} catch (IllegalArgumentException except) {
-						requirement.setPriority(Priority.BLANK);
-					}
-
-					try {
-						requirement.setType(Type.valueOf(parentView
-								.getComboBoxType().getSelectedItem().toString()
-								.toUpperCase().replaceAll(" ", "_")));
-					} catch (IllegalArgumentException except) {
-						requirement.setType(Type.BLANK);
-					}
-
-					requirement.setStatus(Status.valueOf(parentView
-							.getComboBoxStatus().getSelectedItem().toString()
-							.toUpperCase().replaceAll(" ", "_")));
-
-					controller.SaveRequirement(requirement, true);
-					// Done by the observer now
-					// //this.parentView.getMainTabController().closeCurrentTab();
-				} catch (NumberFormatException excep) {
-					parentView
-							.displaySaveError("Iteration must be an integer value");
+							.getTextIteration().getText())); 	
 				}
-			} else {
+				catch (NumberFormatException excep) {
+								parentView
+								.displaySaveError("Iteration must be an integer value");
+				}
+				
+				try{
+					int estimate = Integer.parseInt(parentView.getTextEstimate().getText());
+					if(estimate < 0){
+						throw new WPISuiteException("Cannot have a negative estimate.");
+					}
+				}
+				catch (Exception excep){
+					parentView.displaySaveError("Estimate must be a non-negative integer value");
+				}
+
+				try {
+					requirement
+							.setPriority(Priority.valueOf(parentView
+									.getComboBoxPriority()
+									.getSelectedItem().toString()
+									.toUpperCase().replaceAll(" ", "_")));
+				} catch (IllegalArgumentException except) {
+					requirement.setPriority(Priority.BLANK);
+				}
+
+				try {
+					requirement.setType(Type.valueOf(parentView
+							.getComboBoxType().getSelectedItem().toString()
+							.toUpperCase().replaceAll(" ", "_")));
+				} catch (IllegalArgumentException except) {
+					requirement.setType(Type.BLANK);
+				}
+
+				requirement.setStatus(Status.valueOf(parentView
+						.getComboBoxStatus().getSelectedItem().toString()
+						.toUpperCase().replaceAll(" ", "_")));
+					controller.SaveRequirement(requirement, true);
+				// Done by the observer now
+				// //this.parentView.getMainTabController().closeCurrentTab();
+			}
+			
+			else {
 				if (parentView.getTextName().getText().trim().equals("")) {
 					parentView.getTextName().setBackground(
 							new Color(243, 243, 209));

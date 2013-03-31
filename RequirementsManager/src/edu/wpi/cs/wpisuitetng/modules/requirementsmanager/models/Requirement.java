@@ -26,7 +26,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  * This is the basic requirement model. It contains all the fields that can be
  * assigned to a single requirement.
  * 
- * @author Fredric
+ * @author Fredric Silberberg, Alex Gorowara
+ * @author Just About All of Team Swagasaurus at One Point or Another
  * 
  */
 public class Requirement extends AbstractModel {
