@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 
@@ -47,7 +48,10 @@ public class IterationView extends FocusableTab {
 	private JLabel labStartDate;
 	private JLabel labEndDate;
 	
+	/** Error message components */
 	private JLabel labErrorMessage;
+	private JLabel labNameError;
+	private JLabel labCalendarError;
 	
 	/** Buttons for saving and canceling iteration */
 	
@@ -86,7 +90,13 @@ public class IterationView extends FocusableTab {
 		labName = new JLabel("Name:");
 		labStartDate = new JLabel("Starting Date:");
 		labEndDate = new JLabel("Ending Date:");
-		labErrorMessage = new JLabel("");
+		labErrorMessage = new JLabel(" ");
+		
+		labNameError = new JLabel(" ");
+		labCalendarError = new JLabel(" ");
+		
+		labNameError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		labCalendarError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		
 		butSave = new JButton();
 		butSave.setAction(new SaveAction());
@@ -114,11 +124,14 @@ public class IterationView extends FocusableTab {
 		layout.putConstraint(SpringLayout.WEST, labName, HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, labName, VERTICAL_PADDING, SpringLayout.NORTH, this);
 		
+		layout.putConstraint(SpringLayout.WEST, labNameError, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, labNameError, VERTICAL_PADDING, SpringLayout.SOUTH, labName);
+		
 		layout.putConstraint(SpringLayout.WEST, txtName, HORIZONTAL_PADDING, SpringLayout.EAST, labName);
 		layout.putConstraint(SpringLayout.NORTH, txtName, VERTICAL_PADDING, SpringLayout.NORTH, this);
 		
 		layout.putConstraint(SpringLayout.WEST, labStartDate, HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, labStartDate, VERTICAL_PADDING, SpringLayout.SOUTH, labName);
+		layout.putConstraint(SpringLayout.NORTH, labStartDate, VERTICAL_PADDING, SpringLayout.SOUTH, labNameError);
 		
 	
 		layout.putConstraint(SpringLayout.NORTH, labEndDate, 0, SpringLayout.NORTH, labStartDate); // allign them, no padding
@@ -130,13 +143,16 @@ public class IterationView extends FocusableTab {
 		layout.putConstraint(SpringLayout.NORTH, calEndDate, VERTICAL_PADDING, SpringLayout.SOUTH, labEndDate);
 		layout.putConstraint(SpringLayout.WEST, calEndDate, HORIZONTAL_PADDING, SpringLayout.EAST, calStartDate);
 		
+		layout.putConstraint(SpringLayout.WEST, labCalendarError, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, labCalendarError, VERTICAL_PADDING, SpringLayout.SOUTH, calStartDate);
+		
 		layout.putConstraint(SpringLayout.WEST, labEndDate, 0, SpringLayout.WEST, calEndDate);
 		
 		layout.putConstraint(SpringLayout.EAST, txtName, 0, SpringLayout.EAST, calEndDate);
 		
 
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING, SpringLayout.SOUTH, calEndDate);
+		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING, SpringLayout.SOUTH, labCalendarError);
 		
 		
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING, SpringLayout.EAST, butSave);
@@ -162,7 +178,10 @@ public class IterationView extends FocusableTab {
 		
 		add(butSave);
 		add(butCancel);
+		
 		add(labErrorMessage);
+		add(labNameError);
+		add(labCalendarError);
 		
 
 	}
@@ -225,7 +244,20 @@ public class IterationView extends FocusableTab {
 	 */
 	
 	public void displaySaveError(String error) {
-		System.out.println("Error saving iteration: " + error);
+		//check for error
+		if (txtName.getText().trim().isEmpty()) {
+			labNameError.setText("**Name connot be blank**");
+		}
+		else {
+			labNameError.setText(" ");
+		}
+		
+		if (calStartDate.getDate().after(calEndDate.getDate())) {
+			labCalendarError.setText("**Start date must be before End date**");
+		}
+		else {
+			labCalendarError.setText(" ");
+		}
 	}
 	
 	
