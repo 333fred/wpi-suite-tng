@@ -18,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 
 /**
@@ -196,6 +197,18 @@ public class RequirementValidator {
 		if (requirement.getUsers() == null) {
 			requirement.setUsers(new LinkedList<String>());
 		}
+		
+		if (requirement.getTasks() == null) {
+			requirement.setTasks(new LinkedList<Task>());
+		}
+		
+		//Ensure that estimate is non-negative
+		if(requirement.getEstimate() < 0)
+			issues.add(new ValidationIssue("Must be non-negative", "estimate"));
+		
+		//Ensure that effort is non-negative
+		if (requirement.getEffort() < 0)
+			issues.add(new ValidationIssue("Must be non-negative", "effort"));
 		
 		//Give BLANK type if none is given
 		if(requirement.getType() == null){
