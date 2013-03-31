@@ -313,8 +313,11 @@ public class DetailPanel extends FocusableTab {
 					}
 					event.consume();
 				}
-				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
-					// don't allow enter, consume the event, do nothing
+				if(!(event.getKeyCode() == KeyEvent.VK_TAB 
+						|| (event.getKeyCode() > KeyEvent.VK_0 && event.getKeyCode() < KeyEvent.VK_9)
+						|| event.getKeyCode() == KeyEvent.VK_BACK_SPACE))
+				{
+					// if the key is neither a tab, nor a backspace, nor a number, disregard it
 					event.consume();
 				}
 			}
