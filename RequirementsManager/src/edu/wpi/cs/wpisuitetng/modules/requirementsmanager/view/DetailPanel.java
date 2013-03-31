@@ -51,6 +51,7 @@ public class DetailPanel extends FocusableTab {
 	private JTextArea textDescriptionValid;
 	private JTextArea textIteration;
 	private JTextArea textEstimate;
+
 	private JTextArea textActual;
 	private JTextArea textRelease;
 	JTextArea saveError;
@@ -733,7 +734,7 @@ public class DetailPanel extends FocusableTab {
 	public void setTextDescriptionValid(JTextArea textDescriptionValid) {
 		this.textDescriptionValid = textDescriptionValid;
 	}
-
+	
 	/**
 	 * @return the comboBoxPriority
 	 */
@@ -774,6 +775,20 @@ public class DetailPanel extends FocusableTab {
 	 */
 	public void setComboBoxStatus(JComboBox comboBoxStatus) {
 		this.comboBoxStatus = comboBoxStatus;
+	}
+	
+	/**
+	 * @return the textEstimate
+	 */
+	public JTextArea getTextEstimate() {
+		return textEstimate;
+	}
+	
+	/**
+	 * @param textEstimate the textEstimate to set
+	 */
+	public void setTextEstimate(JTextArea textEstimate) {
+		this.textEstimate = textEstimate;
 	}
 	
 	public Requirement getModel(){

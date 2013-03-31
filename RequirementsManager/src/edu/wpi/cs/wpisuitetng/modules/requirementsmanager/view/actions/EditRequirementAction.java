@@ -104,6 +104,13 @@ public class EditRequirementAction extends AbstractAction {
 							.getComboBoxStatus().getSelectedItem().toString()
 							.toUpperCase().replaceAll(" ", "_")));
 
+					try {
+						requirement.setEstimate(Integer.parseInt(parentView
+								.getTextEstimate().getText()));
+					} catch (NumberFormatException except) {
+						parentView.displaySaveError("Estimate must be a non-negative integer");
+					}
+					
 					controller.SaveRequirement(requirement, true);
 					// Done by the observer now
 					// //this.parentView.getMainTabController().closeCurrentTab();
