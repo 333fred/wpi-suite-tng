@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -17,10 +18,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * 
  * TODO implement server back-end for this. Right now it is just a dummy that returns a premade list of iterations
  */
-public class RetrieveIterationsController {
+public class RetrieveAllIterationsController {
 	//put view here
 	
-	public RetrieveIterationsController(/* view here*/) {
+	public RetrieveAllIterationsController(/* view here*/) {
 		//view
 	}
 	
@@ -29,11 +30,10 @@ public class RetrieveIterationsController {
 	 */
 	public void getAll() {	
 		final RequestObserver requestObserver = new RetrieveAllIterationsRequestObserver(this);
-		/* TODO: Implement actual network request
 		Request request;
-		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.GET);
+		request = Network.getInstance().makeRequest("requirementsmanager/iteration", HttpMethod.GET);
 		request.addObserver(requestObserver);
-		request.send();*/
+		request.send();
 	}
 	
 	/**
