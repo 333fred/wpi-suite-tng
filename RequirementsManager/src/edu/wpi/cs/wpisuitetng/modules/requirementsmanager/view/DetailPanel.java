@@ -624,9 +624,9 @@ public class DetailPanel extends FocusableTab {
 	}
 	/**
 	 * Method to determine to which statuses the currently viewed requirement 
-	 * can manually be set based on its current status as governed by the stakeholders' specs
+	 * can manually be set based on its current status as governed by the stakeholders' specs;
+	 * also sets the combo box to the appropriate set of statuses
 	 */
-
 	private void determineAvailableStatusOptions() {
 		// String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
 		if (requirement.getStatus() == Status.IN_PROGRESS) {
