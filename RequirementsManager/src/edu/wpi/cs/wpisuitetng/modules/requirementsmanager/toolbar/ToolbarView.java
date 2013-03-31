@@ -24,7 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
-
 	private JButton createHelpPanel;
 
 	/** Button for creating a requirement */
@@ -32,6 +31,7 @@ public class ToolbarView extends DefaultToolbarView {
 	
 	/** Button for creating iteration */
 	private JButton createIteration;
+
 
 	// private JPlaceholderTextField searchField;
 	
@@ -51,15 +51,13 @@ public class ToolbarView extends DefaultToolbarView {
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
 		
+		createIteration = new JButton("Create Iteration");
+		createIteration.setAction(new CreateIterationAction(tabController));
 
 		// Construct the User Manual button
 		createHelpPanel = new JButton("User Manual");		
 		createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
 		
-
-		createIteration = new JButton("Create Iteration");
-		createIteration.setAction(new CreateIterationAction(tabController));
-
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
 		// searchField.addActionListener(new LookupRequirementController(tabController, searchField, this));
@@ -68,17 +66,18 @@ public class ToolbarView extends DefaultToolbarView {
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5, SpringLayout.NORTH, content);
 		layout.putConstraint(SpringLayout.WEST, createRequirement, 8, SpringLayout.WEST, content);
 		
+
 		layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 15, SpringLayout.SOUTH, createRequirement);
 		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8, SpringLayout.WEST, content);
 		
-		// Add buttons to the content panel
 		layout.putConstraint(SpringLayout.NORTH, createIteration, 5, SpringLayout.SOUTH, createRequirement);
 		layout.putConstraint(SpringLayout.WEST, createIteration, 8, SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.EAST, createIteration, 0, SpringLayout.EAST, createRequirement);
 		
+		// Add buttons to the content panel
+		content.add(createIteration);
 		content.add(createRequirement);;
 		content.add(createHelpPanel);;
-		content.add(createIteration);
 
 		//content.add(searchField);
 		
