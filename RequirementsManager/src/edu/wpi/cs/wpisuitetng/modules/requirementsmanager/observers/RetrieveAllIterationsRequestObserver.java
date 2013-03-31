@@ -3,10 +3,12 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -53,6 +55,8 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 			// parse the response
 			Iteration[] iterations = Iteration
 					.fromJSONArray(response.getBody());
+
+			IterationDatabase.setIterations(Arrays.asList(iterations));
 
 			// notify the controller
 			controller.receivedData(iterations);
