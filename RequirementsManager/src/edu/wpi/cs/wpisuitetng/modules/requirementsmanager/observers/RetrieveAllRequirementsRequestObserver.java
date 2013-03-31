@@ -3,7 +3,10 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import java.util.Arrays;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -39,6 +42,8 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 			// parse the response				
 			Requirement[] requirements = Requirement.fromJSONArray(response.getBody());
 
+			RequirementDatabase.setRequirements(Arrays.asList(requirements));
+			
 			// notify the controller
 			controller.receivedData(requirements);
 		}
