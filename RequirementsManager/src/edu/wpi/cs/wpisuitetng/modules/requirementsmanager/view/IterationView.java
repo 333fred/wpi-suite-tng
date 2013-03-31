@@ -1,8 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  *
  */
 
-public class IterationView extends FocusableTab implements ActionListener {
+public class IterationView extends FocusableTab{
 	
 	/** Status enum, whether created or edited */
 	private enum Status {
@@ -36,6 +36,7 @@ public class IterationView extends FocusableTab implements ActionListener {
 	/** Controller for adding an iteration */
 	private AddIterationController addIterationController;
 	
+		
 	/** The maintab controller */
 	private MainTabController mainTabController;
 	
@@ -106,7 +107,7 @@ public class IterationView extends FocusableTab implements ActionListener {
 		
 		butSave = new JButton();
 		butSave.setAction(new SaveAction());
-		butSave.setEnabled(saveEnabled);
+		//butSave.setEnabled(saveEnabled);
 		
 		if (status == Status.CREATE) {
 			butSave.setText("Create");
@@ -121,6 +122,7 @@ public class IterationView extends FocusableTab implements ActionListener {
 		
 		txtName = new JTextField();
 		
+		
 		calStartDate = new JCalendar();
 		calEndDate = new JCalendar();
 		
@@ -130,6 +132,19 @@ public class IterationView extends FocusableTab implements ActionListener {
 			calStartDate.setDate(iteration.getStartDate());
 			calEndDate.setDate(iteration.getEndDate());			
 		}
+		
+		txtName.addKeyListener(new IterationViewListener(this, txtName));
+		
+		/*
+		IterationViewListener startDateListener = new IterationViewListener(this, calStartDate);
+		IterationViewListener endDateListener = new IterationViewListener(this, calEndDate);
+		
+		calStartDate.addKeyListener(startDateListener);
+		calEndDate.addKeyListener(endDateListener);
+		
+		calStartDate.addMouseListener(startDateListener);
+		calEndDate.addMouseListener(endDateListener);
+		*/
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -257,13 +272,35 @@ public class IterationView extends FocusableTab implements ActionListener {
 	
 	public void displaySaveError(String error) {
 		//check for error
+		
+		setNameError();
+		setCalendarError();
+	}
+	
+	/** Determiens the proper error message to be shown in the Name Error field 
+	 * 
+	 */
+	
+	private void setNameError() {
 		if (txtName.getText().trim().isEmpty()) {
-			labNameError.setText("**Name connot be blank**");
+			labNameError.setText("**Name connot be blank**");	
+			saveEnabled = false;
+			butSave.setEnabled(false);
+			txtName.setBackground(new Color(243, 243, 209));
 		}
 		else {
+			saveEnabled = true;
+			butSave.setEnabled(true);
 			labNameError.setText(" ");
+			txtName.setBackground(Color.WHITE);
 		}
-		
+	}
+	
+	/** Determines the proper error message to be shown in the Calendar Error Field
+	 * 
+	 */
+	
+	private void setCalendarError() {
 		if (calStartDate.getDate().after(calEndDate.getDate())) {
 			labCalendarError.setText("**Start date must be before End date**");
 		}
@@ -271,26 +308,15 @@ public class IterationView extends FocusableTab implements ActionListener {
 			labCalendarError.setText(" ");
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		JComponent source = (JComponent)e.getSource();
-		
-		//if the save was disabled, enable it
-		if (!saveEnabled) {
-			saveEnabled = true;
-		}
-		
-		if (source.equals(txtName)) {
-			
-		}
-		else if (source.equals(calEndDate)) {
-			
-		}
-		else {
-			
-		}
-	}
 	
+	/** Called when IterationViewListener reports there has been a change
+	 * 
+	 * @param source The source component
+	 */
+	
+	public void updateSave(JComponent source) {
+		setNameError();
+		setCalendarError();
+	}
 	
 }
