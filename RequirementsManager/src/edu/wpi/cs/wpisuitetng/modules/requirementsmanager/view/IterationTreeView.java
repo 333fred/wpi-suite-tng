@@ -98,10 +98,6 @@ public class IterationTreeView extends JPanel {
 		
 		//force the tree to redraw
 		tree.invalidate();
-		tree.repaint();
-		tree.repaint();
-		tree.repaint();
-		tree.repaint();
 	}
 	
 	public void getIterationsFromServer() {
