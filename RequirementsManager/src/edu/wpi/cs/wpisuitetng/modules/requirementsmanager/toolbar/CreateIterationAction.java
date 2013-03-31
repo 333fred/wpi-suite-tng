@@ -16,10 +16,10 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
- * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
+ *  Action that creates a new Iteration 
  */
 @SuppressWarnings("serial")
-public class CreateRequirementAction extends AbstractAction {
+public class CreateIterationAction extends AbstractAction {
 
 	private final MainTabController controller;
 	
@@ -27,15 +27,15 @@ public class CreateRequirementAction extends AbstractAction {
 	 * Create a CreateDefectAction
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
-	public CreateRequirementAction(MainTabController controller) {
-		super("Create Requirement");
+	public CreateIterationAction(MainTabController controller) {
+		super("Create Iteration");
 		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_R);
+		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.addCreateRequirementTab();
+		controller.addCreateIterationTab();
 	}
 
 }

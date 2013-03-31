@@ -39,8 +39,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	@Override
 	public Iteration makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
-
-		System.out.println("Make Entity Called!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		
 		// Get the iteration from JSON
 		final Iteration newIteration = Iteration.fromJSON(content);
