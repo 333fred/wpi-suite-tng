@@ -607,10 +607,20 @@ public class DetailPanel extends FocusableTab {
 		this.disableSaveButton();
 		this.disableAllFieldsIfDeleted();
 		
+		// prevent in-progress or complete requirements from having their estimates changed
 		if (requirement.getStatus() == Status.IN_PROGRESS ||  requirement.getStatus() == Status.COMPLETE) {
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
 		}
+		
+		// prevent requirements with subrequirements from having their estimates changed
+		if (requirement.getSubRequirements() != null && requirement.getSubRequirements().size() > 0){
+			// TODO: ensure that the estimate of any requirement with subrequirements
+			// is the sum of the estimates of its subrequirements
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
+		
 	}
 	/**
 	 * Method to determine to which statuses the currently viewed requirement 

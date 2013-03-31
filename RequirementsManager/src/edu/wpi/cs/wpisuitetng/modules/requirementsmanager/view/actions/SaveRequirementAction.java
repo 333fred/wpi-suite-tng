@@ -77,7 +77,7 @@ public class SaveRequirementAction extends AbstractAction {
 				
 				controller.AddRequirement(requirement);
 				//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
-			} catch (NumberFormatException excep) {
+			} catch (NumberFormatException except) {
 				parentView.displaySaveError("Iteration must be an integer value");
 			}
 		}
