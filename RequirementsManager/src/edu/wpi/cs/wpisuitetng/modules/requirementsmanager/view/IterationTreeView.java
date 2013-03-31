@@ -4,18 +4,16 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+
 
 /**
  * @author spkordell
@@ -25,6 +23,7 @@ public class IterationTreeView extends JPanel {
 
 	private JTree tree;
 	private DefaultMutableTreeNode top;
+	private RetrieveAllIterationsController retrieveAllIterationsController;
 
 	IterationTreeView() {
 		super(new BorderLayout());
@@ -35,9 +34,11 @@ public class IterationTreeView extends JPanel {
 		JScrollPane treeView = new JScrollPane(tree);	
 		this.add(treeView,BorderLayout.CENTER);
 		
+		this.retrieveAllIterationsController = new RetrieveAllIterationsController(this);
 		
 		//Dummy Stuff for now
-		DefaultMutableTreeNode iterationNode = null;
+		
+/*		DefaultMutableTreeNode iterationNode = null;
 		iterationNode = new DefaultMutableTreeNode("Iteration 1");
 		iterationNode.add(new DefaultMutableTreeNode("Requirement a"));
 		iterationNode.add(new DefaultMutableTreeNode("Requirement b"));
@@ -59,6 +60,30 @@ public class IterationTreeView extends JPanel {
 		iterationNode.add(new DefaultMutableTreeNode("Requirement l"));
 		this.top.add(iterationNode);
 		
+		*/
+		this.tree.expandRow(0);
+	}
+
+	public void refresh() {
+		System.out.print("Getting Iterations from Server\n");
+		this.retrieveAllIterationsController.getAll();
+	}
+	
+	public void refreshIterations(Iteration[] iterations) {
+		System.out.print("Refreshing tree\n");
+		DefaultMutableTreeNode iterationNode = null;
+        
+		this.top.removeAllChildren();
+		
+		for(int i = 0; i < iterations.length; i++){
+			iterationNode = new DefaultMutableTreeNode(iterations[i].getName());
+			
+			for (Integer aReq : iterations[i].getRequirements()) {
+				iterationNode.add(new DefaultMutableTreeNode(aReq.toString()));
+			}
+			
+			this.top.add(iterationNode);
+		}
 		this.tree.expandRow(0);
 	}
 

@@ -6,6 +6,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -19,10 +20,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * TODO implement server back-end for this. Right now it is just a dummy that returns a premade list of iterations
  */
 public class RetrieveAllIterationsController {
-	//put view here
+	private IterationTreeView view;
 	
-	public RetrieveAllIterationsController(/* view here*/) {
-		//view
+	public RetrieveAllIterationsController(IterationTreeView view) {
+		this.view = view;
 	}
 	
 	/**
@@ -44,6 +45,7 @@ public class RetrieveAllIterationsController {
 	 */
 	public void receivedData(Iteration[] iterations){
 		//You have the iterations, so here somehow update your view to display them
+		this.view.refreshIterations(iterations);
 	}
 	
 	/**

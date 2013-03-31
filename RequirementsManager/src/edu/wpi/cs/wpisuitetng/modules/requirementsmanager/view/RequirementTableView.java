@@ -202,6 +202,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		//invalidate the list so it is forced to be redrawn
 		//this.table.invalidate();
 		this.table.repaint();
+		this.iterationTree.refresh();
 	}
 
 	/** Inherited from IToolBarGroup Provider, Provides the toolbar buttons used by this view
@@ -298,7 +299,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	 */
 	
 	public void onTabFocus() {
-		refresh();		
+		refresh();
 	}
 	
 	/** Retrieve the requirements from the server when the GUI is first painted
