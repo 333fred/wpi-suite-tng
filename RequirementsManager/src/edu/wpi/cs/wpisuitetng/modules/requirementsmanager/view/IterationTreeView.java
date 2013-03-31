@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -30,19 +31,13 @@ public class IterationTreeView extends JPanel {
 	public IterationTreeView() {
 		super(new BorderLayout());
 
-		retrieveAllIterationsController = new RetrieveAllIterationsController(
-				this);
-
+		retrieveAllIterationsController = new RetrieveAllIterationsController(this);
+		
 		this.top = new DefaultMutableTreeNode("Iterations");
-		// this.createNodes(top);
 		this.tree = new JTree(top);
+			
 		JScrollPane treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
-
-		// this.retrieveAllIterationsController = new
-		// RetrieveAllIterationsController(this);
-
-		// Dummy Stuff for now
 
 		/*
 		 * DefaultMutableTreeNode iterationNode = null; iterationNode = new
@@ -67,7 +62,6 @@ public class IterationTreeView extends JPanel {
 		 * DefaultMutableTreeNode("Requirement l"));
 		 * this.top.add(iterationNode);
 		 */
-		this.tree.expandRow(0);
 	}
 
 	public void refresh() {
@@ -75,18 +69,21 @@ public class IterationTreeView extends JPanel {
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
 
-		List<Iteration> iterations = IterationDatabase.getInstance()
-				.getAllIterations();
-
+		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();
+		
 		for (Iteration i : iterations) {
 			System.out.println("Iteration Name: " + i.getName());
 		}
 
-		for (int i = 0; i < iterations.toArray().length; i++) {
-			iterationNode = new DefaultMutableTreeNode(iterations.get(i)
-					.getName());
+		for (Iteration anIteration : iterations) {
+			
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)this.tree.getCellRenderer();
+			renderer.setLeafIcon(null);
+			this.tree.setCellRenderer(renderer);
+			
+			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
 
-			for (Integer aReq : iterations.get(i).getRequirements()) {
+			for (Integer aReq : anIteration.getRequirements()) {
 				try {
 					iterationNode.add(new DefaultMutableTreeNode(
 							RequirementDatabase.getInstance().getRequirement(
