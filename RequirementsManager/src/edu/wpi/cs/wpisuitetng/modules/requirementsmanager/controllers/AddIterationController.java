@@ -3,11 +3,9 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddIterationRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddRequirementRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -18,10 +16,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class AddIterationController {
 
-	DetailPanel detailPanel;
+	IterationView iterationView;
 
-	public AddIterationController(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
+	public AddIterationController(IterationView iterationView) {
+		this.iterationView = iterationView;
 	}
 
 	/**
@@ -30,13 +28,13 @@ public class AddIterationController {
 	 * @param toAdd
 	 *            requirement that will be added
 	 */
-	public void AddRequirement(Iteration toAdd) {
+	public void addIteration(Iteration toAdd) {
 		final RequestObserver requestObserver = new AddIterationRequestObserver(
-				this, detailPanel); // you will probably want to pass your view
+				this, iterationView); // you will probably want to pass your view
 									// to the observer as well
 		Request request;
 		request = Network.getInstance().makeRequest(
-				"requirementsmanager/requirement", HttpMethod.PUT);
+				"requirementsmanager/iteration", HttpMethod.PUT);
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();

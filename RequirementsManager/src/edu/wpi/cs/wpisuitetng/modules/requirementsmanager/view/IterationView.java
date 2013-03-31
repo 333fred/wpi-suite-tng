@@ -1,22 +1,40 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.event.ActionEvent;
+import java.util.Date;
+
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import com.toedter.calendar.JCalendar;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+
+/** View for creating or editing a iteration
+ * 
+ * @author Mitchell, Matt
+ *
+ */
 
 public class IterationView extends FocusableTab {
 	
+	/** Status enum, whether created or edited */
 	private enum Status {
 		CREATE,
 		EDIT
 	}
+	
+	/** Controller for adding an iteration */
+	private AddIterationController addIterationController;
+	
+	/** THe maintab controller */
+	private MainTabController mainTabController;
 	
 	/** The iteration object this view will be displaying / creating */
 	private Iteration iteration;
@@ -28,6 +46,8 @@ public class IterationView extends FocusableTab {
 	private JLabel labName;
 	private JLabel labStartDate;
 	private JLabel labEndDate;
+	
+	private JLabel labErrorMessage;
 	
 	/** Buttons for saving and canceling iteration */
 	
@@ -46,34 +66,42 @@ public class IterationView extends FocusableTab {
 	private final int VERTICAL_PADDING = 10;
 	private final int HORIZONTAL_PADDING = 20;
 	
-	public IterationView(Iteration iteration) {
-		this(iteration, Status.EDIT);
+	public IterationView(Iteration iteration, MainTabController mainTabController) {
+		this(iteration, Status.EDIT, mainTabController);
 	}
 	
-	public IterationView() {
-		this(new Iteration(), Status.CREATE);		
+	public IterationView(MainTabController mainTabController) {
+		this(new Iteration(), Status.CREATE, mainTabController);		
 	}
 	
-	private IterationView(Iteration iteration, Status status) {
+	private IterationView(Iteration iteration, Status status, MainTabController mainTabController) {
 		this.iteration = iteration;
 		this.status = status;
+		this.mainTabController = mainTabController;
 		
+		//initilize the add iteration controller
+		addIterationController = new AddIterationController(this);
 		// initlaize JComponents
 		
 		labName = new JLabel("Name:");
 		labStartDate = new JLabel("Starting Date:");
 		labEndDate = new JLabel("Ending Date:");
+		labErrorMessage = new JLabel("");
 		
+		butSave = new JButton();
+		butSave.setAction(new SaveAction());
 		
 		if (status == Status.CREATE) {
-			butSave = new JButton("Create");
+			butSave.setText("Create");
 		}
 		else {
-			butSave = new JButton("Save");
+			butSave.setText("Save");
 		}
+		
 		
 		
 		butCancel = new JButton("Cancel");
+		butCancel.setAction(new CancelAction());
 		
 		txtName = new JTextField();
 		
@@ -110,8 +138,13 @@ public class IterationView extends FocusableTab {
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING, SpringLayout.SOUTH, calEndDate);
 		
+		
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING, SpringLayout.EAST, butSave);
 		layout.putConstraint(SpringLayout.NORTH, butCancel, 0, SpringLayout.NORTH, butSave);
+		
+		layout.putConstraint(SpringLayout.WEST, labErrorMessage, HORIZONTAL_PADDING, SpringLayout.EAST, butCancel);
+		layout.putConstraint(SpringLayout.NORTH, labErrorMessage, 0, SpringLayout.NORTH, butCancel);
+		
 		
 		setLayout(layout);
 		
@@ -129,9 +162,71 @@ public class IterationView extends FocusableTab {
 		
 		add(butSave);
 		add(butCancel);
+		add(labErrorMessage);
 		
+
 	}
 
+	/** Action to save the given Iteration
+	 * 
+	 * @author Mitchell, Matt
+	 *
+	 */
+	
+	private class SaveAction extends AbstractAction {
+		
+		public SaveAction() {
+			
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			//pull the values from the fields
+			String name = txtName.getText();
+			System.out.println("NAMEEE?!!!!!!!! |" + name + "|");
+			Date startDate = calStartDate.getDate();
+			Date endDate = calEndDate.getDate();
+			
+			if (status == Status.CREATE) {
+				Iteration toAdd = new Iteration(name, startDate, endDate);
+				addIterationController.addIteration(toAdd);
+			}
+			
+		}
+		
+	}
+	
+	/** Class for the cancel action of the cancel button
+	 *  Closes the current tab
+	 * 
+	 * @author Mitchell, Matt
+	 *
+	 */
+	
+	private class CancelAction extends AbstractAction {
+		
+		public CancelAction() {
+			super("Cancel");
+		}
+		
+		
+		public void actionPerformed(ActionEvent e) {
+			mainTabController.closeCurrentTab();			
+		}		
+	}
+	
+	
+	public MainTabController getMainTabController() {
+		return mainTabController;
+	}
+	
+	/** Displays an error message when there is an issue with saving
+	 *  
+	 * @param error The error to display
+	 */
+	
+	public void displaySaveError(String error) {
+		System.out.println("Error saving iteration: " + error);
+	}
 	
 	
 }

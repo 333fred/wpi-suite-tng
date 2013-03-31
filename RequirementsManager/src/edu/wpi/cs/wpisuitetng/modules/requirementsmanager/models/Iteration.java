@@ -40,6 +40,20 @@ public class Iteration extends AbstractModel {
 		this.id = -1;
 		this.requirements = new ArrayList<Integer>();
 	}
+	/**
+	 * Constructor for an iteration with the given start, and end It has a
+	 * blank list of requirements
+	 * 
+	 * @param name
+	 *            the name of the iteration
+	 * @param startDate
+	 *            Start date of the iteration
+	 * @param endDate
+	 *            End date of the iteration. Must be later than the
+	 */
+	public Iteration(String name, Date startDate, Date endDate) {
+		this(name, startDate, endDate, -1);
+	}	
 
 	/**
 	 * Constructor for an iteration with the given start, end, and id. It has a
