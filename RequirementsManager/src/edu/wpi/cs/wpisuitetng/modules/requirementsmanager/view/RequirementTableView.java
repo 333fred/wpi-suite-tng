@@ -2,13 +2,16 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
@@ -56,14 +59,18 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	private Vector<Vector> rowData;
 	
 	private JTable table;
-	/** Construct for a RequirementListView
+	
+	private IterationTreeView iterationTree;
+	
+	/** Constructor for a RequirementTableView
 	 * 
 	 * 
 	 */
-		
 	@SuppressWarnings("rawtypes")
 	public RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
+		this.iterationTree = new IterationTreeView();
+		
 		firstPaint = false;
 		//create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
@@ -72,9 +79,11 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		
 		requirements = new Requirement[0];
 	
-		//set this JPanel to use a border layout
-		setLayout(new BorderLayout(0, 0));
-			
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		//setLayout(new BorderLayout(0, 0));
+		GridLayout mainLayout = new GridLayout(0, 1);
+		setLayout(mainLayout);	
+		
 	    Vector<String> columnNames = new Vector<String>();
 	    columnNames.addElement("Name");
 	    columnNames.addElement("Type");
@@ -94,10 +103,14 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		    };
 		};
 				
-		JScrollPane scrollPane = new JScrollPane(table);
-		table.setFillsViewportHeight(true);
+		JScrollPane scrollPane = new JScrollPane(this.table);
+		this.table.setFillsViewportHeight(true);
+		mainPanel.add(scrollPane,BorderLayout.CENTER);
 		
-		add(scrollPane,BorderLayout.CENTER);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,iterationTree,mainPanel);
+		add(splitPane);
+
+		splitPane.setResizeWeight(0.1);
 		
 		//Add double click event listener		
 		  this.table.addMouseListener(new MouseAdapter() {
