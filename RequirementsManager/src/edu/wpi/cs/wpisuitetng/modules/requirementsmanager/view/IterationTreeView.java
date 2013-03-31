@@ -4,6 +4,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -11,6 +13,9 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
@@ -23,7 +28,7 @@ public class IterationTreeView extends JPanel {
 
 	private JTree tree;
 	private DefaultMutableTreeNode top;
-	private RetrieveAllIterationsController retrieveAllIterationsController;
+	//private RetrieveAllIterationsController retrieveAllIterationsController;
 
 	IterationTreeView() {
 		super(new BorderLayout());
@@ -34,7 +39,7 @@ public class IterationTreeView extends JPanel {
 		JScrollPane treeView = new JScrollPane(tree);	
 		this.add(treeView,BorderLayout.CENTER);
 		
-		this.retrieveAllIterationsController = new RetrieveAllIterationsController(this);
+		//this.retrieveAllIterationsController = new RetrieveAllIterationsController(this);
 		
 		//Dummy Stuff for now
 		
@@ -64,22 +69,23 @@ public class IterationTreeView extends JPanel {
 		this.tree.expandRow(0);
 	}
 
-	public void refresh() {
-		System.out.print("Getting Iterations from Server\n");
-		this.retrieveAllIterationsController.getAll();
-	}
 	
-	public void refreshIterations(Iteration[] iterations) {
+	public void refresh() {
 		System.out.print("Refreshing tree\n");
 		DefaultMutableTreeNode iterationNode = null;
-        
 		this.top.removeAllChildren();
 		
-		for(int i = 0; i < iterations.length; i++){
-			iterationNode = new DefaultMutableTreeNode(iterations[i].getName());
+		List<Iteration> iterations = IterationDatabase.getAllIterations();
+		
+		for(int i = 0; i < iterations.toArray().length; i++){
+			iterationNode = new DefaultMutableTreeNode(iterations.get(i).getName());
 			
-			for (Integer aReq : iterations[i].getRequirements()) {
-				iterationNode.add(new DefaultMutableTreeNode(aReq.toString()));
+			for (Integer aReq : iterations.get(i).getRequirements()) {
+				try {
+					iterationNode.add(new DefaultMutableTreeNode(RequirementDatabase.getRequirement(aReq)));
+				} catch (RequirementNotFoundException e) {
+					System.out.print("Requirement Not Found");
+				}
 			}
 			
 			this.top.add(iterationNode);

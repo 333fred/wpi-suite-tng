@@ -45,7 +45,7 @@ public class RetrieveAllIterationsController {
 	 */
 	public void receivedData(Iteration[] iterations){
 		//You have the iterations, so here somehow update your view to display them
-		this.view.refreshIterations(iterations);
+		//this.view.refreshIterations(iterations);
 	}
 	
 	/**
