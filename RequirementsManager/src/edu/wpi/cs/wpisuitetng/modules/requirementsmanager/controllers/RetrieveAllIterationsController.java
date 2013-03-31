@@ -3,6 +3,9 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import java.util.Arrays;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
@@ -44,8 +47,8 @@ public class RetrieveAllIterationsController {
 	 * @param iterations an array of iterations returned by the server
 	 */
 	public void receivedData(Iteration[] iterations){
-		//You have the iterations, so here somehow update your view to display them
-		//this.view.refreshIterations(iterations);
+		IterationDatabase.setIterations(Arrays.asList(iterations));
+		view.refresh();
 	}
 	
 	/**

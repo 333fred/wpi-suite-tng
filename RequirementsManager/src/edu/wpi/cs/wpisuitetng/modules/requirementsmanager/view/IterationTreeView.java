@@ -4,7 +4,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -17,7 +16,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 
 /**
@@ -28,11 +26,13 @@ public class IterationTreeView extends JPanel {
 
 	private JTree tree;
 	private DefaultMutableTreeNode top;
-	//private RetrieveAllIterationsController retrieveAllIterationsController;
+	private RetrieveAllIterationsController retrieveAllIterationsController;
 
-	IterationTreeView() {
+	public IterationTreeView() {
 		super(new BorderLayout());
 
+		retrieveAllIterationsController = new RetrieveAllIterationsController(this);
+		
 		this.top = new DefaultMutableTreeNode("Iterations");
 		//this.createNodes(top);
 		this.tree = new JTree(top);	
@@ -77,6 +77,10 @@ public class IterationTreeView extends JPanel {
 		
 		List<Iteration> iterations = IterationDatabase.getAllIterations();
 		
+		for (Iteration i : iterations) {
+			System.out.println("Iteration Name: " + i.getName());
+		}	
+		
 		for(int i = 0; i < iterations.toArray().length; i++){
 			iterationNode = new DefaultMutableTreeNode(iterations.get(i).getName());
 			
@@ -91,6 +95,17 @@ public class IterationTreeView extends JPanel {
 			this.top.add(iterationNode);
 		}
 		this.tree.expandRow(0);
+		
+		//force the tree to redraw
+		tree.invalidate();
+		tree.repaint();
+		tree.repaint();
+		tree.repaint();
+		tree.repaint();
+	}
+	
+	public void getIterationsFromServer() {
+		retrieveAllIterationsController.getAll();
 	}
 
 /*

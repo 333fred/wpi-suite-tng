@@ -54,6 +54,7 @@ public class IterationDatabase {
 	 */
 	public static synchronized void setIterations(List<Iteration> iterations) {
 		init();
+		System.out.println("Set iterations called!!!");
 		IterationDatabase.iterations = new HashMap<Integer, Iteration>();
 		for (Iteration i : iterations) {
 			IterationDatabase.iterations.put(i.getId(), i);

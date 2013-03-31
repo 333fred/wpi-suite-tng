@@ -224,6 +224,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	public void refresh() {
 		//retreive a new copy of requirements, and update the list view
 		getRequirementsFromServer();
+		iterationTree.getIterationsFromServer();
 	}
 	
 	/** Open a new tab containing a view of the selected requirement in the list view
