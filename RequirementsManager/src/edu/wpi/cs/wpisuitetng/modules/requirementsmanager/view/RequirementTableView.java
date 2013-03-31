@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -31,7 +30,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * @author Steve, Mitchell
  *
  */
-
 @SuppressWarnings("serial")
 public class RequirementTableView extends FocusableTab implements IToolbarGroupProvider, IReceivedAllRequirementNotifier {	
 
@@ -56,7 +54,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	
 	@SuppressWarnings("rawtypes")
 	private Vector<Vector> rowData;
-
+	
 	private JTable table;
 	/** Construct for a RequirementListView
 	 * 
@@ -123,7 +121,6 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	void onDoubleClick(int index) {	
 		//update to use this function instead
 		viewRequirement(index);
-
 	}
 	
 	/** Initializes the toolbar group, and adds the buttons that will be displayed to it.
@@ -218,7 +215,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	public void viewRequirement() {
 		//obtain the currently selected requirement
 		int selectedIndex = this.table.getSelectedRow();
-						
+										
 		if (selectedIndex < 0) {
 			//nothing is currently selected
 			return;
@@ -233,7 +230,9 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	 */
 	
 	public void viewRequirement(int index) {
+		boolean requirementIsOpen = false;
 		
+				
 		if (index <0 || index >= requirements.length) {
 			//invalid index
 			System.out.println("Invalid index");
@@ -242,12 +241,21 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		//get the requirement to update from the array
 		Requirement requirementToFetch = requirements[index];
 		
-		// create the controller for fetching the new requirement
-		RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
-				new OpenRequirementTabAction(tabController, requirementToFetch));
+		for (int i = 0; i < this.tabController.getTabView().getTabCount(); i++) {
+			if (this.tabController.getTabView().getTitleAt(i).equals(requirementToFetch.getName())) {
+				this.tabController.switchToTab(i);
+				requirementIsOpen = true;
+			}
+		}
 		
-		//get the requirement from the server
-		retreiveRequirementController.get(requirementToFetch.getrUID());
+		if (!requirementIsOpen) {
+			// create the controller for fetching the new requirement
+			RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
+					new OpenRequirementTabAction(tabController, requirementToFetch));
+			
+			//get the requirement from the server
+			retreiveRequirementController.get(requirementToFetch.getrUID());
+		}
 	}
 
 	/** The updated requirements data has been received, update the list
