@@ -252,6 +252,7 @@ public class RequirementTableView extends FocusableTab implements
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
 		getRequirementsFromServer();
+		iterationTree.getIterationsFromServer();
 	}
 
 	/**
