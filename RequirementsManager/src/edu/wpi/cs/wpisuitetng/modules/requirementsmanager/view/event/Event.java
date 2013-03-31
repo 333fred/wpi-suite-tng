@@ -13,14 +13,12 @@ public interface Event {
 	 * 
 	 * @return The title
 	 */
-	
 	public String getTitle();
 	
 	/** Returns this events content
 	 * 
 	 * @return The content
-	 */
-	
+	 */	
 	public String getContent();
 	
 }
