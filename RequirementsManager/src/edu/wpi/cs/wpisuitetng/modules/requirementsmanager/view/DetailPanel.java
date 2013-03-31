@@ -558,10 +558,14 @@ public class DetailPanel extends FocusableTab {
 			comboBoxPriority.setSelectedIndex(3);
 			break;
 		}
-
-		noteView = new DetailNoteView(this.requirement, this);
+		
 		logView = new DetailLogView(this.requirement, this);
-		userView = new AssigneePanel(requirement,this);
+		noteView = new DetailNoteView(this.requirement, this);
+		
+		//User assignment panel is not created if the status is deleted
+		if(requirement.getStatus() != Status.DELETED){
+			userView = new AssigneePanel(requirement,this);
+		}
 	
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
@@ -596,6 +600,8 @@ public class DetailPanel extends FocusableTab {
 		
 		this.determineAvailableStatusOptions();
 		this.disableSaveButton();
+		this.disableAllFieldsIfDeleted();
+		
 		
 	}
 	/**
@@ -605,16 +611,21 @@ public class DetailPanel extends FocusableTab {
 
 	private void determineAvailableStatusOptions() {
 		// String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
+		if (requirement.getStatus() == Status.IN_PROGRESS) {
+			//In Progress: In Progress, Complete, Deleted	
+			this.comboBoxStatus.removeItem("New");
+			this.comboBoxStatus.removeItem("Open");
+			this.comboBoxStatus.removeItem("Deleted");
+		}
+		else if (requirement.getSubRequirements().size() > 0 /*||  TODO: add check for tasks */)
+		{
+			this.comboBoxStatus.removeItem("Deleted");
+		}
 		if (requirement.getStatus() == Status.NEW) {
 			//New: New, Deleted
 			this.comboBoxStatus.removeItem("In Progress");
 			this.comboBoxStatus.removeItem("Open");
 			this.comboBoxStatus.removeItem("Complete");
-		}
-		if (requirement.getStatus() == Status.IN_PROGRESS) {
-			//In Progress: In Progress, Complete, Deleted	
-			this.comboBoxStatus.removeItem("New");
-			this.comboBoxStatus.removeItem("Open");
 		}
 		if (requirement.getStatus() == Status.OPEN) {
 			//Open: Open, Deleted		
@@ -764,6 +775,28 @@ public class DetailPanel extends FocusableTab {
 	}
 	public List<String> getAssignedUsers() {
 		return this.userView.getAssignedUsersList();
+	}
+	
+	
+	/**
+	 * Checks requirement status:
+	 * 	If deleted, disables all editable fields except status
+	 * 	Else do nothing
+	 */
+	public void disableAllFieldsIfDeleted(){
+		if(requirement.getStatus() != Status.DELETED)
+			return;
+		textName.setEnabled(false);
+		textDescription.setEnabled(false);
+		textIteration.setEnabled(false);
+		textRelease.setEnabled(false);
+		textEstimate.setEnabled(false);
+		textActual.setEnabled(false);
+		
+		comboBoxType.setEnabled(false);
+		comboBoxPriority.setEnabled(false);
+		
+		
 	}
 
 }
