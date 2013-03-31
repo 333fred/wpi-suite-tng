@@ -3,6 +3,7 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -43,7 +44,11 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 			this.detailPanel.getMainTabController().closeCurrentTab();
 		}
 		
-		detailPanel.logView.refresh(Requirement.fromJSON(response.getBody()));
+		Requirement req = Requirement.fromJSON(response.getBody());
+		
+		RequirementDatabase.addRequirement(req);
+		
+		detailPanel.logView.refresh(req);
 				
 		/*if (response.getStatusCode() == 200) {
 			// parse the requirement from the body

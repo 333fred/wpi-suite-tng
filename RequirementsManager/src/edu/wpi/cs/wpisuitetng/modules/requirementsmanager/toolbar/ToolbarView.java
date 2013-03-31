@@ -15,7 +15,6 @@ import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -25,8 +24,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
-	private JButton createRequirement;	
+
 	private JButton createHelpPanel;
+
+	/** Button for creating a requirement */
+	private JButton createRequirement;
+	
+	/** Button for creating iteration */
+	private JButton createIteration;
+
 	// private JPlaceholderTextField searchField;
 	
 	/**
@@ -45,10 +51,15 @@ public class ToolbarView extends DefaultToolbarView {
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
 		
+
 		// Construct the User Manual button
 		createHelpPanel = new JButton("User Manual");		
 		createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
 		
+
+		createIteration = new JButton("Create Iteration");
+		createIteration.setAction(new CreateIterationAction(tabController));
+
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
 		// searchField.addActionListener(new LookupRequirementController(tabController, searchField, this));
@@ -61,8 +72,14 @@ public class ToolbarView extends DefaultToolbarView {
 		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8, SpringLayout.WEST, content);
 		
 		// Add buttons to the content panel
+		layout.putConstraint(SpringLayout.NORTH, createIteration, 5, SpringLayout.SOUTH, createRequirement);
+		layout.putConstraint(SpringLayout.WEST, createIteration, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, createIteration, 0, SpringLayout.EAST, createRequirement);
+		
 		content.add(createRequirement);;
 		content.add(createHelpPanel);;
+		content.add(createIteration);
+
 		//content.add(searchField);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar

@@ -41,7 +41,7 @@ public class RefreshAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		requirementList.refresh();
+		requirementList.refresh();		
 	}
 
 }
