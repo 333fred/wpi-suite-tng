@@ -25,7 +25,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
-	private JButton createRequirement;
+	private JButton createRequirement;	
+	private JButton createHelpPanel;
 	// private JPlaceholderTextField searchField;
 	
 	/**
@@ -43,7 +44,11 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the create Requirement button
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
-			
+		
+		// Construct the User Manual button
+		createHelpPanel = new JButton("User Manual");		
+		createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
+		
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
 		// searchField.addActionListener(new LookupRequirementController(tabController, searchField, this));
@@ -52,8 +57,12 @@ public class ToolbarView extends DefaultToolbarView {
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5, SpringLayout.NORTH, content);
 		layout.putConstraint(SpringLayout.WEST, createRequirement, 8, SpringLayout.WEST, content);
 		
+		layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 15, SpringLayout.SOUTH, createRequirement);
+		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8, SpringLayout.WEST, content);
+		
 		// Add buttons to the content panel
 		content.add(createRequirement);;
+		content.add(createHelpPanel);;
 		//content.add(searchField);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
