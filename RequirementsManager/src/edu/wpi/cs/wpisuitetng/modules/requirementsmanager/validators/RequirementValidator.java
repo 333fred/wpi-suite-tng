@@ -177,10 +177,6 @@ public class RequirementValidator {
 
 		
 		//Initialize any null lists to be empty
-		if(requirement.getLog() == null){
-			requirement.setLog(new LinkedList<Log>());
-		}
-		
 		if (requirement.getNotes() == null) {
 			requirement.setNotes(new LinkedList<Note>());
 		}
