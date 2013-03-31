@@ -133,7 +133,7 @@ public class IterationView extends FocusableTab{
 			calEndDate.setDate(iteration.getEndDate());			
 		}
 		
-		txtName.addKeyListener(new IterationViewListener(this, txtName));
+		//txtName.addKeyListener(new IterationViewListener(this, txtName));
 		
 		/*
 		IterationViewListener startDateListener = new IterationViewListener(this, calStartDate);

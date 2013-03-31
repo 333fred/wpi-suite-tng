@@ -96,9 +96,7 @@ public class IterationTreeView extends JPanel {
 			this.top.add(iterationNode);
 		}
 		this.tree.expandRow(0);
-
-		// force the tree to redraw
-		tree.invalidate();
+		this.tree.repaint();
 	}
 
 	public void getIterationsFromServer() {
