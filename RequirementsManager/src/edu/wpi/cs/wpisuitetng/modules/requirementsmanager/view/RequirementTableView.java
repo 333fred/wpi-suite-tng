@@ -2,14 +2,16 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
@@ -17,6 +19,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -31,7 +34,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * @author Steve, Mitchell
  *
  */
-
 @SuppressWarnings("serial")
 public class RequirementTableView extends FocusableTab implements IToolbarGroupProvider, IReceivedAllRequirementNotifier {	
 
@@ -56,16 +58,20 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	
 	@SuppressWarnings("rawtypes")
 	private Vector<Vector> rowData;
-
+	
 	private JTable table;
-	/** Construct for a RequirementListView
+	
+	private IterationTreeView iterationTree;
+	
+	/** Constructor for a RequirementTableView
 	 * 
 	 * 
 	 */
-		
 	@SuppressWarnings("rawtypes")
 	public RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
+		this.iterationTree = new IterationTreeView();
+		
 		firstPaint = false;
 		//create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
@@ -74,17 +80,19 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		
 		requirements = new Requirement[0];
 	
-		//set this JPanel to use a border layout
-		setLayout(new BorderLayout(0, 0));
-			
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		//setLayout(new BorderLayout(0, 0));
+		GridLayout mainLayout = new GridLayout(0, 1);
+		setLayout(mainLayout);	
+		
 	    Vector<String> columnNames = new Vector<String>();
 	    columnNames.addElement("Name");
 	    columnNames.addElement("Type");
 	    columnNames.addElement("Priority");
 	    columnNames.addElement("Status");
 	    columnNames.addElement("Iteration");
-	    //TODO: columnNames.addElement("Estimate");
-	    columnNames.addElement("Actual");
+	    columnNames.addElement("Effort");
+	    columnNames.addElement("Estimate");
 	    columnNames.addElement("Release Number");
 		
 	    this.rowData = new Vector<Vector>();
@@ -96,10 +104,15 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		    };
 		};
 				
-		JScrollPane scrollPane = new JScrollPane(table);
-		table.setFillsViewportHeight(true);
+		JScrollPane scrollPane = new JScrollPane(this.table);
+		this.table.setFillsViewportHeight(true);
+		this.table.setAutoCreateRowSorter(true);
+		mainPanel.add(scrollPane,BorderLayout.CENTER);
 		
-		add(scrollPane,BorderLayout.CENTER);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,iterationTree,mainPanel);
+		add(splitPane);
+
+		splitPane.setResizeWeight(0.1);
 		
 		//Add double click event listener		
 		  this.table.addMouseListener(new MouseAdapter() {
@@ -123,7 +136,6 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	void onDoubleClick(int index) {	
 		//update to use this function instead
 		viewRequirement(index);
-
 	}
 	
 	/** Initializes the toolbar group, and adds the buttons that will be displayed to it.
@@ -161,6 +173,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 			row.addElement(requirements[i].getStatus().toString());
 			row.addElement(String.valueOf(requirements[i].getIteration()));
 			row.addElement(String.valueOf(requirements[i].getEffort()));
+			row.addElement("");
 			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
 			this.rowData.add(row);
 		}
@@ -179,6 +192,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	}
 	
 	/** Updates the list view acording to the values in the Requirements Array
+	 * @throws RequirementNotFoundException 
 	 * 
 	 * */
 	
@@ -191,6 +205,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		//invalidate the list so it is forced to be redrawn
 		//this.table.invalidate();
 		this.table.repaint();
+		this.iterationTree.refresh();
 	}
 
 	/** Inherited from IToolBarGroup Provider, Provides the toolbar buttons used by this view
@@ -218,7 +233,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	public void viewRequirement() {
 		//obtain the currently selected requirement
 		int selectedIndex = this.table.getSelectedRow();
-						
+										
 		if (selectedIndex < 0) {
 			//nothing is currently selected
 			return;
@@ -233,7 +248,9 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	 */
 	
 	public void viewRequirement(int index) {
+		boolean requirementIsOpen = false;
 		
+				
 		if (index <0 || index >= requirements.length) {
 			//invalid index
 			System.out.println("Invalid index");
@@ -242,12 +259,21 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		//get the requirement to update from the array
 		Requirement requirementToFetch = requirements[index];
 		
-		// create the controller for fetching the new requirement
-		RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
-				new OpenRequirementTabAction(tabController, requirementToFetch));
+		for (int i = 0; i < this.tabController.getTabView().getTabCount(); i++) {
+			if (this.tabController.getTabView().getTitleAt(i).equals(requirementToFetch.getName())) {
+				this.tabController.switchToTab(i);
+				requirementIsOpen = true;
+			}
+		}
 		
-		//get the requirement from the server
-		retreiveRequirementController.get(requirementToFetch.getrUID());
+		if (!requirementIsOpen) {
+			// create the controller for fetching the new requirement
+			RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
+					new OpenRequirementTabAction(tabController, requirementToFetch));
+			
+			//get the requirement from the server
+			retreiveRequirementController.get(requirementToFetch.getrUID());
+		}
 	}
 
 	/** The updated requirements data has been received, update the list
@@ -276,7 +302,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	 */
 	
 	public void onTabFocus() {
-		refresh();		
+		refresh();
 	}
 	
 	/** Retrieve the requirements from the server when the GUI is first painted

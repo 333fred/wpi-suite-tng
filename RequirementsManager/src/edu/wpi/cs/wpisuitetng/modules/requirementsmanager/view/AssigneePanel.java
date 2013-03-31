@@ -308,5 +308,12 @@ public class AssigneePanel extends JPanel {
 			}
 		}
 	}
+	
+	public void disableUserButtons(){
+		assignSelectedUsers.setEnabled(false);
+		unassignSelectedUsers.setEnabled(false);
+		unassignedUsers.setEnabled(false);
+		assignedUsers.setEnabled(false);
+	}
 }
 

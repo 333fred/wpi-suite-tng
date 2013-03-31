@@ -128,13 +128,18 @@ public class MainTabController {
 	 * Changes the selected tab to the tab with the given index
 	 * @param tabIndex the index of the tab to select
 	 */
-	private void switchToTab(int tabIndex) {
+	public void switchToTab(int tabIndex) {
 		try {
 			tabView.setSelectedIndex(tabIndex);
 		}
 		catch (IndexOutOfBoundsException e) {
 			// an invalid tab was requested, do nothing
 		}
+	}
+
+
+	public MainTabView getTabView() {
+		return tabView;
 	}
 	
 }
