@@ -49,7 +49,7 @@ public class Logger {
 	 * @author Fredric
 	 */
 	public enum EventType {
-		NAME_CHANGE, DESC_CHANGE, TYPE_CHANGE, STATUS_CHANGE, PRIORITY_CHANGE, RELEASE_CHANGE, ITER_CHANGE, EFFORT_CHANGE, ASSIGN_CHANGE, SUB_CHANGE, PARENT_CHANGE, NOTE_CHANGE
+		NAME_CHANGE, DESC_CHANGE, TYPE_CHANGE, STATUS_CHANGE, PRIORITY_CHANGE, RELEASE_CHANGE, ITER_CHANGE, EFFORT_CHANGE, ESTIMATE_CHANGE, ASSIGN_CHANGE, SUB_CHANGE, PARENT_CHANGE, NOTE_CHANGE
 	}
 
 	/**
@@ -203,6 +203,13 @@ public class Logger {
 			case EFFORT_CHANGE:
 				if (type == null) {
 					type = "Effort: ";
+				}
+				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
+						+ " to <b>" + event.newVal.toString() + "</b><br>";
+				updated = true;
+			case ESTIMATE_CHANGE:
+				if (type == null) {
+					type = "Estimate: ";
 				}
 				logMsg += type + "<b>" + event.oldVal.toString() + "</b>"
 						+ " to <b>" + event.newVal.toString() + "</b><br>";

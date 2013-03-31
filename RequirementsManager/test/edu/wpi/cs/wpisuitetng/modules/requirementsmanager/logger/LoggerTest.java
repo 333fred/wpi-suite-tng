@@ -120,4 +120,22 @@ public class LoggerTest {
 		assertEquals(requirement.getLogger().getLogs().size(), 3);
 		
 	}
+	
+	/**
+	 * Test of the logger's ability to add a log of an estimate change
+	 * using a synthetic event
+	 */
+	@Test
+	public void testEstimateChange(){
+		
+		requirement = new Requirement();
+		requirement.logCreation(session);
+		Logger.Event e = requirement.getLogger().new Event(new Integer(1), new Integer(2), Logger.EventType.ESTIMATE_CHANGE);
+		List<Logger.Event> list = new ArrayList<Logger.Event>();
+		list.add(e);
+		requirement.logEvents(list, session);
+		String logString = requirement.getLogger().getLogs().get(0).getLog();
+		assertTrue(logString.contains("Estimate: ") && logString.contains("1") && logString.contains("2"));
+		
+	}
 }

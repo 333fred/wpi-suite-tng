@@ -41,6 +41,7 @@ public class Requirement extends AbstractModel {
 	// Date and scheduling attributes
 	private int releaseNum; // TODO: Implement Releases
 	private int iteration; // TODO: Implement Iterations
+	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
 	private int estimate;
@@ -68,6 +69,7 @@ public class Requirement extends AbstractModel {
 		releaseNum = 0;
 		iteration = -1;
 		effort = 0;
+		estimate = 0;
 		assignees = new ArrayList<String>();
 		subRequirements = new ArrayList<Integer>();
 		pUID = new ArrayList<Integer>();
@@ -392,6 +394,25 @@ public class Requirement extends AbstractModel {
 	 */
 	public void setEffort(int effort) {
 		this.effort = effort;
+	}
+	
+	/**
+	 * Gets the total estimate for the requirement
+	 * 
+	 * @return the estimate
+	 */
+	public int getEstimate() {
+		return estimate;
+	}
+
+	/**
+	 * Sets the estimate for the requirement
+	 * 
+	 * @param estimate
+	 *            the estimate to set
+	 */
+	public void setEstimate(int estimate) {
+		this.estimate = estimate;
 	}
 
 	/**
