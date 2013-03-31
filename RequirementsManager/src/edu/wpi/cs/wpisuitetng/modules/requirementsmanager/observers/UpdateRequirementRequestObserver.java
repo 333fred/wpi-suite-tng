@@ -46,7 +46,7 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 		
 		Requirement req = Requirement.fromJSON(response.getBody());
 		
-		RequirementDatabase.addRequirement(req);
+		RequirementDatabase.getInstance().addRequirement(req);
 		
 		detailPanel.logView.refresh(req);
 				

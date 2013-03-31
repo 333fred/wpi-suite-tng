@@ -19,19 +19,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  */
 public class RequirementDatabase {
 
-	private static Map<Integer, Requirement> requirements;
-	private static boolean initialized;
-
-	/**
-	 * Initializes the database for the first time
-	 */
-	private static synchronized void init() {
-		if (initialized) {
-			return;
-		} else {
-			initialized = true;
-			requirements = new HashMap<Integer, Requirement>();
+	private Map<Integer, Requirement> requirements;
+	private static RequirementDatabase db;
+	
+	private RequirementDatabase(){
+		requirements = new HashMap<Integer, Requirement>();
+	}
+	
+	public static RequirementDatabase getInstance(){
+		if(db == null){
+			db = new RequirementDatabase();
 		}
+		return db;
 	}
 
 	/**
@@ -39,10 +38,9 @@ public class RequirementDatabase {
 	 * 
 	 * @param requirements
 	 */
-	public static synchronized void setRequirements(
+	public synchronized void setRequirements(
 			Map<Integer, Requirement> requirements) {
-		init();
-		RequirementDatabase.requirements = requirements;
+		this.requirements = requirements;
 	}
 
 	/**
@@ -52,11 +50,10 @@ public class RequirementDatabase {
 	 * @param requirements
 	 *            the requirements to add
 	 */
-	public static synchronized void setRequirements(List<Requirement> requirements) {
-		init();
-		RequirementDatabase.requirements = new HashMap<Integer, Requirement>();
+	public synchronized void setRequirements(List<Requirement> requirements) {
+		this.requirements = new HashMap<Integer, Requirement>();
 		for (Requirement i : requirements) {
-			RequirementDatabase.requirements.put(i.getrUID(), i);
+			this.requirements.put(i.getrUID(), i);
 		}
 	}
 
@@ -67,10 +64,9 @@ public class RequirementDatabase {
 	 * 
 	 * @param requirements the requirements to add/update
 	 */
-	public static synchronized void addRequirements(List<Requirement> requirements) {
-		init();
+	public synchronized void addRequirements(List<Requirement> requirements) {
 		for (Requirement i : requirements) {
-			RequirementDatabase.requirements.put(i.getrUID(), i);
+			this.requirements.put(i.getrUID(), i);
 		}
 	}
 	
@@ -78,8 +74,7 @@ public class RequirementDatabase {
 	 * Adds or updates a specific requirement
 	 * @param i the requirement to add/update
 	 */
-	public static synchronized void addRequirement(Requirement i){
-		init();
+	public synchronized void addRequirement(Requirement i){
 		requirements.put(i.getrUID(), i);
 	}
 
@@ -92,9 +87,8 @@ public class RequirementDatabase {
 	 * @throws RequirementNotFoundException
 	 *             couldn't find the requirement
 	 */
-	public static synchronized Requirement getRequirement(int id)
+	public synchronized Requirement getRequirement(int id)
 			throws RequirementNotFoundException {
-		init();
 		if (requirements.get(id) != null) {
 			return requirements.get(id);
 		} else {
@@ -107,8 +101,7 @@ public class RequirementDatabase {
 	 * 
 	 * @return all the current arrays
 	 */
-	public static synchronized List<Requirement> getAllRequirements() {
-		init();
+	public synchronized List<Requirement> getAllRequirements() {
 		List<Requirement> list = new ArrayList<Requirement>();
 		list = Arrays.asList(requirements.values().toArray(new Requirement[0]));
 		return list;

@@ -49,7 +49,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		// print the body
 		System.out.println("Received response: " + response.getBody());
 		
-		RequirementDatabase.addRequirement(Requirement.fromJSON(response.getBody()));
+		RequirementDatabase.getInstance().addRequirement(Requirement.fromJSON(response.getBody()));
 
 		this.detailPanel.getMainTabController().closeCurrentTab();
 		

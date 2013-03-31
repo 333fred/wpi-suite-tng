@@ -42,7 +42,7 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 			// parse the response				
 			Requirement[] requirements = Requirement.fromJSONArray(response.getBody());
 
-			RequirementDatabase.setRequirements(Arrays.asList(requirements));
+			RequirementDatabase.getInstance().setRequirements(Arrays.asList(requirements));
 			
 			// notify the controller
 			controller.receivedData(requirements);

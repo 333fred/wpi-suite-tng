@@ -19,19 +19,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
  */
 public class IterationDatabase {
 
-	private static Map<Integer, Iteration> iterations;
-	private static boolean initialized;
+	private Map<Integer, Iteration> iterations;
+	private static IterationDatabase db;
 
-	/**
-	 * Initializes the database for the first time
-	 */
-	private static synchronized void init() {
-		if (initialized) {
-			return;
-		} else {
-			initialized = true;
-			iterations = new HashMap<Integer, Iteration>();
+	private IterationDatabase(){
+		iterations = new HashMap<Integer, Iteration>();
+	}
+	
+	public static IterationDatabase getInstance() {
+		if(db == null){
+			db = new IterationDatabase();
 		}
+		return db;
 	}
 
 	/**
@@ -39,10 +38,9 @@ public class IterationDatabase {
 	 * 
 	 * @param iterations
 	 */
-	public static synchronized void setIterations(
+	public synchronized void setIterations(
 			Map<Integer, Iteration> iterations) {
-		init();
-		IterationDatabase.iterations = iterations;
+		this.iterations = iterations;
 	}
 
 	/**
@@ -52,12 +50,11 @@ public class IterationDatabase {
 	 * @param iterations
 	 *            the iterations to add
 	 */
-	public static synchronized void setIterations(List<Iteration> iterations) {
-		init();
+	public synchronized void setIterations(List<Iteration> iterations) {
 		System.out.println("Set iterations called!!!");
-		IterationDatabase.iterations = new HashMap<Integer, Iteration>();
+		this.iterations = new HashMap<Integer, Iteration>();
 		for (Iteration i : iterations) {
-			IterationDatabase.iterations.put(i.getId(), i);
+			this.iterations.put(i.getId(), i);
 		}
 	}
 
@@ -68,10 +65,9 @@ public class IterationDatabase {
 	 * 
 	 * @param iterations the iterations to add/update
 	 */
-	public static synchronized void addIterations(List<Iteration> iterations) {
-		init();
+	public synchronized void addIterations(List<Iteration> iterations) {
 		for (Iteration i : iterations) {
-			IterationDatabase.iterations.put(i.getId(), i);
+			this.iterations.put(i.getId(), i);
 		}
 	}
 	
@@ -79,8 +75,7 @@ public class IterationDatabase {
 	 * Adds or updates a specific iteration
 	 * @param i the iteration to add/update
 	 */
-	public static synchronized void addIteration(Iteration i){
-		init();
+	public synchronized void addIteration(Iteration i){
 		iterations.put(i.getId(), i);
 	}
 
@@ -93,9 +88,8 @@ public class IterationDatabase {
 	 * @throws IterationNotFoundException
 	 *             couldn't find the iteration
 	 */
-	public static synchronized Iteration getIteration(int id)
+	public synchronized Iteration getIteration(int id)
 			throws IterationNotFoundException {
-		init();
 		if (iterations.get(id) != null) {
 			return iterations.get(id);
 		} else {
@@ -108,10 +102,10 @@ public class IterationDatabase {
 	 * 
 	 * @return all the current arrays
 	 */
-	public static synchronized List<Iteration> getAllIterations() {
-		init();
+	public synchronized List<Iteration> getAllIterations() {
+		//init();
 		List<Iteration> list = new ArrayList<Iteration>();
-		list = Arrays.asList(iterations.values().toArray(new Iteration[0]));
+		list = new ArrayList<Iteration>(iterations.values());
 		return list;
 	}
 
