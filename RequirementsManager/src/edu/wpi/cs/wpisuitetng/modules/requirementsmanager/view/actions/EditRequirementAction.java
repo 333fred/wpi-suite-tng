@@ -66,8 +66,8 @@ public class EditRequirementAction extends AbstractAction {
 			parentView.getTextDescriptionValid().setText("");
 		}
 
-		
-		else {
+		if (!parentView.getTextName().getText().trim().equals("") && !parentView.getTextDescription().getText().trim().equals("")) 
+		{
 			// Checks to make sure that both the name and descriptions are not
 			// empty, and attempts to save the requirements
 			if (!parentView.getTextName().getText().trim().equals("")
