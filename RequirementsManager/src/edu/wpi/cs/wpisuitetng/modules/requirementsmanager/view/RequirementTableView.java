@@ -16,6 +16,9 @@ import javax.swing.JTable;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
@@ -168,12 +171,12 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 		for(int i = 0; i < requirements.length; i++){
 			Vector<String> row = new Vector<String>();
 			row.addElement(requirements[i].getName());
-			row.addElement(requirements[i].getType().toString());
-			row.addElement(requirements[i].getPriority().toString());
-			row.addElement(requirements[i].getStatus().toString());
+			row.addElement(requirements[i].getType().equals(Type.BLANK) ? "" : requirements[i].getType().toString().substring(0,1).concat(requirements[i].getType().toString().substring(1).toLowerCase()));
+			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? "" : requirements[i].getPriority().toString().substring(0,1).concat(requirements[i].getPriority().toString().substring(1).toLowerCase()));
+			row.addElement(requirements[i].getStatus().equals(Status.BLANK) ? "" : requirements[i].getStatus().toString().substring(0,1).concat(requirements[i].getStatus().toString().substring(1).toLowerCase()));
 			row.addElement(String.valueOf(requirements[i].getIteration()));
 			row.addElement(String.valueOf(requirements[i].getEffort()));
-			row.addElement("");
+			row.addElement(String.valueOf(requirements[i].getEstimate()));
 			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
 			this.rowData.add(row);
 		}
