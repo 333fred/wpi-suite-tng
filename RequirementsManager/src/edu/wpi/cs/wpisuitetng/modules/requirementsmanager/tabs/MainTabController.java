@@ -9,6 +9,7 @@ import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 
 /**
@@ -75,6 +76,12 @@ public class MainTabController {
 	public Tab addCreateRequirementTab() {
 		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this); 
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
+	}
+	
+	//TEST
+	public Tab addHelpPanelTab() {
+		HelpPanel emptyDetailView = new HelpPanel(); 
+		return addTab("User Manual", new ImageIcon(), emptyDetailView, "User Manual");		
 	}
 	
 	public Tab addCreateIterationTab() {
