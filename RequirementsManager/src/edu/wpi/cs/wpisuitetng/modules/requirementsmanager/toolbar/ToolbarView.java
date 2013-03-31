@@ -15,7 +15,6 @@ import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -25,7 +24,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
+	/** Button for creating a requirement */
 	private JButton createRequirement;
+	
+	/** Button for creating iteration */
+	private JButton createIteration;
 	// private JPlaceholderTextField searchField;
 	
 	/**
@@ -43,6 +46,9 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the create Requirement button
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
+		
+		createIteration = new JButton("Create Iteration");
+		createIteration.setAction(new CreateIterationAction(tabController));
 			
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -52,8 +58,13 @@ public class ToolbarView extends DefaultToolbarView {
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5, SpringLayout.NORTH, content);
 		layout.putConstraint(SpringLayout.WEST, createRequirement, 8, SpringLayout.WEST, content);
 		
+		layout.putConstraint(SpringLayout.NORTH, createIteration, 5, SpringLayout.SOUTH, createRequirement);
+		layout.putConstraint(SpringLayout.WEST, createIteration, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, createIteration, 0, SpringLayout.EAST, createRequirement);
+		
 		// Add buttons to the content panel
-		content.add(createRequirement);;
+		content.add(createRequirement);
+		content.add(createIteration);
 		//content.add(searchField);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
