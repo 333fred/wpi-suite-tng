@@ -30,10 +30,10 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 		
 		//create dummy list
 		testIterations = new Iteration[4];
-		testIterations[0] = new Iteration(new Date(), new Date(), 1);
-		testIterations[1] = new Iteration(new Date(), new Date(), 2);
-		testIterations[2] = new Iteration(new Date(), new Date(), 3);
-		testIterations[3] = new Iteration(new Date(), new Date(), 4);
+		testIterations[0] = new Iteration("",new Date(), new Date(), 1);
+		testIterations[1] = new Iteration("",new Date(), new Date(), 2);
+		testIterations[2] = new Iteration("",new Date(), new Date(), 3);
+		testIterations[3] = new Iteration("",new Date(), new Date(), 4);
 		
 		//Now callback
 		controller.receivedData(testIterations);

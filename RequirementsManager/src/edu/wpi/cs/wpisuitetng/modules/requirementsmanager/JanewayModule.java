@@ -72,7 +72,7 @@ public class JanewayModule implements IJanewayModule {
 		toolbarController = new ToolbarController(toolbarView, tabController);
 		
 		tabController.addTab("Requirements List", new ImageIcon(), requirementListView, "The list of requirements");
-		
+		tabController.addCreateIterationTab();
 		
 		//create a new JanewayTabModel, passing in the tab view, and a new JPanel as the toolbar
 		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), toolbarView, tabView);
