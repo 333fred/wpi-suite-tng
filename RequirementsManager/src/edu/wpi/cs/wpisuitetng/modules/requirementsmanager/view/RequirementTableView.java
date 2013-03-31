@@ -81,8 +81,8 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 	    columnNames.addElement("Priority");
 	    columnNames.addElement("Status");
 	    columnNames.addElement("Iteration");
-	    //TODO: columnNames.addElement("Estimate");
-	    columnNames.addElement("Actual");
+	    columnNames.addElement("Effort");
+	    columnNames.addElement("Estimate");
 	    columnNames.addElement("Release Number");
 		
 	    this.rowData = new Vector<Vector>();
@@ -158,6 +158,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 			row.addElement(requirements[i].getStatus().toString());
 			row.addElement(String.valueOf(requirements[i].getIteration()));
 			row.addElement(String.valueOf(requirements[i].getEffort()));
+			row.addElement("");
 			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
 			this.rowData.add(row);
 		}
