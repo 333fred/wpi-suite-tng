@@ -2,10 +2,12 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
@@ -23,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  *
  */
 
-public class IterationView extends FocusableTab {
+public class IterationView extends FocusableTab implements ActionListener {
 	
 	/** Status enum, whether created or edited */
 	private enum Status {
@@ -34,7 +36,7 @@ public class IterationView extends FocusableTab {
 	/** Controller for adding an iteration */
 	private AddIterationController addIterationController;
 	
-	/** THe maintab controller */
+	/** The maintab controller */
 	private MainTabController mainTabController;
 	
 	/** The iteration object this view will be displaying / creating */
@@ -70,6 +72,8 @@ public class IterationView extends FocusableTab {
 	private final int VERTICAL_PADDING = 10;
 	private final int HORIZONTAL_PADDING = 20;
 	
+	private boolean saveEnabled;
+	
 	public IterationView(Iteration iteration, MainTabController mainTabController) {
 		this(iteration, Status.EDIT, mainTabController);
 	}
@@ -82,6 +86,8 @@ public class IterationView extends FocusableTab {
 		this.iteration = iteration;
 		this.status = status;
 		this.mainTabController = mainTabController;
+		
+		this.saveEnabled = false;
 		
 		//initilize the add iteration controller
 		addIterationController = new AddIterationController(this);
@@ -100,14 +106,14 @@ public class IterationView extends FocusableTab {
 		
 		butSave = new JButton();
 		butSave.setAction(new SaveAction());
+		butSave.setEnabled(saveEnabled);
 		
 		if (status == Status.CREATE) {
 			butSave.setText("Create");
 		}
 		else {
 			butSave.setText("Save");
-		}
-		
+		}	
 		
 		
 		butCancel = new JButton("Cancel");
@@ -117,6 +123,13 @@ public class IterationView extends FocusableTab {
 		
 		calStartDate = new JCalendar();
 		calEndDate = new JCalendar();
+		
+		// populate fields, if editing
+		if (status == Status.EDIT) {
+			txtName.setText(iteration.getName());
+			calStartDate.setDate(iteration.getStartDate());
+			calEndDate.setDate(iteration.getEndDate());			
+		}
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -256,6 +269,26 @@ public class IterationView extends FocusableTab {
 		}
 		else {
 			labCalendarError.setText(" ");
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JComponent source = (JComponent)e.getSource();
+		
+		//if the save was disabled, enable it
+		if (!saveEnabled) {
+			saveEnabled = true;
+		}
+		
+		if (source.equals(txtName)) {
+			
+		}
+		else if (source.equals(calEndDate)) {
+			
+		}
+		else {
+			
 		}
 	}
 	
