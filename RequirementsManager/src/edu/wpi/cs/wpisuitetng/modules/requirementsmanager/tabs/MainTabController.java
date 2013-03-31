@@ -78,7 +78,7 @@ public class MainTabController {
 	}
 	
 	public Tab addCreateIterationTab() {
-		IterationView view = new IterationView();
+		IterationView view = new IterationView(this);
 		return addTab("New Iteration", new ImageIcon(), view, "New Iteration");
 	}
 	
