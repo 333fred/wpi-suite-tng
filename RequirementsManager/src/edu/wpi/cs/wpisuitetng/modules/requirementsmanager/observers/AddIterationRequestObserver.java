@@ -8,6 +8,8 @@ import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -48,6 +50,8 @@ public class AddIterationRequestObserver implements RequestObserver {
 
 		// print the body
 		System.out.println("Received response: " + response.getBody());
+		
+		IterationDatabase.addIteration(Iteration.fromJSON(response.getBody()));
 
 		this.detailPanel.getMainTabController().closeCurrentTab();
 		
