@@ -105,6 +105,7 @@ public class RequirementTableView extends FocusableTab implements IToolbarGroupP
 				
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
+		this.table.setAutoCreateRowSorter(true);
 		mainPanel.add(scrollPane,BorderLayout.CENTER);
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,iterationTree,mainPanel);
