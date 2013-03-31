@@ -36,6 +36,7 @@ public class CreateRequirementAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		controller.addCreateRequirementTab();
+		//controller.addHelpPanelTab();
 	}
 
 }

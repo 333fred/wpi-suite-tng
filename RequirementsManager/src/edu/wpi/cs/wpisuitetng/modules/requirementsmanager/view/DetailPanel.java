@@ -297,8 +297,6 @@ public class DetailPanel extends FocusableTab {
 		
 		textEstimate = new JTextArea(1,9);
 		textEstimate.setBorder((new JTextField()).getBorder());
-		textEstimate.setEnabled(false); // SET DISABLED FOR THIS ITERATION
-		textEstimate.setBackground(defaultColor);
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
@@ -388,6 +386,8 @@ public class DetailPanel extends FocusableTab {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
 			textIteration.setEnabled(false);
 			textIteration.setBackground(defaultColor);
 		} else {
@@ -604,7 +604,10 @@ public class DetailPanel extends FocusableTab {
 		this.disableSaveButton();
 		this.disableAllFieldsIfDeleted();
 		
-		
+		if (requirement.getStatus() == Status.IN_PROGRESS ||  requirement.getStatus() == Status.COMPLETE) {
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
 	}
 	/**
 	 * Method to determine to which statuses the currently viewed requirement 
@@ -786,13 +789,18 @@ public class DetailPanel extends FocusableTab {
 	 * 	Else do nothing
 	 */
 	public void disableAllFieldsIfDeleted(){
+		JPanel panel = new JPanel();
+		Color defaultColor = panel.getBackground();
+		
 		if(requirement.getStatus() != Status.DELETED)
 			return;
 		textName.setEnabled(false);
 		textDescription.setEnabled(false);
 		textIteration.setEnabled(false);
+		textIteration.setBackground(defaultColor);
 		textRelease.setEnabled(false);
 		textEstimate.setEnabled(false);
+		textEstimate.setBackground(defaultColor);
 		textActual.setEnabled(false);
 		
 		comboBoxType.setEnabled(false);
