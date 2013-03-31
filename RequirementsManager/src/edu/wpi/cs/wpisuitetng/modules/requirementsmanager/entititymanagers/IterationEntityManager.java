@@ -45,6 +45,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 
 		// Get the id for the new iteration
 		newIteration.setId(Count() + 1);
+		System.out.println("Count " + Count());
 
 		// Validate the new iteration
 		List<ValidationIssue> issues = validator.validate(s, newIteration,
@@ -100,8 +101,12 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 */
 	@Override
 	public Iteration[] getAll(Session s) throws WPISuiteException {
-		return db.retrieveAll(new Iteration(), s.getProject()).toArray(
+		Iteration[] is = db.retrieveAll(new Iteration(), s.getProject()).toArray(
 				new Iteration[0]);
+		for (Iteration i : is){
+			System.out.println("I name " + i.getName());
+		}
+		return is;
 	}
 
 	/**
@@ -226,7 +231,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	@Override
 	public int Count() throws WPISuiteException {
 		// Retrieve all from this project
-		return db.retrieveAll(new Requirement()).size();
+		return db.retrieveAll(new Iteration()).size();
 	}
 
 	/**

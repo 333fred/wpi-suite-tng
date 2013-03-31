@@ -52,7 +52,7 @@ public class AddIterationRequestObserver implements RequestObserver {
 		// print the body
 		System.out.println("Received response: " + response.getBody());
 		
-		IterationDatabase.addIteration(Iteration.fromJSON(response.getBody()));
+		IterationDatabase.getInstance().addIteration(Iteration.fromJSON(response.getBody()));
 
 		this.iterationView.getMainTabController().closeCurrentTab();
 		

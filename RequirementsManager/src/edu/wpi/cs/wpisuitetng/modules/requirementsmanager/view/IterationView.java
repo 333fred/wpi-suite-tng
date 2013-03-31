@@ -229,7 +229,6 @@ public class IterationView extends FocusableTab{
 		public void actionPerformed(ActionEvent e) {
 			//pull the values from the fields
 			String name = txtName.getText();
-			System.out.println("NAMEEE?!!!!!!!! |" + name + "|");
 			Date startDate = calStartDate.getDate();
 			Date endDate = calEndDate.getDate();
 			
