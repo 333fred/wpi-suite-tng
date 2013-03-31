@@ -92,18 +92,6 @@ public class EditRequirementAction extends AbstractAction {
 						.getText());
 				requirement.setEstimate(Integer.parseInt(parentView.getTextEstimate().getText()));
 				requirement.setUsers(parentView.getAssignedUsers());
-				
-				/*try {
-					requirement.setEstimate(Integer.parseInt(parentView
-							.getTextEstimate().getText()));
-					
-					try {
-						requirement.setPriority
-					}
-				} catch (NumberFormatException excep) {
-					parentView.displaySaveError("Estimate must be a non-negative integer value");
-				}
-				*/
 
 				try {
 					requirement.setIteration(Integer.parseInt(parentView
@@ -115,7 +103,10 @@ public class EditRequirementAction extends AbstractAction {
 				}
 				
 				try{
-					int estimate = Integer.parseInt(parentView.getTextEstimate().getText());
+					int estimate = 0;
+					if(parentView.getTextEstimate().getText().length() > 0){
+						estimate = Integer.parseInt(parentView.getTextEstimate().getText());
+					}
 					if(estimate < 0){
 						throw new WPISuiteException("Cannot have a negative estimate.");
 					}
