@@ -56,7 +56,7 @@ public class ToolbarView extends DefaultToolbarView {
 
 		// Construct the User Manual button
 		createHelpPanel = new JButton("User Manual");		
-		createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
+	//	createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
 		
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
