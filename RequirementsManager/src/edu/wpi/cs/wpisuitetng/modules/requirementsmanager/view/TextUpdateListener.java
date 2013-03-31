@@ -121,43 +121,4 @@ public class TextUpdateListener implements KeyListener {
 				panel.enableSaveButton();
 		}
 	}
-
-	public void checkIfOneCharacter() {
-		String base = "";
-		firstKeyPress = true;
-
-		if (!(base.equals(component.getText().trim()))) {
-			component.setBackground(Color.WHITE);
-			if (errorComponent != null) { // if there's an error panel to write to
-				errorComponent.setText("");
-			}
-			if(base.equals(panel.getTextName().getText().trim()) 
-					|| base.equals(panel.getTextDescription().getText().trim())
-					|| base.equals(panel.getTextIteration().getText().trim())) {
-				panel.disableSaveButton();
-			}
-			else {
-				panel.enableSaveButton();
-			}
-		}
-		/*
-		if (base.equals(component.getText().trim())) {
-			if (errorComponent != null) { // if there's an error panel to write to
-				component.setBackground(new Color(243, 243, 209));
-				errorComponent.setText("** Field must be non-blank **");
-			}
-			firstKeyPress = true;
-		}*/
-	}
-	
-	public void checkToClear() {
-		String base = "";
-		
-		if (!(base.equals(component.getText().trim()))) {
-			component.setBackground(Color.WHITE);
-			if (errorComponent != null) { // if there's an error panel to write to
-				errorComponent.setText("");
-			}
-		}
-	}
 }
