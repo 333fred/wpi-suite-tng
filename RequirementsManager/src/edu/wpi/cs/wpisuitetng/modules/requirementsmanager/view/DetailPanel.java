@@ -808,7 +808,11 @@ public class DetailPanel extends FocusableTab {
 		if(requirement.getStatus() != Status.DELETED)
 			return;
 		textName.setEnabled(false);
+		textName.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textName.setBackground(defaultColor);
 		textDescription.setEnabled(false);
+		textDescription.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textDescription.setBackground(defaultColor);
 		textIteration.setEnabled(false);
 		textIteration.setBackground(defaultColor);
 		textRelease.setEnabled(false);
