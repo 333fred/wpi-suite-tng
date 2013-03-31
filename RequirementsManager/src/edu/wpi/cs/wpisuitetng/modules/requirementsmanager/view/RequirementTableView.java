@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -115,10 +116,12 @@ public class RequirementTableView extends FocusableTab implements
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
+		this.table.setAutoCreateRowSorter(true);
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				iterationTree, mainPanel);
+
 		add(splitPane);
 
 		splitPane.setResizeWeight(0.1);
@@ -207,7 +210,9 @@ public class RequirementTableView extends FocusableTab implements
 	}
 
 	/**
-	 * Updates the list view acording to the values in the Requirements Array
+	 * Updates the list view according to the values in the Requirements Array
+	 * 
+	 * @throws RequirementNotFoundException
 	 * 
 	 * */
 
@@ -221,6 +226,7 @@ public class RequirementTableView extends FocusableTab implements
 		// invalidate the list so it is forced to be redrawn
 		// this.table.invalidate();
 		this.table.repaint();
+		this.iterationTree.refresh();
 	}
 
 	/**
@@ -283,12 +289,14 @@ public class RequirementTableView extends FocusableTab implements
 		// Check to make sure the requirement is not already being
 		// displayed. This is assuming that the list view is displayed in
 		// the left most tab, index 0
-		for (int i = 1; i < this.tabController.getTabView().getTabCount(); i++) {
-			if (((((DetailPanel) this.tabController.getTabView()
-					.getComponentAt(i))).getModel().getrUID()) == (requirementToFetch
-					.getrUID())) {
-				this.tabController.switchToTab(i);
-				requirementIsOpen = true;
+		for (int i = 0; i < this.tabController.getTabView().getTabCount(); i++) {
+			if (this.tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+				if (((((DetailPanel) this.tabController.getTabView()
+						.getComponentAt(i))).getModel().getrUID()) == (requirementToFetch
+						.getrUID())) {
+					this.tabController.switchToTab(i);
+					requirementIsOpen = true;
+				}
 			}
 		}
 

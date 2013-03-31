@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.Require
  * This is the basic requirement model. It contains all the fields that can be
  * assigned to a single requirement.
  * 
- * @author Fredric
+ * @author Fredric, jason, Conor
  * 
  */
 public class Requirement extends AbstractModel {
@@ -46,6 +46,8 @@ public class Requirement extends AbstractModel {
 	private List<Note> notes;
 	private List<RequirementChangeset> logs;
 	//private Logger logger;
+	
+	private List<Task> tasks; //TODO: actually implement tasks
 
 	/**
 	 * Creates a new Requirement, with default values.
@@ -69,6 +71,7 @@ public class Requirement extends AbstractModel {
 		notes = new ArrayList<Note>();
 		logs = new ArrayList<RequirementChangeset>();
 		//logger = new Logger();
+		tasks = new ArrayList<Task>();
 	}
 
 	/**
@@ -101,7 +104,7 @@ public class Requirement extends AbstractModel {
 	public Requirement(String name, String description, int releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
 			int iteration, int effort, List<String> assignees,
-			List<Integer> pUID) {
+			List<Integer> pUID, List<Task> tasks) {
 		// Get the next UID for this requirement
 
 		// Assign all inputs
@@ -120,6 +123,8 @@ public class Requirement extends AbstractModel {
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
 		this.logs = new ArrayList<RequirementChangeset>();
+		
+		this.tasks = tasks;
 	}
 
 	/**
@@ -581,5 +586,31 @@ public class Requirement extends AbstractModel {
 		} else {
 			return this.rUID == ((Requirement) o).rUID;
 		}
+	}
+	
+	/**
+	 * @return the tasks
+	 */
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	/**
+	 * @param tasks the tasks to set
+	 */
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	/**
+	 * Checks the task list for completed tasks
+	 * @return true if all tasks in the list are complete
+	 */
+	public boolean tasksCompleted(){
+		for(Task t: this.tasks){
+			if(!t.isCompleted())
+				return false;
+		}
+		return true;
 	}
 }

@@ -7,9 +7,9 @@ import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 
 /**
  * Controller wrapper around the MainTabView
@@ -46,9 +46,9 @@ public class MainTabController {
 	}
 	
 
-private void onChangeTab() {
-	((FocusableTab)this.tabView.getSelectedComponent()).onTabFocus();
-}
+	private void onChangeTab() {
+		((FocusableTab)this.tabView.getSelectedComponent()).onTabFocus();
+	}
 	
 	/** Adds a tab to the TabView that this controller manages, and returns a new instance of Tab representing the new tab created
 	 * 
@@ -75,6 +75,11 @@ private void onChangeTab() {
 	public Tab addCreateRequirementTab() {
 		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this); 
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
+	}
+	
+	public Tab addCreateIterationTab() {
+		IterationView view = new IterationView(this);
+		return addTab("New Iteration", new ImageIcon(), view, "New Iteration");
 	}
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement

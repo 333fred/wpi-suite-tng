@@ -3,13 +3,16 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -20,15 +23,15 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  *         AddRequirementController]
  */
 
-public class AddRequirementRequestObserver implements RequestObserver {
+public class AddIterationRequestObserver implements RequestObserver {
 
-	private AddRequirementController controller;
+	private AddIterationController controller;
 
-	DetailPanel detailPanel;
+	private IterationView iterationView;
 
-	public AddRequirementRequestObserver(AddRequirementController controller, DetailPanel detailPanel) {
+	public AddIterationRequestObserver(AddIterationController controller, IterationView iterationView) {
 		this.controller = controller;
-		this.detailPanel = detailPanel;
+		this.iterationView = iterationView;
 	}
 
 	/*
@@ -49,9 +52,9 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		// print the body
 		System.out.println("Received response: " + response.getBody());
 		
-		RequirementDatabase.addRequirement(Requirement.fromJSON(response.getBody()));
+		IterationDatabase.addIteration(Iteration.fromJSON(response.getBody()));
 
-		this.detailPanel.getMainTabController().closeCurrentTab();
+		this.iterationView.getMainTabController().closeCurrentTab();
 		
 /*		if (response.getStatusCode() == 201) {
 			// parse the Requirement from the body
@@ -100,7 +103,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		System.out.println("Error: " + iReq.getResponse().getBody());
-		this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		this.iterationView.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
 	}
 
 	/*
@@ -112,7 +115,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
+		this.iterationView.displaySaveError("Unable to complete request: " + exception.getMessage());
 	}
 
 }
