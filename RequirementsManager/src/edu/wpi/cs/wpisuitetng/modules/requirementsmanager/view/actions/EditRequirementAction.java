@@ -66,12 +66,8 @@ public class EditRequirementAction extends AbstractAction {
 			parentView.getTextDescriptionValid().setText("");
 		}
 
-		if (requirement.getStatus().equals("Deleted")
-				&& Integer.parseInt(parentView.getTextIteration().getText()) != -1) {
-			parentView
-					.displaySaveError("Cannot add iteration to deleted project. Set box value to \"-1\".");
-		} else {
-
+		
+		else {
 			// Checks to make sure that both the name and descriptions are not
 			// empty, and attempts to save the requirements
 			if (!parentView.getTextName().getText().trim().equals("")

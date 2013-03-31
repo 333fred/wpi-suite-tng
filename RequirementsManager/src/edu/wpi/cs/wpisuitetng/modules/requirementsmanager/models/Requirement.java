@@ -36,6 +36,7 @@ public class Requirement extends AbstractModel {
 	// Date and scheduling attributes
 	private int releaseNum; // TODO: Implement Releases
 	private int iteration; // TODO: Implement Iterations
+	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
 	// Assignees, Subrequirements, and Parents
@@ -64,6 +65,7 @@ public class Requirement extends AbstractModel {
 		priority = Priority.BLANK;
 		releaseNum = 0;
 		iteration = -1;
+		estimate = 0;
 		effort = 0;
 		assignees = new ArrayList<String>();
 		subRequirements = new ArrayList<Integer>();
@@ -103,7 +105,7 @@ public class Requirement extends AbstractModel {
 	 */
 	public Requirement(String name, String description, int releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
-			int iteration, int effort, List<String> assignees,
+			int iteration, int estimate, int effort, List<String> assignees,
 			List<Integer> pUID, List<Task> tasks) {
 		// Get the next UID for this requirement
 
@@ -116,6 +118,7 @@ public class Requirement extends AbstractModel {
 		this.subRequirements = subRequirements;
 		this.notes = notes;
 		this.iteration = iteration;
+		this.estimate = estimate;
 		this.effort = effort;
 		this.assignees = assignees;
 		this.pUID = pUID;
@@ -125,6 +128,20 @@ public class Requirement extends AbstractModel {
 		this.logs = new ArrayList<RequirementChangeset>();
 		
 		this.tasks = tasks;
+	}
+
+	/**
+	 * @return the estimate
+	 */
+	public int getEstimate() {
+		return estimate;
+	}
+
+	/**
+	 * @param estimate the estimate to set
+	 */
+	public void setEstimate(int estimate) {
+		this.estimate = estimate;
 	}
 
 	/**
