@@ -5,6 +5,11 @@
 	<path id="classpath">
 		<pathelement path="../Network/build"/>
 		<pathelement path="../Core/WPISuite-Interfaces/build"/>
+		
+		<fileset dir="./lib/">
+				<include name="*.jar"/>
+		</fileset>
+		
 		<fileset dir="${core-lib}">
 			<include name="commons-codec-1.7.jar"/>
 		</fileset>

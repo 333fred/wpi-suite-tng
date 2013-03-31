@@ -9,6 +9,11 @@
 		<pathelement path="../Janeway/build"/>
 		<pathelement path="../Network/build"/>
 		<pathelement path="../Core/WPISuite-Interfaces/build"/>
+		
+		<fileset dir="../Janeway/lib/">
+				<include name="*.jar"/>
+		</fileset>
+		
 		<fileset dir="${core-lib}">
 			<include name="gson-*.jar"/>
 		</fileset>
