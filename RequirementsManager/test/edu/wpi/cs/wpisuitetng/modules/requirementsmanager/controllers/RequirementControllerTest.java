@@ -34,7 +34,7 @@ public class RequirementControllerTest {
 	SaveRequirementController controller4;
 	
 	RetrieveAllRequirementsController controller5; //Cannot test these controllers yet
-	RetrieveIterationsController controller6;
+	RetrieveAllIterationsController controller6;
 	
 	
 	DetailPanel view;
