@@ -4,12 +4,13 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 /**
- * @author Kyle
+ * @author Kyle, Conor, Jason
  *
  */
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -40,13 +41,14 @@ public class RequirementTest {
 	private List<Integer> subRequirements;
 	private List<Integer> pUID;
 	private List<Note> notes;
+	private List<Task> tasks = new ArrayList<Task>();
 
 	
 	@Before
 	public void setUp() {
-		r1 = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID);
-		r1copy = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID);
-		r2 = new Requirement(name2, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID);
+		r1 = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID, tasks);
+		r1copy = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID, tasks);
+		r2 = new Requirement(name2, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID, tasks);
 		project = new Project("test", "1");
 	}
 	
@@ -109,5 +111,38 @@ public class RequirementTest {
 	public void testSetPriority() {
 		r1.setPriority(priority);
 		assertSame(priority ,r1.getPriority());
+	}
+	
+	//Testing the task completeness checking for a list of complete tasks
+	@Test
+	public void testTaskCheckTrue() {
+		Task task1 = new Task();
+		task1.setCompleted(true);
+		Task task2 = new Task();
+		task2.setCompleted(true);
+		ArrayList<Task> taskList = new ArrayList<Task>();
+		taskList.add(task1);
+		taskList.add(task2);
+		r1.setTasks(taskList);
+		assertTrue(r1.tasksCompleted());
+	}
+	
+	//Testing the task completeness checking for a list of complete and incomplete tasks
+	@Test
+	public void testTaskCheckFalse() {
+		Task task1 = new Task();
+		task1.setCompleted(true);
+		Task task2 = new Task();
+		ArrayList<Task> taskList = new ArrayList<Task>();
+		taskList.add(task1);
+		taskList.add(task2);
+		r1.setTasks(taskList);
+		assertFalse(r1.tasksCompleted());
+	}
+	
+	//Testing the task completeness for a an empty list
+	@Test
+	public void testTaskCheckEmpty() {
+		assertTrue(r1.tasksCompleted());
 	}
 }

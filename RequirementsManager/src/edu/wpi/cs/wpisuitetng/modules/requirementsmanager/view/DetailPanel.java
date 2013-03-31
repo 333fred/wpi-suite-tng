@@ -39,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteVi
 /**
  * JPanel class to display the different fields of the requirement
  * 
- * @author Swagasaurus
+ * @author Team Swagasaurus
  * 
  */
 public class DetailPanel extends FocusableTab {
@@ -142,6 +142,7 @@ public class DetailPanel extends FocusableTab {
 		AbstractDocument textNameDoc = (AbstractDocument) textName.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
+		textName.setName("Name");
 		mainPanel.add(textName);
 		
 
@@ -184,6 +185,7 @@ public class DetailPanel extends FocusableTab {
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
+		textDescription.setName("Description");
 		JScrollPane scroll = new JScrollPane(textDescription);
 		
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -558,14 +560,18 @@ public class DetailPanel extends FocusableTab {
 			comboBoxPriority.setSelectedIndex(3);
 			break;
 		}
-
-		noteView = new DetailNoteView(this.requirement, this);
+		
 		logView = new DetailLogView(this.requirement, this);
+		noteView = new DetailNoteView(this.requirement, this);
 		userView = new AssigneePanel(requirement,this);
+		
 	
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
 		
+		if(requirement.getStatus() == Status.DELETED){
+			eventPane.disableUserButtons();
+		}
 		// Add everything to this
 		
 		//add(mainPanel);
@@ -596,6 +602,8 @@ public class DetailPanel extends FocusableTab {
 		
 		this.determineAvailableStatusOptions();
 		this.disableSaveButton();
+		this.disableAllFieldsIfDeleted();
+		
 		
 	}
 	/**
@@ -605,16 +613,21 @@ public class DetailPanel extends FocusableTab {
 
 	private void determineAvailableStatusOptions() {
 		// String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
+		if (requirement.getStatus() == Status.IN_PROGRESS) {
+			//In Progress: In Progress, Complete, Deleted	
+			this.comboBoxStatus.removeItem("New");
+			this.comboBoxStatus.removeItem("Open");
+			this.comboBoxStatus.removeItem("Deleted");
+		}
+		else if (requirement.getSubRequirements().size() > 0 || !requirement.tasksCompleted())
+		{
+			this.comboBoxStatus.removeItem("Deleted");
+		}
 		if (requirement.getStatus() == Status.NEW) {
 			//New: New, Deleted
 			this.comboBoxStatus.removeItem("In Progress");
 			this.comboBoxStatus.removeItem("Open");
 			this.comboBoxStatus.removeItem("Complete");
-		}
-		if (requirement.getStatus() == Status.IN_PROGRESS) {
-			//In Progress: In Progress, Complete, Deleted	
-			this.comboBoxStatus.removeItem("New");
-			this.comboBoxStatus.removeItem("Open");
 		}
 		if (requirement.getStatus() == Status.OPEN) {
 			//Open: Open, Deleted		
@@ -764,6 +777,28 @@ public class DetailPanel extends FocusableTab {
 	}
 	public List<String> getAssignedUsers() {
 		return this.userView.getAssignedUsersList();
+	}
+	
+	
+	/**
+	 * Checks requirement status:
+	 * 	If deleted, disables all editable fields except status
+	 * 	Else do nothing
+	 */
+	public void disableAllFieldsIfDeleted(){
+		if(requirement.getStatus() != Status.DELETED)
+			return;
+		textName.setEnabled(false);
+		textDescription.setEnabled(false);
+		textIteration.setEnabled(false);
+		textRelease.setEnabled(false);
+		textEstimate.setEnabled(false);
+		textActual.setEnabled(false);
+		
+		comboBoxType.setEnabled(false);
+		comboBoxPriority.setEnabled(false);
+		
+		
 	}
 
 }

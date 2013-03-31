@@ -44,26 +44,53 @@ public class TextUpdateListener implements KeyListener {
 		this.panel = panel;
 		this.component = component;
 		this.errorComponent = errorComponent;
-		this.firstKeyPress = false;
+		
+		String empty = "";
+		if (empty.equals(component.getText().trim())) { // if this was empty to begin with
+			this.firstKeyPress = false;
+		}
+		else {
+			this.firstKeyPress = true;
+		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
+			checkIfUpdated();
+		}
 		if (firstKeyPress) {
 			checkIfUpdated();
+		}
+		else {
+			String empty = "";
+			if (empty.equals(component.getText().trim())) { // if this was empty to begin with
+				this.firstKeyPress = false;
+			}
+			else {
+				this.firstKeyPress = true;
+			}
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-			checkIfOneCharacter();
+		if (firstKeyPress) {
+			checkIfUpdated();
+		}
+		else {
+			String empty = "";
+			if (empty.equals(component.getText().trim())) { // if this was empty to begin with
+				this.firstKeyPress = false;
+			}
+			else {
+				this.firstKeyPress = true;
+			}
+		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		if (firstKeyPress) {
-			checkIfUpdated();		
-		}
 	}
 
 	/**
@@ -71,7 +98,7 @@ public class TextUpdateListener implements KeyListener {
 	 */
 	public void checkIfUpdated() {
 		String base = ""; // base of empty string to compare to
-
+		
 		// Compare base to the component's text to determine whether or not to highlight the field.
 		if (base.equals(component.getText().trim())) {
 			if (errorComponent != null) { // if there's an error panel to write to
@@ -97,7 +124,8 @@ public class TextUpdateListener implements KeyListener {
 
 	public void checkIfOneCharacter() {
 		String base = "";
-		
+		firstKeyPress = true;
+
 		if (!(base.equals(component.getText().trim()))) {
 			component.setBackground(Color.WHITE);
 			if (errorComponent != null) { // if there's an error panel to write to
@@ -111,7 +139,6 @@ public class TextUpdateListener implements KeyListener {
 			else {
 				panel.enableSaveButton();
 			}
-			firstKeyPress = true;
 		}
 		/*
 		if (base.equals(component.getText().trim())) {
@@ -121,5 +148,16 @@ public class TextUpdateListener implements KeyListener {
 			}
 			firstKeyPress = true;
 		}*/
+	}
+	
+	public void checkToClear() {
+		String base = "";
+		
+		if (!(base.equals(component.getText().trim()))) {
+			component.setBackground(Color.WHITE);
+			if (errorComponent != null) { // if there's an error panel to write to
+				errorComponent.setText("");
+			}
+		}
 	}
 }
