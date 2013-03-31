@@ -42,15 +42,18 @@ public class HelpPanel extends JPanel {
 		helpPane.setBounds(new Rectangle(10, 10, 260, 365));
 		
 		URL url = null;
-
-		/*
+		URL test = null;
+		
 		File input = new File("main.html");
+		String path = new String("file:///"+input.getAbsolutePath());
+		System.out.println(path);
+		
 		try {
-			FileInputStream inStream = new FileInputStream(input);
-		} catch (FileNotFoundException e1) {
+			test = new URL(path);
+		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}*/
+		}
 		
 		try {
 			url = new URL("http://pastehtml.com/iew/cxh3xp4jm.html");
@@ -60,7 +63,7 @@ public class HelpPanel extends JPanel {
 		}
 		
 		try {
-			helpPane.setPage(url);
+			helpPane.setPage(test);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
