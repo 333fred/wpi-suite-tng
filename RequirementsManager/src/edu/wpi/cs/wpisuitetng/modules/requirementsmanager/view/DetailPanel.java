@@ -39,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteVi
 /**
  * JPanel class to display the different fields of the requirement
  * 
- * @author Swagasaurus
+ * @author Team Swagasaurus
  * 
  */
 public class DetailPanel extends FocusableTab {
@@ -619,7 +619,7 @@ public class DetailPanel extends FocusableTab {
 			this.comboBoxStatus.removeItem("Open");
 			this.comboBoxStatus.removeItem("Deleted");
 		}
-		else if (requirement.getSubRequirements().size() > 0 /*||  TODO: add check for tasks */)
+		else if (requirement.getSubRequirements().size() > 0 || !requirement.tasksCompleted())
 		{
 			this.comboBoxStatus.removeItem("Deleted");
 		}
