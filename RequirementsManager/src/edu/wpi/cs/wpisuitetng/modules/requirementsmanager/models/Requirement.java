@@ -43,6 +43,7 @@ public class Requirement extends AbstractModel {
 	private int iteration; // TODO: Implement Iterations
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
+	private int estimate;
 	// Assignees, Subrequirements, and Parents
 	private List<String> assignees; // Team Member usernames
 	private List<Integer> subRequirements;
@@ -103,7 +104,7 @@ public class Requirement extends AbstractModel {
 	 */
 	public Requirement(String name, String description, int releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
-			int iteration, int effort, List<String> assignees, List<Integer> pUID) {
+			int iteration, int effort, int estimate, List<String> assignees, List<Integer> pUID) {
 		// Get the next UID for this requirement
 
 		// Assign all inputs
@@ -116,6 +117,7 @@ public class Requirement extends AbstractModel {
 		this.notes = notes;
 		this.iteration = iteration;
 		this.effort = effort;
+		this.estimate = estimate;
 		this.assignees = assignees;
 		this.pUID = pUID;
 
@@ -366,6 +368,20 @@ public class Requirement extends AbstractModel {
 	 */
 	public int getEffort() {
 		return effort;
+	}
+
+	/**
+	 * @return the estimate
+	 */
+	public int getEstimate() {
+		return estimate;
+	}
+
+	/**
+	 * @param estimate the estimate to set
+	 */
+	public void setEstimate(int estimate) {
+		this.estimate = estimate;
 	}
 
 	/**

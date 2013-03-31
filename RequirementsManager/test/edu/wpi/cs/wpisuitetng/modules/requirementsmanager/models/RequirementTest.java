@@ -36,6 +36,7 @@ public class RequirementTest {
 	Priority priority;
 	private int iteration;
 	private int effort;
+	private int estimate;
 	private List<String> assignees;
 	private List<Integer> subRequirements;
 	private List<Integer> pUID;
@@ -44,9 +45,9 @@ public class RequirementTest {
 	
 	@Before
 	public void setUp() {
-		r1 = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID);
-		r1copy = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID);
-		r2 = new Requirement(name2, description, rUID, type, subRequirements, notes, iteration, effort, assignees, pUID);
+		r1 = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, estimate, assignees, pUID);
+		r1copy = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, effort, estimate, assignees, pUID);
+		r2 = new Requirement(name2, description, rUID, type, subRequirements, notes, iteration, effort, estimate, assignees, pUID);
 		project = new Project("test", "1");
 	}
 	

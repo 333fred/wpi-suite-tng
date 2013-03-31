@@ -51,6 +51,7 @@ public class DetailPanel extends FocusableTab {
 	private JTextArea textDescriptionValid;
 	private JTextArea textIteration;
 	private JTextArea textEstimate;
+	private JTextArea textEstimateValid;
 	private JTextArea textActual;
 	private JTextArea textRelease;
 	JTextArea saveError;
@@ -319,6 +320,16 @@ public class DetailPanel extends FocusableTab {
 				}
 			}
 		});
+		
+		/*
+		textEstimateValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textEstimateValid.setOpaque(false);
+		textEstimateValid.setEnabled(false);
+		textEstimateValid.setDisabledTextColor(Color.BLACK);
+		textEstimateValid.setLineWrap(true);
+		textEstimateValid.setWrapStyleWord(true);
+		mainPanel.add(textEstimateValid);
+		*/
 		
 		textActual = new JTextArea(1,9);
 		textActual.setBorder((new JTextField()).getBorder());
@@ -753,6 +764,24 @@ public class DetailPanel extends FocusableTab {
 	
 	public JTextArea getTextIteration() {
 		return this.textIteration;
+	}
+	
+	public JTextArea getTextEstimate() {
+		return this.textEstimate;
+	}
+	
+	/**
+	 * @return the textEstimateValid
+	 */
+	public JTextArea getTextEstimateValid() {
+		return textEstimateValid;
+	}
+	
+	/**
+	 * @param textEstimateValid the textEstimateValid to set
+	 */
+	public void setTextEstimateValid(JTextArea textEstimateValid) {
+		this.textEstimateValid = textEstimateValid;
 	}
 	
 	public void disableSaveButton() {

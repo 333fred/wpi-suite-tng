@@ -70,17 +70,38 @@ public class EditRequirementAction extends AbstractAction {
 				&& Integer.parseInt(parentView.getTextIteration().getText()) != -1) {
 			parentView
 					.displaySaveError("Cannot add iteration to deleted project. Set box value to \"-1\".");
-		} else {
+		} 
+		
+		if (!requirement.getStatus().equals("In Progress") && !requirement.getStatus().equals("Completed")) {
+			parentView.getTextEstimate().setBackground(Color.WHITE);
+			parentView.getTextEstimateValid().setText("");
+		}
+		
+		else {
 
 			// Checks to make sure that both the name and descriptions are not
 			// empty, and attempts to save the requirements
 			if (!parentView.getTextName().getText().trim().equals("")
 					&& !parentView.getTextDescription().getText().trim()
-							.equals("")) {
+							.equals("")
+					&& Integer.parseInt(parentView.getTextEstimate().getText()) >= 0) {
 				requirement.setName(parentView.getTextName().getText().trim());
 				requirement.setDescription(parentView.getTextDescription()
 						.getText());
+				requirement.setEstimate(Integer.parseInt(parentView.getTextEstimate().getText()));
 				requirement.setUsers(parentView.getAssignedUsers());
+				
+				/*try {
+					requirement.setEstimate(Integer.parseInt(parentView
+							.getTextEstimate().getText()));
+					
+					try {
+						requirement.setPriority
+					}
+				} catch (NumberFormatException excep) {
+					parentView.displaySaveError("Estimate must be a non-negative integer value");
+				}
+				*/
 
 				try {
 					requirement.setIteration(Integer.parseInt(parentView
