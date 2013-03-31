@@ -142,6 +142,7 @@ public class DetailPanel extends FocusableTab {
 		AbstractDocument textNameDoc = (AbstractDocument) textName.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
+		textName.setName("Name");
 		mainPanel.add(textName);
 		
 
@@ -184,6 +185,7 @@ public class DetailPanel extends FocusableTab {
 		textDescription.setLineWrap(true);
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
+		textDescription.setName("Description");
 		JScrollPane scroll = new JScrollPane(textDescription);
 		
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
