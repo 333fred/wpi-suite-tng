@@ -563,15 +563,15 @@ public class DetailPanel extends FocusableTab {
 		
 		logView = new DetailLogView(this.requirement, this);
 		noteView = new DetailNoteView(this.requirement, this);
+		userView = new AssigneePanel(requirement,this);
 		
-		//User assignment panel is not created if the status is deleted
-		if(requirement.getStatus() != Status.DELETED){
-			userView = new AssigneePanel(requirement,this);
-		}
 	
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
 		
+		if(requirement.getStatus() == Status.DELETED){
+			eventPane.disableUserButtons();
+		}
 		// Add everything to this
 		
 		//add(mainPanel);

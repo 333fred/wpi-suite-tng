@@ -4,6 +4,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
+
 /** Class for displaying the note view and the log view on the right side of the Detail View
  * 
  * @author Mitchell
@@ -32,5 +34,9 @@ public class DetailEventPane extends JTabbedPane {
 		addTab("OldLog", new ImageIcon(), logListPane, "The log for this requirement");
 		addTab("Users", new ImageIcon(), userListPane, "The users assigned to this requirement");
 
+	}
+	
+	public void disableUserButtons(){
+		((AssigneePanel)userListPane).disableUserButtons();
 	}
 }
