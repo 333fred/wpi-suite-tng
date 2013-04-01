@@ -18,6 +18,8 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
+
 import javax.swing.JTextPane;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.FlowLayout;
@@ -30,7 +32,7 @@ import java.awt.BorderLayout;
  * @author Nick Massa, Pat Bobell
  *
  */
-public class HelpPanel extends JPanel {
+public class HelpPanel extends FocusableTab {
 
 	Requirement requirement;
 	
@@ -39,10 +41,8 @@ public class HelpPanel extends JPanel {
 	 * @throws Exception 
 	 */
 	
-	public HelpPanel() {
-		setLayout(new BorderLayout(8, 5)); //TODO: Layout better?
-
-		
+	public HelpPanel() {		
+		setLayout(new BorderLayout(0, 0));
 		JTextPane helpPane = new JTextPane(); //Create and add the panel
 		JScrollPane scrollPane = new JScrollPane(helpPane); 
 		helpPane.setEditable(false);
@@ -60,7 +60,7 @@ public class HelpPanel extends JPanel {
 		try {
 			index = new URL(path); //Try to set our index url given the path
 		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
+			System.out.println("Error setting URL path!");
 			e1.printStackTrace();
 		}
 		
@@ -78,6 +78,7 @@ public class HelpPanel extends JPanel {
 		        try {
 		            desktop.browse(index.toURI()); //Convert link to identifier and launch default browser
 		        } catch (Exception e) {
+		        	System.out.println("Error launching browser!");
 		            e.printStackTrace();
 		        }
 		    }

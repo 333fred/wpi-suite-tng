@@ -30,7 +30,7 @@ public class CreateHelpPanelAction extends AbstractAction {
 	public CreateHelpPanelAction(MainTabController controller) {
 		super("?");
 		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_U);
+		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
 	}
 	
 	@Override
