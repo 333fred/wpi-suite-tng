@@ -261,15 +261,10 @@ public class RequirementTableView extends FocusableTab implements
 	 */
 
 	public void viewRequirement() {
-		// obtain the currently selected requirement
-		int selectedIndex = this.table.getSelectedRow();
-
-		if (selectedIndex < 0) {
-			// nothing is currently selected
-			return;
+		for (int i : this.table.getSelectedRows()) {
+			viewRequirement(i);
+			//TODO: Slight problem: when opening multiple requirements at the same time,because of the server respond speed, the iterations won't open the tabs necessarily in the order they appear in the table
 		}
-
-		viewRequirement(selectedIndex);
 	}
 
 	/**
