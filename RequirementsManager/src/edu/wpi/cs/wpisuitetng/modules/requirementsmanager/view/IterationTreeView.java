@@ -35,6 +35,7 @@ public class IterationTreeView extends JPanel {
 		
 		this.top = new DefaultMutableTreeNode("Iterations");
 		this.tree = new JTree(top);
+		this.tree.setEditable(true);
 			
 		JScrollPane treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
@@ -70,10 +71,6 @@ public class IterationTreeView extends JPanel {
 		this.top.removeAllChildren();
 
 		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();
-		
-		for (Iteration i : iterations) {
-			System.out.println("Iteration Name: " + i.getName());
-		}
 
 		for (Iteration anIteration : iterations) {
 			
@@ -82,6 +79,7 @@ public class IterationTreeView extends JPanel {
 			this.tree.setCellRenderer(renderer);
 			
 			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
+			System.out.println(anIteration.getName());
 
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
@@ -96,7 +94,7 @@ public class IterationTreeView extends JPanel {
 			this.top.add(iterationNode);
 		}
 		this.tree.expandRow(0);
-		this.tree.repaint();
+		this.tree.updateUI();
 	}
 
 	public void getIterationsFromServer() {
