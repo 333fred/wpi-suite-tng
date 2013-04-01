@@ -33,13 +33,15 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 /* A 1.4 class used by TextComponentDemo.java. */
 
-import javax.swing.*;
-import javax.swing.text.*;
 import java.awt.Toolkit;
+
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 public class DocumentSizeFilter extends DocumentFilter {
     int maxCharacters;
-    boolean DEBUG = false;
+
 
     public DocumentSizeFilter(int maxChars) {
         maxCharacters = maxChars;
@@ -48,9 +50,6 @@ public class DocumentSizeFilter extends DocumentFilter {
     public void insertString(FilterBypass fb, int offs,
                              String str, AttributeSet a)
         throws BadLocationException {
-        if (DEBUG) {
-            System.out.println("in DocumentSizeFilter's insertString method");
-        }
 
         //This rejects the entire insertion if it would make
         //the contents too long. Another option would be
@@ -66,9 +65,7 @@ public class DocumentSizeFilter extends DocumentFilter {
                         int length, 
                         String str, AttributeSet a)
         throws BadLocationException {
-        if (DEBUG) {
-            System.out.println("in DocumentSizeFilter's replace method");
-        }
+
         //This rejects the entire replacement if it would make
         //the contents too long. Another option would be
         //to truncate the replacement string so the contents

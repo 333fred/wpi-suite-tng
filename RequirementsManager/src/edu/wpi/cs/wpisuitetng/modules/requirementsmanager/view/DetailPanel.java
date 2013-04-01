@@ -300,7 +300,7 @@ public class DetailPanel extends FocusableTab {
 		textEstimate.setBorder((new JTextField()).getBorder());
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
+		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
 		
 		textEstimate.addKeyListener(new KeyAdapter() {
@@ -322,9 +322,9 @@ public class DetailPanel extends FocusableTab {
 		textActual.setBorder((new JTextField()).getBorder());
 		textActual.setEnabled(false); // DISABLE THIS ITERATION
 		textActual.setBackground(defaultColor);
-		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
+		textActual.setMaximumSize(textActual.getPreferredSize());
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
-		textActualDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
+		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textActual);
 		
 		textActual.addKeyListener(new KeyAdapter() {
