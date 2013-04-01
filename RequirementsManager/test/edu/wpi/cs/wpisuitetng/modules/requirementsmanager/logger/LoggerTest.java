@@ -89,20 +89,19 @@ public class LoggerTest {
 	 */
 	@Test
 	public void testMultipleEvents(){
-		/*
-		requirement = new Requirement();
-		List<Logger.Event> eventList = new ArrayList<Logger.Event>();
-		Logger.Event eventZero = requirement.getLogger().new Event("1", "2", Logger.EventType.ITER_CHANGE);
-		Logger.Event eventOne = requirement.getLogger().new Event("A", "B", Logger.EventType.RELEASE_CHANGE);
-		Logger.Event eventTwo = requirement.getLogger().new Event("Alpha", "Beta", Logger.EventType.PARENT_CHANGE);
-		eventList.add(eventZero);
-		eventList.add(eventOne);
-		eventList.add(eventTwo);
-		requirement.logEvents(eventList, session);
 		
-		System.out.println(requirement.getLogger().getLogs().size());
-		assertEquals(requirement.getLogger().getLogs().size(), 1);
-		*/
+		requirement = new Requirement();
+		RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("TYPE_A", new FieldChange<String>("OLD_A", "NEW_A"));
+		reqChange.getChanges().put("TYPE_B", new FieldChange<Exception>(new Exception("OLD_B"), new Exception("NEW_B")));
+		requirement.logEvents(reqChange);
+		
+		assertEquals(requirement.getLogs().size(), 1);	// confirm that only one log has been added
+		assertEquals(requirement.getLogs().get(0).getChanges().keySet().size(), 2);	// confirm that this one log has recorded two changes
+		assertTrue(requirement.getLogs().get(0).getChanges().containsKey("TYPE_A"));	// confirm that change A has been added
+		assertTrue(requirement.getLogs().get(0).getChanges().containsKey("TYPE_B"));	// confirm that change B has been added
+		assertEquals(requirement.getLogs().get(0).getChanges().get("TYPE_B").getOldValue().toString(), new Exception("OLD_B").toString());	// confirm one value as a sample
+		
 	}
 	
 	/**
