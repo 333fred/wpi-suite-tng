@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -309,11 +310,19 @@ public class AssigneePanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * This function disables interaction with the assignee panel
+	 */
 	public void disableUserButtons(){
+		JPanel panel = new JPanel();
+		Color defaultColor = panel.getBackground();
+
 		assignSelectedUsers.setEnabled(false);
 		unassignSelectedUsers.setEnabled(false);
 		unassignedUsers.setEnabled(false);
+		unassignedUsers.setBackground(defaultColor);
 		assignedUsers.setEnabled(false);
+		assignedUsers.setBackground(defaultColor);
 	}
 }
 
