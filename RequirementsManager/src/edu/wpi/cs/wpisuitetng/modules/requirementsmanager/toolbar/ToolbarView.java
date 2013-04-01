@@ -40,7 +40,7 @@ public class ToolbarView extends DefaultToolbarView {
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
 	public ToolbarView(MainTabController tabController) {
-
+		// Note: User Manual button is being deprecated in favor of it's own toolbar
 		// Construct the content panel
 		JPanel content = new JPanel();
 		SpringLayout layout  = new SpringLayout();
@@ -77,7 +77,7 @@ public class ToolbarView extends DefaultToolbarView {
 		// Add buttons to the content panel
 		content.add(createIteration);
 		content.add(createRequirement);;
-		content.add(createHelpPanel);;
+		//content.add(createHelpPanel);;
 
 		//content.add(searchField);
 		
@@ -88,6 +88,19 @@ public class ToolbarView extends DefaultToolbarView {
 		Double toolbarGroupWidth = createRequirement.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 		addGroup(toolbarGroup);
+		
+		
+		//This is the help toolbar
+		ToolbarGroupView toolbarView = new ToolbarGroupView("Help");
+		JButton butHelp = new JButton("User Manual");
+		butHelp.setAction(new CreateHelpPanelAction(tabController));
+		//Create and add the buttons that will be displayed in the help
+		toolbarView.getContent().add(butHelp);
+		//Set the width of the group so it is not too long
+		toolbarView.setPreferredWidth((int) (butHelp.getPreferredSize().getWidth() + 40));		
+		//Calculate the width of the toolbar		
+		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
+		addGroup(toolbarView);
 	}
 
 }
