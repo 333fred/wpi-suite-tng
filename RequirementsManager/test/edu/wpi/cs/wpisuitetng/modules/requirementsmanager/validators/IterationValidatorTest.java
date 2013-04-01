@@ -110,11 +110,11 @@ public class IterationValidatorTest {
 	}
 	
 	@Test
-	//Ensure that incorrect dates cause rejection
+	//Ensure that incorrect dates (start after they end) cause rejection
 	public void testIncorrectDate() {
-		Iteration overlapping = new Iteration("Iteration 2", new Date(9000),new Date(8000), 2);
-		checkNumIssues(1, overlapping, defaultSession, IterationActionMode.CREATE);
-		checkNumIssues(1, overlapping, defaultSession, IterationActionMode.EDIT);
+		Iteration incorrect = new Iteration("Iteration 2", new Date(90000),new Date(80000), 2);
+		checkNumIssues(1, incorrect, defaultSession, IterationActionMode.CREATE);
+		checkNumIssues(1, incorrect, defaultSession, IterationActionMode.EDIT);
 	}
 	
 	@Test
@@ -159,7 +159,9 @@ public class IterationValidatorTest {
 	@Test
 	//Ensure that overlapping iteration will be rejected
 	public void testOverlap() {
-		fail("Overlap validation not implemented");
+		Iteration overlapping = new Iteration("Iteration 2", new Date(8000),new Date(9000), 2);
+		checkNumIssues(1, overlapping, defaultSession, IterationActionMode.CREATE);
+		checkNumIssues(1, overlapping, defaultSession, IterationActionMode.EDIT);
 	}
 	
 	/**
