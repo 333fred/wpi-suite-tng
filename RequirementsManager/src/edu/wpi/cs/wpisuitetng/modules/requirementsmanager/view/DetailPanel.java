@@ -300,7 +300,7 @@ public class DetailPanel extends FocusableTab {
 		textEstimate.setBorder((new JTextField()).getBorder());
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
+		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
 		
 		textEstimate.addKeyListener(new KeyAdapter() {
