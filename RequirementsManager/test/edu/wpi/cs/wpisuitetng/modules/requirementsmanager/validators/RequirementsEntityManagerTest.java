@@ -16,6 +16,9 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
@@ -214,33 +217,59 @@ public class RequirementsEntityManagerTest {
 		assertSame(testProject, newRequirement.getProject());
 	}
 	
-	/* TODO: Test updating once implemented
-	@SuppressWarnings("unchecked")
 	@Test
-	public void testUpdate() throws WPISuiteException {
-		Defect updated = manager.update(defaultSession, goodUpdatedDefect.toJSON());
-		assertSame(existingDefect, updated);
-		assertEquals(goodUpdatedDefect.getTitle(), updated.getTitle()); // make sure ModelMapper is used
-		assertEquals(1, updated.getEvents().size());
-		
-		DefectChangeset changeset = (DefectChangeset) updated.getEvents().get(0);
-		assertSame(existingUser, changeset.getUser());
-		assertEquals(updated.getLastModifiedDate(), changeset.getDate());
-		
-		Map<String, FieldChange<?>> changes = changeset.getChanges();
-		// these fields shouldn't be recorded in the changeset
-		// creator was different in goodUpdatedDefect, but should be ignored
-		assertFalse(changes.keySet().containsAll(Arrays.asList("events", "lastModifiedDate", "creator")));
-		
-		FieldChange<String> titleChange = (FieldChange<String>) changes.get("title");
-		assertEquals("An existing defect", titleChange.getOldValue());
-		assertEquals("A changed title", titleChange.getNewValue());
-		
-		// make sure events are being saved explicitly to get around a bug
-		// TODO: remove this when said bug is fixed
-		assertSame(updated.getEvents(), db.retrieveAll(new ArrayList<DefectEvent>()).get(0));
+	//Tests updating a requirement without changes
+	public void testNoUpdate() throws WPISuiteException {
+		Requirement updated = manager.update(defaultSession, oldRequirement.toJSON());
+		assertSame(oldRequirement, updated);
+		assertEquals(oldRequirement.getName(), updated.getName());
+		assertEquals(oldRequirement.getDescription(), updated.getDescription());
+		assertEquals(oldRequirement.getEstimate(), updated.getEstimate());
+		assertEquals(oldRequirement.getIteration(), updated.getIteration());
+		assertEquals(oldRequirement.getNotes(), updated.getNotes());
+		assertEquals(oldRequirement.getPriority(), updated.getPriority());
+		assertEquals(oldRequirement.getpUID(), updated.getpUID());
+		assertEquals(oldRequirement.getReleaseNum(), updated.getReleaseNum());
+		assertEquals(oldRequirement.getrUID(), updated.getrUID());
+		assertEquals(oldRequirement.getStatus(), updated.getStatus());
+		assertEquals(oldRequirement.getSubRequirements(), updated.getSubRequirements());
+		assertEquals(oldRequirement.getTasks(), updated.getTasks());
+		assertEquals(oldRequirement.getType(), updated.getType());
+		assertEquals(oldRequirement.getUsers(), updated.getUsers());
 	}
 	
+	@Test
+	//Tests updating a requirement with name change
+	public void testUpdate() throws WPISuiteException {
+		Requirement updated = new Requirement();
+		oldRequirement.setrUID(1);
+		oldRequirement.setName("Update Old Requirement");
+		oldRequirement.setDescription("UPDATED");
+		oldRequirement.setEstimate(2);
+		oldRequirement.setIteration(2);
+		oldRequirement.setPriority(Priority.HIGH);
+		oldRequirement.setReleaseNum(5);
+		oldRequirement.setStatus(Status.BLANK);
+		oldRequirement.setType(Type.EPIC);
+
+		updated = manager.update(defaultSession, oldRequirement.toJSON());
+		assertEquals("Update Old Requirement", updated.getName());
+		assertEquals("UPDATED", updated.getDescription());
+		assertEquals(2, updated.getEstimate());
+		assertEquals(2, updated.getIteration());
+		assertEquals(oldRequirement.getNotes(), updated.getNotes());
+		assertEquals(Priority.HIGH, updated.getPriority());
+		assertEquals(oldRequirement.getpUID(), updated.getpUID());
+		assertEquals(5, updated.getReleaseNum());
+		assertEquals(oldRequirement.getrUID(), updated.getrUID());
+		assertEquals(Status.BLANK, updated.getStatus());
+		assertEquals(oldRequirement.getSubRequirements(), updated.getSubRequirements());
+		assertEquals(oldRequirement.getTasks(), updated.getTasks());
+		assertEquals(Type.EPIC, updated.getType());
+		assertEquals(oldRequirement.getUsers(), updated.getUsers());
+	}
+	
+	/*
 	@Test(expected=BadRequestException.class)
 	public void testBadUpdate() throws WPISuiteException {
 		goodUpdatedDefect.setTitle("");
