@@ -26,7 +26,10 @@ import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreiveRequirementByIDControllerNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -49,7 +52,6 @@ public class DetailPanel extends FocusableTab {
 	private JTextArea textDescription;
 	private JTextArea textNameValid;
 	private JTextArea textDescriptionValid;
-	private JTextArea textIteration;
 	private JTextField textEstimate;
 
 	private JTextField textActual;
@@ -57,12 +59,13 @@ public class DetailPanel extends FocusableTab {
 	JTextArea saveError;
 
 	// combo boxes
-	JComboBox comboBoxType;
-	JComboBox comboBoxStatus;
-	JComboBox comboBoxPriority;
+	private JComboBox comboBoxType;
+	private JComboBox comboBoxStatus;
+	private JComboBox comboBoxPriority;
+	private JComboBox comboBoxIteration;
 
 	// requirement that is displayed
-	Requirement requirement;
+	private Requirement requirement;
 	// controller for all the tabs
 	private MainTabController mainTabController;
 	// the view that shows the notes
@@ -77,7 +80,7 @@ public class DetailPanel extends FocusableTab {
 	
 	protected final TextUpdateListener textTitleListener;
 	protected final TextUpdateListener textDescriptionListener;
-	protected final TextUpdateListener textIterationListener;
+	//TODO: protected final TextUpdateListener textIterationListener;
 	
 	protected final ItemStateListener comboBoxTypeListener;
 	protected final ItemStateListener comboBoxStatusListener;
@@ -265,25 +268,34 @@ public class DetailPanel extends FocusableTab {
 		
 		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
 		comboBoxPriority.addItemListener(comboBoxPriorityListener);
+				
+		List<Iteration> iterationList = IterationDatabase.getInstance().getAllIterations();
 		
-		textIteration = new JTextArea(1,9);
-		textIteration.setLineWrap(true);
-		textIteration.setWrapStyleWord(true);
-		textIteration.setBorder((new JTextField()).getBorder());
-		textIteration.setName("Iteration");
-		AbstractDocument textIterationDoc = (AbstractDocument) textIteration.getDocument();
-		textIterationDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
-		mainPanel.add(textIteration);
+		String[] availableIterations = new String[iterationList.size()];
+		for (int i = 0; i < iterationList.size(); i++) {
+			availableIterations[i] = iterationList.get(i).getName();
+		}
 		
-		textIteration.addKeyListener(new KeyAdapter() {
+		
+		//TODO: event listener on iteration combo box
+		comboBoxIteration = new JComboBox(availableIterations);
+		//comboBoxIteration.setLineWrap(true);
+		//comboBoxIteration.setWrapStyleWord(true);
+		comboBoxIteration.setBorder((new JTextField()).getBorder());
+		comboBoxIteration.setName("Iteration");
+	//	AbstractDocument textIterationDoc = (AbstractDocument) comboBoxIteration.getDocument();
+		//textIterationDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
+		mainPanel.add(comboBoxIteration);
+		
+		comboBoxIteration.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						textIteration.transferFocus();
+						comboBoxIteration.transferFocus();
 					}
 					else {
-						textIteration.transferFocusBackward();
+						comboBoxIteration.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -294,8 +306,10 @@ public class DetailPanel extends FocusableTab {
 			}
 		});
 		
-		textIterationListener = new TextUpdateListener(this, textIteration, null);
-		textIteration.addKeyListener(textIterationListener);
+	//	textIterationListener = new TextUpdateListener(this, comboBoxIteration, null);
+		
+		//TODO iteration KeyListener?
+		//comboBoxIteration.addKeyListener(textIterationListener);
 		
 		textEstimate = new JTextField(9);
 		textEstimate.setBorder((new JTextField()).getBorder());
@@ -395,8 +409,8 @@ public class DetailPanel extends FocusableTab {
 			comboBoxStatus.setSelectedItem("NEW");
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
-			textIteration.setEnabled(false);
-			textIteration.setBackground(defaultColor);
+			comboBoxIteration.setEnabled(false);
+			comboBoxIteration.setBackground(defaultColor);
 		} else {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
@@ -453,7 +467,7 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxType);
-		layout.putConstraint(SpringLayout.WEST, textIteration, HORIZONTAL_PADDING, 
+		layout.putConstraint(SpringLayout.WEST, comboBoxIteration, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, lblEstimate, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
@@ -503,14 +517,14 @@ public class DetailPanel extends FocusableTab {
 		layout.putConstraint(SpringLayout.NORTH, lblIteration,
 				VERTICAL_PADDING , SpringLayout.SOUTH,
 				comboBoxPriority);
-		layout.putConstraint(SpringLayout.NORTH, textIteration,
+		layout.putConstraint(SpringLayout.NORTH, comboBoxIteration,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblIteration);
 		layout.putConstraint(SpringLayout.NORTH, lblEstimate, VERTICAL_PADDING,
 				SpringLayout.SOUTH, comboBoxStatus);
 		layout.putConstraint(SpringLayout.NORTH, lblActual,
 				VERTICAL_PADDING - VERTICAL_CLOSE, SpringLayout.SOUTH,
-				textIteration);
+				comboBoxIteration);
 		layout.putConstraint(SpringLayout.NORTH, textEstimate,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblEstimate);
@@ -533,7 +547,8 @@ public class DetailPanel extends FocusableTab {
 
 		textName.setText(requirement.getName());
 		textDescription.setText(requirement.getDescription());
-		textIteration.setText(Integer.toString(requirement.getIteration()));
+		//TODO: Load current iteration into combo box
+		//comboBoxIteration.setText(Integer.toString(requirement.getIteration()));
 		switch (requirement.getType()) {
 		case BLANK:
 			comboBoxType.setSelectedIndex(0);
@@ -798,8 +813,8 @@ public class DetailPanel extends FocusableTab {
 		return requirement;
 	}
 	
-	public JTextArea getTextIteration() {
-		return this.textIteration;
+	public JComboBox getTextIteration() {
+		return this.comboBoxIteration;
 	}
 	
 	public void disableSaveButton() {
@@ -831,8 +846,8 @@ public class DetailPanel extends FocusableTab {
 		textDescription.setEnabled(false);
 		textDescription.setBackground(defaultColor);
 		textDescription.setDisabledTextColor(Color.GRAY);
-		textIteration.setEnabled(false);
-		textIteration.setBackground(defaultColor);
+		comboBoxIteration.setEnabled(false);
+		comboBoxIteration.setBackground(defaultColor);
 		textRelease.setEnabled(false);
 		textEstimate.setEnabled(false);
 		textEstimate.setBackground(defaultColor);

@@ -120,7 +120,7 @@ public class TextUpdateListener implements KeyListener {
 			}
 			if (base.equals(panel.getTextName().getText().trim())
 					|| base.equals(panel.getTextDescription().getText().trim())
-					|| base.equals(panel.getTextIteration().getText().trim())) {
+					/*TODO: || base.equals(panel.getTextIteration().getText().trim())*/) {
 				panel.disableSaveButton();
 			}
 			else 

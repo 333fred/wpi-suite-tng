@@ -79,8 +79,8 @@ public class EditRequirementAction extends AbstractAction {
 				requirement.setUsers(parentView.getAssignedUsers());
 
 				try {
-					requirement.setIteration(Integer.parseInt(parentView
-							.getTextIteration().getText()));
+					/*TODO: Save Iteration:  requirement.setIteration(Integer.parseInt(parentView
+							.getTextIteration().getText()));*/
 
 					try {
 						requirement
