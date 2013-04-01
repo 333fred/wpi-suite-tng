@@ -679,7 +679,7 @@ public class DetailPanel extends FocusableTab {
 			//Deleted: Open, Deleted, Complete
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
-			//his.comboBoxStatus.removeItem("Complete");		
+			this.comboBoxStatus.removeItem("Complete");		
 		}
 	}
 
