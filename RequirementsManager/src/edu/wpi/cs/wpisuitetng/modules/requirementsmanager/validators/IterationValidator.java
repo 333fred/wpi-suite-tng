@@ -84,7 +84,7 @@ public class IterationValidator {
 		return issues;
 	}
 	
-	private boolean overlapExists(Iteration alpha, Iteration beta){
+	public static boolean overlapExists(Iteration alpha, Iteration beta){
 		
 		// if iteration alpha starts before iteration beta, this will be +1
 		// if they have the same start date, this will be 0

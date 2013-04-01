@@ -165,6 +165,28 @@ public class IterationValidatorTest {
 	}
 	
 	/**
+	 * Test to confirm that overlapping iterations are recognized as such
+	 */
+	@Test
+	public void testOverlapDetection(){
+		Iteration base = new Iteration("base", new Date(1000), new Date(1500));
+		Iteration strictlyBeforeBase = new Iteration("strictlyBeforeBase", new Date(0), new Date(500));
+		Iteration strictlyAfterBase = new Iteration("strictlyAfterBase", new Date(2000), new Date(2500));
+		Iteration includesBaseStart = new Iteration("includesBaseStart", new Date(750), new Date(1250));
+		Iteration includesBaseEnd = new Iteration("includesBaseEnd", new Date(1250), new Date(1750));
+		Iteration includesBase = new Iteration("includesBase", new Date(750), new Date(1750));
+		Iteration insideBase = new Iteration("insideBase", new Date(1125), new Date(1375));
+		
+		assertFalse(IterationValidator.overlapExists(base, strictlyBeforeBase));
+		assertFalse(IterationValidator.overlapExists(base, strictlyAfterBase));
+		assertTrue(IterationValidator.overlapExists(base, includesBaseStart));
+		assertTrue(IterationValidator.overlapExists(base, includesBaseEnd));
+		assertTrue(IterationValidator.overlapExists(base, includesBase));
+		assertTrue(IterationValidator.overlapExists(base, insideBase));
+		
+	}
+	
+	/**
 	 * 
 	 * @param num number of issues expected, if any other number are found will cause test failure
 	 * @param requirement the requirement to test
