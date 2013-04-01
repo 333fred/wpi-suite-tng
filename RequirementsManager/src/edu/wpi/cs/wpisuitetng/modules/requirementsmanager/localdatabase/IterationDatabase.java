@@ -3,12 +3,14 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
 
+import java.awt.AWTEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationIsNegativeException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
@@ -87,9 +89,13 @@ public class IterationDatabase {
 	 * @return the iteration requested
 	 * @throws IterationNotFoundException
 	 *             couldn't find the iteration
+	 * @throws IterationIsNegativeException 
 	 */
 	public synchronized Iteration getIteration(int id)
-			throws IterationNotFoundException {
+			throws IterationNotFoundException, IterationIsNegativeException {
+		if (id < 0) {
+			throw new IterationIsNegativeException(id);
+		}
 		if (iterations.get(id) != null) {
 			return iterations.get(id);
 		} else {
@@ -97,13 +103,22 @@ public class IterationDatabase {
 		}
 	}
 
+	//TODO: Documentation
+	public synchronized Iteration getIteration(String name) {
+		for (Iteration anIteration : iterations.values()) {
+			if (anIteration.getName().equals(name)) {
+				return anIteration;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Gets all the iterations in the local database
 	 * 
 	 * @return all the current arrays
 	 */
 	public synchronized List<Iteration> getAllIterations() {
-		//init();
 		List<Iteration> list = new ArrayList<Iteration>();
 		list = new ArrayList<Iteration>(iterations.values());
 		return list;

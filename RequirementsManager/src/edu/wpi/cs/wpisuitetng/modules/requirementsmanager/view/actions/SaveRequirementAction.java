@@ -11,6 +11,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
@@ -59,8 +60,8 @@ public class SaveRequirementAction extends AbstractAction {
 			requirement.setUsers(parentView.getAssignedUsers());
 			
 			try {
-				/*TODO: Save Iteration: requirement.setIteration(Integer.parseInt(parentView.getTextIteration().getText()));*/	
-
+				requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
+				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
 				} catch(IllegalArgumentException except) {
@@ -76,7 +77,6 @@ public class SaveRequirementAction extends AbstractAction {
 				requirement.setStatus(Status.valueOf(parentView.getComboBoxStatus().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
 				
 				controller.AddRequirement(requirement);
-				//Done by the observer now //this.parentView.getMainTabController().closeCurrentTab();
 			} catch (NumberFormatException except) {
 				parentView.displaySaveError("Iteration must be an integer value");
 			}

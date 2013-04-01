@@ -28,6 +28,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreiveRequirementByIDControllerNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationIsNegativeException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -259,9 +261,10 @@ public class DetailPanel extends FocusableTab {
 				
 		List<Iteration> iterationList = IterationDatabase.getInstance().getAllIterations();
 		
-		String[] availableIterations = new String[iterationList.size()];
+		String[] availableIterations = new String[iterationList.size()+1];
+		availableIterations[0] = "Backlog";
 		for (int i = 0; i < iterationList.size(); i++) {
-			availableIterations[i] = iterationList.get(i).getName();
+			availableIterations[i+1] = iterationList.get(i).getName();
 		}
 		
 		
@@ -269,7 +272,7 @@ public class DetailPanel extends FocusableTab {
 		comboBoxIteration = new JComboBox(availableIterations);
 		//comboBoxIteration.setLineWrap(true);
 		//comboBoxIteration.setWrapStyleWord(true);
-		comboBoxIteration.setBorder((new JTextField()).getBorder());
+		comboBoxIteration.setBackground(Color.WHITE);
 		comboBoxIteration.setName("Iteration");
 	//	AbstractDocument textIterationDoc = (AbstractDocument) comboBoxIteration.getDocument();
 		//textIterationDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
@@ -509,8 +512,16 @@ public class DetailPanel extends FocusableTab {
 		textName.setText(requirement.getName());
 		textDescription.setText(requirement.getDescription());
 		textEstimate.setText(Integer.toString(requirement.getEstimate()));
-		//TODO: Load current iteration into combo box
-		//comboBoxIteration.setText(Integer.toString(requirement.getIteration()));
+
+		try {
+			comboBoxIteration.setSelectedItem((Object)IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+			System.out.println(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+		} catch (IterationNotFoundException e) {
+			System.out.println("Exception Caught: Iteration Not Found.");
+		} catch (IterationIsNegativeException e) {
+			comboBoxType.setSelectedItem("Backlog");
+		}
+		
 		switch (requirement.getType()) {
 		case BLANK:
 			comboBoxType.setSelectedIndex(0);

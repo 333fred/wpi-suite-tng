@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
@@ -79,9 +80,7 @@ public class EditRequirementAction extends AbstractAction {
 				requirement.setUsers(parentView.getAssignedUsers());
 
 				try {
-					/*TODO: Save Iteration:  requirement.setIteration(Integer.parseInt(parentView
-							.getTextIteration().getText()));*/
-
+					requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
 					try {
 						requirement
 								.setPriority(Priority.valueOf(parentView

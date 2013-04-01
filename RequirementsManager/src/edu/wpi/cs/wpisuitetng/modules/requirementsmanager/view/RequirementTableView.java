@@ -5,10 +5,9 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+
 import java.util.Vector;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,7 +22,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationIsNegativeException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -191,7 +193,14 @@ public class RequirementTableView extends FocusableTab implements
 			row.addElement(requirements[i].getType().equals(Type.BLANK) ? "" : requirements[i].getType().toString().substring(0,1).concat(requirements[i].getType().toString().substring(1).toLowerCase()).replaceAll("_s", " S"));
 			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? "" : requirements[i].getPriority().toString().substring(0,1).concat(requirements[i].getPriority().toString().substring(1).toLowerCase()));
 			row.addElement(requirements[i].getStatus().equals(Status.BLANK) ? "" : requirements[i].getStatus().toString().substring(0,1).concat(requirements[i].getStatus().toString().substring(1).toLowerCase()).replaceAll("_p", " P"));
-			row.addElement("");//TODO: Add iteration to table String.valueOf(requirements[i].getIteration()));
+			try {
+				row.addElement(IterationDatabase.getInstance().getIteration(requirements[i].getIteration()).getName());
+			} catch (IterationIsNegativeException e) {
+				row.addElement("Backlog");
+			} catch (IterationNotFoundException e) {
+				row.addElement("Iteration Not Found");
+			}
+			row.addElement("");
 			row.addElement(String.valueOf(requirements[i].getEffort()));
 			row.addElement(String.valueOf(requirements[i].getEstimate()));
 			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
