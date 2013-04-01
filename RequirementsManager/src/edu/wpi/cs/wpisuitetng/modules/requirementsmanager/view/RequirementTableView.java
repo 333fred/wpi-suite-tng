@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
@@ -160,18 +161,33 @@ public class RequirementTableView extends FocusableTab implements
 	 * 
 	 */
 	private void initializeToolbarGroup() {
-		toolbarView = new ToolbarGroupView("Requirements");
+		
+		JPanel content = new JPanel();
+		SpringLayout layout  = new SpringLayout();
+		content.setLayout(layout);
+		content.setOpaque(false);		
+		
 		butView = new JButton("Edit Requirement");
 		butRefresh = new JButton("Refresh");
 
 		butRefresh.setAction(new RefreshAction(this));
-		butView.setAction(new ViewRequirementAction(this));
+		butView.setAction(new ViewRequirementAction(this));		
+		
+		layout.putConstraint(SpringLayout.NORTH, butView, 5, SpringLayout.NORTH, content);
+		layout.putConstraint(SpringLayout.WEST, butView, 8, SpringLayout.WEST, content);
+		
+		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5, SpringLayout.SOUTH, butView);
+		layout.putConstraint(SpringLayout.WEST, butRefresh, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, butRefresh, 0, SpringLayout.EAST, butView);
+		
 		// create and add the buttons that will be displayed
-		toolbarView.getContent().add(butView);
-		toolbarView.getContent().add(butRefresh);
+		content.add(butView);
+		content.add(butRefresh);
+		
+		toolbarView = new ToolbarGroupView("Requirements", content);
 		// set the width of the group so it is not too long
-		toolbarView.setPreferredWidth((int) (butView.getPreferredSize()
-				.getWidth() + butRefresh.getPreferredSize().getWidth() + 40));
+		toolbarView.setPreferredWidth((int) (butView.getPreferredSize().getWidth() + 40));
+		
 	}
 
 	/**
