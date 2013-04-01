@@ -73,7 +73,6 @@ public class IterationView extends FocusableTab{
 	private final int VERTICAL_PADDING = 10;
 	private final int HORIZONTAL_PADDING = 20;
 	
-	private boolean saveEnabled;
 	
 	public IterationView(Iteration iteration, MainTabController mainTabController) {
 		this(iteration, Status.EDIT, mainTabController);
@@ -88,7 +87,6 @@ public class IterationView extends FocusableTab{
 		this.status = status;
 		this.mainTabController = mainTabController;
 		
-		this.saveEnabled = false;
 		
 		//initilize the add iteration controller
 		addIterationController = new AddIterationController(this);
@@ -133,9 +131,9 @@ public class IterationView extends FocusableTab{
 			calEndDate.setDate(iteration.getEndDate());			
 		}
 		
-		//txtName.addKeyListener(new IterationViewListener(this, txtName));
+		txtName.addKeyListener(new IterationViewListener(this, txtName));
 		
-		/*
+		
 		IterationViewListener startDateListener = new IterationViewListener(this, calStartDate);
 		IterationViewListener endDateListener = new IterationViewListener(this, calEndDate);
 		
@@ -144,7 +142,6 @@ public class IterationView extends FocusableTab{
 		
 		calStartDate.addMouseListener(startDateListener);
 		calEndDate.addMouseListener(endDateListener);
-		*/
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -284,12 +281,10 @@ public class IterationView extends FocusableTab{
 	private void setNameError() {
 		if (txtName.getText().trim().isEmpty()) {
 			labNameError.setText("**Name connot be blank**");	
-			saveEnabled = false;
 			butSave.setEnabled(false);
 			txtName.setBackground(new Color(243, 243, 209));
 		}
 		else {
-			saveEnabled = true;
 			butSave.setEnabled(true);
 			labNameError.setText(" ");
 			txtName.setBackground(Color.WHITE);
