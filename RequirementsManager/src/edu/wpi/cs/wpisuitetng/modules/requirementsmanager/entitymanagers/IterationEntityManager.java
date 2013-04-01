@@ -103,9 +103,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	public Iteration[] getAll(Session s) throws WPISuiteException {
 		Iteration[] is = db.retrieveAll(new Iteration(), s.getProject()).toArray(
 				new Iteration[0]);
-		for (Iteration i : is){
-			System.out.println("I name " + i.getName());
-		}
 		return is;
 	}
 

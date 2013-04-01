@@ -33,8 +33,7 @@ public class IterationValidator {
 		// If the iteration is being created, then we must have no requirements
 		if (mode == IterationActionMode.CREATE) {
 			i.setRequirements(new ArrayList<Integer>());
-		} 
-		else {
+		} else {
 			// If we are not creating, make sure that requirements aren't null
 			if (i.getRequirements() == null) {
 				i.setRequirements(new ArrayList<Integer>());
@@ -78,12 +77,18 @@ public class IterationValidator {
 			if(overlapExists(itr, i)){
 				// report the name of both iterations and that they overlap
 				issues.add(new ValidationIssue(itr.toString() + " overlaps " + i.toString()));
-			}			
+			}		
+			if(i.getName() != null) {
+				if (itr.getName().compareTo(i.getName()) == 0) {
+					issues.add(new ValidationIssue("Iteration name must be unique!"));
+					break;
+				}
+			}
 		}
 
 		return issues;
 	}
-	
+		
 	public static boolean overlapExists(Iteration alpha, Iteration beta){
 		
 		// if iteration alpha starts before iteration beta, this will be +1
