@@ -50,9 +50,9 @@ public class DetailPanel extends FocusableTab {
 	private JTextArea textNameValid;
 	private JTextArea textDescriptionValid;
 	private JTextArea textIteration;
-	private JTextArea textEstimate;
+	private JTextField textEstimate;
 
-	private JTextArea textActual;
+	private JTextField textActual;
 	private JTextArea textRelease;
 	JTextArea saveError;
 
@@ -296,8 +296,9 @@ public class DetailPanel extends FocusableTab {
 		txtIterationListener = new TextUpdateListener(this, textIteration, null);
 		textIteration.addKeyListener(txtIterationListener);
 		
-		textEstimate = new JTextArea(1,9);
+		textEstimate = new JTextField(9);
 		textEstimate.setBorder((new JTextField()).getBorder());
+		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
@@ -317,10 +318,11 @@ public class DetailPanel extends FocusableTab {
 			}
 		});
 		
-		textActual = new JTextArea(1,9);
+		textActual = new JTextField(9);
 		textActual.setBorder((new JTextField()).getBorder());
 		textActual.setEnabled(false); // DISABLE THIS ITERATION
 		textActual.setBackground(defaultColor);
+		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
 		textActualDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textActual);
@@ -773,14 +775,14 @@ public class DetailPanel extends FocusableTab {
 	/**
 	 * @return the textEstimate
 	 */
-	public JTextArea getTextEstimate() {
+	public JTextField getTextEstimate() {
 		return textEstimate;
 	}
 	
 	/**
 	 * @param textEstimate the textEstimate to set
 	 */
-	public void setTextEstimate(JTextArea textEstimate) {
+	public void setTextEstimate(JTextField textEstimate) {
 		this.textEstimate = textEstimate;
 	}
 	
