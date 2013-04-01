@@ -13,11 +13,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 
 /**
- * Skeleton class for iteration. This will be made into a model in the future,
- * but for now it is just a dummy for allowing assignment.
- * 
- * Because this is not a full implementation, validation of dates is not
- * required
+ * Class representing an iteration of a project
  * 
  * @author Jason Whitehouse
  */
@@ -258,8 +254,14 @@ public class Iteration extends AbstractModel {
 		}
 	}
 	
+	/**
+	 * Method to confirm that the end date of an iteration
+	 * is in fact after its start date
+	 * @return true if this iteration has an end date which follows its start date;
+	 * 	false otherwise
+	 */
 	public boolean validateDate(){
-		return startDate.compareTo(endDate) > 0 ? false : true;
+		return(startDate.compareTo(endDate) < 0);
 	}
 
 	/**
