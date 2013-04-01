@@ -8,8 +8,8 @@ import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.IterationActionMode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers.RequirementsEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers.IterationEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.IterationEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 

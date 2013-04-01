@@ -16,7 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers.RequirementsEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 import static org.junit.Assert.*;

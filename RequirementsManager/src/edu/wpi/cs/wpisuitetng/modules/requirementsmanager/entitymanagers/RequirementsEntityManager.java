@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entititymanagers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
 import java.util.List;
 
