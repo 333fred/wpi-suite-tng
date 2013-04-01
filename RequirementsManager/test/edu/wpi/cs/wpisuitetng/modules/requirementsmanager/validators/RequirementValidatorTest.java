@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
 /**
- * @author Jason
+ * @author Jason Whitehouse
  *
  * Testing for RequirementValidator class
  * 	
@@ -35,6 +35,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
  * have a non-null description at most 5000 characters
  * 
  * and when validated should be given a status of NEW and a type of BLANK if null
+ * 
+ * CheckNumIssues and CheckNoIssues methods adapted from Defect Tracker
  */
 
 public class RequirementValidatorTest {
