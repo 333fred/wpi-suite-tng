@@ -55,7 +55,7 @@ public class ToolbarView extends DefaultToolbarView {
 		createIteration.setAction(new CreateIterationAction(tabController));
 
 		// Construct the User Manual button
-		createHelpPanel = new JButton("User Manual");		
+		createHelpPanel = new JButton("?");
 	    createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
 		
 		// Construct the search field
@@ -66,13 +66,13 @@ public class ToolbarView extends DefaultToolbarView {
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5, SpringLayout.NORTH, content);
 		layout.putConstraint(SpringLayout.WEST, createRequirement, 8, SpringLayout.WEST, content);
 		
-
-		layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 15, SpringLayout.SOUTH, createRequirement);
-		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8, SpringLayout.WEST, content);
-		
 		layout.putConstraint(SpringLayout.NORTH, createIteration, 5, SpringLayout.SOUTH, createRequirement);
 		layout.putConstraint(SpringLayout.WEST, createIteration, 8, SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.EAST, createIteration, 0, SpringLayout.EAST, createRequirement);
+		
+		layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 5, SpringLayout.SOUTH, createIteration);
+		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.SOUTH, createHelpPanel, 17, SpringLayout.SOUTH, createIteration);
 		
 		// Add buttons to the content panel
 		content.add(createIteration);

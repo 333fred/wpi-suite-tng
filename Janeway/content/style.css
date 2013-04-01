@@ -1,0 +1,17 @@
+@charset "utf-8";
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	background-color: #F1FCB1;
+}
+body pre{
+	font-family: Verdana, Geneva, sans-serif;
+}
+hr {
+	display: block;
+	margin-before:5px;
+	margin after: 5px;
+	margin-start: auto;
+	margin-end: auto;
+	border-style: inset;
+	border-width: 1px;
+}

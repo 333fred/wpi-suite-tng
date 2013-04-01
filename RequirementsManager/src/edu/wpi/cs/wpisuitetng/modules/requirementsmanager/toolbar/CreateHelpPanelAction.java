@@ -28,9 +28,9 @@ public class CreateHelpPanelAction extends AbstractAction {
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
 	public CreateHelpPanelAction(MainTabController controller) {
-		super("User Manual");
+		super("?");
 		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
+		putValue(MNEMONIC_KEY, KeyEvent.VK_U);
 	}
 	
 	@Override

@@ -3,6 +3,7 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Desktop;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,11 +15,15 @@ import java.net.URL;
 
 import javax.swing.JPanel;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import javax.swing.JTextPane;
 import javax.swing.text.html.HTMLDocument;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 
+//TODO: Documentation, and perhaps built-in browser?
 /**
  * Panel for the user manual
  * 
@@ -33,41 +38,49 @@ public class HelpPanel extends JPanel {
 	 * Construct the panel.
 	 * @throws Exception 
 	 */
+	
 	public HelpPanel() {
+		setLayout(new BorderLayout(8, 5)); //TODO: Layout better?
+
 		
-		JTextPane helpPane = new JTextPane();
-		add(helpPane);
+		JTextPane helpPane = new JTextPane(); //Create and add the panel
+		JScrollPane scrollPane = new JScrollPane(helpPane); 
+		helpPane.setEditable(false);
+		add(scrollPane);
 		
-		helpPane.setContentType("text/html");
-		helpPane.setBounds(new Rectangle(10, 10, 260, 365));
+		/*helpPane.setContentType("text/html"); //Prepare for html and set the bounds
+		helpPane.setBounds(new Rectangle(10, 10, 260, 365));*/
 		
-		URL url = null;
-		URL test = null;
+		URL index = null; //Will be our main index page
 		
-		File input = new File("main.html");
-		String path = new String("file:///"+input.getAbsolutePath());
-		System.out.println(path);
+		File input = new File("index.html"); //Html file is our input
+		String path = new String("file:///"+input.getAbsolutePath()); //Grab the url of the path
+		System.out.println(path); //Make sure the path is correct!
 		
 		try {
-			test = new URL(path);
+			index = new URL(path); //Try to set our index url given the path
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		try {
-			url = new URL("http://pastehtml.com/iew/cxh3xp4jm.html");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			helpPane.setPage(test);
+		/*try {
+			helpPane.setPage(index); //Try to set the page to our index (Will look awful, no CSS support)
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+		
+		helpPane.setText("A web browser should load with the main page of the user manual.  If a browser does not open, search for index.html in the source and open it with a browser.");
+		//Create a desktop type in order to launch the user's default browser
+		 Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+		    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) { //If desktop was created and a browser is supported
+		        try {
+		            desktop.browse(index.toURI()); //Convert link to identifier and launch default browser
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
 
 	}
 }
