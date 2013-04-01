@@ -35,34 +35,10 @@ public class IterationTreeView extends JPanel {
 		
 		this.top = new DefaultMutableTreeNode("Iterations");
 		this.tree = new JTree(top);
-		this.tree.setEditable(true);
+		this.tree.setEditable(false);
 			
 		JScrollPane treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
-
-		/*
-		 * DefaultMutableTreeNode iterationNode = null; iterationNode = new
-		 * DefaultMutableTreeNode("Iteration 1"); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement a")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement b")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement c"));
-		 * this.top.add(iterationNode); iterationNode = new
-		 * DefaultMutableTreeNode("Iteration 2"); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement d")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement e")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement f"));
-		 * this.top.add(iterationNode); iterationNode = new
-		 * DefaultMutableTreeNode("Iteration 3"); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement g")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement h")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement i"));
-		 * this.top.add(iterationNode); iterationNode = new
-		 * DefaultMutableTreeNode("Backlog"); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement j")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement k")); iterationNode.add(new
-		 * DefaultMutableTreeNode("Requirement l"));
-		 * this.top.add(iterationNode);
-		 */
 	}
 
 	public void refresh() {

@@ -25,7 +25,7 @@ import javax.swing.text.html.HTMLDocument;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 
-//TODO: Documentation, and perhaps built-in browser?
+//TODO: Documentation, and perhaps built-in browser? CURRENTLY NOT IN USE, IN FAVOR OF NO TAB OPENING
 /**
  * Panel for the user manual
  * 

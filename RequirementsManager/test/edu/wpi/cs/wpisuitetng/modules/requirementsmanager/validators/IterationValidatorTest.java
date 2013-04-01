@@ -66,7 +66,7 @@ public class IterationValidatorTest {
 		db.save(existingIteration, testProject);
 		db.save(goodRequirement, testProject);
 
-		goodIteration = new Iteration("Iteration 1", new Date(120000),new Date(180000), 1);
+		goodIteration = new Iteration("Good Requirement", new Date(120000),new Date(180000), 1);
 	}
 	
 	@Test
