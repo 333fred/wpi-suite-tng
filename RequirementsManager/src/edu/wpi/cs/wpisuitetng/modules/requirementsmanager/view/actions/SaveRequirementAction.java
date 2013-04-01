@@ -60,7 +60,11 @@ public class SaveRequirementAction extends AbstractAction {
 			requirement.setUsers(parentView.getAssignedUsers());
 			
 			try {
-				requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
+				if(parentView.getTextIteration().getSelectedItem().toString().equals("Backlog")){
+					requirement.setIteration(-1);
+				} else {
+					requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
+				}
 				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
