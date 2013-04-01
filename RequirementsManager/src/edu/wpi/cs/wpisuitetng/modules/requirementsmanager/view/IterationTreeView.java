@@ -74,9 +74,9 @@ public class IterationTreeView extends JPanel {
 
 		for (Iteration anIteration : iterations) {
 			
-			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)this.tree.getCellRenderer();
-			renderer.setLeafIcon(null);
-			this.tree.setCellRenderer(renderer);
+			//DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)this.tree.getCellRenderer();
+			//renderer.setLeafIcon(null);
+			//this.tree.setCellRenderer(renderer);
 			
 			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
 			System.out.println(anIteration.getName());

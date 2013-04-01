@@ -97,48 +97,36 @@ public class DetailPanel extends FocusableTab {
 	/** The controller for retrieving the requirement from the sever */
 	private RetrieveRequirementByIDController retreiveRequirementController;
 
+	private SpringLayout layout;
+	
+	// add labels to the overall panel
+	private JLabel lblName;
+	private JLabel lblDescription;
+	private JLabel lblType;
+	private JLabel lblStatus;
+	private JLabel lblPriority;
+	private JLabel lblIteration;
+	private JLabel lblEstimate;
+	private JLabel lblActual;
+	private JLabel lblRelease;
+
+	private JScrollPane scroll;
+	private JButton btnCancel;
+	
+	private JPanel mainPanel;
+	
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
 		this.mainTabController = mainTabController;
 		
-		JPanel mainPanel = new JPanel();
-		Color defaultColor = mainPanel.getBackground();
-		//GridLayout mainLayout = new GridLayout(0, 2);
-			
+		mainPanel = new JPanel();
+		Color defaultColor = mainPanel.getBackground();	
 		GridLayout mainLayout = new GridLayout(0, 1);
-		
 		setLayout(mainLayout);
-
-		SpringLayout layout = new SpringLayout();
+		layout = new SpringLayout();
 		mainPanel.setLayout(layout);
 
-		// add labels to the overall panel
-		JLabel lblName = new JLabel("Name:");
-		mainPanel.add(lblName);
-
-		JLabel lblDescription = new JLabel("Description:");
-		mainPanel.add(lblDescription);
-
-		JLabel lblType = new JLabel("Type:");
-		mainPanel.add(lblType);
-
-		JLabel lblStatus = new JLabel("Status:");
-		mainPanel.add(lblStatus);
-
-		JLabel lblPriority = new JLabel("Priority:");
-		mainPanel.add(lblPriority);
-		
-		JLabel lblIteration = new JLabel("Iteration:");
-		mainPanel.add(lblIteration);
-		
-		JLabel lblEstimate = new JLabel("Estimate:");
-		mainPanel.add(lblEstimate);
-		
-		JLabel lblActual = new JLabel("Actual:");
-		mainPanel.add(lblActual);
-		
-		JLabel lblRelease = new JLabel("Release Number:");
-		mainPanel.add(lblRelease);
+		addJLabels();
 
 		// formatting for textName area
 		textName = new JTextArea(1, 40);
@@ -191,7 +179,7 @@ public class DetailPanel extends FocusableTab {
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
 		textDescription.setName("Description");
-		JScrollPane scroll = new JScrollPane(textDescription);
+		scroll = new JScrollPane(textDescription);
 		
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.setSize(400, 450);
@@ -398,7 +386,7 @@ public class DetailPanel extends FocusableTab {
 		btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
 		
-		JButton btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Cancel");
 		btnCancel.setAction(new CancelAction(this));
 		mainPanel.add(btnCancel);
 
@@ -436,6 +424,141 @@ public class DetailPanel extends FocusableTab {
 		}
 		
 		
+		addComponentConstraints();
+		loadFields();
+		
+		logView = new DetailLogView(this.requirement, this);
+		noteView = new DetailNoteView(this.requirement, this);
+		userView = new AssigneePanel(requirement,this);
+		
+	
+		// create the new eventPane
+		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
+		
+		if(requirement.getStatus() == Status.DELETED){
+			eventPane.disableUserButtons();
+		}		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		scrollPane.getViewport().add(mainPanel);		
+		
+		//TODO: Implement a proper preferredHeight, but Width works
+		//set the preffered size of mainPanel
+		//int preferredHeight = (int) (btnCancel.getLocation().getY() + btnCancel.getPreferredSize().getHeight() + VERTICAL_PADDING * 2);
+		int preferredHeight = 515;
+		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
+		
+		//set the preferred size
+		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));		
+		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scrollPane, eventPane);
+		//mainLayout = new SpringLayout();
+		add(splitPane);
+
+		splitPane.setResizeWeight(0.5);
+		
+		this.determineAvailableStatusOptions();
+		this.disableSaveButton();
+		this.disableAllFieldsIfDeleted();
+		
+		// prevent in-progress or complete requirements from having their estimates changed
+		if (requirement.getStatus() == Status.IN_PROGRESS ||  requirement.getStatus() == Status.COMPLETE) {
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
+		
+		// prevent requirements with subrequirements from having their estimates changed
+		if (requirement.getSubRequirements() != null && requirement.getSubRequirements().size() > 0){
+			// TODO: ensure that the estimate of any requirement with subrequirements
+			// is the sum of the estimates of its subrequirements
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
+		
+	}
+	/**
+	 * 
+	 */
+	private void addJLabels() {
+		// add labels to the overall panel
+		lblName = new JLabel("Name:");
+		lblDescription = new JLabel("Description:");
+		lblType = new JLabel("Type:");		
+		lblStatus = new JLabel("Status:");
+		lblPriority = new JLabel("Priority:");
+		lblIteration = new JLabel("Iteration:");	
+		lblEstimate = new JLabel("Estimate:");
+		lblActual = new JLabel("Actual:");
+		lblRelease = new JLabel("Release Number:");
+		
+		mainPanel.add(lblName);
+		mainPanel.add(lblDescription);
+		mainPanel.add(lblType);
+		mainPanel.add(lblStatus);
+		mainPanel.add(lblPriority);
+		mainPanel.add(lblIteration);
+		mainPanel.add(lblEstimate);	
+		mainPanel.add(lblActual);
+		mainPanel.add(lblRelease);
+	}
+	/**
+	 * @param requirement
+	 */
+	private void loadFields() {
+		textName.setText(requirement.getName());
+		textDescription.setText(requirement.getDescription());
+		textEstimate.setText(Integer.toString(requirement.getEstimate()));
+		//TODO: Load current iteration into combo box
+		//comboBoxIteration.setText(Integer.toString(requirement.getIteration()));
+		switch (requirement.getType()) {
+		case BLANK:
+			comboBoxType.setSelectedIndex(0);
+			break;
+		case EPIC:
+			comboBoxType.setSelectedIndex(1);
+			break;
+		case THEME:
+			comboBoxType.setSelectedIndex(2);
+			break;
+		case USER_STORY:
+			comboBoxType.setSelectedIndex(3);
+			break;
+		case NON_FUNCTIONAL:
+			comboBoxType.setSelectedIndex(4);
+			break;
+		case SCENARIO:
+			comboBoxType.setSelectedIndex(5);
+		}
+		switch (requirement.getPriority()) {
+		case BLANK:
+			comboBoxPriority.setSelectedIndex(0);
+			break;
+		case HIGH:
+			comboBoxPriority.setSelectedIndex(1);
+			break;
+		case MEDIUM:
+			comboBoxPriority.setSelectedIndex(2);
+			break;
+		case LOW:
+			comboBoxPriority.setSelectedIndex(3);
+			break;
+		}
+	}
+	/**
+	 * @param lblName
+	 * @param lblDescription
+	 * @param lblType
+	 * @param lblStatus
+	 * @param lblPriority
+	 * @param lblIteration
+	 * @param lblEstimate
+	 * @param lblActual
+	 * @param lblRelease
+	 * @param scroll
+	 * @param btnCancel
+	 */
+	private void addComponentConstraints() {
 		// Align left edges of objects
 		layout.putConstraint(SpringLayout.WEST, lblName, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
@@ -543,103 +666,6 @@ public class DetailPanel extends FocusableTab {
 				SpringLayout.SOUTH, textRelease);
 		layout.putConstraint(SpringLayout.NORTH, saveError, VERTICAL_PADDING
 				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
-
-
-		textName.setText(requirement.getName());
-		textDescription.setText(requirement.getDescription());
-		//TODO: Load current iteration into combo box
-		//comboBoxIteration.setText(Integer.toString(requirement.getIteration()));
-		switch (requirement.getType()) {
-		case BLANK:
-			comboBoxType.setSelectedIndex(0);
-			break;
-		case EPIC:
-			comboBoxType.setSelectedIndex(1);
-			break;
-		case THEME:
-			comboBoxType.setSelectedIndex(2);
-			break;
-		case USER_STORY:
-			comboBoxType.setSelectedIndex(3);
-			break;
-		case NON_FUNCTIONAL:
-			comboBoxType.setSelectedIndex(4);
-			break;
-		case SCENARIO:
-			comboBoxType.setSelectedIndex(5);
-		}
-		switch (requirement.getPriority()) {
-		case BLANK:
-			comboBoxPriority.setSelectedIndex(0);
-			break;
-		case HIGH:
-			comboBoxPriority.setSelectedIndex(1);
-			break;
-		case MEDIUM:
-			comboBoxPriority.setSelectedIndex(2);
-			break;
-		case LOW:
-			comboBoxPriority.setSelectedIndex(3);
-			break;
-		}
-		
-		logView = new DetailLogView(this.requirement, this);
-		noteView = new DetailNoteView(this.requirement, this);
-		userView = new AssigneePanel(requirement,this);
-		
-	
-		// create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
-		
-		if(requirement.getStatus() == Status.DELETED){
-			eventPane.disableUserButtons();
-		}
-		// Add everything to this
-		
-		//add(mainPanel);
-		//add(eventPane);
-		
-		
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		scrollPane.getViewport().add(mainPanel);		
-
-		
-		//TODO: Implement a proper preferredHeight, but Width works
-		//set the preffered size of mainPanel
-		//int preferredHeight = (int) (btnCancel.getLocation().getY() + btnCancel.getPreferredSize().getHeight() + VERTICAL_PADDING * 2);
-		int preferredHeight = 515;
-		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
-		
-		//set the preferred size
-		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));		
-		
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scrollPane, eventPane);
-		//mainLayout = new SpringLayout();
-		add(splitPane);
-
-		splitPane.setResizeWeight(0.5);
-		
-		this.determineAvailableStatusOptions();
-		this.disableSaveButton();
-		this.disableAllFieldsIfDeleted();
-		
-		// prevent in-progress or complete requirements from having their estimates changed
-		if (requirement.getStatus() == Status.IN_PROGRESS ||  requirement.getStatus() == Status.COMPLETE) {
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-		
-		// prevent requirements with subrequirements from having their estimates changed
-		if (requirement.getSubRequirements() != null && requirement.getSubRequirements().size() > 0){
-			// TODO: ensure that the estimate of any requirement with subrequirements
-			// is the sum of the estimates of its subrequirements
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-		
 	}
 	/**
 	 * Method to determine to which statuses the currently viewed requirement 
