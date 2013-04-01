@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 
 /** Class for displaying the note view and the log view on the right side of the Detail View
  * 
@@ -31,12 +32,13 @@ public class DetailEventPane extends JTabbedPane {
 
 		//add the given tabs to the pane
 		addTab("Notes", new ImageIcon(), notesListPane, "The notes for this requirement");		
-		addTab("OldLog", new ImageIcon(), logListPane, "The log for this requirement");
+		addTab("Log", new ImageIcon(), logListPane, "The log for this requirement");
 		addTab("Users", new ImageIcon(), userListPane, "The users assigned to this requirement");
 
 	}
 	
 	public void disableUserButtons(){
 		((AssigneePanel)userListPane).disableUserButtons();
+		((DetailNoteView)notesListPane).disableUserButtons();
 	}
 }

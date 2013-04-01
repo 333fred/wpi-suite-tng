@@ -26,6 +26,7 @@ public class DetailNoteView extends JPanel{
 	protected JList notes;
 	private Requirement requirement;
 	private DetailPanel parentView;
+	private MakeNotePanel makeNotePanel;
 	
 	/**
 	 * Construct the panel and add layout components
@@ -38,7 +39,7 @@ public class DetailNoteView extends JPanel{
 		
 		setLayout(new BorderLayout());
 		// Set up the note panel
-		MakeNotePanel makeNotePanel = new MakeNotePanel(requirement, parentView);
+		makeNotePanel = new MakeNotePanel(requirement, parentView);
 
 		// Create the note list
 		noteList = new DefaultListModel();
@@ -92,5 +93,13 @@ public class DetailNoteView extends JPanel{
 		//updates the notes list
 		addNotesToList();
 	}
+	
+	/**
+	 * This function disables interaction with the notes panel
+	 */
+	public void disableUserButtons(){
+		makeNotePanel.setInputEnabled(false);
+	}
+
 	
 }
