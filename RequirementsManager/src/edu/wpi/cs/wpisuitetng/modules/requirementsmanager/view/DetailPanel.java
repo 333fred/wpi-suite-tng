@@ -280,6 +280,7 @@ public class DetailPanel extends FocusableTab {
 		textEstimate.setBorder((new JTextField()).getBorder());
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		textEstimate.setName("Estimate");
+		textEstimate.setDisabledTextColor(Color.GRAY);
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
@@ -309,6 +310,7 @@ public class DetailPanel extends FocusableTab {
 		textActual.setBackground(defaultColor);
 		textActual.setMaximumSize(textActual.getPreferredSize());
 		textActual.setName("Actual");
+		textActual.setDisabledTextColor(Color.GRAY);
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
 		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textActual);
@@ -337,8 +339,7 @@ public class DetailPanel extends FocusableTab {
 		textRelease.setEnabled(false); // DISABLE THIS ITERATION
 		textRelease.setBackground(defaultColor);
 		textRelease.setName("Release");
-		AbstractDocument textReleaseDoc = (AbstractDocument) textRelease.getDocument();
-		textReleaseDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
+		textRelease.setDisabledTextColor(Color.GRAY);
 		mainPanel.add(textRelease);
 		
 		textRelease.addKeyListener(new KeyAdapter() {
