@@ -46,7 +46,9 @@ public class TextUpdateListener implements KeyListener {
 		this.errorComponent = errorComponent;
 		
 		String empty = "";
-		if (empty.equals(component.getText().trim())) { // if this was empty to begin with
+		// if this component was empty to begin with, 
+		// and it is not the estimate field (estimate can be empty)
+		if (empty.equals(component.getText().trim()) && !component.getName().equals("Estimate")) { 
 			this.firstKeyPress = false;
 		}
 		else {
@@ -64,7 +66,9 @@ public class TextUpdateListener implements KeyListener {
 		}
 		else {
 			String empty = "";
-			if (empty.equals(component.getText().trim())) { // if this was empty to begin with
+			// if this component was empty to begin with, 
+			// and it is not the estimate field (estimate can be empty)
+			if (empty.equals(component.getText().trim()) && !component.getName().equals("Estimate")) { 
 				this.firstKeyPress = false;
 			}
 			else {
@@ -80,7 +84,9 @@ public class TextUpdateListener implements KeyListener {
 		}
 		else {
 			String empty = "";
-			if (empty.equals(component.getText().trim())) { // if this was empty to begin with
+			// if this component was empty to begin with, 
+			// and it is not the estimate field (estimate can be empty)
+			if (empty.equals(component.getText().trim()) && !component.getName().equals("Estimate")) { 
 				this.firstKeyPress = false;
 			}
 			else {

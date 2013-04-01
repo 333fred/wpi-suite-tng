@@ -108,7 +108,7 @@ public class EditRequirementAction extends AbstractAction {
 						requirement.setEstimate(Integer.parseInt(parentView
 								.getTextEstimate().getText()));
 					} catch (NumberFormatException except) {
-						parentView.displaySaveError("Estimate must be a non-negative integer");
+						// not necessary to do anything
 					}
 					
 					controller.SaveRequirement(requirement, true);

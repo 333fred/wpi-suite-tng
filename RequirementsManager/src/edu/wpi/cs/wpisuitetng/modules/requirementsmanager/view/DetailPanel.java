@@ -75,13 +75,15 @@ public class DetailPanel extends FocusableTab {
 	
 	JButton btnSave;
 	
-	protected final TextUpdateListener txtTitleListener;
-	protected final TextUpdateListener txtDescriptionListener;
-	protected final TextUpdateListener txtIterationListener;
+	protected final TextUpdateListener textTitleListener;
+	protected final TextUpdateListener textDescriptionListener;
+	protected final TextUpdateListener textIterationListener;
 	
 	protected final ItemStateListener comboBoxTypeListener;
 	protected final ItemStateListener comboBoxStatusListener;
 	protected final ItemStateListener comboBoxPriorityListener;
+	
+	protected final TextUpdateListener textEstimateListener;
 
 	// swing constants
 	private static final int VERTICAL_PADDING = 10;
@@ -176,10 +178,9 @@ public class DetailPanel extends FocusableTab {
 		textNameValid.setWrapStyleWord(true);
 		mainPanel.add(textNameValid);
 		
-		// Add TextUpdateListeners, which check if the text component's text differs from the panel's requirement
-		// model and highlights them accordingly every time a key is pressed.
-		txtTitleListener = new TextUpdateListener(this, textName, textNameValid);
-		textName.addKeyListener(txtTitleListener);
+		// Add TextUpdateListeners
+		textTitleListener = new TextUpdateListener(this, textName, textNameValid);
+		textName.addKeyListener(textTitleListener);
 		
 		// textDescription formatting
 		textDescription = new JTextArea(8, 40);
@@ -219,10 +220,9 @@ public class DetailPanel extends FocusableTab {
 		textDescriptionValid.setWrapStyleWord(true);
 		mainPanel.add(textDescriptionValid);
 		
-		// Add TextUpdateListeners, which check if the text component's text differs from the panel's requirement
-		// model and highlights them accordingly every time a key is pressed.
-		txtDescriptionListener = new TextUpdateListener(this, textDescription, textDescriptionValid);
-		textDescription.addKeyListener(txtDescriptionListener);
+		// Add TextUpdateListeners
+		textDescriptionListener = new TextUpdateListener(this, textDescription, textDescriptionValid);
+		textDescription.addKeyListener(textDescriptionListener);
 		
 		saveError = new JTextArea(1, 40);
 		saveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -270,6 +270,7 @@ public class DetailPanel extends FocusableTab {
 		textIteration.setLineWrap(true);
 		textIteration.setWrapStyleWord(true);
 		textIteration.setBorder((new JTextField()).getBorder());
+		textIteration.setName("Iteration");
 		AbstractDocument textIterationDoc = (AbstractDocument) textIteration.getDocument();
 		textIterationDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textIteration);
@@ -293,12 +294,13 @@ public class DetailPanel extends FocusableTab {
 			}
 		});
 		
-		txtIterationListener = new TextUpdateListener(this, textIteration, null);
-		textIteration.addKeyListener(txtIterationListener);
+		textIterationListener = new TextUpdateListener(this, textIteration, null);
+		textIteration.addKeyListener(textIterationListener);
 		
 		textEstimate = new JTextField(9);
 		textEstimate.setBorder((new JTextField()).getBorder());
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
+		textEstimate.setName("Estimate");
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textEstimate);
@@ -318,11 +320,16 @@ public class DetailPanel extends FocusableTab {
 			}
 		});
 		
+		// Add TextUpdateListeners,
+		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
+		textEstimate.addKeyListener(textEstimateListener);
+		
 		textActual = new JTextField(9);
 		textActual.setBorder((new JTextField()).getBorder());
 		textActual.setEnabled(false); // DISABLE THIS ITERATION
 		textActual.setBackground(defaultColor);
 		textActual.setMaximumSize(textActual.getPreferredSize());
+		textActual.setName("Actual");
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
 		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textActual);
@@ -350,6 +357,7 @@ public class DetailPanel extends FocusableTab {
 		textRelease.setBorder((new JTextField()).getBorder());
 		textRelease.setEnabled(false); // DISABLE THIS ITERATION
 		textRelease.setBackground(defaultColor);
+		textRelease.setName("Release");
 		AbstractDocument textReleaseDoc = (AbstractDocument) textRelease.getDocument();
 		textReleaseDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
 		mainPanel.add(textRelease);
