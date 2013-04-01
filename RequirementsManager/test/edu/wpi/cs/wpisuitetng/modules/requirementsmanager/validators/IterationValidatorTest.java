@@ -62,7 +62,7 @@ public class IterationValidatorTest {
 		goodRequirement.setName("Name");
 		goodRequirement.setDescription("A quality description");
 
-		existingIteration = new Iteration("Iteration 1", new Date(0),new Date(60000), 0);
+		existingIteration = new Iteration("Iteration 1", new Date(10000),new Date(60000), 0);
 		db.save(existingIteration, testProject);
 		db.save(goodRequirement, testProject);
 
@@ -155,35 +155,34 @@ public class IterationValidatorTest {
 		checkNoIssues(goodIteration, defaultSession, IterationActionMode.CREATE);
 		assertEquals(goodIteration.getRequirements(), new LinkedList<Requirement>());
 	}
-	
+
 	@Test
-	//Ensure that overlapping iteration will be rejected
-	public void testOverlap() {
-		Iteration overlapping = new Iteration("Iteration 2", new Date(8000),new Date(9000), 2);
-		checkNumIssues(1, overlapping, defaultSession, IterationActionMode.CREATE);
-		checkNumIssues(1, overlapping, defaultSession, IterationActionMode.EDIT);
-	}
-	
-	/**
-	 * Test to confirm that overlapping iterations are recognized as such
-	 */
-	@Test
+	//Tests validation on all overlap cases
 	public void testOverlapDetection(){
-		Iteration base = new Iteration("base", new Date(1000), new Date(1500));
-		Iteration strictlyBeforeBase = new Iteration("strictlyBeforeBase", new Date(0), new Date(500));
-		Iteration strictlyAfterBase = new Iteration("strictlyAfterBase", new Date(2000), new Date(2500));
-		Iteration includesBaseStart = new Iteration("includesBaseStart", new Date(750), new Date(1250));
-		Iteration includesBaseEnd = new Iteration("includesBaseEnd", new Date(1250), new Date(1750));
-		Iteration includesBase = new Iteration("includesBase", new Date(750), new Date(1750));
-		Iteration insideBase = new Iteration("insideBase", new Date(1125), new Date(1375));
+		Iteration strictlyBefore = new Iteration("strictlyBeforeBase", new Date(0), new Date(500));
+		Iteration strictlyAfter = new Iteration("strictlyAfterBase", new Date(70000), new Date(80000));
+		Iteration includesStart = new Iteration("includesBaseStart", new Date(0), new Date(11000));
+		Iteration includesEnd = new Iteration("includesBaseEnd", new Date(50000), new Date(70000));
+		Iteration includes = new Iteration("includesBase", new Date(0), new Date(70000));
+		Iteration inside = new Iteration("insideBase", new Date(20000), new Date(30000));
 		
-		assertFalse(IterationValidator.overlapExists(base, strictlyBeforeBase));
-		assertFalse(IterationValidator.overlapExists(base, strictlyAfterBase));
-		assertTrue(IterationValidator.overlapExists(base, includesBaseStart));
-		assertTrue(IterationValidator.overlapExists(base, includesBaseEnd));
-		assertTrue(IterationValidator.overlapExists(base, includesBase));
-		assertTrue(IterationValidator.overlapExists(base, insideBase));
+		checkNoIssues(strictlyBefore, defaultSession, IterationActionMode.CREATE);
+		checkNoIssues(strictlyBefore, defaultSession, IterationActionMode.EDIT);
 		
+		checkNoIssues(strictlyAfter, defaultSession, IterationActionMode.CREATE);
+		checkNoIssues(strictlyAfter, defaultSession, IterationActionMode.EDIT);
+		
+		checkNumIssues(1, includesStart, defaultSession, IterationActionMode.CREATE);
+		checkNumIssues(1, includesStart, defaultSession, IterationActionMode.EDIT);
+		
+		checkNumIssues(1, includesEnd, defaultSession, IterationActionMode.CREATE);
+		checkNumIssues(1, includesEnd, defaultSession, IterationActionMode.EDIT);
+		
+		checkNumIssues(1, includes, defaultSession, IterationActionMode.CREATE);
+		checkNumIssues(1, includes, defaultSession, IterationActionMode.EDIT);
+		
+		checkNumIssues(1, inside, defaultSession, IterationActionMode.CREATE);
+		checkNumIssues(1, inside, defaultSession, IterationActionMode.EDIT);
 	}
 	
 	/**
