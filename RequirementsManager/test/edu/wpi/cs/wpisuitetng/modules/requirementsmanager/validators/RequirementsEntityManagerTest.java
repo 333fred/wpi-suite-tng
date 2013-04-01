@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Jason Whitehouse
+ *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
 import java.util.HashSet;
@@ -27,10 +36,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
 
-/**
- * @author Jason Whitehouse
- * 
- */
 public class RequirementsEntityManagerTest {
 	Data db;
 	RequirementsEntityManager manager;
