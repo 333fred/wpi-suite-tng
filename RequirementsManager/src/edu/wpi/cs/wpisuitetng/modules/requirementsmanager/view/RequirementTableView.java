@@ -216,7 +216,6 @@ public class RequirementTableView extends FocusableTab implements
 			} catch (IterationNotFoundException e) {
 				row.addElement("Iteration Not Found");
 			}
-			row.addElement("");
 			row.addElement(String.valueOf(requirements[i].getEffort()));
 			row.addElement(String.valueOf(requirements[i].getEstimate()));
 			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
