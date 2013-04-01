@@ -80,11 +80,11 @@ public class DetailPanel extends FocusableTab {
 	
 	protected final TextUpdateListener textTitleListener;
 	protected final TextUpdateListener textDescriptionListener;
-	//TODO: protected final TextUpdateListener textIterationListener;
 	
 	protected final ItemStateListener comboBoxTypeListener;
 	protected final ItemStateListener comboBoxStatusListener;
 	protected final ItemStateListener comboBoxPriorityListener;
+	protected final ItemStateListener comboBoxIterationListener;
 	
 	protected final TextUpdateListener textEstimateListener;
 
@@ -264,40 +264,14 @@ public class DetailPanel extends FocusableTab {
 			availableIterations[i] = iterationList.get(i).getName();
 		}
 		
-		
-		//TODO: event listener on iteration combo box
 		comboBoxIteration = new JComboBox(availableIterations);
-		//comboBoxIteration.setLineWrap(true);
-		//comboBoxIteration.setWrapStyleWord(true);
-		comboBoxIteration.setBorder((new JTextField()).getBorder());
 		comboBoxIteration.setName("Iteration");
-	//	AbstractDocument textIterationDoc = (AbstractDocument) comboBoxIteration.getDocument();
-		//textIterationDoc.setDocumentFilter(new DocumentSizeFilter(14)); // box allows 14 characters before expanding
+		comboBoxIteration.setPrototypeDisplayValue("Non-functional");
+		comboBoxIteration.setBackground(Color.WHITE);
 		mainPanel.add(comboBoxIteration);
 		
-		comboBoxIteration.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_TAB) {
-					if (event.getModifiers() == 0) {
-						comboBoxIteration.transferFocus();
-					}
-					else {
-						comboBoxIteration.transferFocusBackward();
-					}
-					event.consume();
-				}
-				if(event.getKeyCode() == KeyEvent.VK_ENTER) {
-					// don't allow enter, consume the event, do nothing
-					event.consume();
-				}
-			}
-		});
-		
-	//	textIterationListener = new TextUpdateListener(this, comboBoxIteration, null);
-		
-		//TODO iteration KeyListener?
-		//comboBoxIteration.addKeyListener(textIterationListener);
+		comboBoxIterationListener = new ItemStateListener(this, comboBoxIteration);
+		comboBoxIteration.addItemListener(comboBoxIterationListener);
 		
 		textEstimate = new JTextField(9);
 		textEstimate.setBorder((new JTextField()).getBorder());
