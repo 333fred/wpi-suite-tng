@@ -62,8 +62,8 @@ public class IterationValidator {
 			}
 		}
 
-		// Make sure that the start date is before the end date
-		if (!i.validateDate() && i.getId() != -1) {
+		// Make sure that the start date is before the end date, if it is not the backlog
+		if (!i.validateDate()) {
 			issues.add(new ValidationIssue(
 					"Iteration must start before it ends"));
 		}
