@@ -12,12 +12,16 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
+import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -83,6 +87,8 @@ public class JanewayModule implements IJanewayModule {
 		
 		//add the tab to the list of tabs
 		tabs.add(tab1);
+		
+		registerKeyboardShortcuts(tab1);
 	}
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
@@ -100,6 +106,30 @@ public class JanewayModule implements IJanewayModule {
 	public List<JanewayTabModel> getTabs() {
 		//return an empty list of tabs, for now
 		return tabs;
+	}
+	
+
+	@SuppressWarnings("serial")
+	private void registerKeyboardShortcuts(JanewayTabModel tab) {
+		String osName = System.getProperty("os.name").toLowerCase();
+		
+		// command + w for mac or control + w for windows: close the current tab
+		if (osName.contains("mac")) {
+			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke.getKeyStroke("meta W"), new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tabController.closeCurrentTab();
+				}
+			}));
+		}
+		else {
+			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke.getKeyStroke("control W"), new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tabController.closeCurrentTab();
+				}
+			}));
+		}
 	}
 
 }

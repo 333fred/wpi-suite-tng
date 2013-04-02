@@ -57,7 +57,7 @@ public class TextUpdateListener implements KeyListener {
 		String empty = "";
 		// if this component was empty to begin with, 
 		// and it is not the estimate field (estimate can be empty)
-		if (empty.equals(component.getText().trim()) && !component.getName().equals("Estimate")) { 
+		if (empty.equals(component.getText().trim())) { 
 			this.firstKeyPress = false;
 		}
 		else {
@@ -67,17 +67,14 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
-			checkIfUpdated();
-		}
-		if (firstKeyPress) {
+		if (arg0.getKeyCode() == KeyEvent.VK_TAB || firstKeyPress) {
 			checkIfUpdated();
 		}
 		else {
 			String empty = "";
 			// if this component was empty to begin with, 
 			// and it is not the estimate field (estimate can be empty)
-			if (empty.equals(component.getText().trim()) && !component.getName().equals("Estimate")) { 
+			if (empty.equals(component.getText().trim())) { 
 				this.firstKeyPress = false;
 			}
 			else {
@@ -88,17 +85,18 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if (arg0.getKeyCode() != KeyEvent.VK_TAB) {
+		// as long as we're not reading the key release from tabbing, we can check
+		if (arg0.getKeyCode() != KeyEvent.VK_TAB) { 
 			checkIfUpdated();
 		}
-	/*	if (firstKeyPress) {
+	/*	if (!firstKeyPress) {
 			checkIfUpdated();
 		}
 		else {
 			String empty = "";
 			// if this component was empty to begin with, 
 			// and it is not the estimate field (estimate can be empty)
-			if (empty.equals(component.getText().trim()) && !component.getName().equals("Estimate")) { 
+			if (empty.equals(component.getText().trim())) { 
 				this.firstKeyPress = false;
 			}
 			else {
@@ -116,8 +114,40 @@ public class TextUpdateListener implements KeyListener {
 	 */
 	public void checkIfUpdated() {
 		String base = ""; // base of empty string to compare to
-		
+		/*
+		// Get the base String to compare to the text of the JTextComponent
+		try {
+			// Get the field from the Defect model that corresponds with the name of component.
+			// For instance, if the component's name is "Title" Defect#getTitle will be called.
+			Object field = panel.getModel().getClass().getDeclaredMethod("get" + component.getName()).invoke(panel.getModel());
+
+			// If field is null, set base to an empty String.
+			if (field == null) {
+				base = "";
+			}
+			// If field is an instance of String, set base to that String.
+			else if (field instanceof String) {
+				base = (String) field;
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+
 		// Compare base to the component's text to determine whether or not to highlight the field.
+		// Estimate can be empty
 		if (base.equals(component.getText().trim())) {
 			if (errorComponent != null) { // if there's an error panel to write to
 				component.setBackground(new Color(243, 243, 209));
