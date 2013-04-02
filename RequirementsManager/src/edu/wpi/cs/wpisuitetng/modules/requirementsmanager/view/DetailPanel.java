@@ -267,10 +267,9 @@ public class DetailPanel extends FocusableTab {
 		List<Iteration> iterationList = IterationDatabase.getInstance().getAllIterations();
 		iterationList = sortIterations(iterationList);
 		
-		String[] availableIterations = new String[iterationList.size()+1];
-		availableIterations[0] = "Backlog";
+		String[] availableIterations = new String[iterationList.size()];
 		for (int i = 0; i < iterationList.size(); i++) {
-			availableIterations[i+1] = iterationList.get(i).getName();
+			availableIterations[i] = iterationList.get(i).getName();
 		}
 		
 		comboBoxIteration = new JComboBox(availableIterations);
@@ -495,12 +494,10 @@ public class DetailPanel extends FocusableTab {
 		textEstimate.setText(Integer.toString(requirement.getEstimate()));
 
 		try {
-			comboBoxIteration.setSelectedItem((Object)IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+			comboBoxIteration.setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
 			System.out.println(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
-		} catch (IterationIsNegativeException e) {
-			comboBoxType.setSelectedItem("Backlog");
 		}
 		
 		switch (requirement.getType()) {

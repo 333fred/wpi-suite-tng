@@ -94,20 +94,13 @@ public class EditRequirementAction extends AbstractAction {
 						saveIterationController.Saveiteration(anIteration);
 					} catch (IterationNotFoundException e1) {
 						e1.printStackTrace();
-					} catch (IterationIsNegativeException e1) {
-						//TODO: Need to remove the iteration from the backlog
 					}
-					
-					if (parentView.getTextIteration().getSelectedItem().toString().equals("Backlog")) {
-						requirement.setIteration(-1);
-					} else {
-						
+											
+					requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
+					Iteration anIteration = IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString());
+					anIteration.addRequirement(requirement.getrUID());
+					saveIterationController.Saveiteration(anIteration);
 
-						requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
-						Iteration anIteration = IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString());
-						anIteration.addRequirement(requirement.getrUID());
-						saveIterationController.Saveiteration(anIteration);
-					}
 
 					try {
 						requirement

@@ -239,8 +239,6 @@ public class RequirementTableView extends FocusableTab implements
 			row.addElement(requirements[i].getStatus().equals(Status.BLANK) ? "" : requirements[i].getStatus().toString().substring(0,1).concat(requirements[i].getStatus().toString().substring(1).toLowerCase()).replaceAll("_p", " P"));
 			try {
 				row.addElement(IterationDatabase.getInstance().getIteration(requirements[i].getIteration()).getName());
-			} catch (IterationIsNegativeException e) {
-				row.addElement("Backlog");
 			} catch (IterationNotFoundException e) {
 				row.addElement("Iteration Not Found");
 			}
