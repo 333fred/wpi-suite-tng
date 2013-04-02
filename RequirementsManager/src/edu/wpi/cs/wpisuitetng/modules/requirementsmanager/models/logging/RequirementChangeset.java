@@ -87,27 +87,31 @@ public class RequirementChangeset extends Changeset implements Event {
 			content += "Updated the Description<br>";
 		}
 		if (changes.get("type") != null) {
-			// Get the default string for a old and new value
+			// Get the default string for an old and new value
 			content += oldToNew("Type", changes.get("type"));
 		}
 		if (changes.get("priority") != null) {
-			// Get the default string for a old and new value
+			// Get the default string for an old and new value
 			content += oldToNew("Priority", changes.get("priority"));
 		}
 		if (changes.get("status") != null) {
-			// Get the default string for a old and new value
+			// Get the default string for an old and new value
 			content += oldToNew("Status", changes.get("status"));
 		}
 		if (changes.get("releaseNum") != null) {
-			// Get the default string for a old and new value
+			// Get the default string for an old and new value
 			content += oldToNew("Release Number", changes.get("releaseNum"));
 		}
 		if (changes.get("iteration") != null) {
-			// Get the default string for a old and new value
+			// Get the default string for an old and new value
 			content += oldToNew("Iteration", changes.get("iteration"));
 		}
+		if (changes.get("estimate") != null) {
+			// Get the default string for an old and new value
+			content += oldToNew("Estimate", changes.get("estimate"));
+		}
 		if (changes.get("effort") != null) {
-			// Get the default string for a old and new value
+			// Get the default string for an old and new value
 			content += oldToNew("Effort", changes.get("effort"));
 		}
 		if (changes.get("users") != null) {
