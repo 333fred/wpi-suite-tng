@@ -21,6 +21,8 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
@@ -106,7 +108,17 @@ public class RequirementChangeset extends Changeset implements Event {
 		}
 		if (changes.get("iteration") != null) {
 			// Get the default string for an old and new value
-			content += oldToNew("Iteration", changes.get("iteration"));
+			//content += oldToNew("Iteration", changes.get("iteration"));
+			int oldIteration = ((Double)changes.get("iteration").getOldValue()).intValue();
+			int newIteration = ((Double)changes.get("iteration").getNewValue()).intValue();
+			try {
+				String oldName = IterationDatabase.getInstance().getIteration(oldIteration).getName();
+				String newName = IterationDatabase.getInstance().getIteration(newIteration).getName();
+				content += oldToNew("Iteration", new FieldChange<String>(oldName, newName));
+			} catch (IterationNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (changes.get("estimate") != null) {
 			// Get the default string for an old and new value
