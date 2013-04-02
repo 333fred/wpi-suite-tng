@@ -49,6 +49,7 @@ public class IterationValidator {
 						.asList(new RequirementsEntityManager(db).getAll(s));
 				for (Integer id : i.getRequirements()) {
 					boolean detected = false;
+					System.out.println(id);
 					for (Requirement req : reqs) {
 						if (req.getrUID() == id) {
 							detected = true;

@@ -410,8 +410,8 @@ public class DetailPanel extends FocusableTab {
 		addComponentConstraints();
 		loadFields();
 		
-		logView = new DetailLogView(this.requirement, this);
-		noteView = new DetailNoteView(this.requirement, this);
+		logView = new DetailLogView(this.getRequirement(), this);
+		noteView = new DetailNoteView(this.getRequirement(), this);
 		userView = new AssigneePanel(requirement,this);
 		
 	
@@ -489,18 +489,18 @@ public class DetailPanel extends FocusableTab {
 	 * @param requirement
 	 */
 	private void loadFields() {
-		textName.setText(requirement.getName());
-		textDescription.setText(requirement.getDescription());
-		textEstimate.setText(Integer.toString(requirement.getEstimate()));
+		textName.setText(getRequirement().getName());
+		textDescription.setText(getRequirement().getDescription());
+		textEstimate.setText(Integer.toString(getRequirement().getEstimate()));
 
 		try {
-			comboBoxIteration.setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
-			System.out.println(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+			comboBoxIteration.setSelectedItem(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
+			System.out.println(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
 		}
 		
-		switch (requirement.getType()) {
+		switch (getRequirement().getType()) {
 		case BLANK:
 			comboBoxType.setSelectedIndex(0);
 			break;
@@ -519,7 +519,7 @@ public class DetailPanel extends FocusableTab {
 		case SCENARIO:
 			comboBoxType.setSelectedIndex(5);
 		}
-		switch (requirement.getPriority()) {
+		switch (getRequirement().getPriority()) {
 		case BLANK:
 			comboBoxPriority.setSelectedIndex(0);
 			break;
@@ -663,34 +663,34 @@ public class DetailPanel extends FocusableTab {
 	 */
 	private void determineAvailableStatusOptions() {
 		// String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted"};
-		if (requirement.getStatus() == Status.IN_PROGRESS) {
+		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
 			//In Progress: In Progress, Complete, Deleted	
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("Open");
 			this.comboBoxStatus.removeItem("Deleted");
 		}
-		else if (requirement.getSubRequirements().size() > 0 || !requirement.tasksCompleted())
+		else if (getRequirement().getSubRequirements().size() > 0 || !getRequirement().tasksCompleted())
 		{
 			this.comboBoxStatus.removeItem("Deleted");
 		}
-		if (requirement.getStatus() == Status.NEW) {
+		if (getRequirement().getStatus() == Status.NEW) {
 			//New: New, Deleted
 			this.comboBoxStatus.removeItem("In Progress");
 			this.comboBoxStatus.removeItem("Open");
 			this.comboBoxStatus.removeItem("Complete");
 		}
-		if (requirement.getStatus() == Status.OPEN) {
+		if (getRequirement().getStatus() == Status.OPEN) {
 			//Open: Open, Deleted		
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
 			this.comboBoxStatus.removeItem("Complete");
 		}
-		if (requirement.getStatus() == Status.COMPLETE) {
+		if (getRequirement().getStatus() == Status.COMPLETE) {
 			//Complete: Open, Complete, Deleted		
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
 		}
-		if (requirement.getStatus() == Status.DELETED) {
+		if (getRequirement().getStatus() == Status.DELETED) {
 			//Deleted: Open, Deleted, Complete
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
@@ -825,7 +825,7 @@ public class DetailPanel extends FocusableTab {
 	}
 	
 	public Requirement getModel(){
-		return requirement;
+		return getRequirement();
 	}
 	
 	public JComboBox getTextIteration() {
@@ -853,7 +853,7 @@ public class DetailPanel extends FocusableTab {
 		JPanel panel = new JPanel();
 		Color defaultColor = panel.getBackground();
 		
-		if(requirement.getStatus() != Status.DELETED)
+		if(getRequirement().getStatus() != Status.DELETED)
 			return;
 		textName.setEnabled(false);
 		textName.setBackground(defaultColor);
@@ -877,6 +877,12 @@ public class DetailPanel extends FocusableTab {
 	public static List<Iteration> sortIterations(List<Iteration> iterations) {	
 		Collections.sort(iterations, new IterationComparator());
 		return iterations;
+	}
+	/**
+	 * @return the requirement
+	 */
+	public Requirement getRequirement() {
+		return requirement;
 	}
 
 }

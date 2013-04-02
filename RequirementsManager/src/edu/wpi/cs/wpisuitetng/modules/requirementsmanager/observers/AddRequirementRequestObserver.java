@@ -7,7 +7,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -51,31 +54,29 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		
 		RequirementDatabase.getInstance().addRequirement(Requirement.fromJSON(response.getBody()));
 
-		this.detailPanel.getMainTabController().closeCurrentTab();
 		
-/*		if (response.getStatusCode() == 201) {
+		SaveIterationController saveIterationController = new SaveIterationController(detailPanel);
+				
+
+	
+		
+		if (response.getStatusCode() == 201) {
 			// parse the Requirement from the body
-			final Requirement requirement = Requirement.fromJSON(response
-					.getBody());
+			final Requirement requirement = Requirement.fromJSON(response.getBody());
 
 			// make sure the requirement isn't null
 			if (requirement != null) {
-			/omething with the requirement if wanted
-				 singUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						((DefectPanel) view.getDefectPanel())
-								.updateModel(defect);
-						view.setEditModeDescriptors(defect);
-					}
-				});
+				//System.out.println("New R ID" + requirement.getrUID());
+				Iteration anIteration = IterationDatabase.getInstance().getIteration(detailPanel.getTextIteration().getSelectedItem().toString());
+				anIteration.addRequirement(requirement.getrUID());
+				saveIterationController.Saveiteration(anIteration);		
 				
 				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
-			} else {
+			}/* else {
 				
 				 //Display error in view... here's how defecttracker does it:
-				  JOptionPane.showMessageDialog(detailPanel, "Unable to parse defect received from server.",
-				  "Save Defect Error", JOptionPane.ERROR_MESSAGE);
+				//  JOptionPane.showMessageDialog(detailPanel, "Unable to parse defect received from server.",
+				//  "Save Defect Error", JOptionPane.ERROR_MESSAGE);
 				 
 			}
 		} else {
@@ -87,7 +88,9 @@ public class AddRequirementRequestObserver implements RequestObserver {
 			 * JOptionPane.ERROR_MESSAGE);
 			 
 		}*/
-
+		}
+		
+		this.detailPanel.getMainTabController().closeCurrentTab();
 	}
 
 	/*
