@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Zac Chupka, Maddie Burris
+ *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
@@ -18,7 +27,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRe
 
 /**
  * A panel containing a form for adding a new log to a requirement
- * @author Zac Chupka, Maddie Burris
  */
 public class DetailLogView extends JPanel{
 	/** For Notes */

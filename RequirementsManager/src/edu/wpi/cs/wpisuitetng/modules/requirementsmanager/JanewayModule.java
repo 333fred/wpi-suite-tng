@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Frederic Silberberg
+ *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
 import java.util.ArrayList;
@@ -19,10 +28,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
-/**
- * @author Fredric
- *
- */
 public class JanewayModule implements IJanewayModule {
 
 	/** List of tabs that this module will display */

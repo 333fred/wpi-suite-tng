@@ -11,10 +11,7 @@
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
-<<<<<<< HEAD
 
-=======
->>>>>>> 8d8a245aabd75cb6ef3ce1ddc1f2b3c42c0f610a
 
 import static org.junit.Assert.*;
 
