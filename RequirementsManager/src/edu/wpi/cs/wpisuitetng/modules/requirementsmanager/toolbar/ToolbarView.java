@@ -64,10 +64,10 @@ public class ToolbarView extends DefaultToolbarView {
 		
 		// Configure the layout of the buttons on the content panel
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5, SpringLayout.NORTH, content);
-		layout.putConstraint(SpringLayout.WEST, createRequirement, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.WEST, createRequirement, 16, SpringLayout.WEST, content);
 		
 		layout.putConstraint(SpringLayout.NORTH, createIteration, 5, SpringLayout.SOUTH, createRequirement);
-		layout.putConstraint(SpringLayout.WEST, createIteration, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.WEST, createIteration, 16, SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.EAST, createIteration, 0, SpringLayout.EAST, createRequirement);
 		
 		layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 5, SpringLayout.SOUTH, createIteration);
