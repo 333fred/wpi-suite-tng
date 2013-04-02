@@ -293,6 +293,11 @@ public class IterationView extends FocusableTab{
 			txtName.setBackground(new Color(243, 243, 209));
 			nameError = true;
 		}
+		else if (!isNameUnique()) {
+			labNameError.setText("**Iteration names must be unique**");
+			txtName.setBackground(new Color(243, 243, 209));
+			nameError = true;
+		}
 		else {
 			labNameError.setText(" ");
 			txtName.setBackground(Color.WHITE);
@@ -388,6 +393,29 @@ public class IterationView extends FocusableTab{
 			}
 		}
 		return false;
+	}
+	
+	/** Determines if the name being used, has been used for other requirements
+	 * 
+	 * @return True if it is unique, false if not
+	 */
+	
+	private boolean isNameUnique() {
+		//get the current name of this iteration
+		String name = txtName.getText();
+		
+		//get all iterations from the local database
+		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();
+		
+		
+		for (Iteration i : iterations) {
+			if (i.getName().equals(name)) {
+				//we have found an equal name, return false
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 }
