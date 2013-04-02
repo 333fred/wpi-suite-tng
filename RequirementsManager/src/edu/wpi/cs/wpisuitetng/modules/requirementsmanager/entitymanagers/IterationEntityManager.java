@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -115,6 +117,30 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	public Iteration[] getAll(Session s) throws WPISuiteException {
 		Iteration[] is = db.retrieveAll(new Iteration(), s.getProject()).toArray(
 				new Iteration[0]);
+		
+		//if there is no backlog iteration, we need to create it
+		boolean backlogExists = false;
+		
+		for(Iteration it : is){
+			if(it.getId() == -1){
+				backlogExists = true;
+				break;
+			}
+		}
+		
+		if(!backlogExists){
+			// Save the iteration
+			System.out.println("No Backlog Iteration found! Creating one.");
+
+			Iteration backlog = new Iteration("Backlog", new Date(0), new Date(1));
+			backlog.setId(-1);
+			if (!db.save(backlog, s.getProject())) {
+				throw new WPISuiteException();
+			}
+		}
+		
+		is = db.retrieveAll(new Iteration(), s.getProject()).toArray(new Iteration[0]);
+		
 		return is;
 	}
 
@@ -126,14 +152,14 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 
 		System.out.println("Update Called");
 		System.out.println(content);
-		
+				
 		// Get updated iterations
 		Iteration updatedIteration = Iteration.fromJSON(content);
 		Iteration oldIteration;
 		
 		System.out.println("Got from JSON");
 		System.out.println(updatedIteration);
-
+		
 		// Validate the iteration
 		List<ValidationIssue> issues = validator.validate(s, updatedIteration,
 				IterationActionMode.EDIT, db);
