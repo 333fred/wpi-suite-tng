@@ -46,9 +46,18 @@ public class MainTabController {
 	    });
 	}
 	
-
+	/** Called when the selected tab has been changed, notifies the tab that is is being displayed
+	 * 
+	 * TODO: Remove the instanceof checking
+	 */
+	
 	private void onChangeTab() {
-		((FocusableTab)this.tabView.getSelectedComponent()).onTabFocus();
+		Component selectedComponent = tabView.getSelectedComponent();
+		if (selectedComponent instanceof TabFocusListener) {
+			TabFocusListener listener = (TabFocusListener) selectedComponent;
+			listener.onGainedFocus();
+		}
+		
 	}
 	
 	/** Adds a tab to the TabView that this controller manages, and returns a new instance of Tab representing the new tab created
@@ -75,7 +84,8 @@ public class MainTabController {
 	
 	public Tab addCreateRequirementTab() {
 		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this); 
-		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
+		IterationTreeTab view = new IterationTreeTab(emptyDetailView, null); 
+		return addTab("New Requirement", new ImageIcon(), view, "New Requirement");		
 	}
 	
 	//TEST
@@ -85,7 +95,8 @@ public class MainTabController {
 	}
 	
 	public Tab addCreateIterationTab() {
-		IterationView view = new IterationView(this);
+		IterationView iterationView = new IterationView(this);
+		IterationTreeTab view = new IterationTreeTab(iterationView, null); 
 		return addTab("New Iteration", new ImageIcon(), view, "New Iteration");
 	}
 	
@@ -98,7 +109,8 @@ public class MainTabController {
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
 		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
-		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
+		IterationTreeTab view = new IterationTreeTab(requirmentDetailView, null); 
+		return addTab(requirement.getName(), new ImageIcon(), view, requirement.getName());
 	}
 	
 	/** Adds a tab to Edit a given Requirement
