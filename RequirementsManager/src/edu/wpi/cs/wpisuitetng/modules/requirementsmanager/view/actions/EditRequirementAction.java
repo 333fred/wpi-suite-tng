@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationIsNegativeException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -82,22 +84,27 @@ public class EditRequirementAction extends AbstractAction {
 				requirement.setUsers(parentView.getAssignedUsers());
 
 				try {
-					if (parentView.getTextIteration().getSelectedItem()
-							.toString().equals("Backlog")) {
+					
+					SaveIterationController saveIterationController = new SaveIterationController(parentView);
+					
+					
+					try {
+						Iteration anIteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
+						anIteration.removeRequirement(requirement.getrUID());
+						saveIterationController.Saveiteration(anIteration);
+					} catch (IterationNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (IterationIsNegativeException e1) {
+						//TODO: Need to remove the iteration from the backlog
+					}
+					
+					if (parentView.getTextIteration().getSelectedItem().toString().equals("Backlog")) {
 						requirement.setIteration(-1);
 					} else {
-						requirement.setIteration(IterationDatabase
-								.getInstance()
-								.getIteration(
-										parentView.getTextIteration()
-												.getSelectedItem().toString())
-								.getId());
-						SaveIterationController saveIterationController = new SaveIterationController(
-								parentView);
-						Iteration anIteration = IterationDatabase.getInstance()
-								.getIteration(
-										parentView.getTextIteration()
-												.getSelectedItem().toString());
+						
+
+						requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
+						Iteration anIteration = IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString());
 						anIteration.addRequirement(requirement.getrUID());
 						saveIterationController.Saveiteration(anIteration);
 					}
