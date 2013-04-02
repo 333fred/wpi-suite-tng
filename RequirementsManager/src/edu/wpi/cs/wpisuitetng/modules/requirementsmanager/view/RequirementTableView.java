@@ -15,6 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -152,6 +154,20 @@ public class RequirementTableView extends FocusableTab implements
 					int row = target.getSelectedRow();
 					onDoubleClick(row);
 				}
+			}
+		});
+		
+		this.table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+					JTable target = (JTable) event.getSource();
+					int row = target.getSelectedRow();
+					// just open up the requirement
+					// calling the doubleclick function basically has that property
+					onDoubleClick(row);
+				}
+				event.consume();
 			}
 		});
 
