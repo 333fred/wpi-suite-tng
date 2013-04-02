@@ -118,9 +118,11 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		Iteration[] is = db.retrieveAll(new Iteration(), s.getProject()).toArray(
 				new Iteration[0]);
 		
-		//if there is no backlog iteration, we need to create it
+		//there must always be a backlog iteration with id of -1
+		//so if we don't find one already, we create it
 		boolean backlogExists = false;
-		
+	
+		//check if any of the iterations we retrieved are the backlog
 		for(Iteration it : is){
 			if(it.getId() == -1){
 				backlogExists = true;
@@ -128,19 +130,21 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			}
 		}
 		
+		//If we don't find one, then we have to create it and save it to the database
 		if(!backlogExists){
 			// Save the iteration
 			System.out.println("No Backlog Iteration found! Creating one.");
-
 			Iteration backlog = new Iteration("Backlog", new Date(0), new Date(1));
 			backlog.setId(-1);
 			if (!db.save(backlog, s.getProject())) {
 				throw new WPISuiteException();
 			}
+			
+			//Now add it to our array to return
+			is = Arrays.copyOf(is, is.length +1);
+			is[is.length-1] = backlog;
 		}
-		
-		is = db.retrieveAll(new Iteration(), s.getProject()).toArray(new Iteration[0]);
-		
+				
 		return is;
 	}
 

@@ -63,7 +63,7 @@ public class IterationValidator {
 		}
 
 		// Make sure that the start date is before the end date
-		if (!i.validateDate()) {
+		if (!i.validateDate() && i.getId() != -1) {
 			issues.add(new ValidationIssue(
 					"Iteration must start before it ends"));
 		}
