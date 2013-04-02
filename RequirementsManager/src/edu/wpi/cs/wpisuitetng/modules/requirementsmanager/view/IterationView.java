@@ -409,6 +409,9 @@ public class IterationView extends FocusableTab{
 		
 		
 		for (Iteration i : iterations) {
+			if (i.getId() == iteration.getId()) {
+				continue; //skip over the current (editing) iteration
+			}
 			if (i.getName().equals(name)) {
 				//we have found an equal name, return false
 				return false;
