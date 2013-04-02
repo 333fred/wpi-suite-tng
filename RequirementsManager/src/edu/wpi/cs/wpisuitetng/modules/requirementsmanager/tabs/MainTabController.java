@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -77,6 +78,22 @@ public class MainTabController {
 		return new Tab(tabView, tabView.getTabComponentAt(index));
 	}
 	
+	/** Adds an unclosable tab to the TabView that this controller manages, and returns a new instance of Tab representing the new tab created
+	 * 
+	 * @param title The title of the tab
+	 * @param icon The tabs icon
+	 * @param component The component that the tab will display
+	 * @param tip The tooltip that the tab will display
+	 * @return The new instance of Tab representing the one added
+	 */
+	
+	public Tab addUnclosableTab(String title, Icon icon, Component component, String tip) {
+		tabView.addUnclosableTab(title,icon, component,tip); // add the tab to the TabView
+		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
+		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
+		return new Tab(tabView, tabView.getTabComponentAt(index));
+	}
+	
 	/** Adds a tab to create a new requirement
 	 * 
 	 * TODO: Implement this.
@@ -122,7 +139,7 @@ public class MainTabController {
 	public Tab addRequirementsTab() {
 		RequirementTableView requirementListView = new RequirementTableView(this);
 		IterationTreeTab view = new IterationTreeTab(requirementListView, requirementListView);
-		return addTab("Requirements", new ImageIcon(), view, "The list of requirements");
+		return addUnclosableTab("Requirements", new ImageIcon(), view, "The list of requirements");
 	}
 	
 	/** Adds a tab to Edit a given Requirement
