@@ -29,7 +29,7 @@ public class DocumentNumberAndSizeFilter extends DocumentFilter{
         throws BadLocationException 
     {
 		if ((fb.getDocument().getLength() + str.length()) <= maxChars 
-			&& str.matches("[0-9]")) {
+			&& str.matches("^0*[0-9]{1,14}$")) {
         	super.insertString(fb, off, str, attr);
         }
         else {
@@ -41,7 +41,7 @@ public class DocumentNumberAndSizeFilter extends DocumentFilter{
         throws BadLocationException 
     {
     	if ((fb.getDocument().getLength() + str.length()) <= maxChars 
-    			&& str.matches("[0-9]")) {
+    			&& str.matches("^0*[0-9]{1,14}$")) {
         	super.insertString(fb, off, str, attr);
         }
         else {
