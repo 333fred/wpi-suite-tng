@@ -11,6 +11,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
  * Controller wrapper around the MainTabView
@@ -111,6 +112,17 @@ public class MainTabController {
 		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
 		IterationTreeTab view = new IterationTreeTab(requirmentDetailView, null); 
 		return addTab(requirement.getName(), new ImageIcon(), view, requirement.getName());
+	}
+	
+	/** Adds teh Requirement Table View to the tabs
+	 * 
+	 * @return The tab that was added
+	 */
+	
+	public Tab addRequirementsTab() {
+		RequirementTableView requirementListView = new RequirementTableView(this);
+		IterationTreeTab view = new IterationTreeTab(requirementListView, requirementListView);
+		return addTab("Requirements", new ImageIcon(), view, "The list of requirements");
 	}
 	
 	/** Adds a tab to Edit a given Requirement
