@@ -111,6 +111,26 @@ public class IterationValidatorTest {
 	}
 	
 	@Test
+	//Ensure that whitespace name is rejected
+	public void testWhitespaceOnlyName() {
+		goodIteration.setName("  	  ");
+		checkNumIssues(1, goodIteration, defaultSession, IterationActionMode.CREATE);
+		goodIteration.setName("  	  ");
+		checkNumIssues(1, goodIteration, defaultSession, IterationActionMode.EDIT);
+	}
+	
+	@Test
+	//Ensure that whitespace name is rejected
+	public void testWhitespaceTrimName() {
+		goodIteration.setName("  s	  ");
+		checkNumIssues(0, goodIteration, defaultSession, IterationActionMode.CREATE);
+		assertEquals("s", goodIteration.getName());
+		goodIteration.setName("  s	  ");
+		checkNumIssues(0, goodIteration, defaultSession, IterationActionMode.EDIT);
+		assertEquals("s", goodIteration.getName());
+	}
+	
+	@Test
 	//Ensure that null requirements list is initialized
 	public void testNullRequirements() {
 		goodIteration.setRequirements(null);

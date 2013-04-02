@@ -98,11 +98,7 @@ public class IterationDatabase {
 	 *             couldn't find the iteration
 	 * @throws IterationIsNegativeException 
 	 */
-	public synchronized Iteration getIteration(int id)
-			throws IterationNotFoundException, IterationIsNegativeException {
-		if (id < 0) {
-			throw new IterationIsNegativeException(id);
-		}
+	public synchronized Iteration getIteration(int id) throws IterationNotFoundException {
 		if (iterations.get(id) != null) {
 			return iterations.get(id);
 		} else {
