@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alex Chen
+ *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.event.ItemEvent;
@@ -9,10 +18,6 @@ import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
-/**
- * @author Alex C
- * 
- */
 public class ItemStateListener implements ItemListener {
 	protected final DetailPanel panel;
 	protected final JComboBox component;

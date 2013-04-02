@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Steve Kordell
+ *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
@@ -18,10 +27,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
-/**
- * @author spkordell
- * 
- */
 public class IterationTreeView extends JPanel {
 
 	private JTree tree;
