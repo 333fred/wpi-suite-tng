@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
@@ -272,6 +274,38 @@ public class RequirementChangeset extends Changeset implements Event {
 				added.add(newObj);
 			}
 		}
+	}
+
+	@Override
+	public void save() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String toJSON() {
+		return new Gson().toJson(this, RequirementChangeset.class);
+	}
+	
+	public static RequirementChangeset fromJSON(String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, RequirementChangeset.class);
+	}
+	
+	public static RequirementChangeset[] fromJSONArray(String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, RequirementChangeset[].class);
+	}
+
+	@Override
+	public Boolean identify(Object o) {
+		return this.equals(o);
 	}
 
 }

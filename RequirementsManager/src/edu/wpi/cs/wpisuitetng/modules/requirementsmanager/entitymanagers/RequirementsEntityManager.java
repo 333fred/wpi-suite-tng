@@ -213,7 +213,8 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		if (changeset.getChanges().size() > 0) {
 			oldReq.logEvents(changeset);
 			// Save the requirement, and throw an exception if if fails
-			if (!db.save(oldReq, s.getProject())) {
+			if (!db.save(oldReq, s.getProject())
+					|| !db.save(oldReq.getLogs())) {
 				throw new WPISuiteException();
 			}
 		}
