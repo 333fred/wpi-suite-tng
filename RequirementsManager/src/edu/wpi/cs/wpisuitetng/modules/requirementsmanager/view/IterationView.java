@@ -411,7 +411,7 @@ public class IterationView extends FocusableTab{
 	
 	private boolean isNameUnique() {
 		//get the current name of this iteration
-		String name = txtName.getText();
+		String name = txtName.getText().trim();
 		
 		//get all iterations from the local database
 		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();

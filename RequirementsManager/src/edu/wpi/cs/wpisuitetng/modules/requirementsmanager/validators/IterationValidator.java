@@ -26,8 +26,13 @@ public class IterationValidator {
 		}
 
 		// Detect if the iteration has been given a name
-		if (i.getName() == null || i.getName() == "" || i.getName().isEmpty()) {
+		if(i.getName() == null){
 			issues.add(new ValidationIssue("Iteration must have a name"));
+		} else {
+			i.setName(i.getName().trim());
+			if (i.getName() == "" || i.getName().isEmpty()) {
+				issues.add(new ValidationIssue("Iteration name cannot be blank!"));
+			}
 		}
 
 		// If the iteration is being created, then we must have no requirements
