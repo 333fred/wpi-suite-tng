@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alex Chen
+ *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Color;
@@ -19,10 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * compares this value to the component's text to see if the text differs from the model. If the text 
  * differs, the style of the component is changed to show that it differs from the relevant field in the model.
  * Otherwise, the component's style is changed to be normal.
- * 
- * @author Alex C
  */
-
 public class TextUpdateListener implements KeyListener {
 	protected final DetailPanel panel;
 	protected final JTextComponent component;
