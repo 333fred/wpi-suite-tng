@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -34,8 +35,6 @@ import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreiveRequirementByIDControllerNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationIsNegativeException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
@@ -266,6 +265,7 @@ public class DetailPanel extends FocusableTab {
 		comboBoxPriority.addItemListener(comboBoxPriorityListener);
 				
 		List<Iteration> iterationList = IterationDatabase.getInstance().getAllIterations();
+		iterationList = sortIterations(iterationList);
 		
 		String[] availableIterations = new String[iterationList.size()+1];
 		availableIterations[0] = "Backlog";
@@ -875,6 +875,11 @@ public class DetailPanel extends FocusableTab {
 		comboBoxPriority.setEnabled(false);
 		
 		
+	}
+	
+	public static List<Iteration> sortIterations(List<Iteration> iterations) {	
+		Collections.sort(iterations, new IterationComparator());
+		return iterations;
 	}
 
 }
