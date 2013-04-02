@@ -88,7 +88,10 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if (firstKeyPress) {
+		if (arg0.getKeyCode() != KeyEvent.VK_TAB) {
+			checkIfUpdated();
+		}
+	/*	if (firstKeyPress) {
 			checkIfUpdated();
 		}
 		else {
@@ -101,7 +104,7 @@ public class TextUpdateListener implements KeyListener {
 			else {
 				this.firstKeyPress = true;
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -128,8 +131,7 @@ public class TextUpdateListener implements KeyListener {
 				errorComponent.setText("");
 			}
 			if (base.equals(panel.getTextName().getText().trim())
-					|| base.equals(panel.getTextDescription().getText().trim())
-					/*TODO: || base.equals(panel.getTextIteration().getText().trim())*/) {
+					|| base.equals(panel.getTextDescription().getText().trim())) {
 				panel.disableSaveButton();
 			}
 			else 

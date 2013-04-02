@@ -34,8 +34,7 @@ public class ItemStateListener implements ItemListener {
 
 	public void checkIfUpdated(ItemEvent e) {
 		if (panel.getTextName().getText().trim().length() > 0
-				&& panel.getTextDescription().getText().trim().length() > 0
-				/*TODO: && panel.getTextIteration().getText().trim().length() > 0*/) {
+				&& panel.getTextDescription().getText().trim().length() > 0) {
 			panel.enableSaveButton();
 		}
 	}
