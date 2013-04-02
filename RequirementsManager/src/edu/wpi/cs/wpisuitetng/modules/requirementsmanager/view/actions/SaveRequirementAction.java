@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 public class SaveRequirementAction extends AbstractAction {
 
 	private Requirement requirement;
+
 	private DetailPanel parentView;
 
 	public SaveRequirementAction(Requirement requirement, DetailPanel parentView) {
@@ -62,13 +63,7 @@ public class SaveRequirementAction extends AbstractAction {
 			requirement.setUsers(parentView.getAssignedUsers());
 			
 			try {
-
-				SaveIterationController saveIterationController = new SaveIterationController(this.parentView);
 				requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
-				
-				Iteration anIteration = IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString());
-				anIteration.addRequirement(requirement.getrUID());
-				saveIterationController.Saveiteration(anIteration);
 				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
@@ -101,5 +96,9 @@ public class SaveRequirementAction extends AbstractAction {
 				parentView.getTextDescriptionValid().setText("** Field must be non-blank **");
 			}
 		}
+	}
+	
+	public Requirement getRequirement() {
+		return requirement;
 	}
 }
