@@ -43,7 +43,7 @@ public class Requirement extends AbstractModel {
 	private Priority priority;
 	// Date and scheduling attributes
 	private int releaseNum; // TODO: Implement Releases
-	private int iteration; // TODO: Implement Iterations
+	private int iteration; 
 	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
