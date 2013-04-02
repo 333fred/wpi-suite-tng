@@ -202,10 +202,10 @@ public class RequirementTableView extends FocusableTab implements
 		butView.setAction(new ViewRequirementAction(this));		
 		
 		layout.putConstraint(SpringLayout.NORTH, butView, 5, SpringLayout.NORTH, content);
-		layout.putConstraint(SpringLayout.WEST, butView, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.WEST, butView, 16, SpringLayout.WEST, content);
 		
 		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5, SpringLayout.SOUTH, butView);
-		layout.putConstraint(SpringLayout.WEST, butRefresh, 8, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.WEST, butRefresh, 16, SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.EAST, butRefresh, 0, SpringLayout.EAST, butView);
 		
 		// create and add the buttons that will be displayed
