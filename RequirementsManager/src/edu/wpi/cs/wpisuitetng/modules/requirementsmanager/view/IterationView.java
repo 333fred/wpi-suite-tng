@@ -15,7 +15,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -27,9 +29,12 @@ import javax.swing.SpringLayout;
 import com.toedter.calendar.JCalendar;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
 
 /** 
  * View for creating or editing a iteration
@@ -76,6 +81,11 @@ public class IterationView extends FocusableTab{
 	/** The JCalendars for selecting dates */
 	private JCalendar calStartDate;
 	private JCalendar calEndDate;
+
+	
+	/** Booleans indicating if there is an error with name, or calendar field */
+	private boolean nameError;
+	private boolean calendarError;
 	
 	/**Padding constants */
 	
@@ -96,6 +106,8 @@ public class IterationView extends FocusableTab{
 		this.status = status;
 		this.mainTabController = mainTabController;
 		
+		nameError = false;
+		calendarError = false;
 		
 		//initilize the add iteration controller
 		addIterationController = new AddIterationController(this);
@@ -113,16 +125,15 @@ public class IterationView extends FocusableTab{
 		labCalendarError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		
 		butSave = new JButton();
-		butSave.setAction(new SaveAction());
-		//butSave.setEnabled(saveEnabled);
+		butSave.setAction(new SaveAction());		
 		
 		if (status == Status.CREATE) {
 			butSave.setText("Create");
+			butSave.setEnabled(false);
 		}
 		else {
 			butSave.setText("Save");
 		}	
-		
 		
 		butCancel = new JButton("Cancel");
 		butCancel.setAction(new CancelAction());
@@ -130,8 +141,8 @@ public class IterationView extends FocusableTab{
 		txtName = new JTextField();
 		
 		
-		calStartDate = new JCalendar();
-		calEndDate = new JCalendar();
+		calStartDate = new JCalendar();	
+		calEndDate = new JCalendar();	
 		
 		// populate fields, if editing
 		if (status == Status.EDIT) {
@@ -146,11 +157,8 @@ public class IterationView extends FocusableTab{
 		IterationViewListener startDateListener = new IterationViewListener(this, calStartDate);
 		IterationViewListener endDateListener = new IterationViewListener(this, calEndDate);
 		
-		calStartDate.addKeyListener(startDateListener);
-		calEndDate.addKeyListener(endDateListener);
-		
-		calStartDate.addMouseListener(startDateListener);
-		calEndDate.addMouseListener(endDateListener);
+		calStartDate.addPropertyChangeListener(startDateListener);
+		calEndDate.addPropertyChangeListener(endDateListener);
 		
 		SpringLayout layout = new SpringLayout();
 		
@@ -277,26 +285,32 @@ public class IterationView extends FocusableTab{
 	 */
 	
 	public void displaySaveError(String error) {
-		//check for error
-		
+		//check for error		
 		setNameError();
 		setCalendarError();
 	}
 	
 	/** Determiens the proper error message to be shown in the Name Error field 
 	 * 
+	 * TODO: Check if name is unique
 	 */
 	
-	private void setNameError() {
+	private void setNameError() {	
+		
 		if (txtName.getText().trim().isEmpty()) {
 			labNameError.setText("**Name connot be blank**");	
-			butSave.setEnabled(false);
 			txtName.setBackground(new Color(243, 243, 209));
+			nameError = true;
+		}
+		else if (!isNameUnique()) {
+			labNameError.setText("**Iteration names must be unique**");
+			txtName.setBackground(new Color(243, 243, 209));
+			nameError = true;
 		}
 		else {
-			butSave.setEnabled(true);
 			labNameError.setText(" ");
 			txtName.setBackground(Color.WHITE);
+			nameError = false;
 		}
 	}
 	
@@ -307,10 +321,22 @@ public class IterationView extends FocusableTab{
 	private void setCalendarError() {
 		if (calStartDate.getDate().after(calEndDate.getDate())) {
 			labCalendarError.setText("**Start date must be before End date**");
+			calendarError = true;
+			System.out.println("Yes?");
+		}
+		else if (compareDatesWithoutTime(calStartDate.getDate(), calEndDate.getDate()) == 0) {
+			//dates are equal
+			labCalendarError.setText("**Start date and end date cannot be equal**");
+			calendarError = true;
+		}
+		else if (doIterationsOverlapWithCurrent()) {
+			calendarError = true;
+			labCalendarError.setText("**Iterations cannot overlap**");
 		}
 		else {
 			labCalendarError.setText(" ");
-		}
+			calendarError = false;
+		}		
 	}
 	
 	/** Called when IterationViewListener reports there has been a change
@@ -321,6 +347,84 @@ public class IterationView extends FocusableTab{
 	public void updateSave(JComponent source) {
 		setNameError();
 		setCalendarError();
+		
+		if (nameError || calendarError) {
+			butSave.setEnabled(false);
+		}
+		else {
+			butSave.setEnabled(true);
+		}
+	}
+	
+	/** Compares the two given dates based upon, year, month, and day
+	 * 
+	 * @param date1 The first date
+	 * @param date2 The second date
+	 * @return 0 if the dates are equal, -1 if date1 is before than date2, 1 if date1 is after date 2
+	 */
+	
+	public static int compareDatesWithoutTime(Date date1, Date date2) {
+		Calendar calendar1 = Calendar.getInstance();
+		Calendar calendar2 = Calendar.getInstance();
+		calendar1.setTime(date1);
+		calendar2.setTime(date2);
+		
+		if (calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH) && 
+				calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
+				calendar1.get(Calendar.YEAR)== calendar2.get(Calendar.YEAR)) {
+			
+			// dates are equal
+			return 0;	
+		}
+		return date1.compareTo(date2);
+	}
+	
+	/** Determines if the current Iteration being created / edited overlaps with the iterations in the cache of the server
+	 * 
+	 * @return True if the iterations overlap, false if they dont't
+	 */
+	
+	private boolean doIterationsOverlapWithCurrent() {
+		//get all iterations from the local database
+		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();
+		try {
+			iteration.setEndDate(calEndDate.getDate());
+			iteration.setStartDate(calStartDate.getDate());
+		}
+		catch (InvalidDateException e) {
+			//start date was before end date, most likely wont reach this, but regardless, return true
+			return true;
+		}
+		
+		for (Iteration i: iterations) {
+			if (IterationValidator.overlapExists(iteration, i)) {
+				return true; // an overlap exists
+			}
+		}
+		return false;
+	}
+	
+	/** Determines if the name being used, has been used for other requirements
+	 * 
+	 * @return True if it is unique, false if not
+	 */
+	
+	private boolean isNameUnique() {
+		//get the current name of this iteration
+		String name = txtName.getText();
+		
+		//get all iterations from the local database
+		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();
+		
+		
+		for (Iteration i : iterations) {
+			if (i.getName().equals(name)) {
+				//we have found an equal name, return false
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 }
