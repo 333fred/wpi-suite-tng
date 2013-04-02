@@ -6,9 +6,10 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
-public abstract class Changeset {
+public abstract class Changeset extends AbstractModel {
 
 	protected Map<String, FieldChange<?>> changes;
 	protected Date date;
