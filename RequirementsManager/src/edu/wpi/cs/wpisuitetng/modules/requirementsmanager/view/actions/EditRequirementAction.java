@@ -11,8 +11,10 @@ import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
@@ -67,8 +69,8 @@ public class EditRequirementAction extends AbstractAction {
 			parentView.getTextDescriptionValid().setText("");
 		}
 
-		if (!parentView.getTextName().getText().trim().equals("") && !parentView.getTextDescription().getText().trim().equals("")) 
-		{
+		if (!parentView.getTextName().getText().trim().equals("")
+				&& !parentView.getTextDescription().getText().trim().equals("")) {
 			// Checks to make sure that both the name and descriptions are not
 			// empty, and attempts to save the requirements
 			if (!parentView.getTextName().getText().trim().equals("")
@@ -80,11 +82,26 @@ public class EditRequirementAction extends AbstractAction {
 				requirement.setUsers(parentView.getAssignedUsers());
 
 				try {
-					if(parentView.getTextIteration().getSelectedItem().toString().equals("Backlog")){
+					if (parentView.getTextIteration().getSelectedItem()
+							.toString().equals("Backlog")) {
 						requirement.setIteration(-1);
 					} else {
-						requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
+						requirement.setIteration(IterationDatabase
+								.getInstance()
+								.getIteration(
+										parentView.getTextIteration()
+												.getSelectedItem().toString())
+								.getId());
+						SaveIterationController saveIterationController = new SaveIterationController(
+								parentView);
+						Iteration anIteration = IterationDatabase.getInstance()
+								.getIteration(
+										parentView.getTextIteration()
+												.getSelectedItem().toString());
+						anIteration.addRequirement(requirement.getrUID());
+						saveIterationController.Saveiteration(anIteration);
 					}
+
 					try {
 						requirement
 								.setPriority(Priority.valueOf(parentView
@@ -113,10 +130,8 @@ public class EditRequirementAction extends AbstractAction {
 					} catch (NumberFormatException except) {
 						// not necessary to do anything
 					}
-					
+
 					controller.SaveRequirement(requirement, true);
-					// Done by the observer now
-					// //this.parentView.getMainTabController().closeCurrentTab();
 				} catch (NumberFormatException except) {
 					parentView
 							.displaySaveError("Iteration must be an integer value");

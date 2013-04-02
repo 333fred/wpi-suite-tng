@@ -61,7 +61,7 @@ public class IterationTreeView extends JPanel {
 				try {
 					iterationNode.add(new DefaultMutableTreeNode(
 							RequirementDatabase.getInstance().getRequirement(
-									aReq)));
+									aReq).getName()));
 				} catch (RequirementNotFoundException e) {
 					System.out.print("Requirement Not Found");
 				}

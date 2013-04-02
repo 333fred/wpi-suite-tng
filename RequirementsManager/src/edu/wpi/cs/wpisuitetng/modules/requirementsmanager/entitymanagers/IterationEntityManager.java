@@ -112,17 +112,28 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	@Override
 	public Iteration update(Session s, String content) throws WPISuiteException {
 
+		System.out.println("Update Called");
+		System.out.println(content);
+		
 		// Get updated iterations
 		Iteration updatedIteration = Iteration.fromJSON(content);
 		Iteration oldIteration;
+		
+		System.out.println("Got from JSON");
+		System.out.println(updatedIteration);
 
 		// Validate the iteration
 		List<ValidationIssue> issues = validator.validate(s, updatedIteration,
 				IterationActionMode.EDIT, db);
 		if (issues.size() > 0) {
+			for(ValidationIssue i: issues){
+				System.out.println(i.getMessage());
+			}
 			throw new BadRequestException();
 		}
 
+		System.out.println("Validates, " + issues.size() + " issues");
+		
 		// Attempt to get the old version of the iteration
 		try {
 			oldIteration = getIteration(updatedIteration.getId(), s);
@@ -153,6 +164,8 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		if (!db.save(oldIteration, s.getProject())) {
 			throw new WPISuiteException();
 		}
+		
+		System.out.println("Requirements Assigned: " + oldIteration.getRequirements());
 
 		return oldIteration;
 	}
@@ -173,7 +186,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			throws IterationNotFoundException {
 		try {
 			// Attempt to get the iteration
-			List<Model> iteration = db.retrieve(Iteration.class, "rUID", id,
+			List<Model> iteration = db.retrieve(Iteration.class, "id", id,
 					s.getProject());
 
 			// Check that the iteration was actually found

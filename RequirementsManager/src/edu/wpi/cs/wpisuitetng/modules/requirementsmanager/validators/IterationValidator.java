@@ -26,10 +26,10 @@ public class IterationValidator {
 		}
 
 		// Detect if the iteration has been given a name
-		if (i.getName() == null || i.getName() == "" || i.getName().isEmpty()){
+		if (i.getName() == null || i.getName() == "" || i.getName().isEmpty()) {
 			issues.add(new ValidationIssue("Iteration must have a name"));
 		}
-		
+
 		// If the iteration is being created, then we must have no requirements
 		if (mode == IterationActionMode.CREATE) {
 			i.setRequirements(new ArrayList<Integer>());
@@ -37,8 +37,7 @@ public class IterationValidator {
 			// If we are not creating, make sure that requirements aren't null
 			if (i.getRequirements() == null) {
 				i.setRequirements(new ArrayList<Integer>());
-			} 
-			else {
+			} else {
 				// Loop through all the requirement ids and make sure that they
 				// all exist
 				List<Requirement> reqs = Arrays
@@ -50,37 +49,46 @@ public class IterationValidator {
 							detected = true;
 						}
 					}
-					if (!detected){
-						issues.add(new ValidationIssue("Invalid Requirement ID " + id));
+					if (!detected) {
+						issues.add(new ValidationIssue(
+								"Invalid Requirement ID " + id));
 					}
 				}
 			}
 		}
-		
+
 		// Make sure that the start date is before the end date
-		if(!i.validateDate()){
-			issues.add(new ValidationIssue("Iteration must start before it ends"));
+		if (!i.validateDate()) {
+			issues.add(new ValidationIssue(
+					"Iteration must start before it ends"));
 		}
-		
+
 		// Make sure that this iteration does not overlap with any others
 		IterationEntityManager manager = new IterationEntityManager(db);
 		Iteration[] iterations = new Iteration[0];
 		// attempt to retrieve iterations for this session's project
-		try{
+		try {
 			iterations = manager.getAll(s);
-		}
-		catch(WPISuiteException e){
+		} catch (WPISuiteException e) {
 			// TODO: something other than nothing
 		}
-		for(Iteration itr : iterations){
+		for (Iteration itr : iterations) {
 			// if an iteration overlaps with the one being validated
-			if(overlapExists(itr, i)){
+			if (itr.getId() == i.getId()) {
+				// This is the same iteration, so we don't have to check for
+				// overlap.
+			} else if (overlapExists(itr, i)) {
 				// report the name of both iterations and that they overlap
-				issues.add(new ValidationIssue(itr.toString() + " overlaps " + i.toString()));
-			}		
-			if(i.getName() != null) {
-				if (itr.getName().compareTo(i.getName()) == 0) {
-					issues.add(new ValidationIssue("Iteration name must be unique!"));
+				issues.add(new ValidationIssue(itr.toString() + " overlaps "
+						+ i.toString()));
+			}
+			if (i.getName() != null) {
+				if (itr.getId() == i.getId()) {
+					// This is the same iteration, so of course it will have the
+					// same name
+				} else if (itr.getName().compareTo(i.getName()) == 0) {
+					issues.add(new ValidationIssue(
+							"Iteration name must be unique!"));
 					break;
 				}
 			}
@@ -88,26 +96,45 @@ public class IterationValidator {
 
 		return issues;
 	}
-		
-	public static boolean overlapExists(Iteration alpha, Iteration beta){
-		
+
+	public static boolean overlapExists(Iteration alpha, Iteration beta) {
+
 		// if iteration alpha starts before iteration beta, this will be +1
 		// if they have the same start date, this will be 0
 		// if iteration beta starts before iteration alpha, this will be -1
 		int before = beta.getStartDate().compareTo(alpha.getStartDate());
-		
-		// if one iteration starts before another, it must be entirely before another
+
+		// if one iteration starts before another, it must be entirely before
+		// another
 		// its start and end dates must be before another's start and end dates
-		boolean betaStartAlphaStart = beta.getStartDate().compareTo(alpha.getStartDate()) == before;	// check that beta-start date has the same relation (before or after) to alpha-start date as beta-start date has to alpha-start date (self-evident)
-		boolean betaStartAlphaEnd = beta.getStartDate().compareTo(alpha.getEndDate()) == before;	// check that beta-start date has the same relation to alpha-end date
-		boolean betaEndAlphaStart = beta.getEndDate().compareTo(alpha.getStartDate()) == before;	// check that beta-end date has the same relation to alpha-start date
-		boolean betaEndAlphaEnd = beta.getEndDate().compareTo(alpha.getEndDate()) == before;	// check that beta-end date has the same relation to alpha-end date
-		
+		boolean betaStartAlphaStart = beta.getStartDate().compareTo(
+				alpha.getStartDate()) == before; // check that beta-start date
+													// has the same relation
+													// (before or after) to
+													// alpha-start date as
+													// beta-start date has to
+													// alpha-start date
+													// (self-evident)
+		boolean betaStartAlphaEnd = beta.getStartDate().compareTo(
+				alpha.getEndDate()) == before; // check that beta-start date has
+												// the same relation to
+												// alpha-end date
+		boolean betaEndAlphaStart = beta.getEndDate().compareTo(
+				alpha.getStartDate()) == before; // check that beta-end date has
+													// the same relation to
+													// alpha-start date
+		boolean betaEndAlphaEnd = beta.getEndDate().compareTo(
+				alpha.getEndDate()) == before; // check that beta-end date has
+												// the same relation to
+												// alpha-end date
+
 		// return false (no overlap) if and only if:
-		//	if beta starts before alpha starts, all of beta's dates are before alpha's dates
-		//	if alpha starts before beta starts, all of alpha's dates are before beta's dates
+		// if beta starts before alpha starts, all of beta's dates are before
+		// alpha's dates
+		// if alpha starts before beta starts, all of alpha's dates are before
+		// beta's dates
 		return !(betaStartAlphaStart && betaStartAlphaEnd && betaEndAlphaStart && betaEndAlphaEnd);
-		
+
 	}
 
 }
