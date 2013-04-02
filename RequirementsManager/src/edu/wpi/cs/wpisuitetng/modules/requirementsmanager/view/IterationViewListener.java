@@ -23,13 +23,9 @@ import javax.swing.JComponent;
 /** 
  * IterationViewListener that is used to determine when a change has been made to a component, TextField, or a JCalendar
  */
-<<<<<<< HEAD
-public class IterationViewListener implements KeyListener, MouseListener {
-=======
+
 
 public class IterationViewListener implements KeyListener, PropertyChangeListener {
->>>>>>> 6df9a4559c994a69fa3cfc38a1e87c0782137fb2
-
 	
 	public enum Type {
 		TEXT,
@@ -80,7 +76,6 @@ public class IterationViewListener implements KeyListener, PropertyChangeListene
 		update();	
 		System.out.println("Property Change fired");
 	}
-	
 	
 
 	
