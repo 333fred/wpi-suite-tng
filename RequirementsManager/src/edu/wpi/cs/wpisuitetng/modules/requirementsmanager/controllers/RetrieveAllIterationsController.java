@@ -60,5 +60,6 @@ public class RetrieveAllIterationsController {
 	 * error occurs retrieving the iterations from the server.
 	 */
 	public void errorReceivingData(String error) {
+
 	}
 }

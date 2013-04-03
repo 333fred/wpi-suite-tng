@@ -8,12 +8,14 @@
  *
  * Contributors:
  *    Frederic Silberberg
+ *    Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -26,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
@@ -64,6 +67,12 @@ public class JanewayModule implements IJanewayModule {
 		//TODO: Replace this
 		final NetworkConfiguration config = new NetworkConfiguration("http://localhost:8080");
 		Network.getInstance().setDefaultNetworkConfiguration(config);
+		
+		
+		// Start the database threads
+		RequirementDatabase.getInstance().start();
+		IterationDatabase.getInstance().start();
+				
 		//initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();	
 		
@@ -81,6 +90,9 @@ public class JanewayModule implements IJanewayModule {
 		
 		tabController.addRequirementsTab();
 		
+		Iteration testIteration = new Iteration("Iteration 69", new Date(), new Date());		
+		tabController.addEditIterationTab(testIteration);
+		
 		//initialize the iterationTreeView
 		iterationTreeView = new IterationTreeView();
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, iterationTreeView, tabView);
@@ -93,11 +105,6 @@ public class JanewayModule implements IJanewayModule {
 		tabs.add(tab1);
 		
 		registerKeyboardShortcuts(tab1);
-		
-		
-		// Start the database threads
-		RequirementDatabase.getInstance().start();
-		IterationDatabase.getInstance().start();
 	}
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
