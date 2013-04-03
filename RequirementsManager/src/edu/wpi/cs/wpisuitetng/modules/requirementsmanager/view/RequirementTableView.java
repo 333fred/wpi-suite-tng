@@ -31,15 +31,14 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.TabFocusListener;
@@ -58,7 +57,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  */
 @SuppressWarnings("serial")
 public class RequirementTableView extends JPanel implements TabFocusListener,
-		IToolbarGroupProvider, IReceivedAllRequirementNotifier {
+		IToolbarGroupProvider, IDatabaseListener {
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
@@ -99,10 +98,10 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		this.tabController = tabController;
 		
 		firstPaint = false;
-		// create the Retreive All Requiments Controller
-		retreiveAllRequirementsController = new RetrieveAllRequirementsController(
-				this);
+		// register this listener to the Database
+		RequirementDatabase.getInstance().registerListener(this);
 		retreiveAllIterationsController = new RetrieveAllIterationsController();
+		retreiveAllRequirementsController = new RetrieveAllRequirementsController();
 		// init the toolbar group
 		initializeToolbarGroup();
 
@@ -352,31 +351,6 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	}
 
 	/**
-	 * The updated requirements data has been received, update the list
-	 * 
-	 * @param requirements
-	 *            The new requirement data
-	 */
-
-	@Override
-	public void receivedData(Requirement[] requirements) {
-		this.requirements = requirements;
-		updateListView();
-	}
-
-	/**
-	 * There was an error processing the data request. TODO: Implement what we
-	 * do
-	 * 
-	 */
-
-	@Override
-	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
-		System.out.println("Received an error fecting from server: |"
-				+ RetrieveAllRequirementsRequestObserver);
-	}
-
-	/**
 	 * Method that updates the content of the list view when this tab gains
 	 * focus
 	 * 
@@ -402,6 +376,18 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			refresh();
 			firstPaint = true;
 		}
+	}
+
+	@Override
+	public void update() {
+		this.requirements = RequirementDatabase.getInstance().getAllRequirements().toArray(requirements);
+		updateListView();
+	}
+
+	@Override
+	public boolean shouldRemove() {
+		//this listener should persist
+		return false;
 	}
 
 }

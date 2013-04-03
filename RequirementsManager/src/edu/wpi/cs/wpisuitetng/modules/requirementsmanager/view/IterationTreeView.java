@@ -24,8 +24,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -38,12 +38,14 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 	private JTree tree;
 	private DefaultMutableTreeNode top;
 	private RetrieveAllIterationsController retrieveAllIterationsController;
-
+	private RetrieveAllRequirementsController retrieveAllRequirementsController;
+	
 	@SuppressWarnings("serial")
 	public IterationTreeView() {
 		super(new BorderLayout());
 
 		retrieveAllIterationsController = new RetrieveAllIterationsController();
+		retrieveAllRequirementsController = new RetrieveAllRequirementsController();
 		
 		this.top = new DefaultMutableTreeNode("Iterations");
 		this.tree = new JTree(top);
@@ -61,8 +63,10 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 		
 		//register ourselves as a listener
 		IterationDatabase.getInstance().registerListener(this);
+		RequirementDatabase.getInstance().registerListener(this);
 		
-		//fetch the iterations from the server
+		//fetch the requirements and iterations from the server
+		getRequirementsFromServer();
 		getIterationsFromServer();
 	}
 
@@ -102,6 +106,10 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 
 	public void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
+	}
+	
+	public void getRequirementsFromServer() {
+		retrieveAllRequirementsController.getAll();
 	}
 
 	/** Called when there was a change in iterations in the local database 
