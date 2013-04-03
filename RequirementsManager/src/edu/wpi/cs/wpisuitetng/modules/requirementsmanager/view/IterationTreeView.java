@@ -48,6 +48,7 @@ public class IterationTreeView extends JPanel {
 
 	public void refresh() {
 		System.out.print("Refreshing tree\n");
+		
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
 

@@ -14,18 +14,15 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
 
@@ -37,13 +34,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationIsNegativeException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.TabFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequirementAction;
@@ -58,7 +54,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * 
  */
 @SuppressWarnings("serial")
-public class RequirementTableView extends FocusableTab implements
+public class RequirementTableView extends JPanel implements TabFocusListener,
 		IToolbarGroupProvider, IReceivedAllRequirementNotifier {
 
 	/** The MainTabController that this view is inside of */
@@ -88,8 +84,6 @@ public class RequirementTableView extends FocusableTab implements
 
 	private JTable table;
 
-	private IterationTreeView iterationTree;
-
 	/**
 	 * Constructor for a RequirementTableView
 	 * 
@@ -98,8 +92,7 @@ public class RequirementTableView extends FocusableTab implements
 	@SuppressWarnings("rawtypes")
 	public RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
-		this.iterationTree = new IterationTreeView();
-
+		
 		firstPaint = false;
 		// create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(
@@ -109,10 +102,8 @@ public class RequirementTableView extends FocusableTab implements
 
 		requirements = new Requirement[0];
 
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		// setLayout(new BorderLayout(0, 0));
-		GridLayout mainLayout = new GridLayout(0, 1);
-		setLayout(mainLayout);
+		setLayout(new BorderLayout(0, 0));
+
 
 		Vector<String> columnNames = new Vector<String>();
 		columnNames.addElement("Name");
@@ -137,14 +128,8 @@ public class RequirementTableView extends FocusableTab implements
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
 		//this.table.setAutoCreateRowSorter(true);
-		mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				iterationTree, mainPanel);
-
-		add(splitPane);
-
-		splitPane.setResizeWeight(0.1);
+		add(scrollPane);
 
 		// Add double click event listener
 		this.table.addMouseListener(new MouseAdapter() {
@@ -279,7 +264,6 @@ public class RequirementTableView extends FocusableTab implements
 		// invalidate the list so it is forced to be redrawn
 		// this.table.invalidate();
 		this.table.repaint();
-		this.iterationTree.refresh();
 	}
 
 	/**
@@ -302,7 +286,6 @@ public class RequirementTableView extends FocusableTab implements
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
 		getRequirementsFromServer();
-		iterationTree.getIterationsFromServer();
 	}
 
 	/**
@@ -391,7 +374,7 @@ public class RequirementTableView extends FocusableTab implements
 	 * 
 	 */
 
-	public void onTabFocus() {
+	public void onGainedFocus() {
 		refresh();
 	}
 
