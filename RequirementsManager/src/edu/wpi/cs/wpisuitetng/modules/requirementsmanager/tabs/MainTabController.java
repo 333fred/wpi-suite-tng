@@ -101,8 +101,7 @@ public class MainTabController {
 	
 	public Tab addCreateRequirementTab() {
 		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this); 
-		IterationTreeTab view = new IterationTreeTab(emptyDetailView, null); 
-		return addTab("New Requirement", new ImageIcon(), view, "New Requirement");		
+		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
 	//TEST
@@ -113,8 +112,8 @@ public class MainTabController {
 	
 	public Tab addCreateIterationTab() {
 		IterationView iterationView = new IterationView(this);
-		IterationTreeTab view = new IterationTreeTab(iterationView, null); 
-		return addTab("New Iteration", new ImageIcon(), view, "New Iteration");
+
+		return addTab("New Iteration", new ImageIcon(), iterationView, "New Iteration");
 	}
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement
@@ -126,8 +125,8 @@ public class MainTabController {
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
 		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
-		IterationTreeTab view = new IterationTreeTab(requirmentDetailView, null); 
-		return addTab(requirement.getName(), new ImageIcon(), view, requirement.getName());
+
+		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
 	
 	/** Adds teh Requirement Table View to the tabs
@@ -137,8 +136,8 @@ public class MainTabController {
 	
 	public Tab addRequirementsTab() {
 		RequirementTableView requirementListView = new RequirementTableView(this);
-		IterationTreeTab view = new IterationTreeTab(requirementListView, requirementListView);
-		return addUnclosableTab("Requirements", new ImageIcon(), view, "The list of requirements");
+
+		return addUnclosableTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
 	}
 	
 	/** Adds a tab to Edit a given Requirement

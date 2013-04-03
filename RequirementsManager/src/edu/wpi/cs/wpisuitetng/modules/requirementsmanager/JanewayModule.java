@@ -18,7 +18,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
@@ -30,7 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
@@ -47,6 +47,9 @@ public class JanewayModule implements IJanewayModule {
 	
 	/** Toolbar view, displayed above the main tab view, and contains action buttons for the tabs */
 	private ToolbarView toolbarView;
+	
+	/** the IterationTreeView that will be displayed accross the module */
+	private IterationTreeView iterationTreeView;
 	
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
@@ -74,18 +77,26 @@ public class JanewayModule implements IJanewayModule {
 		toolbarView = new ToolbarView(tabController);
 		
 		//initialize the toolbar Controller
-		toolbarController = new ToolbarController(toolbarView, tabController);
-		
+		toolbarController = new ToolbarController(toolbarView, tabController);		
 		
 		tabController.addRequirementsTab();
 		
+		//initialize the iterationTreeView
+		iterationTreeView = new IterationTreeView();
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, iterationTreeView, tabView);
+		
 		//create a new JanewayTabModel, passing in the tab view, and a new JPanel as the toolbar
-		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), toolbarView, tabView);
+		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), toolbarView, splitPane);
 		
 		//add the tab to the list of tabs
 		tabs.add(tab1);
 		
 		registerKeyboardShortcuts(tab1);
+		
+		
+		// Start the database threads
+		RequirementDatabase.getInstance().start();
+		IterationDatabase.getInstance().start();
 	}
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
@@ -100,9 +111,6 @@ public class JanewayModule implements IJanewayModule {
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
-		// Start the database threads
-		RequirementDatabase.getInstance().start();
-		IterationDatabase.getInstance().start();
 		return tabs;
 	}
 	
