@@ -286,7 +286,7 @@ public class DetailPanel extends FocusableTab {
 		textEstimate.setName("Estimate");
 		textEstimate.setDisabledTextColor(Color.GRAY);
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
+		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); // box allows 12 numbers (around max int)
 		mainPanel.add(textEstimate);
 		
 		textEstimate.addKeyListener(new KeyAdapter() {
@@ -316,7 +316,7 @@ public class DetailPanel extends FocusableTab {
 		textActual.setName("Actual");
 		textActual.setDisabledTextColor(Color.GRAY);
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
-		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(14)); // box allows 14 characters before expanding
+		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); // box allows 12 numbers (around max int)
 		mainPanel.add(textActual);
 		
 		textActual.addKeyListener(new KeyAdapter() {
