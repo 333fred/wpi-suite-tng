@@ -39,16 +39,17 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 
 		// print the body
 		System.out.println("Received response: " + response.getBody()); //TODO change this to logger
-		
-		if (this.closeTab) {
-			this.detailPanel.getMainTabController().closeCurrentTab();
-		}
-		
+			
 		Requirement req = Requirement.fromJSON(response.getBody());
-		
 		RequirementDatabase.getInstance().addRequirement(req);
 		
-		detailPanel.logView.refresh(req);
+		if (this.detailPanel != null) {
+			detailPanel.logView.refresh(req);
+			
+			if (this.closeTab) {
+				this.detailPanel.getMainTabController().closeCurrentTab();
+			}
+		}
 				
 		/*if (response.getStatusCode() == 200) {
 			// parse the requirement from the body
@@ -70,7 +71,9 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		if (this.detailPanel != null) {
+			this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		}
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +81,9 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
+		if (this.detailPanel != null) {
+			this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
+		}
 	}
 
 }

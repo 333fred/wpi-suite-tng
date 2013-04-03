@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
@@ -114,6 +115,16 @@ public class RequirementDatabase {
 		List<Requirement> list = new ArrayList<Requirement>();
 		list = Arrays.asList(requirements.values().toArray(new Requirement[0]));
 		return list;
+	}
+
+	//TODO documentation
+	public Requirement getRequirement(String string) {
+		for (Requirement aReq : requirements.values()) {
+			if (aReq.getName().equals(string)) {
+				return aReq;
+			}
+		}
+		return null;
 	}
 
 }
