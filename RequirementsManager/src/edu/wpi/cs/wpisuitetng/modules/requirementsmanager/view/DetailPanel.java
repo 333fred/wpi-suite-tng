@@ -20,6 +20,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.Date;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -266,9 +267,27 @@ public class DetailPanel extends FocusableTab {
 		List<Iteration> iterationList = IterationDatabase.getInstance().getAllIterations();
 		iterationList = sortIterations(iterationList);
 		
-		String[] availableIterations = new String[iterationList.size()];
-		for (int i = 0; i < iterationList.size(); i++) {
-			availableIterations[i] = iterationList.get(i).getName();
+		int availableIterationNum = 0;
+		int currentAvailableIterationIndex = 0;
+		Date currentDate = new Date();
+		for (Iteration iteration : iterationList) {
+			
+			// if the current date is before the end date of the iteration, or the iteration is this requirement's current iteration
+			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration())){
+				// increment the number of available iterations
+				availableIterationNum++;
+			}
+			
+		}
+		
+		String[] availableIterations = new String[availableIterationNum];
+		for (Iteration iteration: iterationList) {
+			
+			// if the current date is before the end date of the iteration, or the iteration is this requirement's current iteration, add it to the list
+			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration())){
+				availableIterations[currentAvailableIterationIndex] = iteration.getName();
+			}
+			
 		}
 		
 		comboBoxIteration = new JComboBox(availableIterations);

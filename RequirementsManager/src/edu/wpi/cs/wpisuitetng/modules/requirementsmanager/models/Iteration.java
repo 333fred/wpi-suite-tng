@@ -35,7 +35,6 @@ public class Iteration extends AbstractModel {
 	private Date endDate;
 	private int id;
 	private List<Integer> requirements;
-	private int estimate;	// the sum of the estimates of all requirements
 
 	/**
 	 * Creates a blank iteration with empty name, start, end, id, and
@@ -47,7 +46,6 @@ public class Iteration extends AbstractModel {
 		this.endDate = null;
 		this.id = -1;
 		this.requirements = new ArrayList<Integer>();
-		this.estimate = 0;
 	}
 	/**
 	 * Constructor for an iteration with the given start, and end It has a
@@ -83,7 +81,6 @@ public class Iteration extends AbstractModel {
 		this.endDate = endDate;
 		this.id = id;
 		requirements = new ArrayList<Integer>();
-		this.estimate = 0;
 	}
 
 	/**
@@ -107,31 +104,6 @@ public class Iteration extends AbstractModel {
 		this.endDate = endDate;
 		this.id = id;
 		this.requirements = reqs;
-		this.estimate = 0;
-	}
-	
-	/**
-	 * Creates a Iteration with all given inputs
-	 * 
-	 * @param name
-	 *            the name of the iteration
-	 * @param startDate
-	 *            the start date of the iteration
-	 * @param endDate
-	 *            the end date of the iteration
-	 * @param id
-	 *            the id of the iteration
-	 * @param reqs
-	 *            the requirements assigned to this iteration
-	 */
-	public Iteration(String name, Date startDate, Date endDate, int id,
-			List<Integer> reqs, int estimate) {
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.id = id;
-		this.requirements = reqs;
-		this.estimate = estimate;
 	}
 
 	// TODO implement model methods
@@ -199,7 +171,6 @@ public class Iteration extends AbstractModel {
 		try{
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
 			this.requirements.add(rUID);
-			this.estimate += requirement.getEstimate();
 		}
 		catch(RequirementNotFoundException e){
 			throw e;
@@ -227,7 +198,6 @@ public class Iteration extends AbstractModel {
 				
 				try{
 					Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
-					this.estimate -= requirement.getEstimate();
 					return;
 				}
 				
@@ -364,19 +334,26 @@ public class Iteration extends AbstractModel {
 	}
 	
 	/**
-	 * @return the estimate
+	 * @return the sum of the estimates of this iteration's requirements
+	 * 			does not care if a rUID does not point to a valid requirement; simply ignores it in that case
 	 */
 	public int getEstimate(){
-		return this.estimate;
-	}
-	
-	/**
-	 * @param estimate
-	 * 				the new estimate value to be set
-	 */
-	// TODO: determine if this method should even exist
-	public void setEstimate(int estimate){
-		this.estimate = estimate;
+
+		int estimate = 0;
+		
+		for(Integer rUID : requirements){
+			
+			try{
+				estimate += RequirementDatabase.getInstance().getRequirement(rUID).getEstimate();
+			}
+			catch(RequirementNotFoundException e){
+				// do nothing
+			}
+			
+		}
+		
+		return estimate;
+		
 	}
 	
 }
