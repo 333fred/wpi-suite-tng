@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -132,6 +133,13 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
+		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		int colWidth = this.table.getColumnModel().getColumn(0).getPreferredWidth();
+		int numCol = this.table.getColumnCount();
+		for (int i = 0; i < numCol; i++) {
+			this.table.getColumnModel().getColumn(i).setMinWidth(colWidth*2);
+		}
+	//	this.table.setPreferredSize(new Dimension(1100, 200));
 		//this.table.setAutoCreateRowSorter(true);
 
 		add(scrollPane);
