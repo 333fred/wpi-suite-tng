@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -44,6 +43,9 @@ public class IterationTreeView extends JPanel {
 			
 		JScrollPane treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
+		
+		//fetch the iterations from the server
+		getIterationsFromServer();
 	}
 
 	public void refresh() {
@@ -81,6 +83,7 @@ public class IterationTreeView extends JPanel {
 
 	public void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
+		System.out.println("We are getting iterations from the server");
 	}
 
 	/*
