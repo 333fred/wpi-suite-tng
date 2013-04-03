@@ -140,6 +140,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (firstPaint) {
+			firstPaint = false;
 			getRequirementsFromServer();
 			getIterationsFromServer();
 		}

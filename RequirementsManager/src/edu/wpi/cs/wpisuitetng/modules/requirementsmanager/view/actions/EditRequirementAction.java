@@ -119,7 +119,7 @@ public class EditRequirementAction extends AbstractAction {
 				try {
 					requirement.setType(Type.valueOf(parentView
 							.getComboBoxType().getSelectedItem().toString()
-							.toUpperCase().replaceAll(" ", "_")));
+							.toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
 				} catch (IllegalArgumentException except) {
 					requirement.setType(Type.BLANK);
 				}
