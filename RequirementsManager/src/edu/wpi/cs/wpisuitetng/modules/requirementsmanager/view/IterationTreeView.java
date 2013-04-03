@@ -20,13 +20,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
-public class IterationTreeView extends JPanel {
+public class IterationTreeView extends JPanel implements IRetreivedAllIterationsNotifier {
 
 	private JTree tree;
 	private DefaultMutableTreeNode top;
@@ -45,6 +46,7 @@ public class IterationTreeView extends JPanel {
 		this.add(treeView, BorderLayout.CENTER);
 		
 		//fetch the iterations from the server
+		System.out.println("QUEEEEEEEEEEE?!~!!!");
 		getIterationsFromServer();
 	}
 
@@ -83,7 +85,20 @@ public class IterationTreeView extends JPanel {
 
 	public void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
-		System.out.println("We are getting iterations from the server");
+		System.out.println("~~~~We are getting iterations from the server");
+	}
+
+	@Override
+	public void receivedData(Iteration[] iterations) {
+		refresh();
+		System.out.println("Iteration Tree view, we received stuff from the server");
+		
+	}
+
+	@Override
+	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
+		//do nothing atm
+		
 	}
 
 	/*

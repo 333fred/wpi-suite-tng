@@ -24,17 +24,19 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * @author Jason Whitehouse
+ * @author Jason Whitehouse, Mitchell Caisse
  * 
  * This is the controller for retrieving all iterations for the current project on the server
  * 
  * TODO implement server back-end for this. Right now it is just a dummy that returns a premade list of iterations
  */
 public class RetrieveAllIterationsController {
-	private IterationTreeView view;
+
+	/** Notifier called when the iterations have been received */
+	private IRetreivedAllIterationsNotifier notifier;
 	
-	public RetrieveAllIterationsController(IterationTreeView view) {
-		this.view = view;
+	public RetrieveAllIterationsController(IRetreivedAllIterationsNotifier notifier) {
+		this.notifier = notifier;
 	}
 	
 	/**
@@ -55,7 +57,7 @@ public class RetrieveAllIterationsController {
 	 * @param iterations an array of iterations returned by the server
 	 */
 	public void receivedData(Iteration[] iterations){
-		view.refresh();
+		notifier.receivedData(iterations);
 	}
 	
 	/**
@@ -63,6 +65,6 @@ public class RetrieveAllIterationsController {
 	 * error occurs retrieving the iterations from the server.
 	 */
 	public void errorReceivingData(String error) {
-		//now update your view to show the error however you prefer
+		notifier.errorReceivingData(error);
 	}
 }
