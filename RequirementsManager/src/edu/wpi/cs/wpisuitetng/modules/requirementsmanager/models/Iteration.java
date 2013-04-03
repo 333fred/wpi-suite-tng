@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehosue
+ *    Jason Whitehouse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 
 /**
  * Class representing an iteration of a project
@@ -33,6 +35,7 @@ public class Iteration extends AbstractModel {
 	private Date endDate;
 	private int id;
 	private List<Integer> requirements;
+	private int estimate;	// the sum of the estimates of all requirements
 
 	/**
 	 * Creates a blank iteration with empty name, start, end, id, and
@@ -44,6 +47,7 @@ public class Iteration extends AbstractModel {
 		this.endDate = null;
 		this.id = -1;
 		this.requirements = new ArrayList<Integer>();
+		this.estimate = 0;
 	}
 	/**
 	 * Constructor for an iteration with the given start, and end It has a
@@ -79,10 +83,11 @@ public class Iteration extends AbstractModel {
 		this.endDate = endDate;
 		this.id = id;
 		requirements = new ArrayList<Integer>();
+		this.estimate = 0;
 	}
 
 	/**
-	 * Creates a Iteration with all given inputs
+	 * Creates a Iteration with all given inputs except for estimate
 	 * 
 	 * @param name
 	 *            the name of the iteration
@@ -102,6 +107,31 @@ public class Iteration extends AbstractModel {
 		this.endDate = endDate;
 		this.id = id;
 		this.requirements = reqs;
+		this.estimate = 0;
+	}
+	
+	/**
+	 * Creates a Iteration with all given inputs
+	 * 
+	 * @param name
+	 *            the name of the iteration
+	 * @param startDate
+	 *            the start date of the iteration
+	 * @param endDate
+	 *            the end date of the iteration
+	 * @param id
+	 *            the id of the iteration
+	 * @param reqs
+	 *            the requirements assigned to this iteration
+	 */
+	public Iteration(String name, Date startDate, Date endDate, int id,
+			List<Integer> reqs, int estimate) {
+		this.name = name;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.id = id;
+		this.requirements = reqs;
+		this.estimate = estimate;
 	}
 
 	// TODO implement model methods
@@ -157,15 +187,24 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * Adds a given requirement to this iteration
+	 * Adds a given requirement to this iteration and add its estimate to this iteration's estimate
 	 * 
 	 * @param rUID
 	 *            the new requirement
+	 * @throws RequirementNotFOundException
+	 *            if rUID does not correspond to an existing requirement
 	 */
-	public void addRequirement(int rUID) {
-		// TODO: Validate that the requirement actually exists, probably through
-		// a local map
-		this.requirements.add(rUID);
+	public void addRequirement(int rUID) throws RequirementNotFoundException {
+
+		try{
+			Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
+			this.requirements.add(rUID);
+			this.estimate += requirement.getEstimate();
+		}
+		catch(RequirementNotFoundException e){
+			throw e;
+		}
+ 
 	}
 
 	/**
@@ -173,14 +212,35 @@ public class Iteration extends AbstractModel {
 	 * 
 	 * @param rUID
 	 *            the removed requirement
+	 * @throws RequirementNotFoundException
+	 *            if rUID does not correspond to an existing requirement (will still remove the rUID from the list)
+	 *            or if rUID is not in this iteration's list of requirements
 	 */
-	public void removeRequirement(int rUID) {
+	public void removeRequirement(int rUID) throws RequirementNotFoundException {
+	
 		for (Integer id : this.requirements) {
+		
 			if (id == rUID) {
+		
+				// regardless of whether or not the requirement exists, remove its ID
 				this.requirements.remove(id);
-				break;
+				
+				try{
+					Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
+					this.estimate -= requirement.getEstimate();
+					return;
+				}
+				
+				catch(RequirementNotFoundException e){
+					throw e;
+				}
+				
 			}
+			
 		}
+		
+		throw new RequirementNotFoundException(rUID);
+		
 	}
 
 	/**
@@ -302,4 +362,21 @@ public class Iteration extends AbstractModel {
 	public void setRequirements(List<Integer> requirements) {
 		this.requirements = requirements;
 	}
+	
+	/**
+	 * @return the estimate
+	 */
+	public int getEstimate(){
+		return this.estimate;
+	}
+	
+	/**
+	 * @param estimate
+	 * 				the new estimate value to be set
+	 */
+	// TODO: determine if this method should even exist
+	public void setEstimate(int estimate){
+		this.estimate = estimate;
+	}
+	
 }

@@ -189,6 +189,7 @@ public class IterationValidatorTest {
 	@Test
 	//Tests validation on all overlap cases
 	public void testOverlapDetection(){
+		
 		Iteration strictlyBefore = new Iteration("strictlyBeforeBase", new Date(0), new Date(500));
 		Iteration strictlyAfter = new Iteration("strictlyAfterBase", new Date(70000), new Date(80000));
 		Iteration includesStart = new Iteration("includesBaseStart", new Date(0), new Date(11000));
@@ -213,6 +214,7 @@ public class IterationValidatorTest {
 		
 		checkNumIssues(1, inside, defaultSession, IterationActionMode.CREATE);
 		checkNumIssues(1, inside, defaultSession, IterationActionMode.EDIT);
+	
 	}
 	
 	/**
