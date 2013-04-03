@@ -36,10 +36,7 @@ public class JanewayModule implements IJanewayModule {
 
 	/** List of tabs that this module will display */
 	private List<JanewayTabModel> tabs;
-	
-	/** The list view that will display the requirements	 */
-	private RequirementTableView requirementListView;
-	
+		
 	/** The main view of the module that displays the tabs */
 	private MainTabView tabView;
 	
@@ -70,17 +67,15 @@ public class JanewayModule implements IJanewayModule {
 		
 		//initialize TabController
 		tabController = new MainTabController(tabView);
-		
-		//initialize the requirements list view
-		requirementListView = new RequirementTableView(tabController);
-		
+			
 		//initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);
 		
 		//initialize the toolbar Controller
 		toolbarController = new ToolbarController(toolbarView, tabController);
 		
-		tabController.addTab("Requirements List", new ImageIcon(), requirementListView, "The list of requirements");
+		
+		tabController.addRequirementsTab();
 		
 		//create a new JanewayTabModel, passing in the tab view, and a new JPanel as the toolbar
 		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), toolbarView, tabView);

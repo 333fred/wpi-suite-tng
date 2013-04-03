@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
+import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 
 /** A tab wrapper that automatically wraps an iteration tree view around the given
@@ -14,7 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView
  *
  */
 
-public class IterationTreeTab extends JPanel implements TabFocusListener {
+public class IterationTreeTab extends JPanel implements TabFocusListener, IToolbarGroupProvider {
 
 	/** The JPanel that will be displayed to the right of the iterationVIew */
 	private JPanel tabComponent;
@@ -71,6 +73,14 @@ public class IterationTreeTab extends JPanel implements TabFocusListener {
 		}
 		//refresh the iteration tree
 		iterationTreeView.refresh();
+	}
+
+	@Override
+	public ToolbarGroupView getGroup() {
+		if (tabComponent instanceof IToolbarGroupProvider) {
+			return ((IToolbarGroupProvider)tabComponent).getGroup();
+		}	
+		return new ToolbarGroupView("");
 	}
 	
 	

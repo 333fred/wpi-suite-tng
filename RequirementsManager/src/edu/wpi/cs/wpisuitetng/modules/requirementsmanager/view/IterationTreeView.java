@@ -31,6 +31,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -38,8 +40,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
 @SuppressWarnings("serial")
-public class IterationTreeView extends JPanel {
-
+public class IterationTreeView extends JPanel implements IRetreivedAllIterationsNotifier {
 	private JTree tree;
 	private DefaultMutableTreeNode top;
 	private RetrieveAllIterationsController retrieveAllIterationsController;
@@ -63,10 +64,15 @@ public class IterationTreeView extends JPanel {
 		
 		JScrollPane treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
+		
+		//fetch the iterations from the server
+		System.out.println("QUEEEEEEEEEEE?!~!!!");
+		getIterationsFromServer();
 	}
 
 	public void refresh() {
 		System.out.print("Refreshing tree\n");
+		
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
 
@@ -99,5 +105,19 @@ public class IterationTreeView extends JPanel {
 
 	public void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
+		System.out.println("~~~~We are getting iterations from the server");
+	}
+
+	@Override
+	public void receivedData(Iteration[] iterations) {
+		refresh();
+		System.out.println("Iteration Tree view, we received stuff from the server");
+		
+	}
+
+	@Override
+	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
+		//do nothing atm
+		
 	}
 }

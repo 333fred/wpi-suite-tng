@@ -298,7 +298,7 @@ public class IterationView extends FocusableTab{
 	private void setNameError() {	
 		
 		if (txtName.getText().trim().isEmpty()) {
-			labNameError.setText("**Name connot be blank**");	
+			labNameError.setText("**Name cannot be blank**");	
 			txtName.setBackground(new Color(243, 243, 209));
 			nameError = true;
 		}

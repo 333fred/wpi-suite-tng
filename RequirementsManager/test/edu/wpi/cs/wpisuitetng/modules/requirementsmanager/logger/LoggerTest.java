@@ -128,4 +128,31 @@ public class LoggerTest {
 		assertTrue(requirement.getLogs().get(1).getChanges().containsKey("TYPE_A"));	// confirm that the other log still exists		
 		
 	}
+	
+	/**
+	 * Test to confirm that a series of multiple-change events can be added as multiple logs.
+	 */
+	@Test
+	public void testMultipleMultipleChangeLogs(){
+	
+		requirement = new Requirement();
+		
+		requirement.logCreation(session);
+		
+		RequirementChangeset changeA = new RequirementChangeset(user);
+		changeA.getChanges().put("TYPE_A1", new FieldChange<String>("OLD_A1", "NEW_A1"));
+		changeA.getChanges().put("TYPE_A2", new FieldChange<Object>(new Object(), new Object()));
+		requirement.logEvents(changeA);
+		
+		RequirementChangeset changeB = new RequirementChangeset(user);
+		changeB.getChanges().put("TYPE_B1", new FieldChange<Exception>(new Exception("OLD_B1"), new Exception("NEW_B")));
+		changeB.getChanges().put("TYPE_B2", new FieldChange<Requirement>(new Requirement(), new Requirement()));
+		requirement.logEvents(changeB);
+		
+		assertEquals(requirement.getLogs().size(), 3);	// confirm that three and only three logs have been added
+		assertTrue(requirement.getLogs().get(0).getChanges().containsKey("TYPE_B1"));	// confirm that the most recently added log is first
+		assertTrue(requirement.getLogs().get(0).getChanges().containsKey("TYPE_B2"));	// confirm that all changes have been added to the most recent log
+		
+	}
+	
 }

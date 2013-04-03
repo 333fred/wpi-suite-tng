@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 import java.awt.Component;
 
 import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
@@ -47,6 +48,26 @@ public class MainTabView extends JTabbedPane {
 			setTabComponentAt(index, new ClosableTabComponent(this));
 		}
 	}
+	
+	/** Adds an unclosable tab to this JTabbedPane
+	 * 
+	 *  * @param title The title of tab
+	 * @param icon The icon that will be displayed in this tab
+	 * @param component The component that the tab will display
+	 * @param tip The tooltip to be displayed for the tab
+	 * @param index The position to inster the tab
+	 * 
+	 */
+	
+	public void addUnclosableTab(String title, Icon icon, Component component, String tip) {
+		super.addTab(title,icon,component,tip);
+		int index = getTabCount() - 1; // the tab was just added, so we assume that it was at the end
+
+		//set the tab component to un closable.
+		setTabComponentAt(index, new JLabel(title));
+	}
+
+	
 	
 	/** Removes the component at the specified index.
 	 * 
