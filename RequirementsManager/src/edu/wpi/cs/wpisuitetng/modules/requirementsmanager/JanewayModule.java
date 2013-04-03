@@ -90,9 +90,6 @@ public class JanewayModule implements IJanewayModule {
 		
 		tabController.addRequirementsTab();
 		
-		Iteration testIteration = new Iteration("Iteration 69", new Date(), new Date());		
-		tabController.addEditIterationTab(testIteration);
-		
 		//initialize the iterationTreeView
 		iterationTreeView = new IterationTreeView();
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, iterationTreeView, tabView);

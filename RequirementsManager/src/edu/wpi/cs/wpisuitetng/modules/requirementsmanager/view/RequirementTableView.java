@@ -159,11 +159,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					JTable target = (JTable) event.getSource();
-					int row = target.getSelectedRow();
-					// just open up the requirement
-					// calling the doubleclick function basically has that property
-					onDoubleClick(row);
+					viewRequirement();
 				}
 				event.consume();
 			}
