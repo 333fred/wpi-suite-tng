@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class JanewayModuleTest {
@@ -32,6 +33,7 @@ public class JanewayModuleTest {
 	 * TODO: Actually make a test, once the tab model has been implemented.
 	 */
 	@Test
+	@Ignore
 	public void testTabModel() {
 		// TODO: Neet to actually determine what to test
 	}
