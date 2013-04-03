@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
@@ -64,14 +65,18 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 			// make sure the requirement isn't null
 			if (requirement != null) {
-				Iteration anIteration = IterationDatabase.getInstance().getIteration(detailPanel.getTextIteration().getSelectedItem().toString());
+				Iteration anIteration;
 				try {
+					anIteration = IterationDatabase.getInstance().getIteration(-1);
 					anIteration.addRequirement(requirement.getrUID());
+					saveIterationController.Saveiteration(anIteration);	
+				} catch (IterationNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				} catch (RequirementNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				saveIterationController.Saveiteration(anIteration);		
 				
 				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
 			}/* else {

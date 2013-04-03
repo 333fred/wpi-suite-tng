@@ -272,8 +272,8 @@ public class DetailPanel extends FocusableTab {
 		Date currentDate = new Date();
 		for (Iteration iteration : iterationList) {
 			
-			// if the current date is before the end date of the iteration, or the iteration is this requirement's current iteration
-			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration())){
+			// if the current date is before the end date of the iteration, or the iteration is this requirement's current iteration or is the backlog
+			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1){
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
@@ -282,17 +282,18 @@ public class DetailPanel extends FocusableTab {
 		
 		String[] availableIterations = new String[availableIterationNum];
 		for (Iteration iteration: iterationList) {
-			
-			// if the current date is before the end date of the iteration, or the iteration is this requirement's current iteration, add it to the list
-			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration())){
+			// if the current date is before the end date of the iteration, 
+			//or the iteration is this requirement's current iteration,
+			//or it is the backlog, add it to the list
+			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1){
 				availableIterations[currentAvailableIterationIndex] = iteration.getName();
 			}
-			
+			currentAvailableIterationIndex++;
 		}
 		
 		comboBoxIteration = new JComboBox(availableIterations);
 		comboBoxIteration.setName("Iteration");
-		comboBoxIteration.setPrototypeDisplayValue("Non-functional");
+		comboBoxIteration.setPrototypeDisplayValue("Backlog");
 		comboBoxIteration.setBackground(Color.WHITE);
 		mainPanel.add(comboBoxIteration);
 		
