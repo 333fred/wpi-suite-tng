@@ -209,7 +209,7 @@ class TreeTransferHandler extends TransferHandler {
 			try {
 				Iteration anIteration = IterationDatabase.getInstance().getIteration(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getIteration());
 	    		anIteration.removeRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
-	    		saveIterationController.Saveiteration(anIteration);
+	    		saveIterationController.saveIteration(anIteration);
 			} catch (IterationNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -225,7 +225,7 @@ class TreeTransferHandler extends TransferHandler {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			saveIterationController.Saveiteration(anIteration);
+			saveIterationController.saveIteration(anIteration);
 			
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(nodes[i].toString());
 			requirement.setIteration(anIteration.getId());

@@ -3,10 +3,8 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -54,7 +52,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		RequirementDatabase.getInstance().addRequirement(Requirement.fromJSON(response.getBody()));
 
 		
-		SaveIterationController saveIterationController = new SaveIterationController(detailPanel);
+		SaveIterationController saveIterationController = new SaveIterationController(new DefaultSaveNotifier());
 				
 
 	
@@ -69,7 +67,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 				try {
 					anIteration = IterationDatabase.getInstance().getIteration(-1);
 					anIteration.addRequirement(requirement.getrUID());
-					saveIterationController.Saveiteration(anIteration);	
+					saveIterationController.saveIteration(anIteration);	
 				} catch (IterationNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

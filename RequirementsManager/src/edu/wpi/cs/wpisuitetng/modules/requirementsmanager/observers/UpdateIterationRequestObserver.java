@@ -3,24 +3,25 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * @author Steven Kordell
+ * @author Steven Kordell, Mitchell Caisse
+ * 
  * Controller for updating an existing Iteration
  */
 public class UpdateIterationRequestObserver implements RequestObserver {
 	
-	DetailPanel detailPanel;
+	private ISaveNotifier notifier;
 	
-	public UpdateIterationRequestObserver (DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;	
+	public UpdateIterationRequestObserver (ISaveNotifier notifier) {
+		this.notifier = notifier;
 	}	
 	
 	/* (non-Javadoc)
@@ -37,6 +38,8 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 
 		Iteration req = Iteration.fromJSON(response.getBody());
 		IterationDatabase.getInstance().addIteration(req);
+		
+		notifier.responseSuccess();
 		
 		//detailPanel.logView.refresh(req);
 				
@@ -60,7 +63,7 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq.getResponse().getStatusMessage());
 	}
 
 	/* (non-Javadoc)
@@ -68,7 +71,7 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
+		notifier.fail(exception);
 	}
 
 }

@@ -29,6 +29,8 @@ import javax.swing.SpringLayout;
 import com.toedter.calendar.JCalendar;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
@@ -39,7 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationVa
 /** 
  * View for creating or editing a iteration
  */
-public class IterationView extends FocusableTab{
+public class IterationView extends FocusableTab implements ISaveNotifier {
 	
 	/** Status enum, whether created or edited */
 	private enum Status {
@@ -49,6 +51,7 @@ public class IterationView extends FocusableTab{
 	
 	/** Controller for adding an iteration */
 	private AddIterationController addIterationController;
+	private SaveIterationController saveIterationController;
 	
 		
 	/** The maintab controller */
@@ -111,6 +114,7 @@ public class IterationView extends FocusableTab{
 		
 		//initilize the add iteration controller
 		addIterationController = new AddIterationController(this);
+		saveIterationController = new SaveIterationController(this);
 		// initlaize JComponents
 		
 		labName = new JLabel("Name:");
@@ -250,6 +254,17 @@ public class IterationView extends FocusableTab{
 				Iteration toAdd = new Iteration(name, startDate, endDate);
 				addIterationController.addIteration(toAdd);
 			}
+			else {
+				iteration.setName(name);
+				try {
+					iteration.setStartDate(startDate);
+					iteration.setEndDate(endDate);
+				}
+				catch (InvalidDateException e1) {
+					System.out.println("This shouldnt happen!!");
+				}				
+				saveIterationController.saveIteration(iteration);
+			}
 			
 		}
 		
@@ -285,9 +300,7 @@ public class IterationView extends FocusableTab{
 	 */
 	
 	public void displaySaveError(String error) {
-		//check for error		
-		setNameError();
-		setCalendarError();
+		labErrorMessage.setText(error);
 	}
 	
 	/** Determiens the proper error message to be shown in the Name Error field 
@@ -427,6 +440,24 @@ public class IterationView extends FocusableTab{
 		}
 		
 		return true;
+	}
+
+	@Override
+	public void responseSuccess() {
+		System.out.println("Sucessfuly saved iteration!!");
+		mainTabController.closeCurrentTab();
+		
+	}
+
+	@Override
+	public void responseError(int statusCode, String statusMessage) {
+		displaySaveError("Server returned save error: " + statusCode + ":" + statusMessage);
+		
+	}
+
+	@Override
+	public void fail(Exception exception) {
+		displaySaveError("Server returned save error: " + exception.getMessage());
 	}
 	
 }
