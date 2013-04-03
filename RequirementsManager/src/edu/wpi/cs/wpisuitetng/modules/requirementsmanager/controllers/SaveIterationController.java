@@ -17,18 +17,18 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class SaveIterationController {
 	
-	DetailPanel detailPanel;
+	private ISaveNotifier notifier; 
 	
-	public SaveIterationController (DetailPanel detailPanel){
-		this.detailPanel = detailPanel;
+	public SaveIterationController (ISaveNotifier notifier){
+		this.notifier = notifier;
 	}
 	
 	/**
 	 * Saves a iteration
 	 * @param toAdd iteration that will be saved
 	 */
-	public void Saveiteration(Iteration toAdd) {
-		final RequestObserver requestObserver = new UpdateIterationRequestObserver(detailPanel);
+	public void saveIteration(Iteration toAdd) {
+		final RequestObserver requestObserver = new UpdateIterationRequestObserver(notifier);
 		Request request;
 		request = Network.getInstance().makeRequest("requirementsmanager/iteration", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());

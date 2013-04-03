@@ -3,14 +3,12 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-
-import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
@@ -83,13 +81,13 @@ public class EditRequirementAction extends AbstractAction {
 			try {
 
 				SaveIterationController saveIterationController = new SaveIterationController(
-						parentView);
+						new DefaultSaveNotifier());
 
 				try {
 					Iteration anIteration = IterationDatabase.getInstance()
 							.getIteration(requirement.getIteration());
 					anIteration.removeRequirement(requirement.getrUID());
-					saveIterationController.Saveiteration(anIteration);
+					saveIterationController.saveIteration(anIteration);
 				} catch (IterationNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (RequirementNotFoundException ex){
@@ -106,7 +104,7 @@ public class EditRequirementAction extends AbstractAction {
 								parentView.getTextIteration().getSelectedItem()
 										.toString());
 				anIteration.addRequirement(requirement.getrUID());
-				saveIterationController.Saveiteration(anIteration);
+				saveIterationController.saveIteration(anIteration);
 
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
