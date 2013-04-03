@@ -4,10 +4,10 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
@@ -112,8 +112,12 @@ public class MainTabController {
 	
 	public Tab addCreateIterationTab() {
 		IterationView iterationView = new IterationView(this);
-
 		return addTab("New Iteration", new ImageIcon(), iterationView, "New Iteration");
+	}
+	
+	public Tab addEditIterationTab(Iteration iteration) {
+		IterationView iterationView = new IterationView(iteration, this);
+		return addTab("New Iteration", new ImageIcon(), iterationView, iteration.getName());
 	}
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement

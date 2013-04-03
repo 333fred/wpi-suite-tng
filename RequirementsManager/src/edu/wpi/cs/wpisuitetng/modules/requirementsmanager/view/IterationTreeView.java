@@ -14,6 +14,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.util.List;
 
 import javax.swing.DropMode;
@@ -40,12 +41,16 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 	private RetrieveAllIterationsController retrieveAllIterationsController;
 	private RetrieveAllRequirementsController retrieveAllRequirementsController;
 	
+	private boolean firstPaint;
+	
 	@SuppressWarnings("serial")
 	public IterationTreeView() {
 		super(new BorderLayout());
 
 		retrieveAllIterationsController = new RetrieveAllIterationsController();
 		retrieveAllRequirementsController = new RetrieveAllRequirementsController();
+		
+		firstPaint = true;
 		
 		this.top = new DefaultMutableTreeNode("Iterations");
 		this.tree = new JTree(top);
@@ -54,8 +59,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 		this.tree.setDropMode(DropMode.ON);
 		final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		
-	     this.tree.setTransferHandler(new TreeTransferHandler());
-	     this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
+	    this.tree.setTransferHandler(new TreeTransferHandler());
+	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
 	   
 		
 		JScrollPane treeView = new JScrollPane(tree);
@@ -64,13 +69,13 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 		//register ourselves as a listener
 		IterationDatabase.getInstance().registerListener(this);
 		RequirementDatabase.getInstance().registerListener(this);
-		
+	
 		//fetch the requirements and iterations from the server
 		getRequirementsFromServer();
 		getIterationsFromServer();
 	}
 
-	public void refresh() {		
+	public void refresh() {				
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
 
@@ -104,12 +109,12 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 	 * 
 	 */
 
-	public void getIterationsFromServer() {
-		retrieveAllIterationsController.getAll();
+	private void getRequirementsFromServer() {
+		retrieveAllRequirementsController.getAll();
 	}
 	
-	public void getRequirementsFromServer() {
-		retrieveAllRequirementsController.getAll();
+	private void getIterationsFromServer() {
+		retrieveAllIterationsController.getAll();;
 	}
 
 	/** Called when there was a change in iterations in the local database 
@@ -125,5 +130,18 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 	
 	public boolean shouldRemove() {
 		return false;
+	}
+	
+	/** Overriding paint function to update this on first paint
+	 * 
+	 */
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		if (firstPaint) {
+			getRequirementsFromServer();
+			getIterationsFromServer();
+		}
 	}
 }
