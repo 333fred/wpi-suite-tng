@@ -21,6 +21,7 @@ import java.util.Map;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
@@ -187,6 +188,16 @@ public class RequirementDatabase extends Thread {
 				return;
 			}
 		}
+	}
+	
+	//TODO documentation
+	public Requirement getRequirement(String string) {
+		for (Requirement aReq : requirements.values()) {
+			if (aReq.getName().equals(string)) {
+				return aReq;
+			}
+		}
+		return null;
 	}
 
 }
