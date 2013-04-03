@@ -84,6 +84,7 @@ public class JanewayModule implements IJanewayModule {
 		//initialize the iterationTreeView
 		iterationTreeView = new IterationTreeView();
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, iterationTreeView, tabView);
+		splitPane.setResizeWeight(0.1);
 		
 		//create a new JanewayTabModel, passing in the tab view, and a new JPanel as the toolbar
 		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), toolbarView, splitPane);

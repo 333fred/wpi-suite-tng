@@ -58,7 +58,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  */
 @SuppressWarnings("serial")
 public class RequirementTableView extends JPanel implements TabFocusListener,
-		IToolbarGroupProvider, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier{
+		IToolbarGroupProvider, IReceivedAllRequirementNotifier {
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
@@ -102,7 +102,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		// create the Retreive All Requiments Controller
 		retreiveAllRequirementsController = new RetrieveAllRequirementsController(
 				this);
-		retreiveAllIterationsController = new RetrieveAllIterationsController(this);
+		retreiveAllIterationsController = new RetrieveAllIterationsController();
 		// init the toolbar group
 		initializeToolbarGroup();
 
@@ -362,11 +362,6 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	public void receivedData(Requirement[] requirements) {
 		this.requirements = requirements;
 		updateListView();
-	}
-	
-	@Override
-	public void receivedData(Iteration[] iterations) {
-		//we dont want to do anything when we received iterations
 	}
 
 	/**

@@ -8,39 +8,33 @@
  *
  * Contributors:
  *    Steve Kordell
+ *    Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.DropMode;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
 @SuppressWarnings("serial")
-public class IterationTreeView extends JPanel implements IRetreivedAllIterationsNotifier {
+public class IterationTreeView extends JPanel implements IDatabaseListener  {
+	
 	private JTree tree;
 	private DefaultMutableTreeNode top;
 	private RetrieveAllIterationsController retrieveAllIterationsController;
@@ -49,7 +43,7 @@ public class IterationTreeView extends JPanel implements IRetreivedAllIterations
 	public IterationTreeView() {
 		super(new BorderLayout());
 
-		retrieveAllIterationsController = new RetrieveAllIterationsController(this);
+		retrieveAllIterationsController = new RetrieveAllIterationsController();
 		
 		this.top = new DefaultMutableTreeNode("Iterations");
 		this.tree = new JTree(top);
@@ -65,12 +59,14 @@ public class IterationTreeView extends JPanel implements IRetreivedAllIterations
 		JScrollPane treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
 		
+		//register ourselves as a listener
+		IterationDatabase.getInstance().registerListener(this);
+		
 		//fetch the iterations from the server
 		getIterationsFromServer();
 	}
 
-	public void refresh() {
-		
+	public void refresh() {		
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
 
@@ -99,19 +95,27 @@ public class IterationTreeView extends JPanel implements IRetreivedAllIterations
 		this.tree.expandRow(0);
 		this.tree.updateUI();
 	}
+	
+	/** Retreives the iterations from the server
+	 * 
+	 */
 
 	public void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
 	}
 
-	@Override
-	public void receivedData(Iteration[] iterations) {
+	/** Called when there was a change in iterations in the local database 
+	 */
+	
+	public void update() {
 		refresh();		
 	}
 
-	@Override
-	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
-		//do nothing atm
-		
+	/** This listener should persist
+	 * 
+	 */
+	
+	public boolean shouldRemove() {
+		return false;
 	}
 }
