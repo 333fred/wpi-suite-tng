@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
@@ -26,17 +28,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  * 
  * @author Fredric
  */
-public class RequirementDatabase {
+public class RequirementDatabase extends Thread {
 
 	private Map<Integer, Requirement> requirements;
+	private List<IDatabaseListener> listeners;
+	private SimpleRetrieveAllRequirementsController controller;
 	private static RequirementDatabase db;
-	
-	private RequirementDatabase(){
+
+	private RequirementDatabase() {
 		requirements = new HashMap<Integer, Requirement>();
+		this.listeners = new ArrayList<IDatabaseListener>();
+		this.controller = new SimpleRetrieveAllRequirementsController();
+		setDaemon(true);
 	}
-	
-	public static RequirementDatabase getInstance(){
-		if(db == null){
+
+	public static RequirementDatabase getInstance() {
+		if (db == null) {
 			db = new RequirementDatabase();
 		}
 		return db;
@@ -50,11 +57,12 @@ public class RequirementDatabase {
 	public synchronized void setRequirements(
 			Map<Integer, Requirement> requirements) {
 		this.requirements = requirements;
+		updateListeners();
 	}
 
 	/**
-	 * Sets the requirements to the given list. This removes everything in the map
-	 * and adds only things in the list
+	 * Sets the requirements to the given list. This removes everything in the
+	 * map and adds only things in the list
 	 * 
 	 * @param requirements
 	 *            the requirements to add
@@ -64,27 +72,33 @@ public class RequirementDatabase {
 		for (Requirement i : requirements) {
 			this.requirements.put(i.getrUID(), i);
 		}
+		updateListeners();
 	}
 
 	/**
-	 * Adds the given requirements to the map. The difference between this and set
-	 * requirements is that this doesn't erase all requirements, only adds/updates
-	 * the given list
+	 * Adds the given requirements to the map. The difference between this and
+	 * set requirements is that this doesn't erase all requirements, only
+	 * adds/updates the given list
 	 * 
-	 * @param requirements the requirements to add/update
+	 * @param requirements
+	 *            the requirements to add/update
 	 */
 	public synchronized void addRequirements(List<Requirement> requirements) {
 		for (Requirement i : requirements) {
 			this.requirements.put(i.getrUID(), i);
 		}
+		updateListeners();
 	}
-	
+
 	/**
 	 * Adds or updates a specific requirement
-	 * @param i the requirement to add/update
+	 * 
+	 * @param i
+	 *            the requirement to add/update
 	 */
-	public synchronized void addRequirement(Requirement i){
+	public synchronized void addRequirement(Requirement i) {
 		requirements.put(i.getrUID(), i);
+		updateListeners();
 	}
 
 	/**
@@ -114,6 +128,65 @@ public class RequirementDatabase {
 		List<Requirement> list = new ArrayList<Requirement>();
 		list = Arrays.asList(requirements.values().toArray(new Requirement[0]));
 		return list;
+	}
+
+	/**
+	 * Call the update method on all registered listeners
+	 */
+	public synchronized void updateListeners() {
+		List<IDatabaseListener> removes = new ArrayList<IDatabaseListener>();
+		for (IDatabaseListener l : listeners) {
+			l.update();
+			if(l.shouldRemove()){
+				removes.add(l);
+			}
+		}
+		for (IDatabaseListener l : removes){
+			listeners.remove(l);
+		}
+	}
+
+	/**
+	 * Registers a database listener
+	 * 
+	 * @param listener
+	 *            the listener to register
+	 */
+	public synchronized void registerListener(IDatabaseListener listener) {
+		if (listener != null) {
+			listeners.add(listener);
+		}
+	}
+
+	/**
+	 * Removes a given listener from the list of listeners
+	 * 
+	 * @param listener
+	 *            the listener to be removed
+	 * @return True if the listener was removed or did not exits, false
+	 *         otherwise
+	 */
+	public synchronized boolean removeListener(IDatabaseListener listener) {
+		return listeners.remove(listener);
+	}
+
+	/**
+	 * Runs every 5 minutes and updates the local requirements database, which
+	 * will trigger an update of all listeners
+	 */
+	@Override
+	public void run() {
+		while (!interrupted()) {
+			// Trigger an update
+			controller.getAll();
+			try {
+				// Sleep for five minutes
+				this.sleep(300000);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+				return;
+			}
+		}
 	}
 
 }

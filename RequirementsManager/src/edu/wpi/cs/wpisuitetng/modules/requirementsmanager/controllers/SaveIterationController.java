@@ -34,7 +34,6 @@ public class SaveIterationController {
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();
-		System.out.println("Sending Message");
 	}
 
 

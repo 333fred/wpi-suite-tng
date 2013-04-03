@@ -249,12 +249,10 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	 */
 
 	private void getRequirementsFromServer() {
-		System.out.println("We are getting requirements from the server");
 		retreiveAllRequirementsController.getAll();
 	}
 	
 	private void getIterationsFromServer() {
-		System.out.println("We are getting iterations from the server");
 		retreiveAllIterationsController.getAll();;
 	}
 
@@ -266,7 +264,6 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	 * */
 
 	private void updateListView() {
-		System.out.println("We are updating the table view");
 		// update the string array
 		parseRequirements();
 		// set the list values of the requirementsList to the values in the
@@ -324,9 +321,8 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 		if (index < 0 || index >= requirements.length) {
 			// invalid index
-			System.out.println("Invalid index");
+			System.out.println("Invalid index " + index);
 		}
-		System.out.println("Trying to view a requirement");
 		// get the requirement to update from the array
 		Requirement requirementToFetch = requirements[index];
 

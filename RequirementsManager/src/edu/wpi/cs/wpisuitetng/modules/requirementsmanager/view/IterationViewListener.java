@@ -73,8 +73,7 @@ public class IterationViewListener implements KeyListener, PropertyChangeListene
 	 * 
 	 */
 	public void propertyChange(PropertyChangeEvent e) {
-		update();	
-		System.out.println("Property Change fired");
+		update();
 	}
 	
 

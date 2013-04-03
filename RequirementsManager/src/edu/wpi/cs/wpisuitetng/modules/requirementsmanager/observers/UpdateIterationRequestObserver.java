@@ -28,16 +28,12 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		System.out.println("Response Success");
 		
 		// cast observable to a Request
 		Request request = (Request) iReq;
 
 		// get the response from the request
 		ResponseModel response = request.getResponse();
-
-		// print the body
-		System.out.println("Received response: " + response.getBody());
 
 		Iteration req = Iteration.fromJSON(response.getBody());
 		IterationDatabase.getInstance().addIteration(req);

@@ -42,8 +42,7 @@ public class MainTabController {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				onChangeTab();	
-				System.out.println("Tab stated has changed");
+				onChangeTab();
 			}
 	    });
 	}

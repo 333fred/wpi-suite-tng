@@ -27,7 +27,6 @@ public class QueryUserController {
 	}
 	
 	public void getUsers() {
-		System.out.println("Getting Called");
 		final RequestObserver requestObserver = new QueryUserRequestObserver(parentView);
 		Request request;
 		request = Network.getInstance().makeRequest(
@@ -35,7 +34,6 @@ public class QueryUserController {
 		request.setBody(new StringListModel().toJSON());
 		request.addObserver(requestObserver);
 		request.send();
-		System.out.println("Made Request");
 	}
 
 }

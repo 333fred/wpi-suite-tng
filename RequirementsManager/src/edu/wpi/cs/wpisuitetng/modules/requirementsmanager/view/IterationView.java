@@ -322,7 +322,6 @@ public class IterationView extends FocusableTab{
 		if (calStartDate.getDate().after(calEndDate.getDate())) {
 			labCalendarError.setText("**Start date must be before End date**");
 			calendarError = true;
-			System.out.println("Yes?");
 		}
 		else if (compareDatesWithoutTime(calStartDate.getDate(), calEndDate.getDate()) == 0) {
 			//dates are equal

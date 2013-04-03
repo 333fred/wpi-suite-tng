@@ -44,7 +44,6 @@ public class CreateHelpPanelAction extends AbstractAction {
 		
 		File input = new File("index.html"); //Html file is our input
 		String path = new String("file:///"+input.getAbsolutePath()); //Grab the url of the path
-		System.out.println(path); //Make sure the path is correct!
 		
 		try {
 			index = new URL(path); //Try to set our index url given the path

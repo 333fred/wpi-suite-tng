@@ -513,7 +513,6 @@ public class DetailPanel extends FocusableTab {
 
 		try {
 			comboBoxIteration.setSelectedItem(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
-			System.out.println(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
 		}

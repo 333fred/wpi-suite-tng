@@ -25,28 +25,27 @@ public class QueryUserRequestObserver implements RequestObserver {
 	public QueryUserRequestObserver(AssigneePanel parentView) {
 		this.parentView = parentView;
 	}
-	
+
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		ResponseModel response = iReq.getResponse();
-		
-		final StringListModel users = StringListModel.fromJson(response.getBody());
-		
-		System.out.println("User List:\n" + users.getUsers());
-		
+
+		final StringListModel users = StringListModel.fromJson(response
+				.getBody());
+
 		this.parentView.setUnassignedUsersList(users);
 	}
 
 	@Override
 	public void responseError(IRequest iReq) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

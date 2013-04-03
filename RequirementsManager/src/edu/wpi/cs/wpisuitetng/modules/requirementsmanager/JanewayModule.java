@@ -24,6 +24,8 @@ import javax.swing.KeyStroke;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
@@ -95,11 +97,12 @@ public class JanewayModule implements IJanewayModule {
 
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
-	 * TODO: Implement This
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
-		//return an empty list of tabs, for now
+		// Start the database threads
+		RequirementDatabase.getInstance().start();
+		IterationDatabase.getInstance().start();
 		return tabs;
 	}
 	

@@ -59,7 +59,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 
 		// Get the id for the new iteration
 		newIteration.setId(Count() + 1);
-		System.out.println("Count " + Count());
 
 		// Validate the new iteration
 		List<ValidationIssue> issues = validator.validate(s, newIteration,
@@ -153,16 +152,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 */
 	@Override
 	public Iteration update(Session s, String content) throws WPISuiteException {
-
-		System.out.println("Update Called");
-		System.out.println(content);
 				
 		// Get updated iterations
 		Iteration updatedIteration = Iteration.fromJSON(content);
 		Iteration oldIteration;
-		
-		System.out.println("Got from JSON");
-		System.out.println(updatedIteration);
 		
 		// Validate the iteration
 		List<ValidationIssue> issues = validator.validate(s, updatedIteration,
@@ -173,8 +166,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			}
 			throw new BadRequestException();
 		}
-
-		System.out.println("Validates, " + issues.size() + " issues");
 		
 		// Attempt to get the old version of the iteration
 		try {
@@ -206,8 +197,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		if (!db.save(oldIteration, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		
-		System.out.println("Requirements Assigned: " + oldIteration.getRequirements());
 
 		return oldIteration;
 	}

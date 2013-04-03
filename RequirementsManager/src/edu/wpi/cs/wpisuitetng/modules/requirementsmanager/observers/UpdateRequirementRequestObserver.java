@@ -36,9 +36,6 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 
 		// get the response from the request
 		ResponseModel response = request.getResponse();
-
-		// print the body
-		System.out.println("Received response: " + response.getBody()); //TODO change this to logger
 		
 		if (this.closeTab) {
 			this.detailPanel.getMainTabController().closeCurrentTab();

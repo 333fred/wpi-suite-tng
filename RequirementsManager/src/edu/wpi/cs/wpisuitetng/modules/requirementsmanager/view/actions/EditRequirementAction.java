@@ -14,6 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequire
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -74,81 +75,87 @@ public class EditRequirementAction extends AbstractAction {
 				&& !parentView.getTextDescription().getText().trim().equals("")) {
 			// Checks to make sure that both the name and descriptions are not
 			// empty, and attempts to save the requirements
-			if (!parentView.getTextName().getText().trim().equals("")
-					&& !parentView.getTextDescription().getText().trim()
-							.equals("")) {
-				requirement.setName(parentView.getTextName().getText().trim());
-				requirement.setDescription(parentView.getTextDescription()
-						.getText());
-				requirement.setUsers(parentView.getAssignedUsers());
+			requirement.setName(parentView.getTextName().getText().trim());
+			requirement.setDescription(parentView.getTextDescription()
+					.getText());
+			requirement.setUsers(parentView.getAssignedUsers());
+
+			try {
+
+				SaveIterationController saveIterationController = new SaveIterationController(
+						parentView);
 
 				try {
-					
-					SaveIterationController saveIterationController = new SaveIterationController(parentView);
-					
-					
-					try {
-						Iteration anIteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
-						anIteration.removeRequirement(requirement.getrUID());
-						saveIterationController.Saveiteration(anIteration);
-					} catch (IterationNotFoundException e1) {
-						e1.printStackTrace();
-					}
-											
-					requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
-					Iteration anIteration = IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString());
-					anIteration.addRequirement(requirement.getrUID());
+					Iteration anIteration = IterationDatabase.getInstance()
+							.getIteration(requirement.getIteration());
+					anIteration.removeRequirement(requirement.getrUID());
 					saveIterationController.Saveiteration(anIteration);
+				} catch (IterationNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (RequirementNotFoundException ex){
+					ex.printStackTrace();
+				}
 
+				requirement.setIteration(IterationDatabase
+						.getInstance()
+						.getIteration(
+								parentView.getTextIteration().getSelectedItem()
+										.toString()).getId());
+				Iteration anIteration = IterationDatabase.getInstance()
+						.getIteration(
+								parentView.getTextIteration().getSelectedItem()
+										.toString());
+				anIteration.addRequirement(requirement.getrUID());
+				saveIterationController.Saveiteration(anIteration);
 
-					try {
-						requirement
-								.setPriority(Priority.valueOf(parentView
-										.getComboBoxPriority()
-										.getSelectedItem().toString()
-										.toUpperCase().replaceAll(" ", "_")));
-					} catch (IllegalArgumentException except) {
-						requirement.setPriority(Priority.BLANK);
-					}
-
-					try {
-						requirement.setType(Type.valueOf(parentView
-								.getComboBoxType().getSelectedItem().toString()
-								.toUpperCase().replaceAll(" ", "_")));
-					} catch (IllegalArgumentException except) {
-						requirement.setType(Type.BLANK);
-					}
-
-					requirement.setStatus(Status.valueOf(parentView
-							.getComboBoxStatus().getSelectedItem().toString()
+				try {
+					requirement.setPriority(Priority.valueOf(parentView
+							.getComboBoxPriority().getSelectedItem().toString()
 							.toUpperCase().replaceAll(" ", "_")));
+				} catch (IllegalArgumentException except) {
+					requirement.setPriority(Priority.BLANK);
+				}
 
-					try {
-						requirement.setEstimate(Integer.parseInt(parentView
-								.getTextEstimate().getText()));
-					} catch (NumberFormatException except) {
-						// not necessary to do anything
-					}
+				try {
+					requirement.setType(Type.valueOf(parentView
+							.getComboBoxType().getSelectedItem().toString()
+							.toUpperCase().replaceAll(" ", "_")));
+				} catch (IllegalArgumentException except) {
+					requirement.setType(Type.BLANK);
+				}
 
-					controller.SaveRequirement(requirement, true);
+				requirement.setStatus(Status.valueOf(parentView
+						.getComboBoxStatus().getSelectedItem().toString()
+						.toUpperCase().replaceAll(" ", "_")));
+
+				try {
+					requirement.setEstimate(Integer.parseInt(parentView
+							.getTextEstimate().getText()));
 				} catch (NumberFormatException except) {
-					parentView
-							.displaySaveError("Iteration must be an integer value");
+					// not necessary to do anything
 				}
-			} else {
-				if (parentView.getTextName().getText().trim().equals("")) {
-					parentView.getTextName().setBackground(
-							new Color(243, 243, 209));
-					parentView.getTextNameValid().setText(
-							"** Field must be non-blank **");
-				}
-				if (parentView.getTextDescription().getText().trim().equals("")) {
-					parentView.getTextDescription().setBackground(
-							new Color(243, 243, 209));
-					parentView.getTextDescriptionValid().setText(
-							"** Field must be non-blank **");
 
-				}
+				controller.SaveRequirement(requirement, true);
+			} catch (NumberFormatException except) {
+				parentView
+						.displaySaveError("Iteration must be an integer value");
+			} catch (RequirementNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} else {
+			if (parentView.getTextName().getText().trim().equals("")) {
+				parentView.getTextName()
+						.setBackground(new Color(243, 243, 209));
+				parentView.getTextNameValid().setText(
+						"** Field must be non-blank **");
+			}
+			if (parentView.getTextDescription().getText().trim().equals("")) {
+				parentView.getTextDescription().setBackground(
+						new Color(243, 243, 209));
+				parentView.getTextDescriptionValid().setText(
+						"** Field must be non-blank **");
+
 			}
 		}
 	}

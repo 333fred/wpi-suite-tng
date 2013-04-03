@@ -46,12 +46,10 @@ public class IterationTreeView extends JPanel implements IRetreivedAllIterations
 		this.add(treeView, BorderLayout.CENTER);
 		
 		//fetch the iterations from the server
-		System.out.println("QUEEEEEEEEEEE?!~!!!");
 		getIterationsFromServer();
 	}
 
 	public void refresh() {
-		System.out.print("Refreshing tree\n");
 		
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
@@ -65,7 +63,6 @@ public class IterationTreeView extends JPanel implements IRetreivedAllIterations
 			//this.tree.setCellRenderer(renderer);
 			
 			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
-			System.out.println(anIteration.getName());
 
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
@@ -85,14 +82,11 @@ public class IterationTreeView extends JPanel implements IRetreivedAllIterations
 
 	public void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
-		System.out.println("~~~~We are getting iterations from the server");
 	}
 
 	@Override
 	public void receivedData(Iteration[] iterations) {
-		refresh();
-		System.out.println("Iteration Tree view, we received stuff from the server");
-		
+		refresh();		
 	}
 
 	@Override

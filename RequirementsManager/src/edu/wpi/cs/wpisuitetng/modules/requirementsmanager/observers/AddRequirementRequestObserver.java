@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
@@ -48,9 +49,6 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 		// get the response from the request
 		ResponseModel response = request.getResponse();
-
-		// print the body
-		System.out.println("Received response: " + response.getBody());
 		
 		RequirementDatabase.getInstance().addRequirement(Requirement.fromJSON(response.getBody()));
 
@@ -66,9 +64,13 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 			// make sure the requirement isn't null
 			if (requirement != null) {
-				//System.out.println("New R ID" + requirement.getrUID());
 				Iteration anIteration = IterationDatabase.getInstance().getIteration(detailPanel.getTextIteration().getSelectedItem().toString());
-				anIteration.addRequirement(requirement.getrUID());
+				try {
+					anIteration.addRequirement(requirement.getrUID());
+				} catch (RequirementNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				saveIterationController.Saveiteration(anIteration);		
 				
 				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
