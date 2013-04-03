@@ -293,7 +293,7 @@ public class DetailPanel extends FocusableTab {
 		
 		comboBoxIteration = new JComboBox(availableIterations);
 		comboBoxIteration.setName("Iteration");
-		comboBoxIteration.setPrototypeDisplayValue("Backlog");
+		comboBoxIteration.setPrototypeDisplayValue("Non-Functional");
 		comboBoxIteration.setBackground(Color.WHITE);
 		mainPanel.add(comboBoxIteration);
 		
