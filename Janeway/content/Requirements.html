@@ -13,7 +13,8 @@ Requirements have a list of users assigned to them, and are worked on as request
 
 </p>
 </pre>
-<img src="../images/NewReq.png"> </img>
+<a href="javascript:showVis('2', '1')"><img src="../images/NewReq.png" id="1" width="25%" height="25%"> </img></a>
+<a href="javascript:showVis('1', '2')"><img src="../images/NewReq.png" id="2" width="60%" height="60%"style="display:none"> </img></a>
 <hr />
 <li><a href="../pages/main.html">Back</a></li>
 <li><a href="../content/addRequirement.html" target="mainFrame">Adding a Requirement</a></li>
@@ -21,5 +22,12 @@ Requirements have a list of users assigned to them, and are worked on as request
 <li><a href="../content/notelogusers.html" target="mainFrame">Notes, logs, and users</a></li>
 <br>
 </body>
-<img src="../images/swagasaurus.png" alt="rawr"> </img>
 </html>
+
+<script type="text/javascript">
+function showVis(id1, id2) {
+	//Alternates an image from visible/invisible
+    document.getElementById(id1).style.display = "";
+    document.getElementById(id2).style.display = "none";
+}
+</script>
