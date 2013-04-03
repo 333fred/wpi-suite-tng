@@ -18,6 +18,7 @@ import javax.swing.tree.TreePath;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
@@ -212,10 +213,18 @@ class TreeTransferHandler extends TransferHandler {
 			} catch (IterationNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (RequirementNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
             
 			Iteration anIteration = IterationDatabase.getInstance().getIteration(nodes[i].getParent().toString());
-			anIteration.addRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
+			try {
+				anIteration.addRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
+			} catch (RequirementNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			saveIterationController.Saveiteration(anIteration);
 			
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(nodes[i].toString());

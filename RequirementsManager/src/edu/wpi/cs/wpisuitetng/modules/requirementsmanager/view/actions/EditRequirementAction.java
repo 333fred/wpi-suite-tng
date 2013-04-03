@@ -14,6 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequire
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -93,6 +94,9 @@ public class EditRequirementAction extends AbstractAction {
 						saveIterationController.Saveiteration(anIteration);
 					} catch (IterationNotFoundException e1) {
 						e1.printStackTrace();
+					} catch (RequirementNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 											
 					requirement.setIteration(IterationDatabase.getInstance().getIteration(parentView.getTextIteration().getSelectedItem().toString()).getId());
@@ -134,6 +138,9 @@ public class EditRequirementAction extends AbstractAction {
 				} catch (NumberFormatException except) {
 					parentView
 							.displaySaveError("Iteration must be an integer value");
+				} catch (RequirementNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			} else {
 				if (parentView.getTextName().getText().trim().equals("")) {
