@@ -13,7 +13,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -32,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
@@ -58,7 +58,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  */
 @SuppressWarnings("serial")
 public class RequirementTableView extends JPanel implements TabFocusListener,
-		IToolbarGroupProvider, IDatabaseListener {
+		IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier {
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
@@ -102,7 +102,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		// register this listener to the Database
 		RequirementDatabase.getInstance().registerListener(this);
 		retreiveAllIterationsController = new RetrieveAllIterationsController();
-		retreiveAllRequirementsController = new RetrieveAllRequirementsController();
+		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
 		// init the toolbar group
 		initializeToolbarGroup();
 
@@ -392,6 +392,19 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	public boolean shouldRemove() {
 		//this listener should persist
 		return false;
+	}
+
+	@Override
+	public void receivedData(Requirement[] requirements) {
+		this.requirements = requirements;
+		updateListView();
+		
+	}
+
+	@Override
+	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
+
+		
 	}
 
 }

@@ -25,6 +25,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -32,9 +33,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabas
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 @SuppressWarnings("serial")
-public class IterationTreeView extends JPanel implements IDatabaseListener  {
+public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier  {
 	
 	private JTree tree;
 	private DefaultMutableTreeNode top;
@@ -48,7 +50,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 		super(new BorderLayout());
 
 		retrieveAllIterationsController = new RetrieveAllIterationsController();
-		retrieveAllRequirementsController = new RetrieveAllRequirementsController();
+		retrieveAllRequirementsController = new RetrieveAllRequirementsController(this);
 		
 		firstPaint = true;
 		
@@ -118,10 +120,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 	}
 
 	/** Called when there was a change in iterations in the local database 
+	 * TODO: Unimplement this for now
 	 */
 	
 	public void update() {
-		refresh();		
+		//refresh();		
 	}
 
 	/** This listener should persist
@@ -144,5 +147,16 @@ public class IterationTreeView extends JPanel implements IDatabaseListener  {
 			getRequirementsFromServer();
 			getIterationsFromServer();
 		}
+	}
+
+	@Override
+	public void receivedData(Requirement[] requirements) {
+		refresh();		
+	}
+
+	@Override
+	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
+		System.out.println("IterationTeamView: Error receiving requirements from server");
+		
 	}
 }
