@@ -299,23 +299,40 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	 * @return The currently selected iterations
 	 */
 	
-	public Iteration[] getSelectedIterations() {
+	public List<Iteration> getSelectedIterations() {
 		int[] selectedIndexes = tree.getSelectionRows();
+		TreePath[] paths = tree.getSelectionPaths();
+
 		
 		if (selectedIndexes == null) {
-			return new Iteration[0];
+			return new ArrayList<Iteration>();
 		}
 		
-		Iteration[] selectedIterations = new  Iteration[selectedIndexes.length];
+		//Iteration[] selectedIterations = new  Iteration[selectedIndexes.length];
+		List<Iteration> selectedIterations = new ArrayList<Iteration>();
 		
-		for (int i=0;i<selectedIterations.length;i++) {
-			if (selectedIndexes[i] == 0) {
-				selectedIterations[i] = null;
-				continue;
+		for (TreePath path : paths) {
+			//f (((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel() != 2) {
+			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != 1) {
+				continue; //thing selected was not an iteration
 			}
-			selectedIterations[i] = iterations.get(selectedIndexes[i] - 1);
+			String iterationName = path.getLastPathComponent().toString();
+			Iteration toAdd = getIterationFromName(iterationName);
+			if (iterationName.equals("Backlog") || toAdd == null) {
+				continue; //either iteration was not found, or user tried to open backlog
+			}
+			selectedIterations.add(toAdd);
 		}
 		return selectedIterations;
 		
+	}
+	
+	private Iteration getIterationFromName(String name) {
+		for (Iteration i : iterations) {
+			if (i.getName().equals(name)) {
+				return i;
+			}
+		}
+		return null;
 	}
 }

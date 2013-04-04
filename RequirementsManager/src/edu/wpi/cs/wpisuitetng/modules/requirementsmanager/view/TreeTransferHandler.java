@@ -18,7 +18,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
