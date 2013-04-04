@@ -244,7 +244,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		for (int i = 0; i < requirements.length; i++) {
 			Vector<String> row = new Vector<String>();
 			row.addElement(requirements[i].getName());
-			row.addElement(requirements[i].getType().equals(Type.BLANK) ? "" : requirements[i].getType().toString().substring(0,1).concat(requirements[i].getType().toString().substring(1).toLowerCase()).replaceAll("_s", " S"));
+			row.addElement(requirements[i].getType().equals(Type.BLANK) ? "" : requirements[i].getType().toString().substring(0,1).concat(requirements[i].getType().toString().substring(1).toLowerCase()).replaceAll("_s", " S").replaceAll("_f", " F"));
 			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? "" : requirements[i].getPriority().toString().substring(0,1).concat(requirements[i].getPriority().toString().substring(1).toLowerCase()));
 			row.addElement(requirements[i].getStatus().equals(Status.BLANK) ? "" : requirements[i].getStatus().toString().substring(0,1).concat(requirements[i].getStatus().toString().substring(1).toLowerCase()).replaceAll("_p", " P"));
 			try {
