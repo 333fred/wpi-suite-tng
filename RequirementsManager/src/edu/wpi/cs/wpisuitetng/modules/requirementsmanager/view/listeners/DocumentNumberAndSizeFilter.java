@@ -10,7 +10,7 @@
  *    Alex Chen
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners;
 
 import java.awt.Toolkit;
 
