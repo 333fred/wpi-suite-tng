@@ -12,28 +12,23 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockNetwork;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockRequest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
-import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class RequirementControllerTest {
 
@@ -67,7 +62,7 @@ public class RequirementControllerTest {
 		r1 = new Requirement();		
 		Network.initNetwork(new MockNetwork());
 		Network.getInstance().setDefaultNetworkConfiguration(new NetworkConfiguration("http://wpisuitetng"));
-		view = new DetailPanel(r1, new MainTabController(new MainTabView()));
+		view = new DetailPanel(r1, new MainTabController(new MainTabView(), new IterationTreeView()));
 		view2 = new AssigneePanel(r1, view);
 		controller = new AddRequirementController(view);
 		controller2 = new SaveRequirementController(view);

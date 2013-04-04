@@ -300,6 +300,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		// retreive a new copy of requirements, and update the list view
 		getRequirementsFromServer();
 		getIterationsFromServer();
+		tabController.refreshIterationTree();
 	}
 
 	/**
