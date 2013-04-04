@@ -27,6 +27,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
@@ -57,8 +58,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
             System.out.println("ClassNotFound: " + e.getMessage());
         }
     }
-
-   
+  
     
    public boolean canImport(TransferHandler.TransferSupport support) {
         if(!support.isDrop()) {
@@ -94,6 +94,10 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
        //Do not allow dropping of iterations into iterations
        if (firstNode.getLevel() == 1) {
        	return false;
+       }
+       //Do not allow dropping of deleted iterations
+       if (RequirementDatabase.getInstance().getRequirement(firstNode.toString()).getStatus() == Status.DELETED) {
+    	   return false;
        }
         // Do not allow MOVE-action drops if a non-leaf node is
         // selected unless all of its children are also selected.
