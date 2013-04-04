@@ -146,7 +146,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addRequirementsTab() {
-		RequirementTableView requirementListView = new RequirementTableView(this);
+		RequirementTableView requirementListView = RequirementTableView.getInstance(this);
 
 		return addUnclosableTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
 	}

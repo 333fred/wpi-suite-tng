@@ -61,6 +61,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
 @SuppressWarnings("serial")
 public class RequirementTableView extends JPanel implements TabFocusListener,
 		IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+	
+	private static RequirementTableView tv;
+	
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
@@ -97,7 +100,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	 * 
 	 */
 	@SuppressWarnings("rawtypes")
-	public RequirementTableView(MainTabController tabController) {
+	private RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
 		
 		firstPaint = false;
@@ -169,6 +172,17 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 	}
 
+	public static RequirementTableView getInstance(MainTabController tabController) {
+		if (tv == null) {
+			tv = new RequirementTableView(tabController);
+		}
+		return tv;
+	}
+	
+	public static RequirementTableView getInstance() {
+		return tv;
+	}	
+	
 	/*
 	 * @author Steve Kordell
 	 */
