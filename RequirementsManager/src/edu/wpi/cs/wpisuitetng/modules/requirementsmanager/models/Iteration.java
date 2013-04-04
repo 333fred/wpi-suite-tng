@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationComparator;
 
 /**
  * Class representing an iteration of a project
@@ -360,6 +362,12 @@ public class Iteration extends AbstractModel {
 		
 		return estimate;
 		
+	}
+	
+	
+	public static List<Iteration> sortIterations(List<Iteration> iterations) {	
+		Collections.sort(iterations, new IterationComparator());
+		return iterations;
 	}
 	
 }

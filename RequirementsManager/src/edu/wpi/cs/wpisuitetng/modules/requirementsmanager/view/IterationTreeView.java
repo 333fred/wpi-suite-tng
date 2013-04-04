@@ -175,6 +175,10 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
 		//iterations = IterationDatabase.getInstance().getAllIterations();
+		
+		//sort the iterations
+		iterations = Iteration.sortIterations(iterations);
+		
 		for (Iteration anIteration : iterations) {
 			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
 

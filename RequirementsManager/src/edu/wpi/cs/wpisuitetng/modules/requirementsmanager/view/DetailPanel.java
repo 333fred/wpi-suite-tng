@@ -18,7 +18,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -281,7 +280,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		comboBoxPriority.addItemListener(comboBoxPriorityListener);
 				
 		List<Iteration> iterationList = IterationDatabase.getInstance().getAllIterations();
-		iterationList = sortIterations(iterationList);
+		iterationList = Iteration.sortIterations(iterationList);
 		
 		int availableIterationNum = 0;
 		int currentAvailableIterationIndex = 0;
@@ -948,10 +947,6 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		
 	}
 	
-	public static List<Iteration> sortIterations(List<Iteration> iterations) {	
-		Collections.sort(iterations, new IterationComparator());
-		return iterations;
-	}
 	/**
 	 * @return the requirement
 	 */
