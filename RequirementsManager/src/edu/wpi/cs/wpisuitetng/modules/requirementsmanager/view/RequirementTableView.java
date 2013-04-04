@@ -122,8 +122,8 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		columnNames.addElement("Priority");
 		columnNames.addElement("Status");
 		columnNames.addElement("Iteration");
-		columnNames.addElement("Effort");
 		columnNames.addElement("Estimate");
+		columnNames.addElement("Effort");
 		columnNames.addElement("Release Number");
 
 		this.rowData = new Vector<Vector>();
@@ -252,8 +252,8 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			} catch (IterationNotFoundException e) {
 				row.addElement("Iteration Not Found");
 			}
-			row.addElement(String.valueOf(requirements[i].getEffort()));
 			row.addElement(String.valueOf(requirements[i].getEstimate()));
+			row.addElement(String.valueOf(requirements[i].getEffort()));
 			row.addElement((requirements[i].getReleaseNum()));
 			this.rowData.add(row);
 		}
