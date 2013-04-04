@@ -68,7 +68,7 @@ public class SaveRequirementAction extends AbstractAction {
 			requirement.setName(parentView.getTextName().getText().trim());
 			requirement.setDescription(parentView.getTextDescription().getText());
 			requirement.setUsers(parentView.getAssignedUsers());
-	//		requirement.setReleaseNum(parentView.getTextRelease().getText());
+			requirement.setReleaseNum(parentView.getTextRelease().getText());
 			
 			try {
 				requirement.setIteration(-1);
