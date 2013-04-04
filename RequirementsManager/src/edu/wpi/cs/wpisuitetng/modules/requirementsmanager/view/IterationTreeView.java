@@ -181,7 +181,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 			}
 			this.top.add(iterationNode);
 		}
-		this.tree.updateUI();
+		((DefaultTreeModel)this.tree.getModel()).nodeStructureChanged(this.top);
 		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)this.tree.getCellRenderer();
 		renderer.setLeafIcon(null);
 		this.tree.setCellRenderer(renderer);
