@@ -150,6 +150,7 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		
 		//this text field will always be disabled, as you cant edit it
 		txtEstimate.setEnabled(false);
+		txtEstimate.setOpaque(false);
 		txtEstimate.setDisabledTextColor(Color.BLACK);
 		
 		

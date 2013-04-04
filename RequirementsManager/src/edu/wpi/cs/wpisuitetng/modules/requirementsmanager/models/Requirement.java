@@ -41,7 +41,7 @@ public class Requirement extends AbstractModel {
 	private Status status;
 	private Priority priority;
 	// Date and scheduling attributes
-	private int releaseNum; // TODO: Implement Releases
+	private String releaseNum; // TODO: Implement Releases
 	private int iteration; 
 	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
@@ -70,7 +70,7 @@ public class Requirement extends AbstractModel {
 		type = Type.BLANK;
 		status = Status.BLANK;
 		priority = Priority.BLANK;
-		releaseNum = 0;
+		releaseNum = "";
 		iteration = -1;
 		estimate = 0;
 		effort = 0;
@@ -110,7 +110,7 @@ public class Requirement extends AbstractModel {
 	 * @param pUID
 	 *            A list of parent requirements
 	 */
-	public Requirement(String name, String description, int releaseNum,
+	public Requirement(String name, String description, String releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
 			int iteration, int estimate, int effort, List<String> assignees,
 			List<Integer> pUID, List<Task> tasks) {
@@ -258,7 +258,7 @@ public class Requirement extends AbstractModel {
 	/**
 	 * @return the releaseNum
 	 */
-	public int getReleaseNum() {
+	public String getReleaseNum() {
 		return releaseNum;
 	}
 
@@ -266,7 +266,7 @@ public class Requirement extends AbstractModel {
 	 * @param releaseNum
 	 *            the releaseNum to set
 	 */
-	public void setReleaseNum(int releaseNum) {
+	public void setReleaseNum(String releaseNum) {
 		this.releaseNum = releaseNum;
 	}
 

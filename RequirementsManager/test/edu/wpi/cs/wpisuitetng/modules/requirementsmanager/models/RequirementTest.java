@@ -37,7 +37,7 @@ public class RequirementTest {
 	
 	String name = "name";
 	String name2 = "name2";
-	int rUID; 
+	String releaseNum; 
 	String description;
 	Type type;
 	Status status;
@@ -54,9 +54,9 @@ public class RequirementTest {
 	
 	@Before
 	public void setUp() {
-		r1 = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, estimate, effort, assignees, pUID, tasks);
-		r1copy = new Requirement(name, description, rUID, type, subRequirements, notes, iteration, estimate, effort, assignees, pUID, tasks);
-		r2 = new Requirement(name2, description, rUID, type, subRequirements, notes, iteration, estimate, effort, assignees, pUID, tasks);
+		r1 = new Requirement(name, description, releaseNum, type, subRequirements, notes, iteration, estimate, effort, assignees, pUID, tasks);
+		r1copy = new Requirement(name, description, releaseNum, type, subRequirements, notes, iteration, estimate, effort, assignees, pUID, tasks);
+		r2 = new Requirement(name2, description, releaseNum, type, subRequirements, notes, iteration, estimate, effort, assignees, pUID, tasks);
 		project = new Project("test", "1");
 	}
 	
@@ -64,7 +64,6 @@ public class RequirementTest {
 	public void testIdentify() {
 		assertTrue(r1.identify(r1));
 		assertTrue(r1.identify(r1copy));
-		assertTrue(r1.identify(rUID));
 		assertFalse(r1.identify(new Object()));
 		assertFalse(r1.identify(null));
 	}
@@ -105,8 +104,8 @@ public class RequirementTest {
 	
 	@Test
 	public void testSetreleaseNum() {
-		r1.setReleaseNum(1);
-		assertEquals(1,r1.getReleaseNum());
+		r1.setReleaseNum("1");
+		assertEquals("1",r1.getReleaseNum());
 	}
 	
 	@Test

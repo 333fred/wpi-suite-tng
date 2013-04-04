@@ -254,7 +254,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			}
 			row.addElement(String.valueOf(requirements[i].getEffort()));
 			row.addElement(String.valueOf(requirements[i].getEstimate()));
-			row.addElement(String.valueOf(requirements[i].getReleaseNum()));
+			row.addElement((requirements[i].getReleaseNum()));
 			this.rowData.add(row);
 		}
 	}

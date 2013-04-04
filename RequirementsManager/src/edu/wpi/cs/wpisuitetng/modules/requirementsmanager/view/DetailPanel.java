@@ -65,7 +65,9 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	private JTextField textEstimate;
 
 	private JTextField textActual;
-	private JTextArea textRelease;
+
+	private JTextField textRelease;
+
 	JTextArea saveError;
 
 	// combo boxes
@@ -97,7 +99,9 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	protected final ItemStateListener comboBoxIterationListener;
 	
 	protected final TextUpdateListener textEstimateListener;
-
+	protected final TextUpdateListener textActualListener;
+	protected final TextUpdateListener textReleaseListener;
+	
 	// swing constants
 	private static final int VERTICAL_PADDING = 10;
 	private static final int VERTICAL_CLOSE = -5;
@@ -150,6 +154,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
 		textName.setName("Name");
+		textName.setDisabledTextColor(Color.GRAY);
 		mainPanel.add(textName);
 		
 
@@ -192,6 +197,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		textDescription.setWrapStyleWord(true);
 		textDescription.setBorder((new JTextField()).getBorder());
 		textDescription.setName("Description");
+		textDescription.setDisabledTextColor(Color.GRAY);
 		scroll = new JScrollPane(textDescription);
 		
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -292,7 +298,6 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 			//or the iteration is this requirement's current iteration,
 			//or it is the backlog, add it to the list
 			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1){
-				System.out.println("WHAT" +currentAvailableIterationIndex + iterationList.size());
 				availableIterations[currentAvailableIterationIndex] = iteration.getName();
 				currentAvailableIterationIndex++;
 			}
@@ -365,11 +370,14 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 			}
 		});
 		
-		textRelease = new JTextArea(1,9);
+		// Add TextUpdateListeners,
+		textActualListener = new TextUpdateListener(this, textActual, null);
+		textActual.addKeyListener(textActualListener);
+		
+		textRelease = new JTextField(9);
 		textRelease.setBorder((new JTextField()).getBorder());
-		textRelease.setEnabled(false); // DISABLE THIS ITERATION
-		textRelease.setBackground(defaultColor);
 		textRelease.setName("Release");
+		textRelease.setMaximumSize(textRelease.getPreferredSize());
 		textRelease.setDisabledTextColor(Color.GRAY);
 		mainPanel.add(textRelease);
 		
@@ -391,6 +399,9 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 				}
 			}
 		});
+		
+		textReleaseListener = new TextUpdateListener(this, textRelease, null);
+		textRelease.addKeyListener(textReleaseListener);
 		
 		btnSave = new JButton("Save Requirement");
 		mainPanel.add(btnSave);
@@ -524,6 +535,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		textName.setText(getRequirement().getName());
 		textDescription.setText(getRequirement().getDescription());
 		textEstimate.setText(Integer.toString(getRequirement().getEstimate()));
+		textActual.setText(Integer.toString(getRequirement().getEffort()));
+		textRelease.setText(getRequirement().getReleaseNum());
 
 		try {
 			comboBoxIteration.setSelectedItem(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
@@ -863,6 +876,32 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		return this.comboBoxIteration;
 	}
 	
+	/**
+	 * @return the textRelease
+	 */
+	public JTextField getTextRelease() {
+		return textRelease;
+	}
+	/**
+	 * @param textRelease the textRelease to set
+	 */
+	public void setTextRelease(JTextField textRelease) {
+		this.textRelease = textRelease;
+	}
+	
+	/**
+	 * @return the textActual
+	 */
+	public JTextField getTextActual() {
+		return textActual;
+	}
+	/**
+	 * @param textActual the textActual to set
+	 */
+	public void setTextActual(JTextField textActual) {
+		this.textActual = textActual;
+	}
+	
 	public void disableSaveButton() {
 		this.btnSave.setEnabled(false);
 	}
@@ -888,16 +927,16 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 			return;
 		textName.setEnabled(false);
 		textName.setBackground(defaultColor);
-		textName.setDisabledTextColor(Color.GRAY);
 		textDescription.setEnabled(false);
 		textDescription.setBackground(defaultColor);
-		textDescription.setDisabledTextColor(Color.GRAY);
 		comboBoxIteration.setEnabled(false);
 		comboBoxIteration.setBackground(defaultColor);
 		textRelease.setEnabled(false);
+		textRelease.setBackground(defaultColor);
 		textEstimate.setEnabled(false);
 		textEstimate.setBackground(defaultColor);
 		textActual.setEnabled(false);
+		textActual.setBackground(defaultColor);
 		
 		comboBoxType.setEnabled(false);
 		comboBoxPriority.setEnabled(false);
