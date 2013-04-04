@@ -64,7 +64,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		
 	    this.tree.setTransferHandler(new TreeTransferHandler());
-	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
+	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	   
 		
 		JScrollPane treeView = new JScrollPane(tree);

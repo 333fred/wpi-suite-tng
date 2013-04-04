@@ -6,6 +6,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -68,6 +69,8 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 		} else {
 			//Display Error
 		}*/
+		
+		RequirementTableView.getInstance().refresh();
 	}
 
 	/* (non-Javadoc)

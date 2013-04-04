@@ -51,7 +51,6 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier{
         if(!support.isDrop()) {
             return false;
         }
-                
         support.setShowDropLocation(true);
         if(!support.isDataFlavorSupported(nodesFlavor)) {
             return false;
