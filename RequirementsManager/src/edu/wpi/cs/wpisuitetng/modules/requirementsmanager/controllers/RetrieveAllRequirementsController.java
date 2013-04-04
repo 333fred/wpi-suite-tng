@@ -26,8 +26,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 public class RetrieveAllRequirementsController {
 	
 	protected Requirement[] data;
+	private IReceivedAllRequirementNotifier notifier;
 	
-	public RetrieveAllRequirementsController(){
+	public RetrieveAllRequirementsController(IReceivedAllRequirementNotifier notifier){
+		this.notifier = notifier;
 	}
 	
 	/**
@@ -48,7 +50,7 @@ public class RetrieveAllRequirementsController {
 	 * @param requirements an array of requirements returned by the server
 	 */
 	public void receivedData(Requirement[] requirements){
-		//You have the requirements, so here somehow update your view to display them
+		notifier.receivedData(requirements);
 	}
 	
 	/**
@@ -56,5 +58,6 @@ public class RetrieveAllRequirementsController {
 	 * error occurs retrieving the requirements from the server.
 	 */
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
+		notifier.errorReceivingData(RetrieveAllRequirementsRequestObserver);
 	}
 }

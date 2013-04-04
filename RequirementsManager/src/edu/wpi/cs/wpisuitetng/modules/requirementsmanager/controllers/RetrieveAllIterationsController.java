@@ -32,7 +32,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class RetrieveAllIterationsController {
 	
-	public RetrieveAllIterationsController() {
+	private IRetreivedAllIterationsNotifier notifier;
+	
+	public RetrieveAllIterationsController(IRetreivedAllIterationsNotifier notifier) {
+		this.notifier = notifier;
 	}
 	
 	/**
@@ -53,6 +56,7 @@ public class RetrieveAllIterationsController {
 	 * @param iterations an array of iterations returned by the server
 	 */
 	public void receivedData(Iteration[] iterations){
+		notifier.receivedData(iterations);
 	}
 	
 	/**
@@ -60,6 +64,6 @@ public class RetrieveAllIterationsController {
 	 * error occurs retrieving the iterations from the server.
 	 */
 	public void errorReceivingData(String error) {
-
+		notifier.errorReceivingData(error);
 	}
 }

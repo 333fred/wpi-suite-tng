@@ -11,6 +11,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
@@ -28,14 +29,18 @@ public class MainTabController {
 	
 	/** The MainTabView that this controller manages */
 	private final MainTabView tabView;
+	
+	/** The iteration tree view that is displayed accross this module */
+	private IterationTreeView iterationTreeView;
 
 	/** Creates a new instance of TabController to manage the specified view
 	 * 
 	 * @param tabView The view to manage
 	 */
 	
-	public MainTabController(MainTabView tabView) {
+	public MainTabController(MainTabView tabView, IterationTreeView iterationTreeView) {
 		this.tabView = tabView;
+		this.iterationTreeView = iterationTreeView;
 		
 		
 	    tabView.addChangeListener(new ChangeListener() {
@@ -53,6 +58,7 @@ public class MainTabController {
 	 */
 	
 	private void onChangeTab() {
+		refreshIterationTree();
 		Component selectedComponent = tabView.getSelectedComponent();
 		if (selectedComponent instanceof TabFocusListener) {
 			TabFocusListener listener = (TabFocusListener) selectedComponent;
@@ -71,6 +77,7 @@ public class MainTabController {
 	 */
 	
 	public Tab addTab(String title, Icon icon, Component component, String tip) {
+		refreshIterationTree();
 		tabView.addTab(title,icon, component,tip); // add the tab to the TabView
 		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
 		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
@@ -190,6 +197,10 @@ public class MainTabController {
 
 	public MainTabView getTabView() {
 		return tabView;
+	}
+	
+	public void refreshIterationTree() {
+		iterationTreeView.refresh();
 	}
 	
 }
