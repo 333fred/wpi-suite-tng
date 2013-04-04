@@ -15,6 +15,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
@@ -24,8 +25,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
+
 @SuppressWarnings("serial")
-class TreeTransferHandler extends TransferHandler {
+class TreeTransferHandler extends TransferHandler implements ISaveNotifier{
     DataFlavor nodesFlavor;
     DataFlavor[] flavors = new DataFlavor[1];
     DefaultMutableTreeNode[] nodesToRemove;
@@ -43,17 +45,19 @@ class TreeTransferHandler extends TransferHandler {
         }
     }
 
-    public boolean canImport(TransferHandler.TransferSupport support) {
+   
+    
+   public boolean canImport(TransferHandler.TransferSupport support) {
         if(!support.isDrop()) {
             return false;
         }
+                
         support.setShowDropLocation(true);
         if(!support.isDataFlavorSupported(nodesFlavor)) {
             return false;
         }
         // Do not allow a drop on the drag source selections.
-        JTree.DropLocation dl =
-                (JTree.DropLocation)support.getDropLocation();
+        JTree.DropLocation dl = (JTree.DropLocation)support.getDropLocation();
         JTree tree = (JTree)support.getComponent();
         int dropRow = tree.getRowForPath(dl.getPath());
         int[] selRows = tree.getSelectionRows();
@@ -62,23 +66,28 @@ class TreeTransferHandler extends TransferHandler {
                 return false;
             }
         }
+        // Do not allow a non-leaf node to be copied to a level
+        // which is less than its source level.
+        TreePath dest = dl.getPath();
+        DefaultMutableTreeNode target = (DefaultMutableTreeNode)dest.getLastPathComponent();
+        TreePath path = tree.getPathForRow(selRows[0]);
+        DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode)path.getLastPathComponent();
+        if(firstNode.getChildCount() > 0 && target.getLevel() < firstNode.getLevel()) {
+            return false;
+        }
+        //Do not allowing dropping requirements into requirements
+       if (target.getLevel() != 1) {
+        	return false;
+        }
+       //Do not allow dropping of iterations into iterations
+       if (firstNode.getLevel() == 1) {
+       	return false;
+       }
         // Do not allow MOVE-action drops if a non-leaf node is
         // selected unless all of its children are also selected.
         int action = support.getDropAction();
         if(action == MOVE) {
             return haveCompleteNode(tree);
-        }
-        // Do not allow a non-leaf node to be copied to a level
-        // which is less than its source level.
-        TreePath dest = dl.getPath();
-        DefaultMutableTreeNode target =
-            (DefaultMutableTreeNode)dest.getLastPathComponent();
-        TreePath path = tree.getPathForRow(selRows[0]);
-        DefaultMutableTreeNode firstNode =
-            (DefaultMutableTreeNode)path.getLastPathComponent();
-        if(firstNode.getChildCount() > 0 &&
-               target.getLevel() < firstNode.getLevel()) {
-            return false;
         }
         return true;
     }
@@ -86,12 +95,11 @@ class TreeTransferHandler extends TransferHandler {
     private boolean haveCompleteNode(JTree tree) {
         int[] selRows = tree.getSelectionRows();
         TreePath path = tree.getPathForRow(selRows[0]);
-        DefaultMutableTreeNode first =
-            (DefaultMutableTreeNode)path.getLastPathComponent();
+        DefaultMutableTreeNode first = (DefaultMutableTreeNode)path.getLastPathComponent();
         int childCount = first.getChildCount();
         // first has children and no children are selected.
         if(childCount > 0 && selRows.length == 1)
-            return false;
+            return false;        
         // first may have children.
         for(int i = 1; i < selRows.length; i++) {
             path = tree.getPathForRow(selRows[i]);
@@ -125,8 +133,7 @@ class TreeTransferHandler extends TransferHandler {
             copies.add(copy);
             toRemove.add(node);
             for(int i = 1; i < paths.length; i++) {
-                DefaultMutableTreeNode next =
-                    (DefaultMutableTreeNode)paths[i].getLastPathComponent();
+                DefaultMutableTreeNode next = (DefaultMutableTreeNode)paths[i].getLastPathComponent();
                 // Do not allow higher level nodes to be added to list.
                 if(next.getLevel() < node.getLevel()) {
                     break;
@@ -158,12 +165,7 @@ class TreeTransferHandler extends TransferHandler {
             DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
             // Remove nodes saved in nodesToRemove in createTransferable.
             for(int i = 0; i < nodesToRemove.length; i++) {
-                model.removeNodeFromParent(nodesToRemove[i]);
-                
-                SaveIterationController saveIterationController = new SaveIterationController(null);
-                
-    			//System.out.println("Node to remove:"+nodesToRemove[i].toString());
-                                
+                model.removeNodeFromParent(nodesToRemove[i]);                                
             }
         }
     }
@@ -204,7 +206,7 @@ class TreeTransferHandler extends TransferHandler {
         for(int i = 0; i < nodes.length; i++) {
             model.insertNodeInto(nodes[i], parent, index++);
             
-            SaveIterationController saveIterationController = new SaveIterationController(null);
+            SaveIterationController saveIterationController = new SaveIterationController(this);
             			        
 			try {
 				Iteration anIteration = IterationDatabase.getInstance().getIteration(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getIteration());
@@ -261,4 +263,23 @@ class TreeTransferHandler extends TransferHandler {
             return nodesFlavor.equals(flavor);
         }
     }
+
+	@Override
+	public void responseSuccess() {
+		// TODO Auto-generated method stub
+	}
+
+
+
+	@Override
+	public void responseError(int statusCode, String statusMessage) {
+		// TODO Auto-generated method stub
+	}
+
+
+
+	@Override
+	public void fail(Exception exception) {
+		// TODO Auto-generated method stub
+	}
 }

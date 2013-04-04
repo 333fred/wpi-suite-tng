@@ -27,6 +27,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -37,7 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 @SuppressWarnings("serial")
-public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier  {
+public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 	
 	private JTree tree;
 	private DefaultMutableTreeNode top;
@@ -94,11 +95,10 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
-					iterationNode.add(new DefaultMutableTreeNode(
-							RequirementDatabase.getInstance().getRequirement(
-									aReq).getName()));
+					iterationNode.add(new DefaultMutableTreeNode(RequirementDatabase.getInstance().getRequirement(aReq).getName()));
 				} catch (RequirementNotFoundException e) {
 					System.out.print("Requirement Not Found");
+					e.printStackTrace();
 				}
 			}
 
