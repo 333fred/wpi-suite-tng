@@ -255,7 +255,7 @@ public class RequirementsEntityManagerTest {
 		oldRequirement.setEstimate(2);
 		oldRequirement.setIteration(2);
 		oldRequirement.setPriority(Priority.HIGH);
-		oldRequirement.setReleaseNum(5);
+		oldRequirement.setReleaseNum("5");
 		oldRequirement.setStatus(Status.BLANK);
 		oldRequirement.setType(Type.EPIC);
 
@@ -267,7 +267,7 @@ public class RequirementsEntityManagerTest {
 		assertEquals(oldRequirement.getNotes(), updated.getNotes());
 		assertEquals(Priority.HIGH, updated.getPriority());
 		assertEquals(oldRequirement.getpUID(), updated.getpUID());
-		assertEquals(5, updated.getReleaseNum());
+		assertEquals("5", updated.getReleaseNum());
 		assertEquals(oldRequirement.getrUID(), updated.getrUID());
 		assertEquals(Status.BLANK, updated.getStatus());
 		assertEquals(oldRequirement.getSubRequirements(), updated.getSubRequirements());
