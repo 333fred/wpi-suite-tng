@@ -27,6 +27,7 @@ public class DetailNoteView extends JPanel{
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeNotePanel makeNotePanel;
+
 	
 	/**
 	 * Construct the panel and add layout components
@@ -99,7 +100,5 @@ public class DetailNoteView extends JPanel{
 	 */
 	public void disableUserButtons(){
 		makeNotePanel.setInputEnabled(false);
-	}
-
-	
+	}	
 }

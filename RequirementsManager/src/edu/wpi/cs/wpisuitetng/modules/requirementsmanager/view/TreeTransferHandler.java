@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 
 @SuppressWarnings("serial")
-class TreeTransferHandler extends TransferHandler implements ISaveNotifier{
+class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
     DataFlavor nodesFlavor;
     DataFlavor[] flavors = new DataFlavor[1];
     DefaultMutableTreeNode[] nodesToRemove;
@@ -231,7 +231,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier{
 			
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(nodes[i].toString());
 			requirement.setIteration(anIteration.getId());
-			SaveRequirementController SaveRequirementController = new SaveRequirementController(null);
+			SaveRequirementController SaveRequirementController = new SaveRequirementController(this);
 			SaveRequirementController.SaveRequirement(requirement, false);
         }
         return true;

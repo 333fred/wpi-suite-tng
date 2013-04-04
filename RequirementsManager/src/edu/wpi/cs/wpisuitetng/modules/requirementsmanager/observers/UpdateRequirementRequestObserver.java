@@ -3,9 +3,9 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -17,12 +17,11 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class UpdateRequirementRequestObserver implements RequestObserver {
 	
-	DetailPanel detailPanel;
-	boolean closeTab;
+	/** The notifier this class calls when the requirement has been saved or errored */
+	private ISaveNotifier notifier;
 	
-	public UpdateRequirementRequestObserver (DetailPanel detailPanel, boolean closeTab) {
-		this.detailPanel = detailPanel;	
-		this.closeTab = closeTab;
+	public UpdateRequirementRequestObserver (ISaveNotifier notifier) {
+		this.notifier = notifier;
 	}
 	
 	
@@ -36,16 +35,19 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 
 		// get the response from the request
 		ResponseModel response = request.getResponse();
-		
-		if (this.closeTab) {
-			this.detailPanel.getMainTabController().closeCurrentTab();
-		}
 
 		// print the body
 		System.out.println("Received response: " + response.getBody()); //TODO change this to logger
 
 		Requirement req = Requirement.fromJSON(response.getBody());
 		RequirementDatabase.getInstance().addRequirement(req);
+		
+		notifier.responseSuccess();
+		/*
+		
+		if (this.closeTab) {
+			this.detailPanel.getMainTabController().closeCurrentTab();
+		}
 		
 		if (this.detailPanel != null) {
 			detailPanel.logView.refresh(req);
@@ -54,6 +56,8 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 				this.detailPanel.getMainTabController().closeCurrentTab();
 			}
 		}
+		
+		*/
 				
 		/*if (response.getStatusCode() == 200) {
 			// parse the requirement from the body
@@ -75,9 +79,12 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
+		/*
 		if (this.detailPanel != null) {
 			this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
 		}
+		*/
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq.getResponse().getStatusMessage());
 	}
 
 	/* (non-Javadoc)
@@ -85,9 +92,10 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		if (this.detailPanel != null) {
+		/* if (this.detailPanel != null) {
 			this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
-		}
+		} */
+		notifier.fail(exception);
 	}
 
 }

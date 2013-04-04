@@ -134,6 +134,7 @@ public class EditRequirementAction extends AbstractAction {
 				}
 
 				controller.SaveRequirement(requirement, true);
+				parentView.closeTabAfterSave();
 			} catch (NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");

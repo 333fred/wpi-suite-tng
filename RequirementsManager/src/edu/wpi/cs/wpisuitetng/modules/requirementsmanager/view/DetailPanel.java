@@ -19,8 +19,8 @@ import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -36,9 +36,12 @@ import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
@@ -52,7 +55,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteVi
 /**
  * JPanel class to display the different fields of the requirement 
  */
-public class DetailPanel extends FocusableTab {
+public class DetailPanel extends FocusableTab implements ISaveNotifier {
 
 	// Textfields
 	private JTextArea textName;
@@ -121,6 +124,9 @@ public class DetailPanel extends FocusableTab {
 	private JButton btnCancel;
 	
 	private JPanel mainPanel;
+	
+	/** boolean to indicate whether the tab should be closed upon saving */
+	private boolean closeTab;
 	
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
@@ -902,5 +908,41 @@ public class DetailPanel extends FocusableTab {
 	public Requirement getRequirement() {
 		return requirement;
 	}
+	@Override
+	public void responseSuccess() {
+		
+		//if the tab should close, close it
+		if (closeTab) {
+			getMainTabController().closeCurrentTab();
+			return;
+		}
+		//other wise we shall update the requriment in the log view
+		
+		Requirement updatedRequirement;
+		try {
+			updatedRequirement = RequirementDatabase.getInstance().getRequirement(this.requirement.getrUID());
+			logView.refresh(updatedRequirement);
+		} 
+		catch (RequirementNotFoundException e) {
+			System.out.println("Unable to find requirement? Wat?");
+		}
+		
+	}
+	@Override
+	public void responseError(int statusCode, String statusMessage) {
+		displaySaveError("Received " + statusCode + " error from server: " + statusMessage);
+		
+	}
+	@Override
+	public void fail(Exception exception) {
+		displaySaveError("Unable to complete request: " + exception.getMessage());		
+	}
 
+	/** Method to set this tab to close when the tab closes
+	 * 
+	 */
+	
+	public void closeTabAfterSave() {
+		closeTab = true;
+	}
 }

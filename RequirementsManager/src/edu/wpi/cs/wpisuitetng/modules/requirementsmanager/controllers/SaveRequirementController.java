@@ -26,10 +26,11 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class SaveRequirementController {
 	
-	DetailPanel detailPanel;
+	/** The notifier this class uses */
+	private ISaveNotifier notifier;
 	
-	public SaveRequirementController (DetailPanel detailPanel){
-		this.detailPanel = detailPanel;
+	public SaveRequirementController (ISaveNotifier notifier) {
+		this.notifier = notifier;
 	}
 	
 	/**
@@ -38,7 +39,7 @@ public class SaveRequirementController {
 	 * @param closeTab tab that will be closed
 	 */
 	public void SaveRequirement(Requirement toAdd, boolean closeTab) {
-		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(detailPanel,closeTab);
+		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(notifier);
 		Request request;
 		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());
