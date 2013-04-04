@@ -12,27 +12,17 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Rectangle;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.JPanel;
-import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
-
-import javax.swing.JTextPane;
-import javax.swing.text.html.HTMLDocument;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
 
 //TODO: Documentation, and perhaps built-in browser? CURRENTLY NOT IN USE, IN FAVOR OF NO TAB OPENING
 /**

@@ -12,20 +12,14 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
@@ -33,6 +27,10 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 /**
  * Testing for RequirementValidator class
  * 	

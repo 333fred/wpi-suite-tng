@@ -4,13 +4,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedList;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;

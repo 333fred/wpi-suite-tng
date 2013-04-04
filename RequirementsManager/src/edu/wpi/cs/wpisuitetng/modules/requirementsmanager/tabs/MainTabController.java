@@ -38,9 +38,9 @@ public class MainTabController {
 	 * @param tabView The view to manage
 	 */
 	
-	public MainTabController(MainTabView tabView, IterationTreeView iterationTreeView) {
+	public MainTabController(MainTabView tabView) {
 		this.tabView = tabView;
-		this.iterationTreeView = iterationTreeView;
+		this.iterationTreeView = new IterationTreeView(this);
 		
 		
 	    tabView.addChangeListener(new ChangeListener() {
@@ -124,7 +124,7 @@ public class MainTabController {
 	
 	public Tab addEditIterationTab(Iteration iteration) {
 		IterationView iterationView = new IterationView(iteration, this);
-		return addTab("New Iteration", new ImageIcon(), iterationView, iteration.getName());
+		return addTab(iteration.getName(), new ImageIcon(), iterationView, iteration.getName());
 	}
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement
@@ -201,6 +201,10 @@ public class MainTabController {
 	
 	public void refreshIterationTree() {
 		iterationTreeView.refresh();
+	}
+	
+	public IterationTreeView getIterationTreeView() {
+		return iterationTreeView;
 	}
 	
 }

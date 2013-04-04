@@ -1,14 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
-import java.awt.Color;
-
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
-import edu.wpi.cs.wpisuitetng.janeway.config.Configuration;
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;

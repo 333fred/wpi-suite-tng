@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 

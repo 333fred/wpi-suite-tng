@@ -4,10 +4,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveIterationByIDController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;

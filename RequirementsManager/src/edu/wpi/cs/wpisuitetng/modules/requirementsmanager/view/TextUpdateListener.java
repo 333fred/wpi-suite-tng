@@ -15,13 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.lang.reflect.InvocationTargetException;
 
-import javax.swing.BorderFactory;
-import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
-
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 /**
  * Checks for whether or not the text in a given JTextComponent differs from the current model.

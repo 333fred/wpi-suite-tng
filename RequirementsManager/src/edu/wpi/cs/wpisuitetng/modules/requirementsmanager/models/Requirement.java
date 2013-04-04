@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;

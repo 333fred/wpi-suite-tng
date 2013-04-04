@@ -13,14 +13,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveIterationByIDRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
-import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**

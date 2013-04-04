@@ -409,6 +409,9 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		}
 		
 		for (Iteration i: iterations) {
+			if  (i.getId() == iteration.getId()) {
+				continue;
+			}
 			if (IterationValidator.overlapExists(iteration, i)) {
 				return true; // an overlap exists
 			}

@@ -12,7 +12,14 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashSet;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
@@ -30,11 +37,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.junit.Before;
 
 public class RequirementsEntityManagerTest {
 	Data db;

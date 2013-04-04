@@ -16,7 +16,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
-import javax.swing.text.JTextComponent;
 
 public class ItemStateListener implements ItemListener {
 	protected final DetailPanel panel;

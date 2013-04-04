@@ -1,9 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
-import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.BorderFactory;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;

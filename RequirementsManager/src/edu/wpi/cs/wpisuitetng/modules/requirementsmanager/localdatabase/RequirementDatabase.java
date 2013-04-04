@@ -18,10 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**

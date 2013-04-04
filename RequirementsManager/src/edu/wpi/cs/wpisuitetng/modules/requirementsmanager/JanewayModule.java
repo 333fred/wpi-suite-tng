@@ -75,13 +75,13 @@ public class JanewayModule implements IJanewayModule {
 		tabs = new ArrayList<JanewayTabModel>();	
 		
 		//initialize the tab view public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		tabView = new MainTabView();
-		
-		//initialize the iterationTreeView
-		iterationTreeView = new IterationTreeView();
+		tabView = new MainTabView();	
 		
 		//initialize TabController
-		tabController = new MainTabController(tabView, iterationTreeView);
+		tabController = new MainTabController(tabView);		
+		
+		//initialize the iterationTreeView
+		iterationTreeView = tabController.getIterationTreeView();
 			
 		//initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);

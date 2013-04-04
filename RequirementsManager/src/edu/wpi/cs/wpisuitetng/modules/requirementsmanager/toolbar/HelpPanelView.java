@@ -10,15 +10,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 
-import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import java.awt.BorderLayout;
 
 /**
  * @author Nick Massa

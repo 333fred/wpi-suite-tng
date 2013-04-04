@@ -8,18 +8,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * A panel containing a form for adding a new note to a requirement

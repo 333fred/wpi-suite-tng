@@ -11,19 +11,20 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.Session;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 
 public class LoggerTest {
 	

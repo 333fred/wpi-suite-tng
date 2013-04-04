@@ -15,8 +15,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.JLabel;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**

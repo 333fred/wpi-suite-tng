@@ -16,7 +16,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllR
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
-import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**

@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**

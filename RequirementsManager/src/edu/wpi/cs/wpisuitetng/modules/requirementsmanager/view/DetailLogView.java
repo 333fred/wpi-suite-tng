@@ -19,7 +19,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;

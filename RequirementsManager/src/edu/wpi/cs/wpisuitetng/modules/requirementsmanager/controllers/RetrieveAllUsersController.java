@@ -12,7 +12,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllUsersRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.network.Network;

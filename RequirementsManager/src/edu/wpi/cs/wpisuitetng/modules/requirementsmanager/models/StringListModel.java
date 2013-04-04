@@ -15,8 +15,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.Permission;

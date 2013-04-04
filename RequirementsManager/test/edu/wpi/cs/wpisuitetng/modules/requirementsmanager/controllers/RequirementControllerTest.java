@@ -62,7 +62,7 @@ public class RequirementControllerTest {
 		r1 = new Requirement();		
 		Network.initNetwork(new MockNetwork());
 		Network.getInstance().setDefaultNetworkConfiguration(new NetworkConfiguration("http://wpisuitetng"));
-		view = new DetailPanel(r1, new MainTabController(new MainTabView(), new IterationTreeView()));
+		view = new DetailPanel(r1, new MainTabController(new MainTabView()));
 		view2 = new AssigneePanel(r1, view);
 		controller = new AddRequirementController(view);
 		controller2 = new SaveRequirementController(view);
