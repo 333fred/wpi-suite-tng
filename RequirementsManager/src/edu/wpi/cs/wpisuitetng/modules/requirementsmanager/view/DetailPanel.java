@@ -292,9 +292,10 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 			//or the iteration is this requirement's current iteration,
 			//or it is the backlog, add it to the list
 			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1){
+				System.out.println("WHAT" +currentAvailableIterationIndex + iterationList.size());
 				availableIterations[currentAvailableIterationIndex] = iteration.getName();
+				currentAvailableIterationIndex++;
 			}
-			currentAvailableIterationIndex++;
 		}
 		
 		comboBoxIteration = new JComboBox(availableIterations);
@@ -336,7 +337,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		
 		textActual = new JTextField(9);
 		textActual.setBorder((new JTextField()).getBorder());
-		textActual.setEnabled(false); // DISABLE THIS ITERATION
+		textActual.setEnabled(false); // disabled until complete
 		textActual.setBackground(defaultColor);
 		textActual.setMaximumSize(textActual.getPreferredSize());
 		textActual.setName("Actual");
@@ -474,6 +475,12 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		if (requirement.getStatus() == Status.IN_PROGRESS ||  requirement.getStatus() == Status.COMPLETE) {
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
+		}
+		
+		// actual field is editable when requirement is complete
+		if (requirement.getStatus() == Status.COMPLETE) {
+			textActual.setEnabled(true);
+			textActual.setBackground(Color.WHITE);
 		}
 		
 		// prevent requirements with subrequirements from having their estimates changed
