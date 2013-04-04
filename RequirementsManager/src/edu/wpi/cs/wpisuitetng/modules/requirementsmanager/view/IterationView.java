@@ -37,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.IterationViewListener;
 
 /** 
  * View for creating or editing a iteration

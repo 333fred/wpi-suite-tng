@@ -10,7 +10,7 @@
  *    Mitchell Caisse, Matt Costi
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,6 +18,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 
 /** 
  * IterationViewListener that is used to determine when a change has been made to a component, TextField, or a JCalendar
