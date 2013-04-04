@@ -17,6 +17,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -42,6 +43,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
     DataFlavor nodesFlavor;
     DataFlavor[] flavors = new DataFlavor[1];
     DefaultMutableTreeNode[] nodesToRemove;
+	private String expansionState;
 
     public TreeTransferHandler() {
         try {
@@ -215,9 +217,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
         // Add data to model.
         for(int i = 0; i < nodes.length; i++) {
             model.insertNodeInto(nodes[i], parent, index++);
-            
-            SaveIterationController saveIterationController = new SaveIterationController(this);
-            			        
+            SaveIterationController saveIterationController = new SaveIterationController(this);    			        
 			try {
 				Iteration anIteration = IterationDatabase.getInstance().getIteration(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getIteration());
 	    		anIteration.removeRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
@@ -229,7 +229,6 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            
 			Iteration anIteration = IterationDatabase.getInstance().getIteration(nodes[i].getParent().toString());
 			try {
 				anIteration.addRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
@@ -238,7 +237,6 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 				e.printStackTrace();
 			}
 			saveIterationController.saveIteration(anIteration);
-			
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(nodes[i].toString());
 			requirement.setIteration(anIteration.getId());
 			SaveRequirementController SaveRequirementController = new SaveRequirementController(this);
@@ -273,7 +271,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
             return nodesFlavor.equals(flavor);
         }
     }
-
+    
 	@Override
 	public void responseSuccess() {
 		// TODO Auto-generated method stub
