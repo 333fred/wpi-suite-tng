@@ -89,7 +89,7 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setDescription(parentView.getTextDescription()
 					.getText());
 			requirement.setUsers(parentView.getAssignedUsers());
-			requirement.setReleaseNum(parentView.getTextRelease().getText());
+	//		requirement.setReleaseNum(parentView.getTextRelease().getText());
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
 
 			try {
