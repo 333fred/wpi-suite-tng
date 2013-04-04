@@ -18,6 +18,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -29,7 +31,6 @@ import javax.swing.JTree;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -161,13 +162,18 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 			retreiveRequirementController.get(requirement.getrUID());
 		}
 	}
-
 	
-	public void refresh() {		
+	public void refresh() {
+		getIterationsFromServer();
+	}
+	
+	public void updateTreeView() {
+		System.out.println("[" + new Date().toString() + "]WE ARE FUCKING REFRESHING THE FUCKING ITERATION TREE VIEW");
+		
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
-		iterations = IterationDatabase.getInstance().getAllIterations();
+		//iterations = IterationDatabase.getInstance().getAllIterations();
 		for (Iteration anIteration : iterations) {
 			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
 
@@ -237,9 +243,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	/** Called when there was a change in iterations in the local database 
 	 * TODO: Unimplement this for now
 	 */
+	
 	public void update() {
 		//refresh();		
 	}
+	
 
 	/** This listener should persist
 	 * 
@@ -276,7 +284,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 
 	@Override
 	public void receivedData(Iteration[] iterations) {
-		refresh();
+		this.iterations = Arrays.asList(iterations);
+		updateTreeView();
 		
 	}
 	

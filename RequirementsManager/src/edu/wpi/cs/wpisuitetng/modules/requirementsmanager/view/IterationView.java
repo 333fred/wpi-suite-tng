@@ -476,6 +476,7 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 	@Override
 	public void responseSuccess() {
 		System.out.println("Sucessfuly saved iteration!!");
+		mainTabController.refreshIterationTree();
 		mainTabController.closeCurrentTab();
 		
 	}

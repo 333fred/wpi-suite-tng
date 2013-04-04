@@ -71,6 +71,7 @@ public class MainTabController {
 	
 	private void onChangeTab() {
 		refreshIterationTree();
+		System.out.println("Change Tab Controller");
 		Component selectedComponent = tabView.getSelectedComponent();
 		if (selectedComponent instanceof TabFocusListener) {
 			TabFocusListener listener = (TabFocusListener) selectedComponent;
@@ -89,7 +90,6 @@ public class MainTabController {
 	 */
 	
 	public Tab addTab(String title, Icon icon, Component component, String tip) {
-		refreshIterationTree();
 		tabView.addTab(title,icon, component,tip); // add the tab to the TabView
 		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
 		tabView.setSelectedIndex(index); // set the current tab to the newly added tab

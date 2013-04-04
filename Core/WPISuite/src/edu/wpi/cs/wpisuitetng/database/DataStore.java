@@ -14,7 +14,7 @@ package edu.wpi.cs.wpisuitetng.database;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -258,7 +258,7 @@ public class DataStore implements Data {
 		config.common().reflectWith(new JdkReflector(Thread.currentThread().getContextClassLoader()));
 
 		List<T> result = theDB.queryByExample(aSample.getClass());
-		System.out.println("retrievedAll: "+result);
+		System.out.println("[" + new Date().toString() + "] retrievedAll: "+result);
 		theDB.commit();
 
 		logger.log(Level.FINE, "Database RetrieveAll Performed");
@@ -284,7 +284,7 @@ public class DataStore implements Data {
 				result.add(theModel);
 			}
 		}
-		System.out.println("retrievedAll: "+result);
+		System.out.println("[" + new Date().toString() + "]retrievedAll: "+result);
 		theDB.commit();
 		logger.log(Level.FINE, "Database RetrieveAll Performed");
 		return result;

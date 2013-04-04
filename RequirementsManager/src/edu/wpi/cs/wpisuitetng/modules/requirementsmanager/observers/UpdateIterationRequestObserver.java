@@ -48,13 +48,10 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 		Iteration req = Iteration.fromJSON(response.getBody());
 		IterationDatabase.getInstance().addIteration(req);
 		
-		notifier.responseSuccess();
-		
-		RequirementTableView.getInstance().refresh();
-		
+		notifier.responseSuccess();		
 		//detailPanel.logView.refresh(req);
 				
-		/*if (response.getStatusCode() == 200) {
+		/*if (response.getStatusCgiode() == 200) {
 			// parse the Iteration from the body
 			final Iteration Iteration = Iteration.fromJSON(response.getBody());
 
