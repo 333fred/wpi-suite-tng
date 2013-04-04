@@ -70,7 +70,6 @@ public class TextUpdateListener implements KeyListener {
 		else {
 			String empty = "";
 			// if this component was empty to begin with, 
-			// and it is not the estimate field (estimate can be empty)
 			if (empty.equals(component.getText().trim())) { 
 				this.firstKeyPress = false;
 			}
@@ -111,6 +110,10 @@ public class TextUpdateListener implements KeyListener {
 	 */
 	public void checkIfUpdated() {
 		String base = ""; // base of empty string to compare to
+		
+		// add to this list the names of components if the component can be blank
+		// backend may assign default values if saved as blank
+		String canBeEmpty = "Estimate|Actual|Release";
 		/*
 		// Get the base String to compare to the text of the JTextComponent
 		try {
@@ -150,7 +153,9 @@ public class TextUpdateListener implements KeyListener {
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
 			}
-			panel.disableSaveButton();
+			if (!component.getName().matches(canBeEmpty)) {
+				panel.disableSaveButton();
+			}
 		}
 		else {
 			component.setBackground(Color.WHITE);
