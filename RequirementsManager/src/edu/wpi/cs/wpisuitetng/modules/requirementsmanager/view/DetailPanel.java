@@ -308,13 +308,13 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		}
 		
 		comboBoxIteration = new JComboBox(availableIterations);
-		comboBoxIteration.setName("Iteration");
-		comboBoxIteration.setPrototypeDisplayValue("Non-Functional");
-		comboBoxIteration.setBackground(Color.WHITE);
-		mainPanel.add(comboBoxIteration);
+		getComboBoxIteration().setName("Iteration");
+		getComboBoxIteration().setPrototypeDisplayValue("Non-Functional");
+		getComboBoxIteration().setBackground(Color.WHITE);
+		mainPanel.add(getComboBoxIteration());
 		
-		comboBoxIterationListener = new ItemStateListener(this, comboBoxIteration);
-		comboBoxIteration.addItemListener(comboBoxIterationListener);
+		comboBoxIterationListener = new ItemStateListener(this, getComboBoxIteration());
+		getComboBoxIteration().addItemListener(comboBoxIterationListener);
 		
 		textEstimate = new JTextField(9);
 		textEstimate.setBorder((new JTextField()).getBorder());
@@ -421,8 +421,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 			comboBoxStatus.setSelectedItem("NEW");
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
-			comboBoxIteration.setEnabled(false);
-			comboBoxIteration.setBackground(defaultColor);
+			getComboBoxIteration().setEnabled(false);
+			getComboBoxIteration().setBackground(defaultColor);
 		} else {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 			switch (requirement.getStatus()) {
@@ -543,7 +543,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		textRelease.setText(getRequirement().getReleaseNum());
 
 		try {
-			comboBoxIteration.setSelectedItem(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
+			getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().getIteration(getRequirement().getIteration()).getName());
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
 		}
@@ -627,7 +627,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, comboBoxPriority, HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxType);
-		layout.putConstraint(SpringLayout.WEST, comboBoxIteration, HORIZONTAL_PADDING, 
+		layout.putConstraint(SpringLayout.WEST, getComboBoxIteration(), HORIZONTAL_PADDING, 
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, lblEstimate, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
@@ -677,14 +677,14 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.NORTH, lblIteration,
 				VERTICAL_PADDING , SpringLayout.SOUTH,
 				comboBoxPriority);
-		layout.putConstraint(SpringLayout.NORTH, comboBoxIteration,
+		layout.putConstraint(SpringLayout.NORTH, getComboBoxIteration(),
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblIteration);
 		layout.putConstraint(SpringLayout.NORTH, lblEstimate, VERTICAL_PADDING,
 				SpringLayout.SOUTH, comboBoxStatus);
 		layout.putConstraint(SpringLayout.NORTH, lblActual,
 				VERTICAL_PADDING, SpringLayout.SOUTH,
-				comboBoxIteration);
+				getComboBoxIteration());
 		layout.putConstraint(SpringLayout.NORTH, textEstimate,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblEstimate);
@@ -877,7 +877,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	}
 	
 	public JComboBox getTextIteration() {
-		return this.comboBoxIteration;
+		return this.getComboBoxIteration();
 	}
 	
 	/**
@@ -933,8 +933,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		textName.setBackground(defaultColor);
 		textDescription.setEnabled(false);
 		textDescription.setBackground(defaultColor);
-		comboBoxIteration.setEnabled(false);
-		comboBoxIteration.setBackground(defaultColor);
+		getComboBoxIteration().setEnabled(false);
+		getComboBoxIteration().setBackground(defaultColor);
 		textRelease.setEnabled(false);
 		textRelease.setBackground(defaultColor);
 		textEstimate.setEnabled(false);
@@ -994,5 +994,11 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	
 	public void closeTabAfterSave() {
 		closeTab = true;
+	}
+	/**
+	 * @return the comboBoxIteration
+	 */
+	public JComboBox getComboBoxIteration() {
+		return comboBoxIteration;
 	}
 }

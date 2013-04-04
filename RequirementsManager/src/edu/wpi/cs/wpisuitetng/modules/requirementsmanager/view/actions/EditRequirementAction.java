@@ -92,6 +92,10 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
 
+			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Deleted")) {
+				parentView.getComboBoxIteration().setSelectedItem("Backlog");
+			}
+			
 			try {
 
 				SaveIterationController saveIterationController = new SaveIterationController(
