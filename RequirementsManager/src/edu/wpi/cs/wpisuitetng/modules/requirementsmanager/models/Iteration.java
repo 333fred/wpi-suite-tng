@@ -159,7 +159,9 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * Adds a given requirement to this iteration and add its estimate to this iteration's estimate
+	 * Adds a given requirement to this iteration. If it does not exist on the
+	 * local database then it will fail. If the requirement is already a 
+	 * member of requirements we do nothing
 	 * 
 	 * @param rUID
 	 *            the new requirement
@@ -168,6 +170,10 @@ public class Iteration extends AbstractModel {
 	 */
 	public void addRequirement(int rUID) throws RequirementNotFoundException {
 
+		//first check if the requirement is already on here
+		for (Integer id : this.requirements) {
+			if (id == rUID) return; //if it is we are already done
+		}
 		try{
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
 			this.requirements.add(rUID);
@@ -209,7 +215,7 @@ public class Iteration extends AbstractModel {
 			
 		}
 		
-		throw new RequirementNotFoundException(rUID);
+		//throw new RequirementNotFoundException(rUID);
 		
 	}
 
