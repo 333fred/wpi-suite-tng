@@ -14,6 +14,9 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -34,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedA
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -42,6 +46,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditIterationAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 
 @SuppressWarnings("serial")
 public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
@@ -110,8 +115,54 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		//fetch the requirements and iterations from the server
 		getRequirementsFromServer();
 		getIterationsFromServer();
+		
+		MouseListener ml = new MouseAdapter() {
+		    public void mousePressed(MouseEvent e) {
+		        int selRow = tree.getRowForLocation(e.getX(), e.getY());
+		        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+		        if(selRow != -1) {
+		            if(e.getClickCount() == 2) {
+		                onDoubleClick(selRow, selPath);
+		            }
+		        }
+		    }
+		};
+		this.tree.addMouseListener(ml);
 	}
 
+	protected void onDoubleClick(int selRow, TreePath selPath) {	
+		if (((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel() != 2) {
+			return;
+		}
+		boolean requirementIsOpen = false;
+		// TODO Auto-generated method stub
+		Requirement requirement = RequirementDatabase.getInstance().getRequirement(((DefaultMutableTreeNode)selPath.getLastPathComponent()).toString());
+		
+		// Check to make sure the requirement is not already being
+		// displayed. This is assuming that the list view is displayed in
+		// the left most tab, index 0
+		for (int i = 0; i < this.tabController.getTabView().getTabCount(); i++) {
+			if (this.tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+				if (((((DetailPanel) this.tabController.getTabView()
+						.getComponentAt(i))).getModel().getrUID()) == (requirement
+						.getrUID())) {
+					this.tabController.switchToTab(i);
+					requirementIsOpen = true;
+				}
+			}
+		}
+		if (!requirementIsOpen) {
+			// create the controller for fetching the new requirement
+			RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
+					new OpenRequirementTabAction(tabController,
+							requirement));
+
+			// get the requirement from the server
+			retreiveRequirementController.get(requirement.getrUID());
+		}
+	}
+
+	
 	public void refresh() {
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
@@ -124,8 +175,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 				try {
 					iterationNode.add(new DefaultMutableTreeNode(RequirementDatabase.getInstance().getRequirement(aReq).getName()));
 				} catch (RequirementNotFoundException e) {
-					System.out.print("Requirement Not Found");
-					//e.printStackTrace();
+					//System.out.println("Requirement Not Found");
+					//Unnecessary to do anything here...I think
 				}
 			}
 			this.top.add(iterationNode);
