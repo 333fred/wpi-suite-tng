@@ -82,7 +82,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		this.tree.setEditable(false);
 		this.tree.setDragEnabled(true);
 		this.tree.setDropMode(DropMode.ON);
-		final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+		//final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		
 	    this.tree.setTransferHandler(new TreeTransferHandler());
 	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -163,7 +163,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	}
 
 	
-	public void refresh() {
+	public void refresh() {		
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
@@ -238,7 +238,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	 * TODO: Unimplement this for now
 	 */
 	public void update() {
-		refresh();		
+		//refresh();		
 	}
 
 	/** This listener should persist

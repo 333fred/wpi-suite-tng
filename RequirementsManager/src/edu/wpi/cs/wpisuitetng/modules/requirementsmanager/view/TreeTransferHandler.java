@@ -16,6 +16,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -95,8 +96,20 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
        if (firstNode.getLevel() == 1) {
        	return false;
        }
-       //Do not allow dropping of deleted iterations
+       //Do not allow dropping of deleted requirements
        if (RequirementDatabase.getInstance().getRequirement(firstNode.toString()).getStatus() == Status.DELETED) {
+    	   return false;
+       }
+       
+       //don't allow dropping into completed iterations
+       Date currentDate = new Date();
+       Iteration iteration = IterationDatabase.getInstance().getIteration(target.toString());
+       if(currentDate.compareTo(iteration.getEndDate()) > 0 && iteration.getId() != -1) {
+    	   return false;
+       }
+       
+       //don't allow dropping into iteration that is already in
+       if(firstNode.getParent() == target) {
     	   return false;
        }
         // Do not allow MOVE-action drops if a non-leaf node is
