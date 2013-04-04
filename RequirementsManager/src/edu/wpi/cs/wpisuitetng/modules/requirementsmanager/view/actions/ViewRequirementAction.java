@@ -1,10 +1,16 @@
-/**
- * Action invoked upon use of the View Requirement key
- * Heavily adapted from CreateDefectAction in the DefectTracker module
- * 
- * @author Alex Gorowara 
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alex Gorowara
+ *******************************************************************************/
+
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
 import java.awt.event.ActionEvent;
@@ -16,6 +22,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
+ * Action invoked upon use of the View Requirement key
+ * Heavily adapted from CreateDefectAction in the DefectTracker module
+ * 
+ * @author Alex Gorowara 
+ * 
  * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
  */
 @SuppressWarnings("serial")
