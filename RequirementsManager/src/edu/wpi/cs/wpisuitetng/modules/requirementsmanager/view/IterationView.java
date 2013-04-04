@@ -67,6 +67,7 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 	private JLabel labName;
 	private JLabel labStartDate;
 	private JLabel labEndDate;
+	private JLabel labEstimate;
 	
 	/** Error message components */
 	private JLabel labErrorMessage;
@@ -80,6 +81,7 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 	
 	/** Textfield for entering the name of the iteration */
 	private JTextField txtName;
+	private JTextField txtEstimate;
 	
 	/** The JCalendars for selecting dates */
 	private JCalendar calStartDate;
@@ -120,8 +122,9 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		labName = new JLabel("Name:");
 		labStartDate = new JLabel("Starting Date:");
 		labEndDate = new JLabel("Ending Date:");
-		labErrorMessage = new JLabel(" ");
+		labEstimate = new JLabel("Estimate:");
 		
+		labErrorMessage = new JLabel(" ");		
 		labNameError = new JLabel(" ");
 		labCalendarError = new JLabel(" ");
 		
@@ -143,6 +146,11 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		butCancel.setAction(new CancelAction());
 		
 		txtName = new JTextField();
+		txtEstimate = new JTextField(10);
+		
+		//this text field will always be disabled, as you cant edit it
+		txtEstimate.setEnabled(false);
+		txtEstimate.setDisabledTextColor(Color.BLACK);
 		
 		
 		calStartDate = new JCalendar();	
@@ -152,7 +160,8 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		if (status == Status.EDIT) {
 			txtName.setText(iteration.getName());
 			calStartDate.setDate(iteration.getStartDate());
-			calEndDate.setDate(iteration.getEndDate());			
+			calEndDate.setDate(iteration.getEndDate());		
+			txtEstimate.setText(iteration.getEstimate() + "");
 		}
 		
 		txtName.addKeyListener(new IterationViewListener(this, txtName));
@@ -196,9 +205,22 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		
 		layout.putConstraint(SpringLayout.EAST, txtName, 0, SpringLayout.EAST, calEndDate);
 		
+		if (status == Status.EDIT) {
+			layout.putConstraint(SpringLayout.NORTH, labEstimate, VERTICAL_PADDING, SpringLayout.SOUTH, labCalendarError);
+			layout.putConstraint(SpringLayout.WEST, labEstimate, HORIZONTAL_PADDING, SpringLayout.WEST, this);
+			
+			layout.putConstraint(SpringLayout.NORTH, txtEstimate, 0, SpringLayout.NORTH, labEstimate);
+			layout.putConstraint(SpringLayout.WEST, txtEstimate, HORIZONTAL_PADDING, SpringLayout.EAST, labEstimate);
+			
+			layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING, SpringLayout.SOUTH, labEstimate);
+		}
+		else {
+			layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING, SpringLayout.SOUTH, labCalendarError);
+		}
+		
 
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING, SpringLayout.SOUTH, labCalendarError);
+	
 		
 		
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING, SpringLayout.EAST, butSave);
@@ -218,6 +240,10 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		add(labStartDate);
 		add(labEndDate);
 		
+		if (status == Status.EDIT) {
+			add(labEstimate);
+			add(txtEstimate);
+		}
 		
 		add(calStartDate);
 		add(calEndDate);

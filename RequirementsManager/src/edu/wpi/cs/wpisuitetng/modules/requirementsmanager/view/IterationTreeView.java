@@ -220,7 +220,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 			}
 			selectedIterations[i] = iterations.get(selectedIndexes[i] - 1);
 		}
-		System.out.println("Wat?" + selectedIterations.length);
 		return selectedIterations;
 		
 	}
