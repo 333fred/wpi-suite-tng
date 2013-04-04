@@ -169,7 +169,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	}
 	
 	public void updateTreeView() {
-		System.out.println("[" + new Date().toString() + "]WE ARE FUCKING REFRESHING THE FUCKING ITERATION TREE VIEW");
+		System.out.println("[" + new Date().toString() + "] We are refreshing the tree view");
 		
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
