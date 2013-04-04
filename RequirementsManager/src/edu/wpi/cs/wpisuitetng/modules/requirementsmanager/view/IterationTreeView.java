@@ -26,6 +26,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -36,7 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 @SuppressWarnings("serial")
-public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier  {
+public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier  {
 	
 	private JTree tree;
 	private DefaultMutableTreeNode top;
@@ -49,7 +50,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	public IterationTreeView() {
 		super(new BorderLayout());
 
-		retrieveAllIterationsController = new RetrieveAllIterationsController();
+		retrieveAllIterationsController = new RetrieveAllIterationsController(this);
 		retrieveAllRequirementsController = new RetrieveAllRequirementsController(this);
 		
 		firstPaint = true;
@@ -157,6 +158,12 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	@Override
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
 		System.out.println("IterationTeamView: Error receiving requirements from server");
+		
+	}
+
+	@Override
+	public void receivedData(Iteration[] iterations) {
+		refresh();
 		
 	}
 }
