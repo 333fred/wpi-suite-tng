@@ -15,8 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.DropMode;
 import javax.swing.JButton;
@@ -25,7 +25,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
@@ -58,8 +60,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	List<Iteration> iterations;
 	
 	private boolean firstPaint;
-	
-	@SuppressWarnings("serial")
+
 	public IterationTreeView(MainTabController tabController) {
 		//super(new BorderLayout());
 		SpringLayout layout = new SpringLayout();
@@ -111,18 +112,12 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		getIterationsFromServer();
 	}
 
-	public void refresh() {				
+	public void refresh() {
+		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
 		this.top.removeAllChildren();
-
 		iterations = IterationDatabase.getInstance().getAllIterations();
-
 		for (Iteration anIteration : iterations) {
-			
-			//DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)this.tree.getCellRenderer();
-			//renderer.setLeafIcon(null);
-			//this.tree.setCellRenderer(renderer);
-			
 			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
 
 			for (Integer aReq : anIteration.getRequirements()) {
@@ -130,20 +125,56 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 					iterationNode.add(new DefaultMutableTreeNode(RequirementDatabase.getInstance().getRequirement(aReq).getName()));
 				} catch (RequirementNotFoundException e) {
 					System.out.print("Requirement Not Found");
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
-
 			this.top.add(iterationNode);
 		}
-		this.tree.expandRow(0);
 		this.tree.updateUI();
+		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)this.tree.getCellRenderer();
+		renderer.setLeafIcon(null);
+		this.tree.setCellRenderer(renderer);
+		restoreExpanstionState(this.tree,0,eState);
 	}
 	
+    // is path1 descendant of path2
+    public static boolean isDescendant(TreePath path1, TreePath path2){
+        int count1 = path1.getPathCount();
+        int count2 = path2.getPathCount();
+        if(count1<=count2)
+            return false;
+        while(count1!=count2){
+            path1 = path1.getParentPath();
+            count1--;
+        }
+        return path1.equals(path2);
+    }
+    public static String getExpansionState(JTree tree, int row){
+        TreePath rowPath = tree.getPathForRow(row);
+        StringBuffer buf = new StringBuffer();
+        int rowCount = tree.getRowCount();
+        for(int i=row; i<rowCount; i++){
+            TreePath path = tree.getPathForRow(i);
+            if(i==row || isDescendant(path, rowPath)){
+                if(tree.isExpanded(path))
+                    buf.append(","+String.valueOf(i-row));
+            }else
+                break;
+        }
+        return buf.toString();
+    }
+    public static void restoreExpanstionState(JTree tree, int row, String expansionState){
+        StringTokenizer stok = new StringTokenizer(expansionState, ",");
+        while(stok.hasMoreTokens()){
+            int token = row + Integer.parseInt(stok.nextToken());
+            tree.expandRow(token);
+        }
+    }
+	
+		
 	/** Retreives the iterations from the server
 	 * 
 	 */
-
 	private void getRequirementsFromServer() {
 		retrieveAllRequirementsController.getAll();
 	}
@@ -155,9 +186,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	/** Called when there was a change in iterations in the local database 
 	 * TODO: Unimplement this for now
 	 */
-	
 	public void update() {
-		//refresh();		
+		refresh();		
 	}
 
 	/** This listener should persist
