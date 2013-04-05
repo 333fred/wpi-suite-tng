@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 
@@ -37,14 +38,17 @@ public class EditIterationAction extends AbstractAction {
 	/** Opens the currently selected iterations in the IterationTreeView */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Iteration[] iterationsToOpen = iterationTreeView.getSelectedIterations();
-		int numIterations = iterationsToOpen.length;
+	//	Iteration[] iterationsToOpen = iterationTreeView.getSelectedIterations();
+		
+		List<Iteration> iterationsToOpen = iterationTreeView.getSelectedIterations();
+		int numIterations = iterationsToOpen.size();
+		
 		for (Iteration i : iterationsToOpen) {
 			if (i == null || i.getName().equals("Backlog")) continue;
 			boolean IterationIsOpen = false;
 			for (int j = 0; j < this.tabController.getTabView().getTabCount(); j++) {
 				for (int k = 0; k < numIterations; k++) {
-					if (this.tabController.getTabView().getTitleAt(j).equals(iterationsToOpen[k].getName())) {
+					if (this.tabController.getTabView().getTitleAt(j).equals(iterationsToOpen.get(k).getName())) {
 						this.tabController.switchToTab(j);
 						IterationIsOpen = true;
 					}

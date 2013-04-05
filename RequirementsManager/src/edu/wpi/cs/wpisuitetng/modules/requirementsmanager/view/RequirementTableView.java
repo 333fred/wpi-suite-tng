@@ -399,6 +399,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			firstPaint = true;
 		}
 	}
+	
 
 	@Override
 	public void update() {

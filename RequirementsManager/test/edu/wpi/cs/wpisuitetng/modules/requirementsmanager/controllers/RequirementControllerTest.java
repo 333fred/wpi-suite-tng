@@ -26,7 +26,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
