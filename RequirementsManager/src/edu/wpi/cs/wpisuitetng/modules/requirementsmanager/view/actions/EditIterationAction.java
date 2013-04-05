@@ -11,6 +11,7 @@
  ********************************************************************************/ 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 
 
 public class EditIterationAction extends AbstractAction {
@@ -48,7 +50,11 @@ public class EditIterationAction extends AbstractAction {
 			boolean IterationIsOpen = false;
 			for (int j = 0; j < this.tabController.getTabView().getTabCount(); j++) {
 				for (int k = 0; k < numIterations; k++) {
-					if (this.tabController.getTabView().getTitleAt(j).equals(iterationsToOpen.get(k).getName())) {
+					Component tabComponent = this.tabController.getTabView().getComponentAt(j);
+					System.out.println("Component: " + tabComponent);
+					if (tabComponent instanceof IterationView && 
+							this.tabController.getTabView().getTitleAt(j).equals(iterationsToOpen.get(k).getName())) {
+						
 						this.tabController.switchToTab(j);
 						IterationIsOpen = true;
 					}
