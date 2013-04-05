@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
 
 @SuppressWarnings("serial")
 public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
@@ -120,13 +121,20 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		
 		MouseListener ml = new MouseAdapter() {
 		    public void mousePressed(MouseEvent e) {
-		        int selRow = tree.getRowForLocation(e.getX(), e.getY());
-		        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-		        if(selRow != -1) {
-		            if(e.getClickCount() == 2) {
-		                onDoubleClick(selRow, selPath);
-		            }
-		        }
+			    if (e.getButton() == MouseEvent.BUTTON1) {
+			        int selRow = tree.getRowForLocation(e.getX(), e.getY());
+			        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+			        if(selRow != -1) {
+			            if(e.getClickCount() == 2) {
+			                onDoubleClick(selRow, selPath);
+			            }
+			        }
+		    	}
+			    else if (e.getButton() == MouseEvent.BUTTON3) {
+			    	//this was a right click
+			    	IterationPopupMenu menu = new IterationPopupMenu();
+			    	menu.show(e.getComponent(), e.getX(), e.getY());
+			    }
 		    }
 		};
 		this.tree.addMouseListener(ml);
