@@ -139,7 +139,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
-	//	this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
+		this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
 		
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
