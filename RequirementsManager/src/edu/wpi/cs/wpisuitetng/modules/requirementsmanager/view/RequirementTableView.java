@@ -138,6 +138,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
+		this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
 	/*	this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		int colWidth = this.table.getColumnModel().getColumn(0).getPreferredWidth();
 		int numCol = this.table.getColumnCount();
@@ -145,7 +146,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			this.table.getColumnModel().getColumn(i).setMinWidth(colWidth*2);
 		}*/
 	//	this.table.setPreferredSize(new Dimension(1100, 200));
-		//this.table.setAutoCreateRowSorter(true);
+		this.table.setAutoCreateRowSorter(true);
 
 		add(scrollPane);
 
@@ -243,6 +244,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		this.rowData.clear();
 		for (int i = 0; i < requirements.length; i++) {
 			Vector<String> row = new Vector<String>();
+			row.addElement(String.valueOf(requirements[i].getrUID()));
 			row.addElement(requirements[i].getName());
 			row.addElement(requirements[i].getType().equals(Type.BLANK) ? "" : requirements[i].getType().toString().substring(0,1).concat(requirements[i].getType().toString().substring(1).toLowerCase()).replaceAll("_s", " S").replaceAll("_f", " F"));
 			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? "" : requirements[i].getPriority().toString().substring(0,1).concat(requirements[i].getPriority().toString().substring(1).toLowerCase()));
@@ -344,8 +346,24 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			// invalid index
 			System.out.println("Invalid index " + index);
 		}
-		// get the requirement to update from the array
-		Requirement requirementToFetch = requirements[index];
+		
+		Requirement requirementToFetch = null;
+		
+		// convert index to new view index (incase of sorting)
+		int newIndex = this.table.convertRowIndexToView(index);
+		// get the rUID of the requirement in the hidden column 
+		String reqId = (String) this.table.getModel().getValueAt(newIndex, 0);
+
+		// iterate through the requirements
+		for (int i = 0; i < requirements.length; i++) {
+			// if the rUIDs match 
+			if (reqId.equals(Integer.toString(requirements[i].getrUID()))) {
+				// get this requirement
+				requirementToFetch = requirements[i];
+				// stop loop
+				break;
+			}
+		}
 
 		// Check to make sure the requirement is not already being
 		// displayed. This is assuming that the list view is displayed in
