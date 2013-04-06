@@ -139,7 +139,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
-		this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
+	//	this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
 		
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
@@ -359,7 +359,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		Requirement requirementToFetch = null;
 		
 		// convert index to new view index (incase of sorting)
-		int newIndex = this.table.convertRowIndexToView(index);
+		int newIndex = this.table.convertRowIndexToModel(index);
 		// get the rUID of the requirement in the hidden column 
 		String reqId = (String) this.table.getModel().getValueAt(newIndex, 0);
 
