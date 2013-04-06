@@ -117,6 +117,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 
 
 		Vector<String> columnNames = new Vector<String>();
+		columnNames.addElement("ID");
 		columnNames.addElement("Name");
 		columnNames.addElement("Type");
 		columnNames.addElement("Priority");
@@ -139,6 +140,14 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
 		this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
+		
+		// Add to this list of the column does not need equal size
+		String shortCols = "Estimate|Effort";
+		for (int i = 0; i < this.table.getColumnCount(); i++) {
+			if (this.table.getColumnName(i).matches(shortCols)) {
+				this.table.getColumnModel().getColumn(i).setPreferredWidth(12);
+			}
+		}
 	/*	this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		int colWidth = this.table.getColumnModel().getColumn(0).getPreferredWidth();
 		int numCol = this.table.getColumnCount();
