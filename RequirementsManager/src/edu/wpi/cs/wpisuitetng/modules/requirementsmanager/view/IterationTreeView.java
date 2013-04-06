@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 import javax.swing.DropMode;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SpringLayout;
@@ -50,9 +51,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
 
 @SuppressWarnings("serial")
 public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+	
+	protected static final int ROOT_LEVEL = 0;
+	protected static final int ITERATION_LEVEL = 1;
+	protected static final int REQUIREMENT_LEVEL = 2;
 	
 	private JTree tree;
 	private DefaultMutableTreeNode top;
@@ -132,12 +139,64 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		    	}
 			    else if (e.getButton() == MouseEvent.BUTTON3) {
 			    	//this was a right click
-			    	IterationPopupMenu menu = new IterationPopupMenu();
-			    	menu.show(e.getComponent(), e.getX(), e.getY());
+			    	
+			    	int selRow = tree.getRowForLocation(e.getX(), e.getY());
+			        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+			        onRightClick(e.getX(), e.getY(), selRow, selPath);
 			    }
 		    }
 		};
 		this.tree.addMouseListener(ml);
+	}
+	
+	/** Called when the user right clicks, will determine where the user clicked on the tree, and open the correct menu
+	 * 
+	 * @param x The x coordinate of where the user clicked
+	 * @param y The y coordinate of where the user clicked
+	 * @param selRow The selection row of where the user clicked
+	 * @param selPath The selection path of where the user clicked
+	 */
+	
+	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
+    	
+    	//we right clicked on something in particular
+    	if (selRow != -1) {
+    		JPopupMenu menuToShow;
+    		int levelClickedOn = ((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel();
+    		switch (levelClickedOn) {
+    		
+    		case ROOT_LEVEL: 
+    			menuToShow = new RootPopupMenu(tabController);
+    			menuToShow.show(this, x, y);
+    			break;
+    			
+    		case ITERATION_LEVEL:
+    			List<Iteration> selectedIterations = getSelectedIterations();
+    			if (selectedIterations.size() == 0) {
+    				//there were no selected iterations, WUT ARE WE DOIN HERE
+    				break;
+    			}
+    			menuToShow = new IterationPopupMenu(tabController, selectedIterations);
+    			menuToShow.show(this, x, y);
+    			break;
+    			
+    		case REQUIREMENT_LEVEL:
+    			List<Requirement> selectedRequirements = getSelectedRequirements();
+    			if (selectedRequirements.size() == 0) {
+    				//there were no selected requirements, 
+    				break;
+    			}
+    			menuToShow = new RequirementPopupMenu(tabController, selectedRequirements);
+    			menuToShow.show(this, x, y);
+    			break;    		
+    		}    		
+   
+    	}
+    	else {
+    		//we right clicked in the tree. 
+    		//TODO: We might want to check if multiple selected, and then open acording menu?
+    	}
+    	
 	}
 
 	protected void onDoubleClick(int selRow, TreePath selPath) {	
@@ -316,7 +375,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 			return new ArrayList<Iteration>();
 		}
 		
-		//Iteration[] selectedIterations = new  Iteration[selectedIndexes.length];
 		List<Iteration> selectedIterations = new ArrayList<Iteration>();
 		
 		for (TreePath path : paths) {
@@ -342,5 +400,38 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 			}
 		}
 		return null;
+	}
+	
+	//RequirementDatabase.getInstance().getRequirement(((DefaultMutableTreeNode)selPath.getLastPathComponent()).toString());
+	
+	public List<Requirement> getSelectedRequirements() {
+		int[] selectedIndexes = tree.getSelectionRows();
+		TreePath[] paths = tree.getSelectionPaths();
+
+		
+		if (selectedIndexes == null) {
+			return new ArrayList<Requirement>();
+		}
+		
+		//Iteration[] selectedIterations = new  Iteration[selectedIndexes.length];
+		List<Requirement> selectedRequirements = new ArrayList<Requirement>();
+		
+		for (TreePath path : paths) {
+			//f (((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel() != 2) {
+			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != 1) {
+				continue; //thing selected was not an iteration
+			}
+			String requirementName = path.getLastPathComponent().toString();
+			Requirement toAdd = getRequirementFromName(requirementName);
+			if (toAdd == null) {
+				continue; //requirement was not found whoops.
+			}
+			selectedRequirements.add(toAdd);
+		}
+		return selectedRequirements;
+	}
+	
+	public Requirement getRequirementFromName(String name) {
+		return RequirementDatabase.getInstance().getRequirement(name);
 	}
 }
