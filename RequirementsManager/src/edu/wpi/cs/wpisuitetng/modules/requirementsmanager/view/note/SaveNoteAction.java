@@ -27,7 +27,7 @@ public class SaveNoteAction extends AbstractAction {
 	 * @param controller the controller to trigger
 	 */
 	public SaveNoteAction(SaveNoteController controller) {
-		super("Add note");
+		super("Save");
 		this.controller = controller;
 	}
 	

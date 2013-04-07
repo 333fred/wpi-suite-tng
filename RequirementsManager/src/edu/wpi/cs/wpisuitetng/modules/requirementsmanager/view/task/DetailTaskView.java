@@ -58,7 +58,22 @@ public class DetailTaskView extends JPanel{
 		tasks = new JList(taskList);
 		tasks.setCellRenderer(new EventCellRenderer());
 		tasks.setSelectionModel(new ToggleSelectionModel());
-			
+	
+		// Add the list to the scroll pane
+		JScrollPane noteScrollPane = new JScrollPane();
+		noteScrollPane.getViewport().add(tasks);
+		
+		// Set up the frame
+		JPanel notePane = new JPanel();
+		notePane.setLayout(new BorderLayout());
+		notePane.add(noteScrollPane, BorderLayout.CENTER);
+		notePane.add(makeTaskPanel, BorderLayout.SOUTH);
+		
+		add(notePane, BorderLayout.CENTER);
+		
+		//adds the notes to the list model
+		addTasksToList();
+		
 	}
 	/**
 	 * Method to populate this object's list of tasks
