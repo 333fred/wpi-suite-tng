@@ -133,7 +133,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		if(!backlogExists){
 			// Save the iteration
 			System.out.println("No Backlog Iteration found! Creating one.");
-			Iteration backlog = new Iteration("Backlog", new Date(Long.MIN_VALUE), new Date(Long.MIN_VALUE+60000));
+			Iteration backlog = new Iteration("Backlog", new Date(0), new Date(60000));
 			backlog.setId(-1);
 			if (!db.save(backlog, s.getProject())) {
 				throw new WPISuiteException();

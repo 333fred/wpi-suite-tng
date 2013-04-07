@@ -93,15 +93,21 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
 			
 			boolean isDeleted = false;
-			boolean unDeleted = false;
+			boolean toBacklog = false;
 
 			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Deleted")) {
 				isDeleted = true;
 			}
 			
+			
+			//handle moving a requirement fmor in progress to open
+			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Open") && requirement.getStatus() == Status.IN_PROGRESS) {
+				toBacklog = true;
+			}
+			
+			//Handle undeletion
 			if(requirement.getStatus() == Status.DELETED && !isDeleted){
-				parentView.getComboBoxStatus().setSelectedItem("Backlog");
-				unDeleted = true;
+				toBacklog = true;
 			}
 			
 			try {
@@ -121,7 +127,7 @@ public class EditRequirementAction extends AbstractAction {
 				}*/
 				
 				String newIteration;
-				if(unDeleted){
+				if(toBacklog){
 					newIteration = "Backlog";
 				} else if (isDeleted){
 					newIteration = "Deleted";
