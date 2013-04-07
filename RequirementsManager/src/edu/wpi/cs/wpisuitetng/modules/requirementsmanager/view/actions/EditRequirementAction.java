@@ -91,9 +91,17 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setUsers(parentView.getAssignedUsers());
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
+			
+			boolean isDeleted = false;
+			boolean unDeleted = false;
 
 			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Deleted")) {
-				parentView.getComboBoxIteration().setSelectedItem("Backlog");
+				isDeleted = true;
+			}
+			
+			if(requirement.getStatus() == Status.DELETED && !isDeleted){
+				parentView.getComboBoxStatus().setSelectedItem("Backlog");
+				unDeleted = true;
 			}
 			
 			try {
@@ -108,22 +116,28 @@ public class EditRequirementAction extends AbstractAction {
 					saveIterationController.saveIteration(anIteration);
 				} catch (IterationNotFoundException e1) {
 					e1.printStackTrace();
-				} catch (RequirementNotFoundException ex){
+				}/* catch (RequirementNotFoundException ex){
 					ex.printStackTrace();
+				}*/
+				
+				String newIteration;
+				if(unDeleted){
+					newIteration = "Backlog";
+				} else if (isDeleted){
+					newIteration = "Deleted";
+				} else {
+					newIteration = parentView.getTextIteration().getSelectedItem().toString();
 				}
-
+						
+								
 				requirement.setIteration(IterationDatabase
 						.getInstance()
-						.getIteration(
-								parentView.getTextIteration().getSelectedItem()
-										.toString()).getId());
+						.getIteration(newIteration).getId());
 				Iteration anIteration = IterationDatabase.getInstance()
-						.getIteration(
-								parentView.getTextIteration().getSelectedItem()
-										.toString());
+						.getIteration(newIteration);
 				anIteration.addRequirement(requirement.getrUID());
 				saveIterationController.saveIteration(anIteration);
-
+				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
 							.getComboBoxPriority().getSelectedItem().toString()
@@ -156,10 +170,10 @@ public class EditRequirementAction extends AbstractAction {
 			} catch (NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");
-			} catch (RequirementNotFoundException e1) {
+			}/* catch (RequirementNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 		} else {
 			if (parentView.getTextName().getText().trim().equals("")) {
 				parentView.getTextName()
