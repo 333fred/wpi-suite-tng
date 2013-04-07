@@ -93,9 +93,15 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
 			
 			boolean isDeleted = false;
+			boolean unDeleted = false;
 
 			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Deleted")) {
 				isDeleted = true;
+			}
+			
+			if(requirement.getStatus() == Status.DELETED && !isDeleted){
+				parentView.getComboBoxStatus().setSelectedItem("Backlog");
+				unDeleted = true;
 			}
 			
 			try {
@@ -114,17 +120,21 @@ public class EditRequirementAction extends AbstractAction {
 					ex.printStackTrace();
 				}*/
 				
-				System.out.println("\n\n\n"+ isDeleted +"\n\n\n\n");
-				
+				String newIteration;
+				if(unDeleted){
+					newIteration = "Backlog";
+				} else if (isDeleted){
+					newIteration = "Deleted";
+				} else {
+					newIteration = parentView.getTextIteration().getSelectedItem().toString();
+				}
+						
+								
 				requirement.setIteration(IterationDatabase
 						.getInstance()
-						.getIteration(
-								isDeleted ? "Deleted" : parentView.getTextIteration().getSelectedItem()
-										.toString()).getId());
+						.getIteration(newIteration).getId());
 				Iteration anIteration = IterationDatabase.getInstance()
-						.getIteration(
-								isDeleted ? "Deleted" : parentView.getTextIteration().getSelectedItem()
-										.toString());
+						.getIteration(newIteration);
 				anIteration.addRequirement(requirement.getrUID());
 				saveIterationController.saveIteration(anIteration);
 				
