@@ -554,8 +554,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	 */
 	private void addJLabels() {
 		// add labels to the overall panel
-		lblName = new JLabel("Name:");
-		lblDescription = new JLabel("Description:");
+		lblName = new JLabel("*Name:");
+		lblDescription = new JLabel("*Description:");
 		lblType = new JLabel("Type:");		
 		lblStatus = new JLabel("Status:");
 		lblPriority = new JLabel("Priority:");
