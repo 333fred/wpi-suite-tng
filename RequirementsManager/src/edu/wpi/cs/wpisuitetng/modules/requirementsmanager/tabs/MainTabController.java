@@ -135,9 +135,25 @@ public class MainTabController {
 	}
 	
 	public Tab addEditIterationTab(Iteration iteration) {
+		//check if this iteration is open already
+		boolean iterationOpen = false;		
+		
+		for (int j = 0; j < getTabView().getTabCount(); j++) {
+			Component tabComponent = getTabView().getComponentAt(j); 
+			if (tabComponent instanceof IterationView) {
+				IterationView tabOpen = (IterationView) tabComponent;
+				if (tabOpen.getIterationId() == iteration.getId()) {
+					switchToTab(j);  
+					return null;
+				}		
+			}
+		}
+		
+		//iteration was not open, add it
 		IterationView iterationView = new IterationView(iteration, this);
 		return addTab(iteration.getName(), new ImageIcon(), iterationView, iteration.getName());
 	}
+
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement
 	 * 
@@ -148,9 +164,22 @@ public class MainTabController {
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
 		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
+		
+		//check if this requirement is already opened
+		for (int i = 0; i < getTabView().getTabCount(); i++) {
+			if (getTabView().getComponentAt(i) instanceof DetailPanel) {
+				if (((((DetailPanel) getTabView()
+						.getComponentAt(i))).getModel().getrUID()) == (requirement
+						.getrUID())) {
+					switchToTab(i);
+					return null;
+				}
+			}
+		}
 
 		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
+	
 	
 	/** Adds teh Requirement Table View to the tabs
 	 * 

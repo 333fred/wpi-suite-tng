@@ -13,6 +13,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,12 +25,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.DropMode;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -48,7 +47,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.BacklogPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
@@ -67,9 +65,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	private RetrieveAllIterationsController retrieveAllIterationsController;
 	private RetrieveAllRequirementsController retrieveAllRequirementsController;
 	
-	/** Temporary button used to view/edit an iteration */
-	private JButton editIterationButton;
-	
 	private MainTabController tabController;
 	
 	/** List of all the iterations currently being displayed */
@@ -78,8 +73,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	private boolean firstPaint;
 
 	public IterationTreeView(MainTabController tabController) {
-		//super(new BorderLayout());
-		SpringLayout layout = new SpringLayout();
+		super(new BorderLayout());
 		this.tabController = tabController;
 		iterations = new ArrayList<Iteration>();
 
@@ -96,28 +90,12 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		//final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		
 	    this.tree.setTransferHandler(new TreeTransferHandler());
-	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-	   
-	    editIterationButton = new JButton("Edit Iteration");
-	    editIterationButton.setAction(new EditIterationAction(this,tabController));
-	    editIterationButton.setText("Edit Iteration");
+	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);	  
+
 		
 		JScrollPane treeView = new JScrollPane(tree);
-		
-		
-		layout.putConstraint(SpringLayout.WEST, editIterationButton, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, editIterationButton, 0, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, editIterationButton, 0, SpringLayout.NORTH, this);
-		
-		layout.putConstraint(SpringLayout.NORTH, treeView, 0, SpringLayout.SOUTH, editIterationButton);
-		layout.putConstraint(SpringLayout.WEST, treeView, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, treeView, 0, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.SOUTH, treeView, 0, SpringLayout.SOUTH, this);
-		
-		setLayout(layout);
-		
-		add(editIterationButton);
-		add(treeView);
+
+		add(treeView,BorderLayout.CENTER);
 		
 		//register ourselves as a listener
 		IterationDatabase.getInstance().registerListener(this);

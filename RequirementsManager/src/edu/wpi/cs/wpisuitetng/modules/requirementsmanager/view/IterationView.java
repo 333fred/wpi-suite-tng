@@ -492,4 +492,8 @@ public class IterationView extends FocusableTab implements ISaveNotifier {
 		displaySaveError("Server returned save error: " + exception.getMessage());
 	}
 	
+	public int getIterationId() {
+		return iteration.getId();
+	}
+	
 }
