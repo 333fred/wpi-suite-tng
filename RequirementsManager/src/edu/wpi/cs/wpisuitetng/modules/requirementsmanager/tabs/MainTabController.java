@@ -123,6 +123,17 @@ public class MainTabController {
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
+	/** Adds a tab to create a new requirement assigned to the given iteration
+	 * 
+	 * TODO: Implement this.
+	 * @return The tab that was added
+	 */
+	
+	public Tab addCreateRequirementTab(Iteration iteration) {
+		DetailPanel emptyDetailView = new DetailPanel(iteration, this); 
+		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
+	}
+	
 	//TEST
 	public Tab addHelpPanelTab() {
 		HelpPanel emptyDetailView = new HelpPanel(); 

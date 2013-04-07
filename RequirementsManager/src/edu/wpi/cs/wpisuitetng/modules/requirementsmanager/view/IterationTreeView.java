@@ -138,7 +138,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
     	
-		
+		x += 10;
     	//we right clicked on something in particular
     	if (selRow != -1) {
     		JPopupMenu menuToShow;
