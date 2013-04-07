@@ -54,6 +54,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.ItemStateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.TextUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskView;
 
 /**
  * JPanel class to display the different fields of the requirement 
@@ -85,6 +86,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	private MainTabController mainTabController;
 	// the view that shows the notes
 	private DetailNoteView noteView;
+	
+	private DetailTaskView taskView;
 
 	//the view that shows the notes
 	public DetailLogView logView;
@@ -453,10 +456,10 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		logView = new DetailLogView(this.getRequirement(), this);
 		noteView = new DetailNoteView(this.getRequirement(), this);
 		userView = new AssigneePanel(requirement,this);
-		
+		taskView = new DetailTaskView(this.getRequirement(), this);
 	
 		// create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
+		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView, taskView);
 		
 		if(requirement.getStatus() == Status.DELETED){
 			eventPane.disableUserButtons();
@@ -996,4 +999,9 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	public JComboBox getComboBoxIteration() {
 		return comboBoxIteration;
 	}
+	
+	public DefaultListModel getTaskList() {
+		return taskView.getTaskList();
+	}
+	
 }
