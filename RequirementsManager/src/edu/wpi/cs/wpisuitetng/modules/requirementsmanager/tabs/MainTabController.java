@@ -123,6 +123,17 @@ public class MainTabController {
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
+	/** Adds a tab to create a new requirement assigned to the given iteration
+	 * 
+	 * TODO: Implement this.
+	 * @return The tab that was added
+	 */
+	
+	public Tab addCreateRequirementTab(Iteration iteration) {
+		DetailPanel emptyDetailView = new DetailPanel(iteration, this); 
+		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
+	}
+	
 	//TEST
 	public Tab addHelpPanelTab() {
 		HelpPanel emptyDetailView = new HelpPanel(); 
@@ -135,9 +146,25 @@ public class MainTabController {
 	}
 	
 	public Tab addEditIterationTab(Iteration iteration) {
+		//check if this iteration is open already
+		boolean iterationOpen = false;		
+		
+		for (int j = 0; j < getTabView().getTabCount(); j++) {
+			Component tabComponent = getTabView().getComponentAt(j); 
+			if (tabComponent instanceof IterationView) {
+				IterationView tabOpen = (IterationView) tabComponent;
+				if (tabOpen.getIterationId() == iteration.getId()) {
+					switchToTab(j);  
+					return null;
+				}		
+			}
+		}
+		
+		//iteration was not open, add it
 		IterationView iterationView = new IterationView(iteration, this);
 		return addTab(iteration.getName(), new ImageIcon(), iterationView, iteration.getName());
 	}
+
 	
 	/** Adds a new View Requirement tab that shows the details about the given requirement
 	 * 
@@ -148,9 +175,22 @@ public class MainTabController {
 	
 	public Tab addViewRequirementTab(Requirement requirement) {
 		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
+		
+		//check if this requirement is already opened
+		for (int i = 0; i < getTabView().getTabCount(); i++) {
+			if (getTabView().getComponentAt(i) instanceof DetailPanel) {
+				if (((((DetailPanel) getTabView()
+						.getComponentAt(i))).getModel().getrUID()) == (requirement
+						.getrUID())) {
+					switchToTab(i);
+					return null;
+				}
+			}
+		}
 
 		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
+	
 	
 	/** Adds teh Requirement Table View to the tabs
 	 * 
@@ -161,16 +201,6 @@ public class MainTabController {
 		RequirementTableView requirementListView = RequirementTableView.getInstance(this);
 
 		return addUnclosableTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
-	}
-	
-	/** Adds a tab to Edit a given Requirement
-	 * 
-	 * @param requirement The requirement to be edited
-	 * @return The tab that was added
-	 */
-	
-	public Tab addEditRequirementTab(Requirement requirement) {
-		return null;
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -159,7 +159,7 @@ public class Note implements Event {
 	 * @return The new string with <br>'s
 	 */
 	
-	private String parseNewLines(String text) {
+	public String parseNewLines(String text) {
 		text = text.replaceAll("\n", "<br>");
 		return text;
 

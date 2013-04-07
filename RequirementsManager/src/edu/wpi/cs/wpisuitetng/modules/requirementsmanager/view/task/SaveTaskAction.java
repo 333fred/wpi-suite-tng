@@ -36,7 +36,7 @@ public class SaveTaskAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.savetask();
+		controller.saveTask();
 	}
 
 }
