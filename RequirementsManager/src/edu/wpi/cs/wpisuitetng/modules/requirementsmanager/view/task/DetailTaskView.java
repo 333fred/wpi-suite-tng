@@ -14,16 +14,18 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
 
 /**
  * Panel containing a task for a requirement
@@ -55,23 +57,9 @@ public class DetailTaskView extends JPanel{
 		taskList = new DefaultListModel();
 		tasks = new JList(taskList);
 		tasks.setCellRenderer(new EventCellRenderer());
-
-		// Add the list to the scroll pane
-		JScrollPane taskScrollPane = new JScrollPane();
-		taskScrollPane.getViewport().add(tasks);
-		
-		// Set up the frame
-		JPanel taskPane = new JPanel();
-		taskPane.setLayout(new BorderLayout());
-		taskPane.add(taskScrollPane, BorderLayout.CENTER);
-		taskPane.add(makeTaskPanel, BorderLayout.SOUTH);
-		
-		add(taskPane, BorderLayout.CENTER);
-		
-		//adds the tasks to the list model
-		addTasksToList();
+		tasks.setSelectionModel(new ToggleSelectionModel());
+			
 	}
-	
 	/**
 	 * Method to populate this object's list of tasks
 	 * from the current requirement's list of tasks

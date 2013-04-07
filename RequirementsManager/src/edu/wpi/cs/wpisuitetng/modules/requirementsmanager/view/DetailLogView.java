@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
 
 
 /**
@@ -50,7 +51,8 @@ public class DetailLogView extends JPanel{
 		logList = new DefaultListModel();
 		log = new JList(logList);
 		log.setCellRenderer(new EventCellRenderer());
-
+		log.setSelectionModel(new ToggleSelectionModel());
+		
 		// Add the list to the scroll pane
 		JScrollPane noteScrollPane = new JScrollPane();
 		noteScrollPane.getViewport().add(log);
