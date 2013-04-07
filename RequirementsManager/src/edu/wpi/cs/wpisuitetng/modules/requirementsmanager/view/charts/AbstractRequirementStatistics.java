@@ -12,11 +12,15 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-public interface IRequirementStatistics {
+public abstract class AbstractRequirementStatistics<T> {
 
+	Map<T, Integer> data;
+	
 	/**
 	 * method to force reacquisition of data
 	 */
-	public void update();
+	public abstract void update();
+	
+	
 	
 }
