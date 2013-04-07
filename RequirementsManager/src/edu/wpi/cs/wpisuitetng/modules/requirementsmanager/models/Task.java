@@ -80,11 +80,12 @@ public class Task implements Event {
 	 */
 	
 	public String getContent() {
-		String temp = "<html><i>" + parseNewLines(getDescription()) + "</i></html>";
+		String temp = "<html><i>" + parseNewLines(getDescription());
+		//return temp;
 		if(this.completed)
-			return temp + "<html><i><br>Currently Completed</i></html>";
+			return temp + "<br>Currently Completed</i></html>";
 		else
-			return temp + "<html><i><br>Currently Incomplete</i></html>";
+			return temp + "<br>Currently Incomplete</i></html>";
 	}
 	
 	/** Changes the new line characters (\n) in the given string to html new line tags (<br>)
