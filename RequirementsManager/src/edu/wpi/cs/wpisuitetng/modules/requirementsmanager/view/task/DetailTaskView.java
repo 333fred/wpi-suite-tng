@@ -7,9 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Zac Chupka, Maddie Burris
+ *    Nick, Conor, Matt
  *******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
 
@@ -22,22 +22,22 @@ import javax.swing.ListSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
 
-
 /**
- * Panel containing a note for a requirement
+ * Panel containing a task for a requirement
  * @author Zac Chupka, Maddie Burris
  */
-public class DetailNoteView extends JPanel{
-	/** For Notes */
-	protected DefaultListModel noteList;
-	protected JList notes;
+public class DetailTaskView extends JPanel{
+	/** For Tasks */
+	protected DefaultListModel taskList;
+	protected JList tasks;
 	private Requirement requirement;
 	private DetailPanel parentView;
-	private MakeNotePanel makeNotePanel;
+	private MakeTaskPanel makeTaskPanel;
 
 	
 	/**
@@ -45,72 +45,57 @@ public class DetailNoteView extends JPanel{
 	 * @param requirement the requirement 
 	 * @param parentView the parent view
 	 */
-	public DetailNoteView(Requirement requirement, DetailPanel parentView){
+	public DetailTaskView(Requirement requirement, DetailPanel parentView){
 		this.requirement = requirement;
 		this.parentView = parentView;
 		
 		setLayout(new BorderLayout());
-		// Set up the note panel
-		makeNotePanel = new MakeNotePanel(requirement, parentView);
+		// Set up the task panel
+		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
 
-		// Create the note list
-		noteList = new DefaultListModel();
-		notes = new JList(noteList);
-		notes.setCellRenderer(new EventCellRenderer());
-		notes.setSelectionModel(new ToggleSelectionModel());
-
-		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(notes);
-		
-		// Set up the frame
-		JPanel notePane = new JPanel();
-		notePane.setLayout(new BorderLayout());
-		notePane.add(noteScrollPane, BorderLayout.CENTER);
-		notePane.add(makeNotePanel, BorderLayout.SOUTH);
-		
-		add(notePane, BorderLayout.CENTER);
-		
-		//adds the notes to the list model
-		addNotesToList();
+		// Create the task list
+		taskList = new DefaultListModel();
+		tasks = new JList(taskList);
+		tasks.setCellRenderer(new EventCellRenderer());
+		tasks.setSelectionModel(new ToggleSelectionModel());
+			
 	}
-	
 	/**
-	 * Method to populate this object's list of notes
-	 * from the current requirement's list of notes
+	 * Method to populate this object's list of tasks
+	 * from the current requirement's list of tasks
 	 */
-	private void addNotesToList() {
-		noteList.clear();
+	private void addTasksToList() {
+		taskList.clear();
 		
-		//add the notes to the list model.
-		for (Note aNote : requirement.getNotes()) {
-			this.noteList.addElement(aNote);
+		//add the tasks to the list model.
+		for (Task aTask : requirement.getTasks()) {
+			this.taskList.addElement(aTask);
 		}
 	}
 	
 	/**
-	 * simple getter for the list of notes of which this view is currently aware
-	 * @return the list of notes
+	 * simple getter for the list of tasks of which this view is currently aware
+	 * @return the list of tasks
 	 */
-	public DefaultListModel getNoteList() {
-		return noteList;
+	public DefaultListModel getTaskList() {
+		return taskList;
 	}
 	
-	/** Updates the local display of the current requirement's notes
+	/** Updates the local display of the current requirement's tasks
 	 * 
 	 * @param newRequirement the most recent version of the current requirement
 	 */
 	public void updateRequirement(Requirement newRequirement) {
 		this.requirement = newRequirement;
 		
-		//updates the notes list
-		addNotesToList();
+		//updates the tasks list
+		addTasksToList();
 	}
 	
 	/**
-	 * This function disables interaction with the notes panel
+	 * This function disables interaction with the tasks panel
 	 */
 	public void disableUserButtons(){
-		makeNotePanel.setInputEnabled(false);
+		makeTaskPanel.setInputEnabled(false);
 	}	
 }

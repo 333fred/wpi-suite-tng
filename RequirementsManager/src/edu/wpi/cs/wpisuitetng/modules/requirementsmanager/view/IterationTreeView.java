@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,11 +26,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.DropMode;
-import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -49,19 +49,24 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.AnywherePopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.BacklogPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
 
 @SuppressWarnings("serial")
 public class IterationTreeView extends JPanel implements IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+	
+	protected static final int ROOT_LEVEL = 0;
+	protected static final int ITERATION_LEVEL = 1;
+	protected static final int REQUIREMENT_LEVEL = 2;
 	
 	private JTree tree;
 	private DefaultMutableTreeNode top;
 	private RetrieveAllIterationsController retrieveAllIterationsController;
 	private RetrieveAllRequirementsController retrieveAllRequirementsController;
-	
-	/** Temporary button used to view/edit an iteration */
-	private JButton editIterationButton;
 	
 	private MainTabController tabController;
 	
@@ -71,8 +76,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	private boolean firstPaint;
 
 	public IterationTreeView(MainTabController tabController) {
-		//super(new BorderLayout());
-		SpringLayout layout = new SpringLayout();
+		super(new BorderLayout());
 		this.tabController = tabController;
 		iterations = new ArrayList<Iteration>();
 
@@ -89,28 +93,12 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		//final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		
 	    this.tree.setTransferHandler(new TreeTransferHandler());
-	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-	   
-	    editIterationButton = new JButton("Edit Iteration");
-	    editIterationButton.setAction(new EditIterationAction(this,tabController));
-	    editIterationButton.setText("Edit Iteration");
+	    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);	  
+
 		
 		JScrollPane treeView = new JScrollPane(tree);
-		
-		
-		layout.putConstraint(SpringLayout.WEST, editIterationButton, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, editIterationButton, 0, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, editIterationButton, 0, SpringLayout.NORTH, this);
-		
-		layout.putConstraint(SpringLayout.NORTH, treeView, 0, SpringLayout.SOUTH, editIterationButton);
-		layout.putConstraint(SpringLayout.WEST, treeView, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, treeView, 0, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.SOUTH, treeView, 0, SpringLayout.SOUTH, this);
-		
-		setLayout(layout);
-		
-		add(editIterationButton);
-		add(treeView);
+
+		add(treeView,BorderLayout.CENTER);
 		
 		//register ourselves as a listener
 		IterationDatabase.getInstance().registerListener(this);
@@ -122,16 +110,172 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		
 		MouseListener ml = new MouseAdapter() {
 		    public void mousePressed(MouseEvent e) {
-		        int selRow = tree.getRowForLocation(e.getX(), e.getY());
-		        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-		        if(selRow != -1) {
-		            if(e.getClickCount() == 2) {
-		                onDoubleClick(selRow, selPath);
-		            }
-		        }
+			    if (e.getButton() == MouseEvent.BUTTON1) {
+			        int selRow = tree.getRowForLocation(e.getX(), e.getY());
+			        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+			        if(selRow != -1) {
+			            if(e.getClickCount() == 2) {
+			                onDoubleClick(selRow, selPath);
+			            }
+			        }
+		    	}
+			    else if (e.getButton() == MouseEvent.BUTTON3) {
+			    	//this was a right click
+			    	
+			    	int selRow = tree.getRowForLocation(e.getX(), e.getY());
+			        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+			        onRightClick(e.getX(), e.getY(), selRow, selPath);
+			    }
 		    }
 		};
 		this.tree.addMouseListener(ml);
+	}
+	
+	/** Called when the user right clicks, will determine where the user clicked on the tree, and open the correct menu
+	 * 
+	 * @param x The x coordinate of where the user clicked
+	 * @param y The y coordinate of where the user clicked
+	 * @param selRow The selection row of where the user clicked
+	 * @param selPath The selection path of where the user clicked
+	 */
+	
+	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
+    	//add a menu offset
+		x += 10;
+		
+    	//we right clicked on something in particular
+    	if (selRow != -1) {
+    		JPopupMenu menuToShow;
+    		int levelClickedOn = ((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel();
+    		System.out.println("LevelClickedOn: " + levelClickedOn);
+    		
+    		if (tree.getSelectionModel().getSelectionMode() == TreeSelectionModel.SINGLE_TREE_SELECTION) {
+    			//we are in single selection mode
+    			tree.setSelectionPath(selPath);  			
+    			
+    		}
+    		else {
+    			//multi selection mode
+    			tree.addSelectionPath(selPath);
+    		}  
+    		
+    		boolean backLogSingleSel = false;
+    		
+    		//check if the user has selected only the backlog
+    		if (tree.getSelectionPaths().length == 1 && levelClickedOn == ITERATION_LEVEL) {
+    			//one thing selected, check for backlog
+    			String iterationName = tree.getSelectionPaths()[0].getLastPathComponent().toString();
+    			if (iterationName.equals("Backlog")) {
+    				backLogSingleSel = true;
+    				//user has selected backlog
+    				BacklogPopupMenu  menu = new BacklogPopupMenu(tabController);
+    				menu.show(this,x,y);
+    			}
+    		}
+  		
+		
+    		//the backlog was not selected, or not only thing selected
+    		if (!backLogSingleSel) {
+	    		switch (levelClickedOn) {
+	    		
+	    		case ROOT_LEVEL: 
+	    			System.out.println("Root Level");
+	    			menuToShow = new RootPopupMenu(tabController);
+	    			menuToShow.show(this, x, y);
+	    			break;
+	    			
+	    		case ITERATION_LEVEL:
+	    			System.out.println("Iteration Level");
+	    			List<Iteration> selectedIterations = getSelectedIterations();
+	    			if (selectedIterations.size() == 0) {
+	    				//there were no selected iterations, WUT ARE WE DOIN HERE
+	    				break;
+	    			}
+	    			menuToShow = new IterationPopupMenu(tabController, selectedIterations);
+	    			menuToShow.show(this, x, y);
+	    			break;
+	    			
+	    		case REQUIREMENT_LEVEL:
+	    			System.out.println("Requirement Level");
+	    			List<Requirement> selectedRequirements = getSelectedRequirements();
+	    			if (selectedRequirements.size() == 0) {
+	    				//there were no selected requirements, 
+	    				break;
+	    			}
+	    			menuToShow = new RequirementPopupMenu(tabController, selectedRequirements);
+	    			menuToShow.show(this, x, y);
+	    			break;    		
+	    		}
+    		}
+
+   
+    	}
+    	else {
+    		//we right clicked in the tree. 
+    		//TODO: We might want to check if multiple selected, and then open according menu?
+
+    		// do this only if more than one thing was selected
+    		if (tree.getSelectionPaths() != null && tree.getSelectionPaths().length > 1 ) {
+    			//something was selected, lets open its stuff
+    			//need to check if only one level is selected
+    			int curSelectionLevel = -1;
+    			boolean sameLevel = true;
+    			for (TreePath path: tree.getSelectionPaths()) {
+    				int pathLevel = ((DefaultMutableTreeNode)path.getLastPathComponent()).getLevel();
+    				if (curSelectionLevel == -1) {
+    					curSelectionLevel = pathLevel;
+    				}
+    				else if (curSelectionLevel != pathLevel) {
+    					sameLevel = false;
+    				}
+    			}
+    			
+    			if (sameLevel) {
+    				
+    				JPopupMenu menuToShow;
+    				
+    				switch (curSelectionLevel) {
+    	    		
+    	    		case ROOT_LEVEL: 
+    	    			System.out.println("Root Level");
+    	    			menuToShow = new RootPopupMenu(tabController);
+    	    			menuToShow.show(this, x, y);
+    	    			break;
+    	    			
+    	    		case ITERATION_LEVEL:
+    	    			System.out.println("Iteration Level");
+    	    			List<Iteration> selectedIterations = getSelectedIterations();
+    	    			if (selectedIterations.size() == 0) {
+    	    				//there were no selected iterations, WUT ARE WE DOIN HERE
+    	    				break;
+    	    			}
+    	    			menuToShow = new IterationPopupMenu(tabController, selectedIterations);
+    	    			menuToShow.show(this, x, y);
+    	    			break;
+    	    			
+    	    		case REQUIREMENT_LEVEL:
+    	    			System.out.println("Requirement Level");
+    	    			List<Requirement> selectedRequirements = getSelectedRequirements();
+    	    			if (selectedRequirements.size() == 0) {
+    	    				//there were no selected requirements, 
+    	    				break;
+    	    			}
+    	    			menuToShow = new RequirementPopupMenu(tabController, selectedRequirements);
+    	    			menuToShow.show(this, x, y);
+    	    			break;    		
+    	    		}
+    			}
+    			
+    		}
+    		else {
+    			//if nothing selected, we create the anywhere menu, to create req and iter.
+    			JPopupMenu menuToShow = new AnywherePopupMenu(tabController);
+    			menuToShow.show(this,x,y);
+    		}
+    		
+    		
+    	}
+    	
 	}
 
 	protected void onDoubleClick(int selRow, TreePath selPath) {	
@@ -307,16 +451,14 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		TreePath[] paths = tree.getSelectionPaths();
 
 		
-		if (selectedIndexes == null) {
+		if (selectedIndexes == null || paths == null ) {
 			return new ArrayList<Iteration>();
 		}
 		
-		//Iteration[] selectedIterations = new  Iteration[selectedIndexes.length];
 		List<Iteration> selectedIterations = new ArrayList<Iteration>();
 		
 		for (TreePath path : paths) {
-			//f (((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel() != 2) {
-			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != 1) {
+			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != ITERATION_LEVEL) {
 				continue; //thing selected was not an iteration
 			}
 			String iterationName = path.getLastPathComponent().toString();
@@ -337,5 +479,36 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 			}
 		}
 		return null;
+	}
+	
+	
+	public List<Requirement> getSelectedRequirements() {
+		int[] selectedIndexes = tree.getSelectionRows();
+		TreePath[] paths = tree.getSelectionPaths();
+
+		
+		if (selectedIndexes == null || paths == null) {
+			return new ArrayList<Requirement>();
+		}
+		
+		//Iteration[] selectedIterations = new  Iteration[selectedIndexes.length];
+		List<Requirement> selectedRequirements = new ArrayList<Requirement>();
+		
+		for (TreePath path : paths) {
+			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != REQUIREMENT_LEVEL) {
+				continue; //thing selected was not an iteration
+			}
+			String requirementName = path.getLastPathComponent().toString();
+			Requirement toAdd = getRequirementFromName(requirementName);
+			if (toAdd == null) {
+				continue; //requirement was not found whoops.
+			}
+			selectedRequirements.add(toAdd);
+		}
+		return selectedRequirements;
+	}
+	
+	public Requirement getRequirementFromName(String name) {
+		return RequirementDatabase.getInstance().getRequirement(name);
 	}
 }
