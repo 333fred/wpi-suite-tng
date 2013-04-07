@@ -241,18 +241,19 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		butRefresh.setAction(new RefreshAction(this));
 		butView.setAction(new ViewRequirementAction(this));		
 		
-		layout.putConstraint(SpringLayout.NORTH, butView, 5, SpringLayout.NORTH, content);
-		layout.putConstraint(SpringLayout.WEST, butView, 16, SpringLayout.WEST, content);
-		
-		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5, SpringLayout.SOUTH, butView);
+		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5, SpringLayout.NORTH, content);
 		layout.putConstraint(SpringLayout.WEST, butRefresh, 16, SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.EAST, butRefresh, 0, SpringLayout.EAST, butView);
+		layout.putConstraint(SpringLayout.EAST, butRefresh, -16, SpringLayout.EAST, content);
+		
+		layout.putConstraint(SpringLayout.NORTH, butView, 5, SpringLayout.SOUTH, butRefresh);
+		layout.putConstraint(SpringLayout.WEST, butView, 16, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, butView, 0, SpringLayout.EAST, butRefresh);
 		
 		// create and add the buttons that will be displayed
-		content.add(butView);
+		//content.add(butView);
 		content.add(butRefresh);
 		
-		toolbarView = new ToolbarGroupView("Requirements", content);
+		toolbarView = new ToolbarGroupView("Refresh", content);
 		// set the width of the group so it is not too long
 		toolbarView.setPreferredWidth((int) (butView.getPreferredSize().getWidth() + 40));
 		
