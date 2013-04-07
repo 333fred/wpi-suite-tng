@@ -161,6 +161,12 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		};
 		
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+	/*	for (int i = 0; i < this.table.getColumnCount(); i++) {
+			if (this.table.getColumnName(i).equals("Priority")) {
+				sorter.setComparator(i, comparator);
+			}
+		}*/
+		// TODO: find a better way to get the priority column
 		sorter.setComparator(3, comparator);
 		table.setRowSorter(sorter);		
 		
@@ -171,14 +177,6 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 				this.table.getColumnModel().getColumn(i).setPreferredWidth(12);
 			}
 		}
-	/*	this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		int colWidth = this.table.getColumnModel().getColumn(0).getPreferredWidth();
-		int numCol = this.table.getColumnCount();
-		for (int i = 0; i < numCol; i++) {
-			this.table.getColumnModel().getColumn(i).setMinWidth(colWidth*2);
-		}*/
-	//	this.table.setPreferredSize(new Dimension(1100, 200));
-	//	this.table.setAutoCreateRowSorter(false);
 		add(scrollPane);
 
 		// Add double click event listener
