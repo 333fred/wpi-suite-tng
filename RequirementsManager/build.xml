@@ -12,9 +12,7 @@
 		<fileset dir="${core-lib}">
 			<include name="gson-*.jar"/>
 		</fileset>
-		<fileset dir="../Janeway/lib/">
-			<include name="*.jar"/>
-		</fileset>
+		<fileset dir="../Janeway/lib" includes= "*.jar"/>
 		<pathelement path="build"/>
 	</path>
 
@@ -38,6 +36,7 @@
 		<jar destfile="${janeway-jar-dest}">
 			<fileset dir="build"/>
 			<fileset file="manifest.txt"/>
+			<zipgroupfileset dir="../Janeway/lib" includes="**/*.jar" />
 		</jar>
 	</target>
 

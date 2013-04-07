@@ -22,12 +22,11 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
- * Action invoked upon use of the Create Requirement key
- * Heavily adapted from CreateDefectAction in the DefectTracker module
+ * Action invoked upon use of the User Manual key
  * 
- * Action that calls {@link MainTabController#addCreateHelpPanelTab()}, default mnemonic key is C. 
+ * Action, default mnemonic key is F1. 
  * 
- * @author Alex Gorowara 
+ * @author Nicholas Massa
  */
 @SuppressWarnings("serial")
 public class CreateHelpPanelAction extends AbstractAction {

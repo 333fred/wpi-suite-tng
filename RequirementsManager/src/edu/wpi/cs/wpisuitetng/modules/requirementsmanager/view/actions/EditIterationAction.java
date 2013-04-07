@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -66,4 +66,27 @@ public class EditIterationAction extends AbstractAction {
 		}
 		
 	}
+	/*
+	   @Override
+	   public void actionPerformed(ActionEvent e) {
+	     Iteration[] iterationsToOpen = iterationTreeView.getSelectedIterations();
+	+    int numIterations = iterationsToOpen.length;
+	     for (Iteration i : iterationsToOpen) {
+	       if (i == null || i.getName().equals("Backlog")) continue;
+	-      tabController.addEditIterationTab(i);
+	+      boolean IterationIsOpen = false;
+	+      for (int j = 0; j < this.tabController.getTabView().getTabCount(); j++) {
+	+        for (int k = 0; k < numIterations; k++) {
+	+          if (this.tabController.getTabView().getTitleAt(j).equals(iterationsToOpen[k].getName())) {
+	+            this.tabController.switchToTab(j);
+	+            IterationIsOpen = true;
+	+          }
+	+        }
+	+      }
+	+      if (!IterationIsOpen) {
+	+        tabController.addEditIterationTab(i);
+	+      }
+	     } 
+	     */
+	
 }
