@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteViewListener;
 
 
 /**
@@ -71,6 +72,13 @@ public class DetailNoteView extends JPanel{
 		
 		add(notePane, BorderLayout.CENTER);
 		
+		// add key listener
+		NoteViewListener noteFieldListener = new NoteViewListener(this, this.makeNotePanel.getnoteField());
+		this.makeNotePanel.getnoteField().addKeyListener(noteFieldListener);
+		
+		// note will be disabled on start, nothing to add
+		disableAddNote();
+		
 		//adds the notes to the list model
 		addNotesToList();
 	}
@@ -113,4 +121,12 @@ public class DetailNoteView extends JPanel{
 	public void disableUserButtons(){
 		makeNotePanel.setInputEnabled(false);
 	}	
+	
+	public void disableAddNote() {
+		this.makeNotePanel.getAddnote().setEnabled(false);
+	}
+	
+	public void enableAddNote() {
+		this.makeNotePanel.getAddnote().setEnabled(true);
+	}
 }

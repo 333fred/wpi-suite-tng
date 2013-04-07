@@ -36,6 +36,8 @@ public class MakeNotePanel extends JPanel{
 
 	private final JTextArea noteField;
 	private final JButton addnote;
+
+
 	//private final JButton deleteNote;
 	private final JLabel addnoteLabel;
 
@@ -67,15 +69,6 @@ public class MakeNotePanel extends JPanel{
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
 				 	noteField.append("\n");
-				 	/*
-					if (event.isShiftDown()) {
-						// user is doing a shift + enter
-						noteField.append("\n");
-					}
-					else {
-						// save the note
-						addnote.doClick(0);
-					}*/
 					event.consume();
 				}
 			}
@@ -118,6 +111,13 @@ public class MakeNotePanel extends JPanel{
 	public JTextArea getnoteField() {
 		return noteField;
 	}
+	
+	/**
+	 * @return the addnote
+	 */
+	public JButton getAddnote() {
+		return addnote;
+	}	
 		
 	/**
 	 * Enables and disables input on this panel.
