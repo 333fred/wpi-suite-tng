@@ -9,6 +9,7 @@
  * Contributors:
  *    Steve Kordell
  *    Mitchell Caisse
+ *    Alex Gorowara
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
