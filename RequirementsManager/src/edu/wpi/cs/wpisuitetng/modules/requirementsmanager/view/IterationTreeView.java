@@ -324,9 +324,10 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		
 		//sort the iterations
 		iterations = Iteration.sortIterations(iterations);
+		Date acurrentDate = new Date();
 		
 		for (Iteration anIteration : iterations) {
-			iterationNode = new DefaultMutableTreeNode(anIteration.getName());
+			iterationNode = new DefaultMutableTreeNode(acurrentDate.compareTo(anIteration.getEndDate()) > 0 ? anIteration.getName() +" (Completed)" : anIteration.getName());
 
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
@@ -447,6 +448,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	 */
 	
 	public List<Iteration> getSelectedIterations() {
+		//TODO: Handle selecting completed iteration
 		int[] selectedIndexes = tree.getSelectionRows();
 		TreePath[] paths = tree.getSelectionPaths();
 
@@ -462,8 +464,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 				continue; //thing selected was not an iteration
 			}
 			String iterationName = path.getLastPathComponent().toString();
+			iterationName = iterationName.replace(" (Completed)", "");
+			System.out.println(iterationName);
+
 			Iteration toAdd = getIterationFromName(iterationName);
-			if (iterationName.equals("Backlog") || toAdd == null) {
+			if (iterationName.equals("Backlog") || iterationName.equals("Deleted") || toAdd == null) {
 				continue; //either iteration was not found, or user tried to open backlog
 			}
 			selectedIterations.add(toAdd);

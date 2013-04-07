@@ -107,6 +107,11 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
     	   return false;
        }
        
+       //don't allow dropping into deleted iteration
+       if(iteration.getId() == -2) {
+    	   return false;
+       }
+       
        //don't allow dropping into iteration that is already in
        if(firstNode.getParent() == target) {
     	   return false;

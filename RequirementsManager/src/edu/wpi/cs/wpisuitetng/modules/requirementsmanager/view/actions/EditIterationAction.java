@@ -46,7 +46,7 @@ public class EditIterationAction extends AbstractAction {
 		int numIterations = iterationsToOpen.size();
 		
 		for (Iteration i : iterationsToOpen) {
-			if (i == null || i.getName().equals("Backlog")) continue;
+			if (i == null || i.getName().equals("Backlog") || i.getName().equals("Deleted")) continue;
 			boolean IterationIsOpen = false;
 			for (int j = 0; j < this.tabController.getTabView().getTabCount(); j++) {
 				for (int k = 0; k < numIterations; k++) {
