@@ -327,7 +327,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		Date acurrentDate = new Date();
 		
 		for (Iteration anIteration : iterations) {
-			iterationNode = new DefaultMutableTreeNode(acurrentDate.compareTo(anIteration.getEndDate()) > 0 ? anIteration.getName() +" (Completed)" : anIteration.getName());
+			iterationNode = new DefaultMutableTreeNode((acurrentDate.compareTo(anIteration.getEndDate()) > 0 && anIteration.getId() != -1) ? anIteration.getName() +" (Completed)" : anIteration.getName());
 
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
