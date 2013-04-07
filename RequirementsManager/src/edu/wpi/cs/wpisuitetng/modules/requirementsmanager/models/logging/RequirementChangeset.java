@@ -207,7 +207,7 @@ public class RequirementChangeset extends Changeset implements Event {
 			List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("notes"));
 			if (added.size() > 0) {
-				content += "Added " + added.size() + " note(s)<br>";
+				content += "Added " + added.size() + " note<br>";
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + added.size() + " note(s)<br>";
