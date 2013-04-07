@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -161,29 +162,19 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * Adds a given requirement to this iteration. If it does not exist on the
-	 * local database then it will fail. If the requirement is already a 
+	 * Adds a given requirement to this iteration. If the requirement is already a 
 	 * member of requirements we do nothing
 	 * 
 	 * @param rUID
 	 *            the new requirement
-	 * @throws RequirementNotFOundException
-	 *            if rUID does not correspond to an existing requirement
 	 */
-	public void addRequirement(int rUID) throws RequirementNotFoundException {
+	public void addRequirement(int rUID)  {
 
 		//first check if the requirement is already on here
 		for (Integer id : this.requirements) {
 			if (id == rUID) return; //if it is we are already done
 		}
-		try{
-			Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
-			this.requirements.add(rUID);
-		}
-		catch(RequirementNotFoundException e){
-			throw e;
-		}
- 
+			this.requirements.add(rUID); 
 	}
 
 	/**
@@ -191,34 +182,14 @@ public class Iteration extends AbstractModel {
 	 * 
 	 * @param rUID
 	 *            the removed requirement
-	 * @throws RequirementNotFoundException
-	 *            if rUID does not correspond to an existing requirement (will still remove the rUID from the list)
-	 *            or if rUID is not in this iteration's list of requirements
 	 */
-	public void removeRequirement(int rUID) throws RequirementNotFoundException {
+	public void removeRequirement(int rUID) {
 	
-		for (Integer id : this.requirements) {
-		
-			if (id == rUID) {
-		
-				// regardless of whether or not the requirement exists, remove its ID
-				this.requirements.remove(id);
-				
-				try{
-					Requirement requirement = RequirementDatabase.getInstance().getRequirement(rUID);
-					return;
-				}
-				
-				catch(RequirementNotFoundException e){
-					throw e;
-				}
-				
-			}
-			
+		Iterator<Integer> iter = this.requirements.iterator();
+		while(iter.hasNext()){
+		    if(iter.next() == rUID)
+		        iter.remove();
 		}
-		
-		//throw new RequirementNotFoundException(rUID);
-		
 	}
 
 	/**
