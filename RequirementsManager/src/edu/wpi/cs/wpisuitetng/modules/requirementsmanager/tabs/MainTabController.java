@@ -163,16 +163,6 @@ public class MainTabController {
 		return addUnclosableTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
 	}
 	
-	/** Adds a tab to Edit a given Requirement
-	 * 
-	 * @param requirement The requirement to be edited
-	 * @return The tab that was added
-	 */
-	
-	public Tab addEditRequirementTab(Requirement requirement) {
-		return null;
-	}
-	
 	/**
 	 * Add a change listener to the view this is controlling.
 	 * @param listener the ChangeListener that should receive ChangeEvents

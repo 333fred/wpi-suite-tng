@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.BacklogPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
@@ -159,42 +160,134 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
     	
+		
     	//we right clicked on something in particular
     	if (selRow != -1) {
     		JPopupMenu menuToShow;
     		int levelClickedOn = ((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel();
-    		switch (levelClickedOn) {
+    		System.out.println("LevelClickedOn: " + levelClickedOn);
     		
-    		case ROOT_LEVEL: 
-    			menuToShow = new RootPopupMenu(tabController);
-    			menuToShow.show(this, x, y);
-    			break;
+    		if (tree.getSelectionModel().getSelectionMode() == TreeSelectionModel.SINGLE_TREE_SELECTION) {
+    			//we are in single selection mode
+    			tree.setSelectionPath(selPath);  			
     			
-    		case ITERATION_LEVEL:
-    			List<Iteration> selectedIterations = getSelectedIterations();
-    			if (selectedIterations.size() == 0) {
-    				//there were no selected iterations, WUT ARE WE DOIN HERE
-    				break;
+    		}
+    		else {
+    			//multi selection mode
+    			tree.addSelectionPath(selPath);
+    		}  
+    		
+    		boolean backLogSingleSel = false;
+    		
+    		//check if the user has selected only the backlog
+    		if (tree.getSelectionPaths().length == 1 && levelClickedOn == ITERATION_LEVEL) {
+    			//one thing selected, check for backlog
+    			String iterationName = tree.getSelectionPaths()[0].getLastPathComponent().toString();
+    			if (iterationName.equals("Backlog")) {
+    				backLogSingleSel = true;
+    				//user has selected backlog
+    				BacklogPopupMenu  menu = new BacklogPopupMenu(tabController);
+    				menu.show(this,x,y);
     			}
-    			menuToShow = new IterationPopupMenu(tabController, selectedIterations);
-    			menuToShow.show(this, x, y);
-    			break;
-    			
-    		case REQUIREMENT_LEVEL:
-    			List<Requirement> selectedRequirements = getSelectedRequirements();
-    			if (selectedRequirements.size() == 0) {
-    				//there were no selected requirements, 
-    				break;
-    			}
-    			menuToShow = new RequirementPopupMenu(tabController, selectedRequirements);
-    			menuToShow.show(this, x, y);
-    			break;    		
-    		}    		
+    		}
+  		
+		
+    		//the backlog was not selected, or not only thing selected
+    		if (!backLogSingleSel) {
+	    		switch (levelClickedOn) {
+	    		
+	    		case ROOT_LEVEL: 
+	    			System.out.println("Root Level");
+	    			menuToShow = new RootPopupMenu(tabController);
+	    			menuToShow.show(this, x, y);
+	    			break;
+	    			
+	    		case ITERATION_LEVEL:
+	    			System.out.println("Iteration Level");
+	    			List<Iteration> selectedIterations = getSelectedIterations();
+	    			if (selectedIterations.size() == 0) {
+	    				//there were no selected iterations, WUT ARE WE DOIN HERE
+	    				break;
+	    			}
+	    			menuToShow = new IterationPopupMenu(tabController, selectedIterations);
+	    			menuToShow.show(this, x, y);
+	    			break;
+	    			
+	    		case REQUIREMENT_LEVEL:
+	    			System.out.println("Requirement Level");
+	    			List<Requirement> selectedRequirements = getSelectedRequirements();
+	    			if (selectedRequirements.size() == 0) {
+	    				//there were no selected requirements, 
+	    				break;
+	    			}
+	    			menuToShow = new RequirementPopupMenu(tabController, selectedRequirements);
+	    			menuToShow.show(this, x, y);
+	    			break;    		
+	    		}
+    		}
+
    
     	}
     	else {
     		//we right clicked in the tree. 
-    		//TODO: We might want to check if multiple selected, and then open acording menu?
+    		//TODO: We might want to check if multiple selected, and then open according menu?
+
+    		//check if anything was selected, only do this if multi select is enabled
+    		if (tree.getSelectionPaths().length != 0 && 
+    				tree.getSelectionModel().getSelectionMode() != TreeSelectionModel.SINGLE_TREE_SELECTION) {
+    			//something was selected, lets open its stuff
+    			//need to check if only one level is selected
+    			int curSelectionLevel = -1;
+    			boolean sameLevel = true;
+    			for (TreePath path: tree.getSelectionPaths()) {
+    				int pathLevel = ((DefaultMutableTreeNode)path.getLastPathComponent()).getLevel();
+    				if (curSelectionLevel == -1) {
+    					curSelectionLevel = pathLevel;
+    				}
+    				else if (curSelectionLevel != pathLevel) {
+    					sameLevel = false;
+    				}
+    			}
+    			
+    			if (sameLevel) {
+    				
+    				JPopupMenu menuToShow;
+    				
+    				switch (curSelectionLevel) {
+    	    		
+    	    		case ROOT_LEVEL: 
+    	    			System.out.println("Root Level");
+    	    			menuToShow = new RootPopupMenu(tabController);
+    	    			menuToShow.show(this, x, y);
+    	    			break;
+    	    			
+    	    		case ITERATION_LEVEL:
+    	    			System.out.println("Iteration Level");
+    	    			List<Iteration> selectedIterations = getSelectedIterations();
+    	    			if (selectedIterations.size() == 0) {
+    	    				//there were no selected iterations, WUT ARE WE DOIN HERE
+    	    				break;
+    	    			}
+    	    			menuToShow = new IterationPopupMenu(tabController, selectedIterations);
+    	    			menuToShow.show(this, x, y);
+    	    			break;
+    	    			
+    	    		case REQUIREMENT_LEVEL:
+    	    			System.out.println("Requirement Level");
+    	    			List<Requirement> selectedRequirements = getSelectedRequirements();
+    	    			if (selectedRequirements.size() == 0) {
+    	    				//there were no selected requirements, 
+    	    				break;
+    	    			}
+    	    			menuToShow = new RequirementPopupMenu(tabController, selectedRequirements);
+    	    			menuToShow.show(this, x, y);
+    	    			break;    		
+    	    		}
+    			}
+    			
+    		}
+    		
+    		
     	}
     	
 	}
@@ -371,15 +464,14 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		TreePath[] paths = tree.getSelectionPaths();
 
 		
-		if (selectedIndexes == null) {
+		if (selectedIndexes == null || paths == null ) {
 			return new ArrayList<Iteration>();
 		}
 		
 		List<Iteration> selectedIterations = new ArrayList<Iteration>();
 		
 		for (TreePath path : paths) {
-			//f (((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel() != 2) {
-			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != 1) {
+			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != ITERATION_LEVEL) {
 				continue; //thing selected was not an iteration
 			}
 			String iterationName = path.getLastPathComponent().toString();
@@ -402,14 +494,13 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		return null;
 	}
 	
-	//RequirementDatabase.getInstance().getRequirement(((DefaultMutableTreeNode)selPath.getLastPathComponent()).toString());
 	
 	public List<Requirement> getSelectedRequirements() {
 		int[] selectedIndexes = tree.getSelectionRows();
 		TreePath[] paths = tree.getSelectionPaths();
 
 		
-		if (selectedIndexes == null) {
+		if (selectedIndexes == null || paths == null) {
 			return new ArrayList<Requirement>();
 		}
 		
@@ -417,8 +508,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		List<Requirement> selectedRequirements = new ArrayList<Requirement>();
 		
 		for (TreePath path : paths) {
-			//f (((DefaultMutableTreeNode)selPath.getLastPathComponent()).getLevel() != 2) {
-			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != 1) {
+			if (((DefaultMutableTreeNode) path.getLastPathComponent()).getLevel() != REQUIREMENT_LEVEL) {
 				continue; //thing selected was not an iteration
 			}
 			String requirementName = path.getLastPathComponent().toString();

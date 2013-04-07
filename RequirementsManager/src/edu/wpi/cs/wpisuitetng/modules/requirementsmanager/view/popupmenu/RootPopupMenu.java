@@ -45,6 +45,8 @@ public class RootPopupMenu extends JPopupMenu implements ActionListener {
 		menuNewIteration = new JMenuItem("New Iteration");
 		menuNewIteration.addActionListener(this);
 		
+		add(menuNewIteration);
+		
 	}
 	
 	/** The action listener for this menu item, when the user clicks on a menu option, (only one in this case),

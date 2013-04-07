@@ -58,7 +58,8 @@ public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		for (Requirement r: selectedRequirements) {
-			tabController.addEditRequirementTab(r);
+			tabController.addViewRequirementTab(r);
+			
 		}
 	}
 	
