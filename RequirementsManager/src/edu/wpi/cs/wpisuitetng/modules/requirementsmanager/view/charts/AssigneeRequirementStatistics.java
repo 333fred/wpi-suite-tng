@@ -9,27 +9,29 @@
  * Contributors:
  *    Alex Gorowara
  *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * class to contain data on how many requirements are assigned to each iteration
  * note that user assignees here are stored as strings, as they are in Requirements themselves
  *
  */
-public class AssigneeRequirementStatistics implements IRequirementStatistics {
 
-	Map<String, Integer> requirementsPerUser;
+public class AssigneeRequirementStatistics extends AbstractRequirementStatistics {
+
+	Map<String, Integer> data;
 	
 	public AssigneeRequirementStatistics(){
 		
-		this.requirementsPerUser = new HashMap<String, Integer>();
+		this.data = new HashMap<String, Integer>();
 		this.update();		
 		
 	}
@@ -50,14 +52,14 @@ public class AssigneeRequirementStatistics implements IRequirementStatistics {
 			for(String user : requirement.getUsers()){
 				
 				// if a user has not been encountered before, add him/her to the map
-				if(requirementsPerUser.get(user) == null){
-					requirementsPerUser.put(user, new Integer(1));	// note that this requirement is one to which the user is assigned!
+				if(data.get(user) == null){
+					data.put(user, new Integer(1));	// note that this requirement is one to which the user is assigned!
 				}
 				
 				// otherwise, simply increment the value
 				else{
-					Integer oldValue = requirementsPerUser.get(user);
-					requirementsPerUser.put(user, new Integer(oldValue.intValue() + 1));
+					Integer oldValue = (Integer)data.get(user);
+					data.put(user, new Integer(oldValue.intValue() + 1));
 				}
 				
 			}

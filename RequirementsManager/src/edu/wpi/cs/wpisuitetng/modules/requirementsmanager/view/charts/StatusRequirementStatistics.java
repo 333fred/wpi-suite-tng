@@ -23,13 +23,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
  * class to contain data on how many requirements are assigned to each status
  *
  */
-public class StatusRequirementStatistics {
+public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
 	Map<Status, Integer> requirementsPerStatus;
 	
 	public StatusRequirementStatistics(){
 		
-		this.requirementsPerStatus = new HashMap<Status, Integer>();		
+		this.requirementsPerStatus = new HashMap<Status, Integer>();
 		this.update();
 		
 	}
@@ -40,7 +40,7 @@ public class StatusRequirementStatistics {
 		
 		// for every possible status
 		for(Status status: Status.values()){
-			this.requirementsPerStatus.put(status, new Integer(0));	// set the number of counted requirements with that status to zero
+			this.requirementsPerStatus.put(status, 0);	// insert the status in the data set with zero counted requirements
 		}
 		
 		// for every requirement in this project
