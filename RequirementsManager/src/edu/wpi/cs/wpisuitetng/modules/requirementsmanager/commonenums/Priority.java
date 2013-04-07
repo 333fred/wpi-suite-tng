@@ -19,7 +19,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  */
 public enum Priority {
 	BLANK,
-	HIGH,
+	LOW,
 	MEDIUM,
-	LOW
+	HIGH
 }

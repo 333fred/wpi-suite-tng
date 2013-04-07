@@ -18,6 +18,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -25,6 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
@@ -141,6 +144,26 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 		this.table.setFillsViewportHeight(true);
 		this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
 		
+		Comparator<String> comparator = new Comparator<String>() {
+		    public int compare(String s1, String s2) {
+		    	if (s1.trim().equals("")){
+		    		s1 = "BLANK";
+		    	}
+		    	if (s2.trim().equals("")) {
+		    		s2 = "BLANK";
+		    	}
+		    	String upper1 = s1.toUpperCase();
+		    	String upper2 = s2.toUpperCase();
+		    	Priority p1 = Priority.valueOf(upper1);
+		    	Priority p2 = Priority.valueOf(upper2);
+		    	return p1.compareTo(p2);
+		    }
+		};
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+		sorter.setComparator(3, comparator);
+		table.setRowSorter(sorter);		
+		
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
 		for (int i = 0; i < this.table.getColumnCount(); i++) {
@@ -155,8 +178,7 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 			this.table.getColumnModel().getColumn(i).setMinWidth(colWidth*2);
 		}*/
 	//	this.table.setPreferredSize(new Dimension(1100, 200));
-		this.table.setAutoCreateRowSorter(true);
-
+	//	this.table.setAutoCreateRowSorter(false);
 		add(scrollPane);
 
 		// Add double click event listener
