@@ -37,13 +37,27 @@ public abstract class AbstractRequirementStatistics {
 	public abstract void update();
 	
 	public PieDataset toPieDataset(){
-		return null;
+		
+		DefaultPieDataset pieDataset = new DefaultPieDataset();
+		
+		for(String key : data.keySet()){
+			pieDataset.setValue(key, data.get(key));
+		}
+		
+		return pieDataset;
+	
 	}
 	
 	public CategoryDataset toCategoryDataset(){
-		return null;
+		
+		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
+		
+		for(String key : data.keySet()){
+			categoryDataset.setValue(data.get(key), "Requirements", key);
+		}
+		
+		return categoryDataset;
+		
 	}
-	
-	
 	
 }

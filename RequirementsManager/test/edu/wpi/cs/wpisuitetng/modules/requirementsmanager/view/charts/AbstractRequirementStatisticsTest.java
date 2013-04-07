@@ -13,7 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.AbstractRequirementStatistics;
 
-public class IRequirementStatisticsTest {
+public class AbstractRequirementStatisticsTest {
 
 	// TODO: work out how to force the RequirementDatabase class to use a mock project
 	
