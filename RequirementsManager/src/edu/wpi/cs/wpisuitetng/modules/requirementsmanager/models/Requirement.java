@@ -50,12 +50,10 @@ public class Requirement extends AbstractModel {
 	private List<String> assignees; // Team Member usernames
 	private List<Integer> subRequirements;
 	private List<Integer> pUID; // Parent unique ID's
-	// Notes and the OldLog
+	// Notes and the log, and tasks
 	private List<Note> notes;
 	private List<RequirementChangeset> logs;
-	//private Logger logger;
-	
-	private List<Task> tasks; //TODO: actually implement tasks
+	private List<Task> tasks;
 
 	/**
 	 * Creates a new Requirement, with default values.
@@ -636,5 +634,9 @@ public class Requirement extends AbstractModel {
 				return false;
 		}
 		return true;
+	}
+
+	public void addTask(Task task) {
+		this.tasks.add(task);		
 	}
 }
