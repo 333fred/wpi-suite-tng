@@ -347,7 +347,7 @@ public class RequirementValidatorTest {
 		r.setStatus(Status.DELETED);
 		r.setIteration(1);
 		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
-		assertEquals(r.getIteration(), -1);
+		assertEquals(r.getIteration(), -2);
 	}
 	
 	@Test
