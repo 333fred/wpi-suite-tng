@@ -26,15 +26,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  */
 
 public class AssigneeRequirementStatistics extends AbstractRequirementStatistics {
-
-	Map<String, Integer> data;
-	
-	public AssigneeRequirementStatistics(){
-		
-		this.data = new HashMap<String, Integer>();
-		this.update();		
-		
-	}
 	
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()

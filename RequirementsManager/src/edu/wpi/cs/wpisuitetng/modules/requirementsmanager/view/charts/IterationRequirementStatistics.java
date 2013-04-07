@@ -27,14 +27,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
  */
 public class IterationRequirementStatistics extends AbstractRequirementStatistics {
 	
-	Map<Iteration, Integer> data;
-	
-	public IterationRequirementStatistics(){
-		
-		this.data = new HashMap<Iteration, Integer>();
-		this.update();		
-		
-	}
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
 	 */
@@ -45,7 +37,7 @@ public class IterationRequirementStatistics extends AbstractRequirementStatistic
 		
 		// for every possible status
 		for(Iteration iteration: IterationDatabase.getInstance().getAllIterations()){
-			this.data.put(iteration, new Integer(0));	// set the number of counted requirements with that status to zero
+			this.data.put(iteration.getName(), new Integer(0));	// set the number of counted requirements with that status to zero
 		}
 		
 		// for every requirement in this project
@@ -54,7 +46,7 @@ public class IterationRequirementStatistics extends AbstractRequirementStatistic
 			try{
 				Iteration iteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
 				Integer oldValue = this.data.get(iteration);
-				this.data.put(iteration, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given iteration
+				this.data.put(iteration.getName(), new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given iteration
 			}
 			catch(IterationNotFoundException e){
 				// do not account for iterations which do not exist

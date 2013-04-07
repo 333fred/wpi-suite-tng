@@ -22,6 +22,15 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public abstract class AbstractRequirementStatistics {
 
+	Map<String, Integer> data;
+	
+	public AbstractRequirementStatistics(){
+		
+		this.data = new HashMap<String, Integer>();
+		this.update();
+		
+	}
+	
 	/**
 	 * method to force reacquisition of data
 	 */

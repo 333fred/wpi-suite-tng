@@ -11,7 +11,7 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.AbstractRequirementStatistics;
 
 public class IRequirementStatisticsTest {
 

@@ -24,15 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
  *
  */
 public class StatusRequirementStatistics extends AbstractRequirementStatistics {
-
-	Map<Status, Integer> requirementsPerStatus;
-	
-	public StatusRequirementStatistics(){
-		
-		this.requirementsPerStatus = new HashMap<Status, Integer>();
-		this.update();
-		
-	}
 	
 	public void update(){
 		
@@ -40,15 +31,15 @@ public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 		
 		// for every possible status
 		for(Status status: Status.values()){
-			this.requirementsPerStatus.put(status, 0);	// insert the status in the data set with zero counted requirements
+			this.data.put(status.toString(), 0);	// insert the status in the data set with zero counted requirements
 		}
 		
 		// for every requirement in this project
 		for(Requirement requirement : requirements){
 			
 			Status status = requirement.getStatus();
-			Integer oldValue = this.requirementsPerStatus.get(status);
-			this.requirementsPerStatus.put(status, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status
+			Integer oldValue = this.data.get(status);
+			this.data.put(status.toString(), new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status
 			
 		}
 		
