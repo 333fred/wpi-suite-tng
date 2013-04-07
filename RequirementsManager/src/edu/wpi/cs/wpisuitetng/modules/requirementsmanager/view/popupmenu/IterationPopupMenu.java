@@ -51,22 +51,22 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 		this.selectedIterations = selectedIterations;
 		
 		//we only have on selected iteration
-		/*if (selectedIterations.size() == 1) {
+		if (selectedIterations.size() == 1) {
 			menuEditIteration = new JMenuItem("Edit Iteration");
-			menuCreateRequirement = new JMenuItem("New Requirement");
+			//menuCreateRequirement = new JMenuItem("New Requirement");
 			
 			menuEditIteration.addActionListener(this); 
-			menuCreateRequirement.addActionListener(this);
+			//menuCreateRequirement.addActionListener(this);
 			
 			add(menuEditIteration);
-			add(menuCreateRequirement);
+			//add(menuCreateRequirement);
 			
 		}
-		else {	*/
+		else {	
 			menuEditIteration = new JMenuItem("Edit Iterations");
 			menuEditIteration.addActionListener(this);
 			add(menuEditIteration);
-		//}
+		}
 
 	}
 	
