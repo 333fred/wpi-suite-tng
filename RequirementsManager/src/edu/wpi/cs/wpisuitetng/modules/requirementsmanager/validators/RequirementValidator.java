@@ -105,7 +105,7 @@ public class RequirementValidator {
 		return true;
 	}
 	
-	/**
+	/*/**
 	 * Return the Requirement with the given id if it already exists in the database.
 	 * 
 	 * @param id the id of the Requirement
@@ -114,7 +114,7 @@ public class RequirementValidator {
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The Requirement with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
-	 */
+	 /
 	Requirement getExistingRequirement(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldRequirements = data.retrieve(Requirement.class, "rUID", id, project);
@@ -124,7 +124,7 @@ public class RequirementValidator {
 		} else {
 			return (Requirement) oldRequirements.get(0);
 		}
-	}
+	}*/
 	
 	/**
 	 * Validate the given model such that any nested models point to appropriate existing models

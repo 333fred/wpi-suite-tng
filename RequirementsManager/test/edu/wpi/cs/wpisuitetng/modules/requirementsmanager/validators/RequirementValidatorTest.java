@@ -31,6 +31,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Requiremen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 /**
  * Testing for RequirementValidator class
  * 	
@@ -70,6 +72,18 @@ public class RequirementValidatorTest {
 		goodRequirement = new Requirement();
 		goodRequirement.setName("Name");
 		goodRequirement.setDescription("A quality description");
+	}
+	
+	@Test
+	public void testGetData () {
+		assertEquals(validator.getData(), db);
+	}
+	
+	@Test
+	public void testSetData () {
+		Data db2 = new MockData(new HashSet<Object>());
+		validator.setData(db2);
+		assertEquals(validator.getData(), db2);
 	}
 	
 	@Test
@@ -190,6 +204,16 @@ public class RequirementValidatorTest {
 	}
 	
 	@Test
+	public void testNullType() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setType(null);
+		r.setDescription("Description");
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
+		assertEquals(r.getStatus(), Status.NEW);
+	}
+	
+	@Test
 	//Test that a requirement with an invalid user will be rejected
 	public void testInvalidUser() {
 		Requirement r  = new Requirement();
@@ -197,6 +221,16 @@ public class RequirementValidatorTest {
 		r.addUser("NotAUser");
 		r.setDescription("Description");
 		checkNumIssues(1, r, defaultSession, RequirementActionMode.CREATE);
+	}
+	
+	@Test
+	//Test that a requirement with an invalid user will be rejected
+	public void testValidUser() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.addUser("testUser");
+		r.setDescription("Description");
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
 	}
 			
 	@Test
@@ -228,13 +262,38 @@ public class RequirementValidatorTest {
 		Requirement r  = new Requirement();
 		r.setName("Name");
 		r.setDescription("Description");
+		r.setNotes(null);
+		r.setpUID(null);
+		r.setSubRequirements(null);
+		r.setUsers(null);
+		r.setTasks(null);
+		r.setLog(null);
 		checkNumIssues(0, r, defaultSession, RequirementActionMode.CREATE);
 		
-		//assertEquals(r.getLog(), new LinkedList<String>());
+		assertEquals(r.getLogs(), new LinkedList<RequirementChangeset>());
 		assertEquals(r.getNotes(), new LinkedList<String>());
 		assertEquals(r.getpUID(), new LinkedList<Integer>());
 		assertEquals(r.getSubRequirements(), new LinkedList<Integer>());
 		assertEquals(r.getUsers(), new LinkedList<String>());
+		assertEquals(r.getTasks(), new LinkedList<Task>());
+	}
+	
+	@Test
+	public void testNegativeEstimate() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("Description");
+		r.setEstimate(-1);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.EDIT);
+	}
+	
+	@Test
+	public void testNegativeEffort() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("Description");
+		r.setEffort(-1);
+		checkNumIssues(1, r, defaultSession, RequirementActionMode.EDIT);
 	}
 	
 	@Test
@@ -278,6 +337,17 @@ public class RequirementValidatorTest {
 		r.setIteration(1);
 		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
 		assertEquals(r.getStatus(), Status.IN_PROGRESS);
+	}
+	
+	@Test
+	public void testDeletedAssignment() {
+		Requirement r  = new Requirement();
+		r.setName("Name");
+		r.setDescription("Description");
+		r.setStatus(Status.DELETED);
+		r.setIteration(1);
+		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
+		assertEquals(r.getIteration(), -1);
 	}
 	
 	@Test

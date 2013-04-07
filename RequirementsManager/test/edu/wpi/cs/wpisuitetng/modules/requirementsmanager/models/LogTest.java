@@ -10,7 +10,7 @@
  *    Nick Massa
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
+/*package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 
 public class LogTest {
@@ -73,6 +73,6 @@ public class LogTest {
 		OldLog logTest = new OldLog(null, null, bob);
 		assertEquals(logTest.getCreator(),bob);
 		
-	}*/
+	}
 
-}
+}*/
