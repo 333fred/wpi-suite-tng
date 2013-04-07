@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
@@ -60,18 +59,18 @@ public class DetailTaskView extends JPanel{
 		tasks.setSelectionModel(new ToggleSelectionModel());
 	
 		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(tasks);
+		JScrollPane taskScrollPane = new JScrollPane();
+		taskScrollPane.getViewport().add(tasks);
 		
 		// Set up the frame
-		JPanel notePane = new JPanel();
-		notePane.setLayout(new BorderLayout());
-		notePane.add(noteScrollPane, BorderLayout.CENTER);
-		notePane.add(makeTaskPanel, BorderLayout.SOUTH);
+		JPanel taskPane = new JPanel();
+		taskPane.setLayout(new BorderLayout());
+		taskPane.add(taskScrollPane, BorderLayout.CENTER);
+		taskPane.add(makeTaskPanel, BorderLayout.SOUTH);
 		
-		add(notePane, BorderLayout.CENTER);
+		add(taskPane, BorderLayout.CENTER);
 		
-		//adds the notes to the list model
+		//adds the tasks to the list model
 		addTasksToList();
 		
 	}
