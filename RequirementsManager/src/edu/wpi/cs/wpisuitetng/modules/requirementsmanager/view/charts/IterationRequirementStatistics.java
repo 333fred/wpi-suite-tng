@@ -19,6 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNo
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
 /**
  * class to contain data on how many requirements are assigned to each iteration
