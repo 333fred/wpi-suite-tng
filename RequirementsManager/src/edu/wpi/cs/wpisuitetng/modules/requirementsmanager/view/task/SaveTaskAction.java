@@ -27,7 +27,7 @@ public class SaveTaskAction extends AbstractAction {
 	 * @param controller the controller to trigger
 	 */
 	public SaveTaskAction(SaveTaskController controller) {
-		super("Add task");
+		super("Save");
 		this.controller = controller;
 	}
 	

@@ -18,18 +18,17 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DocumentSizeFilter;
 
 /**
  * A panel containing a form for adding a new note to a requirement
@@ -46,6 +45,8 @@ public class MakeTaskPanel extends JPanel{
 	
 	private final JLabel nameTaskLabel;
 	private final JLabel descTaskLabel;
+	
+	private final JCheckBox taskComplete;
 
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
@@ -105,6 +106,7 @@ public class MakeTaskPanel extends JPanel{
 		addTaskLabel = new JLabel("Task:");
 		nameTaskLabel = new JLabel("Name:");
 		descTaskLabel = new JLabel("Description:");
+		taskComplete = new JCheckBox("Completed?");
 		
 		
 		//deleteNote = new JButton("Delete note");
@@ -130,7 +132,12 @@ public class MakeTaskPanel extends JPanel{
 		layout.putConstraint(SpringLayout.WEST, taskFieldPane, 0, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, taskFieldPane, 0, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, taskFieldPane, note_FIELD_HEIGHT, SpringLayout.NORTH, taskFieldPane);
-		layout.putConstraint(SpringLayout.NORTH, addtask, VERTICAL_PADDING, SpringLayout.SOUTH, taskFieldPane);
+		
+		layout.putConstraint(SpringLayout.NORTH, taskComplete, VERTICAL_PADDING, SpringLayout.SOUTH, taskFieldPane);
+		layout.putConstraint(SpringLayout.WEST, taskComplete, 0, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
+		
+		layout.putConstraint(SpringLayout.NORTH, addtask, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
 		layout.putConstraint(SpringLayout.EAST, addtask, 0, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, addtask);
 		
@@ -140,6 +147,7 @@ public class MakeTaskPanel extends JPanel{
 		this.add(taskName);
 		this.add(nameTaskLabel);
 		this.add(descTaskLabel);
+		this.add(taskComplete);
 		this.add(taskFieldPane);
 		
 	}
