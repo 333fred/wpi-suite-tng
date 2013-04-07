@@ -62,8 +62,8 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		add(closeButton);
 		//add the mouse listeners
 		MiddleMouseListener mouseListener = new MiddleMouseListener(this);
-		addMouseListener(mouseListener);
-		closeButton.addMouseListener(mouseListener);
+		//addMouseListener(mouseListener);
+		//closeButton.addMouseListener(mouseListener);
 	}
 
 	@Override
