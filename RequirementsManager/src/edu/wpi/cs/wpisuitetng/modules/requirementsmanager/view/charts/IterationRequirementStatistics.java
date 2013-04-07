@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNo
  * class to contain data on how many requirements are assigned to each iteration
  *
  */
-public class IterationRequirementStatistics implements IRequirementStatistics {
+public class IterationRequirementStatistics<Iteration> extends AbstractRequirementStatistics {
 
 	Map<Iteration, Integer> requirementsPerIteration;
 	

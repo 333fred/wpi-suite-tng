@@ -554,8 +554,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	 */
 	private void addJLabels() {
 		// add labels to the overall panel
-		lblName = new JLabel("Name:");
-		lblDescription = new JLabel("Description:");
+		lblName = new JLabel("*Name:");
+		lblDescription = new JLabel("*Description:");
 		lblType = new JLabel("Type:");		
 		lblStatus = new JLabel("Status:");
 		lblPriority = new JLabel("Priority:");
@@ -756,8 +756,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
 			//In Progress: In Progress, Complete, Deleted	
 			this.comboBoxStatus.removeItem("New");
-			this.comboBoxStatus.removeItem("Open");
-			this.comboBoxStatus.removeItem("Deleted");
+			//this.comboBoxStatus.removeItem("Open");
+			//this.comboBoxStatus.removeItem("Deleted");
 		}
 		else if (getRequirement().getSubRequirements().size() > 0 || !getRequirement().tasksCompleted())
 		{

@@ -9,14 +9,12 @@
  * Contributors:
  *    Alex Gorowara
  *******************************************************************************/
-
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-public interface IRequirementStatistics {
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.AbstractRequirementStatistics;
 
-	/**
-	 * method to force reacquisition of data
-	 */
-	public void update();
+public class IRequirementStatisticsTest {
+
+	// TODO: work out how to force the RequirementDatabase class to use a mock project
 	
 }

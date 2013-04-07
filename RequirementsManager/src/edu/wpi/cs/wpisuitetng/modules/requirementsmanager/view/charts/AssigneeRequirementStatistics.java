@@ -23,7 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
  * note that user assignees here are stored as strings, as they are in Requirements themselves
  *
  */
-public class AssigneeRequirementStatistics implements IRequirementStatistics {
+public class AssigneeRequirementStatistics<String> extends AbstractRequirementStatistics {
 
 	Map<String, Integer> requirementsPerUser;
 	
