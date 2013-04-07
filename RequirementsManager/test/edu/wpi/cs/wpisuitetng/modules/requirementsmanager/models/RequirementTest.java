@@ -23,6 +23,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
@@ -75,6 +77,17 @@ public class RequirementTest {
 		assertEquals("name", newRequirement.getName());
 		assertEquals("", newRequirement.getDescription());
 		assertEquals(0, newRequirement.getrUID());
+	}
+	
+	@Test
+	public void testfromJSONArray(){
+		Gson parser = new Gson();
+		Requirement[] array = {r1};
+		String json = parser.toJson(array, Requirement[].class);
+		Requirement[] newRequirementArray = Requirement.fromJSONArray(json);
+		assertEquals("name", newRequirementArray[0].getName());
+		assertEquals("", newRequirementArray[0].getReleaseNum());
+		assertEquals(0, newRequirementArray[0].getEffort());		
 	}
 	
 	@Test
