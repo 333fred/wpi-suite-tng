@@ -11,9 +11,9 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
+
+import org.jfree.chart.JFreeChart;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
@@ -43,6 +43,14 @@ public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 			
 		}
 		
+	}
+	
+	public JFreeChart buildPieChart(){
+		return this.buildPieChart("Requirements by Status");
+	}
+	
+	public JFreeChart buildBarChart(){
+		return this.buildBarChart("Requirements by Status", "Status");
 	}
 	
 }

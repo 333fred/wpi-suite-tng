@@ -12,9 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.jfree.chart.JFreeChart;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -57,6 +57,14 @@ public class AssigneeRequirementStatistics extends AbstractRequirementStatistics
 			
 		}
 		
+	}
+	
+	public JFreeChart buildPieChart(){
+		return this.buildPieChart("Requirements by User");
+	}
+	
+	public JFreeChart buildBarChart(){
+		return this.buildBarChart("Requirements by User", "User");
 	}
 
 }

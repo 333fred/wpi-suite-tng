@@ -19,6 +19,9 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 
 public abstract class AbstractRequirementStatistics {
 
@@ -57,6 +60,19 @@ public abstract class AbstractRequirementStatistics {
 		}
 		
 		return categoryDataset;
+		
+	}
+	
+	protected JFreeChart buildPieChart(String title){
+		
+		return ChartFactory.createPieChart(title, this.toPieDataset(), true, false, false);
+		
+		
+	}
+	
+	protected JFreeChart buildBarChart(String title, String category){
+		
+		return ChartFactory.createBarChart(title, category, "Requirements", this.toCategoryDataset(), PlotOrientation.HORIZONTAL, true, false, false);
 		
 	}
 	

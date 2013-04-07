@@ -11,9 +11,9 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.jfree.chart.JFreeChart;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -56,5 +56,12 @@ public class IterationRequirementStatistics extends AbstractRequirementStatistic
 		
 	}
 	
-
+	public JFreeChart buildPieChart(){
+		return this.buildPieChart("Requirements by Iteration");
+	}
+	
+	public JFreeChart buildBarChart(){
+		return this.buildBarChart("Requirements by Iteration", "Iteration");
+	}
+	
 }
