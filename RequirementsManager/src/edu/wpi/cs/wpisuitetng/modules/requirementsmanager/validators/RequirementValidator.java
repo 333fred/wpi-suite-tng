@@ -156,7 +156,7 @@ public class RequirementValidator {
 			//Automatic status changes
 			
 			//If a new or open requirement is assigned to an iteration then set it to in progress
-			if((requirement.getStatus() == Status.NEW || requirement.getStatus() == Status.OPEN) && requirement.getIteration() != -1)
+			if((requirement.getStatus() == Status.NEW || requirement.getStatus() == Status.OPEN) && requirement.getIteration() != -1 && requirement.getIteration() != -2)
 				requirement.setStatus(Status.IN_PROGRESS);
 			
 			//if an in-progress requirement is removed from an iteration, it is set to open
@@ -166,8 +166,10 @@ public class RequirementValidator {
 
 		}
 		
-		//deleted requirements should not have an iteration
+		//deleted requirements should be moved to the 'deleted'
 		if(requirement.getStatus() == Status.DELETED){
+			requirement.setIteration(-2);
+		} else if(requirement.getIteration() == -2){
 			requirement.setIteration(-1);
 		}
 		

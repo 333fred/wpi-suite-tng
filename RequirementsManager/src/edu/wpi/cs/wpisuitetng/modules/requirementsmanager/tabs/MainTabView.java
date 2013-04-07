@@ -41,30 +41,7 @@ public class MainTabView extends JTabbedPane implements WindowListener, WindowSt
 		
 		//TabView starts off empty.
 	}
-	
-	/** Inserts a component at the specified index, with the given title and icon.
-	 * 
-	 * TODO: Implement this, as of now it will call super method
-	 * 		 Implementation will add the closeable tab wrapper around the component.
-	 * 
-	 * @param title The title of tab
-	 * @param icon The icon that will be displayed in this tab
-	 * @param component The component that the tab will display
-	 * @param tip The tooltip to be displayed for the tab
-	 * @param index The position to inster the tab
-	 */
-
-	
-	@Override
-	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		super.insertTab(title,icon,component,tip,index);
 		
-		//if it is not a list view, create a closeable tab
-		if(!(component instanceof RequirementTableView)) {
-			setTabComponentAt(index, new ClosableTabComponent(this));
-		}
-	}
-	
 	/** Adds an unclosable tab to this JTabbedPane
 	 * 
 	 *  * @param title The title of tab
@@ -81,6 +58,28 @@ public class MainTabView extends JTabbedPane implements WindowListener, WindowSt
 
 		//set the tab component to un closable.
 		setTabComponentAt(index, new JLabel(title));
+	}
+	
+	/** Adds a closable tab
+	 * 
+	 *  * @param title The title of tab
+	 * @param icon The icon that will be displayed in this tab
+	 * @param component The component that the tab will display
+	 * @param tip The tooltip to be displayed for the tab
+	 * @param index The position to inster the tab
+	 * 
+	 */
+	
+	public void addClosableTab(String title, Icon icon, Component component, String tip) {
+		super.addTab(title,icon,component,tip);
+		int index = getTabCount() - 1; // the tab was just added, so we assume that it was at the end
+
+		//make this tab closable
+		setTabComponentAt(index, new ClosableTabComponent(this));
+	}
+	
+	public void addTab(String title, Icon icon, Component component, String tip) {
+		addClosableTab(title,icon,component,tip);
 	}
 
 	
