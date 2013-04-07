@@ -12,7 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-public class Task {
+import java.text.SimpleDateFormat;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
+
+public class Task implements Event {
 	private String name;
 	private String description;
 	private boolean completed;
@@ -64,6 +68,31 @@ public class Task {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getTitle() {
+		return "<html><font size=4><b>" + getName() + "</b></html>";		
+	}
+	
+	/** Returns the content of this note to be displayed in the GUI, as specified by Event interface 
+	 * 
+	 * @return The content
+	 */
+	
+	public String getContent() {
+		return "<html><i>" + parseNewLines(getDescription()) + "</i></html>";
+	}
+	
+	/** Changes the new line characters (\n) in the given string to html new line tags (<br>)
+	 * 
+	 * @param The string to parse
+	 * @return The new string with <br>'s
+	 */
+	
+	public String parseNewLines(String text) {
+		text = text.replaceAll("\n", "<br>");
+		return text;
+
 	}
 	
 	

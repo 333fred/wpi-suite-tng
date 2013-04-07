@@ -25,6 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
@@ -108,7 +109,7 @@ public class MakeTaskPanel extends JPanel{
 		
 		//deleteNote = new JButton("Delete note");
 		
-		//addtask.setAction(new SaveNoteAction(new SaveNoteController(this, model, parentView)));
+		addtask.setAction(new SaveTaskAction(new SaveTaskController(this, model, parentView)));
 		
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.black, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -164,5 +165,9 @@ public class MakeTaskPanel extends JPanel{
 		else {
 			addTaskLabel.setForeground(Color.gray);
 		}
+	}
+
+	public JTextComponent gettaskName() {
+		return taskName;
 	}	
 }

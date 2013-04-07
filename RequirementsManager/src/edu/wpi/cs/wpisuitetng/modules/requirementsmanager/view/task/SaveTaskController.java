@@ -44,8 +44,9 @@ public class SaveTaskController {
 	 */
 	public void saveTask() {
 		final String taskText = view.gettaskField().getText();
-		if (taskText.length() > 0) {
-			this.model.addTask(new Task(taskText, ConfigManager.getConfig().getUserName()));
+		final String taskName = view.gettaskName().getText();
+		if (taskText.length() > 0 && taskName.length() > 0) {
+			this.model.addTask(new Task(taskName, taskText));
 			parentView.getTaskList().addElement(this.model.getTasks().get(this.model.getTasks().size()-1));
 			view.gettaskField().setText("");
 			view.gettaskField().requestFocusInWindow();
