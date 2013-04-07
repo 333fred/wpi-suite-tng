@@ -42,7 +42,7 @@ public class SaveTaskController {
 	/**
 	 * Save a task to the server
 	 */
-	public void savetask() {
+	public void saveTask() {
 		final String taskText = view.gettaskField().getText();
 		if (taskText.length() > 0) {
 			this.model.addTask(new Task(taskText, ConfigManager.getConfig().getUserName()));
