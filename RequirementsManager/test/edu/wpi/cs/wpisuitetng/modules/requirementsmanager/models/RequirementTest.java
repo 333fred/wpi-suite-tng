@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -123,9 +123,9 @@ public class RequirementTest {
 	//Testing the task completeness checking for a list of complete tasks
 	@Test
 	public void testTaskCheckTrue() {
-		Task task1 = new Task();
+		Task task1 = new Task("Task 1", "This is a task!");
 		task1.setCompleted(true);
-		Task task2 = new Task();
+		Task task2 = new Task("Task 2", "This is another task");
 		task2.setCompleted(true);
 		ArrayList<Task> taskList = new ArrayList<Task>();
 		taskList.add(task1);
@@ -137,9 +137,9 @@ public class RequirementTest {
 	//Testing the task completeness checking for a list of complete and incomplete tasks
 	@Test
 	public void testTaskCheckFalse() {
-		Task task1 = new Task();
+		Task task1 = new Task("Task 1", "This is a task!");
 		task1.setCompleted(true);
-		Task task2 = new Task();
+		Task task2 = new Task("Task 2", "This is another task");
 		ArrayList<Task> taskList = new ArrayList<Task>();
 		taskList.add(task1);
 		taskList.add(task2);
