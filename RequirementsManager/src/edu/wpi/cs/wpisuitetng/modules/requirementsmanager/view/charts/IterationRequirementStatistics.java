@@ -25,17 +25,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNo
  * class to contain data on how many requirements are assigned to each iteration
  *
  */
-public class IterationRequirementStatistics<Iteration> extends AbstractRequirementStatistics {
-
-	Map<Iteration, Integer> requirementsPerIteration;
+public class IterationRequirementStatistics extends AbstractRequirementStatistics {
+	
+	Map<Iteration, Integer> data;
 	
 	public IterationRequirementStatistics(){
 		
-		this.requirementsPerIteration = new HashMap<Iteration, Integer>();
+		this.data = new HashMap<Iteration, Integer>();
 		this.update();		
 		
 	}
-	
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
 	 */
@@ -46,7 +45,7 @@ public class IterationRequirementStatistics<Iteration> extends AbstractRequireme
 		
 		// for every possible status
 		for(Iteration iteration: IterationDatabase.getInstance().getAllIterations()){
-			this.requirementsPerIteration.put(iteration, new Integer(0));	// set the number of counted requirements with that status to zero
+			this.data.put(iteration, new Integer(0));	// set the number of counted requirements with that status to zero
 		}
 		
 		// for every requirement in this project
@@ -54,8 +53,8 @@ public class IterationRequirementStatistics<Iteration> extends AbstractRequireme
 			
 			try{
 				Iteration iteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
-				Integer oldValue = this.requirementsPerIteration.get(iteration);
-				this.requirementsPerIteration.put(iteration, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given iteration
+				Integer oldValue = this.data.get(iteration);
+				this.data.put(iteration, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given iteration
 			}
 			catch(IterationNotFoundException e){
 				// do not account for iterations which do not exist

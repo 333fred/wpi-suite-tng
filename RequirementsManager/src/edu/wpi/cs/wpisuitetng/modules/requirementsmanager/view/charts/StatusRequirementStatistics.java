@@ -23,7 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
  * class to contain data on how many requirements are assigned to each status
  *
  */
-public class StatusRequirementStatistics extends AbstractRequirementStatistics<Status> {
+public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
 	Map<Status, Integer> requirementsPerStatus;
 	
