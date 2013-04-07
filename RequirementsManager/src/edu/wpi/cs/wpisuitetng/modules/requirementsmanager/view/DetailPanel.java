@@ -139,6 +139,17 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	/** boolean to indicate whether the tab should be closed upon saving */
 	private boolean closeTab;
 	
+	/** Creates a DetailPanel that creates a requirement assigned to the given iteration 
+	 * 
+	 
+	 * @param iteration The iteration to assign this to
+	 * @param mainTabController Tabcontroller
+	 */
+	
+	public DetailPanel(Iteration iteration, MainTabController mainTabController) {
+		this(new Requirement(), mainTabController);
+	}
+	
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
 		this.mainTabController = mainTabController;

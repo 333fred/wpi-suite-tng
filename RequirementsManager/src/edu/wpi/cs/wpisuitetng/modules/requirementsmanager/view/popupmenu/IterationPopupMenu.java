@@ -31,7 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 
 	/** Menu options for the PopupMenu */
-	private JMenuItem menuCreateRequirement;
+	//private JMenuItem menuCreateRequirement;
 	private JMenuItem menuEditIteration;
 	
 	/** The tab controller used to create new tabs */
@@ -51,7 +51,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 		this.selectedIterations = selectedIterations;
 		
 		//we only have on selected iteration
-		if (selectedIterations.size() == 1) {
+		/*if (selectedIterations.size() == 1) {
 			menuEditIteration = new JMenuItem("Edit Iteration");
 			menuCreateRequirement = new JMenuItem("New Requirement");
 			
@@ -62,11 +62,11 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			add(menuCreateRequirement);
 			
 		}
-		else {	
+		else {	*/
 			menuEditIteration = new JMenuItem("Edit Iterations");
 			menuEditIteration.addActionListener(this);
 			add(menuEditIteration);
-		}
+		//}
 
 	}
 	
@@ -85,7 +85,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 		else {
 			//create requiremetn was selected
 			//TODO: make this actualy create a requirement under the given iteration
-			tabController.addCreateRequirementTab();
+			tabController.addCreateRequirementTab(selectedIterations.get(0));
 		}
 	}
 	

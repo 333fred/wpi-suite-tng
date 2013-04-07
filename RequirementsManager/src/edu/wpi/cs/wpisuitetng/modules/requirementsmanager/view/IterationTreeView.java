@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.AnywherePopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.BacklogPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
@@ -139,7 +140,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 	 */
 	
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
-    	
+    	//add a menu offset
+		x += 10;
 		
     	//we right clicked on something in particular
     	if (selRow != -1) {
@@ -212,9 +214,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
     		//we right clicked in the tree. 
     		//TODO: We might want to check if multiple selected, and then open according menu?
 
-    		//check if anything was selected, only do this if multi select is enabled
-    		if (tree.getSelectionPaths().length != 0 && 
-    				tree.getSelectionModel().getSelectionMode() != TreeSelectionModel.SINGLE_TREE_SELECTION) {
+    		// do this only if more than one thing was selected
+    		if (tree.getSelectionPaths() != null && tree.getSelectionPaths().length > 1 ) {
     			//something was selected, lets open its stuff
     			//need to check if only one level is selected
     			int curSelectionLevel = -1;
@@ -265,6 +266,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
     	    		}
     			}
     			
+    		}
+    		else {
+    			//if nothing selected, we create the anywhere menu, to create req and iter.
+    			JPopupMenu menuToShow = new AnywherePopupMenu(tabController);
+    			menuToShow.show(this,x,y);
     		}
     		
     		
