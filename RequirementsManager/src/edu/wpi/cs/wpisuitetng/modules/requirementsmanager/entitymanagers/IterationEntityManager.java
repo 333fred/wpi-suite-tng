@@ -133,7 +133,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		if(!backlogExists){
 			// Save the iteration
 			System.out.println("No Backlog Iteration found! Creating one.");
-			Iteration backlog = new Iteration("Backlog", new Date(0), new Date(60000));
+			Iteration backlog = new Iteration("Backlog", new Date(Long.MIN_VALUE), new Date(Long.MIN_VALUE+60000));
 			backlog.setId(-1);
 			if (!db.save(backlog, s.getProject())) {
 				throw new WPISuiteException();
@@ -142,6 +142,32 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			//Now add it to our array to return
 			is = Arrays.copyOf(is, is.length +1);
 			is[is.length-1] = backlog;
+		}
+		
+		boolean deletedExists = false;
+		
+		//check if any of the iterations we retrieved are the backlog
+		for (Iteration it : is) {
+			if (it.getId() == -2) {
+				deletedExists = true;
+				break;
+			}
+		}
+
+		// If we don't find one, then we have to create it and save it to the
+		// database
+		if (!deletedExists) {
+			// Save the iteration
+			System.out.println("No Deleted Iteration found! Creating one.");
+			Iteration deleted = new Iteration("Deleted", new Date(Long.MAX_VALUE-60000), new Date(Long.MAX_VALUE));
+			deleted.setId(-2);
+			if (!db.save(deleted, s.getProject())) {
+				throw new WPISuiteException();
+			}
+
+			// Now add it to our array to return
+			is = Arrays.copyOf(is, is.length + 1);
+			is[is.length - 1] = deleted;
 		}
 				
 		return is;

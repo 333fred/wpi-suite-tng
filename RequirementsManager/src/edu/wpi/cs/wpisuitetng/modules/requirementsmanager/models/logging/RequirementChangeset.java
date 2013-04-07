@@ -108,13 +108,18 @@ public class RequirementChangeset extends Changeset implements Event {
 		}
 		if (changes.get("iteration") != null) {
 			// Get the default string for an old and new value
-			//content += oldToNew("Iteration", changes.get("iteration"));
-			int oldIteration = ((Double)changes.get("iteration").getOldValue()).intValue();
-			int newIteration = ((Double)changes.get("iteration").getNewValue()).intValue();
+			// content += oldToNew("Iteration", changes.get("iteration"));
+			int oldIteration = ((Double) changes.get("iteration").getOldValue())
+					.intValue();
+			int newIteration = ((Double) changes.get("iteration").getNewValue())
+					.intValue();
 			try {
-				String oldName = IterationDatabase.getInstance().getIteration(oldIteration).getName();
-				String newName = IterationDatabase.getInstance().getIteration(newIteration).getName();
-				content += oldToNew("Iteration", new FieldChange<String>(oldName, newName));
+				String oldName = IterationDatabase.getInstance()
+						.getIteration(oldIteration).getName();
+				String newName = IterationDatabase.getInstance()
+						.getIteration(newIteration).getName();
+				content += oldToNew("Iteration", new FieldChange<String>(
+						oldName, newName));
 			} catch (IterationNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -207,10 +212,21 @@ public class RequirementChangeset extends Changeset implements Event {
 			List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("notes"));
 			if (added.size() > 0) {
-				content += "Added " + added.size() + " note(s)<br>";
+				content += "Added " + added.size() + " note<br>";
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + added.size() + " note(s)<br>";
+			}
+		}
+		if (changes.get("tasks") != null) {
+			List<Object> added = new ArrayList<Object>();
+			List<Object> removed = new ArrayList<Object>();
+			oldToNewList(added, removed, changes.get("tasks"));
+			if (added.size() > 0) {
+				content += "Added " + added.size() + " task(s)<br>";
+			}
+			if (removed.size() > 0) {
+				content += "Removed " + added.size() + " task(s)<br>";
 			}
 		}
 
@@ -304,12 +320,12 @@ public class RequirementChangeset extends Changeset implements Event {
 	public String toJSON() {
 		return new Gson().toJson(this, RequirementChangeset.class);
 	}
-	
+
 	public static RequirementChangeset fromJSON(String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, RequirementChangeset.class);
 	}
-	
+
 	public static RequirementChangeset[] fromJSONArray(String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, RequirementChangeset[].class);

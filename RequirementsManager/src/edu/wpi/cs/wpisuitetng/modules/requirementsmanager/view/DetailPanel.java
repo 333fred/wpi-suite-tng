@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -54,6 +55,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.ItemStateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.TextUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskView;
 
 /**
  * JPanel class to display the different fields of the requirement 
@@ -85,6 +87,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	private MainTabController mainTabController;
 	// the view that shows the notes
 	private DetailNoteView noteView;
+	
+	private DetailTaskView taskView;
 
 	//the view that shows the notes
 	public DetailLogView logView;
@@ -134,6 +138,17 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	
 	/** boolean to indicate whether the tab should be closed upon saving */
 	private boolean closeTab;
+	
+	/** Creates a DetailPanel that creates a requirement assigned to the given iteration 
+	 * 
+	 
+	 * @param iteration The iteration to assign this to
+	 * @param mainTabController Tabcontroller
+	 */
+	
+	public DetailPanel(Iteration iteration, MainTabController mainTabController) {
+		this(new Requirement(), mainTabController);
+	}
 	
 	public DetailPanel(Requirement requirement, MainTabController mainTabController) {
 		this.requirement = requirement;
@@ -244,7 +259,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		saveError.setDisabledTextColor(Color.BLACK);
 		saveError.setLineWrap(true);
 		saveError.setWrapStyleWord(true);
-		mainPanel.add(saveError);
+		//mainPanel.add(saveError);
 		
 		// set up and add type combobox
 		String[] availableTypes = { "", "Epic", "Theme", "User Story",
@@ -288,7 +303,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		for (Iteration iteration : iterationList) {
 			
 			// if the current date is before the end date of the iteration, or the iteration is this requirement's current iteration or is the backlog
-			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1){
+			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1 || iteration.getId() != -2){
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
@@ -300,7 +315,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration, 
 			//or the iteration is this requirement's current iteration,
 			//or it is the backlog, add it to the list
-			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1){
+			if(currentDate.compareTo(iteration.getEndDate()) <= 0 || iteration.identify(requirement.getIteration()) || iteration.getId() == -1 || iteration.getId() != -2){
 				availableIterations[currentAvailableIterationIndex] = iteration.getName();
 				currentAvailableIterationIndex++;
 			}
@@ -407,11 +422,11 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		textRelease.addKeyListener(textReleaseListener);
 		
 		btnSave = new JButton("Save Requirement");
-		mainPanel.add(btnSave);
+		//mainPanel.add(btnSave);
 		
 		btnCancel = new JButton("Cancel");
 		btnCancel.setAction(new CancelAction(this));
-		mainPanel.add(btnCancel);
+		//mainPanel.add(btnCancel);
 
 		// check if name field is blank
 		if (requirement.getName().trim().equals("")) {
@@ -453,10 +468,10 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		logView = new DetailLogView(this.getRequirement(), this);
 		noteView = new DetailNoteView(this.getRequirement(), this);
 		userView = new AssigneePanel(requirement,this);
-		
+		taskView = new DetailTaskView(this.getRequirement(), this);
 	
 		// create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView);
+		DetailEventPane eventPane = new DetailEventPane(noteView, logView, userView, taskView);
 		
 		if(requirement.getStatus() == Status.DELETED){
 			eventPane.disableUserButtons();
@@ -465,6 +480,7 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		scrollPane.getViewport().add(mainPanel);		
+		scrollPane.setBorder(null);
 		
 		//TODO: Implement a proper preferredHeight, but Width works
 		//set the preffered size of mainPanel
@@ -474,11 +490,38 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		
 		//set the preferred size
 		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));		
-		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scrollPane, eventPane);
-		//mainLayout = new SpringLayout();
-		add(splitPane);
+				
 
+		SpringLayout staticPanelLayout = new SpringLayout();
+		JPanel staticPanel = new JPanel(staticPanelLayout);
+		JPanel leftPanel = new JPanel(new BorderLayout());
+		
+		
+		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5, SpringLayout.NORTH,staticPanel);
+		staticPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5, SpringLayout.WEST,staticPanel);
+		
+		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5, SpringLayout.NORTH,staticPanel);
+		staticPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10, SpringLayout.EAST,btnSave);
+		staticPanelLayout.putConstraint(SpringLayout.WEST, saveError, 10, SpringLayout.EAST, btnCancel);
+		staticPanelLayout.putConstraint(SpringLayout.NORTH, saveError, 5, SpringLayout.SOUTH, staticPanel);
+				
+		staticPanel.setPreferredSize(new Dimension(saveError.getPreferredSize().width + saveError.getPreferredSize().width,btnSave.getPreferredSize().height + 10));
+		
+		//staticPanel.setPreferredSize(new Dimension(100,150));
+		
+		staticPanel.add(btnSave);
+		staticPanel.add(btnCancel);
+		staticPanel.add(saveError);
+		
+		leftPanel.add(scrollPane,BorderLayout.CENTER);
+		leftPanel.add(staticPanel,BorderLayout.SOUTH);
+		
+	
+
+		
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftPanel, eventPane);
+		add(splitPane);		
+		
 		splitPane.setResizeWeight(0.5);
 		
 		this.determineAvailableStatusOptions();
@@ -608,10 +651,10 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textNameValid, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, btnCancel, HORIZONTAL_PADDING, 
-				SpringLayout.EAST, btnSave);
+		//layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
+		//		SpringLayout.WEST, this);
+		//layout.putConstraint(SpringLayout.WEST, btnCancel, HORIZONTAL_PADDING, 
+				//SpringLayout.EAST, btnSave);
 		layout.putConstraint(SpringLayout.WEST, scroll,	HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textDescriptionValid, HORIZONTAL_PADDING, 
@@ -640,8 +683,8 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textRelease, HORIZONTAL_PADDING, 
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, saveError, HORIZONTAL_PADDING, 
-				SpringLayout.WEST, this);
+	//	layout.putConstraint(SpringLayout.WEST, saveError, HORIZONTAL_PADDING, 
+	//			SpringLayout.WEST, this);
 
 
 		// Align North Edges of Objects
@@ -696,12 +739,12 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.NORTH, textRelease,
 				VERTICAL_PADDING + VERTICAL_CLOSE, SpringLayout.SOUTH,
 				lblRelease);
-		layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textRelease);
-		layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textRelease);
-		layout.putConstraint(SpringLayout.NORTH, saveError, VERTICAL_PADDING
-				+ VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
+		//layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
+		//		SpringLayout.SOUTH, textRelease);
+	//	layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
+			//	SpringLayout.SOUTH, textRelease);
+		//layout.putConstraint(SpringLayout.NORTH, saveError, VERTICAL_PADDING
+		//		+ VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
 	}
 	/**
 	 * Method to determine to which statuses the currently viewed requirement 
@@ -996,4 +1039,9 @@ public class DetailPanel extends FocusableTab implements ISaveNotifier {
 	public JComboBox getComboBoxIteration() {
 		return comboBoxIteration;
 	}
+	
+	public DefaultListModel getTaskList() {
+		return taskView.getTaskList();
+	}
+	
 }

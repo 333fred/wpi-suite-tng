@@ -58,7 +58,7 @@ public class Janeway {
 		// Load modules
 		ModuleLoader<IJanewayModule> moduleLoader = new ModuleLoader<IJanewayModule>("./modules.conf");
 		modules = moduleLoader.getModules();
-		modules.add(new DummyModule());
+		//modules.add(new DummyModule());
 		
 		// Check for modules
 		if (modules.size() < 1) {

@@ -16,6 +16,8 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -58,6 +60,10 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		closeButton.setMargin(new Insets(0, 0, 0, 0));
 		closeButton.addActionListener(this);
 		add(closeButton);
+		//add the mouse listeners
+		MiddleMouseListener mouseListener = new MiddleMouseListener(this);
+		addMouseListener(mouseListener);
+		closeButton.addMouseListener(mouseListener);
 	}
 
 	@Override
@@ -66,6 +72,25 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		final int index = tabbedPane.indexOfTabComponent(this);
 		if(index > -1) {
 			tabbedPane.remove(index);
+		}
+	}
+	
+	private class MiddleMouseListener extends MouseAdapter {
+		
+		private ClosableTabComponent component;
+		
+		public MiddleMouseListener(ClosableTabComponent component) {
+			this.component = component;
+		}
+		
+		public void mouseReleased(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON2) {
+				//close the tab
+				final int index = tabbedPane.indexOfTabComponent(component);
+				if(index > -1) {
+					tabbedPane.remove(index);
+				}
+			}
 		}
 	}
 	
