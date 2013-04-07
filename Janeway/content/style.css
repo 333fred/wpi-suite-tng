@@ -7,6 +7,8 @@ body pre{
 	font-family: Verdana, Geneva, sans-serif;
 }
 hr {
+	word-wrap: break-word;
+
 	display: block;
 	margin-before:5px;
 	margin after: 5px;
