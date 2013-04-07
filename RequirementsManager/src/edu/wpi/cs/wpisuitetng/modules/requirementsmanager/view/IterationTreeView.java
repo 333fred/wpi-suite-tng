@@ -178,18 +178,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener, IRec
 		this.top.removeAllChildren();
 		//iterations = IterationDatabase.getInstance().getAllIterations();
 		
-		// introduce the "deleted" requirements
-		DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode("Deleted");
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// TODO: is this the best way to get the most current requirements?
-		
-		// for every requirement, if it is deleted, add it to the deletedNode
-		for(Requirement requirement : requirements){
-			if(requirement.getStatus() == Status.DELETED){
-				deletedNode.add(new DefaultMutableTreeNode(requirement.getName()));
-			}
-		}
-		this.top.add(deletedNode);
-		
 		//sort the iterations
 		iterations = Iteration.sortIterations(iterations);
 		

@@ -241,17 +241,9 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 			} catch (IterationNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (RequirementNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			Iteration anIteration = IterationDatabase.getInstance().getIteration(nodes[i].getParent().toString());
-			try {
-				anIteration.addRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
-			} catch (RequirementNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			anIteration.addRequirement(RequirementDatabase.getInstance().getRequirement(nodes[i].toString()).getrUID());
 			saveIterationController.saveIteration(anIteration);
 			Requirement requirement = RequirementDatabase.getInstance().getRequirement(nodes[i].toString());
 			requirement.setIteration(anIteration.getId());

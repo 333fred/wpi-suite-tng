@@ -79,9 +79,6 @@ public class AddRequirementRequestObserver implements RequestObserver {
 				} catch (IterationNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (RequirementNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 				
 				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);

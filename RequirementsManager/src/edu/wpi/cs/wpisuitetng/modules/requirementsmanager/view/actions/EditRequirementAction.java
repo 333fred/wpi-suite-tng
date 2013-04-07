@@ -91,9 +91,11 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setUsers(parentView.getAssignedUsers());
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
+			
+			boolean isDeleted = false;
 
 			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Deleted")) {
-				parentView.getComboBoxIteration().setSelectedItem("Backlog");
+				isDeleted = true;
 			}
 			
 			try {
@@ -108,22 +110,24 @@ public class EditRequirementAction extends AbstractAction {
 					saveIterationController.saveIteration(anIteration);
 				} catch (IterationNotFoundException e1) {
 					e1.printStackTrace();
-				} catch (RequirementNotFoundException ex){
+				}/* catch (RequirementNotFoundException ex){
 					ex.printStackTrace();
-				}
-
+				}*/
+				
+				System.out.println("\n\n\n"+ isDeleted +"\n\n\n\n");
+				
 				requirement.setIteration(IterationDatabase
 						.getInstance()
 						.getIteration(
-								parentView.getTextIteration().getSelectedItem()
+								isDeleted ? "Deleted" : parentView.getTextIteration().getSelectedItem()
 										.toString()).getId());
 				Iteration anIteration = IterationDatabase.getInstance()
 						.getIteration(
-								parentView.getTextIteration().getSelectedItem()
+								isDeleted ? "Deleted" : parentView.getTextIteration().getSelectedItem()
 										.toString());
 				anIteration.addRequirement(requirement.getrUID());
 				saveIterationController.saveIteration(anIteration);
-
+				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
 							.getComboBoxPriority().getSelectedItem().toString()
@@ -156,10 +160,10 @@ public class EditRequirementAction extends AbstractAction {
 			} catch (NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");
-			} catch (RequirementNotFoundException e1) {
+			}/* catch (RequirementNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 		} else {
 			if (parentView.getTextName().getText().trim().equals("")) {
 				parentView.getTextName()
