@@ -51,7 +51,6 @@ public class DetailTaskView extends JPanel{
 	 */
 	public DetailTaskView(final Requirement requirement, final DetailPanel parentView){
 		
-		System.out.println("\n\n\n\n\n\n\n\nWUT\n\n\n\n\n\n\n");
 		this.requirement = requirement;
 		this.parentView = parentView;
 		
@@ -140,8 +139,6 @@ public class DetailTaskView extends JPanel{
 			}
 		});
 		
-		System.out.println("\n\n\n\n\n\n\n\nWUT\n\n\n\n\n\n\n");
-
 	}
 	/**
 	 * Method to populate this object's list of tasks
