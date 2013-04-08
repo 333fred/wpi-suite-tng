@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -22,8 +23,10 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.table.TableModel;
@@ -476,6 +479,11 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	@Override
 	public void receivedData(Iteration[] iterations) {
 		updateListView();
+	}
+	
+	@Override
+	public Component getTabComponent(JTabbedPane tabbedPane) {
+		return new JLabel("Requirements");
 	}
 
 }
