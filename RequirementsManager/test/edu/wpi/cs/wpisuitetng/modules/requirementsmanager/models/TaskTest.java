@@ -87,9 +87,9 @@ public class TaskTest {
 	@Test
 	public void testGetContent(){
 		t1.setCompleted(true);
-		assertEquals("<html><i>Desc1<br>Currently Completed</i></html>", t1.getContent());
-		assertEquals("<html><i>Desc2<br>Currently Incomplete</i></html>", t2.getContent());
+		assertEquals("<html><i>Desc1<br><FONT COLOR=\"blue\"> No User Assigned<br>Currently Completed</FONT COLOR></i></html>", t1.getContent());
+		assertEquals("<html><i>Desc2<br><FONT COLOR=\"blue\"> No User Assigned<br>In Progress</FONT COLOR></i></html>", t2.getContent());
 		t1.setDescription("Desc1\nDesc");
-		assertEquals("<html><i>Desc1<br>Desc<br>Currently Completed</i></html>", t1.getContent());
+		assertEquals("<html><i>Desc1<br>Desc<br><FONT COLOR=\"blue\"> No User Assigned<br>Currently Completed</FONT COLOR></i></html>", t1.getContent());
 	}
 }

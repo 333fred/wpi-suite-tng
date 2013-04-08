@@ -99,8 +99,8 @@ public class Task implements Event {
 		String temp = "<html><i>" + parseNewLines(getDescription());
 		String userMessage;
 		String completeMessage;
-		if(assignedUser != null) {
-			userMessage = "No User Assigned";
+		if(assignedUser == null) {
+			userMessage = "<br><FONT COLOR=\"blue\"> No User Assigned";
 		}
 		else {
 			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser.getName();
