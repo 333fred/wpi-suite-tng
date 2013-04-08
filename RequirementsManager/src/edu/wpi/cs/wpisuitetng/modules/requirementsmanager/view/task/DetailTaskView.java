@@ -12,6 +12,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -78,12 +80,48 @@ public class DetailTaskView extends JPanel{
 		tasks.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent evt) {		
 				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValuesList()));
+				
+				
+				if(tasks.getSelectedValuesList().size()==0){
+					makeTaskPanel.gettaskStatus().setText("No tasks selected. Fill name and description to create a new one.");
+					makeTaskPanel.gettaskComplete().setEnabled(false);
+					if(makeTaskPanel.gettaskName().getText().trim().equals("")||makeTaskPanel.gettaskField().getText().trim().equals(""))
+						makeTaskPanel.getaddTask().setEnabled(false);
+				}else{
+					makeTaskPanel.gettaskComplete().setEnabled(true);
+					if(tasks.getSelectedValuesList().size()>1){
+						makeTaskPanel.gettaskStatus().setText("Multiple tasks selected. Can only change status.");
+						makeTaskPanel.gettaskFieldPane().setEnabled(false);
+						makeTaskPanel.gettaskField().setEnabled(false);
+						makeTaskPanel.gettaskName().setEnabled(false);
+					}else{
+						makeTaskPanel.gettaskStatus().setText("One task selected. Fill name AND description to edit. Leave blank to just change status.");
+						makeTaskPanel.gettaskFieldPane().setEnabled(true);
+						makeTaskPanel.gettaskField().setEnabled(true);
+						makeTaskPanel.gettaskName().setEnabled(true);
+					}
+				}
 			}
 		});
 		
 		//TODO: Provide listeners
-		makeTaskPanel.gettaskField();
-		makeTaskPanel.gettaskName();
+		makeTaskPanel.gettaskField().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e){
+				if(makeTaskPanel.gettaskField().getText().trim().equals("")&&tasks.getSelectedValuesList().size()==0)
+					makeTaskPanel.getaddTask().setEnabled(false);
+				else if(!makeTaskPanel.gettaskName().getText().trim().equals(""))
+					makeTaskPanel.getaddTask().setEnabled(true);
+			}
+		});
+		
+		makeTaskPanel.gettaskName().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e){
+				if(makeTaskPanel.gettaskName().getText().trim().equals("")&&tasks.getSelectedValuesList().size()==0)
+					makeTaskPanel.getaddTask().setEnabled(false);
+				else if(!makeTaskPanel.gettaskField().getText().trim().equals(""))
+					makeTaskPanel.getaddTask().setEnabled(true);
+			}
+		});
 		
 	}
 	/**

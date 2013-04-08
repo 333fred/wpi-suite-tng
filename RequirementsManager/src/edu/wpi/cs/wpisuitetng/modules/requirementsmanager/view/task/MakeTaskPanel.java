@@ -43,6 +43,7 @@ public class MakeTaskPanel extends JPanel{
 	//private final JButton deleteNote;
 	private final JLabel addTaskLabel;
 	
+	private final JLabel taskStatus;
 	private final JLabel nameTaskLabel;
 	private final JLabel descTaskLabel;
 	
@@ -50,6 +51,7 @@ public class MakeTaskPanel extends JPanel{
 
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
+	private final JScrollPane taskFieldPane;
 	
 	/**
 	 * Construct the panel, add and layout components.
@@ -73,6 +75,7 @@ public class MakeTaskPanel extends JPanel{
 		taskField.setLineWrap(true);
 		taskField.setWrapStyleWord(true);
 		taskField.setBorder((new JTextField()).getBorder());
+		taskField.setDisabledTextColor(Color.GRAY);
 		
 		taskField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -88,25 +91,17 @@ public class MakeTaskPanel extends JPanel{
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
 				 	taskField.append("\n");
-				 	/*
-					if (event.isShiftDown()) {
-						// user is doing a shift + enter
-						taskField.append("\n");
-					}
-					else {
-						// save the note
-						addtask.doClick(0);
-					}*/
 					event.consume();
 				}
 			}
 		});
 
 		addtask = new JButton("Save");
+		taskStatus = new JLabel("No tasks selected. Fill name and description to create a new one.");
 		addTaskLabel = new JLabel("Task:");
 		nameTaskLabel = new JLabel("Name:");
 		descTaskLabel = new JLabel("Description:");
-		taskComplete = new JCheckBox("Completed?");
+		taskComplete = new JCheckBox("Completed");
 		
 		
 		//deleteNote = new JButton("Delete note");
@@ -119,11 +114,12 @@ public class MakeTaskPanel extends JPanel{
 		SpringLayout layout = new SpringLayout();
 		this.setLayout(layout);
 		
-		final JScrollPane taskFieldPane = new JScrollPane(taskField);
+		taskFieldPane = new JScrollPane(taskField);
 		
 		layout.putConstraint(SpringLayout.NORTH, addTaskLabel, 0, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.WEST, addTaskLabel, 0, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, nameTaskLabel, VERTICAL_PADDING, SpringLayout.SOUTH, addTaskLabel);
+		layout.putConstraint(SpringLayout.NORTH, taskStatus, 0, SpringLayout.SOUTH, addTaskLabel);
+		layout.putConstraint(SpringLayout.NORTH, nameTaskLabel, VERTICAL_PADDING, SpringLayout.SOUTH, taskStatus);
 		layout.putConstraint(SpringLayout.NORTH, taskName, VERTICAL_PADDING, SpringLayout.SOUTH, nameTaskLabel);
 		layout.putConstraint(SpringLayout.WEST, taskName, 0, SpringLayout.WEST, nameTaskLabel);
 		layout.putConstraint(SpringLayout.EAST, taskName, 0, SpringLayout.EAST, this);
@@ -141,7 +137,7 @@ public class MakeTaskPanel extends JPanel{
 		layout.putConstraint(SpringLayout.EAST, addtask, 0, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, addtask);
 		
-				
+		this.add(taskStatus);		
 		this.add(addTaskLabel);		
 		this.add(addtask);
 		this.add(taskName);
@@ -149,6 +145,9 @@ public class MakeTaskPanel extends JPanel{
 		this.add(descTaskLabel);
 		this.add(taskComplete);
 		this.add(taskFieldPane);
+		
+		addtask.setEnabled(false);
+		taskComplete.setEnabled(false);
 		
 	}
 	
@@ -185,6 +184,14 @@ public class MakeTaskPanel extends JPanel{
 	
 	public JCheckBox gettaskComplete() {
 		return taskComplete;
+	}
+	
+	public JScrollPane gettaskFieldPane(){
+		return taskFieldPane;
+	}
+	
+	public JLabel gettaskStatus(){
+		return taskStatus;
 	}
 	
 }
