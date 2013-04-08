@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 
 /**
  * Controller wrapper around the MainTabView
@@ -152,15 +153,21 @@ public class MainTabController {
 		return addTab(requirement.getName(), new ImageIcon(), requirmentDetailView, requirement.getName());
 	}
 	
-	/** Adds teh Requirement Table View to the tabs
+	/** Adds the Requirement Table View to the tabs
 	 * 
 	 * @return The tab that was added
 	 */
 	
 	public Tab addRequirementsTab() {
 		RequirementTableView requirementListView = RequirementTableView.getInstance(this);
-
 		return addUnclosableTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
+	}
+	
+
+	//TODO Document
+	public Tab addStatTab() {
+		StatView statView = new StatView();
+		return addUnclosableTab("Statistics", new ImageIcon(), statView, "Statistics");
 	}
 	
 	/** Adds a tab to Edit a given Requirement
