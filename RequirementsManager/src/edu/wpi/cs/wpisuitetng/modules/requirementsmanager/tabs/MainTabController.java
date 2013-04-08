@@ -22,7 +22,6 @@ import javax.swing.event.ChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
@@ -73,7 +72,10 @@ public class MainTabController {
 		refreshIterationTree();
 		System.out.println("Change Tab Controller");
 		Component selectedComponent = tabView.getSelectedComponent();
-		//TODO: Re implement this
+		Tab selectedTab = (Tab) selectedComponent;
+		selectedTab.onGainedFocus();
+		
+		//tabView.setTabComponentAt(tabView.getSelectedIndex(), selectedTab.getTabComponent(tabView));
 
 	}
 	
