@@ -14,12 +14,14 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import java.text.SimpleDateFormat;
 
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 public class Task implements Event {
 	private String name;
 	private String description;
 	private boolean completed;
+	private User assignedUser;
 	
 	public Task(String name, String description){
 		completed  = false;
@@ -70,6 +72,20 @@ public class Task implements Event {
 		this.name = name;
 	}
 	
+	/**
+	 * @return the assignedUser
+	 */
+	public User getAssignedUser() {
+		return assignedUser;
+	}
+
+	/**
+	 * @param assignedUser the assignedUser to set
+	 */
+	public void setAssignedUser(User assignedUser) {
+		this.assignedUser = assignedUser;
+	}
+
 	public String getTitle() {
 		return "<html><font size=4><b>" + getName() + "</b></html>";		
 	}
@@ -81,11 +97,22 @@ public class Task implements Event {
 	
 	public String getContent() {
 		String temp = "<html><i>" + parseNewLines(getDescription());
-		//return temp;
-		if(this.completed)
-			return temp + "<br>Currently Completed</i></html>";
-		else
-			return temp + "<br>Currently Incomplete</i></html>";
+		String userMessage;
+		String completeMessage;
+		if(assignedUser != null) {
+			userMessage = "No User Assigned";
+		}
+		else {
+			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser.getName();
+		}
+		if(this.completed) {
+			completeMessage = "<br>Currently Completed";
+		}
+		else {
+			completeMessage = "<br>In Progress";
+		}
+		//return assembled content string;
+		return temp + userMessage + completeMessage + "</FONT COLOR></i></html>";
 	}
 	
 	/** Changes the new line characters (\n) in the given string to html new line tags (<br>)
