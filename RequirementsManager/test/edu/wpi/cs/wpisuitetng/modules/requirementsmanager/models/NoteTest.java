@@ -16,6 +16,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,7 +74,7 @@ public class NoteTest {
 	@Test
 	public void testGetDate3() {
 		Note noteTest = new Note("Note",bob);
-		assertTrue(!noteTest.getDate().equals(null));
+		assertNotNull(noteTest.getDate());
 	}
 	
 	@Test
