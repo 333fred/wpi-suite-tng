@@ -115,7 +115,7 @@ public class DetailTaskView extends JPanel{
 						makeTaskPanel.gettaskField().setBackground(makeTaskPanel.getBackground());
 						makeTaskPanel.gettaskName().setBackground(makeTaskPanel.getBackground());
 					}else{
-						makeTaskPanel.gettaskStatus().setText("One task selected. Fill name AND description to edit. Leave blank to just change status.");
+						makeTaskPanel.gettaskStatus().setText("One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
 						makeTaskPanel.gettaskFieldPane().setEnabled(true);
 						makeTaskPanel.gettaskField().setEnabled(true);
 						makeTaskPanel.gettaskName().setEnabled(true);

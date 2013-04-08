@@ -21,7 +21,7 @@ public class Task implements Event {
 	private String name;
 	private String description;
 	private boolean completed;
-	private User assignedUser;
+	private String assignedUser;
 	
 	public Task(String name, String description){
 		completed  = false;
@@ -75,14 +75,14 @@ public class Task implements Event {
 	/**
 	 * @return the assignedUser
 	 */
-	public User getAssignedUser() {
+	public String getAssignedUser() {
 		return assignedUser;
 	}
 
 	/**
 	 * @param assignedUser the assignedUser to set
 	 */
-	public void setAssignedUser(User assignedUser) {
+	public void setAssignedUser(String assignedUser) {
 		this.assignedUser = assignedUser;
 	}
 
@@ -103,7 +103,7 @@ public class Task implements Event {
 			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned" + "</FONT COLOR>";
 		}
 		else {
-			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser.getName() + "</FONT COLOR>";
+			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser + "</FONT COLOR>";
 		}
 		if(this.completed) {
 			completeMessage = "<br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR>";

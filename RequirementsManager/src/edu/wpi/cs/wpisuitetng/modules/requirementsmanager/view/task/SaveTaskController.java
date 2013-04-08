@@ -50,7 +50,12 @@ public class SaveTaskController {
 		if(tasks==null){ //Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
 		}else if(tasks.length<1){
-			if (taskText.length() > 0 && taskName.length() > 0) { //Task must have a name and description of at least 1 char! 
+			if (taskText.length() > 0 && taskName.length() > 0) { //Task must have a name and description of at least 1 char!
+				Task tempTask = new Task(taskName,taskText);
+				if((view.getuserAssigned().getSelectedItem()==""))
+					tempTask.setAssignedUser(null);
+				else
+					tempTask.setAssignedUser((String)view.getuserAssigned().getSelectedItem());
 				this.model.addTask(new Task(taskName, taskText));
 				parentView.getTaskList().addElement(this.model.getTasks().get(this.model.getTasks().size()-1));
 				view.gettaskName().setText("");
@@ -65,9 +70,15 @@ public class SaveTaskController {
 			}else{
 
 				for (Object aTask : tasks) { //Modifying tasks! 
-					if (taskText.length() > 0 && taskName.length() > 0 && tasks.length==1){ //If only one is selected, edit the fields!
-						((Task) aTask).setName(view.gettaskName().getText());
-						((Task) aTask).setDescription(view.gettaskField().getText());
+					if (tasks.length==1){ //If only one is selected, edit the fields!
+						if(taskText.length() > 0 && taskName.length() > 0){
+							((Task) aTask).setName(view.gettaskName().getText());
+							((Task) aTask).setDescription(view.gettaskField().getText());
+						}
+						if((view.getuserAssigned().getSelectedItem()==""))
+							((Task) aTask).setAssignedUser(null);
+						else
+							((Task) aTask).setAssignedUser((String)view.getuserAssigned().getSelectedItem());
 					}//Check the completion status on the tasks!
 					((Task) aTask).setCompleted(view.gettaskComplete().isSelected());
 				}
