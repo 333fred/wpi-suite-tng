@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 
 /**
  * Controller wrapper around the MainTabView
@@ -145,6 +146,12 @@ public class MainTabController {
 		return addTab("New Iteration", new ImageIcon(), iterationView, "New Iteration");
 	}
 	
+	//TODO Document
+	public Tab addStatTab() {
+		StatView statView = new StatView();
+		return addUnclosableTab("Statistics", new ImageIcon(), statView, "Statistics");
+	}
+
 	public Tab addEditIterationTab(Iteration iteration) {
 		//check if this iteration is open already
 		boolean iterationOpen = false;		

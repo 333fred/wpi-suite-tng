@@ -91,6 +91,8 @@ public class JanewayModule implements IJanewayModule {
 		
 		tabController.addRequirementsTab();
 		
+		tabController.addStatTab();
+		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, iterationTreeView, tabView);
 		splitPane.setResizeWeight(0.28);
 		
