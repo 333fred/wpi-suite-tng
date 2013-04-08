@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -70,5 +70,26 @@ public class TaskTest {
 		t2.setDescription("Some Desc");
 		assertEquals("New Desc", t1.getDescription());
 		assertEquals("Some Desc", t2.getDescription());
+	}
+	
+	@Test
+	public void testGetTitle(){
+		assertEquals("<html><font size=4><b>Task 1</b></html>", t1.getTitle());
+		assertEquals("<html><font size=4><b>Task 2</b></html>", t2.getTitle());
+	}
+	
+	@Test
+	public void testParseNewLines(){
+		assertEquals("<br>testtest",t1.parseNewLines("\ntesttest"));
+		assertEquals("<br><br>testt<br>est<br>",t1.parseNewLines("\n\ntestt\nest\n"));
+	}
+	
+	@Test
+	public void testGetContent(){
+		t1.setCompleted(true);
+		assertEquals("<html><i>Desc1<br>Currently Completed</i></html>", t1.getContent());
+		assertEquals("<html><i>Desc2<br>Currently Incomplete</i></html>", t2.getContent());
+		t1.setDescription("Desc1\nDesc");
+		assertEquals("<html><i>Desc1<br>Desc<br>Currently Completed</i></html>", t1.getContent());
 	}
 }
