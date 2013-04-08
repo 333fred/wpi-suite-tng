@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
@@ -25,33 +28,54 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
  */
 public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
-	Map<Status, Integer> requirementsPerStatus;
-	
-	public StatusRequirementStatistics(){
-		
-		this.requirementsPerStatus = new HashMap<Status, Integer>();
-		this.update();
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
 		
 	}
+/*
+	private static StatusRequirementStatistics statusRequirementStatistics;
+	private static Map<Status, Integer> requirementsPerStatus;
 	
-	public void update(){
+	private StatusRequirementStatistics(){
+		StatusRequirementStatistics.requirementsPerStatus = new HashMap<Status, Integer>();
+		StatusRequirementStatistics.update();
+	}
+	
+	
+	static public StatusRequirementStatistics getInstance() {
+		if (statusRequirementStatistics == null) {
+			statusRequirementStatistics = new StatusRequirementStatistics();
+		} else {
+			StatusRequirementStatistics.update();
+		}
+		return statusRequirementStatistics;
+	}
+	
+	/*
+	public static void update(){
 		
 		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
 		
 		// for every possible status
 		for(Status status: Status.values()){
-			this.requirementsPerStatus.put(status, 0);	// insert the status in the data set with zero counted requirements
+			requirementsPerStatus.put(status, 0);	// insert the status in the data set with zero counted requirements
 		}
 		
 		// for every requirement in this project
-		for(Requirement requirement : requirements){
-			
+		for(Requirement requirement : requirements){			
 			Status status = requirement.getStatus();
-			Integer oldValue = this.requirementsPerStatus.get(status);
-			this.requirementsPerStatus.put(status, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status
-			
+			Integer oldValue = requirementsPerStatus.get(status);
+			requirementsPerStatus.put(status, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status			
 		}
-		
 	}
 	
+	public PieDataset toPieDataset(){
+        DefaultPieDataset dataset = new DefaultPieDataset();
+		for(Status status: Status.values()){
+			dataset.setValue(status, new Double(requirementsPerStatus.get(status)));
+		}
+        return dataset;   
+	}
+	*/
 }

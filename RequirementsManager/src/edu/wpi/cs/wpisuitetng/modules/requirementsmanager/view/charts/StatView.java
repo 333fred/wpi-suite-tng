@@ -1,6 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -14,6 +17,10 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.ui.RefineryUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+
 
 public class StatView extends Tab {
 
@@ -21,21 +28,38 @@ public class StatView extends Tab {
         add(createDemoPanel());	
 	}
 	
-	
-
     /**
      * Creates a sample dataset.
      * 
      * @return A sample dataset.
      */
     private static PieDataset createDataset() {
+    	
+    	List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();
+    	
         DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("One", new Double(43.2));
-        dataset.setValue("Two", new Double(10.0));
-        dataset.setValue("Three", new Double(27.5));
-        dataset.setValue("Four", new Double(17.5));
-        dataset.setValue("Five", new Double(11.0));
-        dataset.setValue("Six", new Double(19.4));
+        Map<Status, Integer> requirementsPerStatus = new HashMap<Status, Integer>();
+        
+		// for every possible status
+		for(Status status: Status.values()){
+			requirementsPerStatus.put(status, 0);	// insert the status in the data set with zero counted requirements
+		}
+        
+		// for every requirement in this project
+		for(Requirement requirement : requirements){			
+			Status status = requirement.getStatus();
+			Integer oldValue = requirementsPerStatus.get(status);
+			requirementsPerStatus.put(status, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status			
+		}
+        
+		//format the status
+		for(Status status: Status.values()){
+			try {
+				dataset.setValue(status, new Double((requirementsPerStatus.get(status)/requirements.size())*100));
+			} finally {
+			}
+		}
+		
         return dataset;        
     }
     
@@ -61,8 +85,7 @@ public class StatView extends Tab {
         plot.setNoDataMessage("No data available");
         plot.setCircular(false);
         plot.setLabelGap(0.02);
-        return chart;
-        
+        return chart;        
     }
     
     /**
@@ -81,7 +104,6 @@ public class StatView extends Tab {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-
         PieChartDemo1 demo = new PieChartDemo1("Pie Chart Demo 1");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);

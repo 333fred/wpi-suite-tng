@@ -21,9 +21,8 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public abstract class AbstractRequirementStatistics {
-
 	/**
-	 * method to force reacquisition of data
+	 * method to force re-acquisition of data
 	 */
 	public abstract void update();
 	
@@ -34,7 +33,4 @@ public abstract class AbstractRequirementStatistics {
 	public CategoryDataset toCategoryDataset(){
 		return null;
 	}
-	
-	
-	
 }
