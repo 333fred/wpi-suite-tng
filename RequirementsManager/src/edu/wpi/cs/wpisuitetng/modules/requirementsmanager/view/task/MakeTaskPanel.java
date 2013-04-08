@@ -201,5 +201,9 @@ public class MakeTaskPanel extends JPanel{
 	public JLabel gettaskStatus(){
 		return taskStatus;
 	}
+
+	public JComboBox getuserAssigned() {
+		return userAssigned;
+	}
 	
 }
