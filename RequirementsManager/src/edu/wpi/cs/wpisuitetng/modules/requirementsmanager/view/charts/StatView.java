@@ -13,9 +13,9 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.RefineryUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
-public class StatView extends FocusableTab {
+public class StatView extends Tab {
 
 	public StatView() {
         add(createDemoPanel());	

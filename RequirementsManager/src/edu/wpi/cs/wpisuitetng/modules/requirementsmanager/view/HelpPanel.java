@@ -22,13 +22,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 //TODO: Documentation, and perhaps built-in browser? CURRENTLY NOT IN USE, IN FAVOR OF NO TAB OPENING
 /**
  * Panel for the user manual
  */
-public class HelpPanel extends FocusableTab {
+public class HelpPanel extends Tab {
 
 	Requirement requirement;
 	
