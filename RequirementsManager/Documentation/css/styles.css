@@ -1,0 +1,190 @@
+body {
+	background-color: black;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   font-weight: 300;
+   margin-bottom : 20px;
+}
+
+#Centerer {
+	margin-left:auto;
+	margin-right:auto;
+	width:1000px;
+	height: 100%;
+	background-color: white;
+	padding-top: 10;
+	position: relative;
+	l
+}
+
+#MenuContainer {
+	float:left;
+	top : 60px;
+	width: 220px;
+	height : 100%;
+	background-color: white;
+	padding: 10px;
+	position : fixed;
+}
+#MenuHeader {
+	background-color=green;
+	margin-top : 10px;
+	height : 20px;
+	text-align: center;
+}
+#Menu {
+	position: absolute;
+	top: 60px;
+	left: 10px;
+	bottom: 100px;
+	overflow: auto;	
+}
+#ContentWrapper {
+	padding-top:80px;
+	padding-left:260px;
+	height: 100%;
+	width: 1000;
+}
+#Content {
+	background-color: white;
+	height: 100%;
+	width: 740px;
+	float: right;
+	padding : 10px;
+	padding-top :80px;
+	overflow: auto;
+}
+
+#Header {
+	background-color: white;
+	margin-left:auto;
+	margin-right:auto;
+	width: 1000px;
+	height: 70px;
+	position: fixed;
+	top: 0px;
+	text-align: left;
+	font-size: 32;
+}
+
+#Header .titlebox {
+	position: absolute;
+	left: 240px;
+}
+
+#Header .title {
+	display: block;
+	font-size: 1.7em;
+	-webkit-margin-before: 0.2em;
+	-webkit-margin-after: 0.0em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+}
+
+#Header .subtitle {
+	display: block;
+	font-size: 1.3em;
+	-webkit-margin-before: 0.0em;
+	-webkit-margin-after: 0.1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+}
+
+html {
+	height: 100%;
+}
+
+a[nodeid] {
+	color:blue; 
+	text-decoration:underline;
+	cursor: pointer;
+}
+
+.figure img {
+	margin: 10px;
+	text-align: center;
+	cursor: pointer;
+	border-width: 4px;
+	border-style: solid;
+	border-color: #ffffff;
+}
+.figure img:hover {
+	border-width: 4px;
+	border-style: solid;
+	border-color: #ff0000;
+}
+
+.figure .label {
+	font-weight:bold;
+}
+.note {
+	padding: 10px;
+	border-width: 3px;
+	border-style: solid;
+	border-color: rgba(200, 200, 7, 0.3);
+	border-width: 2px;
+	border-left-width: 25px;
+	background-color: rgba(247, 247, 9, 0.17);
+	width: 80%;
+}
+
+.code {
+	display: table;
+	padding: 10px;
+	border-width: 2px;
+	border-style: solid;
+	background-color: #ccffff;
+	margin-left: 30px;
+	margin-right: auto;
+}
+
+h3 {
+	clear:both;
+}
+
+h4 {
+	clear:both;
+}
+pre {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+li.selected > div{
+	font-weight:600;
+}
+
+table { 
+	border-collapse: collapse;
+}
+caption { 
+	margin: 1em auto; 
+}
+th, td { 
+	padding: .65em;
+	vertical-align: top;
+}
+th, thead { 
+	background: #000; 
+	color: #000; 
+	font-weight: bold;
+	border: 1px solid #000; 
+}
+tr:nth-child(odd) { 
+	background: #ccc; 
+}
+tr:hover { 
+	background: #aaa; 
+} 
+td { 
+	border-right: 1px solid #777; 
+
+}
+
+table { 
+	border: 1px solid #777; 
+}
+
