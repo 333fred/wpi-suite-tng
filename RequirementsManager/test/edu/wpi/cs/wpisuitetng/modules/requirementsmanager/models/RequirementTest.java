@@ -36,6 +36,7 @@ public class RequirementTest {
 	Requirement r1copy;
 	Requirement r2;
 	Project project;
+	Integer i1;
 	
 	String name = "name";
 	String name2 = "name2";
