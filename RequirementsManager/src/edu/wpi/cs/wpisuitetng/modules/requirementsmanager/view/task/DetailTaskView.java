@@ -50,6 +50,8 @@ public class DetailTaskView extends JPanel{
 	 * @param parentView the parent view
 	 */
 	public DetailTaskView(final Requirement requirement, final DetailPanel parentView){
+		
+		System.out.println("\n\n\n\n\n\n\n\nWUT\n\n\n\n\n\n\n");
 		this.requirement = requirement;
 		this.parentView = parentView;
 		
@@ -82,7 +84,7 @@ public class DetailTaskView extends JPanel{
 			public void mouseClicked(MouseEvent evt) {		
 				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValues()));
 				
-				if(tasks.getSelectedValuesList().size()==0){
+				if(tasks.getSelectedValues().length==0){
 					makeTaskPanel.gettaskStatus().setText("No tasks selected. Fill name and description to create a new one.");
 					makeTaskPanel.gettaskComplete().setEnabled(false);
 					makeTaskPanel.gettaskComplete().setSelected(false);
@@ -94,7 +96,7 @@ public class DetailTaskView extends JPanel{
 						makeTaskPanel.getaddTask().setEnabled(false);
 				}else{
 					makeTaskPanel.gettaskComplete().setEnabled(true);
-					if(tasks.getSelectedValuesList().size()>1){
+					if(tasks.getSelectedValues().length>1){
 						makeTaskPanel.gettaskStatus().setText("Multiple tasks selected. Can only change status.");
 						makeTaskPanel.gettaskFieldPane().setEnabled(false);
 						makeTaskPanel.gettaskField().setEnabled(false);
@@ -122,7 +124,7 @@ public class DetailTaskView extends JPanel{
 		//TODO: Provide listeners
 		makeTaskPanel.gettaskField().addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e){
-				if(makeTaskPanel.gettaskField().getText().trim().equals("")&&tasks.getSelectedValuesList().size()==0)
+				if(makeTaskPanel.gettaskField().getText().trim().equals("")&&tasks.getSelectedValues().length==0)
 					makeTaskPanel.getaddTask().setEnabled(false);
 				else if(!makeTaskPanel.gettaskName().getText().trim().equals(""))
 					makeTaskPanel.getaddTask().setEnabled(true);
@@ -131,13 +133,15 @@ public class DetailTaskView extends JPanel{
 		
 		makeTaskPanel.gettaskName().addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e){
-				if(makeTaskPanel.gettaskName().getText().trim().equals("")&&tasks.getSelectedValuesList().size()==0)
+				if(makeTaskPanel.gettaskName().getText().trim().equals("")&&tasks.getSelectedValues().length==0)
 					makeTaskPanel.getaddTask().setEnabled(false);
 				else if(!makeTaskPanel.gettaskField().getText().trim().equals(""))
 					makeTaskPanel.getaddTask().setEnabled(true);
 			}
 		});
 		
+		System.out.println("\n\n\n\n\n\n\n\nWUT\n\n\n\n\n\n\n");
+
 	}
 	/**
 	 * Method to populate this object's list of tasks
