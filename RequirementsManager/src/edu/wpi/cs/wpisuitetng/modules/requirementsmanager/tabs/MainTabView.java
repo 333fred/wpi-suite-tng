@@ -12,17 +12,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 import java.awt.Component;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 
 import javax.swing.Icon;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /** The JTabbedPane that will be shown in the RequirementsManager Module.
  * 
@@ -33,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  *
  */
 
-public class MainTabView extends JTabbedPane implements WindowListener, WindowStateListener {
+public class MainTabView extends JTabbedPane  {
 
 	public MainTabView() {
 		setTabPlacement(TOP); //set the tabs to be placed at the top
@@ -55,31 +48,13 @@ public class MainTabView extends JTabbedPane implements WindowListener, WindowSt
 	public void addUnclosableTab(String title, Icon icon, Component component, String tip) {
 		super.addTab(title,icon,component,tip);
 		int index = getTabCount() - 1; // the tab was just added, so we assume that it was at the end
-
-		//set the tab component to un closable.
-		setTabComponentAt(index, new JLabel(title));
 	}
 	
-	/** Adds a closable tab
-	 * 
-	 *  * @param title The title of tab
-	 * @param icon The icon that will be displayed in this tab
-	 * @param component The component that the tab will display
-	 * @param tip The tooltip to be displayed for the tab
-	 * @param index The position to inster the tab
-	 * 
-	 */
-	
-	public void addClosableTab(String title, Icon icon, Component component, String tip) {
-		super.addTab(title,icon,component,tip);
+	public void addTab(String title, Icon icon, Tab tab, String tip) {
+		super.addTab(title,icon, tab, tip);		
 		int index = getTabCount() - 1; // the tab was just added, so we assume that it was at the end
-
-		//make this tab closable
-		setTabComponentAt(index, new ClosableTabComponent(this));
-	}
-	
-	public void addTab(String title, Icon icon, Component component, String tip) {
-		addClosableTab(title,icon,component,tip);
+		//add the tab with the given tab component
+		setTabComponentAt(index, tab.getTabComponent(this));
 	}
 
 	
@@ -108,60 +83,6 @@ public class MainTabView extends JTabbedPane implements WindowListener, WindowSt
 	@Override
 	public void setComponentAt(int index, Component component) {
 		super.setComponentAt(index, component);
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		System.out.println("Got Close event");
-		RequirementDatabase.getInstance().interrupt();
-		IterationDatabase.getInstance().interrupt();
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowStateChanged(WindowEvent e) {
-		if (e.getNewState() == WindowEvent.WINDOW_CLOSED){
-			RequirementDatabase.getInstance().interrupt();
-			IterationDatabase.getInstance().interrupt();
-			System.out.println("Window State Listener");
-		}
-		
 	}
 	
 }

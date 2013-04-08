@@ -13,108 +13,38 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 import java.awt.Component;
 
-import javax.swing.Icon;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
-
-/** Wrapper class around MainTabView that allows tabs to easily change thier title and icons
+/** Interface for listening to when a tab has gained focus
  * 
- * 	Adapted from Tab from DefectTracker module.
  * @author Mitchell
  *
  */
 
-public class Tab {
+public abstract class Tab extends JPanel {
 
-	
-	private final MainTabView tabView;
-	private final Component tabComponent;
-	
-	/** Creates a new instance of Tab with the given tab view, and component
+	/** Function called when the tab gains focus 
 	 * 
-	 * @param tabView
-	 * @param tabComponent
 	 */
 	
-	public Tab(MainTabView tabView, Component tabComponent) {
-		this.tabView = tabView;
-		this.tabComponent = tabComponent;
+	public void onGainedFocus() {
+		
 	}
 	
-	/** Returns the index of this tab
+	/** Called when the tab is about to be closed. 
 	 * 
-	 * @return This tabs index
+	 * @return a boolean indicating whether to close the tab or not, if false tab will not close
 	 */
 	
-	private int getIndex() {
-		return tabView.indexOfTabComponent(tabComponent);
+	public boolean onTabClosed() {
+		return true;
 	}
 	
-	/** Returns the title of this tab
-	 * 
-	 * @return This tabs title
-	 */
-	
-	public String getTitle() {
-		return tabView.getTitleAt(getIndex());
+	public Component getTabComponent(JTabbedPane tabbedPane) {
+		return new ClosableTabComponent(tabbedPane);
 	}
 	
-	/** Changes the title of the tab to the given title
-	 * 
-	 * @param title The new title of the tab
-	 */
 	
-	public void setTitle(String title) {
-		tabView.setTitleAt(getIndex(), title);
-		tabComponent.invalidate(); //have the tab redraw itself to update to the new string length
-	}
 	
-	/** Returns the icon of this tab
-	 * 
-	 * @return This tabs icon
-	 */
-	
-	public Icon getIcon() {
-		return tabView.getIconAt(getIndex());
-	}
-	
-	/** Sets this tabs icon to the given icon
-	 * 
-	 * @param icon Tabs new icon
-	 */
-	
-	public void setIcon(Icon icon) {
-		tabView.setIconAt(getIndex(), icon);
-	}
-	
-	/** Returns thsi tabs tooltip text
-	 * 
-	 * @return Tooltip text
-	 */
-	
-	public String getToolTipText() {
-		return tabView.getToolTipTextAt(getIndex());
-	}
-	
-	/** Sets this tabs tool tip text
-	 * @param toolTipText Set the tooltip of the Tab to this String
-	 */
-	public void setToolTipText(String toolTipText) {
-		tabView.setToolTipTextAt(getIndex(), toolTipText);
-	}
-	
-	/** Returns this tabs component
-	 * 
-	 * @return Tabs component
-	 */
-	
-	public Component getComponent() {
-		return tabView.getComponentAt(getIndex());
-	}
-	
-	/** Sets this tabs component to the given component
-	 * @param component Set the component contained by this Tab to this Component
-	 */
-	public void setComponent(Component component) {
-		tabView.setComponentAt(getIndex(), component);
-	}
 }

@@ -47,7 +47,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.TabFocusListener;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequirementAction;
@@ -62,8 +62,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * 
  */
 @SuppressWarnings("serial")
-public class RequirementTableView extends JPanel implements TabFocusListener,
-		IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+public class RequirementTableView extends Tab implements IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 	
 	private static RequirementTableView tv;
 	
