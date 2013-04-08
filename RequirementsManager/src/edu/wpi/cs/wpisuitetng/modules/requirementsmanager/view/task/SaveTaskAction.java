@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 @SuppressWarnings("serial")
 public class SaveTaskAction extends AbstractAction {
 	public final SaveTaskController controller;
-	public List tasks;
+	public Object[] tasks;
 
 	/**
 	 * Construct the action
@@ -34,13 +34,13 @@ public class SaveTaskAction extends AbstractAction {
 	public SaveTaskAction(SaveTaskController controller) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = new ArrayList<Task>(); //Placeholder list
+		this.tasks = new Object[0]; //Placeholder list
 	}
 	
-	public SaveTaskAction(SaveTaskController controller, List selectedValuesList) {
+	public SaveTaskAction(SaveTaskController controller, Object[] objects) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = selectedValuesList;
+		this.tasks = objects;
 	}
 
 	/*

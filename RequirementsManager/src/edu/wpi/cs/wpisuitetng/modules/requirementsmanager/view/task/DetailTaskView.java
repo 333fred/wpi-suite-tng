@@ -57,7 +57,7 @@ public class DetailTaskView extends JPanel{
 		// Set up the task panel
 		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
 
-		// Create the task list
+		// Create the task list TODO: CHANGE GETSELECTEDVALUES TO GETSELECTEDVALUES
 		taskList = new DefaultListModel();
 		tasks = new JList(taskList);
 		tasks.setCellRenderer(new EventCellRenderer());
@@ -77,11 +77,10 @@ public class DetailTaskView extends JPanel{
 		
 		//adds the tasks to the list model
 		addTasksToList();
-		
+		//,tasks.getSelectedValues()
 		tasks.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent evt) {		
-				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValuesList()));
-				
+				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValues()));
 				
 				if(tasks.getSelectedValuesList().size()==0){
 					makeTaskPanel.gettaskStatus().setText("No tasks selected. Fill name and description to create a new one.");
