@@ -12,6 +12,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -44,7 +46,7 @@ public class DetailTaskView extends JPanel{
 	 * @param requirement the requirement 
 	 * @param parentView the parent view
 	 */
-	public DetailTaskView(Requirement requirement, DetailPanel parentView){
+	public DetailTaskView(final Requirement requirement, final DetailPanel parentView){
 		this.requirement = requirement;
 		this.parentView = parentView;
 		
@@ -72,6 +74,16 @@ public class DetailTaskView extends JPanel{
 		
 		//adds the tasks to the list model
 		addTasksToList();
+		
+		tasks.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent evt) {		
+				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValuesList()));
+			}
+		});
+		
+		//TODO: Provide listeners
+		makeTaskPanel.gettaskField();
+		makeTaskPanel.gettaskName();
 		
 	}
 	/**

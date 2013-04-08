@@ -177,5 +177,14 @@ public class MakeTaskPanel extends JPanel{
 
 	public JTextComponent gettaskName() {
 		return taskName;
-	}	
+	}
+
+	public JButton getaddTask() {
+		return addtask;
+	}
+	
+	public JCheckBox gettaskComplete() {
+		return taskComplete;
+	}
+	
 }

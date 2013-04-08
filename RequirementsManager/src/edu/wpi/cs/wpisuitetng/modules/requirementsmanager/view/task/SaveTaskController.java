@@ -11,6 +11,8 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
+import java.util.List;
+
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
@@ -42,22 +44,42 @@ public class SaveTaskController {
 	/**
 	 * Save a task to the server
 	 */
-	public void saveTask() {
+	public void saveTask(List tasks) {
 		final String taskText = view.gettaskField().getText();
-		final String taskName = view.gettaskName().getText();
-		if (taskText.length() > 0 && taskName.length() > 0) {
-			this.model.addTask(new Task(taskName, taskText));
-			parentView.getTaskList().addElement(this.model.getTasks().get(this.model.getTasks().size()-1));
-			view.gettaskField().setText("");
-			view.gettaskField().requestFocusInWindow();
-			
-			//We want to save the task to the server immediately, but only if the requirement hasn't been just created
-			if (model.getName().length() > 0) {
-				SaveRequirementController controller = new SaveRequirementController(this.parentView);
-				controller.SaveRequirement(model,false);
+		final String taskName = view.gettaskName().getText();		
+		if(tasks==null){ //Creating a task!
+			System.out.println("TASKS WAS NULL, ISSUE");
+		}else if(tasks.size()<1){
+			if (taskText.length() > 0 && taskName.length() > 0) { //Task must have a name and description of at least 1 char! 
+				this.model.addTask(new Task(taskName, taskText));
+				parentView.getTaskList().addElement(this.model.getTasks().get(this.model.getTasks().size()-1));
+				view.gettaskName().setText("");
+				view.gettaskField().setText("");
+				view.gettaskField().requestFocusInWindow();			
+				//We want to save the task to the server immediately, but only if the requirement hasn't been just created
+				if (model.getName().length() > 0) { //Save to requirement!
+					SaveRequirementController controller = new SaveRequirementController(this.parentView);
+					controller.SaveRequirement(model,false);
+				}
+			}
+			}else{
+
+				for (Object aTask : tasks) { //Modifying tasks! 
+					if (taskText.length() > 0 && taskName.length() > 0 && tasks.size()==1){ //If only one is selected, edit the fields!
+						((Task) aTask).setName(view.gettaskName().getText());
+						((Task) aTask).setDescription(view.gettaskField().getText());
+					}//Check the completion status on the tasks!
+					((Task) aTask).setCompleted(view.gettaskComplete().isSelected());
+				}
+				
+				if (model.getName().length() > 0) {	//Save to requirement!					
+					SaveRequirementController controller = new SaveRequirementController(this.parentView);
+					controller.SaveRequirement(model,false);
+				}
+					view.gettaskName().setText("");
+					view.gettaskField().setText("");
+					view.gettaskField().requestFocusInWindow();					
 			}
 			
-			
-		}
-	}
+		}	
 }
