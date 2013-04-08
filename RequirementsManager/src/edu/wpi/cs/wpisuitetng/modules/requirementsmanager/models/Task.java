@@ -100,19 +100,19 @@ public class Task implements Event {
 		String userMessage;
 		String completeMessage;
 		if(assignedUser == null) {
-			userMessage = "<br><FONT COLOR=\"blue\">No User Assigned";
+			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned" + "</FONT COLOR>";
 		}
 		else {
-			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser.getName();
+			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser.getName() + "</FONT COLOR>";
 		}
 		if(this.completed) {
-			completeMessage = "<br>Currently Completed";
+			completeMessage = "<br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR>";
 		}
 		else {
-			completeMessage = "<br>In Progress";
+			completeMessage = "<br><FONT COLOR=\"red\">In Progress</FONT COLOR>";
 		}
 		//return assembled content string;
-		return temp + userMessage + completeMessage + "</FONT COLOR></i></html>";
+		return temp + userMessage + completeMessage + "</i></html>";
 	}
 	
 	/** Changes the new line characters (\n) in the given string to html new line tags (<br>)
