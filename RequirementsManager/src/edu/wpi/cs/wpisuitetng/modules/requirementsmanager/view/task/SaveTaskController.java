@@ -44,12 +44,12 @@ public class SaveTaskController {
 	/**
 	 * Save a task to the server
 	 */
-	public void saveTask(List tasks) {
+	public void saveTask(Object[] tasks) {
 		final String taskText = view.gettaskField().getText();
 		final String taskName = view.gettaskName().getText();		
 		if(tasks==null){ //Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
-		}else if(tasks.size()<1){
+		}else if(tasks.length<1){
 			if (taskText.length() > 0 && taskName.length() > 0) { //Task must have a name and description of at least 1 char! 
 				this.model.addTask(new Task(taskName, taskText));
 				parentView.getTaskList().addElement(this.model.getTasks().get(this.model.getTasks().size()-1));
@@ -65,7 +65,7 @@ public class SaveTaskController {
 			}else{
 
 				for (Object aTask : tasks) { //Modifying tasks! 
-					if (taskText.length() > 0 && taskName.length() > 0 && tasks.size()==1){ //If only one is selected, edit the fields!
+					if (taskText.length() > 0 && taskName.length() > 0 && tasks.length==1){ //If only one is selected, edit the fields!
 						((Task) aTask).setName(view.gettaskName().getText());
 						((Task) aTask).setDescription(view.gettaskField().getText());
 					}//Check the completion status on the tasks!

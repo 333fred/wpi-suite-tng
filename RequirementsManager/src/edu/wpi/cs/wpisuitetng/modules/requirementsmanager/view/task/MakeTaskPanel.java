@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -49,6 +50,7 @@ public class MakeTaskPanel extends JPanel{
 	private final JLabel descTaskLabel;
 	
 	private final JCheckBox taskComplete;
+	private final JComboBox userAssigned;
 
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
@@ -103,7 +105,7 @@ public class MakeTaskPanel extends JPanel{
 		nameTaskLabel = new JLabel("Name:");
 		descTaskLabel = new JLabel("Description:");
 		taskComplete = new JCheckBox("Completed");
-		
+		userAssigned = new JComboBox();		
 		
 		//deleteNote = new JButton("Delete note");
 		
@@ -134,11 +136,16 @@ public class MakeTaskPanel extends JPanel{
 		layout.putConstraint(SpringLayout.WEST, taskComplete, 0, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
 		
+		layout.putConstraint(SpringLayout.NORTH, userAssigned, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
+		layout.putConstraint(SpringLayout.WEST, userAssigned, 4, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.EAST, userAssigned, 0, SpringLayout.EAST, taskComplete);
+		
 		layout.putConstraint(SpringLayout.NORTH, addtask, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
 		layout.putConstraint(SpringLayout.EAST, addtask, 0, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, addtask);
 		
-		this.add(taskStatus);		
+		this.add(taskStatus);
+		this.add(userAssigned);
 		this.add(addTaskLabel);		
 		this.add(addtask);
 		this.add(taskName);
