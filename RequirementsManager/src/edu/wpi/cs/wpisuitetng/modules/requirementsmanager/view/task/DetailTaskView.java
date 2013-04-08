@@ -96,6 +96,7 @@ public class DetailTaskView extends JPanel{
 					makeTaskPanel.gettaskStatus().setText("No tasks selected. Fill name and description to create a new one.");
 					makeTaskPanel.gettaskComplete().setEnabled(false);
 					makeTaskPanel.gettaskComplete().setSelected(false);
+					makeTaskPanel.getuserAssigned().setEnabled(true);
 					makeTaskPanel.gettaskField().setText("");
 					makeTaskPanel.gettaskName().setText("");
 					makeTaskPanel.gettaskField().setBackground(Color.white);
@@ -110,6 +111,7 @@ public class DetailTaskView extends JPanel{
 						makeTaskPanel.gettaskField().setEnabled(false);
 						makeTaskPanel.gettaskName().setEnabled(false);
 						makeTaskPanel.gettaskComplete().setSelected(false);
+						makeTaskPanel.getuserAssigned().setEnabled(false);
 						makeTaskPanel.gettaskField().setText("");
 						makeTaskPanel.gettaskName().setText("");
 						makeTaskPanel.gettaskField().setBackground(makeTaskPanel.getBackground());
@@ -119,6 +121,7 @@ public class DetailTaskView extends JPanel{
 						makeTaskPanel.gettaskFieldPane().setEnabled(true);
 						makeTaskPanel.gettaskField().setEnabled(true);
 						makeTaskPanel.gettaskName().setEnabled(true);
+						makeTaskPanel.getuserAssigned().setEnabled(true);
 						makeTaskPanel.gettaskField().setText(getSingleSelectedTask().getDescription());
 						makeTaskPanel.gettaskName().setText(getSingleSelectedTask().getName());
 						makeTaskPanel.gettaskComplete().setSelected(getSingleSelectedTask().isCompleted());
