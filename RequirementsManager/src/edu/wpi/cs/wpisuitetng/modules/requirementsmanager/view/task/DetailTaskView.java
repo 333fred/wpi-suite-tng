@@ -17,6 +17,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -79,6 +80,14 @@ public class DetailTaskView extends JPanel{
 		//adds the tasks to the list model
 		addTasksToList();
 		//,tasks.getSelectedValues()
+		
+		List<String> assignedUsers = requirement.getUsers();
+		//iterate through and add them to the list
+		for (String user: assignedUsers) {
+			makeTaskPanel.getuserAssigned().addItem(user);
+		}
+		makeTaskPanel.getuserAssigned().addItem("");
+		
 		tasks.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent evt) {		
 				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValues()));
