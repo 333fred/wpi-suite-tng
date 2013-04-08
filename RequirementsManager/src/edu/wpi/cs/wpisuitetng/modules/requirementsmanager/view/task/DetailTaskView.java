@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -85,6 +86,11 @@ public class DetailTaskView extends JPanel{
 				if(tasks.getSelectedValuesList().size()==0){
 					makeTaskPanel.gettaskStatus().setText("No tasks selected. Fill name and description to create a new one.");
 					makeTaskPanel.gettaskComplete().setEnabled(false);
+					makeTaskPanel.gettaskComplete().setSelected(false);
+					makeTaskPanel.gettaskField().setText("");
+					makeTaskPanel.gettaskName().setText("");
+					makeTaskPanel.gettaskField().setBackground(Color.white);
+					makeTaskPanel.gettaskName().setBackground(Color.white);
 					if(makeTaskPanel.gettaskName().getText().trim().equals("")||makeTaskPanel.gettaskField().getText().trim().equals(""))
 						makeTaskPanel.getaddTask().setEnabled(false);
 				}else{
@@ -94,11 +100,21 @@ public class DetailTaskView extends JPanel{
 						makeTaskPanel.gettaskFieldPane().setEnabled(false);
 						makeTaskPanel.gettaskField().setEnabled(false);
 						makeTaskPanel.gettaskName().setEnabled(false);
+						makeTaskPanel.gettaskComplete().setSelected(false);
+						makeTaskPanel.gettaskField().setText("");
+						makeTaskPanel.gettaskName().setText("");
+						makeTaskPanel.gettaskField().setBackground(makeTaskPanel.getBackground());
+						makeTaskPanel.gettaskName().setBackground(makeTaskPanel.getBackground());
 					}else{
 						makeTaskPanel.gettaskStatus().setText("One task selected. Fill name AND description to edit. Leave blank to just change status.");
 						makeTaskPanel.gettaskFieldPane().setEnabled(true);
 						makeTaskPanel.gettaskField().setEnabled(true);
 						makeTaskPanel.gettaskName().setEnabled(true);
+						makeTaskPanel.gettaskField().setText(getSingleSelectedTask().getDescription());
+						makeTaskPanel.gettaskName().setText(getSingleSelectedTask().getName());
+						makeTaskPanel.gettaskComplete().setSelected(getSingleSelectedTask().isCompleted());
+						makeTaskPanel.gettaskField().setBackground(Color.white);
+						makeTaskPanel.gettaskName().setBackground(Color.white);
 					}
 				}
 			}
@@ -154,6 +170,14 @@ public class DetailTaskView extends JPanel{
 		
 		//updates the tasks list
 		addTasksToList();
+	}
+	
+	/**
+	 * simple getter for the single currently selected task 
+	 * @return the selected task
+	 */
+	public Task getSingleSelectedTask(){
+		return (Task) tasks.getSelectedValue();
 	}
 	
 	/**

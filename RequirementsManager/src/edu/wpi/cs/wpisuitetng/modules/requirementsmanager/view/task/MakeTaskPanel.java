@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Nick M
+ *    Matt C
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
@@ -32,7 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * A panel containing a form for adding a new note to a requirement
- * @author spkordell
+ * @author Nick M, Matt C
  */
 @SuppressWarnings("serial")
 public class MakeTaskPanel extends JPanel{
