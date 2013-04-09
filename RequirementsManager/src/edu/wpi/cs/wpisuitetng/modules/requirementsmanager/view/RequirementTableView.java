@@ -65,17 +65,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * 
  */
 @SuppressWarnings("serial")
-public class RequirementTableView extends Tab implements IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
-	
+public class RequirementTableView extends Tab implements IToolbarGroupProvider,
+		IDatabaseListener, IReceivedAllRequirementNotifier,
+		IRetreivedAllIterationsNotifier {
+
 	private static RequirementTableView tv;
-	
 
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
 
 	/** Controller for receiving all requirements from the server */
 	private RetrieveAllRequirementsController retreiveAllRequirementsController;
-	
+
 	private RetrieveAllIterationsController retreiveAllIterationsController;
 
 	/** The list of requirements that the view is displaying */
@@ -107,19 +108,20 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	@SuppressWarnings("rawtypes")
 	private RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
-		
+
 		firstPaint = false;
 		// register this listener to the Database
 		RequirementDatabase.getInstance().registerListener(this);
-		retreiveAllIterationsController = new RetrieveAllIterationsController(this);
-		retreiveAllRequirementsController = new RetrieveAllRequirementsController(this);
+		retreiveAllIterationsController = new RetrieveAllIterationsController(
+				this);
+		retreiveAllRequirementsController = new RetrieveAllRequirementsController(
+				this);
 		// init the toolbar group
 		initializeToolbarGroup();
 
 		requirements = new Requirement[0];
 
 		setLayout(new BorderLayout(0, 0));
-
 
 		Vector<String> columnNames = new Vector<String>();
 		columnNames.addElement("ID");
@@ -137,6 +139,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 		this.table = new JTable(rowData, columnNames) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			};
@@ -144,34 +147,53 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
-		this.table.getColumnModel().removeColumn(this.table.getColumnModel().getColumn(0));
-		
-		Comparator<String> comparator = new Comparator<String>() {
-		    public int compare(String s1, String s2) {
-		    	if (s1.trim().equals("")){
-		    		s1 = "BLANK";
-		    	}
-		    	if (s2.trim().equals("")) {
-		    		s2 = "BLANK";
-		    	}
-		    	String upper1 = s1.toUpperCase();
-		    	String upper2 = s2.toUpperCase();
-		    	Priority p1 = Priority.valueOf(upper1);
-		    	Priority p2 = Priority.valueOf(upper2);
-		    	return p1.compareTo(p2);
-		    }
+		this.table.getColumnModel().removeColumn(
+				this.table.getColumnModel().getColumn(0));
+
+		Comparator<String> PriorityComparator = new Comparator<String>() {
+			@Override
+			public int compare(String s1, String s2) {
+				if (s1.trim().equals("")) {
+					s1 = "BLANK";
+				}
+				if (s2.trim().equals("")) {
+					s2 = "BLANK";
+				}
+				String upper1 = s1.toUpperCase();
+				String upper2 = s2.toUpperCase();
+				Priority p1 = Priority.valueOf(upper1);
+				Priority p2 = Priority.valueOf(upper2);
+				return p1.compareTo(p2);
+			}
 		};
 		
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
-	/*	for (int i = 0; i < this.table.getColumnCount(); i++) {
-			if (this.table.getColumnName(i).equals("Priority")) {
-				sorter.setComparator(i, comparator);
+		Comparator<String> IterationStringComparator = new Comparator<String> () {
+			public int compare (String s1, String s2) {
+				IterationDatabase Idb = IterationDatabase.getInstance();
+				Iteration Iteration1 = Idb.getIteration(s1);
+				Iteration Iteration2 = Idb.getIteration(s2);
+
+				if (Iteration1.getStartDate().before(Iteration2.getStartDate())) {
+					return -1; // first argument is less, or before second
+				} else if (Iteration1.getStartDate().after(Iteration2.getStartDate())) {
+					return 1; // first iteration is more, or after second
+				}
+				return 0; // dates are equal
 			}
-		}*/
-		// TODO: find a better way to get the priority column
-		sorter.setComparator(3, comparator);
-		table.setRowSorter(sorter);		
-		
+		};
+
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+				table.getModel());
+		/*
+		 * for (int i = 0; i < this.table.getColumnCount(); i++) { if
+		 * (this.table.getColumnName(i).equals("Priority")) {
+		 * sorter.setComparator(i, comparator); } }
+		 */
+		// TODO: find a better way to get the the appropriate columns
+		sorter.setComparator(3, PriorityComparator);
+		sorter.setComparator(5, IterationStringComparator);
+		table.setRowSorter(sorter);
+
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
 		for (int i = 0; i < this.table.getColumnCount(); i++) {
@@ -183,6 +205,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 
 		// Add double click event listener
 		this.table.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					JTable target = (JTable) e.getSource();
@@ -191,7 +214,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 				}
 			}
 		});
-		
+
 		this.table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -204,17 +227,18 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 
 	}
 
-	public static RequirementTableView getInstance(MainTabController tabController) {
+	public static RequirementTableView getInstance(
+			MainTabController tabController) {
 		if (tv == null) {
 			tv = new RequirementTableView(tabController);
 		}
 		return tv;
 	}
-	
+
 	public static RequirementTableView getInstance() {
 		return tv;
-	}	
-	
+	}
+
 	/*
 	 * @author Steve Kordell
 	 */
@@ -231,34 +255,41 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	 * 
 	 */
 	private void initializeToolbarGroup() {
-		
+
 		JPanel content = new JPanel();
-		SpringLayout layout  = new SpringLayout();
+		SpringLayout layout = new SpringLayout();
 		content.setLayout(layout);
-		content.setOpaque(false);		
-		
+		content.setOpaque(false);
+
 		butView = new JButton("Edit Requirement");
 		butRefresh = new JButton("Refresh");
 
 		butRefresh.setAction(new RefreshAction(this));
-		butView.setAction(new ViewRequirementAction(this));		
-		
-		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5, SpringLayout.NORTH, content);
-		layout.putConstraint(SpringLayout.WEST, butRefresh, 16, SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.EAST, butRefresh, -16, SpringLayout.EAST, content);
-		
-		layout.putConstraint(SpringLayout.NORTH, butView, 5, SpringLayout.SOUTH, butRefresh);
-		layout.putConstraint(SpringLayout.WEST, butView, 16, SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.EAST, butView, 0, SpringLayout.EAST, butRefresh);
-		
+		butView.setAction(new ViewRequirementAction(this));
+
+		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5,
+				SpringLayout.NORTH, content);
+		layout.putConstraint(SpringLayout.WEST, butRefresh, 16,
+				SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, butRefresh, -16,
+				SpringLayout.EAST, content);
+
+		layout.putConstraint(SpringLayout.NORTH, butView, 5,
+				SpringLayout.SOUTH, butRefresh);
+		layout.putConstraint(SpringLayout.WEST, butView, 16, SpringLayout.WEST,
+				content);
+		layout.putConstraint(SpringLayout.EAST, butView, 0, SpringLayout.EAST,
+				butRefresh);
+
 		// create and add the buttons that will be displayed
-		//content.add(butView);
+		// content.add(butView);
 		content.add(butRefresh);
-		
+
 		toolbarView = new ToolbarGroupView("Refresh", content);
 		// set the width of the group so it is not too long
-		toolbarView.setPreferredWidth((int) (butView.getPreferredSize().getWidth() + 40));
-		
+		toolbarView.setPreferredWidth((int) (butView.getPreferredSize()
+				.getWidth() + 40));
+
 	}
 
 	/**
@@ -278,11 +309,32 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 			Vector<String> row = new Vector<String>();
 			row.addElement(String.valueOf(requirements[i].getrUID()));
 			row.addElement(requirements[i].getName());
-			row.addElement(requirements[i].getType().equals(Type.BLANK) ? "" : requirements[i].getType().toString().substring(0,1).concat(requirements[i].getType().toString().substring(1).toLowerCase()).replaceAll("_s", " S").replaceAll("_f", " F"));
-			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? "" : requirements[i].getPriority().toString().substring(0,1).concat(requirements[i].getPriority().toString().substring(1).toLowerCase()));
-			row.addElement(requirements[i].getStatus().equals(Status.BLANK) ? "" : requirements[i].getStatus().toString().substring(0,1).concat(requirements[i].getStatus().toString().substring(1).toLowerCase()).replaceAll("_p", " P"));
+			row.addElement(requirements[i].getType().equals(Type.BLANK) ? ""
+					: requirements[i]
+							.getType()
+							.toString()
+							.substring(0, 1)
+							.concat(requirements[i].getType().toString()
+									.substring(1).toLowerCase())
+							.replaceAll("_s", " S").replaceAll("_f", " F"));
+			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? ""
+					: requirements[i]
+							.getPriority()
+							.toString()
+							.substring(0, 1)
+							.concat(requirements[i].getPriority().toString()
+									.substring(1).toLowerCase()));
+			row.addElement(requirements[i].getStatus().equals(Status.BLANK) ? ""
+					: requirements[i]
+							.getStatus()
+							.toString()
+							.substring(0, 1)
+							.concat(requirements[i].getStatus().toString()
+									.substring(1).toLowerCase())
+							.replaceAll("_p", " P"));
 			try {
-				row.addElement(IterationDatabase.getInstance().getIteration(requirements[i].getIteration()).getName());
+				row.addElement(IterationDatabase.getInstance()
+						.getIteration(requirements[i].getIteration()).getName());
 			} catch (IterationNotFoundException e) {
 				row.addElement("Iteration Not Found");
 			}
@@ -304,9 +356,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	private void getRequirementsFromServer() {
 		retreiveAllRequirementsController.getAll();
 	}
-	
+
 	private void getIterationsFromServer() {
-		retreiveAllIterationsController.getAll();;
+		retreiveAllIterationsController.getAll();
+		;
 	}
 
 	/**
@@ -360,7 +413,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	public void viewRequirement() {
 		for (int i : this.table.getSelectedRows()) {
 			viewRequirement(i);
-			//TODO: Slight problem: when opening multiple requirements at the same time,because of the server respond speed, the iterations won't open the tabs necessarily in the order they appear in the table
+			// TODO: Slight problem: when opening multiple requirements at the
+			// same time,because of the server respond speed, the iterations
+			// won't open the tabs necessarily in the order they appear in the
+			// table
 		}
 	}
 
@@ -378,17 +434,17 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 			// invalid index
 			System.out.println("Invalid index " + index);
 		}
-		
+
 		Requirement requirementToFetch = null;
-		
+
 		// convert index to new view index (incase of sorting)
 		int newIndex = this.table.convertRowIndexToModel(index);
-		// get the rUID of the requirement in the hidden column 
+		// get the rUID of the requirement in the hidden column
 		String reqId = (String) this.table.getModel().getValueAt(newIndex, 0);
 
 		// iterate through the requirements
 		for (int i = 0; i < requirements.length; i++) {
-			// if the rUIDs match 
+			// if the rUIDs match
 			if (reqId.equals(Integer.toString(requirements[i].getrUID()))) {
 				// get this requirement
 				requirementToFetch = requirements[i];
@@ -428,6 +484,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	 * 
 	 */
 
+	@Override
 	public void onGainedFocus() {
 		refresh();
 	}
@@ -440,6 +497,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	 * 
 	 */
 
+	@Override
 	public void paint(Graphics g) {
 		// call super so there is no change to functionality
 		super.paint(g);
@@ -449,17 +507,17 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 			firstPaint = true;
 		}
 	}
-	
 
 	@Override
 	public void update() {
-	//	this.requirements = RequirementDatabase.getInstance().getAllRequirements().toArray(requirements);
-	//	updateListView();
+		// this.requirements =
+		// RequirementDatabase.getInstance().getAllRequirements().toArray(requirements);
+		// updateListView();
 	}
 
 	@Override
 	public boolean shouldRemove() {
-		//this listener should persist
+		// this listener should persist
 		return false;
 	}
 
@@ -467,20 +525,19 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider, 
 	public void receivedData(Requirement[] requirements) {
 		this.requirements = requirements;
 		updateListView();
-		
+
 	}
 
 	@Override
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
 
-		
 	}
 
 	@Override
 	public void receivedData(Iteration[] iterations) {
 		updateListView();
 	}
-	
+
 	@Override
 	public Component getTabComponent(JTabbedPane tabbedPane) {
 		return new JLabel("Requirements");

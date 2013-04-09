@@ -19,22 +19,30 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
  * @author Jason Whitehouse
- *
- * Request observer for retrieving all users for the active project from the server
+ * 
+ *         Request observer for retrieving all users for the active project from
+ *         the server
  */
 public class RetrieveAllUsersRequestObserver implements RequestObserver {
 
 	private RetrieveAllUsersController controller;
-	
+
 	/**
 	 * Constructor for the Request Observer
-	 * @param controller the controller we wil callback
+	 * 
+	 * @param controller
+	 *            the controller we wil callback
 	 */
-	public RetrieveAllUsersRequestObserver (RetrieveAllUsersController controller) {
+	public RetrieveAllUsersRequestObserver(RetrieveAllUsersController controller) {
 		this.controller = controller;
 	}
-	/* (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi.cs.wpisuitetng.network.models.IRequest)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
+	 * .cs.wpisuitetng.network.models.IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -46,33 +54,48 @@ public class RetrieveAllUsersRequestObserver implements RequestObserver {
 
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			//User[] users = User.fromJSONArray(response.getBody());
+			// User[] users = User.fromJSONArray(response.getBody());
 
 			// notify the controller
-			//controller.receivedData(users);
+			// controller.receivedData(users);
 		} else {
-			controller.errorReceivingData("Received " + iReq.getResponse().getStatusCode() + " error from server: "+ iReq.getResponse().getStatusMessage());
+			controller.errorReceivingData("Received "
+					+ iReq.getResponse().getStatusCode()
+					+ " error from server: "
+					+ iReq.getResponse().getStatusMessage());
 		}
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.cs.wpisuitetng.network.models.IRequest)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
+	 * cs.wpisuitetng.network.models.IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		// TODO Auto-generated method stub
-		controller.errorReceivingData("Received " + iReq.getResponse().getStatusCode() + " error from server: "+ iReq.getResponse().getStatusMessage());
+		controller.errorReceivingData("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng.network.models.IRequest, java.lang.Exception)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
+	 * .network.models.IRequest, java.lang.Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// TODO Auto-generated method stub
-		controller.errorReceivingData("Received " + iReq.getResponse().getStatusCode() + " error from server: "+ iReq.getResponse().getStatusMessage());
+		controller.errorReceivingData("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
 
 	}
 

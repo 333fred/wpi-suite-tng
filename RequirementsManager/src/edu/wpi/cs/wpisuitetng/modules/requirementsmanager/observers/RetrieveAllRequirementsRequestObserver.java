@@ -23,18 +23,20 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
  * @author Jason Whitehouse
- *
+ * 
  */
 public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
-	
+
 	/** The controller managing the request */
 	private RetrieveAllRequirementsController controller;
-	
+
 	/**
 	 * Construct the observer
+	 * 
 	 * @param controller
 	 */
-	public RetrieveAllRequirementsRequestObserver (RetrieveAllRequirementsController controller){
+	public RetrieveAllRequirementsRequestObserver(
+			RetrieveAllRequirementsController controller) {
 		this.controller = controller;
 	}
 
@@ -47,29 +49,36 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 		ResponseModel response = request.getResponse();
 
 		if (response.getStatusCode() == 200) {
-			// parse the response				
-			Requirement[] requirements = Requirement.fromJSONArray(response.getBody());
+			// parse the response
+			Requirement[] requirements = Requirement.fromJSONArray(response
+					.getBody());
 
-			RequirementDatabase.getInstance().setRequirements(Arrays.asList(requirements));
-			
+			RequirementDatabase.getInstance().setRequirements(
+					Arrays.asList(requirements));
+
 			// notify the controller
 			controller.receivedData(requirements);
+		} else {
+			controller.errorReceivingData("Received "
+					+ iReq.getResponse().getStatusCode()
+					+ " error from server: "
+					+ iReq.getResponse().getStatusMessage());
 		}
-		else {
-			controller.errorReceivingData("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
-		}		
 	}
 
 	@Override
 	public void responseError(IRequest iReq) {
 		// an error occurred
-		controller.errorReceivingData("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		controller.errorReceivingData("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
 	}
 
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// an error occurred
-		controller.errorReceivingData("Unable to complete request: " + exception.getMessage());
+		controller.errorReceivingData("Unable to complete request: "
+				+ exception.getMessage());
 	}
 
 }

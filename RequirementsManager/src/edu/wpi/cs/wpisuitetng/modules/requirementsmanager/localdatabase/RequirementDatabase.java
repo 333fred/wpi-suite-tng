@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Fredric
+ *    @author Fredric
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
@@ -24,8 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * Maintains a local database of requirements
- * 
- * @author Fredric
  */
 public class RequirementDatabase extends Thread {
 
@@ -136,11 +134,11 @@ public class RequirementDatabase extends Thread {
 		List<IDatabaseListener> removes = new ArrayList<IDatabaseListener>();
 		for (IDatabaseListener l : listeners) {
 			l.update();
-			if(l.shouldRemove()){
+			if (l.shouldRemove()) {
 				removes.add(l);
 			}
 		}
-		for (IDatabaseListener l : removes){
+		for (IDatabaseListener l : removes) {
 			listeners.remove(l);
 		}
 	}
@@ -180,15 +178,15 @@ public class RequirementDatabase extends Thread {
 			controller.getAll();
 			try {
 				// Sleep for five minutes
-				this.sleep(300000);
+				Thread.sleep(300000);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 				return;
 			}
 		}
 	}
-	
-	//TODO documentation
+
+	// TODO documentation
 	public Requirement getRequirement(String string) {
 		for (Requirement aReq : requirements.values()) {
 			if (aReq.getName().equals(string)) {

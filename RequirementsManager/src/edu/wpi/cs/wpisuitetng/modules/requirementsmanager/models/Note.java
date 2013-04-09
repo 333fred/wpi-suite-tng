@@ -45,7 +45,6 @@ public class Note implements Event {
 		this.creator = creator;
 	}
 
-	
 	/**
 	 * Create a new note. The date and time is set to the current system date
 	 * and time.
@@ -68,21 +67,22 @@ public class Note implements Event {
 	public Note() {
 		this.date = new Date();
 	}
-	
-	public boolean equals(Object o){
+
+	@Override
+	public boolean equals(Object o) {
 		Note note;
 		if (o instanceof Note) {
 			note = (Note) o;
 		} else {
 			return false;
 		}
-		if(!note.creator.equals(this.creator)){
+		if (!note.creator.equals(this.creator)) {
 			return false;
 		}
-		if(!note.date.equals(this.date)){
+		if (!note.date.equals(this.date)) {
 			return false;
 		}
-		if(!note.note.equals(this.note)){
+		if (!note.note.equals(this.note)) {
 			return false;
 		}
 		return true;
@@ -132,33 +132,46 @@ public class Note implements Event {
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
-	
-	/** Returns the title of this note to be displayed in the GUI, as specified by Event interface 
+
+	/**
+	 * Returns the title of this note to be displayed in the GUI, as specified
+	 * by Event interface
 	 * 
 	 * @return The title
 	 */
-	
+
+	@Override
 	public String getTitle() {
-		return "<html><font size=4><b>" + getCreator() + "<font size=.25></b> added on " + new SimpleDateFormat("MM/dd/yy hh:mm a").format(getDate()) + "</html>";
-		
-		
+		return "<html><font size=4><b>" + getCreator()
+				+ "<font size=.25></b> added on "
+				+ new SimpleDateFormat("MM/dd/yy hh:mm a").format(getDate())
+				+ "</html>";
+
 	}
-	
-	/** Returns the content of this note to be displayed in the GUI, as specified by Event interface 
+
+	/**
+	 * Returns the content of this note to be displayed in the GUI, as specified
+	 * by Event interface
 	 * 
 	 * @return The content
 	 */
-	
+
+	@Override
 	public String getContent() {
 		return "<html><i>" + parseNewLines(getNote()) + "</i></html>";
 	}
-	
-	/** Changes the new line characters (\n) in the given string to html new line tags (<br>)
+
+	/**
+	 * Changes the new line characters (\n) in the given string to html new line
+	 * tags (<br>
+	 * )
 	 * 
-	 * @param The string to parse
-	 * @return The new string with <br>'s
+	 * @param The
+	 *            string to parse
+	 * @return The new string with <br>
+	 *         's
 	 */
-	
+
 	public String parseNewLines(String text) {
 		text = text.replaceAll("\n", "<br>");
 		return text;

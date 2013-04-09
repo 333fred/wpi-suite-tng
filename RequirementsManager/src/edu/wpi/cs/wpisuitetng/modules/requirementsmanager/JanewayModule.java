@@ -39,72 +39,84 @@ public class JanewayModule implements IJanewayModule {
 
 	/** List of tabs that this module will display */
 	private List<JanewayTabModel> tabs;
-		
+
 	/** The main view of the module that displays the tabs */
 	private MainTabView tabView;
-	
+
 	/** The tab controller for tabView */
 	private MainTabController tabController;
-	
-	/** Toolbar view, displayed above the main tab view, and contains action buttons for the tabs */
+
+	/**
+	 * Toolbar view, displayed above the main tab view, and contains action
+	 * buttons for the tabs
+	 */
 	private ToolbarView toolbarView;
-	
+
 	/** the IterationTreeView that will be displayed accross the module */
 	private IterationTreeView iterationTreeView;
-	
+
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
-	
-	/** Creates a new instance of JanewayModule, initializing the tabs to be displayed
+
+	/**
+	 * Creates a new instance of JanewayModule, initializing the tabs to be
+	 * displayed
 	 * 
 	 */
-	
+
 	public JanewayModule() {
-		
-		//temp fix to init network
-		//TODO: Replace this
-		final NetworkConfiguration config = new NetworkConfiguration("http://localhost:8080");
+
+		// temp fix to init network
+		// TODO: Replace this
+		final NetworkConfiguration config = new NetworkConfiguration(
+				"http://localhost:8080");
 		Network.getInstance().setDefaultNetworkConfiguration(config);
-		
-		
+
 		// Start the database threads
 		RequirementDatabase.getInstance().start();
 		IterationDatabase.getInstance().start();
-				
-		//initialize the list of tabs, using an array list
-		tabs = new ArrayList<JanewayTabModel>();	
-		
-		//initialize the tab view public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		tabView = new MainTabView();	
-		
-		//initialize TabController
-		tabController = new MainTabController(tabView);		
-		
-		//initialize the iterationTreeView
+
+		// initialize the list of tabs, using an array list
+		tabs = new ArrayList<JanewayTabModel>();
+
+		// initialize the tab view public void insertTab(String title, Icon
+		// icon, Component component, String tip, int index) {
+		tabView = new MainTabView();
+
+		// initialize TabController
+		tabController = new MainTabController(tabView);
+
+		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
-			
-		//initialize the toolbarView
+
+		// initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);
-		
-		//initialize the toolbar Controller
-		toolbarController = new ToolbarController(toolbarView, tabController);		
-		
+
+		// initialize the toolbar Controller
+		toolbarController = new ToolbarController(toolbarView, tabController);
+
 		tabController.addRequirementsTab();
-		
+
 		tabController.addStatTab();
-		
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, iterationTreeView, tabView);
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				iterationTreeView, tabView);
 		splitPane.setResizeWeight(0.28);
-		
-		//create a new JanewayTabModel, passing in the tab view, and a new JPanel as the toolbar
-		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(), toolbarView, splitPane);
-		
-		//add the tab to the list of tabs
+
+		// create a new JanewayTabModel, passing in the tab view, and a new
+		// JPanel as the toolbar
+		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(),
+				toolbarView, splitPane);
+
+		// add the tab to the list of tabs
 		tabs.add(tab1);
-		
+
 		registerKeyboardShortcuts(tab1);
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
 	 */
 	@Override
@@ -112,30 +124,32 @@ public class JanewayModule implements IJanewayModule {
 		return "Requirements Manager";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
 	}
-	
 
 	@SuppressWarnings("serial")
 	private void registerKeyboardShortcuts(JanewayTabModel tab) {
 		String osName = System.getProperty("os.name").toLowerCase();
-		
+
 		// command + w for mac or control + w for windows: close the current tab
 		if (osName.contains("mac")) {
-			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke.getKeyStroke("meta W"), new AbstractAction() {
+			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke
+					.getKeyStroke("meta W"), new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					tabController.closeCurrentTab();
 				}
 			}));
-		}
-		else {
-			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke.getKeyStroke("control W"), new AbstractAction() {
+		} else {
+			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke
+					.getKeyStroke("control W"), new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					tabController.closeCurrentTab();

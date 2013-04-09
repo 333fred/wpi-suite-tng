@@ -19,10 +19,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-
 /**
- * Class with a single method to generate, add, and render a panel for a given Event.
- *
+ * Class with a single method to generate, add, and render a panel for a given
+ * Event.
+ * 
  */
 public class EventCellRenderer implements ListCellRenderer {
 
@@ -36,17 +36,25 @@ public class EventCellRenderer implements ListCellRenderer {
 	 * @cellHasFocus currently of no use here
 	 */
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value,	int index, boolean isSelected, boolean cellHasFocus) {		
-		final JPanel panel;		
-		panel = new EventPanel((Event)value);		
-		
-		
+	public Component getListCellRendererComponent(JList list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus) {
+		final JPanel panel;
+		panel = new EventPanel((Event) value);
+
 		if (isSelected) {
-			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), BorderFactory.createLineBorder(Color.black, 3)), BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+					.createCompoundBorder(
+							BorderFactory.createEmptyBorder(5, 0, 5, 0),
+							BorderFactory.createLineBorder(Color.black, 3)),
+					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 		} else {
-			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), BorderFactory.createLineBorder(Color.black, 1)), BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+					.createCompoundBorder(
+							BorderFactory.createEmptyBorder(5, 0, 5, 0),
+							BorderFactory.createLineBorder(Color.black, 1)),
+					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 		}
-		
+
 		return panel;
 	}
 

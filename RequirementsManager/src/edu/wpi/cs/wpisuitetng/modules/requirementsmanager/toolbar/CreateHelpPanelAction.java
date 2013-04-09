@@ -24,7 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 /**
  * Action invoked upon use of the User Manual key
  * 
- * Action, default mnemonic key is F1. 
+ * Action, default mnemonic key is F1.
  * 
  * @author Nicholas Massa
  */
@@ -32,31 +32,44 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 public class CreateHelpPanelAction extends AbstractAction {
 
 	private final MainTabController controller;
-	
+
 	/**
 	 * Create a CreateHelpPanelAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * 
+	 * @param controller
+	 *            When the action is performed, controller.addCreateDefectTab()
+	 *            is called
 	 */
 	public CreateHelpPanelAction(MainTabController controller) {
 		super("User Manual");
 		this.controller = controller;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_F1);
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e) {		
-		File input = new File("index.html"); //Html file is our input
-		
-		//Create a desktop type in order to launch the user's default browser
-		 Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-		    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) { //If desktop was created and a browser is supported
-		        try {
-		            desktop.open(input); //Convert link to identifier and launch default browser
-		        } catch (Exception f) {
-		        	System.out.println("Error launching browser!");
-		            f.printStackTrace();
-		        }
-		    }
+	public void actionPerformed(ActionEvent e) {
+		File input = new File("index.html"); // Html file is our input
+
+		// Create a desktop type in order to launch the user's default browser
+		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop()
+				: null;
+		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) { // If
+																				// desktop
+																				// was
+																				// created
+																				// and
+																				// a
+																				// browser
+																				// is
+																				// supported
+			try {
+				desktop.open(input); // Convert link to identifier and launch
+										// default browser
+			} catch (Exception f) {
+				System.out.println("Error launching browser!");
+				f.printStackTrace();
+			}
+		}
 	}
 
 }

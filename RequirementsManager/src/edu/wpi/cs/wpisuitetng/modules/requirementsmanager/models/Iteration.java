@@ -50,9 +50,10 @@ public class Iteration extends AbstractModel {
 		this.id = -1;
 		this.requirements = new ArrayList<Integer>();
 	}
+
 	/**
-	 * Constructor for an iteration with the given start, and end It has a
-	 * blank list of requirements
+	 * Constructor for an iteration with the given start, and end It has a blank
+	 * list of requirements
 	 * 
 	 * @param name
 	 *            the name of the iteration
@@ -63,7 +64,7 @@ public class Iteration extends AbstractModel {
 	 */
 	public Iteration(String name, Date startDate, Date endDate) {
 		this(name, startDate, endDate, -1);
-	}	
+	}
 
 	/**
 	 * Constructor for an iteration with the given start, end, and id. It has a
@@ -162,19 +163,20 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * Adds a given requirement to this iteration. If the requirement is already a 
-	 * member of requirements we do nothing
+	 * Adds a given requirement to this iteration. If the requirement is already
+	 * a member of requirements we do nothing
 	 * 
 	 * @param rUID
 	 *            the new requirement
 	 */
-	public void addRequirement(int rUID)  {
+	public void addRequirement(int rUID) {
 
-		//first check if the requirement is already on here
+		// first check if the requirement is already on here
 		for (Integer id : this.requirements) {
-			if (id == rUID) return; //if it is we are already done
+			if (id == rUID)
+				return; // if it is we are already done
 		}
-			this.requirements.add(rUID); 
+		this.requirements.add(rUID);
 	}
 
 	/**
@@ -184,11 +186,11 @@ public class Iteration extends AbstractModel {
 	 *            the removed requirement
 	 */
 	public void removeRequirement(int rUID) {
-	
+
 		Iterator<Integer> iter = this.requirements.iterator();
-		while(iter.hasNext()){
-		    if(iter.next() == rUID)
-		        iter.remove();
+		while (iter.hasNext()) {
+			if (iter.next() == rUID)
+				iter.remove();
 		}
 	}
 
@@ -241,11 +243,11 @@ public class Iteration extends AbstractModel {
 	 *             if the start date is after the end date
 	 */
 	public void setStartDate(Date startDate) throws InvalidDateException {
-	//	if (endDate == null || startDate.compareTo(endDate) < 0) {
-			this.startDate = startDate;
-	//	} else {
-	//		throw new InvalidDateException(startDate);
-	//	}
+		// if (endDate == null || startDate.compareTo(endDate) < 0) {
+		this.startDate = startDate;
+		// } else {
+		// throw new InvalidDateException(startDate);
+		// }
 	}
 
 	/**
@@ -265,21 +267,22 @@ public class Iteration extends AbstractModel {
 	 *             if the end date is before the start date
 	 */
 	public void setEndDate(Date endDate) throws InvalidDateException {
-	//	if (startDate == null || endDate.compareTo(startDate) > 0) {
-			this.endDate = endDate;
-		//} else {
-		//	throw new InvalidDateException(endDate);
-		//}
+		// if (startDate == null || endDate.compareTo(startDate) > 0) {
+		this.endDate = endDate;
+		// } else {
+		// throw new InvalidDateException(endDate);
+		// }
 	}
-	
+
 	/**
-	 * Method to confirm that the end date of an iteration
-	 * is in fact after its start date
-	 * @return true if this iteration has an end date which follows its start date;
-	 * 	false otherwise
+	 * Method to confirm that the end date of an iteration is in fact after its
+	 * start date
+	 * 
+	 * @return true if this iteration has an end date which follows its start
+	 *         date; false otherwise
 	 */
-	public boolean validateDate(){
-		return(startDate.compareTo(endDate) < 0);
+	public boolean validateDate() {
+		return (startDate.compareTo(endDate) < 0);
 	}
 
 	/**
@@ -311,34 +314,34 @@ public class Iteration extends AbstractModel {
 	public void setRequirements(List<Integer> requirements) {
 		this.requirements = requirements;
 	}
-	
+
 	/**
-	 * @return the sum of the estimates of this iteration's requirements
-	 * 			does not care if a rUID does not point to a valid requirement; simply ignores it in that case
+	 * @return the sum of the estimates of this iteration's requirements does
+	 *         not care if a rUID does not point to a valid requirement; simply
+	 *         ignores it in that case
 	 */
-	public int getEstimate(){
+	public int getEstimate() {
 
 		int estimate = 0;
-		
-		for(Integer rUID : requirements){
-			
-			try{
-				estimate += RequirementDatabase.getInstance().getRequirement(rUID).getEstimate();
-			}
-			catch(RequirementNotFoundException e){
+
+		for (Integer rUID : requirements) {
+
+			try {
+				estimate += RequirementDatabase.getInstance()
+						.getRequirement(rUID).getEstimate();
+			} catch (RequirementNotFoundException e) {
 				// do nothing
 			}
-			
+
 		}
-		
+
 		return estimate;
-		
+
 	}
-	
-	
-	public static List<Iteration> sortIterations(List<Iteration> iterations) {	
+
+	public static List<Iteration> sortIterations(List<Iteration> iterations) {
 		Collections.sort(iterations, new IterationComparator());
 		return iterations;
 	}
-	
+
 }

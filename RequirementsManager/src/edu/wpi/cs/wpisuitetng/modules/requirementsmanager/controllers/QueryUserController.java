@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    @author
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
@@ -25,9 +25,10 @@ public class QueryUserController {
 	public QueryUserController(AssigneePanel parentView) {
 		this.parentView = parentView;
 	}
-	
+
 	public void getUsers() {
-		final RequestObserver requestObserver = new QueryUserRequestObserver(parentView);
+		final RequestObserver requestObserver = new QueryUserRequestObserver(
+				parentView);
 		Request request;
 		request = Network.getInstance().makeRequest(
 				"requirementsmanager/stringlistmodel", HttpMethod.POST);
