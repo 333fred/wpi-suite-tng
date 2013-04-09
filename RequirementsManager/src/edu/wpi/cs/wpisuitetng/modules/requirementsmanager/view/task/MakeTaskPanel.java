@@ -27,10 +27,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
  * A panel containing a form for adding a new note to a requirement
@@ -73,9 +75,9 @@ public class MakeTaskPanel extends JPanel {
 		taskName.setLineWrap(true);
 		taskName.setWrapStyleWord(true);
 		taskName.setMaximumSize(new Dimension(40, 2));
-		// AbstractDocument textNameDoc = (AbstractDocument)
-		// taskName.getDocument();
-		// textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
+		AbstractDocument textNameDoc = (AbstractDocument)
+		taskName.getDocument();
+		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		taskName.setBorder((new JTextField()).getBorder());
 		taskName.setName("Name");
 		taskName.setDisabledTextColor(Color.GRAY);
