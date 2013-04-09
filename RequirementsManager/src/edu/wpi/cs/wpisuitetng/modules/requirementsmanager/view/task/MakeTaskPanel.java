@@ -48,6 +48,7 @@ public class MakeTaskPanel extends JPanel{
 	private final JLabel taskStatus;
 	private final JLabel nameTaskLabel;
 	private final JLabel descTaskLabel;
+	private final JLabel userAssignedLabel;
 	
 	private final JCheckBox taskComplete;
 	private final JComboBox userAssigned;
@@ -104,6 +105,7 @@ public class MakeTaskPanel extends JPanel{
 		addTaskLabel = new JLabel("Task:");
 		nameTaskLabel = new JLabel("Name:");
 		descTaskLabel = new JLabel("Description:");
+		userAssignedLabel = new JLabel("Users:");
 		taskComplete = new JCheckBox("Completed");
 		userAssigned = new JComboBox();		
 		
@@ -136,15 +138,21 @@ public class MakeTaskPanel extends JPanel{
 		layout.putConstraint(SpringLayout.WEST, taskComplete, 0, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
 		
+		layout.putConstraint(SpringLayout.NORTH, userAssignedLabel, VERTICAL_PADDING+5, SpringLayout.SOUTH, taskComplete);
+		layout.putConstraint(SpringLayout.WEST, userAssignedLabel, 4, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.EAST, userAssignedLabel, 0, SpringLayout.EAST, taskComplete);
+		
 		layout.putConstraint(SpringLayout.NORTH, userAssigned, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
-		layout.putConstraint(SpringLayout.WEST, userAssigned, 4, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, userAssigned, 0, SpringLayout.EAST, taskComplete);
+		layout.putConstraint(SpringLayout.WEST, userAssigned, 50, SpringLayout.WEST, userAssignedLabel);
+		layout.putConstraint(SpringLayout.EAST, userAssigned, 50, SpringLayout.EAST, taskComplete);
+		
 		
 		layout.putConstraint(SpringLayout.NORTH, addtask, VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
 		layout.putConstraint(SpringLayout.EAST, addtask, 0, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING, SpringLayout.SOUTH, addtask);
 		
 		this.add(taskStatus);
+		this.add(userAssignedLabel);
 		this.add(userAssigned);
 		this.add(addTaskLabel);		
 		this.add(addtask);
