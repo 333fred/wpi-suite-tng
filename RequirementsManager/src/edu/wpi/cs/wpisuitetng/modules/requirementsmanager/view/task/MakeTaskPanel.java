@@ -116,8 +116,7 @@ public class MakeTaskPanel extends JPanel {
 
 		// deleteNote = new JButton("Delete note");
 
-		addtask.setAction(new SaveTaskAction(new SaveTaskController(this,
-				model, parentView)));
+		//addtask.setAction(new SaveTaskAction(new SaveTaskController(this, model, parentView)));
 
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
