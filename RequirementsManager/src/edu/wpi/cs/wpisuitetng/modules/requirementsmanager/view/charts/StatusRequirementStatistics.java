@@ -8,6 +8,7 @@
 *
 * Contributors:
 * Alex Gorowara
+* Steve Kordell
 *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
@@ -25,32 +26,29 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 */
 public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
-public void update(){
+	public void update(){
+		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
+		// for every possible status
+		for(Status status: Status.values()){
+			this.data.put(status.toString(), 0);	// insert the status in the data set with zero counted requirements
+		}
+		// for every requirement in this project
+		for(Requirement requirement : requirements){
+			Status status = requirement.getStatus();
+			Integer oldValue = this.data.get(status.toString());
+			this.data.put(status.toString(), new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status
+		}
 
-List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-
-// for every possible status
-for(Status status: Status.values()){
-this.data.put(status.toString(), 0);	// insert the status in the data set with zero counted requirements
+		this.data.remove("BLANK");
 }
 
-// for every requirement in this project
-for(Requirement requirement : requirements){
+	public JFreeChart buildPieChart(){
+		this.update();
+		return this.buildPieChart("Requirements by Status");
+	}
 
-Status status = requirement.getStatus();
-Integer oldValue = this.data.get(status);
-this.data.put(status.toString(), new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status
-
-}
-
-}
-
-public JFreeChart buildPieChart(){
-return this.buildPieChart("Requirements by Status");
-}
-
-public JFreeChart buildBarChart(){
-return this.buildBarChart("Requirements by Status", "Status");
-}
+	public JFreeChart buildBarChart(){
+		return this.buildBarChart("Requirements by Status", "Status");
+	}
 
 }

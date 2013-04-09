@@ -28,52 +28,37 @@ public abstract class AbstractRequirementStatistics {
 Map<String, Integer> data;
 
 public AbstractRequirementStatistics(){
-
-this.data = new HashMap<String, Integer>();
-this.update();
-
+	this.data = new HashMap<String, Integer>();
+	this.update();
 }
 
 /**
 * method to force reacquisition of data
 */
-public abstract void update();
+	public abstract void update();
 
-public PieDataset toPieDataset(){
+	public PieDataset toPieDataset(){
+		DefaultPieDataset pieDataset = new DefaultPieDataset();
+		for(String key : data.keySet()){
+			pieDataset.setValue(key, data.get(key));
+		}
+		return pieDataset;
+		}
 
-DefaultPieDataset pieDataset = new DefaultPieDataset();
+	public CategoryDataset toCategoryDataset(){
+		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
+		for(String key : data.keySet()){
+			categoryDataset.setValue(data.get(key), "Requirements", key);
+		}
+		return categoryDataset;		
+	}
+	
+		protected JFreeChart buildPieChart(String title){
+			return ChartFactory.createPieChart(title, this.toPieDataset(), true, false, false);
+		}
 
-for(String key : data.keySet()){
-pieDataset.setValue(key, data.get(key));
-}
-
-return pieDataset;
-
-}
-
-public CategoryDataset toCategoryDataset(){
-
-DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
-
-for(String key : data.keySet()){
-categoryDataset.setValue(data.get(key), "Requirements", key);
-}
-
-return categoryDataset;
-
-}
-
-protected JFreeChart buildPieChart(String title){
-
-return ChartFactory.createPieChart(title, this.toPieDataset(), true, false, false);
-
-
-}
-
-protected JFreeChart buildBarChart(String title, String category){
-
-return ChartFactory.createBarChart(title, category, "Requirements", this.toCategoryDataset(), PlotOrientation.HORIZONTAL, true, false, false);
-
-}
+	protected JFreeChart buildBarChart(String title, String category){
+		return ChartFactory.createBarChart(title, category, "Requirements", this.toCategoryDataset(), PlotOrientation.HORIZONTAL, true, false, false);
+	}
 
 }

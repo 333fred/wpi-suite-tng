@@ -47,7 +47,7 @@ public StatView() {
 * @return A chart.
 */
     private static JFreeChart createChart(PieDataset dataset) {
-        
+        /*
         JFreeChart chart = ChartFactory.createPieChart(
             "Pie Chart Demo 1", // chart title
             dataset, // data
@@ -62,7 +62,9 @@ public StatView() {
         plot.setCircular(false);
         plot.setLabelGap(0.02);
         return chart;
-        
+        */
+    	StatusRequirementStatistics statusRequirementStatistics = new StatusRequirementStatistics();
+    	return statusRequirementStatistics.buildPieChart();
     }
     
     /**
