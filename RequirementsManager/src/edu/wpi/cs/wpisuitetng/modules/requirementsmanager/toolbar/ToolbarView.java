@@ -35,6 +35,9 @@ public class ToolbarView extends DefaultToolbarView {
 	/** Button for creating iteration */
 	private JButton createIteration;
 
+	/** Button for creating statistics panel */
+	private JButton createStatPanel;
+
 	// private JPlaceholderTextField searchField;
 
 	/**
@@ -62,6 +65,10 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the User Manual button
 		createHelpPanel = new JButton("User Manual");
 		createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
+		
+		// Construct the Stat button
+		createStatPanel = new JButton("Statistics");
+		createStatPanel.setAction(new CreateStatPanelAction(tabController));
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -80,6 +87,9 @@ public class ToolbarView extends DefaultToolbarView {
 				SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.EAST, createHelpPanel, 0,
 				SpringLayout.EAST, createRequirement);
+		
+		layout.putConstraint(SpringLayout.EAST, createStatPanel, 0,
+				SpringLayout.EAST, createHelpPanel);
 
 		/*
 		 * layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 5,
@@ -94,6 +104,7 @@ public class ToolbarView extends DefaultToolbarView {
 		content.add(createRequirement);
 		// content.add(createHelpPanel);
 		content.add(createHelpPanel);
+		content.add(createStatPanel);
 
 		// content.add(searchField);
 
