@@ -7,11 +7,10 @@ import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 
-
-public class NoteViewListener  implements KeyListener {
+public class NoteViewListener implements KeyListener {
 	protected DetailNoteView panel;
 	protected JTextComponent component;
-	
+
 	public NoteViewListener(DetailNoteView panel, JTextComponent component) {
 		this.panel = panel;
 		this.component = component;
@@ -20,7 +19,7 @@ public class NoteViewListener  implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -30,10 +29,9 @@ public class NoteViewListener  implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (component.getText().trim().equals("")) {	
+		if (component.getText().trim().equals("")) {
 			panel.disableAddNote();
-		}
-		else {
+		} else {
 			panel.enableAddNote();
 		}
 	}

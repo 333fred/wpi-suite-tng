@@ -12,34 +12,36 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 
 	/** Menu options for the PopupMenu */
 	private JMenuItem menuCreateRequirement;
-	
+
 	/** The tab controller used to create new tabs */
 	private MainTabController tabController;
-	
-	
-	/** Creates an BacklogPopupMenu with the given tab controller
+
+	/**
+	 * Creates an BacklogPopupMenu with the given tab controller
 	 * 
-	 * @param tabController The tab controller to open tabs in
+	 * @param tabController
+	 *            The tab controller to open tabs in
 	 */
-	
+
 	public BacklogPopupMenu(MainTabController tabController) {
 		this.tabController = tabController;
 
-		menuCreateRequirement = new JMenuItem("New Requirement");		
+		menuCreateRequirement = new JMenuItem("New Requirement");
 
 		menuCreateRequirement.addActionListener(this);
-		
-		add(menuCreateRequirement);			
-	
+
+		add(menuCreateRequirement);
 
 	}
-	
-	/** The action listener that is called when the user selects a menu option
+
+	/**
+	 * The action listener that is called when the user selects a menu option
 	 * 
 	 */
-	
+
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		tabController.addCreateRequirementTab();
 	}
-	
+
 }

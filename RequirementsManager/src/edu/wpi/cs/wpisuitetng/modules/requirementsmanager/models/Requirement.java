@@ -42,7 +42,7 @@ public class Requirement extends AbstractModel {
 	private Priority priority;
 	// Date and scheduling attributes
 	private String releaseNum; // TODO: Implement Releases
-	private int iteration; 
+	private int iteration;
 	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
 						// sum
@@ -77,7 +77,7 @@ public class Requirement extends AbstractModel {
 		pUID = new ArrayList<Integer>();
 		notes = new ArrayList<Note>();
 		logs = new ArrayList<RequirementChangeset>();
-		//logger = new Logger();
+		// logger = new Logger();
 		tasks = new ArrayList<Task>();
 	}
 
@@ -131,7 +131,7 @@ public class Requirement extends AbstractModel {
 		// Set the task to new, and create a new linked list for the log
 		this.status = Status.NEW;
 		this.logs = new ArrayList<RequirementChangeset>();
-		
+
 		this.tasks = tasks;
 	}
 
@@ -143,7 +143,8 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * @param estimate the estimate to set
+	 * @param estimate
+	 *            the estimate to set
 	 */
 	public void setEstimate(int estimate) {
 		this.estimate = estimate;
@@ -154,6 +155,7 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return The JSON string representing this object
 	 */
+	@Override
 	public String toJSON() {
 		return new Gson().toJson(this, Requirement.class);
 	}
@@ -218,7 +220,8 @@ public class Requirement extends AbstractModel {
 	 */
 	public void logCreation(Session s) {
 		RequirementChangeset creation = new RequirementChangeset(s.getUser());
-		creation.getChanges().put("creation", new FieldChange<String>("creation", "creation"));
+		creation.getChanges().put("creation",
+				new FieldChange<String>("creation", "creation"));
 		logs = new ArrayList<RequirementChangeset>();
 		logs.add(creation);
 	}
@@ -517,7 +520,7 @@ public class Requirement extends AbstractModel {
 	 * @return the log
 	 */
 	public List<RequirementChangeset> getLogs() {
-		//return logger.getLogs();
+		// return logger.getLogs();
 		return logs;
 	}
 
@@ -609,7 +612,7 @@ public class Requirement extends AbstractModel {
 			return this.rUID == ((Requirement) o).rUID;
 		}
 	}
-	
+
 	/**
 	 * @return the tasks
 	 */
@@ -618,7 +621,8 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * @param tasks the tasks to set
+	 * @param tasks
+	 *            the tasks to set
 	 */
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
@@ -626,17 +630,18 @@ public class Requirement extends AbstractModel {
 
 	/**
 	 * Checks the task list for completed tasks
+	 * 
 	 * @return true if all tasks in the list are complete
 	 */
-	public boolean tasksCompleted(){
-		for(Task t: this.tasks){
-			if(!t.isCompleted())
+	public boolean tasksCompleted() {
+		for (Task t : this.tasks) {
+			if (!t.isCompleted())
 				return false;
 		}
 		return true;
 	}
 
 	public void addTask(Task task) {
-		this.tasks.add(task);		
+		this.tasks.add(task);
 	}
 }

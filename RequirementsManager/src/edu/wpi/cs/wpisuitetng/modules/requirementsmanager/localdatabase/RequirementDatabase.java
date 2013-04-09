@@ -134,11 +134,11 @@ public class RequirementDatabase extends Thread {
 		List<IDatabaseListener> removes = new ArrayList<IDatabaseListener>();
 		for (IDatabaseListener l : listeners) {
 			l.update();
-			if(l.shouldRemove()){
+			if (l.shouldRemove()) {
 				removes.add(l);
 			}
 		}
-		for (IDatabaseListener l : removes){
+		for (IDatabaseListener l : removes) {
 			listeners.remove(l);
 		}
 	}
@@ -178,15 +178,15 @@ public class RequirementDatabase extends Thread {
 			controller.getAll();
 			try {
 				// Sleep for five minutes
-				this.sleep(300000);
+				Thread.sleep(300000);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 				return;
 			}
 		}
 	}
-	
-	//TODO documentation
+
+	// TODO documentation
 	public Requirement getRequirement(String string) {
 		for (Requirement aReq : requirements.values()) {
 			if (aReq.getName().equals(string)) {

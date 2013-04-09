@@ -12,27 +12,33 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
-/** Notifier for Saving an iteration / requirement
+/**
+ * Notifier for Saving an iteration / requirement
  */
 
 public interface ISaveNotifier {
-	
+
 	/** Called when saving was successful */
-	
+
 	public void responseSuccess();
-	
-	/** Called when there was an error response from the sever
+
+	/**
+	 * Called when there was an error response from the sever
 	 * 
-	 * @param statusCode The status code
-	 * @param statusMessage The status message
+	 * @param statusCode
+	 *            The status code
+	 * @param statusMessage
+	 *            The status message
 	 */
-	
+
 	public void responseError(int statusCode, String statusMessage);
 
-	/** Called when saving completely failed, 
+	/**
+	 * Called when saving completely failed,
 	 * 
-	 * @param exception The exception that was created
+	 * @param exception
+	 *            The exception that was created
 	 */
-	
+
 	public void fail(Exception exception);
 }

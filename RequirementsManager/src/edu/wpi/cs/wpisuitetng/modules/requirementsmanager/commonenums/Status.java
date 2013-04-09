@@ -17,10 +17,5 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  */
 
 public enum Status {
-	BLANK,
-	NEW,
-	IN_PROGRESS,
-	OPEN,
-	COMPLETE,
-	DELETED
+	BLANK, NEW, IN_PROGRESS, OPEN, COMPLETE, DELETED
 }

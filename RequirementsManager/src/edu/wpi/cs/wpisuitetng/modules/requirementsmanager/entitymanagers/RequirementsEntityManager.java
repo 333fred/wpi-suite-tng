@@ -30,7 +30,6 @@ import edu.wpi.cs.wpisuitetng.modules.logger.ChangesetCallback;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
@@ -205,7 +204,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		// Set up the changeset callback
 		RequirementChangeset changeset = new RequirementChangeset(s.getUser());
 		ChangesetCallback callback = new ChangesetCallback(changeset);
-		
+
 		// Save the iteration values
 		int oldIteration = oldReq.getIteration();
 		int newIteration = updatedRequirement.getIteration();
@@ -218,27 +217,24 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		if (changeset.getChanges().size() > 0) {
 			oldReq.logEvents(changeset);
 			// Save the requirement, and throw an exception if if fails
-			if (!db.save(oldReq, s.getProject())
-					|| !db.save(oldReq.getLogs())) {
+			if (!db.save(oldReq, s.getProject()) || !db.save(oldReq.getLogs())) {
 				throw new WPISuiteException();
-			}/* else if (oldIteration != newIteration){
-				//update iterations if they were changed
-				//remove this requirement from the old iteration
-				//add this requirement to the new iteration
-				IterationEntityManager itEn = new IterationEntityManager(db);
-				System.out.println("\n\n\n\n\n" + oldIteration + ", " + newIteration + "\n\n\n\n\n");
-				if(oldIteration >= 0){
-					Iteration old = itEn.getEntity(s, Integer.toString(oldIteration))[0];
-					old.removeRequirement(updatedRequirement.getrUID());
-					itEn.update(s, old.toJSON());
-				}
-				
-				if(newIteration >= 0){
-					Iteration newIt = itEn.getEntity(s, Integer.toString(newIteration))[0];
-					newIt.addRequirement(updatedRequirement.getrUID());
-					itEn.update(s, newIt.toJSON());
-				}
-			}*/
+			}/*
+			 * else if (oldIteration != newIteration){ //update iterations if
+			 * they were changed //remove this requirement from the old
+			 * iteration //add this requirement to the new iteration
+			 * IterationEntityManager itEn = new IterationEntityManager(db);
+			 * System.out.println("\n\n\n\n\n" + oldIteration + ", " +
+			 * newIteration + "\n\n\n\n\n"); if(oldIteration >= 0){ Iteration
+			 * old = itEn.getEntity(s, Integer.toString(oldIteration))[0];
+			 * old.removeRequirement(updatedRequirement.getrUID());
+			 * itEn.update(s, old.toJSON()); }
+			 * 
+			 * if(newIteration >= 0){ Iteration newIt = itEn.getEntity(s,
+			 * Integer.toString(newIteration))[0];
+			 * newIt.addRequirement(updatedRequirement.getrUID());
+			 * itEn.update(s, newIt.toJSON()); } }
+			 */
 		}
 
 		return oldReq;

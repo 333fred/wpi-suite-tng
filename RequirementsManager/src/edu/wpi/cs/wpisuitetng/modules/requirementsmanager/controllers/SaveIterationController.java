@@ -23,25 +23,28 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Controller for updating an existing defect
  */
 public class SaveIterationController {
-	
-	private ISaveNotifier notifier; 
-	
-	public SaveIterationController (ISaveNotifier notifier){
+
+	private ISaveNotifier notifier;
+
+	public SaveIterationController(ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}
-	
+
 	/**
 	 * Saves a iteration
-	 * @param toAdd iteration that will be saved
+	 * 
+	 * @param toAdd
+	 *            iteration that will be saved
 	 */
 	public void saveIteration(Iteration toAdd) {
-		final RequestObserver requestObserver = new UpdateIterationRequestObserver(notifier);
+		final RequestObserver requestObserver = new UpdateIterationRequestObserver(
+				notifier);
 		Request request;
-		request = Network.getInstance().makeRequest("requirementsmanager/iteration", HttpMethod.POST);
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/iteration", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();
 	}
-
 
 }

@@ -25,9 +25,10 @@ public class QueryUserController {
 	public QueryUserController(AssigneePanel parentView) {
 		this.parentView = parentView;
 	}
-	
+
 	public void getUsers() {
-		final RequestObserver requestObserver = new QueryUserRequestObserver(parentView);
+		final RequestObserver requestObserver = new QueryUserRequestObserver(
+				parentView);
 		Request request;
 		request = Network.getInstance().makeRequest(
 				"requirementsmanager/stringlistmodel", HttpMethod.POST);

@@ -23,27 +23,31 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Controller for updating an existing defect
  */
 public class SaveRequirementController {
-	
+
 	/** The notifier this class uses */
 	private ISaveNotifier notifier;
-	
-	public SaveRequirementController (ISaveNotifier notifier) {
+
+	public SaveRequirementController(ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}
-	
+
 	/**
 	 * Saves a requirement
-	 * @param toAdd requirement that will be saved
-	 * @param closeTab tab that will be closed
+	 * 
+	 * @param toAdd
+	 *            requirement that will be saved
+	 * @param closeTab
+	 *            tab that will be closed
 	 */
 	public void SaveRequirement(Requirement toAdd, boolean closeTab) {
-		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(notifier);
+		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(
+				notifier);
 		Request request;
-		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.POST);
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/requirement", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();
 	}
-
 
 }

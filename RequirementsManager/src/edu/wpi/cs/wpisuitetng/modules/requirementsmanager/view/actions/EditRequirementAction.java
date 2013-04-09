@@ -24,7 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSav
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -90,26 +89,29 @@ public class EditRequirementAction extends AbstractAction {
 					.getText());
 			requirement.setUsers(parentView.getAssignedUsers());
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
-			requirement.setEffort(Integer.parseInt(parentView.getTextActual().getText()));
-			
+			requirement.setEffort(Integer.parseInt(parentView.getTextActual()
+					.getText()));
+
 			boolean isDeleted = false;
 			boolean toBacklog = false;
 
-			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Deleted")) {
+			if (parentView.getComboBoxStatus().getSelectedItem().toString()
+					.equals("Deleted")) {
 				isDeleted = true;
 			}
-			
-			
-			//handle moving a requirement fmor in progress to open
-			if (parentView.getComboBoxStatus().getSelectedItem().toString().equals("Open") && requirement.getStatus() == Status.IN_PROGRESS) {
+
+			// handle moving a requirement fmor in progress to open
+			if (parentView.getComboBoxStatus().getSelectedItem().toString()
+					.equals("Open")
+					&& requirement.getStatus() == Status.IN_PROGRESS) {
 				toBacklog = true;
 			}
-			
-			//Handle undeletion
-			if(requirement.getStatus() == Status.DELETED && !isDeleted){
+
+			// Handle undeletion
+			if (requirement.getStatus() == Status.DELETED && !isDeleted) {
 				toBacklog = true;
 			}
-			
+
 			try {
 
 				SaveIterationController saveIterationController = new SaveIterationController(
@@ -122,28 +124,28 @@ public class EditRequirementAction extends AbstractAction {
 					saveIterationController.saveIteration(anIteration);
 				} catch (IterationNotFoundException e1) {
 					e1.printStackTrace();
-				}/* catch (RequirementNotFoundException ex){
-					ex.printStackTrace();
-				}*/
-				
+				}/*
+				 * catch (RequirementNotFoundException ex){
+				 * ex.printStackTrace(); }
+				 */
+
 				String newIteration;
-				if(toBacklog){
+				if (toBacklog) {
 					newIteration = "Backlog";
-				} else if (isDeleted){
+				} else if (isDeleted) {
 					newIteration = "Deleted";
 				} else {
-					newIteration = parentView.getTextIteration().getSelectedItem().toString();
+					newIteration = parentView.getTextIteration()
+							.getSelectedItem().toString();
 				}
-						
-								
-				requirement.setIteration(IterationDatabase
-						.getInstance()
+
+				requirement.setIteration(IterationDatabase.getInstance()
 						.getIteration(newIteration).getId());
 				Iteration anIteration = IterationDatabase.getInstance()
 						.getIteration(newIteration);
 				anIteration.addRequirement(requirement.getrUID());
 				saveIterationController.saveIteration(anIteration);
-				
+
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
 							.getComboBoxPriority().getSelectedItem().toString()
@@ -155,7 +157,8 @@ public class EditRequirementAction extends AbstractAction {
 				try {
 					requirement.setType(Type.valueOf(parentView
 							.getComboBoxType().getSelectedItem().toString()
-							.toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
+							.toUpperCase().replaceAll(" ", "_")
+							.replaceAll("-", "_")));
 				} catch (IllegalArgumentException except) {
 					requirement.setType(Type.BLANK);
 				}
@@ -176,10 +179,10 @@ public class EditRequirementAction extends AbstractAction {
 			} catch (NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");
-			}/* catch (RequirementNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}*/
+			}/*
+			 * catch (RequirementNotFoundException e1) { // TODO Auto-generated
+			 * catch block e1.printStackTrace(); }
+			 */
 		} else {
 			if (parentView.getTextName().getText().trim().equals("")) {
 				parentView.getTextName()

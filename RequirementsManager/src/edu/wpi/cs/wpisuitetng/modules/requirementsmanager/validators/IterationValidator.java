@@ -8,7 +8,7 @@
  *
  * Contributors:
  *		
- ********************************************************************************/ 
+ ********************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
 import java.util.ArrayList;
@@ -37,12 +37,13 @@ public class IterationValidator {
 		}
 
 		// Detect if the iteration has been given a name
-		if(i.getName() == null){
+		if (i.getName() == null) {
 			issues.add(new ValidationIssue("Iteration must have a name"));
 		} else {
 			i.setName(i.getName().trim());
 			if (i.getName() == "" || i.getName().isEmpty()) {
-				issues.add(new ValidationIssue("Iteration name cannot be blank!"));
+				issues.add(new ValidationIssue(
+						"Iteration name cannot be blank!"));
 			}
 		}
 
@@ -73,7 +74,8 @@ public class IterationValidator {
 			}
 		}
 
-		// Make sure that the start date is before the end date, if it is not the backlog
+		// Make sure that the start date is before the end date, if it is not
+		// the backlog
 		if (!i.validateDate()) {
 			issues.add(new ValidationIssue(
 					"Iteration must start before it ends"));

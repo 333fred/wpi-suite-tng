@@ -16,35 +16,37 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-/** Interface for listening to when a tab has gained focus
+/**
+ * Interface for listening to when a tab has gained focus
  * 
  * @author Mitchell
- *
+ * 
  */
 
 public abstract class Tab extends JPanel {
 
-	/** Function called when the tab gains focus 
+	/**
+	 * Function called when the tab gains focus
 	 * 
 	 */
-	
+
 	public void onGainedFocus() {
-		
+
 	}
-	
-	/** Called when the tab is about to be closed. 
+
+	/**
+	 * Called when the tab is about to be closed.
 	 * 
-	 * @return a boolean indicating whether to close the tab or not, if false tab will not close
+	 * @return a boolean indicating whether to close the tab or not, if false
+	 *         tab will not close
 	 */
-	
+
 	public boolean onTabClosed() {
 		return true;
 	}
-	
+
 	public Component getTabComponent(JTabbedPane tabbedPane) {
 		return new ClosableTabComponent(tabbedPane);
 	}
-	
-	
-	
+
 }

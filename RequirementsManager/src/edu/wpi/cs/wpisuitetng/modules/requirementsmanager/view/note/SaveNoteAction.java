@@ -16,7 +16,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 /**
- * Action that calls {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.notes.SaveNoteController#savenote()}
+ * Action that calls
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.notes.SaveNoteController#savenote()}
  */
 @SuppressWarnings("serial")
 public class SaveNoteAction extends AbstractAction {
@@ -24,15 +25,18 @@ public class SaveNoteAction extends AbstractAction {
 
 	/**
 	 * Construct the action
-	 * @param controller the controller to trigger
+	 * 
+	 * @param controller
+	 *            the controller to trigger
 	 */
 	public SaveNoteAction(SaveNoteController controller) {
 		super("Save");
 		this.controller = controller;
 	}
-	
+
 	/*
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

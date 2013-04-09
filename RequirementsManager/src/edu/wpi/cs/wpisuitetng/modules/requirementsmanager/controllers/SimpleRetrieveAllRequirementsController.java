@@ -19,17 +19,18 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class SimpleRetrieveAllRequirementsController {
-	
+
 	public SimpleRetrieveAllRequirementsController() {
 	}
-	
+
 	/**
 	 * Sends a request for all of the requirements
 	 */
-	public void getAll() {	
+	public void getAll() {
 		final RequestObserver requestObserver = new SimpleRetrieveAllRequirementsRequestObserver();
 		Request request;
-		request = Network.getInstance().makeRequest("requirementsmanager/requirement", HttpMethod.GET);
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/requirement", HttpMethod.GET);
 		request.addObserver(requestObserver);
 		request.send();
 	}

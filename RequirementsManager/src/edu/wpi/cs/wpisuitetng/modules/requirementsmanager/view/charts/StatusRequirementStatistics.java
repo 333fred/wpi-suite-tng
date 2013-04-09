@@ -11,47 +11,57 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * class to contain data on how many requirements are assigned to each status
- *
+ * 
  */
 public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
 	Map<Status, Integer> requirementsPerStatus;
-	
-	public StatusRequirementStatistics(){
-		
+
+	public StatusRequirementStatistics() {
+
 		this.requirementsPerStatus = new HashMap<Status, Integer>();
 		this.update();
-		
+
 	}
-	
-	public void update(){
-		
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-		
+
+	@Override
+	public void update() {
+
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getAllRequirements(); // refresh list of requirements TODO: is
+										// there a better way to do this?
+
 		// for every possible status
-		for(Status status: Status.values()){
-			this.requirementsPerStatus.put(status, 0);	// insert the status in the data set with zero counted requirements
+		for (Status status : Status.values()) {
+			this.requirementsPerStatus.put(status, 0); // insert the status in
+														// the data set with
+														// zero counted
+														// requirements
 		}
-		
+
 		// for every requirement in this project
-		for(Requirement requirement : requirements){
-			
+		for (Requirement requirement : requirements) {
+
 			Status status = requirement.getStatus();
 			Integer oldValue = this.requirementsPerStatus.get(status);
-			this.requirementsPerStatus.put(status, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given status
-			
+			this.requirementsPerStatus.put(status,
+					new Integer(oldValue.intValue() + 1)); // increment the
+															// number of
+															// requirements for
+															// a given status
+
 		}
-		
+
 	}
-	
+
 }

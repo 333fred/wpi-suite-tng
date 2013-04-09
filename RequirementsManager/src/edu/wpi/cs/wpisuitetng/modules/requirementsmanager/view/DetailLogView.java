@@ -24,27 +24,28 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.Require
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
 
-
 /**
  * A panel containing a form for adding a new log to a requirement
  */
-public class DetailLogView extends JPanel{
+public class DetailLogView extends JPanel {
 	/** For Notes */
 	protected DefaultListModel logList;
 	protected JList log;
 	private Requirement requirement;
 	private DetailPanel parentView;
-	
-	
+
 	/**
- 	* Construct the panel and add layout components
- 	* @param requirement the requirement 
- 	* @param parentView the parent view
- 	*/
-	public DetailLogView(Requirement requirement, DetailPanel parentView){
+	 * Construct the panel and add layout components
+	 * 
+	 * @param requirement
+	 *            the requirement
+	 * @param parentView
+	 *            the parent view
+	 */
+	public DetailLogView(Requirement requirement, DetailPanel parentView) {
 		this.requirement = requirement;
 		this.parentView = parentView;
-		
+
 		setLayout(new BorderLayout());
 
 		// Create the log list
@@ -52,18 +53,17 @@ public class DetailLogView extends JPanel{
 		log = new JList(logList);
 		log.setCellRenderer(new EventCellRenderer());
 		log.setSelectionModel(new ToggleSelectionModel());
-		
+
 		// Add the list to the scroll pane
 		JScrollPane noteScrollPane = new JScrollPane();
 		noteScrollPane.getViewport().add(log);
-		
+
 		// Set up the frame
 		JPanel logPane = new JPanel();
 		logPane.setLayout(new BorderLayout());
 		logPane.add(noteScrollPane, BorderLayout.CENTER);
-		
+
 		add(logPane, BorderLayout.CENTER);
-		
 
 		this.refresh(this.requirement);
 	}

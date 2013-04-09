@@ -20,7 +20,7 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * Controller used to add a requirement to the database 
+ * Controller used to add a requirement to the database
  */
 public class AddRequirementController {
 

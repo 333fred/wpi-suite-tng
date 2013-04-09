@@ -8,7 +8,7 @@
  *
  * Contributors:
  *		Chirs Keane
- ********************************************************************************/ 
+ ********************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
 import java.awt.event.ActionEvent;
@@ -19,11 +19,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * @author Chris
- *
- * Action which concerns canceling the creation/editing of a requirement
+ * 
+ *         Action which concerns canceling the creation/editing of a requirement
  */
 public class CancelAction extends AbstractAction {
-
 
 	private DetailPanel parentView;
 
@@ -31,10 +30,10 @@ public class CancelAction extends AbstractAction {
 		super("Cancel");
 		this.parentView = parentView;
 	}
-	
+
 	/**
-	 * Method to cancel any edits made but not yet saved
-	 * or unsaved requirement creation
+	 * Method to cancel any edits made but not yet saved or unsaved requirement
+	 * creation
 	 * 
 	 * @e any ActionEvent object
 	 */

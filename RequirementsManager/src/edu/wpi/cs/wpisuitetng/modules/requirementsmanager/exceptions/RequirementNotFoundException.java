@@ -18,8 +18,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 public class RequirementNotFoundException extends Exception {
 
 	private long id;
-	
-	public RequirementNotFoundException(long id2){
+
+	public RequirementNotFoundException(long id2) {
 		this.id = id2;
 	}
 
@@ -29,5 +29,5 @@ public class RequirementNotFoundException extends Exception {
 	public long getId() {
 		return id;
 	}
-	
+
 }

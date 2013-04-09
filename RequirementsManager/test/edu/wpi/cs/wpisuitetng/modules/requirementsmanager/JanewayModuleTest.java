@@ -7,18 +7,18 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class JanewayModuleTest {
-	
+
 	JanewayModule module;
-	
+
 	/**
-	 * Sets up all necessary objects for testing, in this 
-	 * case the JanewayModule.
+	 * Sets up all necessary objects for testing, in this case the
+	 * JanewayModule.
 	 */
 	@Before
 	public void setUp() {
 		module = new JanewayModule();
 	}
-	
+
 	/**
 	 * Tests the name return function of the Janeway Module interface.
 	 */
@@ -27,10 +27,10 @@ public class JanewayModuleTest {
 		String name = module.getName();
 		assertEquals(name, "Requirements Manager");
 	}
-	
+
 	/**
-	 * This tests the Tab module for errors.  
-	 * TODO: Actually make a test, once the tab model has been implemented.
+	 * This tests the Tab module for errors. TODO: Actually make a test, once
+	 * the tab model has been implemented.
 	 */
 	@Test
 	@Ignore

@@ -30,75 +30,78 @@ import javax.swing.JTabbedPane;
  */
 @SuppressWarnings("serial")
 public class ClosableTabComponent extends JPanel implements ActionListener {
-	
+
 	private final JTabbedPane tabbedPane;
-	
+
 	/**
-	 * Create a closable tab component belonging to the given tabbedPane.
-	 * The title is extracted with {@link JTabbedPane#getTitleAt(int)}.
-	 * @param tabbedPane  The JTabbedPane this tab component belongs to
+	 * Create a closable tab component belonging to the given tabbedPane. The
+	 * title is extracted with {@link JTabbedPane#getTitleAt(int)}.
+	 * 
+	 * @param tabbedPane
+	 *            The JTabbedPane this tab component belongs to
 	 */
 	public ClosableTabComponent(JTabbedPane tabbedPane) {
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		this.tabbedPane = tabbedPane;
 		setOpaque(false);
-		
+
 		final JLabel label = new JLabel() {
 			// display the title according to what's set on our JTabbedPane
 			@Override
 			public String getText() {
 				final JTabbedPane tabbedPane = ClosableTabComponent.this.tabbedPane;
-				final int index = tabbedPane.indexOfTabComponent(ClosableTabComponent.this);
+				final int index = tabbedPane
+						.indexOfTabComponent(ClosableTabComponent.this);
 				return index > -1 ? tabbedPane.getTitleAt(index) : "";
 			}
 		};
-	
-		
+
 		label.setBorder(BorderFactory.createEmptyBorder(3, 0, 2, 7));
 		add(label);
-		
+
 		final JButton closeButton = new JButton("\u2716");
 		closeButton.setFont(closeButton.getFont().deriveFont((float) 8));
 		closeButton.setMargin(new Insets(0, 0, 0, 0));
 		closeButton.addActionListener(this);
 		add(closeButton);
-		
-		//add the mouse listeners
+
+		// add the mouse listeners
 		MiddleMouseListener mouseListener = new MiddleMouseListener(this);
-		//addMouseListener(mouseListener);
-		//closeButton.addMouseListener(mouseListener);
+		// addMouseListener(mouseListener);
+		// closeButton.addMouseListener(mouseListener);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// close this tab when close button is clicked
 		final int index = tabbedPane.indexOfTabComponent(this);
-		if(index > -1) {
+		if (index > -1) {
 			Tab tab = (Tab) tabbedPane.getComponentAt(index);
-			//check if the tab can be closed, or if tab will close itself
+			// check if the tab can be closed, or if tab will close itself
 			if (tab.onTabClosed()) {
 				tabbedPane.remove(index);
 			}
 		}
 	}
-	
+
 	private class MiddleMouseListener extends MouseAdapter {
-		
+
 		private ClosableTabComponent component;
-		
+
 		public MiddleMouseListener(ClosableTabComponent component) {
 			this.component = component;
 		}
-		
+
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON2) {
-				//close the tab
+				// close the tab
 				final int index = tabbedPane.indexOfTabComponent(component);
-				if(index > -1) {
+				if (index > -1) {
 					tabbedPane.remove(index);
 				}
 			}
 		}
 	}
-	
+
 }

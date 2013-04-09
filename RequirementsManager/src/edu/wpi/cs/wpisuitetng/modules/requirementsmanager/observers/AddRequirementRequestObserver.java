@@ -15,7 +15,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequire
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
@@ -37,7 +36,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 	DetailPanel detailPanel;
 
-	public AddRequirementRequestObserver(AddRequirementController controller, DetailPanel detailPanel) {
+	public AddRequirementRequestObserver(AddRequirementController controller,
+			DetailPanel detailPanel) {
 		this.controller = controller;
 		this.detailPanel = detailPanel;
 	}
@@ -56,50 +56,51 @@ public class AddRequirementRequestObserver implements RequestObserver {
 
 		// get the response from the request
 		ResponseModel response = request.getResponse();
-		
-		RequirementDatabase.getInstance().addRequirement(Requirement.fromJSON(response.getBody()));
 
-		
-		SaveIterationController saveIterationController = new SaveIterationController(new DefaultSaveNotifier());
-				
+		RequirementDatabase.getInstance().addRequirement(
+				Requirement.fromJSON(response.getBody()));
 
-	
-		
+		SaveIterationController saveIterationController = new SaveIterationController(
+				new DefaultSaveNotifier());
+
 		if (response.getStatusCode() == 201) {
 			// parse the Requirement from the body
-			final Requirement requirement = Requirement.fromJSON(response.getBody());
+			final Requirement requirement = Requirement.fromJSON(response
+					.getBody());
 
 			// make sure the requirement isn't null
 			if (requirement != null) {
 				Iteration anIteration;
 				try {
-					anIteration = IterationDatabase.getInstance().getIteration(-1);
+					anIteration = IterationDatabase.getInstance().getIteration(
+							-1);
 					anIteration.addRequirement(requirement.getrUID());
-					saveIterationController.saveIteration(anIteration);	
+					saveIterationController.saveIteration(anIteration);
 				} catch (IterationNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
-			}/* else {
-				
-				 //Display error in view... here's how defecttracker does it:
-				//  JOptionPane.showMessageDialog(detailPanel, "Unable to parse defect received from server.",
-				//  "Save Defect Error", JOptionPane.ERROR_MESSAGE);
-				 
-			}
-		} else {
-			/*
-			 * Display error in view... here's how defecttracker does it:
-			 * JOptionPane.showMessageDialog(view, "Received " +
+
+				// JOptionPane.showMessageDialog(detailPanel,
+				// "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
+			}/*
+			 * else {
+			 * 
+			 * //Display error in view... here's how defecttracker does it: //
+			 * JOptionPane.showMessageDialog(detailPanel,
+			 * "Unable to parse defect received from server.", //
+			 * "Save Defect Error", JOptionPane.ERROR_MESSAGE);
+			 * 
+			 * } } else { /* Display error in view... here's how defecttracker
+			 * does it: JOptionPane.showMessageDialog(view, "Received " +
 			 * iReq.getResponse().getStatusCode() + " status from server: " +
 			 * iReq.getResponse().getStatusMessage(), "Save Defect Error",
 			 * JOptionPane.ERROR_MESSAGE);
-			 
-		}*/
+			 * 
+			 * }
+			 */
 		}
-		
+
 		this.detailPanel.getMainTabController().closeCurrentTab();
 	}
 
@@ -113,7 +114,9 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		System.out.println("Error: " + iReq.getResponse().getBody());
-		this.detailPanel.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		this.detailPanel.displaySaveError("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
 	}
 
 	/*
@@ -125,7 +128,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		this.detailPanel.displaySaveError("Unable to complete request: " + exception.getMessage());
+		this.detailPanel.displaySaveError("Unable to complete request: "
+				+ exception.getMessage());
 	}
 
 }

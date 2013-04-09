@@ -12,13 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.PieDataset;
 
 public abstract class AbstractRequirementStatistics {
 
@@ -26,15 +21,13 @@ public abstract class AbstractRequirementStatistics {
 	 * method to force reacquisition of data
 	 */
 	public abstract void update();
-	
-	public PieDataset toPieDataset(){
+
+	public PieDataset toPieDataset() {
 		return null;
 	}
-	
-	public CategoryDataset toCategoryDataset(){
+
+	public CategoryDataset toCategoryDataset() {
 		return null;
 	}
-	
-	
-	
+
 }

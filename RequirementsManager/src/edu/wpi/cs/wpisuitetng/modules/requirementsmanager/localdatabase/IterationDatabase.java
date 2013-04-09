@@ -187,7 +187,7 @@ public class IterationDatabase extends Thread {
 			controller.getAll();
 			try {
 				// Sleep for five minutes
-				this.sleep(300000);
+				Thread.sleep(300000);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 				return;

@@ -8,7 +8,7 @@
  *
  * Contributors:
  *		Alex Gorowara
- ********************************************************************************/ 
+ ********************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
 
@@ -21,28 +21,32 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
- * Action invoked upon use of the Refresh key
- * Heavily adapted from CreateDefectAction in the DefectTracker module
+ * Action invoked upon use of the Refresh key Heavily adapted from
+ * CreateDefectAction in the DefectTracker module
  * 
- * @author Alex Gorowara 
+ * @author Alex Gorowara
  * 
- * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
+ *         Action that calls {@link MainTabController#addCreateDefectTab()},
+ *         default mnemonic key is C.
  */
 @SuppressWarnings("serial")
 public class RefreshAction extends AbstractAction {
 
 	private final RequirementTableView requirementList;
-	
+
 	/**
 	 * Create a CreateDefectAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * 
+	 * @param controller
+	 *            When the action is performed, controller.addCreateDefectTab()
+	 *            is called
 	 */
 	public RefreshAction(RequirementTableView requirementList) {
 		super("Refresh");
 		this.requirementList = requirementList;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_F5);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		requirementList.refresh();
