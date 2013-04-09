@@ -64,10 +64,9 @@ public class SaveTaskController {
 				else
 					tempTask.setAssignedUser((String) view.getuserAssigned()
 							.getSelectedItem());
-				this.model.addTask(new Task(taskName, taskText));
-				parentView.getTaskList().addElement(
-						this.model.getTasks().get(
-								this.model.getTasks().size() - 1));
+				tempTask.setId(this.model.getTasks().size() + 1);
+				this.model.addTask(tempTask);
+				parentView.getTaskList().addElement(tempTask);
 				view.gettaskName().setText("");
 				view.gettaskField().setText("");
 				view.gettaskField().requestFocusInWindow();
