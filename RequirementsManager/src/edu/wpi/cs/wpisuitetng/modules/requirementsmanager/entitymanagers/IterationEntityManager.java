@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,7 +53,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	@Override
 	public Iteration makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
-		
+
 		// Get the iteration from JSON
 		final Iteration newIteration = Iteration.fromJSON(content);
 
@@ -114,39 +114,41 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 */
 	@Override
 	public Iteration[] getAll(Session s) throws WPISuiteException {
-		Iteration[] is = db.retrieveAll(new Iteration(), s.getProject()).toArray(
-				new Iteration[0]);
-		
-		//there must always be a backlog iteration with id of -1
-		//so if we don't find one already, we create it
+		Iteration[] is = db.retrieveAll(new Iteration(), s.getProject())
+				.toArray(new Iteration[0]);
+
+		// there must always be a backlog iteration with id of -1
+		// so if we don't find one already, we create it
 		boolean backlogExists = false;
-	
-		//check if any of the iterations we retrieved are the backlog
-		for(Iteration it : is){
-			if(it.getId() == -1){
+
+		// check if any of the iterations we retrieved are the backlog
+		for (Iteration it : is) {
+			if (it.getId() == -1) {
 				backlogExists = true;
 				break;
 			}
 		}
-		
-		//If we don't find one, then we have to create it and save it to the database
-		if(!backlogExists){
+
+		// If we don't find one, then we have to create it and save it to the
+		// database
+		if (!backlogExists) {
 			// Save the iteration
 			System.out.println("No Backlog Iteration found! Creating one.");
-			Iteration backlog = new Iteration("Backlog", new Date(0), new Date(60000));
+			Iteration backlog = new Iteration("Backlog", new Date(0), new Date(
+					60000));
 			backlog.setId(-1);
 			if (!db.save(backlog, s.getProject())) {
 				throw new WPISuiteException();
 			}
-			
-			//Now add it to our array to return
-			is = Arrays.copyOf(is, is.length +1);
-			is[is.length-1] = backlog;
+
+			// Now add it to our array to return
+			is = Arrays.copyOf(is, is.length + 1);
+			is[is.length - 1] = backlog;
 		}
-		
+
 		boolean deletedExists = false;
-		
-		//check if any of the iterations we retrieved are the backlog
+
+		// check if any of the iterations we retrieved are the backlog
 		for (Iteration it : is) {
 			if (it.getId() == -2) {
 				deletedExists = true;
@@ -159,7 +161,8 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		if (!deletedExists) {
 			// Save the iteration
 			System.out.println("No Deleted Iteration found! Creating one.");
-			Iteration deleted = new Iteration("Deleted", new Date(Long.MAX_VALUE-60000), new Date(Long.MAX_VALUE));
+			Iteration deleted = new Iteration("Deleted", new Date(
+					Long.MAX_VALUE - 60000), new Date(Long.MAX_VALUE));
 			deleted.setId(-2);
 			if (!db.save(deleted, s.getProject())) {
 				throw new WPISuiteException();
@@ -169,7 +172,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			is = Arrays.copyOf(is, is.length + 1);
 			is[is.length - 1] = deleted;
 		}
-				
+
 		return is;
 	}
 
@@ -178,21 +181,21 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 */
 	@Override
 	public Iteration update(Session s, String content) throws WPISuiteException {
-				
+
 		// Get updated iterations
 		Iteration updatedIteration = Iteration.fromJSON(content);
 		Iteration oldIteration;
-		
+
 		// Validate the iteration
 		List<ValidationIssue> issues = validator.validate(s, updatedIteration,
 				IterationActionMode.EDIT, db);
 		if (issues.size() > 0) {
-			for(ValidationIssue i: issues){
+			for (ValidationIssue i : issues) {
 				System.out.println(i.getMessage());
 			}
 			throw new BadRequestException();
 		}
-		
+
 		// Attempt to get the old version of the iteration
 		try {
 			oldIteration = getIteration(updatedIteration.getId(), s);

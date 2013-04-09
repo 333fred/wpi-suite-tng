@@ -18,51 +18,69 @@ import java.util.Map;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * class to contain data on how many requirements are assigned to each iteration
- *
+ * 
  */
-public class IterationRequirementStatistics extends AbstractRequirementStatistics {
-	
+public class IterationRequirementStatistics extends
+		AbstractRequirementStatistics {
+
 	Map<Iteration, Integer> data;
-	
-	public IterationRequirementStatistics(){
-		
+
+	public IterationRequirementStatistics() {
+
 		this.data = new HashMap<Iteration, Integer>();
-		this.update();		
-		
+		this.update();
+
 	}
-	/* (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
+	 * IRequirementStatistics#update()
 	 */
 	@Override
-	public void update(){
-		
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-		
+	public void update() {
+
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getAllRequirements(); // refresh list of requirements TODO: is
+										// there a better way to do this?
+
 		// for every possible status
-		for(Iteration iteration: IterationDatabase.getInstance().getAllIterations()){
-			this.data.put(iteration, new Integer(0));	// set the number of counted requirements with that status to zero
+		for (Iteration iteration : IterationDatabase.getInstance()
+				.getAllIterations()) {
+			this.data.put(iteration, new Integer(0)); // set the number of
+														// counted requirements
+														// with that status to
+														// zero
 		}
-		
+
 		// for every requirement in this project
-		for(Requirement requirement : requirements){
-			
-			try{
-				Iteration iteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
+		for (Requirement requirement : requirements) {
+
+			try {
+				Iteration iteration = IterationDatabase.getInstance()
+						.getIteration(requirement.getIteration());
 				Integer oldValue = this.data.get(iteration);
-				this.data.put(iteration, new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given iteration
-			}
-			catch(IterationNotFoundException e){
+				this.data.put(iteration, new Integer(oldValue.intValue() + 1)); // increment
+																				// the
+																				// number
+																				// of
+																				// requirements
+																				// for
+																				// a
+																				// given
+																				// iteration
+			} catch (IterationNotFoundException e) {
 				// do not account for iterations which do not exist
 			}
-			
+
 		}
-		
+
 	}
-	
 
 }

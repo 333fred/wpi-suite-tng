@@ -40,7 +40,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners;
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 /* A 1.4 class used by TextComponentDemo.java. */
 
@@ -51,41 +51,38 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 public class DocumentSizeFilter extends DocumentFilter {
-    int maxCharacters;
+	int maxCharacters;
 
+	public DocumentSizeFilter(int maxChars) {
+		maxCharacters = maxChars;
+	}
 
-    public DocumentSizeFilter(int maxChars) {
-        maxCharacters = maxChars;
-    }
+	@Override
+	public void insertString(FilterBypass fb, int offs, String str,
+			AttributeSet a) throws BadLocationException {
 
-    public void insertString(FilterBypass fb, int offs,
-                             String str, AttributeSet a)
-        throws BadLocationException {
+		// This rejects the entire insertion if it would make
+		// the contents too long. Another option would be
+		// to truncate the inserted string so the contents
+		// would be exactly maxCharacters in length.
+		if ((fb.getDocument().getLength() + str.length()) <= maxCharacters)
+			super.insertString(fb, offs, str, a);
+		else
+			Toolkit.getDefaultToolkit().beep();
+	}
 
-        //This rejects the entire insertion if it would make
-        //the contents too long. Another option would be
-        //to truncate the inserted string so the contents
-        //would be exactly maxCharacters in length.
-        if ((fb.getDocument().getLength() + str.length()) <= maxCharacters)
-            super.insertString(fb, offs, str, a);
-        else
-            Toolkit.getDefaultToolkit().beep();
-    }
-    
-    public void replace(FilterBypass fb, int offs,
-                        int length, 
-                        String str, AttributeSet a)
-        throws BadLocationException {
+	@Override
+	public void replace(FilterBypass fb, int offs, int length, String str,
+			AttributeSet a) throws BadLocationException {
 
-        //This rejects the entire replacement if it would make
-        //the contents too long. Another option would be
-        //to truncate the replacement string so the contents
-        //would be exactly maxCharacters in length.
-        if ((fb.getDocument().getLength() + str.length()
-             - length) <= maxCharacters)
-            super.replace(fb, offs, length, str, a);
-        else
-            Toolkit.getDefaultToolkit().beep();
-    }
+		// This rejects the entire replacement if it would make
+		// the contents too long. Another option would be
+		// to truncate the replacement string so the contents
+		// would be exactly maxCharacters in length.
+		if ((fb.getDocument().getLength() + str.length() - length) <= maxCharacters)
+			super.replace(fb, offs, length, str, a);
+		else
+			Toolkit.getDefaultToolkit().beep();
+	}
 
 }

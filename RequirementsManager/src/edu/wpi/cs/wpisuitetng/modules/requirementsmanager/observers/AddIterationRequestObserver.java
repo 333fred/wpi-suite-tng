@@ -29,7 +29,8 @@ public class AddIterationRequestObserver implements RequestObserver {
 
 	private IterationView iterationView;
 
-	public AddIterationRequestObserver(AddIterationController controller, IterationView iterationView) {
+	public AddIterationRequestObserver(AddIterationController controller,
+			IterationView iterationView) {
 		this.controller = controller;
 		this.iterationView = iterationView;
 	}
@@ -50,41 +51,35 @@ public class AddIterationRequestObserver implements RequestObserver {
 		ResponseModel response = request.getResponse();
 
 		this.iterationView.getMainTabController().closeCurrentTab();
-		
-/*		if (response.getStatusCode() == 201) {
-			// parse the Requirement from the body
-			final Requirement requirement = Requirement.fromJSON(response
-					.getBody());
 
-			// make sure the requirement isn't null
-			if (requirement != null) {
-			/omething with the requirement if wanted
-				 singUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						((DefectPanel) view.getDefectPanel())
-								.updateModel(defect);
-						view.setEditModeDescriptors(defect);
-					}
-				});
-				
-				 //  JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
-			} else {
-				
-				 //Display error in view... here's how defecttracker does it:
-				  JOptionPane.showMessageDialog(detailPanel, "Unable to parse defect received from server.",
-				  "Save Defect Error", JOptionPane.ERROR_MESSAGE);
-				 
-			}
-		} else {
-			/*
-			 * Display error in view... here's how defecttracker does it:
-			 * JOptionPane.showMessageDialog(view, "Received " +
-			 * iReq.getResponse().getStatusCode() + " status from server: " +
-			 * iReq.getResponse().getStatusMessage(), "Save Defect Error",
-			 * JOptionPane.ERROR_MESSAGE);
-			 
-		}*/
+		/*
+		 * if (response.getStatusCode() == 201) { // parse the Requirement from
+		 * the body final Requirement requirement =
+		 * Requirement.fromJSON(response .getBody());
+		 * 
+		 * // make sure the requirement isn't null if (requirement != null) {
+		 * /omething with the requirement if wanted
+		 * singUtilities.invokeLater(new Runnable() {
+		 * 
+		 * @Override public void run() { ((DefectPanel) view.getDefectPanel())
+		 * .updateModel(defect); view.setEditModeDescriptors(defect); } });
+		 * 
+		 * // JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS",
+		 * JOptionPane.OK_OPTION); } else {
+		 * 
+		 * //Display error in view... here's how defecttracker does it:
+		 * JOptionPane.showMessageDialog(detailPanel,
+		 * "Unable to parse defect received from server.", "Save Defect Error",
+		 * JOptionPane.ERROR_MESSAGE);
+		 * 
+		 * } } else { /* Display error in view... here's how defecttracker does
+		 * it: JOptionPane.showMessageDialog(view, "Received " +
+		 * iReq.getResponse().getStatusCode() + " status from server: " +
+		 * iReq.getResponse().getStatusMessage(), "Save Defect Error",
+		 * JOptionPane.ERROR_MESSAGE);
+		 * 
+		 * }
+		 */
 
 	}
 
@@ -98,7 +93,9 @@ public class AddIterationRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		System.out.println("Error: " + iReq.getResponse().getBody());
-		this.iterationView.displaySaveError("Received " + iReq.getResponse().getStatusCode() + " error from server: " + iReq.getResponse().getStatusMessage());
+		this.iterationView.displaySaveError("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
 	}
 
 	/*
@@ -110,7 +107,8 @@ public class AddIterationRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		this.iterationView.displaySaveError("Unable to complete request: " + exception.getMessage());
+		this.iterationView.displaySaveError("Unable to complete request: "
+				+ exception.getMessage());
 	}
 
 }

@@ -20,20 +20,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 /**
- * @author Nick Massa
- * The Help Panel on the top right. CURRENTLY NOT IMPLEMENTED. DONE AS NEXT TO HOME IN TOOLBARVIEW
+ * @author Nick Massa The Help Panel on the top right. CURRENTLY NOT
+ *         IMPLEMENTED. DONE AS NEXT TO HOME IN TOOLBARVIEW
  */
 @SuppressWarnings("serial")
 public class HelpPanelView extends Tab implements IToolbarGroupProvider {
-	
+
 	ToolbarGroupView toolbarView;
 	JButton butHelp;
 	ToolbarGroupView toolbarGroup;
 	private JButton createHelpPanel;
-	
+
 	/**
 	 * Create a ToolbarView.
-	 * @param tabController The MainTabController this view should open tabs with
+	 * 
+	 * @param tabController
+	 *            The MainTabController this view should open tabs with
 	 */
 	public HelpPanelView(MainTabController tabController) {
 
@@ -46,13 +48,14 @@ public class HelpPanelView extends Tab implements IToolbarGroupProvider {
 		// set the width of the group so it is not too long
 		toolbarView.setPreferredWidth((int) (butHelp.getPreferredSize()
 				.getWidth() + butHelp.getPreferredSize().getWidth() + 40));
-		
+
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = createHelpPanel.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
-		
+		Double toolbarGroupWidth = createHelpPanel.getPreferredSize()
+				.getWidth() + 40; // 40 accounts for margins between the buttons
+
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 	}
-	
+
 	@Override
 	public ToolbarGroupView getGroup() {
 		return toolbarView;

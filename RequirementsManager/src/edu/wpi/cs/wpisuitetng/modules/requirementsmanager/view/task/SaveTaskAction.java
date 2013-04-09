@@ -12,15 +12,12 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
-
 /**
- * Action that calls {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.RequirementsManager.tasks.SaveTaskController#savetask()}
+ * Action that calls
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.RequirementsManager.tasks.SaveTaskController#savetask()}
  */
 @SuppressWarnings("serial")
 public class SaveTaskAction extends AbstractAction {
@@ -29,14 +26,16 @@ public class SaveTaskAction extends AbstractAction {
 
 	/**
 	 * Construct the action
-	 * @param controller the controller to trigger
+	 * 
+	 * @param controller
+	 *            the controller to trigger
 	 */
 	public SaveTaskAction(SaveTaskController controller) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = new Object[0]; //Placeholder list
+		this.tasks = new Object[0]; // Placeholder list
 	}
-	
+
 	public SaveTaskAction(SaveTaskController controller, Object[] objects) {
 		super("Save");
 		this.controller = controller;
@@ -44,7 +43,8 @@ public class SaveTaskAction extends AbstractAction {
 	}
 
 	/*
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * 
  * @author Swagasaurus
  * 
- * Action to save a requirement
+ *         Action to save a requirement
  */
 public class SaveRequirementAction extends AbstractAction {
 
@@ -49,63 +49,72 @@ public class SaveRequirementAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		AddRequirementController controller = new AddRequirementController(this.parentView);
+		AddRequirementController controller = new AddRequirementController(
+				this.parentView);
 
-		if(!parentView.getTextName().getText().trim().equals(""))
-		{
+		if (!parentView.getTextName().getText().trim().equals("")) {
 			parentView.getTextName().setBackground(Color.WHITE);
 			parentView.getTextNameValid().setText("");
 		}
-		
-		if(!parentView.getTextDescription().getText().trim().equals("")) 
-		{
+
+		if (!parentView.getTextDescription().getText().trim().equals("")) {
 			parentView.getTextDescription().setBackground(Color.WHITE);
 			parentView.getTextDescriptionValid().setText("");
 		}
-		
-		if(!parentView.getTextName().getText().trim().equals("") && !parentView.getTextDescription().getText().trim().equals("")) 
-		{
+
+		if (!parentView.getTextName().getText().trim().equals("")
+				&& !parentView.getTextDescription().getText().trim().equals("")) {
 			requirement.setName(parentView.getTextName().getText().trim());
-			requirement.setDescription(parentView.getTextDescription().getText());
+			requirement.setDescription(parentView.getTextDescription()
+					.getText());
 			requirement.setUsers(parentView.getAssignedUsers());
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
-						
+
 			try {
 				requirement.setIteration(-1);
-				
+
 				try {
-					requirement.setPriority(Priority.valueOf(parentView.getComboBoxPriority().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
-				} catch(IllegalArgumentException except) {
+					requirement.setPriority(Priority.valueOf(parentView
+							.getComboBoxPriority().getSelectedItem().toString()
+							.toUpperCase().replaceAll(" ", "_")));
+				} catch (IllegalArgumentException except) {
 					requirement.setPriority(Priority.BLANK);
 				}
-				
+
 				try {
-					requirement.setType(Type.valueOf(parentView.getComboBoxType().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
-				} catch(IllegalArgumentException except) {
+					requirement.setType(Type.valueOf(parentView
+							.getComboBoxType().getSelectedItem().toString()
+							.toUpperCase().replaceAll(" ", "_")
+							.replaceAll("-", "_")));
+				} catch (IllegalArgumentException except) {
 					requirement.setType(Type.BLANK);
 				}
-				
-				requirement.setStatus(Status.valueOf(parentView.getComboBoxStatus().getSelectedItem().toString().toUpperCase().replaceAll(" ", "_")));
-				
+
+				requirement.setStatus(Status.valueOf(parentView
+						.getComboBoxStatus().getSelectedItem().toString()
+						.toUpperCase().replaceAll(" ", "_")));
+
 				controller.AddRequirement(requirement);
 			} catch (NumberFormatException except) {
-				parentView.displaySaveError("Iteration must be an integer value");
+				parentView
+						.displaySaveError("Iteration must be an integer value");
 			}
-		}
-		else {
-			if(parentView.getTextName().getText().trim().equals(""))
-			{
-				parentView.getTextName().setBackground(new Color(243, 243, 209));
-				parentView.getTextNameValid().setText("** Field must be non-blank **");
+		} else {
+			if (parentView.getTextName().getText().trim().equals("")) {
+				parentView.getTextName()
+						.setBackground(new Color(243, 243, 209));
+				parentView.getTextNameValid().setText(
+						"** Field must be non-blank **");
 			}
-			if(parentView.getTextDescription().getText().trim().equals(""))
-			{
-				parentView.getTextDescription().setBackground(new Color(243, 243, 209));
-				parentView.getTextDescriptionValid().setText("** Field must be non-blank **");
+			if (parentView.getTextDescription().getText().trim().equals("")) {
+				parentView.getTextDescription().setBackground(
+						new Color(243, 243, 209));
+				parentView.getTextDescriptionValid().setText(
+						"** Field must be non-blank **");
 			}
 		}
 	}
-	
+
 	public Requirement getRequirement() {
 		return requirement;
 	}
