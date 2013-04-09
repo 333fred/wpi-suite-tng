@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Integer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,6 @@ public class RequirementTest {
 	Requirement r1copy;
 	Requirement r2;
 	Project project;
-	Integer i1;
 	
 	String name = "name";
 	String name2 = "name2";
@@ -49,7 +49,7 @@ public class RequirementTest {
 	private int estimate;
 	private int effort;
 	private List<String> assignees;
-	private List<Integer> subRequirements;
+	private List<Integer> subRequirements = new ArrayList<Integer>();
 	private List<Integer> pUID;
 	private List<Note> notes;
 	private List<Task> tasks = new ArrayList<Task>();
@@ -69,6 +69,9 @@ public class RequirementTest {
 		assertTrue(r1.identify(r1copy));
 		assertFalse(r1.identify(new Object()));
 		assertFalse(r1.identify(null));
+		assertTrue(r1.identify(0));
+		r2.setrUID(1);
+		assertFalse(r1.identify(r2));
 	}
 	
 	@Test
@@ -165,5 +168,11 @@ public class RequirementTest {
 	@Test
 	public void testTaskCheckEmpty() {
 		assertTrue(r1.tasksCompleted());
+	}
+	
+	@Test
+	public void testAddSubRequirement() {
+		r1.addSubRequirement(0);
+		assertTrue(r1.removeSubRequirement(0));
 	}
 }
