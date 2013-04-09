@@ -21,6 +21,5 @@
 	<classpathentry kind="lib" path="/Janeway/lib/junit.jar"/>
 	<classpathentry kind="lib" path="/Janeway/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="/Janeway/lib/swtgraphics2d.jar"/>
-	<classpathentry kind="lib" path="R:/My_Documents/cs3733/Repo/wpi-suite-tng/Core/WPISuite/WebContent/WEB-INF/lib/RequirementsManager.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
