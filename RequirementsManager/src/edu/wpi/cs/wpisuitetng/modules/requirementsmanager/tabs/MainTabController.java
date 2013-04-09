@@ -16,6 +16,7 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -90,10 +91,15 @@ public class MainTabController {
 	 */
 	
 	public TabWrap addTab(String title, Icon icon, Tab tab, String tip) {
+		
+		SwingUtilities.invokeLater(new AddTabInvokable(tabView,title,icon,tab,tip));
+		
+		/*
 		tabView.addTab(title,icon, tab,tip); // add the tab to the TabView
 		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
 		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
-		return new TabWrap(tabView, tabView.getTabComponentAt(index));
+		*/
+		return new TabWrap(tabView, tab);
 	}
 	
 	/** Adds a tab to create a new requirement

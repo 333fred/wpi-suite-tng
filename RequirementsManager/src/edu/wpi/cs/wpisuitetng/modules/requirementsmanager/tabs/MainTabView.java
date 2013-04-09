@@ -56,9 +56,9 @@ public class MainTabView extends JTabbedPane  {
 		//add the tab with the given tab component
 		
 		//invoke this later to solve issues
-		SwingUtilities.invokeLater(new CreateClosableTabInvokable(this, index, tab));
+		//SwingUtilities.invokeLater(new CreateClosableTabInvokable(this, index, tab));
 		
-		//setTabComponentAt(index, tab.getTabComponent(this));
+		setTabComponentAt(index, tab.getTabComponent(this));
 	}
 
 	
