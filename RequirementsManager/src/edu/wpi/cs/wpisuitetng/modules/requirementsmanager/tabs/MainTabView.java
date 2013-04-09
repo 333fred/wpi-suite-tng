@@ -14,8 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 import java.awt.Component;
 
 import javax.swing.Icon;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 /** The JTabbedPane that will be shown in the RequirementsManager Module.
  * 
@@ -54,7 +54,11 @@ public class MainTabView extends JTabbedPane  {
 		super.addTab(title,icon, tab, tip);		
 		int index = getTabCount() - 1; // the tab was just added, so we assume that it was at the end
 		//add the tab with the given tab component
-		setTabComponentAt(index, tab.getTabComponent(this));
+		
+		//invoke this later to solve issues
+		SwingUtilities.invokeLater(new CreateClosableTabInvokable(this, index, tab));
+		
+		//setTabComponentAt(index, tab.getTabComponent(this));
 	}
 
 	
