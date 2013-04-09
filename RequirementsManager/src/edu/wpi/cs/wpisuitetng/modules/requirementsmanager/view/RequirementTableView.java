@@ -150,7 +150,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		this.table.getColumnModel().removeColumn(
 				this.table.getColumnModel().getColumn(0));
 
-		Comparator<String> comparator = new Comparator<String>() {
+		Comparator<String> PriorityComparator = new Comparator<String>() {
 			@Override
 			public int compare(String s1, String s2) {
 				if (s1.trim().equals("")) {
@@ -166,6 +166,21 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				return p1.compareTo(p2);
 			}
 		};
+		
+		Comparator<String> IterationStringComparator = new Comparator<String> () {
+			public int compare (String s1, String s2) {
+				IterationDatabase Idb = IterationDatabase.getInstance();
+				Iteration Iteration1 = Idb.getIteration(s1);
+				Iteration Iteration2 = Idb.getIteration(s2);
+				
+				if (Iteration1.getStartDate().before(Iteration2.getStartDate())) {
+					return -1; // first argument is less, or before second
+				} else if (Iteration1.getStartDate().after(Iteration2.getStartDate())) {
+					return 1; // first iteration is more, or after second
+				}
+				return 0; // dates are equal
+			}
+		};
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
 				table.getModel());
@@ -175,7 +190,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		 * sorter.setComparator(i, comparator); } }
 		 */
 		// TODO: find a better way to get the priority column
-		sorter.setComparator(3, comparator);
+		sorter.setComparator(3, PriorityComparator);
+		sorter.setComparator(5, IterationStringComparator);
 		table.setRowSorter(sorter);
 
 		// Add to this list of the column does not need equal size
