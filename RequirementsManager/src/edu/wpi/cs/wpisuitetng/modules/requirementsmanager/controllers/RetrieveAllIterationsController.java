@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
+ *    @author Jason Whitehouse, Mitchell Caisse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
@@ -18,12 +18,8 @@ import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
-/**
- * @author Jason Whitehouse, Mitchell Caisse
- * 
+/** 
  * This is the controller for retrieving all iterations for the current project on the server
- * 
- *
  */
 public class RetrieveAllIterationsController {
 	

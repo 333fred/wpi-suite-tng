@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,9 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
- *    Mitchell Caisse
- *******************************************************************************/package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
+ *    @author Jason Whitehouse, Mitchell Caisse
+ *******************************************************************************/
+
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
@@ -19,7 +20,6 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * @author Jason Whitehouse
  * Controller to retrieve all requirements from server and return them to the central table view
  */
 public class RetrieveAllRequirementsController {

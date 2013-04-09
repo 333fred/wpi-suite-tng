@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
+ *    @author Jason Whitehouse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -21,7 +21,6 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * @author Jason Whitehouse
  * Controller to retrieve a single requirement from server by id and return them to the central table view
  */
 public class RetrieveIterationByIDController {
