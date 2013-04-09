@@ -46,5 +46,6 @@ public class CreateClosableTabInvokable implements Runnable {
 	
 	public synchronized void run() {		
 		tabView.setTabComponentAt(index, tabToUpdate.getTabComponent(tabView));
+		tabView.invalidate();
 	}
 }
