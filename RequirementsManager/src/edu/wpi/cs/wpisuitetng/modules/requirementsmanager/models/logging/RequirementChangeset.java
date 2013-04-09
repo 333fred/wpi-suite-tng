@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.StringMap;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
@@ -227,6 +229,36 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + added.size() + " task(s)<br>";
+			}
+
+			List<Object> oldList = (List<Object>) changes.get("tasks")
+					.getOldValue();
+			List<Object> newList = (List<Object>) changes.get("tasks")
+					.getNewValue();
+			List<Object> modified = new ArrayList<Object>();
+			for (Object oldObj : oldList) {
+				boolean detected = false;
+				for (Object newObj : newList) {
+					System.out.println("Obj Class " + oldObj.getClass());
+					/*Task oldTask = (Task) oldObj;
+					Task newTask = (Task) newObj;
+					if (oldTask.modified(newTask)) {
+						// In this case, we've confirmed that the new list
+						// of requirements has the given requirement from
+						// the old list, so break and set the detected
+						// variable to true
+						detected = true;
+						break;
+					}*/
+				}
+				// If we didn't detect the old requirement in the new list,
+				// increase the count
+				if (detected) {
+					modified.add(oldObj);
+				}
+			}
+			if(modified.size() > 0){
+				content += "Modified " + modified.size() + " task(s)<br>";
 			}
 		}
 
