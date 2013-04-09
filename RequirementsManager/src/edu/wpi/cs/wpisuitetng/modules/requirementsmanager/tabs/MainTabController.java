@@ -13,7 +13,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 import java.awt.Component;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -231,6 +230,18 @@ public class MainTabController {
 		try {
 			tabView.removeTabAt(tabView.getSelectedIndex());
 		} catch (IndexOutOfBoundsException e) {
+			// do nothing, tried to close tab that does not exist
+		}
+	}
+	
+	public void attemptToCloseTabAt(int index) {
+		try {
+			Tab tab = (Tab) tabView.getComponentAt(index);
+			if (tabView.getTabComponentAt(index) instanceof ClosableTabComponent && tab.onTabClosed()) {				
+				tabView.removeTabAt(index);
+			}
+		}
+		catch (IndexOutOfBoundsException e) {
 			// do nothing, tried to close tab that does not exist
 		}
 	}

@@ -97,9 +97,12 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 			System.out.println("Mouse Released in tab");
 			if (e.getButton() == MouseEvent.BUTTON2) {
 				// close the tab
-				final int index = tabbedPane.indexOfTabComponent(component);
-				if (index > -1 && tab.onTabClosed()) {
-					tabbedPane.remove(index);
+				final int index = tabbedPane.indexOfTabComponent(component);				
+				if (index > -1) {
+					Tab tab = (Tab) tabbedPane.getComponentAt(index);
+					if (tab.onTabClosed()) {
+						tabbedPane.remove(index);
+					}
 				}
 			}
 			else if (e.getButton() == MouseEvent.BUTTON1) {
