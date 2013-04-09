@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -90,15 +91,8 @@ public class MainTabController {
 	 * @return The new instance of Tab representing the one added
 	 */
 	
-	public TabWrap addTab(String title, Icon icon, Tab tab, String tip) {
-		
+	public TabWrap addTab(String title, Icon icon, Tab tab, String tip) {		
 		SwingUtilities.invokeLater(new AddTabInvokable(tabView,title,icon,tab,tip));
-		
-		/*
-		tabView.addTab(title,icon, tab,tip); // add the tab to the TabView
-		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
-		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
-		*/
 		return new TabWrap(tabView, tab);
 	}
 	
