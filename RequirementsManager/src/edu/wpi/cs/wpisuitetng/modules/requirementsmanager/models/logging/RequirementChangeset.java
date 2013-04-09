@@ -217,49 +217,24 @@ public class RequirementChangeset extends Changeset implements Event {
 				content += "Added " + added.size() + " note<br>";
 			}
 			if (removed.size() > 0) {
-				content += "Removed " + added.size() + " note(s)<br>";
+				content += "Removed " + removed.size() + " note(s)<br>";
 			}
 		}
 		if (changes.get("tasks") != null) {
 			List<Object> added = new ArrayList<Object>();
 			List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("tasks"));
-			if (added.size() > 0) {
-				content += "Added " + added.size() + " task(s)<br>";
-			}
+			int modified = added.size();
 			if (removed.size() > 0) {
-				content += "Removed " + added.size() + " task(s)<br>";
+				content += "Modified " + removed.size() + " task(s)<br>";
+				modified -= removed.size();
 			}
+			if (modified > 0) {
+				content += "Added " + modified + " task(s)<br>";
+			}
+			
 
-			List<Object> oldList = (List<Object>) changes.get("tasks")
-					.getOldValue();
-			List<Object> newList = (List<Object>) changes.get("tasks")
-					.getNewValue();
-			List<Object> modified = new ArrayList<Object>();
-			for (Object oldObj : oldList) {
-				boolean detected = false;
-				for (Object newObj : newList) {
-					System.out.println("Obj Class " + oldObj.getClass());
-					/*Task oldTask = (Task) oldObj;
-					Task newTask = (Task) newObj;
-					if (oldTask.modified(newTask)) {
-						// In this case, we've confirmed that the new list
-						// of requirements has the given requirement from
-						// the old list, so break and set the detected
-						// variable to true
-						detected = true;
-						break;
-					}*/
-				}
-				// If we didn't detect the old requirement in the new list,
-				// increase the count
-				if (detected) {
-					modified.add(oldObj);
-				}
-			}
-			if(modified.size() > 0){
-				content += "Modified " + modified.size() + " task(s)<br>";
-			}
+			
 		}
 
 		content += "</html>";

@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
-public class Task extends AbstractModel implements Event {
+public class Task implements Event {
 	private String name;
 	private String description;
 	private boolean completed;
@@ -143,44 +143,6 @@ public class Task extends AbstractModel implements Event {
 	}
 
 	/**
-	 * Override of the equals method to allow for comparison of tasks using the
-	 * getId method
-	 */
-	@Override
-	public boolean equals(Object o) {
-		System.out.println("Called!");
-		if (o instanceof Task) {
-			Task t = (Task) o;
-			if (t.getId() == this.getId()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Returns whether this task has been modified from the given task. It will
-	 * return false either if it hasn't been modified, or if the given task is
-	 * does not have the same id as us
-	 * 
-	 * @param t
-	 *            the task to compare
-	 * @return whether the task has been modified
-	 */
-	public boolean modified(Task t) {
-		if (this.equals(t)) {
-			// Check to see if anything has been modified
-			return super.equals(t);
-		} else {
-			// This is a different task than us, so return false
-			return false;
-		}
-	}
-
-	/**
 	 * @return the id of the task
 	 */
 	public int getId() {
@@ -193,47 +155,6 @@ public class Task extends AbstractModel implements Event {
 	 */
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String toJSON() {
-		return new Gson().toJson(this);
-	}
-	
-	public static Task fromJSON(String content) {
-		final Gson parser = new Gson();
-		return parser.fromJson(content, Task.class);
-	}
-	
-	public static Task[] fromJSONArray(String content){
-		final Gson parser = new Gson();
-		return parser.fromJson(content, Task[].class);
-	}
-
-	@Override
-	public Boolean identify(Object o) {
-		if (o instanceof Task) {
-			Task t = (Task) o;
-			if (t.getId() == this.getId()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
 	}
 
 }
