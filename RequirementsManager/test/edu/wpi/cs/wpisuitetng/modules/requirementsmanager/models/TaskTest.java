@@ -78,8 +78,8 @@ public class TaskTest {
 	
 	@Test
 	public void testGetSetAssignedUser(){
-		t1.setAssignedUser(u1);
-		assertEquals(t1.getAssignedUser(), u1);
+		t1.setAssignedUser(u1.getName());
+		assertEquals(t1.getAssignedUser(), u1.getName());
 		assertEquals(t2.getAssignedUser(), null);
 	}
 	
@@ -102,7 +102,7 @@ public class TaskTest {
 		assertEquals("<html><i>Desc2<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"red\">In Progress</FONT COLOR></i></html>", t2.getContent());
 		t1.setDescription("Desc1\nDesc");
 		assertEquals("<html><i>Desc1<br>Desc<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR></i></html>", t1.getContent());
-		t1.setAssignedUser(u1);
+		t1.setAssignedUser(u1.getName());
 		assertEquals("<html><i>Desc1<br>Desc<br><FONT COLOR=\"blue\">Assignee: name</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR></i></html>", t1.getContent());
 	}
 }

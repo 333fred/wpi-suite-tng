@@ -16,15 +16,15 @@ import javax.swing.JButton;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 /**
  * @author Nick Massa
  * The Help Panel on the top right. CURRENTLY NOT IMPLEMENTED. DONE AS NEXT TO HOME IN TOOLBARVIEW
  */
 @SuppressWarnings("serial")
-public class HelpPanelView extends FocusableTab implements IToolbarGroupProvider {
+public class HelpPanelView extends Tab implements IToolbarGroupProvider {
 	
 	ToolbarGroupView toolbarView;
 	JButton butHelp;

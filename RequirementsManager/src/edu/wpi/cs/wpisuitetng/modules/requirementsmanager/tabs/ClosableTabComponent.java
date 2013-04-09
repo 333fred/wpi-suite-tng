@@ -52,6 +52,8 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 				return index > -1 ? tabbedPane.getTitleAt(index) : "";
 			}
 		};
+	
+		
 		label.setBorder(BorderFactory.createEmptyBorder(3, 0, 2, 7));
 		add(label);
 		
@@ -60,6 +62,7 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		closeButton.setMargin(new Insets(0, 0, 0, 0));
 		closeButton.addActionListener(this);
 		add(closeButton);
+		
 		//add the mouse listeners
 		MiddleMouseListener mouseListener = new MiddleMouseListener(this);
 		//addMouseListener(mouseListener);
@@ -71,7 +74,11 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		// close this tab when close button is clicked
 		final int index = tabbedPane.indexOfTabComponent(this);
 		if(index > -1) {
-			tabbedPane.remove(index);
+			Tab tab = (Tab) tabbedPane.getComponentAt(index);
+			//check if the tab can be closed, or if tab will close itself
+			if (tab.onTabClosed()) {
+				tabbedPane.remove(index);
+			}
 		}
 	}
 	

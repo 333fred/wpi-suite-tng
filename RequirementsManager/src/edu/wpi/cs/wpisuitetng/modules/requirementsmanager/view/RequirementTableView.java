@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -22,8 +23,10 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.table.TableModel;
@@ -47,7 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.TabFocusListener;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequirementAction;
@@ -62,8 +65,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequi
  * 
  */
 @SuppressWarnings("serial")
-public class RequirementTableView extends JPanel implements TabFocusListener,
-		IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+public class RequirementTableView extends Tab implements IToolbarGroupProvider, IDatabaseListener, IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 	
 	private static RequirementTableView tv;
 	
@@ -477,6 +479,11 @@ public class RequirementTableView extends JPanel implements TabFocusListener,
 	@Override
 	public void receivedData(Iteration[] iterations) {
 		updateListView();
+	}
+	
+	@Override
+	public Component getTabComponent(JTabbedPane tabbedPane) {
+		return new JLabel("Requirements");
 	}
 
 }

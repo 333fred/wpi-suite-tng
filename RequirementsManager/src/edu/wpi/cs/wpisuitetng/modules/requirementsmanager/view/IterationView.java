@@ -34,15 +34,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterat
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.FocusableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.IterationViewListener;
 
 /** 
  * View for creating or editing a iteration
  */
-public class IterationView extends FocusableTab implements ISaveNotifier {
+public class IterationView extends Tab implements ISaveNotifier {
 	
 	/** Status enum, whether created or edited */
 	private enum Status {

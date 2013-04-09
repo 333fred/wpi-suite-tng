@@ -22,7 +22,6 @@ import javax.swing.event.ChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.HelpPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
@@ -74,11 +73,11 @@ public class MainTabController {
 		refreshIterationTree();
 		System.out.println("Change Tab Controller");
 		Component selectedComponent = tabView.getSelectedComponent();
-		if (selectedComponent instanceof TabFocusListener) {
-			TabFocusListener listener = (TabFocusListener) selectedComponent;
-			listener.onGainedFocus();
-		}
+		Tab selectedTab = (Tab) selectedComponent;
+		selectedTab.onGainedFocus();
 		
+		//tabView.setTabComponentAt(tabView.getSelectedIndex(), selectedTab.getTabComponent(tabView));
+
 	}
 	
 	/** Adds a tab to the TabView that this controller manages, and returns a new instance of Tab representing the new tab created
@@ -90,69 +89,55 @@ public class MainTabController {
 	 * @return The new instance of Tab representing the one added
 	 */
 	
-	public Tab addTab(String title, Icon icon, Component component, String tip) {
-		tabView.addTab(title,icon, component,tip); // add the tab to the TabView
+	public TabWrap addTab(String title, Icon icon, Tab tab, String tip) {
+		tabView.addTab(title,icon, tab,tip); // add the tab to the TabView
 		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
 		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
-		return new Tab(tabView, tabView.getTabComponentAt(index));
-	}
-	
-	/** Adds an unclosable tab to the TabView that this controller manages, and returns a new instance of Tab representing the new tab created
-	 * 
-	 * @param title The title of the tab
-	 * @param icon The tabs icon
-	 * @param component The component that the tab will display
-	 * @param tip The tooltip that the tab will display
-	 * @return The new instance of Tab representing the one added
-	 */
-	
-	public Tab addUnclosableTab(String title, Icon icon, Component component, String tip) {
-		tabView.addUnclosableTab(title,icon, component,tip); // add the tab to the TabView
-		int index = tabView.getTabCount() - 1; // get the index of the newly added tab
-		tabView.setSelectedIndex(index); // set the current tab to the newly added tab
-		return new Tab(tabView, tabView.getTabComponentAt(index));
+		return new TabWrap(tabView, tabView.getTabComponentAt(index));
 	}
 	
 	/** Adds a tab to create a new requirement
 	 * 
-	 * TODO: Implement this.
 	 * @return The tab that was added
 	 */
 	
-	public Tab addCreateRequirementTab() {
+	public TabWrap addCreateRequirementTab() {
 		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this); 
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
 	/** Adds a tab to create a new requirement assigned to the given iteration
 	 * 
-	 * TODO: Implement this.
 	 * @return The tab that was added
 	 */
 	
-	public Tab addCreateRequirementTab(Iteration iteration) {
+	public TabWrap addCreateRequirementTab(Iteration iteration) {
 		DetailPanel emptyDetailView = new DetailPanel(iteration, this); 
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView, "New Requirement");		
 	}
 	
 	//TEST
-	public Tab addHelpPanelTab() {
+	/*
+	public TabWrap addHelpPanelTab() {
 		HelpPanel emptyDetailView = new HelpPanel(); 
 		return addTab("User Manual", new ImageIcon(), emptyDetailView, "User Manual");		
 	}
+	*/
 	
-	public Tab addCreateIterationTab() {
+	public TabWrap addCreateIterationTab() {
 		IterationView iterationView = new IterationView(this);
 		return addTab("New Iteration", new ImageIcon(), iterationView, "New Iteration");
 	}
 	
 	//TODO Document
-	public Tab addStatTab() {
+	public TabWrap addStatTab() {
 		StatView statView = new StatView();
-		return addUnclosableTab("Statistics", new ImageIcon(), statView, "Statistics");
+		return addTab("Statistics", new ImageIcon(), statView, "Statistics");
 	}
 
-	public Tab addEditIterationTab(Iteration iteration) {
+
+	public TabWrap addEditIterationTab(Iteration iteration) {
+
 		//check if this iteration is open already
 		boolean iterationOpen = false;		
 		
@@ -180,7 +165,7 @@ public class MainTabController {
 	 * @return The tab that was added
 	 */
 	
-	public Tab addViewRequirementTab(Requirement requirement) {
+	public TabWrap addViewRequirementTab(Requirement requirement) {
 		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
 		
 		//check if this requirement is already opened
@@ -204,10 +189,10 @@ public class MainTabController {
 	 * @return The tab that was added
 	 */
 	
-	public Tab addRequirementsTab() {
+	public TabWrap addRequirementsTab() {
 		RequirementTableView requirementListView = RequirementTableView.getInstance(this);
 
-		return addUnclosableTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
+		return addTab("Requirements", new ImageIcon(), requirementListView, "The list of requirements");
 	}
 	
 	/**

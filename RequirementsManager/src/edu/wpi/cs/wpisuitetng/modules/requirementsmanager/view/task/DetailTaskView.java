@@ -17,6 +17,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -79,6 +80,14 @@ public class DetailTaskView extends JPanel{
 		//adds the tasks to the list model
 		addTasksToList();
 		//,tasks.getSelectedValues()
+		
+		List<String> assignedUsers = requirement.getUsers();
+		//iterate through and add them to the list
+		for (String user: assignedUsers) {
+			makeTaskPanel.getuserAssigned().addItem(user);
+		}
+		makeTaskPanel.getuserAssigned().addItem("");
+		
 		tasks.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent evt) {		
 				makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView),tasks.getSelectedValues()));
@@ -87,6 +96,7 @@ public class DetailTaskView extends JPanel{
 					makeTaskPanel.gettaskStatus().setText("No tasks selected. Fill name and description to create a new one.");
 					makeTaskPanel.gettaskComplete().setEnabled(false);
 					makeTaskPanel.gettaskComplete().setSelected(false);
+					makeTaskPanel.getuserAssigned().setEnabled(true);
 					makeTaskPanel.gettaskField().setText("");
 					makeTaskPanel.gettaskName().setText("");
 					makeTaskPanel.gettaskField().setBackground(Color.white);
@@ -101,15 +111,17 @@ public class DetailTaskView extends JPanel{
 						makeTaskPanel.gettaskField().setEnabled(false);
 						makeTaskPanel.gettaskName().setEnabled(false);
 						makeTaskPanel.gettaskComplete().setSelected(false);
+						makeTaskPanel.getuserAssigned().setEnabled(false);
 						makeTaskPanel.gettaskField().setText("");
 						makeTaskPanel.gettaskName().setText("");
 						makeTaskPanel.gettaskField().setBackground(makeTaskPanel.getBackground());
 						makeTaskPanel.gettaskName().setBackground(makeTaskPanel.getBackground());
 					}else{
-						makeTaskPanel.gettaskStatus().setText("One task selected. Fill name AND description to edit. Leave blank to just change status.");
+						makeTaskPanel.gettaskStatus().setText("One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
 						makeTaskPanel.gettaskFieldPane().setEnabled(true);
 						makeTaskPanel.gettaskField().setEnabled(true);
 						makeTaskPanel.gettaskName().setEnabled(true);
+						makeTaskPanel.getuserAssigned().setEnabled(true);
 						makeTaskPanel.gettaskField().setText(getSingleSelectedTask().getDescription());
 						makeTaskPanel.gettaskName().setText(getSingleSelectedTask().getName());
 						makeTaskPanel.gettaskComplete().setSelected(getSingleSelectedTask().isCompleted());
