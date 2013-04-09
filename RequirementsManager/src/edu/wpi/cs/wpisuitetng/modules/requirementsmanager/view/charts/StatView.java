@@ -3,6 +3,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 /*@author Steve Kordell*/
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -16,7 +18,7 @@ import org.jfree.chart.JFreeChart;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
-public class StatView extends Tab {
+public class StatView extends Tab implements ActionListener {
 
 	/** The split pane that will display the chart and its control panel */
 	private JSplitPane splitPane;
@@ -46,11 +48,17 @@ public class StatView extends Tab {
 	/** The JPanel that holds the chart */
 	private JPanel chartPanel;
 	
+	/** Enums representing hte type of chart and type of data */
+	private ChartType chartType;
+	private DataType chartDataType;
+	
 	private static final int VERTICAL_PADDING = 8;
 	private static final int HORIZONTAL_PADDING = 8;
 	
 	public StatView() {		
 		
+		chartType = ChartType.PIE;
+		chartDataType = DataType.STATUS;
 		//create the two panels
 		createChartPanel();
 		createControlPanel();
@@ -100,15 +108,14 @@ public class StatView extends Tab {
 		
 		//creat the radio buttons
 		rbutPieChart = new JRadioButton("Pie Chart");
-		rbutBarChart = new JRadioButton("Bar Graph");
-		
-		rbutPieChart.setSelected(true);
+		rbutBarChart = new JRadioButton("Bar Graph");		
 		
 		rbutStatus = new JRadioButton("Status");
 		rbutIteration = new JRadioButton("Iteration");
 		rbutAssignee = new JRadioButton("Assignee");
 		
-		rbutStatus.setSelected(true);
+		//ste the selected radio buttons
+		setSelectedRadioButtons();
 		
 		//add the buttons to the button groups
 		groupChartType.add(rbutPieChart);
@@ -141,5 +148,81 @@ public class StatView extends Tab {
 		
 		controlPanel.setLayout(controlLayout);
 		
+		//add the action listeners
+		rbutPieChart.addActionListener(this);
+		rbutBarChart.addActionListener(this);
+		
+		rbutStatus.addActionListener(this);
+		rbutIteration.addActionListener(this);
+		rbutAssignee.addActionListener(this);
+		
+	}
+	/** Sets the selected radio buttons based upon the enums
+	 * 
+	 */
+	
+	private void setSelectedRadioButtons() {
+		//set the chart type radio buttons
+		switch (chartType) {
+		case PIE:
+			rbutPieChart.setSelected(true);
+		case BAR:
+			rbutBarChart.setSelected(true);
+		}
+		
+		//set the chart data type radio buttons
+		switch(chartDataType) {
+		case STATUS:
+			rbutStatus.setSelected(true);
+		case ITERATION:
+			rbutIteration.setSelected(true);
+		case ASSIGNEE:
+			rbutAssignee.setSelected(true);
+		}
+	}
+		
+	public void actionPerformed(ActionEvent e) {
+		JRadioButton source = (JRadioButton)e.getSource();
+		if (source.equals(rbutPieChart)) {
+			updateChartType(ChartType.PIE);
+		}
+		else if (source.equals(rbutBarChart)) {
+			updateChartType(ChartType.BAR);
+		}
+		else if (source.equals(rbutStatus)) {
+			updateChartDataType(DataType.STATUS);
+		}
+		else if (source.equals(rbutIteration)) {
+			updateChartDataType(DataType.ITERATION);
+		}
+		else if (source.equals(rbutAssignee)) {
+			updateChartDataType(DataType.ASSIGNEE);
+		}
+	}
+	
+	/** Called by the action listener to update the chart type
+	 * 
+	 * @param type The new chart type
+	 */
+	
+	private void updateChartType(ChartType type) {
+		chartType = type;
+	}
+	
+	/** Called by the action listener to update the chart data type
+	 * 
+	 * @param type The new chart data type
+	 */
+	
+	private void updateChartDataType(DataType type) {
+		chartDataType = type;
+	}
+	
+	private enum ChartType {
+		BAR, PIE
+	}
+	
+	private enum DataType {
+		STATUS, ITERATION, ASSIGNEE
 	}
 }
