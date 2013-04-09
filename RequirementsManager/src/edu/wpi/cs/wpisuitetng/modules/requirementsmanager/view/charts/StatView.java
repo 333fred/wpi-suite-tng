@@ -1,5 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
+/*@author Steve Kordell*/
+
+import java.awt.BorderLayout;
 import java.awt.Font;
 
 import javax.swing.JPanel;
@@ -17,72 +20,37 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 public class StatView extends Tab {
 
-	public StatView() {
-		add(createDemoPanel());
-	}
+public StatView() {
+		this.setLayout(new BorderLayout());
+		JPanel chart = new ChartPanel(createChart());
+        add(chart,BorderLayout.CENTER);
+}
+    
+    /**
+* Creates a chart.
+*
+* @param dataset the dataset.
+*
+* @return A chart.
+*/
+    private static JFreeChart createChart() {
+        /*
+        JFreeChart chart = ChartFactory.createPieChart(
+            "Pie Chart Demo 1", // chart title
+            dataset, // data
+            true, // include legend
+            true,
+            false
+        );
 
-	/**
-	 * Creates a sample dataset.
-	 * 
-	 * @return A sample dataset.
-	 */
-	private static PieDataset createDataset() {
-		DefaultPieDataset dataset = new DefaultPieDataset();
-		dataset.setValue("One", new Double(43.2));
-		dataset.setValue("Two", new Double(10.0));
-		dataset.setValue("Three", new Double(27.5));
-		dataset.setValue("Four", new Double(17.5));
-		dataset.setValue("Five", new Double(11.0));
-		dataset.setValue("Six", new Double(19.4));
-		return dataset;
-	}
-
-	/**
-	 * Creates a chart.
-	 * 
-	 * @param dataset
-	 *            the dataset.
-	 * 
-	 * @return A chart.
-	 */
-	private static JFreeChart createChart(PieDataset dataset) {
-
-		JFreeChart chart = ChartFactory.createPieChart("Pie Chart Demo 1", // chart
-																			// title
-				dataset, // data
-				true, // include legend
-				true, false);
-
-		PiePlot plot = (PiePlot) chart.getPlot();
-		plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
-		plot.setNoDataMessage("No data available");
-		plot.setCircular(false);
-		plot.setLabelGap(0.02);
-		return chart;
-
-	}
-
-	/**
-	 * Creates a panel for the demo (used by SuperDemo.java).
-	 * 
-	 * @return A panel.
-	 */
-	public static JPanel createDemoPanel() {
-		JFreeChart chart = createChart(createDataset());
-		return new ChartPanel(chart);
-	}
-
-	/**
-	 * Starting point for the demonstration application.
-	 * 
-	 * @param args
-	 *            ignored.
-	 */
-	public static void main(String[] args) {
-
-		PieChartDemo1 demo = new PieChartDemo1("Pie Chart Demo 1");
-		demo.pack();
-		RefineryUtilities.centerFrameOnScreen(demo);
-		demo.setVisible(true);
-	}
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+        plot.setNoDataMessage("No data available");
+        plot.setCircular(false);
+        plot.setLabelGap(0.02);
+        return chart;
+        */
+    	StatusRequirementStatistics statusRequirementStatistics = new StatusRequirementStatistics();
+    	return statusRequirementStatistics.buildPieChart();
+    }
 }

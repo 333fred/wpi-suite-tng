@@ -12,6 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import com.google.gson.Gson;
+
+import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 public class Task implements Event {
@@ -19,11 +22,13 @@ public class Task implements Event {
 	private String description;
 	private boolean completed;
 	private String assignedUser;
+	private int id;
 
 	public Task(String name, String description) {
 		completed = false;
 		this.name = name;
 		this.description = description;
+		this.id = -1;
 	}
 
 	/**
@@ -135,6 +140,21 @@ public class Task implements Event {
 		text = text.replaceAll("\n", "<br>");
 		return text;
 
+	}
+
+	/**
+	 * @return the id of the task
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

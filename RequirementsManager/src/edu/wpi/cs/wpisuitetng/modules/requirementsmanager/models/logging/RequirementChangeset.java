@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.StringMap;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
@@ -215,19 +217,24 @@ public class RequirementChangeset extends Changeset implements Event {
 				content += "Added " + added.size() + " note<br>";
 			}
 			if (removed.size() > 0) {
-				content += "Removed " + added.size() + " note(s)<br>";
+				content += "Removed " + removed.size() + " note(s)<br>";
 			}
 		}
 		if (changes.get("tasks") != null) {
 			List<Object> added = new ArrayList<Object>();
 			List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("tasks"));
-			if (added.size() > 0) {
-				content += "Added " + added.size() + " task(s)<br>";
-			}
+			int modified = added.size();
 			if (removed.size() > 0) {
-				content += "Removed " + added.size() + " task(s)<br>";
+				content += "Modified " + removed.size() + " task(s)<br>";
+				modified -= removed.size();
 			}
+			if (modified > 0) {
+				content += "Added " + modified + " task(s)<br>";
+			}
+			
+
+			
 		}
 
 		content += "</html>";

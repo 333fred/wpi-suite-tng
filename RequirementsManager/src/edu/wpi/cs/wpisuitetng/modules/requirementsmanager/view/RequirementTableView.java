@@ -172,7 +172,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				IterationDatabase Idb = IterationDatabase.getInstance();
 				Iteration Iteration1 = Idb.getIteration(s1);
 				Iteration Iteration2 = Idb.getIteration(s2);
-				
+
 				if (Iteration1.getStartDate().before(Iteration2.getStartDate())) {
 					return -1; // first argument is less, or before second
 				} else if (Iteration1.getStartDate().after(Iteration2.getStartDate())) {
@@ -190,6 +190,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		 * sorter.setComparator(i, comparator); } }
 		 */
 		// TODO: find a better way to get the priority column
+
+		// TODO: find a better way to get the the appropriate columns
+
 		sorter.setComparator(3, PriorityComparator);
 		sorter.setComparator(5, IterationStringComparator);
 		table.setRowSorter(sorter);

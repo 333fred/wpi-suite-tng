@@ -57,13 +57,13 @@ function loadNode(node,reload) {
             $('.titlebox .subtitle').html(node.name);
             // add local image path
             $('.figure img').attr('src', function() {
-                 return location.pathname + filePath + "/" + this.getAttribute('data-path');
+                    return location.pathname.substring(0, location.pathname.lastIndexOf("/")+1) + filePath + "/" + this.getAttribute('data-path');
             });            
             //wrap figures
             $('.figure img').click( function() {
                 var imgURL=$(this).attr("src");
                 var $dialog =$('<div>/div>').html(
-                        '<img src = ' + $(this).attr("src") + ' />').dialog({
+                        '<img src = ' + $(this).attr("src") + ' style = "width:100%"/>').dialog({
                     modal: true,
                     width: 'auto', 
  //                   title: 'Full Size Image'
