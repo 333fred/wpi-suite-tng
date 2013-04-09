@@ -57,7 +57,7 @@ function loadNode(node,reload) {
             $('.titlebox .subtitle').html(node.name);
             // add local image path
             $('.figure img').attr('src', function() {
-                 return location.pathname + filePath + "/" + this.getAttribute('data-path');
+                    return location.pathname.substring(0, location.pathname.lastIndexOf("/")+1) + filePath + "/" + this.getAttribute('data-path');
             });            
             //wrap figures
             $('.figure img').click( function() {
