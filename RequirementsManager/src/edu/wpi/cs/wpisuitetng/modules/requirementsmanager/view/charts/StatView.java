@@ -4,6 +4,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -89,15 +90,25 @@ public class StatView extends Tab {
 		groupChartType = new ButtonGroup();
 		groupChartData = new ButtonGroup();
 		
+		//set up the panels containing the radio buttons
 		panelChartType = new JPanel();
 		panelChartData = new JPanel();
 		
+		panelChartType.setBorder(BorderFactory.createTitledBorder("Chart type"));
+		panelChartData.setBorder(BorderFactory.createTitledBorder("Chart data type"));
+		
+		
+		//creat the radio buttons
 		rbutPieChart = new JRadioButton("Pie Chart");
 		rbutBarChart = new JRadioButton("Bar Graph");
+		
+		rbutPieChart.setSelected(true);
 		
 		rbutStatus = new JRadioButton("Status");
 		rbutIteration = new JRadioButton("Iteration");
 		rbutAssignee = new JRadioButton("Assignee");
+		
+		rbutStatus.setSelected(true);
 		
 		//add the buttons to the button groups
 		groupChartType.add(rbutPieChart);
