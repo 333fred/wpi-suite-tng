@@ -54,15 +54,15 @@ public AbstractRequirementStatistics(){
 	}
 	
 	public abstract JFreeChart buildPieChart();
-	
-	public abstract JFreeChart buildBarChart();
-	
-		protected JFreeChart buildPieChart(String title){
-			return ChartFactory.createPieChart(title, this.toPieDataset(), true, false, false);
-		}
 
-		protected JFreeChart buildBarChart(String title, String category){
-			return ChartFactory.createBarChart(title, category, "Requirements", this.toCategoryDataset(), PlotOrientation.HORIZONTAL, true, false, false);
-		}
+	public abstract JFreeChart buildBarChart();
+
+	protected JFreeChart buildPieChart(String title){
+		return ChartFactory.createPieChart(title, this.toPieDataset(), true, false, false);
+	}
+
+	protected JFreeChart buildBarChart(String title, String category,String axisLabel){
+		return ChartFactory.createBarChart(title, category, axisLabel, this.toCategoryDataset(), PlotOrientation.HORIZONTAL, true, false, false);
+	}
 
 }
