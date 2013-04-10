@@ -233,6 +233,18 @@ public class MainTabController {
 			// do nothing, tried to close tab that does not exist
 		}
 	}
+	
+	public void attemptToCloseTabAt(int index) {
+		try {
+			Tab tab = (Tab) tabView.getComponentAt(index);
+			if (tabView.getTabComponentAt(index) instanceof ClosableTabComponent && tab.onTabClosed()) {				
+				tabView.removeTabAt(index);
+			}
+		}
+		catch (IndexOutOfBoundsException e) {
+			// do nothing, tried to close tab that does not exist
+		}
+	}
 
 	/**
 	 * Changes the selected tab to the tab with the given index

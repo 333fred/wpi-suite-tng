@@ -1103,12 +1103,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public DefaultListModel getTaskList() {
 		return taskView.getTaskList();
 	}
-
+	
 	@Override
-	public Component getTabComponent(JTabbedPane tabbedPane) {
-		System.out.println("Creating closable tab component with name: "
-				+ requirement.getName());
-		return new ClosableTabComponent(tabbedPane);
+	public boolean onTabClosed() {
+		//TODO: Implement this method.
+		return true;
 	}
+
 
 }

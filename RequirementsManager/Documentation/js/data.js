@@ -24,7 +24,11 @@ var data = [
 						label: 'Notes, Logs, and Users',
 						folder: false,
 						id: 13
-					}
+					}, {
+				    	label: 'Tasks',
+				    	folder: false,
+				    	id: 14
+			    }
 		]},
 		{label: 'Iterations',
     	folder: true,
@@ -42,5 +46,9 @@ var data = [
 		        	folder: false,
 		        	id: 22
 			    }]
-            }
+            },
+        {label: 'Viewing Statistics',
+    	folder: false,
+    	id: 3
+    	}
     ]

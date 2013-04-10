@@ -215,7 +215,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		 * (this.table.getColumnName(i).equals("Priority")) {
 		 * sorter.setComparator(i, comparator); } }
 		 */
+		// TODO: find a better way to get the priority column
+
 		// TODO: find a better way to get the the appropriate columns
+
 		sorter.setComparator(3, PriorityComparator);
 		sorter.setComparator(5, IterationStringComparator);
 		table.setRowSorter(sorter);

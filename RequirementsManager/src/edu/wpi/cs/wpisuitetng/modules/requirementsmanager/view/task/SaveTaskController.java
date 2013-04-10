@@ -11,6 +11,10 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
+import java.awt.Color;
+
+import javax.swing.JList;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
@@ -24,6 +28,7 @@ public class SaveTaskController {
 	private final MakeTaskPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
+	private final JList tasks;
 
 	/**
 	 * Construct the controller
@@ -36,10 +41,11 @@ public class SaveTaskController {
 	 *            the DetailPanel displaying the current requirement
 	 */
 	public SaveTaskController(MakeTaskPanel view, Requirement model,
-			DetailPanel parentView) {
+			DetailPanel parentView, JList tasks) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
+		this.tasks = tasks;
 	}
 
 	/**
@@ -64,10 +70,9 @@ public class SaveTaskController {
 				else
 					tempTask.setAssignedUser((String) view.getuserAssigned()
 							.getSelectedItem());
-				this.model.addTask(new Task(taskName, taskText));
-				parentView.getTaskList().addElement(
-						this.model.getTasks().get(
-								this.model.getTasks().size() - 1));
+				tempTask.setId(this.model.getTasks().size() + 1);
+				this.model.addTask(tempTask);
+				parentView.getTaskList().addElement(tempTask);
 				view.gettaskName().setText("");
 				view.gettaskField().setText("");
 				view.gettaskField().requestFocusInWindow();
@@ -108,6 +113,21 @@ public class SaveTaskController {
 			view.gettaskField().setText("");
 			view.gettaskField().requestFocusInWindow();
 		}
+
+		this.tasks.clearSelection();
+		view.gettaskStatus()
+				.setText(
+						"No tasks selected. Fill name and description to create a new one.");
+		view.gettaskComplete().setEnabled(false);
+		view.gettaskComplete().setSelected(false);
+		view.getuserAssigned().setEnabled(true);
+		view.gettaskField().setText("");
+		view.gettaskName().setText("");
+		view.gettaskField().setBackground(Color.white);
+		view.gettaskName().setBackground(Color.white);
+		if (view.gettaskName().getText().trim().equals("")
+				|| view.gettaskField().getText().trim().equals(""))
+			view.getaddTask().setEnabled(false);
 
 	}
 }

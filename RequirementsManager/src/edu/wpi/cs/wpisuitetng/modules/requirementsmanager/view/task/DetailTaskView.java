@@ -86,17 +86,19 @@ public class DetailTaskView extends JPanel {
 
 		List<String> assignedUsers = requirement.getUsers();
 		// iterate through and add them to the list
+		makeTaskPanel.getuserAssigned().addItem("");
 		for (String user : assignedUsers) {
 			makeTaskPanel.getuserAssigned().addItem(user);
 		}
-		makeTaskPanel.getuserAssigned().addItem("");
-
+		
+		makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView, tasks)));
+		
 		tasks.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
 				makeTaskPanel.getaddTask().setAction(
 						new SaveTaskAction(new SaveTaskController(
-								makeTaskPanel, requirement, parentView), tasks
+								makeTaskPanel, requirement, parentView, tasks), tasks
 								.getSelectedValues()));
 
 				if (tasks.getSelectedValues().length == 0) {

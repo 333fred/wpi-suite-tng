@@ -63,7 +63,7 @@ function loadNode(node,reload) {
             $('.figure img').click( function() {
                 var imgURL=$(this).attr("src");
                 var $dialog =$('<div>/div>').html(
-                        '<img src = ' + $(this).attr("src") + ' />').dialog({
+                        '<img src = ' + $(this).attr("src") + ' style = "width:100%"/>').dialog({
                     modal: true,
                     width: 'auto', 
  //                   title: 'Full Size Image'
