@@ -22,6 +22,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * This controller handles saving requirement tasks to the server
+ * 
+ * @author Nick Massa
  */
 public class SaveTaskController {
 

@@ -35,7 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
- * A panel containing a form for adding a new note to a requirement
+ * A panel containing a form for the tasks of a requirement
  * 
  * @author Nick M, Matt C
  */

@@ -18,6 +18,8 @@ import javax.swing.AbstractAction;
 /**
  * Action that calls
  * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.RequirementsManager.tasks.SaveTaskController#savetask()}
+ * 
+ * @author Nick Massa
  */
 @SuppressWarnings("serial")
 public class SaveTaskAction extends AbstractAction {
