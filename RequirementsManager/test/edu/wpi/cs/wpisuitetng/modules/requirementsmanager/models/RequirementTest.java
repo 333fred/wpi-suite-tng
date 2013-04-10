@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class RequirementTest {
 	Requirement r1copy;
 	Requirement r2;
 	Project project;
+	Note n1;
+	Note n2;
 
 	String name = "name";
 	String name2 = "name2";
@@ -47,10 +50,10 @@ public class RequirementTest {
 	private int iteration;
 	private int estimate;
 	private int effort;
-	private List<String> assignees;
+	private List<String> assignees = new ArrayList<String>();
 	private List<Integer> subRequirements = new ArrayList<Integer>();
-	private List<Integer> pUID;
-	private List<Note> notes;
+	private List<Integer> pUID = new ArrayList<Integer>();
+	private List<Note> notes = new ArrayList<Note>();
 	private List<Task> tasks = new ArrayList<Task>();
 
 	@Before
@@ -65,6 +68,8 @@ public class RequirementTest {
 				subRequirements, notes, iteration, estimate, effort, assignees,
 				pUID, tasks);
 		project = new Project("test", "1");
+		n1 = new Note("note1", new Date(), "creator1");
+		n2 = new Note("note2", new Date(), "creator2");
 	}
 
 	@Test
@@ -179,5 +184,29 @@ public class RequirementTest {
 	public void testAddSubRequirement() {
 		r1.addSubRequirement(0);
 		assertTrue(r1.removeSubRequirement(0));
+	}
+	
+	@Test
+	public void testAddAndRemoveNotes() {
+		r1.addNote(n1);
+		r1.removeNote("note1");
+	}
+	
+	@Test
+	public void testAddAndRemovePUID() {
+		r1.addPUID(0);
+		r1.removePUID(0);
+		assertTrue(r1.getpUID().isEmpty());
+	}
+	
+	@Test
+	public void testAddAndRemoveUsers() {
+		r1.addUser("user1");
+		assertTrue(r1.removeUser("user1"));
+	}
+	
+	@Test
+	public void testAddTask() {
+		r1.addTask(new Task("Task 1", "Desc 1"));
 	}
 }
