@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -53,6 +54,9 @@ public class IterationValidatorTest {
 	String mockSsid;
 	Data db;
 	User testUser;
+	Calendar startCalendar;
+	Calendar endCalendar;
+
 
 	@Before
 	public void init() {
@@ -65,18 +69,24 @@ public class IterationValidatorTest {
 		db.save(testUser);
 
 		// set up validator, good & existing iterations
+		startCalendar = Calendar.getInstance();
+		endCalendar = Calendar.getInstance();
+		startCalendar.set(0, 0, 5);
+		endCalendar.set(0,0,10);
 		validator = new IterationValidator();
 		goodRequirement = new Requirement();
 		goodRequirement.setName("Name");
 		goodRequirement.setDescription("A quality description");
 
-		existingIteration = new Iteration("Iteration 1", new Date(10000),
-				new Date(60000), 0);
+		existingIteration = new Iteration("Iteration 1", startCalendar.getTime(),
+				endCalendar.getTime(), 0);
 		db.save(existingIteration, testProject);
 		db.save(goodRequirement, testProject);
 
-		goodIteration = new Iteration("Good Requirement", new Date(120000),
-				new Date(180000), 1);
+		startCalendar.set(0, 0, 10);
+		endCalendar.set(0,0,12);
+		goodIteration = new Iteration("Good Iteration", startCalendar.getTime(),
+				endCalendar.getTime(), 1);
 	}
 
 	@Test
@@ -151,8 +161,10 @@ public class IterationValidatorTest {
 	@Test
 	// Ensure that incorrect dates (start after they end) cause rejection
 	public void testIncorrectDate() {
-		Iteration incorrect = new Iteration("Iteration 2", new Date(90000),
-				new Date(80000), 2);
+		startCalendar.set(0, 0, 21);
+		endCalendar.set(0,0,20);
+		Iteration incorrect = new Iteration("Iteration 2", startCalendar.getTime(),
+				endCalendar.getTime(), 2);
 		checkNumIssues(1, incorrect, defaultSession, IterationActionMode.CREATE);
 		checkNumIssues(1, incorrect, defaultSession, IterationActionMode.EDIT);
 	}
@@ -203,19 +215,32 @@ public class IterationValidatorTest {
 	@Test
 	// Tests validation on all overlap cases
 	public void testOverlapDetection() {
-
-		Iteration strictlyBefore = new Iteration("strictlyBeforeBase",
-				new Date(0), new Date(500));
-		Iteration strictlyAfter = new Iteration("strictlyAfterBase", new Date(
-				70000), new Date(80000));
-		Iteration includesStart = new Iteration("includesBaseStart",
-				new Date(0), new Date(11000));
-		Iteration includesEnd = new Iteration("includesBaseEnd",
-				new Date(50000), new Date(70000));
-		Iteration includes = new Iteration("includesBase", new Date(0),
-				new Date(70000));
-		Iteration inside = new Iteration("insideBase", new Date(20000),
-				new Date(30000));
+		startCalendar = Calendar.getInstance();
+		endCalendar = Calendar.getInstance();
+		
+		startCalendar.set(0, 0, 3);
+		endCalendar.set(0,0,5);
+		Iteration strictlyBefore = new Iteration("strictlyBeforeBase", startCalendar.getTime(), endCalendar.getTime());
+		
+		startCalendar.set(0, 0, 10);
+		endCalendar.set(0,0,12);
+		Iteration strictlyAfter = new Iteration("strictlyAfterBase", startCalendar.getTime(), endCalendar.getTime());
+		
+		startCalendar.set(0, 0, 3);
+		endCalendar.set(0,0,6);
+		Iteration includesStart = new Iteration("includesBaseStart", startCalendar.getTime(), endCalendar.getTime());
+		
+		startCalendar.set(0, 0, 12);
+		endCalendar.set(0,0,9);
+		Iteration includesEnd = new Iteration("includesBaseEnd", startCalendar.getTime(), endCalendar.getTime());
+		
+		startCalendar.set(0, 0, 3);
+		endCalendar.set(0,0,12);
+		Iteration includes = new Iteration("includesBase", startCalendar.getTime(), endCalendar.getTime());
+		
+		startCalendar.set(0, 0, 6);
+		endCalendar.set(0,0,9);
+		Iteration inside = new Iteration("insideBase", startCalendar.getTime(), endCalendar.getTime());
 
 		checkNoIssues(strictlyBefore, defaultSession,
 				IterationActionMode.CREATE);

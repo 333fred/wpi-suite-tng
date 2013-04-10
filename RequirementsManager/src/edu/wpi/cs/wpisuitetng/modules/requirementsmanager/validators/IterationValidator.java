@@ -13,6 +13,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -116,43 +118,58 @@ public class IterationValidator {
 	}
 
 	public static boolean overlapExists(Iteration alpha, Iteration beta) {
+		
+		/*System.out.println("COMPARING: "+alpha+", "+beta);
+		System.out.println(alpha.getName() + ":  "+alpha.getStartDate().toString() +"  "+ alpha.getEndDate().toString());
+		System.out.println(beta.getName() + ":  "+beta.getStartDate().toString() +"  "+ beta.getEndDate().toString());
+		System.out.println(compareDatesWithoutTime(alpha.getStartDate(), beta.getStartDate()) + "\n" + compareDatesWithoutTime(alpha.getEndDate(),
+				beta.getStartDate()));
+		System.out.println(compareDatesWithoutTime(alpha.getStartDate(), beta.getEndDate()) + "\n" + compareDatesWithoutTime(alpha.getEndDate(),
+				beta.getEndDate()));*/
+		
+		// check if alpha starts before beta starts and ends on or before it
+		// starts
+		if (compareDatesWithoutTime(alpha.getStartDate(), beta.getStartDate()) == -1
+				&& compareDatesWithoutTime(alpha.getEndDate(),
+						beta.getStartDate()) <= 0) {
+			return false;
+		}
 
-		// if iteration alpha starts before iteration beta, this will be +1
-		// if they have the same start date, this will be 0
-		// if iteration beta starts before iteration alpha, this will be -1
-		int before = beta.getStartDate().compareTo(alpha.getStartDate());
+		// check if alpha starts on the date when beta ends or after
+		if (compareDatesWithoutTime(alpha.getStartDate(), beta.getEndDate()) >= 0
+				&& compareDatesWithoutTime(alpha.getEndDate(),
+						beta.getEndDate()) == 1) {
+			return false;
+		}
+		//System.out.println("OVERLAP!");
+		return true;
+	}
+	
+	/**
+	 * Compares the two given dates based upon, year, month, and day
+	 * 
+	 * @param date1
+	 *            The first date
+	 * @param date2
+	 *            The second date
+	 * @return 0 if the dates are equal, -1 if date1 is before than date2, 1 if
+	 *         date1 is after date 2
+	 */
 
-		// if one iteration starts before another, it must be entirely before
-		// another
-		// its start and end dates must be before another's start and end dates
-		boolean betaStartAlphaStart = beta.getStartDate().compareTo(
-				alpha.getStartDate()) == before; // check that beta-start date
-													// has the same relation
-													// (before or after) to
-													// alpha-start date as
-													// beta-start date has to
-													// alpha-start date
-													// (self-evident)
-		boolean betaStartAlphaEnd = beta.getStartDate().compareTo(
-				alpha.getEndDate()) == before; // check that beta-start date has
-												// the same relation to
-												// alpha-end date
-		boolean betaEndAlphaStart = beta.getEndDate().compareTo(
-				alpha.getStartDate()) == before; // check that beta-end date has
-													// the same relation to
-													// alpha-start date
-		boolean betaEndAlphaEnd = beta.getEndDate().compareTo(
-				alpha.getEndDate()) == before; // check that beta-end date has
-												// the same relation to
-												// alpha-end date
+	public static int compareDatesWithoutTime(Date date1, Date date2) {
+		Calendar calendar1 = Calendar.getInstance();
+		Calendar tempCalendar = Calendar.getInstance();
+		Calendar calendar2 = Calendar.getInstance();
+		
+		//We can simply round off everything smaller than days, and then compare
+		tempCalendar.setTime(date1);
+		calendar1.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH));
+		
+		tempCalendar.setTime(date2);
+		calendar2.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH));
 
-		// return false (no overlap) if and only if:
-		// if beta starts before alpha starts, all of beta's dates are before
-		// alpha's dates
-		// if alpha starts before beta starts, all of alpha's dates are before
-		// beta's dates
-		return !(betaStartAlphaStart && betaStartAlphaEnd && betaEndAlphaStart && betaEndAlphaEnd);
-
+		
+		return calendar1.getTime().compareTo(calendar2.getTime());
 	}
 
 }
