@@ -35,11 +35,14 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.CategoryPlot;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 @SuppressWarnings("serial")
 public class StatView extends Tab implements ActionListener {
 
+	private static StatView sv;
 	private JComboBox comboBoxStatisticType;
 	private JRadioButton makePieRadio;
 	private JRadioButton makeBarRadio;
@@ -52,7 +55,7 @@ public class StatView extends Tab implements ActionListener {
 	private DataType chartDataType;
 
 	
-	public StatView() {
+	private StatView() {
 		chartType = ChartType.PIE;
 		chartDataType = DataType.STATUS;
 		
@@ -64,7 +67,13 @@ public class StatView extends Tab implements ActionListener {
 		add(mainPane);
 	}
 
-
+	public static StatView getInstance() {
+		if (sv == null) {
+			sv = new StatView();
+		}
+		return sv;
+	}
+	
 	public JPanel buildSidePanel() {
 		final int VERTICAL_PADDING = 5;
 		final int HORIZONTAL_PADDING = 5;
@@ -189,8 +198,12 @@ public class StatView extends Tab implements ActionListener {
 		switch (chartType) {
 		case PIE:
 			makePieRadio.setSelected(true);
+			makeBarRadio.setSelected(false);
+			break;
 		case BAR:
 			makeBarRadio.setSelected(true);
+			makePieRadio.setSelected(false);
+			break;
 		}
 		comboBoxStatisticType.setSelectedItem(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().toLowerCase()));
 		System.out.println(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().substring(1).toLowerCase()));
@@ -222,7 +235,7 @@ public class StatView extends Tab implements ActionListener {
 	/**
 	 * method to update the displayed chart based on the user's selection
 	 */
-	private void updateChart(){
+	public void updateChart(){
 		
 		JFreeChart chart = null;
 		AbstractRequirementStatistics stats = null;
@@ -285,6 +298,11 @@ public class StatView extends Tab implements ActionListener {
 		
 		return;
 		
+	}
+	
+	@Override
+	public void onGainedFocus() {
+		updateChart();
 	}
 	
 }

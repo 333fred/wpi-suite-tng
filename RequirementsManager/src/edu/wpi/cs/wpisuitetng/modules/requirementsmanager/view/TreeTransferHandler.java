@@ -35,6 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 
 @SuppressWarnings("serial")
 class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
@@ -271,6 +272,11 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 					this);
 			SaveRequirementController.SaveRequirement(requirement, false);
 		}
+		
+		
+		
+		//Refresh the chart
+		StatView.getInstance().updateChart();
 		return true;
 	}
 
