@@ -154,7 +154,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		
 		this.table = new JTable(rowData, columnNames) {
 			private static final long serialVersionUID = 1L;
-			//private boolean[] editedRows = new boolean[rowData.size()];
+			//TODO: How to get the ctual number for this?
+			private boolean[] editedRows = new boolean[100];
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -168,15 +169,16 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				try {
 					if (super.convertColumnIndexToModel(col) == 6) {
 						int i = Integer.parseInt((String) value);
-						if (i < 0) {
+						if (i < 0 || i == Integer.parseInt((String)super.getValueAt(row, col))) {
 							return;
 						} else {
 							//we save the parsed int to removed leading 0s
-							//editedRows[convertRowIndexToModel(row)] = true;
+							editedRows[convertRowIndexToModel(row)] = true;
+							selectionModel.removeSelectionInterval(convertRowIndexToModel(row),convertRowIndexToModel(row));
 							super.setValueAt(Integer.toString(i), row, col);
 						}
 					} else {
-						//editedRows[super.convertRowIndexToModel(row)] = true;
+						editedRows[super.convertRowIndexToModel(row)] = true;
 						super.setValueAt(value, row, col);
 					}
 				} catch (NumberFormatException e) {
@@ -184,7 +186,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				}
 			}
 			
-			/*@Override
+			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
 	            if (editedRows[super.convertRowIndexToModel(row)]) {
 	                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -193,7 +195,11 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	            } else {
 	                return super.getCellRenderer(row, column);
 	            }
-	        }*/
+	        }
+			
+			public void clearUpdated() {
+				editedRows = new boolean[100];
+			}
 		};
 				
 		btnEdit = new JButton("Enable Editing");
