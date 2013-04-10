@@ -157,6 +157,24 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			public boolean isCellEditable(int row, int column) {
 				return (isEditable && column==5);
 			};
+			
+			@Override
+			public void setValueAt(Object value, int row, int col) {
+				if(col == 5 && (Integer)value < 0){
+					return;
+				} else {
+					super.setValueAt(value, row, col);
+				}
+		    }
+			
+			@Override
+		    public Class<?> getColumnClass(int c) {
+				if(c == 5 || c == 6) {
+					return Integer.class;
+				} else {
+					return getValueAt(0, c).getClass();
+				}
+		    }
 		};
 				
 		btnEdit = new JButton("Enable Editing");
