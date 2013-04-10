@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -99,6 +100,11 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	private Vector<Vector> rowData;
 
 	private JTable table;
+	
+	private JButton btnEdit;
+	private JButton btnSave;
+	
+	boolean isEditable;
 
 	/**
 	 * Constructor for a RequirementTableView
@@ -136,15 +142,35 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		this.rowData = new Vector<Vector>();
 
+		isEditable = false;
 		this.table = new JTable(rowData, columnNames) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false;
+				return (isEditable && column==5);
 			};
 		};
-
+				
+		btnEdit = new JButton("Enable Editing");
+		btnSave = new JButton("Save Changes");
+		// TODO: dynamically change this
+		btnSave.setEnabled(false);
+		//TODO: Set this button's action
+		
+		SpringLayout editPanelLayout = new SpringLayout();
+		JPanel editPanel = new JPanel(editPanelLayout);
+		editPanel.add(btnEdit);
+		editPanel.add(btnSave);		
+		
+		editPanel.setPreferredSize(new Dimension(btnEdit.getPreferredSize().width, btnEdit.getPreferredSize().height + (btnEdit.getPreferredSize().height / 2)));
+		
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnEdit, 0, SpringLayout.VERTICAL_CENTER, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnSave, 0, SpringLayout.VERTICAL_CENTER, editPanel);
+		
+		editPanelLayout.putConstraint(SpringLayout.EAST, btnEdit, -5, SpringLayout.HORIZONTAL_CENTER, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5, SpringLayout.HORIZONTAL_CENTER, editPanel);
+		
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
 		this.table.getColumnModel().removeColumn(
@@ -201,7 +227,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				this.table.getColumnModel().getColumn(i).setPreferredWidth(12);
 			}
 		}
-		add(scrollPane);
+		
+		add(scrollPane, BorderLayout.CENTER);
+		add(editPanel, BorderLayout.SOUTH);
 
 		// Add double click event listener
 		this.table.addMouseListener(new MouseAdapter() {
