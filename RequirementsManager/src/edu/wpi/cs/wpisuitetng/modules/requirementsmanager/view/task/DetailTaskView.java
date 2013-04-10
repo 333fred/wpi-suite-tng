@@ -63,6 +63,8 @@ public class DetailTaskView extends JPanel {
 		setLayout(new BorderLayout());
 		// Set up the task panel
 		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
+		
+		
 
 		// Create the task list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
@@ -94,8 +96,11 @@ public class DetailTaskView extends JPanel {
 			makeTaskPanel.getuserAssigned().addItem(user);
 		}
 
+		if(requirement.getStatus() != Status.DELETED) {
 		//Set the action of the save button to the default (create new task)
 		makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView, tasks)));
+		
+		
 
 		tasks.addMouseListener(new MouseAdapter() { //Listen for user clicking on tasks
 			@Override
@@ -104,7 +109,7 @@ public class DetailTaskView extends JPanel {
 			}
 		});
 
-		int delay = 1000; // Setting up timer, delay for 1 sec
+		/*int delay = 1000; // Setting up timer, delay for 1 sec
 		int period = 1000; // repeat every 1 sec
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask()
@@ -113,7 +118,7 @@ public class DetailTaskView extends JPanel {
 			{
 				updateTaskView(); //Update the view periodically. Used due to swing clicking buggy
 			}
-		}, delay, period);
+		}, delay, period);*/
 
 		makeTaskPanel.gettaskField().addKeyListener(new KeyAdapter() { //Make sure save button is unavailable if name field is empty
 			//For creating a new task
@@ -139,6 +144,18 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getaddTask().setEnabled(true);
 			}
 		});
+		
+		}else{
+			makeTaskPanel.gettaskFieldPane().setEnabled(false);
+			makeTaskPanel.gettaskField().setEnabled(false);
+			makeTaskPanel.gettaskName().setEnabled(false);
+			makeTaskPanel.getuserAssigned().setEnabled(false);
+			makeTaskPanel.getaddTask().setEnabled(false);
+			makeTaskPanel.gettaskStatus().setText("");
+			
+			makeTaskPanel.gettaskField().setBackground(makeTaskPanel.getBackground());
+			makeTaskPanel.gettaskName().setBackground(makeTaskPanel.getBackground());
+		}
 
 	}
 
