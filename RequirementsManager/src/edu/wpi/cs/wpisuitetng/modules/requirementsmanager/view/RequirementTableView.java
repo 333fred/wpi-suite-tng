@@ -32,6 +32,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -152,39 +154,46 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		
 		this.table = new JTable(rowData, columnNames) {
 			private static final long serialVersionUID = 1L;
+			//private boolean[] editedRows = new boolean[rowData.size()];
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return (isEditable && super.getColumnName(column) == "Estimate");
+				//Only the "Estimate" column is currently editable
+				return (isEditable && super.convertColumnIndexToModel(column) == 6);
 			};
 			
 			@Override
 			public void setValueAt(Object value, int row, int col) {
 				//The estimate column should only accept non-negative integers
 				try {
-					if (super.getColumnName(col) == "Estimate") {
+					if (super.convertColumnIndexToModel(col) == 6) {
 						int i = Integer.parseInt((String) value);
 						if (i < 0) {
 							return;
 						} else {
+							//we save the parsed int to removed leading 0s
+							//editedRows[convertRowIndexToModel(row)] = true;
 							super.setValueAt(Integer.toString(i), row, col);
 						}
 					} else {
+						//editedRows[super.convertRowIndexToModel(row)] = true;
 						super.setValueAt(value, row, col);
 					}
 				} catch (NumberFormatException e) {
 					return;
 				}
 			}
-
+			
 			/*@Override
-		    public Class<?> getColumnClass(int c) {
-				if(c == 5 || c == 6) {
-					return Integer.class;
-				} else {
-					return getValueAt(0, c).getClass();
-				}
-		    }*/
+			public TableCellRenderer getCellRenderer(int row, int column) {
+	            if (editedRows[super.convertRowIndexToModel(row)]) {
+	                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+	                renderer.setBackground(Color.yellow);
+	                return renderer;
+	            } else {
+	                return super.getCellRenderer(row, column);
+	            }
+	        }*/
 		};
 				
 		btnEdit = new JButton("Enable Editing");
