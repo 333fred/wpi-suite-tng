@@ -59,7 +59,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEditingAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequirementAction;
 
 /**
  * RequirementListView is the basic GUI that will display a list of the current
