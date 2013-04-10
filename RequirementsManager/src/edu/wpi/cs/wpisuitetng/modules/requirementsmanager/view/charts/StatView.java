@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 /*@author Steve Kordell*/
 
 import java.awt.BorderLayout;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
@@ -20,15 +23,24 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 @SuppressWarnings("serial")
 public class StatView extends Tab implements ActionListener {
 
 	private JComboBox comboBoxStatisticType;
+	private JRadioButton makePieRadio;
+	private JRadioButton makeBarRadio;
+	
+	/** Enums representing the type of chart and type of data */
+	private ChartType chartType;
+	private DataType chartDataType;
+
 	
 	public StatView() {
+		chartType = ChartType.PIE;
+		chartDataType = DataType.STATUS;
+		
 		this.setLayout(new BorderLayout());
 		JPanel chart = new ChartPanel(createPieStatusChart());
 		
@@ -53,13 +65,12 @@ public class StatView extends Tab implements ActionListener {
 		comboBoxStatisticType = new JComboBox(availableStatisticTypes);
 	    comboBoxStatisticType.addActionListener(this);
 		
-		JRadioButton makePieRadio = new JRadioButton("Pie Chart");
+	    makePieRadio = new JRadioButton("Pie Chart");
 	    makePieRadio.setMnemonic(KeyEvent.VK_P);
 	    makePieRadio.setActionCommand("Pie Chart");
 	    makePieRadio.addActionListener(this);
-	    makePieRadio.setSelected(true);
 	    
-		JRadioButton makeBarRadio = new JRadioButton("Bar Chart");
+	    makeBarRadio = new JRadioButton("Bar Chart");
 		makeBarRadio.setMnemonic(KeyEvent.VK_B);
 		makeBarRadio.setActionCommand("Bar Chart");
 		makeBarRadio.addActionListener(this);
@@ -67,6 +78,7 @@ public class StatView extends Tab implements ActionListener {
 		ButtonGroup group = new ButtonGroup();
 		group.add(makePieRadio);
 		group.add(makeBarRadio);
+		setSelectedRadioButtons();
 		
 		sidePanel.add(lblStatisticType);
 		sidePanel.add(lblChartType);
@@ -88,6 +100,8 @@ public class StatView extends Tab implements ActionListener {
 		
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeBarRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makePieRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeBarRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
+		
+
 		
 		return sidePanel;
 	}
@@ -111,8 +125,54 @@ public class StatView extends Tab implements ActionListener {
     }
     
     public void actionPerformed(ActionEvent e) {
-    	System.out.println(e.getActionCommand()); 
+    	//System.out.println(e.getActionCommand());
+		JRadioButton source = (JRadioButton)e.getSource();
+		if (source.equals(makePieRadio)) {
+			updateChartType(ChartType.PIE);
+		} else if (source.equals(makeBarRadio)) {
+			updateChartType(ChartType.BAR);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Status")) {
+			updateChartDataType(DataType.STATUS);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Iterations")) {
+			updateChartDataType(DataType.ITERATION);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Assignees")) {
+			updateChartDataType(DataType.ASSIGNEE);
+		}
     }
-
-
+    
+	private void setSelectedRadioButtons() {
+		//set the chart type radio buttons
+		switch (chartType) {
+		case PIE:
+			makePieRadio.setSelected(true);
+		case BAR:
+			makeBarRadio.setSelected(true);
+		}
+		//todo set the combo box
+	}
+	
+	/** Called by the action listener to update the chart type
+	 * 
+	 * @param type The new chart type
+	 */
+	private void updateChartType(ChartType type) {
+		chartType = type;
+	}
+	
+	/** Called by the action listener to update the chart data type
+	 * 
+	 * @param type The new chart data type
+	 */
+	private void updateChartDataType(DataType type) {
+		chartDataType = type;
+	}
+	
+	private enum ChartType {
+		BAR, PIE
+	}
+	
+	private enum DataType {
+		STATUS, ITERATION, ASSIGNEE
+	}
 }
+
