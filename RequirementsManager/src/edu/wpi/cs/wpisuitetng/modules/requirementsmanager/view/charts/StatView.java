@@ -1,6 +1,16 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Steve Kordell, Alex Gorowara
+ *******************************************************************************/
 
-/*@author Steve Kordell*/
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.awt.BorderLayout;
 
@@ -18,10 +28,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.SpringLayout;
+import javax.swing.JButton;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.CategoryPlot;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
@@ -31,6 +43,9 @@ public class StatView extends Tab implements ActionListener {
 	private JComboBox comboBoxStatisticType;
 	private JRadioButton makePieRadio;
 	private JRadioButton makeBarRadio;
+	/*
+	private JButton generateChart;
+	*/
 	
 	/** Enums representing the type of chart and type of data */
 	private ChartType chartType;
@@ -74,6 +89,13 @@ public class StatView extends Tab implements ActionListener {
 		makeBarRadio.setMnemonic(KeyEvent.VK_B);
 		makeBarRadio.setActionCommand("Bar Chart");
 		makeBarRadio.addActionListener(this);
+		
+		/*
+		generateChart = new JButton("Generate Chart");
+		generateChart.setMnemonic(KeyEvent.VK_ENTER);
+		generateChart.setActionCommand("Generate Chart");
+		generateChart.addActionListener(this);
+		*/
 	
 		ButtonGroup group = new ButtonGroup();
 		group.add(makePieRadio);
@@ -85,6 +107,9 @@ public class StatView extends Tab implements ActionListener {
 		sidePanel.add(comboBoxStatisticType);
 		sidePanel.add(makePieRadio);
 		sidePanel.add(makeBarRadio);
+		/*
+		sidePanel.add(generateChart);
+		*/
 		
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,lblStatisticType,VERTICAL_PADDING,SpringLayout.NORTH,sidePanel);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,lblStatisticType,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
@@ -101,6 +126,11 @@ public class StatView extends Tab implements ActionListener {
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeBarRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makePieRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeBarRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
+		/*
+		// TODO: ascertain that this is an acceptable placement for the generateChart button
+		sidePanelLayout.putConstraint(SpringLayout.NORTH, generateChart, VERTICAL_PADDING+FAR, SpringLayout.SOUTH, makeBarRadio);
+		sidePanelLayout.putConstraint(SpringLayout.WEST, generateChart, HORIZONTAL_PADDING, SpringLayout.WEST, sidePanel);
+		*/
 
 		
 		return sidePanel;
@@ -124,6 +154,11 @@ public class StatView extends Tab implements ActionListener {
         return chart;
     }
     
+    /**
+     * method to update this object upon receiving word of an action
+     * updates user preference for data type and chart type
+     * and creates a new chart based on those new preferences
+     */
     public void actionPerformed(ActionEvent e) {
     	//System.out.println(e.getActionCommand());
 		JRadioButton source = (JRadioButton)e.getSource();
@@ -138,6 +173,9 @@ public class StatView extends Tab implements ActionListener {
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Assignees")) {
 			updateChartDataType(DataType.ASSIGNEE);
 		}
+		
+		this.updateChart();
+		
     }
     
 	private void setSelectedRadioButtons() {
@@ -174,5 +212,68 @@ public class StatView extends Tab implements ActionListener {
 	private enum DataType {
 		STATUS, ITERATION, ASSIGNEE
 	}
+	
+	/**
+	 * method to update the displayed chart based on the user's selection
+	 */
+	private void updateChart(){
+		
+		JFreeChart chart = null;
+		AbstractRequirementStatistics stats = null;
+		
+		// initialize the stats based on the type of data which the user has selected
+		switch(this.chartDataType){
+		
+			case STATUS:
+				stats = new StatusRequirementStatistics();
+				break;
+				
+			case ITERATION:
+				stats = new IterationRequirementStatistics();
+				break;
+				
+			case ASSIGNEE:
+				stats = new AssigneeRequirementStatistics();
+				break;
+				
+			default:
+				// if you encounter this default statement, it means that new values have been
+				// added to the DataType enum, but nobody has modified this poor little method
+				
+		}
+		
+		// build the chart based on the type of chart the user has selected
+		switch(this.chartType){
+		
+			case BAR:	// TODO: determine if additional modifications need to be made to the plot
+				chart = stats.buildBarChart();
+				CategoryPlot barPlot = (CategoryPlot) chart.getPlot();
+				barPlot.setNoDataMessage("No data available");
+				break;
+				
+			case PIE:
+				chart = stats.buildPieChart();
+				PiePlot piePlot = (PiePlot) chart.getPlot();
+				piePlot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+				piePlot.setNoDataMessage("No data available");
+				piePlot.setCircular(true);
+				piePlot.setLabelGap(0.02);
+				break;
+				
+			default:
+				// if you encounter this default statement, it means that new values have been
+				// added to the ChartType enum, but nobody has modified this poor little method
+				
+		}
+		
+		// add the newly generated chart to the panel
+		JSplitPane mainPane = (JSplitPane)this.getComponent(0);
+		ChartPanel chartPanel = (ChartPanel)mainPane.getLeftComponent();
+		chartPanel.setChart(chart);
+		
+		return;
+		
+	}
+	
 }
 
