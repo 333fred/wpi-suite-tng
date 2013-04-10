@@ -76,7 +76,7 @@ public class StatView extends Tab implements ActionListener {
 		JLabel lblStatisticType = new JLabel("Statistic Type");
 		JLabel lblChartType = new JLabel("Chart Type");
 		
-		String[] availableStatisticTypes = {"Assignees","Iterations","Status"};
+		String[] availableStatisticTypes = {"Status","Assignees","Iterations"};
 		comboBoxStatisticType = new JComboBox(availableStatisticTypes);
 	    comboBoxStatisticType.addActionListener(this);
 		
@@ -100,7 +100,7 @@ public class StatView extends Tab implements ActionListener {
 		ButtonGroup group = new ButtonGroup();
 		group.add(makePieRadio);
 		group.add(makeBarRadio);
-		setSelectedRadioButtons();
+		setSelectedItems();
 		
 		sidePanel.add(lblStatisticType);
 		sidePanel.add(lblChartType);
@@ -161,10 +161,15 @@ public class StatView extends Tab implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
     	//System.out.println(e.getActionCommand());
-		JRadioButton source = (JRadioButton)e.getSource();
-		if (source.equals(makePieRadio)) {
+		//JRadioButton source = (JRadioButton)e.getSource();
+		
+    	String source = e.getActionCommand();
+    	
+		//TODO: the above is what is causing the exception
+		
+		if (source.equals("Pie Chart")) {
 			updateChartType(ChartType.PIE);
-		} else if (source.equals(makeBarRadio)) {
+		} else if (source.equals("Bar Chart")) {
 			updateChartType(ChartType.BAR);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Status")) {
 			updateChartDataType(DataType.STATUS);
@@ -178,7 +183,7 @@ public class StatView extends Tab implements ActionListener {
 		
     }
     
-	private void setSelectedRadioButtons() {
+	private void setSelectedItems() {
 		//set the chart type radio buttons
 		switch (chartType) {
 		case PIE:
@@ -186,7 +191,8 @@ public class StatView extends Tab implements ActionListener {
 		case BAR:
 			makeBarRadio.setSelected(true);
 		}
-		//todo set the combo box
+		comboBoxStatisticType.setSelectedItem(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().toLowerCase()));
+		System.out.println(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().substring(1).toLowerCase()));
 	}
 	
 	/** Called by the action listener to update the chart type
@@ -241,6 +247,8 @@ public class StatView extends Tab implements ActionListener {
 				// added to the DataType enum, but nobody has modified this poor little method
 				
 		}
+		
+		System.out.println(this.chartDataType.toString());
 		
 		// build the chart based on the type of chart the user has selected
 		switch(this.chartType){
