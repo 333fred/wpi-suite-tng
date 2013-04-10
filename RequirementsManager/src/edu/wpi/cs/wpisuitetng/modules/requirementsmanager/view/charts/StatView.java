@@ -189,9 +189,11 @@ public class StatView extends Tab implements ActionListener {
 		case PIE:
 			makePieRadio.setSelected(true);
 			makeBarRadio.setSelected(false);
+			break;
 		case BAR:
 			makeBarRadio.setSelected(true);
 			makePieRadio.setSelected(false);
+			break;
 		}
 		comboBoxStatisticType.setSelectedItem(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().toLowerCase()));
 		System.out.println(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().substring(1).toLowerCase()));
