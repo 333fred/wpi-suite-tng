@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -29,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -52,6 +54,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEditingAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.ViewRequirementAction;
@@ -100,11 +103,14 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	private Vector<Vector> rowData;
 
 	private JTable table;
-	
+
 	private JButton btnEdit;
 	private JButton btnSave;
 	
-	boolean isEditable;
+	private JTextArea textEditInformation;
+	
+	private boolean isEditable;
+
 
 	/**
 	 * Constructor for a RequirementTableView
@@ -143,6 +149,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		this.rowData = new Vector<Vector>();
 
 		isEditable = false;
+		
 		this.table = new JTable(rowData, columnNames) {
 			private static final long serialVersionUID = 1L;
 
@@ -154,22 +161,36 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				
 		btnEdit = new JButton("Enable Editing");
 		btnSave = new JButton("Save Changes");
+		
+		textEditInformation = new JTextArea(1, 25);
+		textEditInformation.setOpaque(false);
+		textEditInformation.setEnabled(false);
+		textEditInformation.setDisabledTextColor(Color.BLACK);
+		textEditInformation.setLineWrap(true);
+		textEditInformation.setWrapStyleWord(true);
+		
 		// TODO: dynamically change this
 		btnSave.setEnabled(false);
 		//TODO: Set this button's action
 		
+		btnEdit.setAction(new EnableEditingAction(this));
+		
 		SpringLayout editPanelLayout = new SpringLayout();
 		JPanel editPanel = new JPanel(editPanelLayout);
 		editPanel.add(btnEdit);
-		editPanel.add(btnSave);		
+		editPanel.add(btnSave);	
+		editPanel.add(textEditInformation);
 		
-		editPanel.setPreferredSize(new Dimension(btnEdit.getPreferredSize().width, btnEdit.getPreferredSize().height + (btnEdit.getPreferredSize().height / 2)));
+		editPanel.setPreferredSize(new Dimension(btnEdit.getPreferredSize().width, btnEdit.getPreferredSize().height + (btnEdit.getPreferredSize().height / 2) + textEditInformation.getPreferredScrollableViewportSize().height + 10));
 		
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnEdit, 0, SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnSave, 0, SpringLayout.VERTICAL_CENTER, editPanel);
 		
 		editPanelLayout.putConstraint(SpringLayout.EAST, btnEdit, -5, SpringLayout.HORIZONTAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5, SpringLayout.HORIZONTAL_CENTER, editPanel);
+		
+		editPanelLayout.putConstraint(SpringLayout.WEST, textEditInformation, 0, SpringLayout.WEST, btnEdit);
+		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInformation, 0, SpringLayout.SOUTH, btnEdit);
 		
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
@@ -215,10 +236,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		 * (this.table.getColumnName(i).equals("Priority")) {
 		 * sorter.setComparator(i, comparator); } }
 		 */
-		// TODO: find a better way to get the priority column
-
-		// TODO: find a better way to get the the appropriate columns
-
+		// TODO: find a better way to get the the appropriate columns (for loop was failing for me for no reason)
 		sorter.setComparator(3, PriorityComparator);
 		sorter.setComparator(5, IterationStringComparator);
 		table.setRowSorter(sorter);
@@ -238,7 +256,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		this.table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 2 && !isEditable) {
 					JTable target = (JTable) e.getSource();
 					int row = target.getSelectedRow();
 					onDoubleClick(row);
@@ -249,7 +267,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		this.table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (event.getKeyCode() == KeyEvent.VK_ENTER && !isEditable) {
 					viewRequirement();
 				}
 				event.consume();
@@ -296,7 +314,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		butRefresh = new JButton("Refresh");
 
 		butRefresh.setAction(new RefreshAction(this));
-		butView.setAction(new ViewRequirementAction(this));
+	//	butView.setAction(new ViewRequirementAction(this));
 
 		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5,
 				SpringLayout.NORTH, content);
@@ -572,6 +590,44 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	@Override
 	public Component getTabComponent(JTabbedPane tabbedPane) {
 		return new JLabel("Requirements");
+	}
+	
+	/**
+	 * @return the table
+	 */
+	public JTable getTable() {
+		return table;
+	}
+	
+	// writes to hidden panel to inform the user of editing, etc..
+	public void displayEditInformation(String text) {
+		this.textEditInformation.setText(text);
+	}
+	
+	// sets the buttons enabled/disabled depending on the isEditable state
+	public void changeButtonStatus() {
+		if (isEditable) {
+			btnEdit.setEnabled(false);
+			btnSave.setEnabled(true);
+		}
+		else {
+			btnEdit.setEnabled(false);
+			btnSave.setEnabled(true);
+		}
+	}
+	
+	/**
+	 * @return the isEditable
+	 */
+	public boolean getIsEditable() {
+		return isEditable;
+	}
+
+	/**
+	 * @param isEditable the isEditable to set
+	 */
+	public void setIsEditable(boolean isEditable) {
+		this.isEditable = isEditable;
 	}
 
 }
