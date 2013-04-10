@@ -1105,16 +1105,30 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	@Override
 	public boolean onTabClosed() {
 		if (btnSave.isEnabled()) {
-			int res = JOptionPane.showConfirmDialog(this,
-					"There are unsaved changes, are you sure you want to continue?","Unsaved Changes!",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			Object[] options = {"Save Changes",
+			                    "Discard Changes",
+			                    "Cancel"};
+			int res = JOptionPane.showOptionDialog(this,
+			    "There are unsaved changes, are you sure you want to continue?",
+			    "Confirm Close",
+			    JOptionPane.YES_NO_CANCEL_OPTION,
+			    JOptionPane.QUESTION_MESSAGE,
+			    null,
+			    options,
+			    options[2]);
 			
-			if (res == 1) {
+			if (res == 0) {
+				closeTabAfterSave();
+				btnSave.getAction().actionPerformed(null);
+			} 
+			else if (res == 1) {
+				return true;
+			}
+			else if (res == 2) {
 				return false;
 			}
 		
 		}
 		return true;
 	}
-
 }

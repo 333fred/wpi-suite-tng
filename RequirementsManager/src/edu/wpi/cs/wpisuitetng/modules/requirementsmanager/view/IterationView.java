@@ -23,6 +23,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
@@ -135,10 +136,9 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 		if (status == Status.CREATE) {
 			butSave.setText("Create");
-			butSave.setEnabled(false);
 		} else {
 			butSave.setText("Save");
-		}
+		}		
 
 		butCancel = new JButton("Cancel");
 		butCancel.setAction(new CancelAction());
@@ -157,10 +157,12 @@ public class IterationView extends Tab implements ISaveNotifier {
 		// populate fields, if editing
 		if (status == Status.EDIT) {
 			txtName.setText(iteration.getName());
-			calStartDate.setDate(iteration.getStartDate());
-			calEndDate.setDate(iteration.getEndDate());
+			calStartDate.setDate((Date)iteration.getStartDate().clone());
+			calEndDate.setDate((Date)iteration.getEndDate().clone());
 			txtEstimate.setText(iteration.getEstimate() + "");
 		}
+		
+		butSave.setEnabled(false);
 
 		txtName.addKeyListener(new IterationViewListener(this, txtName));
 
@@ -301,12 +303,8 @@ public class IterationView extends Tab implements ISaveNotifier {
 				addIterationController.addIteration(toAdd);
 			} else {
 				iteration.setName(name);
-				try {
-					iteration.setStartDate(startDate);
-					iteration.setEndDate(endDate);
-				} catch (InvalidDateException e1) {
-					System.out.println("This shouldnt happen!!");
-				}
+				iteration.setStartDate(startDate);
+				iteration.setEndDate(endDate);
 				saveIterationController.saveIteration(iteration);
 			}
 
@@ -350,12 +348,10 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	/**
 	 * Determiens the proper error message to be shown in the Name Error field
-	 * 
-	 * TODO: Check if name is unique
+	 *
 	 */
 
 	private void setNameError() {
-
 		if (txtName.getText().trim().isEmpty()) {
 			labNameError.setText("**Name cannot be blank**");
 			txtName.setBackground(new Color(243, 243, 209));
@@ -406,10 +402,21 @@ public class IterationView extends Tab implements ISaveNotifier {
 	public void updateSave(JComponent source) {
 		setNameError();
 		setCalendarError();
-
+		
+		
 		if (nameError || calendarError) {
 			butSave.setEnabled(false);
-		} else {
+		} else if (status == Status.EDIT) {
+			if (txtName.getText().trim().equals(iteration.getName()) && compareDatesWithoutTime(calStartDate.getDate(), iteration.getStartDate()) == 0 
+					&& compareDatesWithoutTime(calEndDate.getDate(), iteration.getEndDate()) == 0) {
+				butSave.setEnabled(false);
+			}
+			else {
+				butSave.setEnabled(true);
+			}
+			
+		}
+		else {
 			butSave.setEnabled(true);
 		}
 	}
@@ -430,7 +437,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 		Calendar calendar2 = Calendar.getInstance();
 		calendar1.setTime(date1);
 		calendar2.setTime(date2);
-
 		if (calendar1.get(Calendar.DAY_OF_MONTH) == calendar2
 				.get(Calendar.DAY_OF_MONTH)
 				&& calendar1.get(Calendar.MONTH) == calendar2
@@ -454,14 +460,14 @@ public class IterationView extends Tab implements ISaveNotifier {
 		// get all iterations from the local database
 		List<Iteration> iterations = IterationDatabase.getInstance()
 				.getAllIterations();
-		try {
-			iteration.setEndDate(calEndDate.getDate());
-			iteration.setStartDate(calStartDate.getDate());
-		} catch (InvalidDateException e) {
-			// start date was before end date, most likely wont reach this, but
-			// regardless, return true
-			return true;
-		}
+		
+		Date origStart = iteration.getStartDate();
+		Date origEnd = iteration.getEndDate();
+		
+	
+		iteration.setEndDate(calEndDate.getDate());
+		iteration.setStartDate(calStartDate.getDate());
+
 
 		for (Iteration i : iterations) {
 			if (i.getId() == iteration.getId()) {
@@ -471,6 +477,12 @@ public class IterationView extends Tab implements ISaveNotifier {
 				return true; // an overlap exists
 			}
 		}
+
+
+		iteration.setStartDate(origStart);
+		iteration.setEndDate(origEnd);
+
+
 		return false;
 	}
 
@@ -503,7 +515,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	@Override
 	public void responseSuccess() {
-		System.out.println("Sucessfuly saved iteration!!");
 		mainTabController.refreshIterationTree();
 		mainTabController.closeCurrentTab();
 
@@ -524,6 +535,35 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	public int getIterationId() {
 		return iteration.getId();
+	}
+	
+	@Override
+	public boolean onTabClosed() {
+		if (butSave.isEnabled()) {
+			Object[] options = {"Save Changes",
+			                    "Discard Changes",
+			                    "Cancel"};
+			int res = JOptionPane.showOptionDialog(this,
+			    "There are unsaved changes, are you sure you want to continue?",
+			    "Confirm Close",
+			    JOptionPane.YES_NO_CANCEL_OPTION,
+			    JOptionPane.QUESTION_MESSAGE,
+			    null,
+			    options,
+			    options[2]);
+			
+			if (res == 0) {
+				butSave.getAction().actionPerformed(null);
+			} 
+			else if (res == 1) {
+				return true;
+			}
+			else if (res == 2) {
+				return false;
+			}
+		
+		}
+		return true;
 	}
 
 }
