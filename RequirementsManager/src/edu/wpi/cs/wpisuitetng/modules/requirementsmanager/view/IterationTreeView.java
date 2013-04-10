@@ -350,7 +350,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			iterationNode = new DefaultMutableTreeNode(
 					(acurrentDate.compareTo(anIteration.getEndDate()) > 0 && anIteration
 							.getId() != -1) ? anIteration.getName()
-							+ " (Completed)" : anIteration.getName());
+							+ " (Closed)" : anIteration.getName());
 
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
@@ -485,7 +485,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 	 */
 
 	public List<Iteration> getSelectedIterations() {
-		// TODO: Handle selecting completed iteration
+		// TODO: Handle selecting closed iteration
 		int[] selectedIndexes = tree.getSelectionRows();
 		TreePath[] paths = tree.getSelectionPaths();
 
@@ -501,7 +501,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 				continue; // thing selected was not an iteration
 			}
 			String iterationName = path.getLastPathComponent().toString();
-			iterationName = iterationName.replace(" (Completed)", "");
+			iterationName = iterationName.replace(" (Closed)", "");
 			System.out.println(iterationName);
 
 			Iteration toAdd = getIterationFromName(iterationName);
