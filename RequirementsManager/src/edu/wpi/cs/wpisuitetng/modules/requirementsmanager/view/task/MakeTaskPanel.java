@@ -35,27 +35,29 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
- * A panel containing a form for the tasks of a requirement
+ * A panel containing a a creation and edit form 
+ * for the tasks in a requirement
  * 
  * @author Nick M, Matt C
  */
 @SuppressWarnings("serial")
 public class MakeTaskPanel extends JPanel {
 
+	//The fields to make a task
 	private JTextArea taskName;
-	private final JTextArea taskField;
-	private final JButton addtask;
-	// private final JButton deleteNote;
+	private final JTextArea taskDescription;
+	private final JButton addTask;
 	private final JLabel addTaskLabel;
-
+	private final JCheckBox taskComplete;
+	private final JComboBox userAssigned;
+	
+	//Jlabels for task fields
 	private final JLabel taskStatus;
 	private final JLabel nameTaskLabel;
 	private final JLabel descTaskLabel;
 	private final JLabel userAssignedLabel;
 
-	private final JCheckBox taskComplete;
-	private final JComboBox userAssigned;
-
+	
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane taskFieldPane;
@@ -71,6 +73,7 @@ public class MakeTaskPanel extends JPanel {
 	 */
 	public MakeTaskPanel(Requirement model, DetailPanel parentView) {
 
+		//setup the task name field
 		taskName = new JTextArea(1, 40);
 		taskName.setLineWrap(true);
 		taskName.setWrapStyleWord(true);
@@ -82,31 +85,33 @@ public class MakeTaskPanel extends JPanel {
 		taskName.setName("Name");
 		taskName.setDisabledTextColor(Color.GRAY);
 
-		taskField = new JTextArea();
-		taskField.setLineWrap(true);
-		taskField.setWrapStyleWord(true);
-		taskField.setBorder((new JTextField()).getBorder());
-		taskField.setDisabledTextColor(Color.GRAY);
-
-		taskField.addKeyListener(new KeyAdapter() {
+		//setup the task description field
+		taskDescription = new JTextArea();
+		taskDescription.setLineWrap(true);
+		taskDescription.setWrapStyleWord(true);
+		taskDescription.setBorder((new JTextField()).getBorder());
+		taskDescription.setDisabledTextColor(Color.GRAY);
+		
+		taskDescription.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						taskField.transferFocus();
+						taskDescription.transferFocus();
 					} else {
-						taskField.transferFocusBackward();
+						taskDescription.transferFocusBackward();
 					}
 					event.consume();
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					taskField.append("\n");
+					taskDescription.append("\n");
 					event.consume();
 				}
 			}
 		});
 
-		addtask = new JButton("Save");
+		//setup all the buttons and label text
+		addTask = new JButton("Save");
 		taskStatus = new JLabel(
 				"No tasks selected. Fill name and description to create a new one.");
 		addTaskLabel = new JLabel("Task:");
@@ -116,10 +121,6 @@ public class MakeTaskPanel extends JPanel {
 		taskComplete = new JCheckBox("Completed");
 		userAssigned = new JComboBox();
 
-		// deleteNote = new JButton("Delete note");
-
-		//addtask.setAction(new SaveTaskAction(new SaveTaskController(this, model, parentView)));
-
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.black, 1),
@@ -128,8 +129,9 @@ public class MakeTaskPanel extends JPanel {
 		SpringLayout layout = new SpringLayout();
 		this.setLayout(layout);
 
-		taskFieldPane = new JScrollPane(taskField);
-
+		taskFieldPane = new JScrollPane(taskDescription);
+		
+		//Setup the layout of the task Panel
 		layout.putConstraint(SpringLayout.NORTH, addTaskLabel, 0,
 				SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.WEST, addTaskLabel, 0,
@@ -176,25 +178,28 @@ public class MakeTaskPanel extends JPanel {
 		layout.putConstraint(SpringLayout.EAST, userAssigned, 50,
 				SpringLayout.EAST, taskComplete);
 
-		layout.putConstraint(SpringLayout.NORTH, addtask, VERTICAL_PADDING,
+		layout.putConstraint(SpringLayout.NORTH, addTask, VERTICAL_PADDING,
 				SpringLayout.SOUTH, taskComplete);
-		layout.putConstraint(SpringLayout.EAST, addtask, 0, SpringLayout.EAST,
+		layout.putConstraint(SpringLayout.EAST, addTask, 0, SpringLayout.EAST,
 				this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
-				SpringLayout.SOUTH, addtask);
+				SpringLayout.SOUTH, addTask);
 
+		//add all of the swing components to the this task panel
 		this.add(taskStatus);
 		this.add(userAssignedLabel);
 		this.add(userAssigned);
 		this.add(addTaskLabel);
-		this.add(addtask);
+		this.add(addTask);
 		this.add(taskName);
 		this.add(nameTaskLabel);
 		this.add(descTaskLabel);
 		this.add(taskComplete);
 		this.add(taskFieldPane);
 
-		addtask.setEnabled(false);
+		//default the add button and complete checkbox 
+		//to un-enabled
+		addTask.setEnabled(false);
 		taskComplete.setEnabled(false);
 
 	}
@@ -204,8 +209,8 @@ public class MakeTaskPanel extends JPanel {
 	 * 
 	 * @return the note JTextArea
 	 */
-	public JTextArea gettaskField() {
-		return taskField;
+	public JTextArea getTaskField() {
+		return taskDescription;
 	}
 
 	/**
@@ -216,8 +221,8 @@ public class MakeTaskPanel extends JPanel {
 	 *            disabled.
 	 */
 	public void setInputEnabled(boolean value) {
-		taskField.setEnabled(value);
-		addtask.setEnabled(value);
+		taskDescription.setEnabled(value);
+		addTask.setEnabled(value);
 		if (value) {
 			addTaskLabel.setForeground(Color.black);
 		} else {
@@ -225,27 +230,27 @@ public class MakeTaskPanel extends JPanel {
 		}
 	}
 
-	public JTextComponent gettaskName() {
+	public JTextComponent getTaskName() {
 		return taskName;
 	}
 
-	public JButton getaddTask() {
-		return addtask;
+	public JButton getAddTask() {
+		return addTask;
 	}
 
-	public JCheckBox gettaskComplete() {
+	public JCheckBox getTaskComplete() {
 		return taskComplete;
 	}
 
-	public JScrollPane gettaskFieldPane() {
+	public JScrollPane getTaskFieldPane() {
 		return taskFieldPane;
 	}
 
-	public JLabel gettaskStatus() {
+	public JLabel getTaskStatus() {
 		return taskStatus;
 	}
 
-	public JComboBox getuserAssigned() {
+	public JComboBox getUserAssigned() {
 		return userAssigned;
 	}
 

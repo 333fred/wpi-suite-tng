@@ -54,82 +54,81 @@ public class SaveTaskController {
 	 * Save a task to the server
 	 */
 	public void saveTask(Object[] tasks) {
-		final String taskText = view.gettaskField().getText();
-		final String taskName = view.gettaskName().getText();
+		final String taskText = view.getTaskField().getText();
+		final String taskName = view.getTaskName().getText();
 		if (tasks == null) { // Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
 		} else if (tasks.length < 1) {
-			if (taskText.length() > 0 && taskName.length() > 0) { // Task must
-																	// have a
-																	// name and
-																	// description
-																	// of at
-																	// least 1
-																	// char!
+			//Task must have a name and description of at least one character
+			if (taskText.length() > 0 && taskName.length() > 0) { 
 				Task tempTask = new Task(taskName, taskText);
-				if ((view.getuserAssigned().getSelectedItem() == ""))
+				if ((view.getUserAssigned().getSelectedItem() == ""))
 					tempTask.setAssignedUser(null);
 				else
-					tempTask.setAssignedUser((String) view.getuserAssigned()
+					tempTask.setAssignedUser((String) view.getUserAssigned()
 							.getSelectedItem());
 				tempTask.setId(this.model.getTasks().size() + 1);
 				this.model.addTask(tempTask);
 				parentView.getTaskList().addElement(tempTask);
-				view.gettaskName().setText("");
-				view.gettaskField().setText("");
-				view.gettaskField().requestFocusInWindow();
+				view.getTaskName().setText("");
+				view.getTaskField().setText("");
+				view.getTaskField().requestFocusInWindow();
 				// We want to save the task to the server immediately, but only
 				// if the requirement hasn't been just created
-				if (model.getName().length() > 0) { // Save to requirement!
+				if (model.getName().length() > 0) { 
+					// Save to requirement!
 					SaveRequirementController controller = new SaveRequirementController(
 							this.parentView);
 					controller.SaveRequirement(model, false);
 				}
 			}
 		} else {
-
-			for (Object aTask : tasks) { // Modifying tasks!
-				if (tasks.length == 1) { // If only one is selected, edit the
-											// fields!
+			
+			// Modifying tasks
+			for (Object aTask : tasks) { 
+				if (tasks.length == 1) { 
+					// If only one is selected, edit the fields
 					if (taskText.length() > 0 && taskName.length() > 0) {
-						((Task) aTask).setName(view.gettaskName().getText());
-						((Task) aTask).setDescription(view.gettaskField()
+						((Task) aTask).setName(view.getTaskName().getText());
+						((Task) aTask).setDescription(view.getTaskField()
 								.getText());
 					}
-					if ((view.getuserAssigned().getSelectedItem() == ""))
+					if ((view.getUserAssigned().getSelectedItem() == ""))
 						((Task) aTask).setAssignedUser(null);
 					else
 						((Task) aTask).setAssignedUser((String) view
-								.getuserAssigned().getSelectedItem());
-				}// Check the completion status on the tasks!
+								.getUserAssigned().getSelectedItem());
+				}
+				// Check the completion status on the tasks
 				((Task) aTask)
-						.setCompleted(view.gettaskComplete().isSelected());
+						.setCompleted(view.getTaskComplete().isSelected());
 			}
-
-			if (model.getName().length() > 0) { // Save to requirement!
+			
+			// Save to requirement!
+			if (model.getName().length() > 0) { 
 				SaveRequirementController controller = new SaveRequirementController(
 						this.parentView);
 				controller.SaveRequirement(model, false);
 			}
-			view.gettaskName().setText("");
-			view.gettaskField().setText("");
-			view.gettaskField().requestFocusInWindow();
+			view.getTaskName().setText("");
+			view.getTaskField().setText("");
+			view.getTaskField().requestFocusInWindow();
 		}
-
+		
 		this.tasks.clearSelection();
-		view.gettaskStatus()
+		view.getTaskStatus()
 				.setText(
 						"No tasks selected. Fill name and description to create a new one.");
-		view.gettaskComplete().setEnabled(false);
-		view.gettaskComplete().setSelected(false);
-		view.getuserAssigned().setEnabled(true);
-		view.gettaskField().setText("");
-		view.gettaskName().setText("");
-		view.gettaskField().setBackground(Color.white);
-		view.gettaskName().setBackground(Color.white);
-		if (view.gettaskName().getText().trim().equals("")
-				|| view.gettaskField().getText().trim().equals(""))
-			view.getaddTask().setEnabled(false);
+		view.getTaskComplete().setEnabled(false);
+		view.getTaskComplete().setSelected(false);
+		view.getUserAssigned().setEnabled(true);
+		view.getTaskField().setText("");
+		view.getTaskName().setText("");
+		view.getTaskField().setBackground(Color.white);
+		view.getTaskName().setBackground(Color.white);
+		if (view.getTaskName().getText().trim().equals("")
+				|| view.getTaskField().getText().trim().equals(""))
+			view.getAddTask().setEnabled(false);
 
 	}
 }
