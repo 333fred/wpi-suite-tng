@@ -7,8 +7,8 @@
 * http://www.eclipse.org/legal/epl-v10.html
 *
 * Contributors:
-* * Chris Keane
-* * Maddie Burris
+* *Chris Keane
+* *Maddie Burris
 *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 */
 
 
-public class EstimateRequirementStatistics extends AbstractRequirementStatistics {
+public class ActualRequirementStatistics extends AbstractRequirementStatistics {
 
 	/* (non-Javadoc)
 	* @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
@@ -41,18 +41,18 @@ public class EstimateRequirementStatistics extends AbstractRequirementStatistics
 		// for each requirement
 		for(Requirement requirement: requirements){
 			
-			data.put(requirement.getName(), requirement.getEstimate());
+			data.put(requirement.getName(), requirement.getEffort());
 		
 		}
 	
 	}
 	
 	public JFreeChart buildPieChart(){
-		return this.buildPieChart("Requirements by Estimate");
+		return this.buildPieChart("Requirements by Actual Effort");
 	}
 	
 	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Estimates by Requirements", "Requirements", "Estimate");
+		JFreeChart barChart = this.buildBarChart("Estimates by Actual Effort", "Requirements", "Effort");
 		return barChart;
 	}
 
