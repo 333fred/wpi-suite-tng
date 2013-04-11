@@ -618,15 +618,20 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	/**
 	 * @return the isEditable
 	 */
-	public boolean getIsEditable() {
+	public boolean isEditable() {
 		return isEditable;
 	}
 
 	/**
-	 * @param isEditable the isEditable to set
+	 * @param editable the isEditable to set
 	 */
-	public void setIsEditable(boolean isEditable) {
-		this.isEditable = isEditable;
+	public void setEditable(boolean editable) {
+		this.isEditable = editable;
+	}
+	
+	@Override
+	public boolean onLostFocus() {
+		return !isEditable;
 	}
 
 }

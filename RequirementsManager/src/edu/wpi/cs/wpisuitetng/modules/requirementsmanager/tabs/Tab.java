@@ -44,6 +44,25 @@ public abstract class Tab extends JPanel {
 	public boolean onTabClosed() {
 		return true;
 	}
+	
+	/** 
+	 * Called before the user is about to switch off of the tab
+	 * 
+	 * @return a boolean indicating whether to leave the tab or not, if false the tab will stay selected
+	 */
+	
+	public boolean onLostFocus() {
+		return true;
+		
+	}
+	
+	/** Refreshes the tab
+	 * 
+	 */
+	
+	public void refresh() {
+		
+	}
 
 	public Component getTabComponent(JTabbedPane tabbedPane) {
 		return new ClosableTabComponent(tabbedPane);

@@ -75,6 +75,7 @@ public class MainTabController {
 
 	private void onChangeTab() {
 		refreshIterationTree();
+		
 		System.out.println("Change Tab Controller");
 		Component selectedComponent = tabView.getSelectedComponent();
 		Tab selectedTab = (Tab) selectedComponent;
@@ -252,8 +253,9 @@ public class MainTabController {
 	 *            the index of the tab to select
 	 */
 	public void switchToTab(int tabIndex) {
-		try {
+		try {				
 			tabView.setSelectedIndex(tabIndex);
+
 		} catch (IndexOutOfBoundsException e) {
 			// an invalid tab was requested, do nothing
 		}

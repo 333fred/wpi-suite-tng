@@ -15,7 +15,6 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 
 /**
  * The JTabbedPane that will be shown in the RequirementsManager Module.
@@ -29,7 +28,11 @@ import javax.swing.SwingUtilities;
 
 public class MainTabView extends JTabbedPane {
 
+	/** boolean indicating whether hte first tab has been added */
+	private boolean firstTab;
+	
 	public MainTabView() {
+		firstTab = true;
 		setTabPlacement(TOP); // set the tabs to be placed at the top
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT); // allow the tabs to be
 												// scrollable whne there are too
@@ -105,5 +108,44 @@ public class MainTabView extends JTabbedPane {
 	public void setComponentAt(int index, Component component) {
 		super.setComponentAt(index, component);
 	}
+	
+	
+	/** Override setSelctedIndex to stop tabs from being selected, if the current tab doesn't allow
+	 * loss of focus
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setSelectedIndex(int index) {
+		if (firstTab) {
+			firstTab = false;
+			super.setSelectedIndex(index);
+		}
+		int oldIndex = getSelectedIndex();
+		Tab tab = (Tab) getComponentAt(oldIndex);
+		if (tab.onLostFocus()) {				
+			super.setSelectedIndex(index);
+		}
+	}
+	
+	/** Override setSelctedIndex to stop tabs from being selected, if the current tab doesn't allow
+	 * loss of focus
+	 * 
+	 * {@inheritDoc}
+	 */
+	
+	@Override
+	public void setSelectedComponent(Component component) {
+		if (firstTab) {
+			firstTab = false;
+			super.setSelectedComponent(component);
+		}
+		int oldIndex = getSelectedIndex();
+		Tab tab = (Tab) getComponentAt(oldIndex);
+		if (tab.onLostFocus()) {				
+			super.setSelectedComponent(component);
+		}
+	}
+	
 
 }
