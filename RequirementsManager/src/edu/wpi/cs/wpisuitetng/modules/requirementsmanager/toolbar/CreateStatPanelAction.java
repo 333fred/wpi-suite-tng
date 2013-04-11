@@ -40,7 +40,7 @@ public class CreateStatPanelAction extends AbstractAction {
 	 *            is called
 	 */
 	public CreateStatPanelAction(MainTabController controller) {
-		super("Create Statistics Panel");
+		super("Show Statistics");
 		this.controller = controller;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
 	}

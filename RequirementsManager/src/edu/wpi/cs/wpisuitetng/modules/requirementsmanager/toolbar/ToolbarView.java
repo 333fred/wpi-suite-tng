@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
-	private JButton createHelpPanel;
+	private JButton createHelp;
 
 	/** Button for creating a requirement */
 	private JButton createRequirement;
@@ -36,7 +36,7 @@ public class ToolbarView extends DefaultToolbarView {
 	private JButton createIteration;
 
 	/** Button for creating statistics panel */
-	private JButton createStatPanel;
+	private JButton createStatistics;
 
 	// private JPlaceholderTextField searchField;
 
@@ -51,13 +51,13 @@ public class ToolbarView extends DefaultToolbarView {
 		// toolbar
 		// Construct the content panel
 		JPanel content = new JPanel();
-		JPanel helpPanel = new JPanel();
+		JPanel resourcePanel = new JPanel();
 		SpringLayout layout = new SpringLayout();
-		SpringLayout helpLayout = new SpringLayout();
+		SpringLayout resourceLayout = new SpringLayout();
 		content.setLayout(layout);
 		content.setOpaque(false);
-		helpPanel.setLayout(helpLayout);
-		helpPanel.setOpaque(false);
+		resourcePanel.setLayout(resourceLayout);
+		resourcePanel.setOpaque(false);
 
 		// Construct the create Requirement button
 		createRequirement = new JButton("Create Requirement");
@@ -67,12 +67,12 @@ public class ToolbarView extends DefaultToolbarView {
 		createIteration.setAction(new CreateIterationAction(tabController));
 
 		// Construct the User Manual button
-		createHelpPanel = new JButton("User Manual");
-		createHelpPanel.setAction(new CreateHelpPanelAction(tabController));
+		createHelp = new JButton("User Manual");
+		createHelp.setAction(new CreateHelpPanelAction(tabController));
 
 		// Construct the Stat button
-		createStatPanel = new JButton("Statistics");
-		createStatPanel.setAction(new CreateStatPanelAction(tabController));
+		createStatistics = new JButton("Show Statistics");
+		createStatistics.setAction(new CreateStatPanelAction(tabController));
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -82,43 +82,47 @@ public class ToolbarView extends DefaultToolbarView {
 		// Configure the layout of the buttons on the content panel
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5,
 				SpringLayout.NORTH, content);
-		layout.putConstraint(SpringLayout.EAST, createRequirement, 0,
-				SpringLayout.EAST, createStatPanel);
-		layout.putConstraint(SpringLayout.WEST, createRequirement, 0,
-				SpringLayout.WEST, createStatPanel);
-
-		layout.putConstraint(SpringLayout.NORTH, createStatPanel, 10,
-				SpringLayout.SOUTH, createRequirement);		
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, createStatPanel,
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, createRequirement,
 				0, SpringLayout.HORIZONTAL_CENTER, content);
 
-		helpLayout.putConstraint(SpringLayout.NORTH, createHelpPanel, 5,
-				SpringLayout.NORTH, helpPanel);
-		helpLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, createHelpPanel, 0,
-				SpringLayout.HORIZONTAL_CENTER, helpPanel);
-	
+		layout.putConstraint(SpringLayout.NORTH, createIteration, 10,
+				SpringLayout.SOUTH, createRequirement);
+		layout.putConstraint(SpringLayout.WEST, createIteration, 0,
+				SpringLayout.WEST, createRequirement);
+		layout.putConstraint(SpringLayout.EAST, createIteration, 0,
+				SpringLayout.EAST, createRequirement);
 
-		/*
-		 * layout.putConstraint(SpringLayout.NORTH, createHelpPanel, 5,
-		 * SpringLayout.SOUTH, createIteration);
-		 * layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8,
-		 * SpringLayout.WEST, content); layout.putConstraint(SpringLayout.SOUTH,
-		 * createHelpPanel, 17, SpringLayout.SOUTH, createIteration);
-		 */
+		resourceLayout.putConstraint(SpringLayout.NORTH, createHelp, 5,
+				SpringLayout.NORTH, resourcePanel);
+		resourceLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
+				createHelp, 0, SpringLayout.HORIZONTAL_CENTER, resourcePanel);
+
+		resourceLayout.putConstraint(SpringLayout.NORTH, createStatistics, 10, SpringLayout.SOUTH, createHelp);
+		resourceLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, createStatistics, 0, SpringLayout.HORIZONTAL_CENTER, resourcePanel);
+		
+		resourceLayout.putConstraint(SpringLayout.WEST, createHelp, 0, SpringLayout.WEST, createStatistics);
+		resourceLayout.putConstraint(SpringLayout.EAST, createHelp, 0, SpringLayout.EAST, createStatistics);
+/*
+		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8,
+				SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.SOUTH, createHelpPanel, 17,
+				SpringLayout.SOUTH, createIteration);
+				*/
 
 		// Add buttons to the content panel
 		// content.add(createIteration);
 		content.add(createRequirement);
 		// content.add(createHelpPanel);
-		content.add(createStatPanel);
+		content.add(createIteration);
 
-		helpPanel.add(createHelpPanel);
+		resourcePanel.add(createHelp);
+		resourcePanel.add(createStatistics);
 
 		// content.add(searchField);
 
 		// Construct a new toolbar group to be added to the end of the toolbar
 		ToolbarGroupView toolbarGroup = new ToolbarGroupView("Home", content);
-		ToolbarGroupView helpToolbar = new ToolbarGroupView("Help", helpPanel);
+		ToolbarGroupView helpToolbar = new ToolbarGroupView("Resources", resourcePanel);
 
 		// Calculate the width of the toolbar
 		Double toolbarGroupWidth = createRequirement.getPreferredSize()
