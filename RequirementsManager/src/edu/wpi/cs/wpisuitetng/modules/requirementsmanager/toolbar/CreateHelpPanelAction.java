@@ -16,6 +16,8 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.AbstractAction;
 
@@ -48,7 +50,14 @@ public class CreateHelpPanelAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		File input = new File("index.html"); // Html file is our input
+		//File input = new File("http://dastardlybanana.com/Docs/RequirementsManager/"); // Html file is our input
+		URI input = null;
+		try {
+			input = new URI("http://dastardlybanana.com/Docs/RequirementsManager/");
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		// Create a desktop type in order to launch the user's default browser
 		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop()
@@ -63,7 +72,7 @@ public class CreateHelpPanelAction extends AbstractAction {
 																				// is
 																				// supported
 			try {
-				desktop.open(input); // Convert link to identifier and launch
+				desktop.browse(input); // Convert link to identifier and launch
 										// default browser
 			} catch (Exception f) {
 				System.out.println("Error launching browser!");

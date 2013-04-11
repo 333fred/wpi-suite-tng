@@ -68,7 +68,7 @@ public class StatView extends Tab implements ActionListener {
 		JPanel chart = new ChartPanel(createPieStatusChart());
 		
 		JSplitPane mainPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,chart,buildSidePanel());
-		mainPane.setResizeWeight(0.75);
+		mainPane.setResizeWeight(0.40);
 		add(mainPane);
 	}
 
@@ -90,7 +90,8 @@ public class StatView extends Tab implements ActionListener {
 		JLabel lblStatisticType = new JLabel("Statistic Type");
 		JLabel lblChartType = new JLabel("Chart Type");
 		
-		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Estimates", "Effort", "Velocity"};
+
+		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Estimates", "Effort", "Tasks","Velocity"};
 		comboBoxStatisticType = new JComboBox(availableStatisticTypes);
 	    comboBoxStatisticType.addActionListener(this);
 		
@@ -209,6 +210,8 @@ public class StatView extends Tab implements ActionListener {
 			updateChartDataType(DataType.EFFORT);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Velocity")) {
 			updateChartDataType(DataType.VELOCITY);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Tasks")) {
+			updateChartDataType(DataType.TASK);
 		}
 		this.updateChart();
 		
@@ -257,7 +260,7 @@ public class StatView extends Tab implements ActionListener {
 	}
 	
 	private enum DataType {
-		STATUS, ITERATION, ASSIGNEE	, ESTIMATES, EFFORT, VELOCITY}
+		STATUS, ITERATION, ASSIGNEE	, ESTIMATES, EFFORT, TASK, VELOCITY}
 	
 	/**
 	 * method to update the displayed chart based on the user's selection
@@ -289,10 +292,12 @@ public class StatView extends Tab implements ActionListener {
 			case EFFORT:
 				stats = new ActualRequirementStatistics();
 				break;
-				
 			case VELOCITY:
 				stats = new VelocityIterationStatistics();
-				
+				break;
+			case TASK:
+				stats = new TaskRequirementStatistics();
+				break;
 			default:
 				// if you encounter this default statement, it means that new values have been
 				// added to the DataType enum, but nobody has modified this poor little method

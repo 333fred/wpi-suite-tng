@@ -7,8 +7,9 @@
 * http://www.eclipse.org/legal/epl-v10.html
 *
 * Contributors:
-* *Chris Keane
-* *Maddie Burris
+* Maddie Burris
+* Chris Keane
+* 
 *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
@@ -19,45 +20,36 @@ import org.jfree.chart.JFreeChart;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 
 /**
-* class to contain data on how effort spent on requirements
-* 
+* class to contain data on how many tasks are assigned to each requirement
+* note that Tasks here are stored in lists, as they are in classes themselves
+*
 */
 
-
-public class ActualRequirementStatistics extends AbstractRequirementStatistics {
+public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 
 	/* (non-Javadoc)
 	* @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
 	*/
 	@Override
-	public void update(){
-	
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-		
+	public void update(){	
+		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?		
 		
 		// for each requirement
-		for(Requirement requirement: requirements){
-			//get amount of effort spent per requirement
-			data.put(requirement.getName(), requirement.getEffort());
-		
-		}
-	
-	}
-	
-	public JFreeChart buildLineChart(){
-		this.update();
-		return this.buildLineChart("Requirements by Actual Effort", "Requirment", "Effort");
+		for(Requirement requirement: requirements){		
+			// get the length of the list of tasks
+			data.put(requirement.getName(), requirement.getTasks().size());
+		}	
 	}
 	
 	public JFreeChart buildPieChart(){
-		return this.buildPieChart("Requirements by Actual Effort");
+		return this.buildPieChart("Requirements by Task");
 	}
 	
 	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Requirements by Actual Effort", "Requirements", "Effort");
-		return barChart;
+		return this.buildBarChart("Requirements by Task", "Tasks", "Requirements");
 	}
 
 }
