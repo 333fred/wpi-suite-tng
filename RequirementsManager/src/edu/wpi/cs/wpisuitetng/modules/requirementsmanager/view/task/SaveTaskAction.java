@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick Massa, Matt Costi
  *    
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
@@ -18,6 +18,8 @@ import javax.swing.AbstractAction;
 /**
  * Action that calls
  * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.RequirementsManager.tasks.SaveTaskController#savetask()}
+ * 
+ * @author Nick Massa, Matt Costi
  */
 @SuppressWarnings("serial")
 public class SaveTaskAction extends AbstractAction {
@@ -27,8 +29,7 @@ public class SaveTaskAction extends AbstractAction {
 	/**
 	 * Construct the action
 	 * 
-	 * @param controller
-	 *            the controller to trigger
+	 * @param controller the controller to trigger
 	 */
 	public SaveTaskAction(SaveTaskController controller) {
 		super("Save");
@@ -36,6 +37,12 @@ public class SaveTaskAction extends AbstractAction {
 		this.tasks = new Object[0]; // Placeholder list
 	}
 
+	/**
+	 * Construct the action
+	 * 
+	 * @param controller the controller to trigger
+	 * @param objects object array of all of the tasks
+	 */
 	public SaveTaskAction(SaveTaskController controller, Object[] objects) {
 		super("Save");
 		this.controller = controller;

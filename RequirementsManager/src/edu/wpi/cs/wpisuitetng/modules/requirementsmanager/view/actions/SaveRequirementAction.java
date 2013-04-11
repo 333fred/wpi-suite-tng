@@ -48,7 +48,7 @@ public class SaveRequirementAction extends AbstractAction {
 	 * @e any ActionEvent
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e1) {
 		AddRequirementController controller = new AddRequirementController(
 				this.parentView);
 

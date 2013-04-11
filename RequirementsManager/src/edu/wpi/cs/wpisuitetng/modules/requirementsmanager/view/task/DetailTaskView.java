@@ -18,12 +18,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
@@ -33,7 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelec
 /**
  * Panel containing a task for a requirement
  * 
- * @author Zac Chupka, Maddie Burris
+ * @author Nick Massa, Matt Costi
  */
 public class DetailTaskView extends JPanel {
 	/** For Tasks */
@@ -61,6 +64,8 @@ public class DetailTaskView extends JPanel {
 		// Set up the task panel
 		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
 
+
+
 		// Create the task list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
 		taskList = new DefaultListModel();
@@ -86,105 +91,210 @@ public class DetailTaskView extends JPanel {
 
 		List<String> assignedUsers = requirement.getUsers();
 		// iterate through and add them to the list
-		makeTaskPanel.getuserAssigned().addItem("");
+		makeTaskPanel.getUserAssigned().addItem("");
 		for (String user : assignedUsers) {
-			makeTaskPanel.getuserAssigned().addItem(user);
+			makeTaskPanel.getUserAssigned().addItem(user);
 		}
-		
-		makeTaskPanel.getaddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView, tasks)));
-		
-		tasks.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-				makeTaskPanel.getaddTask().setAction(
-						new SaveTaskAction(new SaveTaskController(
-								makeTaskPanel, requirement, parentView, tasks), tasks
-								.getSelectedValues()));
 
-				if (tasks.getSelectedValues().length == 0) {
-					makeTaskPanel
-							.gettaskStatus()
-							.setText(
-									"No tasks selected. Fill name and description to create a new one.");
-					makeTaskPanel.gettaskComplete().setEnabled(false);
-					makeTaskPanel.gettaskComplete().setSelected(false);
-					makeTaskPanel.getuserAssigned().setEnabled(true);
-					makeTaskPanel.gettaskField().setText("");
-					makeTaskPanel.gettaskName().setText("");
-					makeTaskPanel.gettaskField().setBackground(Color.white);
-					makeTaskPanel.gettaskName().setBackground(Color.white);
-					if (makeTaskPanel.gettaskName().getText().trim().equals("")
-							|| makeTaskPanel.gettaskField().getText().trim()
-									.equals(""))
-						makeTaskPanel.getaddTask().setEnabled(false);
-				} else {
-					makeTaskPanel.gettaskComplete().setEnabled(true);
-					if (tasks.getSelectedValues().length > 1) {
-						makeTaskPanel
-								.gettaskStatus()
-								.setText(
-										"Multiple tasks selected. Can only change status.");
-						makeTaskPanel.gettaskFieldPane().setEnabled(false);
-						makeTaskPanel.gettaskField().setEnabled(false);
-						makeTaskPanel.gettaskName().setEnabled(false);
-						makeTaskPanel.gettaskComplete().setSelected(false);
-						makeTaskPanel.getuserAssigned().setEnabled(false);
-						makeTaskPanel.gettaskField().setText("");
-						makeTaskPanel.gettaskName().setText("");
-						makeTaskPanel.gettaskField().setBackground(
-								makeTaskPanel.getBackground());
-						makeTaskPanel.gettaskName().setBackground(
-								makeTaskPanel.getBackground());
-					} else {
-						makeTaskPanel
-								.gettaskStatus()
-								.setText(
-										"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
-						makeTaskPanel.gettaskFieldPane().setEnabled(true);
-						makeTaskPanel.gettaskField().setEnabled(true);
-						makeTaskPanel.gettaskName().setEnabled(true);
-						makeTaskPanel.getuserAssigned().setEnabled(true);
-						makeTaskPanel.gettaskField().setText(
-								getSingleSelectedTask().getDescription());
-						makeTaskPanel.gettaskName().setText(
-								getSingleSelectedTask().getName());
-						makeTaskPanel.gettaskComplete().setSelected(
-								getSingleSelectedTask().isCompleted());
-						makeTaskPanel.gettaskField().setBackground(Color.white);
-						makeTaskPanel.gettaskName().setBackground(Color.white);
-					}
+		if(requirement.getStatus() != Status.DELETED) {
+			//Set the action of the save button to the default (create new task)
+			makeTaskPanel.getAddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView, tasks)));
+
+
+			//Listen for user clicking on tasks
+			tasks.addMouseListener(new MouseAdapter() { 
+				@Override
+				public void mouseClicked(MouseEvent evt) {
+					updateTaskView(); //Update the task view, will change based on number of tasks clicked (0,1,multiple)
 				}
-			}
-		});
+			});
 
-		// TODO: Provide listeners
-		makeTaskPanel.gettaskField().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (makeTaskPanel.gettaskField().getText().trim().equals("")
-						&& tasks.getSelectedValues().length == 0)
-					makeTaskPanel.getaddTask().setEnabled(false);
-				else if (!makeTaskPanel.gettaskName().getText().trim()
-						.equals(""))
-					makeTaskPanel.getaddTask().setEnabled(true);
-			}
-		});
+			//		Timer ensures right fields are enabled/disabled, but is sort of sketchy
+			//		int delay = 1000; // Setting up timer, delay for 1 sec
+			//		int period = 1000; // repeat every 1 sec
+			//		Timer timer = new Timer();
+			//		timer.scheduleAtFixedRate(new TimerTask()
+			//		{
+			//			public void run()
+			//			{
+			//				if(requirement.getStatus() != Status.DELETED)
+			//					updateTaskViewTime(); //Update the view periodically. Used due to swing clicking buggy
+			//			}
+			//		}, delay, period);
 
-		makeTaskPanel.gettaskName().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (makeTaskPanel.gettaskName().getText().trim().equals("")
-						&& tasks.getSelectedValues().length == 0)
-					makeTaskPanel.getaddTask().setEnabled(false);
-				else if (!makeTaskPanel.gettaskField().getText().trim()
-						.equals(""))
-					makeTaskPanel.getaddTask().setEnabled(true);
-			}
-		});
+			
+			//Make sure save button is unavailable if name field is empty
+			makeTaskPanel.getTaskField().addKeyListener(new KeyAdapter() { 
+				//For creating a new task
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (makeTaskPanel.getTaskField().getText().trim().equals("")
+							&& tasks.getSelectedValues().length == 0)
+						makeTaskPanel.getAddTask().setEnabled(false);
+					else if (!makeTaskPanel.getTaskName().getText().trim()
+							.equals(""))
+						makeTaskPanel.getAddTask().setEnabled(true);
+				}
+			});
+			
+			//Make sure save button is unavailable if desc field is empty
+			//for creating a new task
+			makeTaskPanel.getTaskName().addKeyListener(new KeyAdapter() { 
+				@Override                                                 
+				public void keyReleased(KeyEvent e) {
+					if (makeTaskPanel.getTaskName().getText().trim().equals("")
+							&& tasks.getSelectedValues().length == 0)
+						makeTaskPanel.getAddTask().setEnabled(false);
+					else if (!makeTaskPanel.getTaskField().getText().trim()
+							.equals(""))
+						makeTaskPanel.getAddTask().setEnabled(true);
+				}
+			});
+
+		}else{
+			//Requirement is set to delted, so disable all of the fields
+			makeTaskPanel.getTaskFieldPane().setEnabled(false);
+			makeTaskPanel.getTaskField().setEnabled(false);
+			makeTaskPanel.getTaskName().setEnabled(false);
+			makeTaskPanel.getUserAssigned().setEnabled(false);
+			makeTaskPanel.getAddTask().setEnabled(false);
+			makeTaskPanel.getTaskStatus().setText("");
+
+			makeTaskPanel.getTaskField().setBackground(makeTaskPanel.getBackground());
+			makeTaskPanel.getTaskName().setBackground(makeTaskPanel.getBackground());
+		}
 
 	}
 
 	/**
+	 * updateTaskView
+	 * 
+	 * currently not used. Would be called by the timer to update the view task
+	 * 
+	 */
+	private void updateTaskView(){
+		if(requirement.getStatus() != Status.DELETED){
+			makeTaskPanel.getAddTask().setAction(
+					new SaveTaskAction(new SaveTaskController(
+							makeTaskPanel, requirement, parentView, tasks), tasks
+							.getSelectedValues()));
+
+			if (tasks.getSelectedValues().length == 0) {
+				makeTaskPanel
+				.getTaskStatus()
+				.setText(
+						"No tasks selected. Fill name and description to create a new one.");
+				makeTaskPanel.getTaskComplete().setEnabled(false);
+				makeTaskPanel.getTaskComplete().setSelected(false);
+				makeTaskPanel.getUserAssigned().setEnabled(true);
+				makeTaskPanel.getTaskField().setText("");
+				makeTaskPanel.getTaskName().setText("");
+				makeTaskPanel.getTaskField().setBackground(Color.white);
+				makeTaskPanel.getTaskName().setBackground(Color.white);
+				if (makeTaskPanel.getTaskName().getText().trim().equals("")
+						|| makeTaskPanel.getTaskField().getText().trim()
+						.equals(""))
+					makeTaskPanel.getAddTask().setEnabled(false);
+			} else {
+				makeTaskPanel.getTaskComplete().setEnabled(true);
+				if (tasks.getSelectedValues().length > 1) {
+					makeTaskPanel
+					.getTaskStatus()
+					.setText(
+							"Multiple tasks selected. Can only change status.");
+					makeTaskPanel.getTaskFieldPane().setEnabled(false);
+					makeTaskPanel.getTaskField().setEnabled(false);
+					makeTaskPanel.getTaskName().setEnabled(false);
+					makeTaskPanel.getTaskComplete().setSelected(false);
+					makeTaskPanel.getUserAssigned().setEnabled(false);
+					makeTaskPanel.getTaskField().setText("");
+					makeTaskPanel.getTaskName().setText("");
+					makeTaskPanel.getTaskField().setBackground(
+							makeTaskPanel.getBackground());
+					makeTaskPanel.getTaskName().setBackground(
+							makeTaskPanel.getBackground());
+				} else {
+					makeTaskPanel
+					.getTaskStatus()
+					.setText(
+							"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
+					makeTaskPanel.getTaskFieldPane().setEnabled(true);
+					makeTaskPanel.getTaskField().setEnabled(true);
+					makeTaskPanel.getTaskName().setEnabled(true);
+					makeTaskPanel.getUserAssigned().setEnabled(true);
+					makeTaskPanel.getTaskField().setText(
+							getSingleSelectedTask().getDescription());
+					makeTaskPanel.getTaskName().setText(
+							getSingleSelectedTask().getName());
+					makeTaskPanel.getTaskComplete().setSelected(
+							getSingleSelectedTask().isCompleted());
+					makeTaskPanel.getTaskField().setBackground(Color.white);
+					makeTaskPanel.getTaskName().setBackground(Color.white);
+				}
+			}
+		}
+	}
+
+	/**
+	 * updateTaskViewTime
+	 * 
+	 * currently not used. Would be called by the timer to update the view task 
+	 * and populate the fields
+	 * 
+	 */
+	private void updateTaskViewTime(){
+		if(requirement.getStatus() != Status.DELETED){
+			makeTaskPanel.getAddTask().setAction(
+					new SaveTaskAction(new SaveTaskController(
+							makeTaskPanel, requirement, parentView, tasks), tasks
+							.getSelectedValues()));
+
+			if (tasks.getSelectedValues().length == 0) {
+				makeTaskPanel
+				.getTaskStatus()
+				.setText(
+						"No tasks selected. Fill name and description to create a new one.");
+				makeTaskPanel.getTaskComplete().setEnabled(false);
+				makeTaskPanel.getUserAssigned().setEnabled(true);
+				makeTaskPanel.getTaskField().setBackground(Color.white);
+				makeTaskPanel.getTaskName().setBackground(Color.white);
+				if (makeTaskPanel.getTaskName().getText().trim().equals("")
+						|| makeTaskPanel.getTaskField().getText().trim()
+						.equals(""))
+					makeTaskPanel.getAddTask().setEnabled(false);
+			} else {
+				makeTaskPanel.getTaskComplete().setEnabled(true);
+				if (tasks.getSelectedValues().length > 1) {
+					makeTaskPanel
+					.getTaskStatus()
+					.setText(
+							"Multiple tasks selected. Can only change status.");
+					makeTaskPanel.getTaskFieldPane().setEnabled(false);
+					makeTaskPanel.getTaskField().setEnabled(false);
+					makeTaskPanel.getTaskName().setEnabled(false);
+					makeTaskPanel.getUserAssigned().setEnabled(false);
+					makeTaskPanel.getTaskField().setBackground(
+							makeTaskPanel.getBackground());
+					makeTaskPanel.getTaskName().setBackground(
+							makeTaskPanel.getBackground());
+				} else {
+					makeTaskPanel
+					.getTaskStatus()
+					.setText(
+							"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
+					makeTaskPanel.getTaskFieldPane().setEnabled(true);
+					makeTaskPanel.getTaskField().setEnabled(true);
+					makeTaskPanel.getTaskName().setEnabled(true);
+					makeTaskPanel.getUserAssigned().setEnabled(true);
+					makeTaskPanel.getTaskField().setBackground(Color.white);
+					makeTaskPanel.getTaskName().setBackground(Color.white);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
 	 * Method to populate this object's list of tasks from the current
 	 * requirement's list of tasks
 	 */

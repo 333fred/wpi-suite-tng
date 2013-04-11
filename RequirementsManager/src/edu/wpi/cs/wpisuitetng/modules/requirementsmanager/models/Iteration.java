@@ -242,12 +242,8 @@ public class Iteration extends AbstractModel {
 	 * @throws InvalidDateException
 	 *             if the start date is after the end date
 	 */
-	public void setStartDate(Date startDate) throws InvalidDateException {
-		// if (endDate == null || startDate.compareTo(endDate) < 0) {
+	public void setStartDate(Date startDate){
 		this.startDate = startDate;
-		// } else {
-		// throw new InvalidDateException(startDate);
-		// }
 	}
 
 	/**
@@ -266,12 +262,8 @@ public class Iteration extends AbstractModel {
 	 * @throws InvalidDateException
 	 *             if the end date is before the start date
 	 */
-	public void setEndDate(Date endDate) throws InvalidDateException {
-		// if (startDate == null || endDate.compareTo(startDate) > 0) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-		// } else {
-		// throw new InvalidDateException(endDate);
-		// }
 	}
 
 	/**

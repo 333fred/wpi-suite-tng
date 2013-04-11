@@ -144,8 +144,7 @@ public class MainTabController {
 
 	// TODO Document
 	public TabWrap addStatTab() {
-		StatView statView = new StatView();
-		return addTab("Statistics", new ImageIcon(), statView, "Statistics");
+		return addTab("Statistics", new ImageIcon(), StatView.getInstance(), "Statistics");
 	}
 
 	public TabWrap addEditIterationTab(Iteration iteration) {
