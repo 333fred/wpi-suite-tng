@@ -68,16 +68,18 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void responseError(int statusCode, String statusMessage) {
-		// TODO Auto-generated method stub
-		
+		this.tableView.displayEditInformation("Received " + statusCode + " error from server: "
+				+ statusMessage);
+		this.tableView.refresh();
 	}
 
 	@Override
 	public void fail(Exception exception) {
-		// TODO Auto-generated method stub
-		
+		this.tableView.displayEditInformation("Unable to complete request: "
+				+ exception.getMessage());
+		this.tableView.refresh();
 	}
 }

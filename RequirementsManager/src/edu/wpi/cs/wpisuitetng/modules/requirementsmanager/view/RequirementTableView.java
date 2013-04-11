@@ -59,6 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEditingAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveEditingTableAction;
 
 /**
  * RequirementListView is the basic GUI that will display a list of the current
@@ -103,7 +104,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	@SuppressWarnings("rawtypes")
 	private Vector<Vector> rowData;
 
-	private JTable table;
+	private RequirementsTable table;
 
 	private JButton btnEdit;
 	private JButton btnSave;
@@ -151,55 +152,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		isEditable = false;
 		
-		this.table = new JTable(rowData, columnNames) {
-			private static final long serialVersionUID = 1L;
-			//TODO: How to get the ctual number for this?
-			private boolean[] editedRows = new boolean[100];
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				//Only the "Estimate" column is currently editable
-				return (isEditable && super.convertColumnIndexToModel(column) == 6);
-			};
-			
-			@Override
-			public void setValueAt(Object value, int row, int col) {
-				//The estimate column should only accept non-negative integers
-				try {
-					if (super.convertColumnIndexToModel(col) == 6) {
-						int i = Integer.parseInt((String) value);
-						if (i < 0 || i == Integer.parseInt((String)super.getValueAt(row, col))) {
-							return;
-						} else {
-							//we save the parsed int to removed leading 0s
-							editedRows[convertRowIndexToModel(row)] = true;
-							selectionModel.removeSelectionInterval(convertRowIndexToModel(row),convertRowIndexToModel(row));
-							super.setValueAt(Integer.toString(i), row, col);
-						}
-					} else {
-						editedRows[super.convertRowIndexToModel(row)] = true;
-						super.setValueAt(value, row, col);
-					}
-				} catch (NumberFormatException e) {
-					return;
-				}
-			}
-			
-			@Override
-			public TableCellRenderer getCellRenderer(int row, int column) {
-	            if (editedRows[super.convertRowIndexToModel(row)]) {
-	                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-	                renderer.setBackground(Color.yellow);
-	                return renderer;
-	            } else {
-	                return super.getCellRenderer(row, column);
-	            }
-	        }
-			
-			public void clearUpdated() {
-				editedRows = new boolean[100];
-			}
-		};
+		this.table = new RequirementsTable(rowData, columnNames, this);
 				
 		btnEdit = new JButton("Enable Editing");
 		btnSave = new JButton("Save Changes");
@@ -215,7 +168,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		btnSave.setEnabled(false);
 		//TODO: Set this button's action
 		
-		btnEdit.setAction(new EnableEditingAction(this));
 		
 		SpringLayout editPanelLayout = new SpringLayout();
 		JPanel editPanel = new JPanel(editPanelLayout);
@@ -282,6 +234,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		sorter.setComparator(3, PriorityComparator);
 		sorter.setComparator(5, IterationStringComparator);
 		table.setRowSorter(sorter);
+		
+		// TODO: MOVE
+		btnSave.setAction(new SaveEditingTableAction(this, sorter));
+		btnEdit.setAction(new EnableEditingAction(this, sorter));
 
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
@@ -315,6 +271,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				event.consume();
 			}
 		});
+		
 
 	}
 
@@ -637,7 +594,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	/**
 	 * @return the table
 	 */
-	public JTable getTable() {
+	public RequirementsTable getTable() {
 		return table;
 	}
 	
@@ -649,12 +606,12 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	// sets the buttons enabled/disabled depending on the isEditable state
 	public void changeButtonStatus() {
 		if (isEditable) {
-			btnEdit.setEnabled(false);
+			btnEdit.setText("Discard Changes");
 			btnSave.setEnabled(true);
 		}
 		else {
-			btnEdit.setEnabled(false);
-			btnSave.setEnabled(true);
+			btnEdit.setText("Enable Editing");
+			btnSave.setEnabled(false);
 		}
 	}
 	
