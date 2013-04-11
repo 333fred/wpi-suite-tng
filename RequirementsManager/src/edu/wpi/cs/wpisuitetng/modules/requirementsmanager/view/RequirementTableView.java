@@ -456,7 +456,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		System.out.println("We are refreshing the table view");
 
 		if (isEditable) {
-			Object[] options = { "Discard Changes", "Cancel" };
+			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
 					.showOptionDialog(
 							this,
@@ -467,6 +467,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							options[1]);
 
 			if (res == 0) {
+				btnSave.getAction().actionPerformed(null);
+			} else if (res == 1) {
 				btnEdit.getAction().actionPerformed(null);
 			} else {
 
