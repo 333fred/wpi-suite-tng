@@ -8,6 +8,7 @@
 *
 * Contributors:
 * Maddie Burris
+* Chris Keane
 * 
 *******************************************************************************/
 
@@ -22,8 +23,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 
 /**
-* class to contain data on how many requirements are assigned to each iteration
-* note that user assignees here are stored as strings, as they are in Requirements themselves
+* class to contain data on how many tasks are assigned to each requirement
+* note that Tasks here are stored in lists, as they are in classes themselves
 *
 */
 
@@ -35,10 +36,10 @@ public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 	@Override
 	public void update(){	
 		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?		
-		// TODO: replace with a method to get all users, record them as zero-counts in the map, and then simply work through and increment
+		
 		// for each requirement
 		for(Requirement requirement: requirements){		
-			// for each set of assigned users
+			// get the length of the list of tasks
 			data.put(requirement.getName(), requirement.getTasks().size());
 		}	
 	}

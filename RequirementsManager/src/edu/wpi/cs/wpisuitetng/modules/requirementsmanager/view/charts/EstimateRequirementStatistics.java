@@ -21,9 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
-* class to contain data on how many requirements are assigned to each iteration
-* note that user assignees here are stored as strings, as they are in Requirements themselves
-*
+* class to contain data on estimate for each requirements 
 */
 
 
@@ -37,10 +35,10 @@ public class EstimateRequirementStatistics extends AbstractRequirementStatistics
 	
 		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
 		
-		// TODO: replace with a method to get all users, record them as zero-counts in the map, and then simply work through and increment
+		
 		// for each requirement
 		for(Requirement requirement: requirements){
-			
+			//get the estimate for each requirement
 			data.put(requirement.getName(), requirement.getEstimate());
 		
 		}
