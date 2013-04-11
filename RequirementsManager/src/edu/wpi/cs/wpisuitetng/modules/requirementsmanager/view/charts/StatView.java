@@ -85,7 +85,7 @@ public class StatView extends Tab implements ActionListener {
 		JLabel lblStatisticType = new JLabel("Statistic Type");
 		JLabel lblChartType = new JLabel("Chart Type");
 		
-		String[] availableStatisticTypes = {"Status","Assignees","Iterations"};
+		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Estimates", "Effort"};
 		comboBoxStatisticType = new JComboBox(availableStatisticTypes);
 	    comboBoxStatisticType.addActionListener(this);
 		
@@ -186,8 +186,11 @@ public class StatView extends Tab implements ActionListener {
 			updateChartDataType(DataType.ITERATION);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Assignees")) {
 			updateChartDataType(DataType.ASSIGNEE);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Estimates")) {
+			updateChartDataType(DataType.ESTIMATES);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Effort")) {
+			updateChartDataType(DataType.EFFORT);
 		}
-		
 		this.updateChart();
 		
     }
@@ -229,8 +232,7 @@ public class StatView extends Tab implements ActionListener {
 	}
 	
 	private enum DataType {
-		STATUS, ITERATION, ASSIGNEE
-	}
+		STATUS, ITERATION, ASSIGNEE	, ESTIMATES, EFFORT}
 	
 	/**
 	 * method to update the displayed chart based on the user's selection
@@ -255,6 +257,13 @@ public class StatView extends Tab implements ActionListener {
 				stats = new AssigneeRequirementStatistics();
 				break;
 				
+			case ESTIMATES:
+				stats = new EstimateRequirementStatistics();
+				break;
+				
+			case EFFORT:
+				stats = new ActualRequirementStatistics();
+				break;
 			default:
 				// if you encounter this default statement, it means that new values have been
 				// added to the DataType enum, but nobody has modified this poor little method
