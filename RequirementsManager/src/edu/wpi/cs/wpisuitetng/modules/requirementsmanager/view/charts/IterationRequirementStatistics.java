@@ -58,6 +58,11 @@ public class IterationRequirementStatistics extends AbstractRequirementStatistic
 	
 	}
 	
+	public JFreeChart buildLineChart(){
+		this.update();
+		return this.buildLineChart("Requirements by Iteration", "Iteration", "Requirements");
+	}
+	
 	public JFreeChart buildPieChart(){
 		this.update();
 		return this.buildPieChart("Requirements by Iteration");
