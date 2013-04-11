@@ -48,7 +48,7 @@ public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 	}
 	
 	public JFreeChart buildBarChart(){
-		return this.buildBarChart("Requirements by Tasks", "Tasks", "Requirements");
+		return this.buildBarChart("Requirements by Task", "Tasks", "Requirements");
 	}
 
 }

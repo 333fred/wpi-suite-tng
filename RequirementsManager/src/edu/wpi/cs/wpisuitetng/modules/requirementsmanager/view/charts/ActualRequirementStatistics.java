@@ -52,7 +52,7 @@ public class ActualRequirementStatistics extends AbstractRequirementStatistics {
 	}
 	
 	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Estimates by Actual Effort", "Requirements", "Effort");
+		JFreeChart barChart = this.buildBarChart("Requirements by Actual Effort", "Requirements", "Effort");
 		return barChart;
 	}
 
