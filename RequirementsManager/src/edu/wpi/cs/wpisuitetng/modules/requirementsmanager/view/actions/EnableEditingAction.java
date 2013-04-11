@@ -44,8 +44,8 @@ public class EnableEditingAction extends AbstractAction {
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
 			tableView.getTable().setRowSorter(sorter);
-			tableView.refresh();
 			tableView.getTable().clearUpdated();
+			tableView.refresh();
 		} else {
 
 			// Turn off row sorting (it breaks editing right now)

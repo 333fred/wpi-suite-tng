@@ -232,6 +232,23 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				return 0; // dates are equal
 			}
 		};
+		
+		Comparator<String> numberComparator = new Comparator<String>() {
+			public int compare(String s1, String s2) {
+				int Estimate1 = Integer.parseInt(s1);
+				int Estimate2 = Integer.parseInt(s2);
+				
+				if (Estimate1 < Estimate2) {
+					return -1;
+				}
+				else if (Estimate1 > Estimate2) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
+			}
+		};
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
 				table.getModel());
@@ -244,6 +261,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		// was failing for me for no reason)
 		sorter.setComparator(3, PriorityComparator);
 		sorter.setComparator(5, IterationStringComparator);
+		sorter.setComparator(6, numberComparator);
+		sorter.setComparator(7, numberComparator);
 		table.setRowSorter(sorter);
 
 		// TODO: MOVE
