@@ -52,4 +52,9 @@ public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 		return this.buildBarChart("Requirements by Task", "Tasks", "Requirements");
 	}
 
+	@Override
+	public JFreeChart buildLineChart() {
+		return this.buildLineChart("Requirements by Task", "Tasks", "Requirements");
+	}
+
 }
