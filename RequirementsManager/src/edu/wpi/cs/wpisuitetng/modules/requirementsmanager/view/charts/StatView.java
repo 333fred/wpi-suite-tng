@@ -42,6 +42,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.VelocityIterationStatistics;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.TaskRequirementStatistics;
 
 @SuppressWarnings("serial")
 public class StatView extends Tab implements ActionListener {
