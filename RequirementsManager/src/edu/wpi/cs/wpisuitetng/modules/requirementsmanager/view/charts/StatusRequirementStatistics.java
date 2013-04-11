@@ -51,5 +51,10 @@ public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 		this.update();
 		return this.buildBarChart("Requirements by Status", "Status", "Requirements");
 	}
+	
+	public JFreeChart buildLineChart(){
+		this.update();
+		return this.buildLineChart("Requirements by Status", "Status", "Requirements");
+	}
 
 }

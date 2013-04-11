@@ -45,10 +45,10 @@ public AbstractRequirementStatistics(){
 		return pieDataset;
 		}
 
-	public CategoryDataset toCategoryDataset(){
+	public CategoryDataset toCategoryDataset(String category){
 		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
 		for(String key : data.keySet()){
-			categoryDataset.setValue(data.get(key), "Requirements", key);
+			categoryDataset.setValue(data.get(key), category, key);
 		}
 		return categoryDataset;		
 	}
@@ -56,13 +56,20 @@ public AbstractRequirementStatistics(){
 	public abstract JFreeChart buildPieChart();
 
 	public abstract JFreeChart buildBarChart();
+	
+	public abstract JFreeChart buildLineChart();
+	
 
 	protected JFreeChart buildPieChart(String title){
-		return ChartFactory.createPieChart(title, this.toPieDataset(), true, false, false);
+		return ChartFactory.createPieChart3D(title, this.toPieDataset(), true, false, false);
 	}
 
 	protected JFreeChart buildBarChart(String title, String category,String axisLabel){
-		return ChartFactory.createBarChart(title, category, axisLabel, this.toCategoryDataset(), PlotOrientation.HORIZONTAL, true, false, false);
+		return ChartFactory.createBarChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, true, false, false);
+	}
+	
+	protected JFreeChart buildLineChart(String title, String category, String axisLabel){
+		return ChartFactory.createLineChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, false, false, false);
 	}
 
 }

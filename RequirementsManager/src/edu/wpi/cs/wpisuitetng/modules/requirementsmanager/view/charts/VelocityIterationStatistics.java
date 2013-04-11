@@ -8,7 +8,7 @@
 *
 * Contributors:
 * *Chris Keane
-* *Maddie Burris
+*
 *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
@@ -17,16 +17,19 @@ import java.util.List;
 
 import org.jfree.chart.JFreeChart;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
-* class to contain data on how effort spent on requirements
-* 
+* class to contain data on how many requirements are assigned to each iteration
+* note that user assignees here are stored as strings, as they are in Requirements themselves
+*
 */
 
 
-public class ActualRequirementStatistics extends AbstractRequirementStatistics {
+public class VelocityIterationStatistics extends AbstractRequirementStatistics {
 
 	/* (non-Javadoc)
 	* @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
@@ -34,13 +37,11 @@ public class ActualRequirementStatistics extends AbstractRequirementStatistics {
 	@Override
 	public void update(){
 	
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
+		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();	// refresh list of iterations
 		
-		
-		// for each requirement
-		for(Requirement requirement: requirements){
-			//get amount of effort spent per requirement
-			data.put(requirement.getName(), requirement.getEffort());
+		for(Iteration anIteration: iterations){
+			
+			data.put(anIteration.getName(), anIteration.getEstimate());
 		
 		}
 	
@@ -56,7 +57,7 @@ public class ActualRequirementStatistics extends AbstractRequirementStatistics {
 	}
 	
 	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Requirements by Actual Effort", "Requirements", "Effort");
+		JFreeChart barChart = this.buildBarChart("Estimates by Actual Effort", "Requirements", "Effort");
 		return barChart;
 	}
 

@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
@@ -34,7 +35,10 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot3D;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
@@ -46,6 +50,7 @@ public class StatView extends Tab implements ActionListener {
 	private JComboBox comboBoxStatisticType;
 	private JRadioButton makePieRadio;
 	private JRadioButton makeBarRadio;
+	private JRadioButton makeLineRadio;
 	/*
 	private JButton generateChart;
 	*/
@@ -85,7 +90,8 @@ public class StatView extends Tab implements ActionListener {
 		JLabel lblStatisticType = new JLabel("Statistic Type");
 		JLabel lblChartType = new JLabel("Chart Type");
 		
-		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Estimates", "Effort", "Tasks"};
+
+		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Estimates", "Effort", "Tasks","Velocity"};
 		comboBoxStatisticType = new JComboBox(availableStatisticTypes);
 	    comboBoxStatisticType.addActionListener(this);
 		
@@ -99,6 +105,11 @@ public class StatView extends Tab implements ActionListener {
 		makeBarRadio.setActionCommand("Bar Chart");
 		makeBarRadio.addActionListener(this);
 		
+		makeLineRadio = new JRadioButton("Line Chart");
+		makeLineRadio.setMnemonic(KeyEvent.VK_B);
+		makeLineRadio.setActionCommand("Line Chart");
+		makeLineRadio.addActionListener(this);
+		
 		/*
 		generateChart = new JButton("Generate Chart");
 		generateChart.setMnemonic(KeyEvent.VK_ENTER);
@@ -109,6 +120,7 @@ public class StatView extends Tab implements ActionListener {
 		ButtonGroup group = new ButtonGroup();
 		group.add(makePieRadio);
 		group.add(makeBarRadio);
+		group.add(makeLineRadio);
 		setSelectedItems();
 		
 		sidePanel.add(lblStatisticType);
@@ -116,6 +128,7 @@ public class StatView extends Tab implements ActionListener {
 		sidePanel.add(comboBoxStatisticType);
 		sidePanel.add(makePieRadio);
 		sidePanel.add(makeBarRadio);
+		sidePanel.add(makeLineRadio);
 		/*
 		sidePanel.add(generateChart);
 		*/
@@ -134,6 +147,9 @@ public class StatView extends Tab implements ActionListener {
 		
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeBarRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makePieRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeBarRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
+		
+		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeLineRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makeBarRadio);
+		sidePanelLayout.putConstraint(SpringLayout.WEST,makeLineRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
 		/*
 		// TODO: ascertain that this is an acceptable placement for the generateChart button
@@ -180,6 +196,8 @@ public class StatView extends Tab implements ActionListener {
 			updateChartType(ChartType.PIE);
 		} else if (source.equals("Bar Chart")) {
 			updateChartType(ChartType.BAR);
+		} else if (source.equals("Line Chart")) {
+			updateChartType(ChartType.LINE);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Status")) {
 			updateChartDataType(DataType.STATUS);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Iterations")) {
@@ -190,6 +208,8 @@ public class StatView extends Tab implements ActionListener {
 			updateChartDataType(DataType.ESTIMATES);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Effort")) {
 			updateChartDataType(DataType.EFFORT);
+		} else if (comboBoxStatisticType.getSelectedItem().equals("Velocity")) {
+			updateChartDataType(DataType.VELOCITY);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Tasks")) {
 			updateChartDataType(DataType.TASK);
 		}
@@ -203,11 +223,17 @@ public class StatView extends Tab implements ActionListener {
 		case PIE:
 			makePieRadio.setSelected(true);
 			makeBarRadio.setSelected(false);
+			makeLineRadio.setSelected(false);
 			break;
 		case BAR:
 			makeBarRadio.setSelected(true);
 			makePieRadio.setSelected(false);
+			makeLineRadio.setSelected(false);
 			break;
+		case LINE:
+			makeBarRadio.setSelected(false);
+			makePieRadio.setSelected(false);
+			makeLineRadio.setSelected(true);
 		}
 		comboBoxStatisticType.setSelectedItem(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().toLowerCase()));
 		System.out.println(this.chartDataType.toString().substring(0, 1).concat(this.chartDataType.toString().substring(1).toLowerCase()));
@@ -230,11 +256,11 @@ public class StatView extends Tab implements ActionListener {
 	}
 	
 	private enum ChartType {
-		BAR, PIE
+		BAR, PIE, LINE
 	}
 	
 	private enum DataType {
-		STATUS, ITERATION, ASSIGNEE	, ESTIMATES, EFFORT, TASK}
+		STATUS, ITERATION, ASSIGNEE	, ESTIMATES, EFFORT, TASK, VELOCITY}
 	
 	/**
 	 * method to update the displayed chart based on the user's selection
@@ -266,6 +292,9 @@ public class StatView extends Tab implements ActionListener {
 			case EFFORT:
 				stats = new ActualRequirementStatistics();
 				break;
+			case VELOCITY:
+				stats = new VelocityIterationStatistics();
+				break;
 			case TASK:
 				stats = new TaskRequirementStatistics();
 				break;
@@ -288,12 +317,19 @@ public class StatView extends Tab implements ActionListener {
 				
 			case PIE:
 				chart = stats.buildPieChart();
-				PiePlot piePlot = (PiePlot) chart.getPlot();
+				PiePlot3D piePlot = (PiePlot3D) chart.getPlot();
 				piePlot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
 				piePlot.setNoDataMessage("No data available");
 				piePlot.setCircular(true);
 				piePlot.setLabelGap(0.02);
+				piePlot.setForegroundAlpha(0.7f);
+				
 				break;
+				
+			case LINE:
+				chart = stats.buildLineChart();
+				CategoryPlot linePlot = (CategoryPlot) chart.getPlot();
+				linePlot.setNoDataMessage("No data available");
 				
 			default:
 				// if you encounter this default statement, it means that new values have been

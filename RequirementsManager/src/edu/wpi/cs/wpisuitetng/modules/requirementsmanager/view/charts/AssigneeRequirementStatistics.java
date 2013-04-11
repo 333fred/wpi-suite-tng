@@ -52,6 +52,11 @@ public class AssigneeRequirementStatistics extends AbstractRequirementStatistics
 		}	
 	}
 	
+	public JFreeChart buildLineChart(){
+		this.update();
+		return this.buildLineChart("Requirements by User", "Requirement", "User");
+	}
+	
 	public JFreeChart buildPieChart(){
 		return this.buildPieChart("Requirements by User");
 	}

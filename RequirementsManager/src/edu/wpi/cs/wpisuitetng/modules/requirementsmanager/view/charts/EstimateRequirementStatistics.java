@@ -54,4 +54,9 @@ public class EstimateRequirementStatistics extends AbstractRequirementStatistics
 		return barChart;
 	}
 
+	public JFreeChart buildLineChart(){
+		this.update();
+		return this.buildLineChart("Estimates by Requirements", "Requirements", "Estimate");
+	}
+
 }
