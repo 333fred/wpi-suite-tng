@@ -1110,7 +1110,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			                    "Cancel"};
 			int res = JOptionPane.showOptionDialog(this,
 			    "There are unsaved changes, are you sure you want to continue?",
-			    "Confirm Close",
+			    requirement.getName() + ": Confirm Close",
 			    JOptionPane.YES_NO_CANCEL_OPTION,
 			    JOptionPane.QUESTION_MESSAGE,
 			    null,

@@ -454,10 +454,27 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
 		System.out.println("We are refreshing the table view");
-		
-		getRequirementsFromServer();
-		getIterationsFromServer();
 
+		if (isEditable) {
+			Object[] options = { "Discard Changes", "Cancel" };
+			int res = JOptionPane
+					.showOptionDialog(
+							this,
+							"There are unsaved changes, You need to discart them before you can refresh",
+							"Requirements: Confirm Refresh",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[1]);
+
+			if (res == 0) {
+				btnEdit.getAction().actionPerformed(null);
+			} else {
+
+			}
+		} else {
+			getRequirementsFromServer();
+			getIterationsFromServer();
+		}
 
 		tabController.refreshIterationTree();
 	}
@@ -637,17 +654,19 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public void setEditable(boolean editable) {
 		this.isEditable = editable;
 	}
-	
+
 	public boolean onLostFocus() {
 		if (isEditable) {
-			Object[] options = {"Save Changes", "Discard Changes", "Cancel" };
+			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
 					.showOptionDialog(
 							this,
-							"There are unsaved changes, either discard them, or save them befor continuing",
-							"Confirm Refresh", JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-			
+							"There are unsaved changes, either discard them, or save them before continuing",
+							"Requirements: Confirm Changes",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[2]);
+
 			if (res == 0) {
 				btnSave.getAction().actionPerformed(null);
 			} else if (res == 1) {
@@ -657,7 +676,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			}
 		}
 		return true;
-		
+
 	}
 
 }
