@@ -49,15 +49,15 @@ public class VelocityIterationStatistics extends AbstractRequirementStatistics {
 	
 	public JFreeChart buildLineChart(){
 		this.update();
-		return this.buildLineChart("Requirements by Actual Effort", "Requirment", "Effort");
+		return this.buildLineChart("Iterations by Actual Effort", "Iteration", "Effort");
 	}
 	
 	public JFreeChart buildPieChart(){
-		return this.buildPieChart("Requirements by Actual Effort");
+		return this.buildPieChart("Iterations by Actual Effort");
 	}
 	
 	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Estimates by Actual Effort", "Requirements", "Effort");
+		JFreeChart barChart = this.buildBarChart("Iterations by Actual Effort", "Iteration", "Effort");
 		return barChart;
 	}
 

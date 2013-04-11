@@ -62,7 +62,7 @@ public class AssigneeRequirementStatistics extends AbstractRequirementStatistics
 	}
 	
 	public JFreeChart buildBarChart(){
-		return this.buildBarChart("Requirements by User", "User", "Requirements");
+		return this.buildBarChart("Requirements by User", "Requirement", "User");
 	}
 
 }
