@@ -93,7 +93,8 @@ public class StatView extends Tab implements ActionListener {
 		JLabel lblChartType = new JLabel("Chart Type");
 		
 
-		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Estimates", "Effort", "Tasks","Velocity"};
+		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Velocity"};
+		//TODO: Add Estimates, Effort, Tasks charts for future use.
 		comboBoxStatisticType = new JComboBox(availableStatisticTypes);
 	    comboBoxStatisticType.addActionListener(this);
 		
