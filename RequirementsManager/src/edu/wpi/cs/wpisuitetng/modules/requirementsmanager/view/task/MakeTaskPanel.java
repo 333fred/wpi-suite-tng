@@ -84,6 +84,23 @@ public class MakeTaskPanel extends JPanel {
 		taskName.setBorder((new JTextField()).getBorder());
 		taskName.setName("Name");
 		taskName.setDisabledTextColor(Color.GRAY);
+		
+		taskName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						taskDescription.transferFocus();
+					} else {
+						taskDescription.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+					event.consume();
+				}
+			}
+		});
 
 		//setup the task description field
 		taskDescription = new JTextArea();
