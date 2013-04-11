@@ -39,7 +39,10 @@ public class RequirementsTable extends JTable {
 	@Override
 	public boolean isCellEditable(int row, int column) {
 		//Only the "Estimate" column is currently editable
-		return (view.isEditable() && super.convertColumnIndexToModel(column) == 6);
+		String status = (String)super.getModel().getValueAt(convertRowIndexToModel(row), 4);
+		boolean statusEditable = !status.equals("In Progress") && !status.equals("Deleted") && !status.equals("Complete");
+
+		return (view.isEditable() && super.convertColumnIndexToModel(column) == 6 && statusEditable);
 	};
 	
 	@Override
