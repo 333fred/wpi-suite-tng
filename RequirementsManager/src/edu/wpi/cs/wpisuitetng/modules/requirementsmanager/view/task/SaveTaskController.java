@@ -122,13 +122,13 @@ public class SaveTaskController {
 		view.getTaskComplete().setEnabled(false);
 		view.getTaskComplete().setSelected(false);
 		view.getUserAssigned().setEnabled(true);
+		view.getTaskField().setEnabled(true);
+		view.getTaskName().setEnabled(true);
 		view.getTaskField().setText("");
 		view.getTaskName().setText("");
 		view.getTaskField().setBackground(Color.white);
 		view.getTaskName().setBackground(Color.white);
-		if (view.getTaskName().getText().trim().equals("")
-				|| view.getTaskField().getText().trim().equals(""))
-			view.getAddTask().setEnabled(false);
+		view.getAddTask().setEnabled(false);
 
 	}
 }
