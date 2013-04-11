@@ -7,7 +7,8 @@
 * http://www.eclipse.org/legal/epl-v10.html
 *
 * Contributors:
-*			 Alex Gorowara
+*	Alex Gorowara
+*	Steven Kordell
 *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
@@ -21,7 +22,12 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 public abstract class AbstractRequirementStatistics {
 
@@ -65,11 +71,19 @@ public AbstractRequirementStatistics(){
 	}
 
 	protected JFreeChart buildBarChart(String title, String category,String axisLabel){
-		return ChartFactory.createBarChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, true, false, false);
+		JFreeChart chart = ChartFactory.createBarChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, true, false, false);		
+		CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
+		NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
+		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());		
+		return chart;
 	}
 	
 	protected JFreeChart buildLineChart(String title, String category, String axisLabel){
-		return ChartFactory.createLineChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, false, false, false);
+		JFreeChart chart = ChartFactory.createLineChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, false, false, false);
+		CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
+		NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
+		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		return chart;
 	}
 
 }
