@@ -465,10 +465,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 
 			if (res == 0) {
 				btnEdit.getAction().actionPerformed(null);
-			} else if (res == 1) {
-				getRequirementsFromServer();
-				getIterationsFromServer();
-			}
+			} 
 		}
 		else {			
 			getRequirementsFromServer();
