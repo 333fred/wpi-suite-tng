@@ -454,23 +454,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
 		System.out.println("We are refreshing the table view");
-		if (isEditable) {
-			Object[] options = {"Discard Changes", "Cancel" };
-			int res = JOptionPane
-					.showOptionDialog(
-							this,
-							"There are unsaved changes, either disgard them, or ignore the refresh, which will discard new changes.",
-							"Confirm Refresh", JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-	 
-			if (res == 0) {
-				btnEdit.getAction().actionPerformed(null);
-			} 
-		}
-		else {			
-			getRequirementsFromServer();
-			getIterationsFromServer();
-		}
+		
+		getRequirementsFromServer();
+		getIterationsFromServer();
+
 
 		tabController.refreshIterationTree();
 	}
@@ -649,6 +636,28 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 	public void setEditable(boolean editable) {
 		this.isEditable = editable;
+	}
+	
+	public boolean onLostFocus() {
+		if (isEditable) {
+			Object[] options = {"Save Changes", "Discard Changes", "Cancel" };
+			int res = JOptionPane
+					.showOptionDialog(
+							this,
+							"There are unsaved changes, either discard them, or save them befor continuing",
+							"Confirm Refresh", JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+			
+			if (res == 0) {
+				btnSave.getAction().actionPerformed(null);
+			} else if (res == 1) {
+				btnEdit.getAction().actionPerformed(null);
+			} else {
+				return false;
+			}
+		}
+		return true;
+		
 	}
 
 }
