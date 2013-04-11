@@ -39,8 +39,8 @@ public class EnableEditingAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 
 		// TODO Auto-generated method stub
-		if (tableView.getIsEditable()) {
-			tableView.setIsEditable(false);
+		if (tableView.isEditable()) {
+			tableView.setEditable(false);
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
 			tableView.getTable().setRowSorter(sorter);
@@ -52,7 +52,7 @@ public class EnableEditingAction extends AbstractAction {
 			tableView.getTable().setRowSorter(null);
 
 			// set isEditable to true
-			tableView.setIsEditable(true);
+			tableView.setEditable(true);
 
 			tableView.changeButtonStatus();
 

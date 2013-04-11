@@ -53,8 +53,8 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 		}
 		
 		// TODO Auto-generated method stub
-		if (tableView.getIsEditable()) {
-			tableView.setIsEditable(false);
+		if (tableView.isEditable()) {
+			tableView.setEditable(false);
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
 			tableView.getTable().setRowSorter(sorter);
