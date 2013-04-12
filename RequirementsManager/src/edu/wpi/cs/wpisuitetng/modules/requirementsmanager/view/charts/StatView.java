@@ -196,16 +196,40 @@ public class StatView extends Tab implements ActionListener {
 		//TODO: the above is what is causing the exception
 		
 		if (source.equals("Pie Chart")) {
+			if (chartDataType == DataType.VELOCITY) {
+				updateChartDataType(DataType.STATUS);
+				comboBoxStatisticType.setSelectedItem("Status");
+			}
 			updateChartType(ChartType.PIE);
+			
 		} else if (source.equals("Bar Chart")) {
+			if (chartDataType == DataType.VELOCITY) {
+				updateChartDataType(DataType.STATUS);
+				comboBoxStatisticType.setSelectedItem("Status");
+			}
 			updateChartType(ChartType.BAR);
 		} else if (source.equals("Line Chart")) {
 			updateChartType(ChartType.LINE);
+			updateChartDataType(DataType.VELOCITY);
+			comboBoxStatisticType.setSelectedItem("Velocity");
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Status")) {
+			if (chartType == ChartType.LINE) {
+				updateChartType(ChartType.PIE);
+				makePieRadio.setSelected(true);
+			}
 			updateChartDataType(DataType.STATUS);
+			
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Iterations")) {
+			if (chartType == ChartType.LINE) {
+				updateChartType(ChartType.PIE);
+				makePieRadio.setSelected(true);
+			}
 			updateChartDataType(DataType.ITERATION);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Assignees")) {
+			if (chartType == ChartType.LINE) {
+				updateChartType(ChartType.PIE);
+				makePieRadio.setSelected(true);
+			}
 			updateChartDataType(DataType.ASSIGNEE);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Estimates")) {
 			updateChartDataType(DataType.ESTIMATES);
@@ -213,6 +237,9 @@ public class StatView extends Tab implements ActionListener {
 			updateChartDataType(DataType.EFFORT);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Velocity")) {
 			updateChartDataType(DataType.VELOCITY);
+			updateChartType(ChartType.LINE);
+			makeLineRadio.setSelected(true);
+			
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Tasks")) {
 			updateChartDataType(DataType.TASK);
 		}
