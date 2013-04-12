@@ -1105,6 +1105,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	@Override
 	public boolean onTabClosed() {
 		if (btnSave.isEnabled()) {
+			
+			mainTabController.switchToTab(this);
+			
 			Object[] options = {"Save Changes",
 			                    "Discard Changes",
 			                    "Cancel"};

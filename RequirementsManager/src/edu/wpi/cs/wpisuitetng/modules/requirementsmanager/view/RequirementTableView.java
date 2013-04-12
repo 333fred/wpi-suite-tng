@@ -29,7 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
@@ -635,7 +634,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	}
 
 	@Override
-	public Component getTabComponent(JTabbedPane tabbedPane) {
+	public Component getTabComponent(MainTabController tabController) {
 		return new JLabel("Requirements");
 	}
 

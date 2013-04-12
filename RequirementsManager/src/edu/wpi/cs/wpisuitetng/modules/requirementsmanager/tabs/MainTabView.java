@@ -31,7 +31,11 @@ public class MainTabView extends JTabbedPane {
 	/** boolean indicating whether hte first tab has been added */
 	private boolean firstTab;
 	
-	public MainTabView() {
+	/** The tab controller for this tab view */
+	private MainTabController tabController;
+	
+	public MainTabView(MainTabController tabController) {
+		this.tabController = tabController;
 		firstTab = true;
 		setTabPlacement(TOP); // set the tabs to be placed at the top
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT); // allow the tabs to be
@@ -72,7 +76,7 @@ public class MainTabView extends JTabbedPane {
 		//invoke this later to solve issues
 		//SwingUtilities.invokeLater(new CreateClosableTabInvokable(this, index, tab));
 		
-		setTabComponentAt(index, tab.getTabComponent(this));
+		setTabComponentAt(index, tab.getTabComponent(tabController));
 	}
 
 	/**
