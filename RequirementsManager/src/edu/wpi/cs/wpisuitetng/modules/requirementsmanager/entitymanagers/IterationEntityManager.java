@@ -72,8 +72,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			throw new BadRequestException();
 		}
 
-		// TODO: Determine if we want to do logging here
-
 		// Save the iteration
 		if (!db.save(newIteration, s.getProject())) {
 			throw new WPISuiteException();
@@ -274,7 +272,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	@Override
 	public void save(Session s, Iteration model) throws WPISuiteException {
 		db.save(model, s.getProject());
-
 	}
 
 	/**
