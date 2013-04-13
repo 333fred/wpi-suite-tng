@@ -12,6 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -20,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
@@ -110,7 +114,14 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		if (filter.length < 1 || filter[0] == null) {
 			throw new NotFoundException();
 		}
-		return filter[0];
+
+		// Make sure the filter belongs to this user
+		Filter f = filter[0];
+		if (f.getCreator() != s.getUser()) {
+			throw new NotFoundException();
+		}
+
+		return f;
 	}
 
 	/**
@@ -118,8 +129,18 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	@Override
 	public Filter[] getAll(Session s) throws WPISuiteException {
-		return db.retrieveAll(new Filter(), s.getProject()).toArray(
-				new Filter[0]);
+		List<Model> models = db.retrieveAll(new Filter(), s.getProject());
+		List<Filter> filters = new ArrayList<Filter>();
+
+		// Make sure that we only return filters that belong to current user
+		for (Model m : models) {
+			Filter f = (Filter) m;
+			if (f.getCreator() == s.getUser()) {
+				filters.add(f);
+			}
+		}
+
+		return filters.toArray(new Filter[0]);
 	}
 
 	/**
