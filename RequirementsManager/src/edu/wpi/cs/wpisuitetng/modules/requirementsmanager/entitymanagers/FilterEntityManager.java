@@ -28,11 +28,14 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.FilterValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
 
 public class FilterEntityManager implements EntityManager<Filter> {
 
 	private Data db;
 	private ModelMapper updateMapper;
+	private FilterValidator validator;
 
 	/**
 	 * Creates a new entity manager for filters, with the given database
@@ -43,6 +46,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	public FilterEntityManager(Data db) {
 		this.db = db;
 		this.updateMapper = new ModelMapper();
+		this.validator = new FilterValidator();
 	}
 
 	/**
@@ -59,7 +63,16 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// Set the user of the filter
 		newFilter.setCreator(s.getUser());
 
-		// TODO: Write a validator for filters and validate them here
+		// Validate the filter, and error if failure
+		List<ValidationIssue> issues;
+		issues = validator.validate(s, newFilter);
+
+		if (issues.size() > 0) {
+			for (ValidationIssue issue : issues) {
+				System.out.println(issue.getMessage());
+			}
+			throw new BadRequestException();
+		}
 
 		// Save the filter
 		if (!db.save(newFilter, s.getProject())) {
@@ -153,7 +166,16 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		Filter updatedFilter = Filter.fromJSON(content);
 		Filter oldFilter;
 
-		// TODO: Validate the updated iteration
+		// Validate the filter, and error if failure
+		List<ValidationIssue> issues;
+		issues = validator.validate(s, updatedFilter);
+
+		if (issues.size() > 0) {
+			for (ValidationIssue issue : issues) {
+				System.out.println(issue.getMessage());
+			}
+			throw new BadRequestException();
+		}
 
 		// Get the old iteration
 		try {
@@ -233,7 +255,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	@Override
 	public int Count() throws WPISuiteException {
-		// TODO Auto-generated method stub
 		return db.retrieveAll(new Filter()).size();
 	}
 
