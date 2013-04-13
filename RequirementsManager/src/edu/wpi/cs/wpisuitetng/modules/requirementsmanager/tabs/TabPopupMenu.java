@@ -47,7 +47,6 @@ public class TabPopupMenu extends JPopupMenu implements ActionListener {
 		
 		if (closeMode == CloseMode.CLOSE_ONLY_OTHERS) {
 			add(menuCloseOther);
-			add(menuCloseAll);
 		}
 		else if (closeMode == CloseMode.CLOSE_ONLY_THIS) {
 			add(menuCloseThis);

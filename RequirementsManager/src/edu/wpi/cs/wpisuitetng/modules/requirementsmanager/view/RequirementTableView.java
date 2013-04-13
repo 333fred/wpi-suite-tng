@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -54,6 +53,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.UnclosableTabComponent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEditingAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
@@ -635,7 +635,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public Component getTabComponent(MainTabController tabController) {
-		return new JLabel("Requirements");
+		return new UnclosableTabComponent(tabController, "Requirements");
 	}
 
 	/**
@@ -675,8 +675,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public void setEditable(boolean editable) {
 		this.isEditable = editable;
 	}
+		
 
-	public boolean onLostFocus() {
+	public boolean onLostFocus() {		
 		if (isEditable) {
 			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
@@ -695,6 +696,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			} else {
 				return false;
 			}
+				
 		}
 		return true;
 
