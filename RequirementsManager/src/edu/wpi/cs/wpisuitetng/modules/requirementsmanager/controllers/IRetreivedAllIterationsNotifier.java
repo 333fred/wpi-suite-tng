@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author 
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -16,10 +16,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
 public interface IRetreivedAllIterationsNotifier {
 	/**
-	 * Called when the requirements data has been received by the server
+	 * Called when the iteration data has been retrieved from the server
 	 * 
-	 * @param requirements
-	 *            The received data
+	 * @param iterations
+	 *            The retrieved data
 	 */
 
 	public void receivedData(Iteration[] iterations);

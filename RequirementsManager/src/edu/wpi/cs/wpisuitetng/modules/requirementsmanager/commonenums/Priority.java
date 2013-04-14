@@ -7,15 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
 
 /**
  * Enum to set the requirement's priority
- * 
- * @author Fredric
- * 
  */
 public enum Priority {
 	BLANK, LOW, MEDIUM, HIGH
