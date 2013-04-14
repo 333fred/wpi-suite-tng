@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -31,7 +33,12 @@ public class SavePermissionController {
 	 * @param toAdd
 	 *            the permission to save/update
 	 */
-	public void save(PermissionModel toAdd) {
+	public void save(PermissionModel toAdd) throws UnauthorizedException {
+		// Throw an exception if the user can't save permissions
+		if (PermissionModel.getInstance().getPermission() != UserPermissionLevels.ADMIN) {
+			throw new UnauthorizedException(UserPermissionLevels.ADMIN,
+					PermissionModel.getInstance().getPermission());
+		}
 		final RequestObserver requestObserver = new SavePermissionRequestObserver();
 		Request request;
 		request = Network.getInstance().makeRequest(
