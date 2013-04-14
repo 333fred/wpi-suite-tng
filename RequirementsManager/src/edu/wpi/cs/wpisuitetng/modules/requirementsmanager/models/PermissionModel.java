@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.Permission;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
@@ -77,12 +76,21 @@ public class PermissionModel extends AbstractModel {
 	public static PermissionModel fromJSONSingleton(String content) {
 		init();
 		final Gson parser = new Gson();
-		PermissionModel json = parser.fromJson(content, PermissionModel[].class)[0];
+		PermissionModel json = parser
+				.fromJson(content, PermissionModel[].class)[0];
 		setUserPermissionLevelStatic(json.getPermission());
 		setUserStatic(json.getUser());
 		return getInstance();
 	}
 
+	/**
+	 * Returns a non-singleton version of the given JSON encoded string. Should
+	 * not be called on the client, ever. For any reason.
+	 * 
+	 * @param content
+	 *            the JSON encoded server
+	 * @return the non-singleton permission model
+	 */
 	public static PermissionModel fromJSON(String content) {
 		init();
 		final Gson parser = new Gson();

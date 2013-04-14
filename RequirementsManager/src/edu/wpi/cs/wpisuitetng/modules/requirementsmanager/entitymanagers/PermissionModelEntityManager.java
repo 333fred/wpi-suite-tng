@@ -90,8 +90,8 @@ public class PermissionModelEntityManager implements
 	 */
 	@Override
 	public PermissionModel[] getAll(Session s) throws WPISuiteException {
-		return db.retrieve(PermissionModel.class, "user", s.getUser(),
-				s.getProject()).toArray(new PermissionModel[0]);
+		return db.retrieveAll(new PermissionModel(), s.getProject()).toArray(
+				new PermissionModel[0]);
 	}
 
 	/**
