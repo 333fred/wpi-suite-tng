@@ -209,12 +209,9 @@ public class DetailATestView extends JPanel {
 					makeATestPanel.getaTestFieldPane().setEnabled(true);
 					makeATestPanel.getaTestField().setEnabled(true);
 					makeATestPanel.getaTestName().setEnabled(true);
-					makeATestPanel.getaTestField().setText(
-							getSingleSelectedaTest().getDescription());
-					makeATestPanel.getaTestName().setText(
-							getSingleSelectedaTest().getName());
-					makeATestPanel.getaTestStatusBox().setSelectedItem(
-							getSingleSelectedaTest().getStatus());
+					makeATestPanel.getaTestField().setText(getSingleSelectedaTest().getDescription());
+					makeATestPanel.getaTestName().setText(getSingleSelectedaTest().getName());
+					makeATestPanel.getaTestStatusBox().setSelectedItem(getSingleSelectedaTest().getStatus().toString());
 					makeATestPanel.getaTestField().setBackground(Color.white);
 					makeATestPanel.getaTestName().setBackground(Color.white);
 				}
@@ -240,7 +237,7 @@ public class DetailATestView extends JPanel {
 				makeATestPanel
 				.getaTestStatus()
 				.setText(
-						"No aTests selected. Fill name and description to create a new one.");
+						"No acceptance test selected. Fill name and description to create a new one.");
 				makeATestPanel.getaTestStatusBox().setEnabled(false);
 				makeATestPanel.getaTestField().setBackground(Color.white);
 				makeATestPanel.getaTestName().setBackground(Color.white);
@@ -254,7 +251,7 @@ public class DetailATestView extends JPanel {
 					makeATestPanel
 					.getaTestStatus()
 					.setText(
-							"Multiple aTests selected. Can only change status.");
+							"Multiple acceptance tests selected. Can only change status.");
 					makeATestPanel.getaTestFieldPane().setEnabled(false);
 					makeATestPanel.getaTestField().setEnabled(false);
 					makeATestPanel.getaTestName().setEnabled(false);
@@ -266,7 +263,7 @@ public class DetailATestView extends JPanel {
 					makeATestPanel
 					.getaTestStatus()
 					.setText(
-							"One aTest selected. Fill name AND description to edit. Leave blank to just change status/user.");
+							"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
 					makeATestPanel.getaTestFieldPane().setEnabled(true);
 					makeATestPanel.getaTestField().setEnabled(true);
 					makeATestPanel.getaTestName().setEnabled(true);

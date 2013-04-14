@@ -130,10 +130,8 @@ public class MakeATestPanel extends JPanel {
 				"No Acceptance Test selected. Fill name and description to create a new one.");
 		addaTestLabel = new JLabel("Acceptance Test:");
 		nameaTestLabel = new JLabel("Name:");
-		descaTestLabel = new JLabel("Description:");
-		
-		String[] availableStatuses = {"","PASSED","FAILED"};
-		
+		descaTestLabel = new JLabel("Description:");		
+		String[] availableStatuses = {"","PASSED","FAILED"};		
 		aTestStatusBox = new JComboBox(availableStatuses);
 
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
