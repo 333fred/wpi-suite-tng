@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -22,24 +21,10 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * Observer callback responsible for handling the response success or failure of
- * RetrieveAllFiltersController
+ * Simple request observer for adding all filters to the local database
  */
 
-public class RetrieveAllFiltersRequestObserver implements RequestObserver {
-
-	private RetrieveAllFiltersController controller;
-
-	/**
-	 * Creates a Request Observer with the given controller to call back to
-	 * 
-	 * @param controller
-	 *            the controller to callback to
-	 */
-	public RetrieveAllFiltersRequestObserver(
-			RetrieveAllFiltersController controller) {
-		this.controller = controller;
-	}
+public class SimpleRetrieveAllFiltersRequestObserver implements RequestObserver {
 
 	/**
 	 * {@inheritDoc}
@@ -53,7 +38,6 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 
 			FilterDatabase.getInstance().setFilters(Arrays.asList(filters));
 		}
-
 	}
 
 	/**

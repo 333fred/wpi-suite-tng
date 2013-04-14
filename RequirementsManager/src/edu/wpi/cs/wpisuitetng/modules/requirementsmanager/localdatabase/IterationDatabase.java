@@ -104,7 +104,6 @@ public class IterationDatabase extends Thread {
 	 * @return the iteration requested
 	 * @throws IterationNotFoundException
 	 *             couldn't find the iteration
-	 * @throws IterationIsNegativeException
 	 */
 	public synchronized Iteration getIteration(int id)
 			throws IterationNotFoundException {
@@ -115,13 +114,20 @@ public class IterationDatabase extends Thread {
 		}
 	}
 
-	// TODO: Documentation
+	/**
+	 * Gets the given iteration, returning null if the iteration isn't found
+	 * 
+	 * @param name
+	 *            the name of the iteration to retrieve
+	 * @return the iteration if it exists, null otherwise
+	 */
 	public synchronized Iteration getIteration(String name) {
 		for (Iteration anIteration : iterations.values()) {
 			if (anIteration.getName().equals(name)) {
 				return anIteration;
 			}
 		}
+		// TODO: This needs to be an exception, not null
 		return null;
 	}
 
