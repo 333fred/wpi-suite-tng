@@ -34,7 +34,7 @@ public class ATest implements Event {
 	/**
 	 * @return the completed
 	 */
-	public ATestStatus getStaus() {
+	public ATestStatus getStatus() {
 		return status;
 	}
 
@@ -159,7 +159,16 @@ public class ATest implements Event {
 	}
 
 	
-	private enum ATestStatus {
+	public enum ATestStatus {
 		BLANK,PASSED,FAILED
+	}
+
+
+	public boolean isPassed() {
+		if (this.getStatus() == ATestStatus.PASSED) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

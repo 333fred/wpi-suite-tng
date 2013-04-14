@@ -36,31 +36,31 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
 
 /**
  * A panel containing a a creation and edit form 
- * for the tasks in a requirement
+ * for the aTests in a requirement
  * 
  * @author Nick M, Matt C, Steve Kordell
  */
 @SuppressWarnings("serial")
 public class MakeATestPanel extends JPanel {
 
-	//The fields to make a task
-	private JTextArea taskName;
-	private final JTextArea taskDescription;
-	private final JButton addTask;
-	private final JLabel addTaskLabel;
-	private final JCheckBox taskComplete;
+	//The fields to make a aTest
+	private JTextArea aTestName;
+	private final JTextArea aTestDescription;
+	private final JButton addaTest;
+	private final JLabel addaTestLabel;
+	private final JCheckBox aTestComplete;
 	private final JComboBox userAssigned;
 	
-	//Jlabels for task fields
-	private final JLabel taskStatus;
-	private final JLabel nameTaskLabel;
-	private final JLabel descTaskLabel;
+	//Jlabels for aTest fields
+	private final JLabel aTestStatus;
+	private final JLabel nameaTestLabel;
+	private final JLabel descaTestLabel;
 	private final JLabel userAssignedLabel;
 
 	
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
-	private final JScrollPane taskFieldPane;
+	private final JScrollPane aTestFieldPane;
 
 	/**
 	 * Construct the panel, add and layout components.
@@ -73,26 +73,26 @@ public class MakeATestPanel extends JPanel {
 	 */
 	public MakeATestPanel(Requirement model, DetailPanel parentView) {
 
-		//setup the task name field
-		taskName = new JTextArea(1, 40);
-		taskName.setLineWrap(true);
-		taskName.setWrapStyleWord(true);
-		taskName.setMaximumSize(new Dimension(40, 2));
+		//setup the aTest name field
+		aTestName = new JTextArea(1, 40);
+		aTestName.setLineWrap(true);
+		aTestName.setWrapStyleWord(true);
+		aTestName.setMaximumSize(new Dimension(40, 2));
 		AbstractDocument textNameDoc = (AbstractDocument)
-		taskName.getDocument();
+		aTestName.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
-		taskName.setBorder((new JTextField()).getBorder());
-		taskName.setName("Name");
-		taskName.setDisabledTextColor(Color.GRAY);
+		aTestName.setBorder((new JTextField()).getBorder());
+		aTestName.setName("Name");
+		aTestName.setDisabledTextColor(Color.GRAY);
 		
-		taskName.addKeyListener(new KeyAdapter() {
+		aTestName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						taskDescription.transferFocus();
+						aTestDescription.transferFocus();
 					} else {
-						taskDescription.transferFocusBackward();
+						aTestDescription.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -102,40 +102,40 @@ public class MakeATestPanel extends JPanel {
 			}
 		});
 
-		//setup the task description field
-		taskDescription = new JTextArea();
-		taskDescription.setLineWrap(true);
-		taskDescription.setWrapStyleWord(true);
-		taskDescription.setBorder((new JTextField()).getBorder());
-		taskDescription.setDisabledTextColor(Color.GRAY);
+		//setup the aTest description field
+		aTestDescription = new JTextArea();
+		aTestDescription.setLineWrap(true);
+		aTestDescription.setWrapStyleWord(true);
+		aTestDescription.setBorder((new JTextField()).getBorder());
+		aTestDescription.setDisabledTextColor(Color.GRAY);
 		
-		taskDescription.addKeyListener(new KeyAdapter() {
+		aTestDescription.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						taskDescription.transferFocus();
+						aTestDescription.transferFocus();
 					} else {
-						taskDescription.transferFocusBackward();
+						aTestDescription.transferFocusBackward();
 					}
 					event.consume();
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					taskDescription.append("\n");
+					aTestDescription.append("\n");
 					event.consume();
 				}
 			}
 		});
 
 		//setup all the buttons and label text
-		addTask = new JButton("Save");
-		taskStatus = new JLabel(
-				"No tasks selected. Fill name and description to create a new one.");
-		addTaskLabel = new JLabel("Task:");
-		nameTaskLabel = new JLabel("Name:");
-		descTaskLabel = new JLabel("Description:");
+		addaTest = new JButton("Save");
+		aTestStatus = new JLabel(
+				"No Acceptance Test selected. Fill name and description to create a new one.");
+		addaTestLabel = new JLabel("Acceptance Test:");
+		nameaTestLabel = new JLabel("Name:");
+		descaTestLabel = new JLabel("Description:");
 		userAssignedLabel = new JLabel("Users:");
-		taskComplete = new JCheckBox("Completed");
+		aTestComplete = new JCheckBox("Completed");
 		userAssigned = new JComboBox();
 
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -146,78 +146,78 @@ public class MakeATestPanel extends JPanel {
 		SpringLayout layout = new SpringLayout();
 		this.setLayout(layout);
 
-		taskFieldPane = new JScrollPane(taskDescription);
+		aTestFieldPane = new JScrollPane(aTestDescription);
 		
-		//Setup the layout of the task Panel
-		layout.putConstraint(SpringLayout.NORTH, addTaskLabel, 0,
+		//Setup the layout of the aTest Panel
+		layout.putConstraint(SpringLayout.NORTH, addaTestLabel, 0,
 				SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.WEST, addTaskLabel, 0,
+		layout.putConstraint(SpringLayout.WEST, addaTestLabel, 0,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, taskStatus, 0,
-				SpringLayout.SOUTH, addTaskLabel);
-		layout.putConstraint(SpringLayout.NORTH, nameTaskLabel,
-				VERTICAL_PADDING, SpringLayout.SOUTH, taskStatus);
-		layout.putConstraint(SpringLayout.NORTH, taskName, VERTICAL_PADDING,
-				SpringLayout.SOUTH, nameTaskLabel);
-		layout.putConstraint(SpringLayout.WEST, taskName, 0, SpringLayout.WEST,
-				nameTaskLabel);
-		layout.putConstraint(SpringLayout.EAST, taskName, 0, SpringLayout.EAST,
+		layout.putConstraint(SpringLayout.NORTH, aTestStatus, 0,
+				SpringLayout.SOUTH, addaTestLabel);
+		layout.putConstraint(SpringLayout.NORTH, nameaTestLabel,
+				VERTICAL_PADDING, SpringLayout.SOUTH, aTestStatus);
+		layout.putConstraint(SpringLayout.NORTH, aTestName, VERTICAL_PADDING,
+				SpringLayout.SOUTH, nameaTestLabel);
+		layout.putConstraint(SpringLayout.WEST, aTestName, 0, SpringLayout.WEST,
+				nameaTestLabel);
+		layout.putConstraint(SpringLayout.EAST, aTestName, 0, SpringLayout.EAST,
 				this);
-		layout.putConstraint(SpringLayout.NORTH, descTaskLabel,
-				VERTICAL_PADDING, SpringLayout.SOUTH, taskName);
-		layout.putConstraint(SpringLayout.NORTH, taskFieldPane,
-				VERTICAL_PADDING, SpringLayout.SOUTH, descTaskLabel);
-		layout.putConstraint(SpringLayout.WEST, taskFieldPane, 0,
+		layout.putConstraint(SpringLayout.NORTH, descaTestLabel,
+				VERTICAL_PADDING, SpringLayout.SOUTH, aTestName);
+		layout.putConstraint(SpringLayout.NORTH, aTestFieldPane,
+				VERTICAL_PADDING, SpringLayout.SOUTH, descaTestLabel);
+		layout.putConstraint(SpringLayout.WEST, aTestFieldPane, 0,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, taskFieldPane, 0,
+		layout.putConstraint(SpringLayout.EAST, aTestFieldPane, 0,
 				SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.SOUTH, taskFieldPane,
-				note_FIELD_HEIGHT, SpringLayout.NORTH, taskFieldPane);
+		layout.putConstraint(SpringLayout.SOUTH, aTestFieldPane,
+				note_FIELD_HEIGHT, SpringLayout.NORTH, aTestFieldPane);
 
-		layout.putConstraint(SpringLayout.NORTH, taskComplete,
-				VERTICAL_PADDING, SpringLayout.SOUTH, taskFieldPane);
-		layout.putConstraint(SpringLayout.WEST, taskComplete, 0,
+		layout.putConstraint(SpringLayout.NORTH, aTestComplete,
+				VERTICAL_PADDING, SpringLayout.SOUTH, aTestFieldPane);
+		layout.putConstraint(SpringLayout.WEST, aTestComplete, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
-				SpringLayout.SOUTH, taskComplete);
+				SpringLayout.SOUTH, aTestComplete);
 
 		layout.putConstraint(SpringLayout.NORTH, userAssignedLabel,
-				VERTICAL_PADDING + 5, SpringLayout.SOUTH, taskComplete);
+				VERTICAL_PADDING + 5, SpringLayout.SOUTH, aTestComplete);
 		layout.putConstraint(SpringLayout.WEST, userAssignedLabel, 4,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, userAssignedLabel, 0,
-				SpringLayout.EAST, taskComplete);
+				SpringLayout.EAST, aTestComplete);
 
 		layout.putConstraint(SpringLayout.NORTH, userAssigned,
-				VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
+				VERTICAL_PADDING, SpringLayout.SOUTH, aTestComplete);
 		layout.putConstraint(SpringLayout.WEST, userAssigned, 50,
 				SpringLayout.WEST, userAssignedLabel);
 		layout.putConstraint(SpringLayout.EAST, userAssigned, 50,
-				SpringLayout.EAST, taskComplete);
+				SpringLayout.EAST, aTestComplete);
 
-		layout.putConstraint(SpringLayout.NORTH, addTask, VERTICAL_PADDING,
-				SpringLayout.SOUTH, taskComplete);
-		layout.putConstraint(SpringLayout.EAST, addTask, 0, SpringLayout.EAST,
+		layout.putConstraint(SpringLayout.NORTH, addaTest, VERTICAL_PADDING,
+				SpringLayout.SOUTH, aTestComplete);
+		layout.putConstraint(SpringLayout.EAST, addaTest, 0, SpringLayout.EAST,
 				this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
-				SpringLayout.SOUTH, addTask);
+				SpringLayout.SOUTH, addaTest);
 
-		//add all of the swing components to the this task panel
-		this.add(taskStatus);
+		//add all of the swing components to the this aTest panel
+		this.add(aTestStatus);
 		this.add(userAssignedLabel);
 		this.add(userAssigned);
-		this.add(addTaskLabel);
-		this.add(addTask);
-		this.add(taskName);
-		this.add(nameTaskLabel);
-		this.add(descTaskLabel);
-		this.add(taskComplete);
-		this.add(taskFieldPane);
+		this.add(addaTestLabel);
+		this.add(addaTest);
+		this.add(aTestName);
+		this.add(nameaTestLabel);
+		this.add(descaTestLabel);
+		this.add(aTestComplete);
+		this.add(aTestFieldPane);
 
 		//default the add button and complete checkbox 
 		//to un-enabled
-		addTask.setEnabled(false);
-		taskComplete.setEnabled(false);
+		addaTest.setEnabled(false);
+		aTestComplete.setEnabled(false);
 
 	}
 
@@ -226,8 +226,8 @@ public class MakeATestPanel extends JPanel {
 	 * 
 	 * @return the note JTextArea
 	 */
-	public JTextArea getTaskField() {
-		return taskDescription;
+	public JTextArea getaTestField() {
+		return aTestDescription;
 	}
 
 	/**
@@ -238,33 +238,33 @@ public class MakeATestPanel extends JPanel {
 	 *            disabled.
 	 */
 	public void setInputEnabled(boolean value) {
-		taskDescription.setEnabled(value);
-		addTask.setEnabled(value);
+		aTestDescription.setEnabled(value);
+		addaTest.setEnabled(value);
 		if (value) {
-			addTaskLabel.setForeground(Color.black);
+			addaTestLabel.setForeground(Color.black);
 		} else {
-			addTaskLabel.setForeground(Color.gray);
+			addaTestLabel.setForeground(Color.gray);
 		}
 	}
 
-	public JTextComponent getTaskName() {
-		return taskName;
+	public JTextComponent getaTestName() {
+		return aTestName;
 	}
 
-	public JButton getAddTask() {
-		return addTask;
+	public JButton getAddaTest() {
+		return addaTest;
 	}
 
-	public JCheckBox getTaskComplete() {
-		return taskComplete;
+	public JCheckBox getaTestComplete() {
+		return aTestComplete;
 	}
 
-	public JScrollPane getTaskFieldPane() {
-		return taskFieldPane;
+	public JScrollPane getaTestFieldPane() {
+		return aTestFieldPane;
 	}
 
-	public JLabel getTaskStatus() {
-		return taskStatus;
+	public JLabel getaTestStatus() {
+		return aTestStatus;
 	}
 
 	public JComboBox getUserAssigned() {

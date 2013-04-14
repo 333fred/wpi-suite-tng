@@ -1104,6 +1104,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public DefaultListModel getTaskList() {
 		return taskView.getTaskList();
 	}
+	
+	public DefaultListModel getTestList() {
+		return aTestView.getaTestList();
+	}
 
 	@Override
 	public boolean onTabClosed() {
@@ -1137,4 +1141,5 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
+
 }

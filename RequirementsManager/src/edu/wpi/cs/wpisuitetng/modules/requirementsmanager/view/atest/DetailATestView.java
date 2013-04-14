@@ -19,7 +19,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -27,19 +26,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
 
 /**
- * Panel containing a task for a requirement
+ * Panel containing a aTest for a requirement
  * 
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
 public class DetailATestView extends JPanel {
-	/** For Tasks */
+	/** For aTests */
 	protected DefaultListModel testList;
 	protected JList tests;
 	private Requirement requirement;
@@ -61,12 +60,12 @@ public class DetailATestView extends JPanel {
 		this.parentView = parentView;
 
 		setLayout(new BorderLayout());
-		// Set up the task panel
+		// Set up the aTest panel
 		makeATestPanel = new MakeATestPanel(requirement, parentView);
 
 
 
-		// Create the task list TODO: CHANGE GETSELECTEDVALUES TO
+		// Create the aTest list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
 		testList = new DefaultListModel();
 		tests = new JList(testList);
@@ -74,20 +73,20 @@ public class DetailATestView extends JPanel {
 		tests.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
-		JScrollPane taskScrollPane = new JScrollPane();
-		taskScrollPane.getViewport().add(tests);
+		JScrollPane aTestScrollPane = new JScrollPane();
+		aTestScrollPane.getViewport().add(tests);
 
 		// Set up the frame
-		JPanel taskPane = new JPanel();
-		taskPane.setLayout(new BorderLayout());
-		taskPane.add(taskScrollPane, BorderLayout.CENTER);
-		taskPane.add(makeATestPanel, BorderLayout.SOUTH);
+		JPanel aTestPane = new JPanel();
+		aTestPane.setLayout(new BorderLayout());
+		aTestPane.add(aTestScrollPane, BorderLayout.CENTER);
+		aTestPane.add(makeATestPanel, BorderLayout.SOUTH);
 
-		add(taskPane, BorderLayout.CENTER);
+		add(aTestPane, BorderLayout.CENTER);
 
-		// adds the tasks to the list model
-		addTasksToList();
-		// ,tasks.getSelectedValues()
+		// adds the aTests to the list model
+		addaTestsToList();
+		// ,aTests.getSelectedValues()
 
 		List<String> assignedUsers = requirement.getUsers();
 		// iterate through and add them to the list
@@ -97,15 +96,15 @@ public class DetailATestView extends JPanel {
 		}
 
 		if(requirement.getStatus() != Status.DELETED) {
-			//Set the action of the save button to the default (create new task)
-			makeATestPanel.getAddTask().setAction(new SaveATestAction(new SaveATestController(makeATestPanel, requirement, parentView, tests)));
+			//Set the action of the save button to the default (create new aTest)
+			makeATestPanel.getAddaTest().setAction(new SaveATestAction(new SaveATestController(makeATestPanel, requirement, parentView, tests)));
 
 
-			//Listen for user clicking on tasks
+			//Listen for user clicking on aTests
 			tests.addMouseListener(new MouseAdapter() { 
 				@Override
 				public void mouseClicked(MouseEvent evt) {
-					updateTaskView(); //Update the task view, will change based on number of tasks clicked (0,1,multiple)
+					updateaTestView(); //Update the aTest view, will change based on number of aTests clicked (0,1,multiple)
 				}
 			});
 
@@ -113,181 +112,181 @@ public class DetailATestView extends JPanel {
 			//		int delay = 1000; // Setting up timer, delay for 1 sec
 			//		int period = 1000; // repeat every 1 sec
 			//		Timer timer = new Timer();
-			//		timer.scheduleAtFixedRate(new TimerTask()
+			//		timer.scheduleAtFixedRate(new TimeraTest()
 			//		{
 			//			public void run()
 			//			{
 			//				if(requirement.getStatus() != Status.DELETED)
-			//					updateTaskViewTime(); //Update the view periodically. Used due to swing clicking buggy
+			//					updateaTestViewTime(); //Update the view periodically. Used due to swing clicking buggy
 			//			}
 			//		}, delay, period);
 
 			
 			//Make sure save button is unavailable if name field is empty
-			makeATestPanel.getTaskField().addKeyListener(new KeyAdapter() { 
-				//For creating a new task
+			makeATestPanel.getaTestField().addKeyListener(new KeyAdapter() { 
+				//For creating a new aTest
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if (makeATestPanel.getTaskField().getText().trim().equals("")
+					if (makeATestPanel.getaTestField().getText().trim().equals("")
 							&& tests.getSelectedValues().length == 0)
-						makeATestPanel.getAddTask().setEnabled(false);
-					else if (!makeATestPanel.getTaskName().getText().trim()
+						makeATestPanel.getAddaTest().setEnabled(false);
+					else if (!makeATestPanel.getaTestName().getText().trim()
 							.equals(""))
-						makeATestPanel.getAddTask().setEnabled(true);
+						makeATestPanel.getAddaTest().setEnabled(true);
 				}
 			});
 			
 			//Make sure save button is unavailable if desc field is empty
-			//for creating a new task
-			makeATestPanel.getTaskName().addKeyListener(new KeyAdapter() { 
+			//for creating a new aTest
+			makeATestPanel.getaTestName().addKeyListener(new KeyAdapter() { 
 				@Override                                                 
 				public void keyReleased(KeyEvent e) {
-					if (makeATestPanel.getTaskName().getText().trim().equals("")
+					if (makeATestPanel.getaTestName().getText().trim().equals("")
 							&& tests.getSelectedValues().length == 0)
-						makeATestPanel.getAddTask().setEnabled(false);
-					else if (!makeATestPanel.getTaskField().getText().trim()
+						makeATestPanel.getAddaTest().setEnabled(false);
+					else if (!makeATestPanel.getaTestField().getText().trim()
 							.equals(""))
-						makeATestPanel.getAddTask().setEnabled(true);
+						makeATestPanel.getAddaTest().setEnabled(true);
 				}
 			});
 
 		}else{
 			//Requirement is set to delted, so disable all of the fields
-			makeATestPanel.getTaskFieldPane().setEnabled(false);
-			makeATestPanel.getTaskField().setEnabled(false);
-			makeATestPanel.getTaskName().setEnabled(false);
+			makeATestPanel.getaTestFieldPane().setEnabled(false);
+			makeATestPanel.getaTestField().setEnabled(false);
+			makeATestPanel.getaTestName().setEnabled(false);
 			makeATestPanel.getUserAssigned().setEnabled(false);
-			makeATestPanel.getAddTask().setEnabled(false);
-			makeATestPanel.getTaskStatus().setText("");
+			makeATestPanel.getAddaTest().setEnabled(false);
+			makeATestPanel.getaTestStatus().setText("");
 
-			makeATestPanel.getTaskField().setBackground(makeATestPanel.getBackground());
-			makeATestPanel.getTaskName().setBackground(makeATestPanel.getBackground());
+			makeATestPanel.getaTestField().setBackground(makeATestPanel.getBackground());
+			makeATestPanel.getaTestName().setBackground(makeATestPanel.getBackground());
 		}
 
 	}
 
 	/**
-	 * updateTaskView
+	 * updateaTestView
 	 * 
-	 * currently not used. Would be called by the timer to update the view task
+	 * currently not used. Would be called by the timer to update the view aTest
 	 * 
 	 */
-	private void updateTaskView(){
+	private void updateaTestView(){
 		if(requirement.getStatus() != Status.DELETED){
-			makeATestPanel.getAddTask().setAction(
+			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(
 							makeATestPanel, requirement, parentView, tests), tests
 							.getSelectedValues()));
 
 			if (tests.getSelectedValues().length == 0) {
 				makeATestPanel
-				.getTaskStatus()
+				.getaTestStatus()
 				.setText(
-						"No tasks selected. Fill name and description to create a new one.");
-				makeATestPanel.getTaskComplete().setEnabled(false);
-				makeATestPanel.getTaskComplete().setSelected(false);
+						"No acceptance tests selected. Fill name and description to create a new one.");
+				makeATestPanel.getaTestComplete().setEnabled(false);
+				makeATestPanel.getaTestComplete().setSelected(false);
 				makeATestPanel.getUserAssigned().setEnabled(true);
-				makeATestPanel.getTaskField().setText("");
-				makeATestPanel.getTaskName().setText("");
-				makeATestPanel.getTaskField().setBackground(Color.white);
-				makeATestPanel.getTaskName().setBackground(Color.white);
-				if (makeATestPanel.getTaskName().getText().trim().equals("")
-						|| makeATestPanel.getTaskField().getText().trim()
+				makeATestPanel.getaTestField().setText("");
+				makeATestPanel.getaTestName().setText("");
+				makeATestPanel.getaTestField().setBackground(Color.white);
+				makeATestPanel.getaTestName().setBackground(Color.white);
+				if (makeATestPanel.getaTestName().getText().trim().equals("")
+						|| makeATestPanel.getaTestField().getText().trim()
 						.equals(""))
-					makeATestPanel.getAddTask().setEnabled(false);
+					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
-				makeATestPanel.getTaskComplete().setEnabled(true);
+				makeATestPanel.getaTestComplete().setEnabled(true);
 				if (tests.getSelectedValues().length > 1) {
 					makeATestPanel
-					.getTaskStatus()
+					.getaTestStatus()
 					.setText(
-							"Multiple tasks selected. Can only change status.");
-					makeATestPanel.getTaskFieldPane().setEnabled(false);
-					makeATestPanel.getTaskField().setEnabled(false);
-					makeATestPanel.getTaskName().setEnabled(false);
-					makeATestPanel.getTaskComplete().setSelected(false);
+							"Multiple acceptance tests selected. Can only change status.");
+					makeATestPanel.getaTestFieldPane().setEnabled(false);
+					makeATestPanel.getaTestField().setEnabled(false);
+					makeATestPanel.getaTestName().setEnabled(false);
+					makeATestPanel.getaTestComplete().setSelected(false);
 					makeATestPanel.getUserAssigned().setEnabled(false);
-					makeATestPanel.getTaskField().setText("");
-					makeATestPanel.getTaskName().setText("");
-					makeATestPanel.getTaskField().setBackground(
+					makeATestPanel.getaTestField().setText("");
+					makeATestPanel.getaTestName().setText("");
+					makeATestPanel.getaTestField().setBackground(
 							makeATestPanel.getBackground());
-					makeATestPanel.getTaskName().setBackground(
+					makeATestPanel.getaTestName().setBackground(
 							makeATestPanel.getBackground());
 				} else {
 					makeATestPanel
-					.getTaskStatus()
+					.getaTestStatus()
 					.setText(
-							"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
-					makeATestPanel.getTaskFieldPane().setEnabled(true);
-					makeATestPanel.getTaskField().setEnabled(true);
-					makeATestPanel.getTaskName().setEnabled(true);
+							"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
+					makeATestPanel.getaTestFieldPane().setEnabled(true);
+					makeATestPanel.getaTestField().setEnabled(true);
+					makeATestPanel.getaTestName().setEnabled(true);
 					makeATestPanel.getUserAssigned().setEnabled(true);
-					makeATestPanel.getTaskField().setText(
-							getSingleSelectedTask().getDescription());
-					makeATestPanel.getTaskName().setText(
-							getSingleSelectedTask().getName());
-					makeATestPanel.getTaskComplete().setSelected(
-							getSingleSelectedTask().isCompleted());
-					makeATestPanel.getTaskField().setBackground(Color.white);
-					makeATestPanel.getTaskName().setBackground(Color.white);
+					makeATestPanel.getaTestField().setText(
+							getSingleSelectedaTest().getDescription());
+					makeATestPanel.getaTestName().setText(
+							getSingleSelectedaTest().getName());
+					makeATestPanel.getaTestComplete().setSelected(
+							getSingleSelectedaTest().isPassed());
+					makeATestPanel.getaTestField().setBackground(Color.white);
+					makeATestPanel.getaTestName().setBackground(Color.white);
 				}
 			}
 		}
 	}
 
 	/**
-	 * updateTaskViewTime
+	 * updateaTestViewTime
 	 * 
-	 * currently not used. Would be called by the timer to update the view task 
+	 * currently not used. Would be called by the timer to update the view aTest 
 	 * and populate the fields
 	 * 
 	 */
-	private void updateTaskViewTime(){
+	private void updateaTestViewTime(){
 		if(requirement.getStatus() != Status.DELETED){
-			makeATestPanel.getAddTask().setAction(
+			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(
 							makeATestPanel, requirement, parentView, tests), tests
 							.getSelectedValues()));
 
 			if (tests.getSelectedValues().length == 0) {
 				makeATestPanel
-				.getTaskStatus()
+				.getaTestStatus()
 				.setText(
-						"No tasks selected. Fill name and description to create a new one.");
-				makeATestPanel.getTaskComplete().setEnabled(false);
+						"No aTests selected. Fill name and description to create a new one.");
+				makeATestPanel.getaTestComplete().setEnabled(false);
 				makeATestPanel.getUserAssigned().setEnabled(true);
-				makeATestPanel.getTaskField().setBackground(Color.white);
-				makeATestPanel.getTaskName().setBackground(Color.white);
-				if (makeATestPanel.getTaskName().getText().trim().equals("")
-						|| makeATestPanel.getTaskField().getText().trim()
+				makeATestPanel.getaTestField().setBackground(Color.white);
+				makeATestPanel.getaTestName().setBackground(Color.white);
+				if (makeATestPanel.getaTestName().getText().trim().equals("")
+						|| makeATestPanel.getaTestField().getText().trim()
 						.equals(""))
-					makeATestPanel.getAddTask().setEnabled(false);
+					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
-				makeATestPanel.getTaskComplete().setEnabled(true);
+				makeATestPanel.getaTestComplete().setEnabled(true);
 				if (tests.getSelectedValues().length > 1) {
 					makeATestPanel
-					.getTaskStatus()
+					.getaTestStatus()
 					.setText(
-							"Multiple tasks selected. Can only change status.");
-					makeATestPanel.getTaskFieldPane().setEnabled(false);
-					makeATestPanel.getTaskField().setEnabled(false);
-					makeATestPanel.getTaskName().setEnabled(false);
+							"Multiple aTests selected. Can only change status.");
+					makeATestPanel.getaTestFieldPane().setEnabled(false);
+					makeATestPanel.getaTestField().setEnabled(false);
+					makeATestPanel.getaTestName().setEnabled(false);
 					makeATestPanel.getUserAssigned().setEnabled(false);
-					makeATestPanel.getTaskField().setBackground(
+					makeATestPanel.getaTestField().setBackground(
 							makeATestPanel.getBackground());
-					makeATestPanel.getTaskName().setBackground(
+					makeATestPanel.getaTestName().setBackground(
 							makeATestPanel.getBackground());
 				} else {
 					makeATestPanel
-					.getTaskStatus()
+					.getaTestStatus()
 					.setText(
-							"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
-					makeATestPanel.getTaskFieldPane().setEnabled(true);
-					makeATestPanel.getTaskField().setEnabled(true);
-					makeATestPanel.getTaskName().setEnabled(true);
+							"One aTest selected. Fill name AND description to edit. Leave blank to just change status/user.");
+					makeATestPanel.getaTestFieldPane().setEnabled(true);
+					makeATestPanel.getaTestField().setEnabled(true);
+					makeATestPanel.getaTestName().setEnabled(true);
 					makeATestPanel.getUserAssigned().setEnabled(true);
-					makeATestPanel.getTaskField().setBackground(Color.white);
-					makeATestPanel.getTaskName().setBackground(Color.white);
+					makeATestPanel.getaTestField().setBackground(Color.white);
+					makeATestPanel.getaTestName().setBackground(Color.white);
 				}
 			}
 		}
@@ -295,29 +294,29 @@ public class DetailATestView extends JPanel {
 	
 	/**
 	 * 
-	 * Method to populate this object's list of tasks from the current
-	 * requirement's list of tasks
+	 * Method to populate this object's list of aTests from the current
+	 * requirement's list of aTests
 	 */
-	private void addTasksToList() {
+	private void addaTestsToList() {
 		testList.clear();
 
-		// add the tasks to the list model.
-		for (Task aTask : requirement.getTasks()) {
-			this.testList.addElement(aTask);
+		// add the aTests to the list model.
+		for (ATest aaTest : requirement.getTests()) {
+			this.testList.addElement(aaTest);
 		}
 	}
 
 	/**
-	 * simple getter for the list of tasks of which this view is currently aware
+	 * simple getter for the list of aTests of which this view is currently aware
 	 * 
-	 * @return the list of tasks
+	 * @return the list of aTests
 	 */
-	public DefaultListModel getTaskList() {
+	public DefaultListModel getaTestList() {
 		return testList;
 	}
 
 	/**
-	 * Updates the local display of the current requirement's tasks
+	 * Updates the local display of the current requirement's aTests
 	 * 
 	 * @param newRequirement
 	 *            the most recent version of the current requirement
@@ -325,21 +324,21 @@ public class DetailATestView extends JPanel {
 	public void updateRequirement(Requirement newRequirement) {
 		this.requirement = newRequirement;
 
-		// updates the tasks list
-		addTasksToList();
+		// updates the aTests list
+		addaTestsToList();
 	}
 
 	/**
-	 * simple getter for the single currently selected task
+	 * simple getter for the single currently selected aTest
 	 * 
-	 * @return the selected task
+	 * @return the selected aTest
 	 */
-	public Task getSingleSelectedTask() {
-		return (Task) tests.getSelectedValue();
+	public ATest getSingleSelectedaTest() {
+		return (ATest) tests.getSelectedValue();
 	}
 
 	/**
-	 * This function disables interaction with the tasks panel
+	 * This function disables interaction with the aTests panel
 	 */
 	public void disableUserButtons() {
 		makeATestPanel.setInputEnabled(false);
