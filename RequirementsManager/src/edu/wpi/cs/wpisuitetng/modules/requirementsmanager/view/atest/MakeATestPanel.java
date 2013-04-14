@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -245,5 +246,9 @@ public class MakeATestPanel extends JPanel {
 
 	public JLabel getaTestStatus() {
 		return aTestStatus;
+	}
+
+	public JButton getAddATest() {
+		return addaTest;
 	}
 }

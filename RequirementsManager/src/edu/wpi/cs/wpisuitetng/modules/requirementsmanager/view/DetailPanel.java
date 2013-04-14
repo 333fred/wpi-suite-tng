@@ -1168,7 +1168,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		
 		}
 		
-		if (taskView.getTaskPanel().getAddTask().isEnabled() || noteView.getNotePanel().getAddnote().isEnabled()) {
+		if (taskView.getTaskPanel().getAddTask().isEnabled() || noteView.getNotePanel().getAddnote().isEnabled() || aTestView.getTestPanel().getAddATest().isEnabled()) {
 			mainTabController.switchToTab(this);
 			
 			Object[] altOptions = {"Discard Changes",
