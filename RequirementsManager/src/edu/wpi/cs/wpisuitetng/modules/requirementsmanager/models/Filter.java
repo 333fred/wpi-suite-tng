@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
 
 /**
  * This is a model for a filter. They are used by the UI to determine what to
@@ -25,26 +26,31 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class Filter extends AbstractModel {
 
-	/** Enum for the field to filter
+	/**
+	 * Enum for the field to filter
 	 * 
 	 */
-	public enum Field {
-		NAME, TYPE, PRIORITY, STATUS, ITERATION, ESTIMATE, EFFORT, RELEASE_NUMBER
+	public enum FilterField {
+		NAME("Name"), TYPE("Type"), PRIORITY("Priority"), STATUS("Status"), ITERATION(
+				"Iteration"), ESTIMATE("Estimate"), EFFORT("Effort"), RELEASE_NUMBER(
+				"Release Number");
+
+		private String name;
+
+		private FilterField(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
-	
-	/** Enum for the filter operation 
-	 * 
-	 */
-	public enum Operation {
-		LESS_THAN, LESS_THAN_EQUAL, EQUAL, NOT_EQUAL, GREATER_THAN_EQUAL, GREATER_THAN, OCCURS_BETWEEN, OCCURS_AFTER, OCCURS_BEFORE
-	}
-	
 	
 	private int id;
 	private User creator;
-	private Field field;
-	private Operation operation;
-	private Object equalTo;
+	private FilterField field;
+	private FilterOperation operation;
+	private Object value;
 
 	/**
 	 * Creates a blank filter with no user
@@ -140,49 +146,50 @@ public class Filter extends AbstractModel {
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
-	
-	
 
 	/**
 	 * @return the field
 	 */
-	public Field getField() {
+	public FilterField getField() {
 		return field;
 	}
 
 	/**
-	 * @param field the field to set
+	 * @param field
+	 *            the field to set
 	 */
-	public void setField(Field field) {
+	public void setField(FilterField field) {
 		this.field = field;
 	}
 
 	/**
 	 * @return the operation
 	 */
-	public Operation getOperation() {
+	public FilterOperation getOperation() {
 		return operation;
 	}
 
 	/**
-	 * @param operation the operation to set
+	 * @param operation
+	 *            the operation to set
 	 */
-	public void setOperation(Operation operation) {
+	public void setOperation(FilterOperation operation) {
 		this.operation = operation;
 	}
 
 	/**
 	 * @return the equalTo
 	 */
-	public Object getEqualTo() {
-		return equalTo;
+	public Object getValue() {
+		return value;
 	}
 
 	/**
-	 * @param equalTo the equalTo to set
+	 * @param equalTo
+	 *            the equalTo to set
 	 */
-	public void setEqualTo(Object equalTo) {
-		this.equalTo = equalTo;
+	public void setValue(Object value) {
+		this.value = value;
 	}
 
 	/**
