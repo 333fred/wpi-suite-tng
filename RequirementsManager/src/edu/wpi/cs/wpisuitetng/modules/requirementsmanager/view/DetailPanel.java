@@ -58,6 +58,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.ItemStateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.TextUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskView;
 
 /**
@@ -92,11 +93,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private DetailNoteView noteView;
 
 	private DetailTaskView taskView;
+	
+	private SubRequirementPanel subRequirementView;
 
 	// the view that shows the notes
 	public DetailLogView logView;
 	// the view that shows the users assigned to the requirement
 	private AssigneePanel userView;
+	private SubRequirementPanel subReqView;
 
 	JButton btnSave;
 
@@ -498,10 +502,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		userView = new AssigneePanel(requirement, this);
 		taskView = new DetailTaskView(this.getRequirement(), this);
 		aTestView = new DetailATestView(this.getRequirement(), this);
+		subRequirementView = new SubRequirementPanel(this.getRequirement(),this);
 
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
-				userView, taskView, aTestView);
+				userView, taskView, aTestView,subRequirementView);
 
 		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
 			eventPane.disableUserButtons();
