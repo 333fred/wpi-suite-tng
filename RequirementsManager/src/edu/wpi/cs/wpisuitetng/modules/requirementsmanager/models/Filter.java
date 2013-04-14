@@ -37,7 +37,7 @@ public class Filter extends AbstractModel {
 	 * Creates a blank filter with no user
 	 */
 	public Filter() {
-		new Filter(null, FilterField.NAME, FilterOperation.EQUAL, new String());
+		this(null, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class Filter extends AbstractModel {
 	 *            the creator of the filter
 	 */
 	public Filter(User u) {
-		new Filter(u, FilterField.NAME, FilterOperation.EQUAL, new String());
+		this(u, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
 	
 	/** Creates a filter with the given fields
@@ -63,6 +63,9 @@ public class Filter extends AbstractModel {
 		this.field = field;
 		this.operation = operation;
 		this.value = value;
+		
+		System.out.println("FILTERRR FIELD: " + field + "  " + getField());
+		
 	}
 
 	/**

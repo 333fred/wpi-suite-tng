@@ -24,6 +24,7 @@ public class FilterTableView extends JPanel {
 
 		ArrayList<Filter> filters = new ArrayList<Filter>();
 		filters.add(new Filter());
+		filters.add(new Filter());
 		tableModel = new FilterTableModel(filters);
 		
 		tableView = new JTable(tableModel);		

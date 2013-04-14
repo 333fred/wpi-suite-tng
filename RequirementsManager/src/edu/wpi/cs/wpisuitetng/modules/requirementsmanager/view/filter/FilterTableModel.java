@@ -20,9 +20,6 @@ public class FilterTableModel implements TableModel {
 	/** Array of the names of the columns */
 	private String[] columnNames;
 	
-	/** The number of columns this data has */
-	private int columnCount;
-	
 	/** Creates a new Filter Table Model with the given filters 
 	 * 
 	 * @param filters The initial set of filters to display 
@@ -48,6 +45,8 @@ public class FilterTableModel implements TableModel {
 		for (Filter filter: filters) {
 			//create the new column data
 			String[] columnData = new String[getColumnCount()];
+			System.out.println(filter);
+			System.out.println(filter.getField());
 			columnData[0] = filter.getField().toString();
 			columnData[1] = filter.getOperation().toString();
 			columnData[2] = filter.getValue().toString();
@@ -65,7 +64,7 @@ public class FilterTableModel implements TableModel {
 	}
 
 	public int getColumnCount() {
-		return columnCount;
+		return columnNames.length;
 	}
 
 	public String getColumnName(int columnIndex) {
