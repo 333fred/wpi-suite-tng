@@ -149,8 +149,10 @@ public class SaveTaskController {
 		view.getUserAssigned().setEnabled(true);
 		view.getTaskField().setEnabled(true);
 		view.getTaskName().setEnabled(true);
+		view.getEstimate().setEnabled(true);
 		view.getTaskField().setText("");
 		view.getTaskName().setText("");
+		view.getEstimate().setText("");
 		view.getTaskField().setBackground(Color.white);
 		view.getTaskName().setBackground(Color.white);
 		view.getAddTask().setEnabled(false);

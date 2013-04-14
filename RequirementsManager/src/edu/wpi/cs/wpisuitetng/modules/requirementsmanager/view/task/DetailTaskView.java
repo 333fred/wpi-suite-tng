@@ -188,6 +188,7 @@ public class DetailTaskView extends JPanel {
 				makeTaskPanel.getUserAssigned().setEnabled(true);
 				makeTaskPanel.getTaskField().setText("");
 				makeTaskPanel.getTaskName().setText("");
+				makeTaskPanel.getEstimate().setText("0");
 				makeTaskPanel.getTaskField().setBackground(Color.white);
 				makeTaskPanel.getTaskName().setBackground(Color.white);
 				if (makeTaskPanel.getTaskName().getText().trim().equals("")
@@ -206,8 +207,10 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskName().setEnabled(false);
 					makeTaskPanel.getTaskComplete().setSelected(false);
 					makeTaskPanel.getUserAssigned().setEnabled(false);
+					makeTaskPanel.getEstimate().setEnabled(false);
 					makeTaskPanel.getTaskField().setText("");
 					makeTaskPanel.getTaskName().setText("");
+					makeTaskPanel.getEstimate().setText("0");
 					makeTaskPanel.getTaskField().setBackground(
 							makeTaskPanel.getBackground());
 					makeTaskPanel.getTaskName().setBackground(
@@ -221,14 +224,17 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskField().setEnabled(true);
 					makeTaskPanel.getTaskName().setEnabled(true);
 					makeTaskPanel.getUserAssigned().setEnabled(true);
+					makeTaskPanel.getEstimate().setEnabled(true);
 					makeTaskPanel.getTaskField().setText(
 							getSingleSelectedTask().getDescription());
 					makeTaskPanel.getTaskName().setText(
 							getSingleSelectedTask().getName());
 					makeTaskPanel.getTaskComplete().setSelected(
-							getSingleSelectedTask().isCompleted());
+							getSingleSelectedTask().isCompleted());					
+					makeTaskPanel.getEstimate().setText(Integer.toString(
+							getSingleSelectedTask().getEstimate()));
 					makeTaskPanel.getTaskField().setBackground(Color.white);
-					makeTaskPanel.getTaskName().setBackground(Color.white);
+					makeTaskPanel.getTaskName().setBackground(Color.white);					
 				}
 			}
 		}
