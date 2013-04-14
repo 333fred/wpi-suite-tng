@@ -87,7 +87,6 @@ public class DetailTaskView extends JPanel {
 
 		// adds the tasks to the list model
 		addTasksToList();
-		// ,tasks.getSelectedValues()
 
 		List<String> assignedUsers = requirement.getUsers();
 		// iterate through and add them to the list

@@ -22,6 +22,7 @@ public class Task implements Event {
 	private String description;
 	private boolean completed;
 	private String assignedUser;
+	private int estimate;
 	private int id;
 
 	public Task(String name, String description) {
@@ -29,6 +30,7 @@ public class Task implements Event {
 		this.name = name;
 		this.description = description;
 		this.id = -1;
+		this.estimate = 0;		
 	}
 
 	/**
@@ -109,6 +111,7 @@ public class Task implements Event {
 		String temp = "<html><i>" + parseNewLines(getDescription());
 		String userMessage;
 		String completeMessage;
+		String estimateMessage;
 		if (assignedUser == null) {
 			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned"
 					+ "</FONT COLOR>";
@@ -121,8 +124,9 @@ public class Task implements Event {
 		} else {
 			completeMessage = "<br><FONT COLOR=\"red\">In Progress</FONT COLOR>";
 		}
+		estimateMessage = "<br><FONT COLOR=\"red\">Estimate: " + this.estimate + "</FONT COLOR>";
 		// return assembled content string;
-		return temp + userMessage + completeMessage + "</i></html>";
+		return temp + userMessage + completeMessage + estimateMessage + "</i></html>";
 	}
 
 	/**
@@ -155,6 +159,21 @@ public class Task implements Event {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	/**
+	 * @return the estimate of the task
+	 */
+	public int getEstimate() {
+		return estimate;
+	}
+
+	/**
+	 * @param est
+	 *            the estimate to set
+	 */
+	public void setEstimate(int est) {
+		this.estimate = est;
 	}
 
 }
