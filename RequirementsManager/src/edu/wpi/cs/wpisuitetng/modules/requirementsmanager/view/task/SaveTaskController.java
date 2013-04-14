@@ -56,6 +56,18 @@ public class SaveTaskController {
 	public void saveTask(Object[] tasks) {
 		final String taskText = view.getTaskField().getText();
 		final String taskName = view.getTaskName().getText();
+		int taskEstimate;
+		
+		if(!view.getEstimate().getText().equals(""))
+			taskEstimate = Integer.parseInt(view.getEstimate().getText());
+		else
+			taskEstimate = -1;
+		
+		int estimateSum = 0;
+		
+		for(Task altTask : model.getTasks())
+			estimateSum = estimateSum + altTask.getEstimate();
+		
 		if (tasks == null) { // Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
 		} else if (tasks.length < 1) {
@@ -67,6 +79,12 @@ public class SaveTaskController {
 				else
 					tempTask.setAssignedUser((String) view.getUserAssigned()
 							.getSelectedItem());
+				
+				if(taskEstimate!=-1){
+					if(taskEstimate+estimateSum <= model.getEstimate())
+						tempTask.setEstimate(taskEstimate);
+				}
+
 				tempTask.setId(this.model.getTasks().size() + 1);
 				this.model.addTask(tempTask);
 				parentView.getTaskList().addElement(tempTask);
@@ -93,11 +111,18 @@ public class SaveTaskController {
 						((Task) aTask).setDescription(view.getTaskField()
 								.getText());
 					}
+					
 					if ((view.getUserAssigned().getSelectedItem() == ""))
 						((Task) aTask).setAssignedUser(null);
 					else
 						((Task) aTask).setAssignedUser((String) view
 								.getUserAssigned().getSelectedItem());
+					
+					if(taskEstimate!=-1){
+						if(taskEstimate+estimateSum-((Task) aTask).getEstimate() <= model.getEstimate())
+							((Task) aTask).setEstimate(taskEstimate);
+					}
+					
 				}
 				// Check the completion status on the tasks
 				((Task) aTask)
@@ -124,11 +149,14 @@ public class SaveTaskController {
 		view.getUserAssigned().setEnabled(true);
 		view.getTaskField().setEnabled(true);
 		view.getTaskName().setEnabled(true);
+		view.getEstimate().setEnabled(true);
 		view.getTaskField().setText("");
 		view.getTaskName().setText("");
+		view.getEstimate().setText("");
 		view.getTaskField().setBackground(Color.white);
 		view.getTaskName().setBackground(Color.white);
 		view.getAddTask().setEnabled(false);
+		parentView.getTaskView().hasChanges = false;
 
 	}
 }

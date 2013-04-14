@@ -45,6 +45,7 @@ public class DetailTaskView extends JPanel {
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeTaskPanel makeTaskPanel;
+	public Boolean hasChanges;
 
 	/**
 	 * Construct the panel and add layout components
@@ -59,7 +60,7 @@ public class DetailTaskView extends JPanel {
 
 		this.requirement = requirement;
 		this.parentView = parentView;
-
+		hasChanges = false;
 		setLayout(new BorderLayout());
 		// Set up the task panel
 		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
@@ -87,7 +88,6 @@ public class DetailTaskView extends JPanel {
 
 		// adds the tasks to the list model
 		addTasksToList();
-		// ,tasks.getSelectedValues()
 
 		List<String> assignedUsers = requirement.getUsers();
 		// iterate through and add them to the list
@@ -96,7 +96,7 @@ public class DetailTaskView extends JPanel {
 			makeTaskPanel.getUserAssigned().addItem(user);
 		}
 
-		if(requirement.getStatus() != Status.DELETED) {
+		if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE) {
 			//Set the action of the save button to the default (create new task)
 			makeTaskPanel.getAddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView, tasks)));
 
@@ -128,6 +128,7 @@ public class DetailTaskView extends JPanel {
 				//For creating a new task
 				@Override
 				public void keyReleased(KeyEvent e) {
+					hasChanges = true;
 					if (makeTaskPanel.getTaskField().getText().trim().equals("")
 							&& tasks.getSelectedValues().length == 0)
 						makeTaskPanel.getAddTask().setEnabled(false);
@@ -142,6 +143,7 @@ public class DetailTaskView extends JPanel {
 			makeTaskPanel.getTaskName().addKeyListener(new KeyAdapter() { 
 				@Override                                                 
 				public void keyReleased(KeyEvent e) {
+					hasChanges = true;
 					if (makeTaskPanel.getTaskName().getText().trim().equals("")
 							&& tasks.getSelectedValues().length == 0)
 						makeTaskPanel.getAddTask().setEnabled(false);
@@ -152,14 +154,15 @@ public class DetailTaskView extends JPanel {
 			});
 
 		}else{
-			//Requirement is set to delted, so disable all of the fields
+			//Requirement is set to deleted, so disable all of the fields
 			makeTaskPanel.getTaskFieldPane().setEnabled(false);
 			makeTaskPanel.getTaskField().setEnabled(false);
 			makeTaskPanel.getTaskName().setEnabled(false);
 			makeTaskPanel.getUserAssigned().setEnabled(false);
 			makeTaskPanel.getAddTask().setEnabled(false);
+			makeTaskPanel.getEstimate().setEnabled(false);
 			makeTaskPanel.getTaskStatus().setText("");
-
+			makeTaskPanel.getEstimate().setBackground(makeTaskPanel.getBackground());
 			makeTaskPanel.getTaskField().setBackground(makeTaskPanel.getBackground());
 			makeTaskPanel.getTaskName().setBackground(makeTaskPanel.getBackground());
 		}
@@ -173,7 +176,7 @@ public class DetailTaskView extends JPanel {
 	 * 
 	 */
 	private void updateTaskView(){
-		if(requirement.getStatus() != Status.DELETED){
+		if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE){
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(
 							makeTaskPanel, requirement, parentView, tasks), tasks
@@ -189,6 +192,7 @@ public class DetailTaskView extends JPanel {
 				makeTaskPanel.getUserAssigned().setEnabled(true);
 				makeTaskPanel.getTaskField().setText("");
 				makeTaskPanel.getTaskName().setText("");
+				makeTaskPanel.getEstimate().setText("0");
 				makeTaskPanel.getTaskField().setBackground(Color.white);
 				makeTaskPanel.getTaskName().setBackground(Color.white);
 				if (makeTaskPanel.getTaskName().getText().trim().equals("")
@@ -207,11 +211,15 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskName().setEnabled(false);
 					makeTaskPanel.getTaskComplete().setSelected(false);
 					makeTaskPanel.getUserAssigned().setEnabled(false);
+					makeTaskPanel.getEstimate().setEnabled(false);
 					makeTaskPanel.getTaskField().setText("");
 					makeTaskPanel.getTaskName().setText("");
+					makeTaskPanel.getEstimate().setText("0");
 					makeTaskPanel.getTaskField().setBackground(
 							makeTaskPanel.getBackground());
 					makeTaskPanel.getTaskName().setBackground(
+							makeTaskPanel.getBackground());
+					makeTaskPanel.getEstimate().setBackground(
 							makeTaskPanel.getBackground());
 				} else {
 					makeTaskPanel
@@ -222,14 +230,18 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskField().setEnabled(true);
 					makeTaskPanel.getTaskName().setEnabled(true);
 					makeTaskPanel.getUserAssigned().setEnabled(true);
+					makeTaskPanel.getEstimate().setEnabled(true);
 					makeTaskPanel.getTaskField().setText(
 							getSingleSelectedTask().getDescription());
 					makeTaskPanel.getTaskName().setText(
 							getSingleSelectedTask().getName());
 					makeTaskPanel.getTaskComplete().setSelected(
-							getSingleSelectedTask().isCompleted());
+							getSingleSelectedTask().isCompleted());					
+					makeTaskPanel.getEstimate().setText(Integer.toString(
+							getSingleSelectedTask().getEstimate()));
 					makeTaskPanel.getTaskField().setBackground(Color.white);
 					makeTaskPanel.getTaskName().setBackground(Color.white);
+					makeTaskPanel.getEstimate().setBackground(Color.white);	
 				}
 			}
 		}
@@ -243,7 +255,7 @@ public class DetailTaskView extends JPanel {
 	 * 
 	 */
 	private void updateTaskViewTime(){
-		if(requirement.getStatus() != Status.DELETED){
+		if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE){
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(
 							makeTaskPanel, requirement, parentView, tasks), tasks

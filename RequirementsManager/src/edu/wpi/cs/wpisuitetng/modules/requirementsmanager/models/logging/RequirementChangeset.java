@@ -231,10 +231,20 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 			if (modified > 0) {
 				content += "Added " + modified + " task(s)<br>";
+			}			
+		}
+		if(changes.get("aTests") != null){
+			List<Object> added = new ArrayList<Object>();
+			List<Object> removed = new ArrayList<Object>();
+			oldToNewList(added, removed, changes.get("aTests"));
+			int modified = added.size();
+			if (removed.size() > 0) {
+				content += "Modified " + removed.size() + " tests(s)<br>";
+				modified -= removed.size();
 			}
-			
-
-			
+			if (modified > 0) {
+				content += "Added " + modified + " tests(s)<br>";
+			}	
 		}
 
 		content += "</html>";

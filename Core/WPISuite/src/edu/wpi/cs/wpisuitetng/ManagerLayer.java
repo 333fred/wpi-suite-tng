@@ -80,7 +80,6 @@ public class ManagerLayer {
 		map.put("requirementsmanagerstringlistmodel", new UserEntityManager(data));
 		map.put("requirementsmanageriteration", new IterationEntityManager(data));
 		map.put("requirementsmanagerfilter", new FilterEntityManager(data));
-		System.out.println("FUCK BITCHES GET MONEY");
 		//add just your module to this list
 		String[] fullModuleList = {"core","defecttracker","postboard"};
 		((ProjectManager)map.get("coreproject")).setAllModules(fullModuleList);

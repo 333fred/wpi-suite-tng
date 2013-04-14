@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.CancelAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest.DetailATestView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEventPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentNumberAndSizeFilter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
@@ -139,6 +140,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	/** boolean to indicate whether the tab should be closed upon saving */
 	private boolean closeTab;
+	private DetailATestView aTestView;
 
 	/**
 	 * Creates a DetailPanel that creates a requirement assigned to the given
@@ -494,12 +496,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		noteView = new DetailNoteView(this.getRequirement(), this);
 		userView = new AssigneePanel(requirement, this);
 		taskView = new DetailTaskView(this.getRequirement(), this);
+		aTestView = new DetailATestView(this.getRequirement(), this);
 
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
-				userView, taskView);
+				userView, taskView, aTestView);
 
-		if (requirement.getStatus() == Status.DELETED) {
+		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
 			eventPane.disableUserButtons();
 		}
 
@@ -1021,7 +1024,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		JPanel panel = new JPanel();
 		Color defaultColor = panel.getBackground();
 
-		if (getRequirement().getStatus() != Status.DELETED)
+		if (getRequirement().getStatus() != Status.DELETED && getRequirement().getStatus() != Status.COMPLETE)
 			return;
 		textName.setEnabled(false);
 		textName.setBackground(defaultColor);
@@ -1101,6 +1104,22 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public DefaultListModel getTaskList() {
 		return taskView.getTaskList();
 	}
+	
+
+	public DefaultListModel getTestList() {
+		return aTestView.getaTestList();
+	}
+	public DetailTaskView getTaskView() {
+		return taskView;
+	}
+	
+	public DetailNoteView getNoteView() {
+		return noteView;
+	}
+	
+	public AssigneePanel getUserView() {
+		return userView;
+	}
 
 	@Override
 	public boolean onTabClosed() {
@@ -1111,6 +1130,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			Object[] options = {"Save Changes",
 			                    "Discard Changes",
 			                    "Cancel"};
+			
 			int res = JOptionPane.showOptionDialog(this,
 			    "There are unsaved changes, are you sure you want to continue?",
 			    requirement.getName() + ": Confirm Close",
@@ -1132,6 +1152,31 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			}
 		
 		}
+		
+		if (taskView.hasChanges || noteView.hasChanges) {
+			mainTabController.switchToTab(this);
+			
+			Object[] altOptions = {"Discard Changes",
+			"Cancel"};
+			
+			int res = JOptionPane.showOptionDialog(this,
+				    "There are unsaved changes in subtabs, are you sure you want to continue?",
+				    requirement.getName() + ": Confirm Close",
+				    JOptionPane.YES_NO_CANCEL_OPTION,
+				    JOptionPane.QUESTION_MESSAGE,
+				    null,
+				    altOptions,
+				    altOptions[1]);				
+
+				if (res == 0) {
+					return true;
+				}
+				else if (res == 1) {
+					return false;
+				}
+			
+		}
 		return true;
 	}
+
 }

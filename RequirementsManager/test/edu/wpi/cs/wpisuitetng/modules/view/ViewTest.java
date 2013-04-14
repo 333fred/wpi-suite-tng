@@ -16,6 +16,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 
+import javax.swing.JTextArea;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,6 +74,6 @@ public class ViewTest {
 	
 	@Test
 	public void testGetTextName() throws Exception {
-		assertEquals("", this.DetailTest1.getTextName());
+		assertEquals("", this.DetailTest1.getTextName().getText());
 	}
 }

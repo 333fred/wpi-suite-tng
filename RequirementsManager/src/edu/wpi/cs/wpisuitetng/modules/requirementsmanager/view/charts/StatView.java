@@ -246,8 +246,8 @@ public class StatView extends Tab implements ActionListener {
 		this.updateChart();
 		
     }
-    
-	private void setSelectedItems() {
+    //public for testing purposes
+	public void setSelectedItems() {
 		//set the chart type radio buttons
 		switch (chartType) {
 		case PIE:
@@ -273,7 +273,8 @@ public class StatView extends Tab implements ActionListener {
 	 * 
 	 * @param type The new chart type
 	 */
-	private void updateChartType(ChartType type) {
+	//public for testing purposes
+	public void updateChartType(ChartType type) {
 		chartType = type;
 	}
 	
@@ -281,15 +282,16 @@ public class StatView extends Tab implements ActionListener {
 	 * 
 	 * @param type The new chart data type
 	 */
-	private void updateChartDataType(DataType type) {
+	//public for testing purposes
+	public void updateChartDataType(DataType type) {
 		chartDataType = type;
 	}
-	
-	private enum ChartType {
+	//public only for testing
+	public enum ChartType {
 		BAR, PIE, LINE
 	}
-	
-	private enum DataType {
+	//public only for testing
+	public enum DataType {
 		STATUS, ITERATION, ASSIGNEE	, ESTIMATES, EFFORT, TASK, VELOCITY}
 	
 	/**
@@ -337,7 +339,7 @@ public class StatView extends Tab implements ActionListener {
 		System.out.println(this.chartDataType.toString());
 		
 		// build the chart based on the type of chart the user has selected
-		switch(this.chartType){
+		switch(chartType){
 		
 			case BAR:	// TODO: determine if additional modifications need to be made to the plot
 				chart = stats.buildBarChart();
@@ -380,6 +382,17 @@ public class StatView extends Tab implements ActionListener {
 	public void onGainedFocus() {
 		updateChart();
 	}
-	
+
+	/**
+	 * @return the chartType
+	 */
+	public ChartType getChartType() {
+		return chartType;
+	}
+
+	public DataType getChartDataType() {
+		return chartDataType;
+	}
+
 }
 
