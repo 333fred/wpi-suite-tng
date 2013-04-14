@@ -62,11 +62,6 @@ public class SaveATestController {
 			//aTest must have a name and description of at least one character
 			if (testText.length() > 0 && testName.length() > 0) { 
 				ATest tempTest = new ATest(testName, testText);
-				if ((view.getUserAssigned().getSelectedItem() == ""))
-					tempTest.setAssignedUser(null);
-				else
-					tempTest.setAssignedUser((String) view.getUserAssigned()
-							.getSelectedItem());
 				tempTest.setId(this.model.getTests().size() + 1);
 				this.model.addTest(tempTest);
 				parentView.getTestList().addElement(tempTest);
@@ -93,14 +88,9 @@ public class SaveATestController {
 						((ATest) aTest).setDescription(view.getaTestField()
 								.getText());
 					}
-					if ((view.getUserAssigned().getSelectedItem() == ""))
-						((ATest) aTest).setAssignedUser(null);
-					else
-						((ATest) aTest).setAssignedUser((String) view
-								.getUserAssigned().getSelectedItem());
 				}
 				// Check the completion status on the aTests
-				//((ATest) aTest).setStatus(view.getaTestComplete().isSelected()); //TODO set status
+				((ATest) aTest).setStatus(ATest.ATestStatus.valueOf(view.getaTestStatusBox().getSelectedItem().equals("") ? "BLANK" : view.getaTestStatusBox().getSelectedItem().toString()));
 			}
 			
 			// Save to requirement!
@@ -118,9 +108,8 @@ public class SaveATestController {
 		view.getaTestStatus()
 				.setText(
 						"No aTests selected. Fill name and description to create a new one.");
-		view.getaTestComplete().setEnabled(false);
-		view.getaTestComplete().setSelected(false);
-		view.getUserAssigned().setEnabled(true);
+		view.getaTestStatusBox().setEnabled(false);
+		view.getaTestStatusBox().setSelectedItem("");
 		view.getaTestField().setEnabled(true);
 		view.getaTestName().setEnabled(true);
 		view.getaTestField().setText("");

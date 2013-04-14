@@ -21,7 +21,6 @@ public class ATest implements Event {
 	private String name;
 	private String description;
 	private ATestStatus status;
-	private String assignedUser;
 	private int id;
 
 	public ATest(String name, String description) {
@@ -42,7 +41,7 @@ public class ATest implements Event {
 	 * @param completed
 	 *            the completed to set
 	 */
-	public void setCompleted(ATestStatus status) {
+	public void setStatus(ATestStatus status) {
 		this.status = status;
 	}
 
@@ -76,20 +75,6 @@ public class ATest implements Event {
 		this.name = name;
 	}
 
-	/**
-	 * @return the assignedUser
-	 */
-	public String getAssignedUser() {
-		return assignedUser;
-	}
-
-	/**
-	 * @param assignedUser
-	 *            the assignedUser to set
-	 */
-	public void setAssignedUser(String assignedUser) {
-		this.assignedUser = assignedUser;
-	}
 
 	@Override
 	public String getTitle() {
@@ -106,15 +91,7 @@ public class ATest implements Event {
 	@Override
 	public String getContent() {
 		String temp = "<html><i>" + parseNewLines(getDescription());
-		String userMessage;
 		String completeMessage;
-		if (assignedUser == null) {
-			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned"
-					+ "</FONT COLOR>";
-		} else {
-			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser
-					+ "</FONT COLOR>";
-		}
 		if (this.status == ATestStatus.PASSED) {
 			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
 		} else if (this.status == ATestStatus.FAILED) {
@@ -123,7 +100,7 @@ public class ATest implements Event {
 			completeMessage = "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>";
 		}
 		// return assembled content string;
-		return temp + userMessage + completeMessage + "</i></html>";
+		return temp + completeMessage + "</i></html>";
 	}
 
 	/**

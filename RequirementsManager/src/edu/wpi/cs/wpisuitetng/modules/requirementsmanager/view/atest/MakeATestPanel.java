@@ -19,7 +19,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,16 +48,13 @@ public class MakeATestPanel extends JPanel {
 	private final JTextArea aTestDescription;
 	private final JButton addaTest;
 	private final JLabel addaTestLabel;
-	private final JCheckBox aTestComplete;
-	private final JComboBox userAssigned;
+	private final JComboBox aTestStatusBox;
 	
 	//Jlabels for aTest fields
 	private final JLabel aTestStatus;
 	private final JLabel nameaTestLabel;
 	private final JLabel descaTestLabel;
-	private final JLabel userAssignedLabel;
 
-	
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane aTestFieldPane;
@@ -134,9 +131,10 @@ public class MakeATestPanel extends JPanel {
 		addaTestLabel = new JLabel("Acceptance Test:");
 		nameaTestLabel = new JLabel("Name:");
 		descaTestLabel = new JLabel("Description:");
-		userAssignedLabel = new JLabel("Users:");
-		aTestComplete = new JCheckBox("Completed");
-		userAssigned = new JComboBox();
+		
+		String[] availableStatuses = {"","PASSED","FAILED"};
+		
+		aTestStatusBox = new JComboBox(availableStatuses);
 
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
@@ -174,29 +172,15 @@ public class MakeATestPanel extends JPanel {
 		layout.putConstraint(SpringLayout.SOUTH, aTestFieldPane,
 				note_FIELD_HEIGHT, SpringLayout.NORTH, aTestFieldPane);
 
-		layout.putConstraint(SpringLayout.NORTH, aTestComplete,
+		layout.putConstraint(SpringLayout.NORTH, aTestStatusBox,
 				VERTICAL_PADDING, SpringLayout.SOUTH, aTestFieldPane);
-		layout.putConstraint(SpringLayout.WEST, aTestComplete, 0,
+		layout.putConstraint(SpringLayout.WEST, aTestStatusBox, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
-				SpringLayout.SOUTH, aTestComplete);
-
-		layout.putConstraint(SpringLayout.NORTH, userAssignedLabel,
-				VERTICAL_PADDING + 5, SpringLayout.SOUTH, aTestComplete);
-		layout.putConstraint(SpringLayout.WEST, userAssignedLabel, 4,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, userAssignedLabel, 0,
-				SpringLayout.EAST, aTestComplete);
-
-		layout.putConstraint(SpringLayout.NORTH, userAssigned,
-				VERTICAL_PADDING, SpringLayout.SOUTH, aTestComplete);
-		layout.putConstraint(SpringLayout.WEST, userAssigned, 50,
-				SpringLayout.WEST, userAssignedLabel);
-		layout.putConstraint(SpringLayout.EAST, userAssigned, 50,
-				SpringLayout.EAST, aTestComplete);
+				SpringLayout.SOUTH, aTestStatusBox);
 
 		layout.putConstraint(SpringLayout.NORTH, addaTest, VERTICAL_PADDING,
-				SpringLayout.SOUTH, aTestComplete);
+				SpringLayout.SOUTH, aTestStatusBox);
 		layout.putConstraint(SpringLayout.EAST, addaTest, 0, SpringLayout.EAST,
 				this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
@@ -204,20 +188,18 @@ public class MakeATestPanel extends JPanel {
 
 		//add all of the swing components to the this aTest panel
 		this.add(aTestStatus);
-		this.add(userAssignedLabel);
-		this.add(userAssigned);
 		this.add(addaTestLabel);
 		this.add(addaTest);
 		this.add(aTestName);
 		this.add(nameaTestLabel);
 		this.add(descaTestLabel);
-		this.add(aTestComplete);
+		this.add(aTestStatusBox);
 		this.add(aTestFieldPane);
 
 		//default the add button and complete checkbox 
 		//to un-enabled
 		addaTest.setEnabled(false);
-		aTestComplete.setEnabled(false);
+		aTestStatusBox.setEnabled(false);
 
 	}
 
@@ -255,8 +237,8 @@ public class MakeATestPanel extends JPanel {
 		return addaTest;
 	}
 
-	public JCheckBox getaTestComplete() {
-		return aTestComplete;
+	public JComboBox getaTestStatusBox() {
+		return aTestStatusBox;
 	}
 
 	public JScrollPane getaTestFieldPane() {
@@ -266,9 +248,4 @@ public class MakeATestPanel extends JPanel {
 	public JLabel getaTestStatus() {
 		return aTestStatus;
 	}
-
-	public JComboBox getUserAssigned() {
-		return userAssigned;
-	}
-
 }

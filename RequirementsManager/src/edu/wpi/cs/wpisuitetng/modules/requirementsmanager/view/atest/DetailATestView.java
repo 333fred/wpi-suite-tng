@@ -17,8 +17,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.Timer;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -37,6 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelec
  * 
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
+@SuppressWarnings("serial")
 public class DetailATestView extends JPanel {
 	/** For aTests */
 	protected DefaultListModel testList;
@@ -87,13 +86,6 @@ public class DetailATestView extends JPanel {
 		// adds the aTests to the list model
 		addaTestsToList();
 		// ,aTests.getSelectedValues()
-
-		List<String> assignedUsers = requirement.getUsers();
-		// iterate through and add them to the list
-		makeATestPanel.getUserAssigned().addItem("");
-		for (String user : assignedUsers) {
-			makeATestPanel.getUserAssigned().addItem(user);
-		}
 
 		if(requirement.getStatus() != Status.DELETED) {
 			//Set the action of the save button to the default (create new aTest)
@@ -155,7 +147,6 @@ public class DetailATestView extends JPanel {
 			makeATestPanel.getaTestFieldPane().setEnabled(false);
 			makeATestPanel.getaTestField().setEnabled(false);
 			makeATestPanel.getaTestName().setEnabled(false);
-			makeATestPanel.getUserAssigned().setEnabled(false);
 			makeATestPanel.getAddaTest().setEnabled(false);
 			makeATestPanel.getaTestStatus().setText("");
 
@@ -183,9 +174,8 @@ public class DetailATestView extends JPanel {
 				.getaTestStatus()
 				.setText(
 						"No acceptance tests selected. Fill name and description to create a new one.");
-				makeATestPanel.getaTestComplete().setEnabled(false);
-				makeATestPanel.getaTestComplete().setSelected(false);
-				makeATestPanel.getUserAssigned().setEnabled(true);
+				makeATestPanel.getaTestStatusBox().setEnabled(false);
+				makeATestPanel.getaTestStatusBox().setSelectedItem("");
 				makeATestPanel.getaTestField().setText("");
 				makeATestPanel.getaTestName().setText("");
 				makeATestPanel.getaTestField().setBackground(Color.white);
@@ -195,7 +185,7 @@ public class DetailATestView extends JPanel {
 						.equals(""))
 					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
-				makeATestPanel.getaTestComplete().setEnabled(true);
+				makeATestPanel.getaTestStatusBox().setEnabled(true);
 				if (tests.getSelectedValues().length > 1) {
 					makeATestPanel
 					.getaTestStatus()
@@ -204,8 +194,7 @@ public class DetailATestView extends JPanel {
 					makeATestPanel.getaTestFieldPane().setEnabled(false);
 					makeATestPanel.getaTestField().setEnabled(false);
 					makeATestPanel.getaTestName().setEnabled(false);
-					makeATestPanel.getaTestComplete().setSelected(false);
-					makeATestPanel.getUserAssigned().setEnabled(false);
+					makeATestPanel.getaTestStatusBox().setSelectedItem("");
 					makeATestPanel.getaTestField().setText("");
 					makeATestPanel.getaTestName().setText("");
 					makeATestPanel.getaTestField().setBackground(
@@ -220,13 +209,12 @@ public class DetailATestView extends JPanel {
 					makeATestPanel.getaTestFieldPane().setEnabled(true);
 					makeATestPanel.getaTestField().setEnabled(true);
 					makeATestPanel.getaTestName().setEnabled(true);
-					makeATestPanel.getUserAssigned().setEnabled(true);
 					makeATestPanel.getaTestField().setText(
 							getSingleSelectedaTest().getDescription());
 					makeATestPanel.getaTestName().setText(
 							getSingleSelectedaTest().getName());
-					makeATestPanel.getaTestComplete().setSelected(
-							getSingleSelectedaTest().isPassed());
+					makeATestPanel.getaTestStatusBox().setSelectedItem(
+							getSingleSelectedaTest().getStatus());
 					makeATestPanel.getaTestField().setBackground(Color.white);
 					makeATestPanel.getaTestName().setBackground(Color.white);
 				}
@@ -253,8 +241,7 @@ public class DetailATestView extends JPanel {
 				.getaTestStatus()
 				.setText(
 						"No aTests selected. Fill name and description to create a new one.");
-				makeATestPanel.getaTestComplete().setEnabled(false);
-				makeATestPanel.getUserAssigned().setEnabled(true);
+				makeATestPanel.getaTestStatusBox().setEnabled(false);
 				makeATestPanel.getaTestField().setBackground(Color.white);
 				makeATestPanel.getaTestName().setBackground(Color.white);
 				if (makeATestPanel.getaTestName().getText().trim().equals("")
@@ -262,7 +249,7 @@ public class DetailATestView extends JPanel {
 						.equals(""))
 					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
-				makeATestPanel.getaTestComplete().setEnabled(true);
+				makeATestPanel.getaTestStatusBox().setEnabled(true);
 				if (tests.getSelectedValues().length > 1) {
 					makeATestPanel
 					.getaTestStatus()
@@ -271,7 +258,6 @@ public class DetailATestView extends JPanel {
 					makeATestPanel.getaTestFieldPane().setEnabled(false);
 					makeATestPanel.getaTestField().setEnabled(false);
 					makeATestPanel.getaTestName().setEnabled(false);
-					makeATestPanel.getUserAssigned().setEnabled(false);
 					makeATestPanel.getaTestField().setBackground(
 							makeATestPanel.getBackground());
 					makeATestPanel.getaTestName().setBackground(
@@ -284,7 +270,6 @@ public class DetailATestView extends JPanel {
 					makeATestPanel.getaTestFieldPane().setEnabled(true);
 					makeATestPanel.getaTestField().setEnabled(true);
 					makeATestPanel.getaTestName().setEnabled(true);
-					makeATestPanel.getUserAssigned().setEnabled(true);
 					makeATestPanel.getaTestField().setBackground(Color.white);
 					makeATestPanel.getaTestName().setBackground(Color.white);
 				}
