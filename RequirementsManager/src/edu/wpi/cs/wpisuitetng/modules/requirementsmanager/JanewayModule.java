@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
@@ -31,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
@@ -50,6 +52,12 @@ public class JanewayModule implements IJanewayModule {
 
 	/** the IterationTreeView that will be displayed accross the module */
 	private IterationTreeView iterationTreeView;
+	
+	/** The view that will display filters */
+	private FilterView filterView;
+	
+	/** The tabbed pane on the left for filters and iterations */
+	private JTabbedPane leftTabbedPane;
 
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
@@ -81,10 +89,18 @@ public class JanewayModule implements IJanewayModule {
 
 		// initialize TabController
 		tabController = new MainTabController();
-
+	
+		
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
 
+		//initialize the filters
+		filterView = new FilterView();
+		
+		leftTabbedPane = new JTabbedPane();
+		leftTabbedPane.addTab("Iterations", iterationTreeView);
+		leftTabbedPane.addTab("Filters", filterView);
+		
 		// initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);
 
@@ -94,7 +110,7 @@ public class JanewayModule implements IJanewayModule {
 		tabController.addRequirementsTab();
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				iterationTreeView, tabController.getTabView());
+				leftTabbedPane, tabController.getTabView());
 		splitPane.setResizeWeight(0.28);
 
 		// create a new JanewayTabModel, passing in the tab view, and a new
