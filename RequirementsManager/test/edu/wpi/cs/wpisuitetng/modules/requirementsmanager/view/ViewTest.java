@@ -10,7 +10,7 @@
  *    
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import static org.junit.Assert.assertEquals;
 
