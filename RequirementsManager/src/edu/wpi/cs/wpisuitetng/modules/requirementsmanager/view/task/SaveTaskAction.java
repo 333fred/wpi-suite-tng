@@ -17,7 +17,7 @@ import javax.swing.AbstractAction;
 
 /**
  * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.RequirementsManager.tasks.SaveTaskController#savetask()}
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.SaveATestController.tasks.SaveTaskController#savetask()}
  * 
  * @author Nick Massa, Matt Costi
  */
