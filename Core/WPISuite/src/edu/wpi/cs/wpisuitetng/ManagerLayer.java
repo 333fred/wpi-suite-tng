@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.defecttracker.entitymanagers.CommentManage
 import edu.wpi.cs.wpisuitetng.modules.defecttracker.entitymanagers.DefectManager;
 import edu.wpi.cs.wpisuitetng.modules.postboard.model.PostBoardEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.IterationEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.PermissionModelEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.UserEntityManager;
 
@@ -78,6 +79,7 @@ public class ManagerLayer {
 		map.put("requirementsmanagerrequirement", new RequirementsEntityManager(data));
 		map.put("requirementsmanagerstringlistmodel", new UserEntityManager(data));
 		map.put("requirementsmanageriteration", new IterationEntityManager(data));
+		map.put("requirementsmanagerpermissionmodel", new PermissionModelEntityManager(data));
 
 		//add just your module to this list
 		String[] fullModuleList = {"core","defecttracker","postboard"};
