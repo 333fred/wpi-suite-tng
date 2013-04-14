@@ -32,8 +32,6 @@ import javax.swing.JTabbedPane;
 public class ClosableTabComponent extends JPanel implements ActionListener {
 
 	private final JTabbedPane tabbedPane;
-	
-	private final MainTabController tabController;
 
 	/**
 	 * Create a closable tab component belonging to the given tabbedPane. The
@@ -42,10 +40,9 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 	 * @param tabbedPane
 	 *            The JTabbedPane this tab component belongs to
 	 */
-	public ClosableTabComponent(MainTabController tabController) {
+	public ClosableTabComponent(JTabbedPane tabbedPane) {
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		this.tabController = tabController;
-		tabbedPane = tabController.getTabView();
+		this.tabbedPane = tabbedPane;
 		setOpaque(false);
 
 		final JLabel label = new JLabel() {
@@ -112,22 +109,6 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 				final int index = tabbedPane.indexOfTabComponent(component);
 				if (index > -1) {
 					tabbedPane.setSelectedIndex(index);
-				}
-			}
-			else if (e.getButton() == MouseEvent.BUTTON3) {
-				final int index = tabbedPane.indexOfTabComponent(component);
-				if (index > -1) {
-					int tabsOpen = tabController.getNumberOfOpenTabs();
-					TabPopupMenu popupMenu;
-					if (tabsOpen == 2) {
-						//only one closable tab component open
-						popupMenu = new TabPopupMenu(index, tabController, TabPopupMenu.CloseMode.CLOSE_ONLY_THIS);
-					}
-					else {
-						popupMenu = new TabPopupMenu(index ,tabController, TabPopupMenu.CloseMode.CLOSE_ALL);
-					}				
-					popupMenu.show(component, 5, 5); // off set of 5,5
-					//tabbedPane.setSelectedIndex(index);
 				}
 			}
 		}

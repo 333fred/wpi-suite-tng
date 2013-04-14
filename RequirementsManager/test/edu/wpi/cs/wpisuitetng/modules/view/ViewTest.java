@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.view;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
@@ -27,10 +28,14 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockData;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockNetwork;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllUsersController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
@@ -40,8 +45,8 @@ public class ViewTest {
 
 	// Create a dummy test so that JUnit doesn't break
 	Requirement RequirmentTest1 = new Requirement();
-	MainTabController TabControllerTest = new MainTabController();
-	MainTabView TabViewTest = TabControllerTest.getTabView();
+	MainTabView TabViewTest = new MainTabView();
+	MainTabController TabControllerTest = new MainTabController(TabViewTest);
 	Iteration IterationTest = new Iteration();
 	DetailPanel DetailTest1;
 	Project testProject;

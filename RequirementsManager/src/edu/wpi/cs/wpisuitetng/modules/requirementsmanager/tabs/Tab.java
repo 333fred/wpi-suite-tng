@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 import java.awt.Component;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  * Interface for listening to when a tab has gained focus
@@ -63,8 +64,8 @@ public abstract class Tab extends JPanel {
 		
 	}
 
-	public Component getTabComponent(MainTabController tabController) {
-		return new ClosableTabComponent(tabController);
+	public Component getTabComponent(JTabbedPane tabbedPane) {
+		return new ClosableTabComponent(tabbedPane);
 	}
 
 }

@@ -53,9 +53,9 @@ public class MainTabController {
 	 *            The view to manage
 	 */
 
-	public MainTabController() {		
+	public MainTabController(MainTabView tabView) {
+		this.tabView = tabView;
 		this.iterationTreeView = new IterationTreeView(this);
-		tabView = new MainTabView(this);
 
 		tabView.addChangeListener(new ChangeListener() {
 
@@ -234,22 +234,15 @@ public class MainTabController {
 		}
 	}
 	
-	public void closeTabAt(int index) {
+	public void attemptToCloseTabAt(int index) {
 		try {
 			Tab tab = (Tab) tabView.getComponentAt(index);
-			if (tab.onTabClosed()) {				
+			if (tabView.getTabComponentAt(index) instanceof ClosableTabComponent && tab.onTabClosed()) {				
 				tabView.removeTabAt(index);
 			}
 		}
 		catch (IndexOutOfBoundsException e) {
 			// do nothing, tried to close tab that does not exist
-		}
-	}
-	
-	public void closeTab(Tab tab) {
-		int index = tabView.indexOfComponent(tab);		
-		if (tabView.getTabComponentAt(index) instanceof ClosableTabComponent && tab.onTabClosed()) {			
-			tabView.remove(tab);
 		}
 	}
 
@@ -267,11 +260,6 @@ public class MainTabController {
 			// an invalid tab was requested, do nothing
 		}
 	}
-	
-	public void switchToTab(Tab tab) {
-		int index =  tabView.indexOfComponent(tab);
-		switchToTab(index);
-	}
 
 	public MainTabView getTabView() {
 		return tabView;
@@ -283,49 +271,6 @@ public class MainTabController {
 
 	public IterationTreeView getIterationTreeView() {
 		return iterationTreeView;
-	}
-	
-	/** Closes other tabs
-	 * 
-	 * @param currentIndex Index of the tab not to close
-	 */
-	
-	public void closeOtherTabs(int currentIndex) {
-		Tab[] openTabs = getOpenTabs();
-		for (int i=0;i<openTabs.length;i++) {
-			if (i == currentIndex) continue;
-			if (openTabs[i] instanceof Tab) {
-				closeTab(openTabs[i]);
-			};
-		}
-	}
-	
-	/** Closes all open tabs, that can be closed */
-	
-	public void closeAllTabs() {
-		Tab[] openTabs = getOpenTabs();
-		for (int i=0;i<openTabs.length;i++) {
-			if (openTabs[i] instanceof Tab) {
-				closeTab(openTabs[i]);
-				System.out.println("Ya?");
-			}
-		}
-	}
-	
-	/** Returns the number of tabs currently open */
-	
-	public int getNumberOfOpenTabs() {
-		return tabView.getTabCount();
-	}
-	
-	/** Returns a list of all the open tabs */
-	
-	public Tab[] getOpenTabs() {
-		Tab[] openTabs = new Tab[getNumberOfOpenTabs()];
-		for (int i=1;i<openTabs.length;i++) {
-			openTabs[i] = (Tab)tabView.getComponentAt(i);
-		}	
-		return openTabs;
 	}
 
 }

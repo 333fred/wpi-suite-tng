@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
@@ -38,6 +39,9 @@ public class JanewayModule implements IJanewayModule {
 
 	/** List of tabs that this module will display */
 	private List<JanewayTabModel> tabs;
+
+	/** The main view of the module that displays the tabs */
+	private MainTabView tabView;
 
 	/** The tab controller for tabView */
 	private MainTabController tabController;
@@ -77,10 +81,10 @@ public class JanewayModule implements IJanewayModule {
 
 		// initialize the tab view public void insertTab(String title, Icon
 		// icon, Component component, String tip, int index) {
-		
+		tabView = new MainTabView();
 
 		// initialize TabController
-		tabController = new MainTabController();
+		tabController = new MainTabController(tabView);
 
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
@@ -94,7 +98,7 @@ public class JanewayModule implements IJanewayModule {
 		tabController.addRequirementsTab();
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				iterationTreeView, tabController.getTabView());
+				iterationTreeView, tabView);
 		splitPane.setResizeWeight(0.28);
 
 		// create a new JanewayTabModel, passing in the tab view, and a new
