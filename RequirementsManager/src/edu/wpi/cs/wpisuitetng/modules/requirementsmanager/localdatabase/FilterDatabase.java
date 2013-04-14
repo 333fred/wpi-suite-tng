@@ -36,6 +36,7 @@ public class FilterDatabase extends Thread {
 	private FilterDatabase() {
 		this.filters = new HashMap<Integer, Filter>();
 		this.controller = new SimpleRetrieveAllFiltersController();
+		setDaemon(true);
 	}
 
 	/**
