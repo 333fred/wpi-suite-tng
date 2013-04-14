@@ -148,19 +148,21 @@ public class CreateFilterView extends JPanel implements ActionListener {
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualTo);
 		layout.putConstraint(SpringLayout.WEST, cboxEqualTo,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-
+		
 		layout.putConstraint(SpringLayout.SOUTH, butCancel, -VERTICAL_PADDING,
 				SpringLayout.SOUTH, this);
-		layout.putConstraint(SpringLayout.EAST, butCancel, -HORIZONTAL_PADDING,
-				SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING,
+				SpringLayout.EAST, butSave);
 
 		layout.putConstraint(SpringLayout.SOUTH, butSave, -VERTICAL_PADDING,
 				SpringLayout.SOUTH, this);
-		layout.putConstraint(SpringLayout.EAST, butSave, -HORIZONTAL_PADDING,
-				SpringLayout.WEST, butCancel);
+		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
 
 		setLayout(layout);
-
+		
+		
+		
 		add(labField);
 		add(labOperation);
 		add(labEqualTo);
@@ -181,6 +183,10 @@ public class CreateFilterView extends JPanel implements ActionListener {
 		cboxOperation.addActionListener(this);
 		cboxEqualTo.addActionListener(this);
 
+		//add action listeners to save
+		butSave.addActionListener(this);
+		butCancel.addActionListener(this);
+		
 		// populate the fields in the combo boxes
 		populateFieldComboBox();
 		populateOperationComboBox();
@@ -222,12 +228,11 @@ public class CreateFilterView extends JPanel implements ActionListener {
 			cboxOperation.addItem("=");
 			cboxOperation.addItem("!=");
 		} else if (cboxField.getSelectedItem().equals("Iteration")) {
-			cboxOperation.addItem("<");
-			cboxOperation.addItem("<=");
-			cboxOperation.addItem("=");
-			cboxOperation.addItem("!=");
-			cboxOperation.addItem(">=");
-			cboxOperation.addItem(">");
+			cboxOperation.addItem("Equals");
+			cboxOperation.addItem("Occurs before");
+			cboxOperation.addItem("Occurs after");
+			cboxOperation.addItem("Occurs between");
+			
 		}
 
 	}
@@ -273,6 +278,19 @@ public class CreateFilterView extends JPanel implements ActionListener {
 			txtEqualTo.setVisible(true);
 		}
 	}
+	
+	public void onSavePressed() {
+		
+	}
+	
+	public void onCancelPressed() {
+		txtEqualTo.setText("");
+		cboxField.setSelectedItem("Name");
+		
+		populateOperationComboBox();
+		updateEqualsField();
+		
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -280,5 +298,14 @@ public class CreateFilterView extends JPanel implements ActionListener {
 			populateOperationComboBox();
 			updateEqualsField();
 		}
+		
+		
+		else if (source.equals(butSave)) {
+			onSavePressed();
+		}
+		else if (source.equals(butCancel)) {
+			onCancelPressed();
+		}
 	}
+	
 }

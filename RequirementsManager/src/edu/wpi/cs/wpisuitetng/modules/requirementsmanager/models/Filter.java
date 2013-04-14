@@ -25,8 +25,26 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class Filter extends AbstractModel {
 
+	/** Enum for the field to filter
+	 * 
+	 */
+	public enum Field {
+		NAME, TYPE, PRIORITY, STATUS, ITERATION, ESTIMATE, EFFORT, RELEASE_NUMBER
+	}
+	
+	/** Enum for the filter operation 
+	 * 
+	 */
+	public enum Operation {
+		LESS_THAN, LESS_THAN_EQUAL, EQUAL, NOT_EQUAL, GREATER_THAN_EQUAL, GREATER_THAN, OCCURS_BETWEEN, OCCURS_AFTER, OCCURS_BEFORE
+	}
+	
+	
 	private int id;
 	private User creator;
+	private Field field;
+	private Operation operation;
+	private Object equalTo;
 
 	/**
 	 * Creates a blank filter with no user
@@ -121,6 +139,50 @@ public class Filter extends AbstractModel {
 	 */
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+	
+	
+
+	/**
+	 * @return the field
+	 */
+	public Field getField() {
+		return field;
+	}
+
+	/**
+	 * @param field the field to set
+	 */
+	public void setField(Field field) {
+		this.field = field;
+	}
+
+	/**
+	 * @return the operation
+	 */
+	public Operation getOperation() {
+		return operation;
+	}
+
+	/**
+	 * @param operation the operation to set
+	 */
+	public void setOperation(Operation operation) {
+		this.operation = operation;
+	}
+
+	/**
+	 * @return the equalTo
+	 */
+	public Object getEqualTo() {
+		return equalTo;
+	}
+
+	/**
+	 * @param equalTo the equalTo to set
+	 */
+	public void setEqualTo(Object equalTo) {
+		this.equalTo = equalTo;
 	}
 
 	/**
