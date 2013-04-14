@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.CancelAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest.DetailATestView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.DetailEventPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentNumberAndSizeFilter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
@@ -139,6 +140,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	/** boolean to indicate whether the tab should be closed upon saving */
 	private boolean closeTab;
+	private DetailATestView aTestView;
 
 	/**
 	 * Creates a DetailPanel that creates a requirement assigned to the given
@@ -494,10 +496,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		noteView = new DetailNoteView(this.getRequirement(), this);
 		userView = new AssigneePanel(requirement, this);
 		taskView = new DetailTaskView(this.getRequirement(), this);
+		aTestView = new DetailATestView(this.getRequirement(), this);
 
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
-				userView, taskView);
+				userView, taskView, aTestView);
 
 		if (requirement.getStatus() == Status.DELETED) {
 			eventPane.disableUserButtons();
@@ -1104,7 +1107,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	@Override
 	public boolean onTabClosed() {
-		if (btnSave.isEnabled()) {
+		if (btnSave.isEnabled() || taskView.hasChanges || noteView.hasChanges || userView.hasChanges) {
 			
 			mainTabController.switchToTab(this);
 			

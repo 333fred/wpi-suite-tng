@@ -17,36 +17,33 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
-public class Task implements Event {
+public class ATest implements Event {
 	private String name;
 	private String description;
-	private boolean completed;
+	private ATestStatus status;
 	private String assignedUser;
-	private int estimate;
 	private int id;
 
-	public Task(String name, String description) {
-		completed = false;
+	public ATest(String name, String description) {
+		status = ATestStatus.BLANK;
 		this.name = name;
 		this.description = description;
 		this.id = -1;
-		this.estimate = 0;		
 	}
 
 	/**
 	 * @return the completed
 	 */
-	public boolean isCompleted() {
-
-		return completed;
+	public ATestStatus getStaus() {
+		return status;
 	}
 
 	/**
 	 * @param completed
 	 *            the completed to set
 	 */
-	public void setCompleted(boolean completed) {
-		this.completed = completed;
+	public void setCompleted(ATestStatus status) {
+		this.status = status;
 	}
 
 	/**
@@ -111,7 +108,6 @@ public class Task implements Event {
 		String temp = "<html><i>" + parseNewLines(getDescription());
 		String userMessage;
 		String completeMessage;
-		String estimateMessage;
 		if (assignedUser == null) {
 			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned"
 					+ "</FONT COLOR>";
@@ -119,14 +115,15 @@ public class Task implements Event {
 			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser
 					+ "</FONT COLOR>";
 		}
-		if (this.completed) {
-			completeMessage = "<br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR>";
+		if (this.status == ATestStatus.PASSED) {
+			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
+		} else if (this.status == ATestStatus.FAILED) {
+			completeMessage = "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>";
 		} else {
-			completeMessage = "<br><FONT COLOR=\"red\">In Progress</FONT COLOR>";
+			completeMessage = "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>";
 		}
-		estimateMessage = "<br><FONT COLOR=\"red\">Estimate: " + this.estimate + "</FONT COLOR>";
 		// return assembled content string;
-		return temp + userMessage + completeMessage + estimateMessage + "</i></html>";
+		return temp + userMessage + completeMessage + "</i></html>";
 	}
 
 	/**
@@ -160,20 +157,9 @@ public class Task implements Event {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	
-	/**
-	 * @return the estimate of the task
-	 */
-	public int getEstimate() {
-		return estimate;
+	private enum ATestStatus {
+		BLANK,PASSED,FAILED
 	}
-
-	/**
-	 * @param est
-	 *            the estimate to set
-	 */
-	public void setEstimate(int est) {
-		this.estimate = est;
-	}
-
 }

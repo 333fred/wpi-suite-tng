@@ -9,7 +9,7 @@
  * Contributors: Nick Massa, Matt Costi
  *    
  *******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.event.ActionEvent;
 
@@ -19,11 +19,11 @@ import javax.swing.AbstractAction;
  * Action that calls
  * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.SaveATestController.tasks.SaveTaskController#savetask()}
  * 
- * @author Nick Massa, Matt Costi
+ * @author Nick Massa, Matt Costi, Steve Kordell
  */
 @SuppressWarnings("serial")
-public class SaveTaskAction extends AbstractAction {
-	public final SaveTaskController controller;
+public class SaveATestAction extends AbstractAction {
+	public final SaveATestController controller;
 	public Object[] tasks;
 
 	/**
@@ -31,7 +31,7 @@ public class SaveTaskAction extends AbstractAction {
 	 * 
 	 * @param controller the controller to trigger
 	 */
-	public SaveTaskAction(SaveTaskController controller) {
+	public SaveATestAction(SaveATestController controller) {
 		super("Save");
 		this.controller = controller;
 		this.tasks = new Object[0]; // Placeholder list
@@ -43,7 +43,7 @@ public class SaveTaskAction extends AbstractAction {
 	 * @param controller the controller to trigger
 	 * @param objects object array of all of the tasks
 	 */
-	public SaveTaskAction(SaveTaskController controller, Object[] objects) {
+	public SaveATestAction(SaveATestController controller, Object[] objects) {
 		super("Save");
 		this.controller = controller;
 		this.tasks = objects;

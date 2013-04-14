@@ -10,7 +10,7 @@
  *    Nick M
  *    Matt C
  *******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,17 +32,16 @@ import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentNumberAndSizeFilter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
  * A panel containing a a creation and edit form 
  * for the tasks in a requirement
  * 
- * @author Nick M, Matt C
+ * @author Nick M, Matt C, Steve Kordell
  */
 @SuppressWarnings("serial")
-public class MakeTaskPanel extends JPanel {
+public class MakeATestPanel extends JPanel {
 
 	//The fields to make a task
 	private JTextArea taskName;
@@ -57,9 +56,6 @@ public class MakeTaskPanel extends JPanel {
 	private final JLabel nameTaskLabel;
 	private final JLabel descTaskLabel;
 	private final JLabel userAssignedLabel;
-	
-	private final JLabel estimateLabel;
-	private final JTextField taskEstimate;
 
 	
 	private static final int VERTICAL_PADDING = 5;
@@ -75,13 +71,13 @@ public class MakeTaskPanel extends JPanel {
 	 * @param parentView
 	 *            the view of the requirement in question
 	 */
-	public MakeTaskPanel(Requirement model, DetailPanel parentView) {
+	public MakeATestPanel(Requirement model, DetailPanel parentView) {
 
 		//setup the task name field
 		taskName = new JTextArea(1, 40);
 		taskName.setLineWrap(true);
 		taskName.setWrapStyleWord(true);
-		taskName.setMaximumSize(new Dimension(40, 1));
+		taskName.setMaximumSize(new Dimension(40, 2));
 		AbstractDocument textNameDoc = (AbstractDocument)
 		taskName.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
@@ -130,18 +126,7 @@ public class MakeTaskPanel extends JPanel {
 				}
 			}
 		});
-		
-		estimateLabel = new JLabel("Estimate:");
-		
-		taskEstimate = new JTextField(9);
-		taskEstimate.setBorder((new JTextField()).getBorder());
-		taskEstimate.setMaximumSize(taskEstimate.getPreferredSize());
-		taskEstimate.setName("Estimate");
-		taskEstimate.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textEstimateDoc = (AbstractDocument) taskEstimate
-				.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
-		
+
 		//setup all the buttons and label text
 		addTask = new JButton("Save");
 		taskStatus = new JLabel(
@@ -152,7 +137,6 @@ public class MakeTaskPanel extends JPanel {
 		userAssignedLabel = new JLabel("Users:");
 		taskComplete = new JCheckBox("Completed");
 		userAssigned = new JComboBox();
-		userAssigned.setBackground(Color.white);
 
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
@@ -206,33 +190,19 @@ public class MakeTaskPanel extends JPanel {
 
 		layout.putConstraint(SpringLayout.NORTH, userAssigned,
 				VERTICAL_PADDING, SpringLayout.SOUTH, taskComplete);
-		layout.putConstraint(SpringLayout.WEST, userAssigned, 60,
+		layout.putConstraint(SpringLayout.WEST, userAssigned, 50,
 				SpringLayout.WEST, userAssignedLabel);
-		layout.putConstraint(SpringLayout.EAST, userAssigned, 60,
-				SpringLayout.EAST, taskComplete);
-		
-		layout.putConstraint(SpringLayout.NORTH, estimateLabel,
-				VERTICAL_PADDING + 5, SpringLayout.SOUTH, userAssignedLabel);
-		layout.putConstraint(SpringLayout.WEST, estimateLabel, 4,
-				SpringLayout.WEST, this);
-		
-		layout.putConstraint(SpringLayout.NORTH, taskEstimate,
-				VERTICAL_PADDING, SpringLayout.SOUTH, userAssigned);
-		layout.putConstraint(SpringLayout.WEST, taskEstimate, 60,
-				SpringLayout.WEST, estimateLabel);
-		layout.putConstraint(SpringLayout.EAST, taskEstimate, 60,
+		layout.putConstraint(SpringLayout.EAST, userAssigned, 50,
 				SpringLayout.EAST, taskComplete);
 
 		layout.putConstraint(SpringLayout.NORTH, addTask, VERTICAL_PADDING,
-				SpringLayout.SOUTH, userAssignedLabel);
+				SpringLayout.SOUTH, taskComplete);
 		layout.putConstraint(SpringLayout.EAST, addTask, 0, SpringLayout.EAST,
 				this);
 		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
 				SpringLayout.SOUTH, addTask);
 
 		//add all of the swing components to the this task panel
-		this.add(taskEstimate);
-		this.add(estimateLabel);
 		this.add(taskStatus);
 		this.add(userAssignedLabel);
 		this.add(userAssigned);
@@ -243,7 +213,6 @@ public class MakeTaskPanel extends JPanel {
 		this.add(descTaskLabel);
 		this.add(taskComplete);
 		this.add(taskFieldPane);
-		
 
 		//default the add button and complete checkbox 
 		//to un-enabled
@@ -300,10 +269,6 @@ public class MakeTaskPanel extends JPanel {
 
 	public JComboBox getUserAssigned() {
 		return userAssigned;
-	}
-	
-	public JTextField getEstimate() {
-		return taskEstimate;
 	}
 
 }
