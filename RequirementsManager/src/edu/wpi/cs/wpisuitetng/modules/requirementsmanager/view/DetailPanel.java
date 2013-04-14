@@ -1107,7 +1107,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	@Override
 	public boolean onTabClosed() {
-		if (btnSave.isEnabled()) {
+		if (btnSave.isEnabled() || taskView.hasChanges || noteView.hasChanges || userView.hasChanges) {
 			
 			mainTabController.switchToTab(this);
 			
