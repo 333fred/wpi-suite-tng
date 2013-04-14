@@ -7,11 +7,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Alex
+ *    @author Alex Woodyard
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
 
-public class UserPermissionLevels {
-
+public enum UserPermissionLevels {
+	ADMIN, UPDATE, NONE
 }
