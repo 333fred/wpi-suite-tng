@@ -149,13 +149,13 @@ public class CreateFilterView extends JPanel implements ActionListener {
 		layout.putConstraint(SpringLayout.WEST, cboxEqualTo,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		
-		layout.putConstraint(SpringLayout.SOUTH, butCancel, -VERTICAL_PADDING,
-				SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.NORTH, butCancel, VERTICAL_PADDING,
+				SpringLayout.SOUTH, cboxEqualTo);
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING,
 				SpringLayout.EAST, butSave);
 
-		layout.putConstraint(SpringLayout.SOUTH, butSave, -VERTICAL_PADDING,
-				SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
+				SpringLayout.SOUTH, cboxEqualTo);
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 
