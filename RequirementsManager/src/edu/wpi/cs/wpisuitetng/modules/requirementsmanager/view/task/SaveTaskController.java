@@ -99,6 +99,7 @@ public class SaveTaskController {
 							this.parentView);
 					controller.SaveRequirement(model, false);
 				}
+				parentView.getComboBoxStatus().removeItem("Complete");
 			}
 		} else {
 			
@@ -138,6 +139,11 @@ public class SaveTaskController {
 			view.getTaskName().setText("");
 			view.getTaskField().setText("");
 			view.getTaskField().requestFocusInWindow();
+		}
+		
+		for (Object aTask : tasks) {
+			if(!((Task) aTask).isCompleted())
+				parentView.getComboBoxStatus().removeItem("Complete");
 		}
 		
 		this.tasks.clearSelection();

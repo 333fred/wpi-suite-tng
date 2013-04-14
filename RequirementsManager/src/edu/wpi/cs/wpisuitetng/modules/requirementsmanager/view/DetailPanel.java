@@ -45,6 +45,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.CancelAction;
@@ -798,6 +799,15 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private void determineAvailableStatusOptions() {
 		// String[] availableStatuses = { "New", "In Progress",
 		// "Open","Complete", "Deleted"};
+		
+		Boolean hasComplete = true;
+		for (Task aTask : requirement.getTasks()){
+			if(!aTask.isCompleted())
+				hasComplete = false;
+		}
+		if(!hasComplete)
+			this.comboBoxStatus.removeItem("Complete");
+		
 		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			this.comboBoxStatus.removeItem("New");
@@ -811,13 +821,15 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// New: New, Deleted
 			this.comboBoxStatus.removeItem("In Progress");
 			this.comboBoxStatus.removeItem("Open");
-			this.comboBoxStatus.removeItem("Complete");
+			if(hasComplete)
+				this.comboBoxStatus.removeItem("Complete");
 		}
 		if (getRequirement().getStatus() == Status.OPEN) {
 			// Open: Open, Deleted
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
-			this.comboBoxStatus.removeItem("Complete");
+			if(hasComplete)
+				this.comboBoxStatus.removeItem("Complete");
 		}
 		if (getRequirement().getStatus() == Status.COMPLETE) {
 			// Complete: Open, Complete, Deleted
@@ -828,8 +840,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// Deleted: Open, Deleted, Complete
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
-			this.comboBoxStatus.removeItem("Complete");
+			if(hasComplete)
+				this.comboBoxStatus.removeItem("Complete");
 		}
+		
+			
 	}
 
 	DefaultListModel listModel = new DefaultListModel();
