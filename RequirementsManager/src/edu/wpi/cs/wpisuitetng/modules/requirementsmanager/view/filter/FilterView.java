@@ -13,8 +13,10 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 
-import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 /** The view for viewing and creating filters 
  * 
@@ -31,12 +33,35 @@ public class FilterView extends JPanel {
 	private CreateFilterView createFilterView;
 	
 	public FilterView() {
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
 		filterTableView = new FilterTableView();
 		createFilterView = new CreateFilterView();
 		
-		add(filterTableView);
-		add(createFilterView);
+		/*
+		SpringLayout layout = new SpringLayout();
+		
+		layout.putConstraint(SpringLayout.NORTH, filterTableView, 0, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.EAST, filterTableView, 0, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.WEST, filterTableView, 0, SpringLayout.WEST, this);
+		
+		layout.putConstraint(SpringLayout.SOUTH, filterTableView, 0, SpringLayout.VERTICAL_CENTER, this);
+		layout.putConstraint(SpringLayout.NORTH, createFilterView, 0, SpringLayout.VERTICAL_CENTER, this);
+		
+		layout.putConstraint(SpringLayout.SOUTH, createFilterView, 0, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.EAST, createFilterView, 0, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.WEST, createFilterView, 0, SpringLayout.WEST, this);
+		
+		setLayout(layout);*/
+		
+		//JScrollPane createScrollPane = new JScrollPane(createFilterView, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, filterTableView, createFilterView);
+	
+		splitPane.setDividerLocation(0.75f);
+		
+		setLayout(new BorderLayout());
+		
+		add(splitPane, BorderLayout.CENTER);
+		
 	
 
 	}
