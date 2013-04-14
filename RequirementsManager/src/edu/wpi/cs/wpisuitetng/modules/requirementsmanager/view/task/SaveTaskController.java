@@ -156,6 +156,7 @@ public class SaveTaskController {
 		view.getTaskField().setBackground(Color.white);
 		view.getTaskName().setBackground(Color.white);
 		view.getAddTask().setEnabled(false);
+		parentView.getTaskView().hasChanges = false;
 
 	}
 }

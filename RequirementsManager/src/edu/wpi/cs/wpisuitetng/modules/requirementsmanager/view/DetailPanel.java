@@ -1104,16 +1104,29 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public DefaultListModel getTaskList() {
 		return taskView.getTaskList();
 	}
+	
+	public DetailTaskView getTaskView() {
+		return taskView;
+	}
+	
+	public DetailNoteView getNoteView() {
+		return noteView;
+	}
+	
+	public AssigneePanel getUserView() {
+		return userView;
+	}
 
 	@Override
 	public boolean onTabClosed() {
-		if (btnSave.isEnabled() || taskView.hasChanges || noteView.hasChanges || userView.hasChanges) {
+		if (btnSave.isEnabled()) {
 			
 			mainTabController.switchToTab(this);
 			
 			Object[] options = {"Save Changes",
 			                    "Discard Changes",
 			                    "Cancel"};
+			
 			int res = JOptionPane.showOptionDialog(this,
 			    "There are unsaved changes, are you sure you want to continue?",
 			    requirement.getName() + ": Confirm Close",
@@ -1134,6 +1147,30 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				return false;
 			}
 		
+		}
+		
+		if (taskView.hasChanges || noteView.hasChanges) {
+			mainTabController.switchToTab(this);
+			
+			Object[] altOptions = {"Discard Changes",
+			"Cancel"};
+			
+			int res = JOptionPane.showOptionDialog(this,
+				    "There are unsaved changes in subtabs, are you sure you want to continue?",
+				    requirement.getName() + ": Confirm Close",
+				    JOptionPane.YES_NO_CANCEL_OPTION,
+				    JOptionPane.QUESTION_MESSAGE,
+				    null,
+				    altOptions,
+				    altOptions[1]);				
+
+				if (res == 0) {
+					return true;
+				}
+				else if (res == 1) {
+					return false;
+				}
+			
 		}
 		return true;
 	}
