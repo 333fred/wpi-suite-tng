@@ -34,6 +34,8 @@ public class FilterTableModel implements TableModel {
 		
 		String[] columnNames = {"Field", "Operation", "Value"};
 		this.columnNames = columnNames;
+		
+		updateFilters(filters);
 	}
 	
 	/** Updates the data displayed with the new list of filters 

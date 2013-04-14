@@ -13,8 +13,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 
-import java.awt.BorderLayout;
-
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 /** The view for viewing and creating filters 
@@ -25,12 +24,20 @@ import javax.swing.JPanel;
 
 public class FilterView extends JPanel {
 
+	/** View for displaying and enabling / disabling filters */
+	private FilterTableView filterTableView;
+	
+	/** View for creating and editing filters */
 	private CreateFilterView createFilterView;
 	
 	public FilterView() {
-		setLayout(new BorderLayout());
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		filterTableView = new FilterTableView();
 		createFilterView = new CreateFilterView();
-		add(createFilterView, BorderLayout.CENTER);
+		
+		add(filterTableView);
+		add(createFilterView);
+	
 
 	}
 	

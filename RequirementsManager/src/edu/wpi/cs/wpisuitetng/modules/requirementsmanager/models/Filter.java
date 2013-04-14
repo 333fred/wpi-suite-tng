@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
 
 /**
@@ -25,26 +26,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOper
  */
 
 public class Filter extends AbstractModel {
-
-	/**
-	 * Enum for the field to filter
-	 * 
-	 */
-	public enum FilterField {
-		NAME("Name"), TYPE("Type"), PRIORITY("Priority"), STATUS("Status"), ITERATION(
-				"Iteration"), ESTIMATE("Estimate"), EFFORT("Effort"), RELEASE_NUMBER(
-				"Release Number");
-
-		private String name;
-
-		private FilterField(String name) {
-			this.name = name;
-		}
-
-		public String toString() {
-			return name;
-		}
-	}
 	
 	private int id;
 	private User creator;
@@ -56,8 +37,7 @@ public class Filter extends AbstractModel {
 	 * Creates a blank filter with no user
 	 */
 	public Filter() {
-		this.id = -1;
-		this.creator = null;
+		new Filter(null, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
 
 	/**
@@ -67,8 +47,22 @@ public class Filter extends AbstractModel {
 	 *            the creator of the filter
 	 */
 	public Filter(User u) {
+		new Filter(u, FilterField.NAME, FilterOperation.EQUAL, new String());
+	}
+	
+	/** Creates a filter with the given fields
+	 *
+	 * @param user The user who created the filter
+	 * @param field The field that this filter operates on
+	 * @param operation The operation for the filter
+	 * @param value The value the filter looks for
+	 */
+	public Filter(User user, FilterField field, FilterOperation operation, Object value) {
 		this.id = -1;
-		this.creator = u;
+		this.creator = user;
+		this.field = field;
+		this.operation = operation;
+		this.value = value;
 	}
 
 	/**
