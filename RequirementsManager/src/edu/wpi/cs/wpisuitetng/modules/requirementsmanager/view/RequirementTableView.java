@@ -30,7 +30,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.RowFilter;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -110,7 +113,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	private JTextArea textEditInformation;
 
 	private boolean isEditable;
-
+	
+	JTextArea FilterDemo;
+	TableRowSorter<TableModel> sorter;
+	
 	/**
 	 * Constructor for a RequirementTableView
 	 * 
@@ -161,6 +167,30 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		textEditInformation.setLineWrap(true);
 		textEditInformation.setWrapStyleWord(true);
 
+		
+		
+		FilterDemo = new JTextArea(1, 25);
+		FilterDemo.setOpaque(true);
+		FilterDemo.setEnabled(true);
+		FilterDemo.setDisabledTextColor(Color.BLACK);
+		FilterDemo.setLineWrap(true);
+		FilterDemo.setWrapStyleWord(true);
+		FilterDemo.getDocument().addDocumentListener( new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				newFilter();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				newFilter();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				newFilter();
+			}
+		});
+	
+		
+		
+		
+		
 		// TODO: dynamically change this
 		btnSave.setEnabled(false);
 		// TODO: Set this button's action
@@ -169,6 +199,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		JPanel editPanel = new JPanel(editPanelLayout);
 		editPanel.add(btnEdit);
 		editPanel.add(btnSave);
+		editPanel.add(FilterDemo);
 		editPanel.add(textEditInformation);
 
 		editPanel.setPreferredSize(new Dimension(
@@ -194,6 +225,17 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInformation,
 				0, SpringLayout.SOUTH, btnEdit);
 
+		
+		
+		
+		editPanelLayout.putConstraint(SpringLayout.EAST, FilterDemo, -5, SpringLayout.WEST, btnEdit);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo, 0,
+				SpringLayout.VERTICAL_CENTER, editPanel);
+		
+		
+		
+		
+		
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
 		this.table.getColumnModel().removeColumn(
@@ -249,7 +291,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			}
 		};
 
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+		sorter = new TableRowSorter<TableModel>(
 				table.getModel());
 		/*
 		 * for (int i = 0; i < this.table.getColumnCount(); i++) { if
@@ -701,5 +743,16 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		return true;
 
 	}
+	
+	private void newFilter() {
+        RowFilter rf = null;
+        //If current expression doesn't parse, don't update.
+        try {
+            rf = RowFilter.regexFilter(FilterDemo.getText());
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf);
+    }
 
 }
