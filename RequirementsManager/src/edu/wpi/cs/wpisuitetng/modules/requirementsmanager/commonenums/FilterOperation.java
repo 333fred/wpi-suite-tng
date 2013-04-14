@@ -5,7 +5,7 @@ public enum FilterOperation {
 	LESS_THAN("<"), LESS_THAN_EQUAL("<="), EQUAL("Equals"), NOT_EQUAL(
 			"Not equals"), GREATER_THAN_EQUAL(">="), GREATER_THAN(">"), OCCURS_BETWEEN(
 			"Occurs between"), OCCURS_AFTER("Occurs after"), OCCURS_BEFORE(
-			"Occurs before");
+			"Occurs before"), CONTAINS("Contains"), STARTS_WITH("Starts with");
 
 	private String name;
 

@@ -211,6 +211,8 @@ public class CreateFilterView extends JPanel implements ActionListener {
 				|| cboxField.getSelectedItem().equals("Release Number")) {
 			cboxOperation.addItem("=");
 			cboxOperation.addItem("!=");
+			cboxOperation.addItem("Starts with");
+			cboxOperation.addItem("Contains");
 		} else if (cboxField.getSelectedItem().equals("Estimate")
 				|| cboxField.getSelectedItem().equals("Effort")) {
 
