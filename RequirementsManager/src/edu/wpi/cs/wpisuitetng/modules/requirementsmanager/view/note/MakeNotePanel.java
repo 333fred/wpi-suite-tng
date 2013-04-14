@@ -12,6 +12,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -84,6 +86,12 @@ public class MakeNotePanel extends JPanel {
 
 		addnote.setAction(new SaveNoteAction(new SaveNoteController(this,
 				model, parentView)));
+		
+		addnote.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addnote.setEnabled(false);
+			}
+		});
 
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
