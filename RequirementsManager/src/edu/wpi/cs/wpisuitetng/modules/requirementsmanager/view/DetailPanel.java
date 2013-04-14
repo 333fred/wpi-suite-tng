@@ -502,7 +502,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
 				userView, taskView, aTestView);
 
-		if (requirement.getStatus() == Status.DELETED) {
+		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
 			eventPane.disableUserButtons();
 		}
 
@@ -1024,7 +1024,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		JPanel panel = new JPanel();
 		Color defaultColor = panel.getBackground();
 
-		if (getRequirement().getStatus() != Status.DELETED)
+		if (getRequirement().getStatus() != Status.DELETED && getRequirement().getStatus() != Status.COMPLETE)
 			return;
 		textName.setEnabled(false);
 		textName.setBackground(defaultColor);
@@ -1105,6 +1105,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		return taskView.getTaskList();
 	}
 	
+
+	public DefaultListModel getTestList() {
+		return aTestView.getaTestList();
+	}
 	public DetailTaskView getTaskView() {
 		return taskView;
 	}
@@ -1174,4 +1178,5 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
+
 }

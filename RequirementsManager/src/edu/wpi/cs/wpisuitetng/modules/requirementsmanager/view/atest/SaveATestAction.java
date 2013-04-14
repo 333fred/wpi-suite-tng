@@ -17,14 +17,14 @@ import javax.swing.AbstractAction;
 
 /**
  * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.SaveATestController.tasks.SaveTaskController#savetask()}
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.aTest.SaveATestController.aTests.SaveaTestController#saveaTest()}
  * 
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
 @SuppressWarnings("serial")
 public class SaveATestAction extends AbstractAction {
 	public final SaveATestController controller;
-	public Object[] tasks;
+	public Object[] aTests;
 
 	/**
 	 * Construct the action
@@ -34,19 +34,19 @@ public class SaveATestAction extends AbstractAction {
 	public SaveATestAction(SaveATestController controller) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = new Object[0]; // Placeholder list
+		this.aTests = new Object[0]; // Placeholder list
 	}
 
 	/**
 	 * Construct the action
 	 * 
 	 * @param controller the controller to trigger
-	 * @param objects object array of all of the tasks
+	 * @param objects object array of all of the aTests
 	 */
 	public SaveATestAction(SaveATestController controller, Object[] objects) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = objects;
+		this.aTests = objects;
 	}
 
 	/*
@@ -55,7 +55,7 @@ public class SaveATestAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.saveTask(tasks);
+		controller.saveaTest(aTests);
 	}
 
 }

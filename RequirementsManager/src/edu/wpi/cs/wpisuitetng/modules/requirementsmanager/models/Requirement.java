@@ -11,6 +11,7 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class Requirement extends AbstractModel {
 	private List<Note> notes;
 	private List<RequirementChangeset> logs;
 	private List<Task> tasks;
+	private List<ATest> aTests;
 
 	/**
 	 * Creates a new Requirement, with default values.
@@ -79,6 +81,7 @@ public class Requirement extends AbstractModel {
 		logs = new ArrayList<RequirementChangeset>();
 		// logger = new Logger();
 		tasks = new ArrayList<Task>();
+		aTests = new ArrayList<ATest>();
 	}
 
 	/**
@@ -633,6 +636,41 @@ public class Requirement extends AbstractModel {
 	 * 
 	 * @return true if all tasks in the list are complete
 	 */
+	public boolean testsPassed() {
+		for (ATest t : this.aTests) {
+			if (t.getStatus() == ATest.ATestStatus.FAILED || t.getStatus() == ATest.ATestStatus.BLANK)
+				return false;
+		}
+		return true;
+	}
+
+	public void addTest(ATest aTest) {
+		this.aTests.add(aTest);
+	}
+
+	
+	
+	
+	/**
+	 * @return the tasks
+	 */
+	public List<ATest> getTests() {
+		return aTests;
+	}
+
+	/**
+	 * @param tasks
+	 *            the tasks to set
+	 */
+	public void setTests(List<ATest> aTests) {
+		this.aTests = aTests;
+	}
+
+	/**
+	 * Checks the task list for completed tasks
+	 * 
+	 * @return true if all tasks in the list are complete
+	 */
 	public boolean tasksCompleted() {
 		for (Task t : this.tasks) {
 			if (!t.isCompleted())
@@ -644,4 +682,5 @@ public class Requirement extends AbstractModel {
 	public void addTask(Task task) {
 		this.tasks.add(task);
 	}
+
 }

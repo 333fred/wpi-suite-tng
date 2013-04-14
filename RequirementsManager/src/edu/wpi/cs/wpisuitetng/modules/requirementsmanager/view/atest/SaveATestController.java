@@ -16,12 +16,12 @@ import java.awt.Color;
 import javax.swing.JList;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
- * This controller handles saving requirement tasks to the server
+ * This controller handles saving requirement aTests to the server
  * 
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
@@ -30,50 +30,45 @@ public class SaveATestController {
 	private final MakeATestPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
-	private final JList tasks;
+	private final JList tests;
 
 	/**
 	 * Construct the controller
 	 * 
 	 * @param view
-	 *            the MakeTaskPanel containing the task field
+	 *            the MakeaTestPanel containing the aTest field
 	 * @param model
-	 *            the requirement to which tasks are being added
+	 *            the requirement to which aTests are being added
 	 * @param parentView
 	 *            the DetailPanel displaying the current requirement
 	 */
 	public SaveATestController(MakeATestPanel view, Requirement model,
-			DetailPanel parentView, JList tasks) {
+			DetailPanel parentView, JList tests) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
-		this.tasks = tasks;
+		this.tests = tests;
 	}
 
 	/**
-	 * Save a task to the server
+	 * Save a aTest to the server
 	 */
-	public void saveTask(Object[] tasks) {
-		final String taskText = view.getTaskField().getText();
-		final String taskName = view.getTaskName().getText();
-		if (tasks == null) { // Creating a task!
-			System.out.println("TASKS WAS NULL, ISSUE");
-		} else if (tasks.length < 1) {
-			//Task must have a name and description of at least one character
-			if (taskText.length() > 0 && taskName.length() > 0) { 
-				Task tempTask = new Task(taskName, taskText);
-				if ((view.getUserAssigned().getSelectedItem() == ""))
-					tempTask.setAssignedUser(null);
-				else
-					tempTask.setAssignedUser((String) view.getUserAssigned()
-							.getSelectedItem());
-				tempTask.setId(this.model.getTasks().size() + 1);
-				this.model.addTask(tempTask);
-				parentView.getTaskList().addElement(tempTask);
-				view.getTaskName().setText("");
-				view.getTaskField().setText("");
-				view.getTaskField().requestFocusInWindow();
-				// We want to save the task to the server immediately, but only
+	public void saveaTest(Object[] tests) {
+		final String testText = view.getaTestField().getText();
+		final String testName = view.getaTestName().getText();
+		if (tests == null) { // Creating a aTest!
+			System.out.println("aTestS WAS NULL, ISSUE");
+		} else if (tests.length < 1) {
+			//aTest must have a name and description of at least one character
+			if (testText.length() > 0 && testName.length() > 0) { 
+				ATest tempTest = new ATest(testName, testText);
+				tempTest.setId(this.model.getTests().size() + 1);
+				this.model.addTest(tempTest);
+				parentView.getTestList().addElement(tempTest);
+				view.getaTestName().setText("");
+				view.getaTestField().setText("");
+				view.getaTestField().requestFocusInWindow();
+				// We want to save the aTest to the server immediately, but only
 				// if the requirement hasn't been just created
 				if (model.getName().length() > 0) { 
 					// Save to requirement!
@@ -84,24 +79,18 @@ public class SaveATestController {
 			}
 		} else {
 			
-			// Modifying tasks
-			for (Object aTask : tasks) { 
-				if (tasks.length == 1) { 
+			// Modifying aTests
+			for (Object aTest : tests) { 
+				if (tests.length == 1) { 
 					// If only one is selected, edit the fields
-					if (taskText.length() > 0 && taskName.length() > 0) {
-						((Task) aTask).setName(view.getTaskName().getText());
-						((Task) aTask).setDescription(view.getTaskField()
+					if (testText.length() > 0 && testName.length() > 0) {
+						((ATest) aTest).setName(view.getaTestName().getText());
+						((ATest) aTest).setDescription(view.getaTestField()
 								.getText());
 					}
-					if ((view.getUserAssigned().getSelectedItem() == ""))
-						((Task) aTask).setAssignedUser(null);
-					else
-						((Task) aTask).setAssignedUser((String) view
-								.getUserAssigned().getSelectedItem());
 				}
-				// Check the completion status on the tasks
-				((Task) aTask)
-						.setCompleted(view.getTaskComplete().isSelected());
+				// Check the completion status on the aTests
+				((ATest) aTest).setStatus(ATest.ATestStatus.valueOf(view.getaTestStatusBox().getSelectedItem().equals("") ? "BLANK" : view.getaTestStatusBox().getSelectedItem().toString()));
 			}
 			
 			// Save to requirement!
@@ -110,25 +99,24 @@ public class SaveATestController {
 						this.parentView);
 				controller.SaveRequirement(model, false);
 			}
-			view.getTaskName().setText("");
-			view.getTaskField().setText("");
-			view.getTaskField().requestFocusInWindow();
+			view.getaTestName().setText("");
+			view.getaTestField().setText("");
+			view.getaTestField().requestFocusInWindow();
 		}
 		
-		this.tasks.clearSelection();
-		view.getTaskStatus()
+		this.tests.clearSelection();
+		view.getaTestStatus()
 				.setText(
-						"No tasks selected. Fill name and description to create a new one.");
-		view.getTaskComplete().setEnabled(false);
-		view.getTaskComplete().setSelected(false);
-		view.getUserAssigned().setEnabled(true);
-		view.getTaskField().setEnabled(true);
-		view.getTaskName().setEnabled(true);
-		view.getTaskField().setText("");
-		view.getTaskName().setText("");
-		view.getTaskField().setBackground(Color.white);
-		view.getTaskName().setBackground(Color.white);
-		view.getAddTask().setEnabled(false);
+						"No aTests selected. Fill name and description to create a new one.");
+		view.getaTestStatusBox().setEnabled(false);
+		view.getaTestStatusBox().setSelectedItem("");
+		view.getaTestField().setEnabled(true);
+		view.getaTestName().setEnabled(true);
+		view.getaTestField().setText("");
+		view.getaTestName().setText("");
+		view.getaTestField().setBackground(Color.white);
+		view.getaTestName().setBackground(Color.white);
+		view.getAddaTest().setEnabled(false);
 
 	}
 }
