@@ -60,7 +60,6 @@ public class AssigneePanel extends JPanel {
 	/** The requirement that this view will operate on */
 	private Requirement requirement;
 	private DetailPanel detailPanel;
-	public boolean hasChanges;
 
 	public AssigneePanel(Requirement requirement, DetailPanel detailPanel) {
 		this.requirement = requirement;
@@ -286,7 +285,6 @@ public class AssigneePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			hasChanges = true;
 			for (Object m : unassignedUsers.getSelectedValues()) {
 				detailPanel.enableSaveButton();
 				// add the selected element(s) in alphabetical order
@@ -317,7 +315,6 @@ public class AssigneePanel extends JPanel {
 	private class UnassignUserAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			hasChanges = true;
 			for (Object m : assignedUsers.getSelectedValues()) {
 				detailPanel.enableSaveButton();
 				// add the selected element(s) in alphabetical order

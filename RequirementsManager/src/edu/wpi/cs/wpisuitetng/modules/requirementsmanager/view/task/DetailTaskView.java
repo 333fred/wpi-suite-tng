@@ -45,7 +45,6 @@ public class DetailTaskView extends JPanel {
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeTaskPanel makeTaskPanel;
-	public Boolean hasChanges;
 
 	/**
 	 * Construct the panel and add layout components
@@ -60,7 +59,6 @@ public class DetailTaskView extends JPanel {
 
 		this.requirement = requirement;
 		this.parentView = parentView;
-		hasChanges = false;
 		setLayout(new BorderLayout());
 		// Set up the task panel
 		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
@@ -122,13 +120,12 @@ public class DetailTaskView extends JPanel {
 			//			}
 			//		}, delay, period);
 
-			
+			makeTaskPanel.getAddTask().setEnabled(false);
 			//Make sure save button is unavailable if name field is empty
 			makeTaskPanel.getTaskField().addKeyListener(new KeyAdapter() { 
 				//For creating a new task
 				@Override
 				public void keyReleased(KeyEvent e) {
-					hasChanges = true;
 					if (makeTaskPanel.getTaskField().getText().trim().equals("")
 							&& tasks.getSelectedValues().length == 0)
 						makeTaskPanel.getAddTask().setEnabled(false);
@@ -143,7 +140,6 @@ public class DetailTaskView extends JPanel {
 			makeTaskPanel.getTaskName().addKeyListener(new KeyAdapter() { 
 				@Override                                                 
 				public void keyReleased(KeyEvent e) {
-					hasChanges = true;
 					if (makeTaskPanel.getTaskName().getText().trim().equals("")
 							&& tasks.getSelectedValues().length == 0)
 						makeTaskPanel.getAddTask().setEnabled(false);
@@ -355,5 +351,9 @@ public class DetailTaskView extends JPanel {
 	 */
 	public void disableUserButtons() {
 		makeTaskPanel.setInputEnabled(false);
+	}
+
+	public MakeTaskPanel getTaskPanel() {
+		return makeTaskPanel;
 	}
 }
