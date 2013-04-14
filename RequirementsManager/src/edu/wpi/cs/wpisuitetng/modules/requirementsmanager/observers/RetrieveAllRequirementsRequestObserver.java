@@ -13,6 +13,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -50,14 +52,19 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			Requirement[] requirements = Requirement.fromJSONArray(response
+			final Requirement[] requirements = Requirement.fromJSONArray(response
 					.getBody());
 
 			RequirementDatabase.getInstance().setRequirements(
 					Arrays.asList(requirements));
 
 			// notify the controller
-			controller.receivedData(requirements);
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					controller.receivedData(requirements);
+				}
+			});
 		} else {
 			controller.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()

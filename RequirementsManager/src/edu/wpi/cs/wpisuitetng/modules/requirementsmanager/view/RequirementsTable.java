@@ -47,6 +47,14 @@ public class RequirementsTable extends JTable {
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
+		if(editedRows == null){
+			editedRows = new boolean[super.getRowCount()];
+		} else if (editedRows.length < super.getRowCount()){
+			boolean[] temp = new boolean[super.getRowCount()];
+			System.arraycopy(editedRows, 0, temp, 0, editedRows.length);
+			editedRows = temp;
+		}
+
 		//The estimate column should only accept non-negative integers
 		try {
 			if (super.convertColumnIndexToModel(col) == 6) {
