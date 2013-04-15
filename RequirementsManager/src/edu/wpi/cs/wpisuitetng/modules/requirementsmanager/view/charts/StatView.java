@@ -14,10 +14,12 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -79,7 +81,6 @@ public class StatView extends Tab implements ActionListener {
 		JPanel sidePanel = new JPanel(sidePanelLayout);		
 		
 		JLabel lblStatisticType = new JLabel("Statistic Type");
-		JLabel lblChartType = new JLabel("Chart Type");
 		
 
 		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Velocity"};
@@ -115,12 +116,16 @@ public class StatView extends Tab implements ActionListener {
 		group.add(makeLineRadio);
 		setSelectedItems();
 		
+		JPanel radioPanel = new JPanel(new GridLayout(3,1));
+		radioPanel.add(makePieRadio);
+		radioPanel.add(makeBarRadio);
+		radioPanel.add(makeLineRadio);
+		radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Chart Type"));
+		
 		sidePanel.add(lblStatisticType);
-		sidePanel.add(lblChartType);
 		sidePanel.add(comboBoxStatisticType);
-		sidePanel.add(makePieRadio);
-		sidePanel.add(makeBarRadio);
-		sidePanel.add(makeLineRadio);
+		sidePanel.add(radioPanel);
+
 		/*
 		sidePanel.add(generateChart);
 		*/
@@ -131,24 +136,16 @@ public class StatView extends Tab implements ActionListener {
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,comboBoxStatisticType,VERTICAL_PADDING,SpringLayout.SOUTH,lblStatisticType);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,comboBoxStatisticType,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
-		sidePanelLayout.putConstraint(SpringLayout.NORTH,lblChartType,VERTICAL_PADDING+FAR,SpringLayout.SOUTH,comboBoxStatisticType);
-		sidePanelLayout.putConstraint(SpringLayout.WEST,lblChartType,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);	
+		sidePanelLayout.putConstraint(SpringLayout.NORTH,radioPanel,VERTICAL_PADDING+FAR,SpringLayout.SOUTH,comboBoxStatisticType);
+		sidePanelLayout.putConstraint(SpringLayout.WEST,radioPanel,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
-		sidePanelLayout.putConstraint(SpringLayout.NORTH,makePieRadio,VERTICAL_PADDING+FAR,SpringLayout.SOUTH,lblChartType);
-		sidePanelLayout.putConstraint(SpringLayout.WEST,makePieRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
-		
+		/*
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeBarRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makePieRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeBarRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeLineRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makeBarRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeLineRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
-		
-		/*
-		// TODO: ascertain that this is an acceptable placement for the generateChart button
-		sidePanelLayout.putConstraint(SpringLayout.NORTH, generateChart, VERTICAL_PADDING+FAR, SpringLayout.SOUTH, makeBarRadio);
-		sidePanelLayout.putConstraint(SpringLayout.WEST, generateChart, HORIZONTAL_PADDING, SpringLayout.WEST, sidePanel);
 		*/
-
 		
 		return sidePanel;
 	}
