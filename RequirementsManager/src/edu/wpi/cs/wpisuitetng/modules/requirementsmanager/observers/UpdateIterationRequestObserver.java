@@ -12,8 +12,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -55,6 +58,26 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 		notifier.responseSuccess();
 		
 		StatView.getInstance().updateChart();
+		
+		
+		if (notifier.getTabController() != null) {
+		
+			Requirement requirement = notifier.getDraggedRequirement();
+			
+			for (int i = 0; i < notifier.getTabController().getTabView().getTabCount(); i++) {
+				if (notifier.getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
+					if (((((DetailPanel) notifier.getTabController().getTabView().getComponentAt(i))).getModel().getrUID()) == (requirement.getrUID())) {
+						try {
+							(((DetailPanel) notifier.getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+						} catch (IterationNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			
+		}
+		
 		// detailPanel.logView.refresh(req);
 
 		/*

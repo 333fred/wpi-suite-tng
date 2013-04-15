@@ -64,6 +64,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 /**
  * JPanel class to display the different fields of the requirement
  */
+@SuppressWarnings("serial")
 public class DetailPanel extends Tab implements ISaveNotifier {
 
 	// Textfields
@@ -1197,6 +1198,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			
 		}
 		return true;
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		return null;
 	}
 
 }

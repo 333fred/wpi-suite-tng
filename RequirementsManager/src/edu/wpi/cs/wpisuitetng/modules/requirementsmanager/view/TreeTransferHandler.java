@@ -35,14 +35,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 @SuppressWarnings("serial")
 class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 	DataFlavor nodesFlavor;
 	DataFlavor[] flavors = new DataFlavor[1];
 	DefaultMutableTreeNode[] nodesToRemove;
+	private MainTabController tabController;
+	private Requirement draggedRequirement;
 	
-	public TreeTransferHandler() {
+	public TreeTransferHandler(MainTabController tabController) {
+		this.tabController = tabController;
 		try {
 			String mimeType = DataFlavor.javaJVMLocalObjectMimeType
 					+ ";class=\""
@@ -271,12 +275,10 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 			SaveRequirementController SaveRequirementController = new SaveRequirementController(
 					this);
 			SaveRequirementController.SaveRequirement(requirement, false);
+			this.draggedRequirement = requirement;
 		}
 		
 		
-		
-		//Refresh the chart
-		//StatView.getInstance().updateChart();
 		return true;
 	}
 
@@ -325,4 +327,16 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 	public void fail(Exception exception) {
 		// TODO Auto-generated method stub
 	}
+
+	/**
+	 * @return the tabController
+	 */
+	public MainTabController getTabController() {
+		return tabController;
+	}
+	
+	public Requirement getDraggedRequirement() {
+		return draggedRequirement;
+	}
+
 }
