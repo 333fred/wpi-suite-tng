@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
  * Class for creating a right click menu in IterationTreeView, when a user right
@@ -35,6 +36,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 	/** Menu options for the PopupMenu */
 	// private JMenuItem menuCreateRequirement;
 	private JMenuItem menuEditIteration;
+	private JMenuItem menuFilterIteration;
 
 	/** The tab controller used to create new tabs */
 	private MainTabController tabController;
@@ -60,18 +62,24 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 		// we only have on selected iteration
 		if (selectedIterations.size() == 1) {
 			menuEditIteration = new JMenuItem("Edit Iteration");
+			menuFilterIteration = new JMenuItem("Filter By Iteration");
 			// menuCreateRequirement = new JMenuItem("New Requirement");
 
 			menuEditIteration.addActionListener(this);
+			menuFilterIteration.addActionListener(this);
 			// menuCreateRequirement.addActionListener(this);
 
 			add(menuEditIteration);
+			add(menuFilterIteration);
 			// add(menuCreateRequirement);
 
 		} else {
 			menuEditIteration = new JMenuItem("Edit Iterations");
+			menuFilterIteration = new JMenuItem("Filter By Iteration");
 			menuEditIteration.addActionListener(this);
+			menuFilterIteration.addActionListener(this);
 			add(menuEditIteration);
+			add(menuFilterIteration);
 		}
 
 	}
@@ -89,6 +97,10 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			for (Iteration i : selectedIterations) {
 				tabController.addEditIterationTab(i);
 			}
+		} else if (e.getSource().equals(menuFilterIteration)) {
+			Iteration iter = selectedIterations.get(0);
+			RequirementTableView tableView = RequirementTableView.getInstance();
+			tableView.IterationFilter(iter.getName());
 		} else {
 			// create requiremetn was selected
 			// TODO: make this actualy create a requirement under the given

@@ -754,5 +754,16 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
         }
         sorter.setRowFilter(rf);
     }
+	
+	public void IterationFilter(String IterationName) {
+        RowFilter rf = null;
+        //If current expression doesn't parse, don't update.
+        try {
+            rf = RowFilter.regexFilter(IterationName);
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf);
+    }
 
 }
