@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -49,6 +50,8 @@ public class SubRequirementPanel extends JPanel {
 	private JButton assignParent;
 	
 	private JScrollPane scrollPane;
+	public List<Requirement> visitingReqs;
+	public List<Requirement> visitedReqs;
 	
 	
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {		
@@ -176,6 +179,66 @@ public class SubRequirementPanel extends JPanel {
 			}
 		}
 		return false;
+	}
+	
+	public boolean checkDirectedCycle() {
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getAllRequirements();
+		visitingReqs = new ArrayList<Requirement>();
+		visitedReqs = new ArrayList<Requirement>();
+		boolean check = false;
+		Requirement tempReq = null;
+
+		for (Requirement anReq : requirements) {
+			if (!visitedReqs.contains(anReq)) { //If requirement was not visited
+				visitingReqs.add(anReq); //Add to visiting
+				for (int subreq : anReq.getSubRequirements()) { //Go through sub requirements
+					try {
+						tempReq = RequirementDatabase.getInstance().getRequirement(subreq);
+					} catch (RequirementNotFoundException e) {
+						e.printStackTrace();
+					}
+					if (!visitedReqs.contains(tempReq)) //If this subrequirement hasn't been visited, process
+						check = process(subreq);
+					if(check) return true;
+				}
+				
+				if(visitingReqs.contains(anReq)) //Safety removal
+					visitingReqs.remove(anReq);
+				visitedReqs.add(anReq);
+			}
+		}
+		return false;
+	}
+	
+	public boolean process(int subreq){
+		boolean check = false;
+		Requirement tempReq = null;
+		Requirement tempReqLoop = null;
+		try {
+			tempReq = RequirementDatabase.getInstance().getRequirement(subreq);
+		} catch (RequirementNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		if(visitingReqs.contains(tempReq))
+			return true;		
+		
+		System.out.println(tempReq.getName() + "HERECT\n");
+		visitingReqs.add(tempReq);
+			for(int anReq : tempReq.getSubRequirements()) {
+				try {
+					tempReqLoop = RequirementDatabase.getInstance().getRequirement(anReq);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+				if(!visitedReqs.contains(tempReqLoop))
+					check = process(tempReqLoop.getrUID());
+				if(check) return true;
+			}		
+		visitingReqs.remove(tempReq);
+		visitedReqs.add(tempReq);
+		return false;		
 	}
 		
 	
