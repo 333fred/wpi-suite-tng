@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.FilterValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
 
@@ -93,6 +94,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	@Override
 	public Filter[] getEntity(Session s, String id) throws NotFoundException,
 			WPISuiteException {
+		System.out.println("\n\n\n\n\n\n YA'LL\n\n\n\n\n\n\n\n");
 
 		// Attempt to get the filter id
 		final int filterId = Integer.parseInt(id);
@@ -146,10 +148,14 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	@Override
 	public Filter[] getAll(Session s) throws WPISuiteException {
-		List<Model> models = db.retrieveAll(new Filter(), s.getProject());
-		List<Filter> filters = new ArrayList<Filter>();
+		//List<Model> models = db.retrieveAll(new Filter(), s.getProject());
+		//List<Filter> filters = new ArrayList<Filter>();
+		System.out.println("\n\n\n\n\n\nHEY YA'LL\n\n\n\n\n\n\n\n");
+		Filter[] filters = db.retrieveAll(new Filter(), s.getProject()).toArray(
+				new Filter[0]);
+		return filters;
 
-		// Make sure that we only return filters that belong to current user
+		/*// Make sure that we only return filters that belong to current user
 		for (Model m : models) {
 			Filter f = (Filter) m;
 			if (f.getCreator() == s.getUser()) {
@@ -157,7 +163,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 			}
 		}
 
-		return filters.toArray(new Filter[0]);
+		return filters.toArray(new Filter[0]);*/
 	}
 
 	/**
@@ -170,6 +176,8 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		Filter updatedFilter = Filter.fromJSON(content);
 		Filter oldFilter;
 
+		System.out.println("Update Filter: " + updatedFilter.getCreator());
+		
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
 		issues = validator.validate(s, updatedFilter);

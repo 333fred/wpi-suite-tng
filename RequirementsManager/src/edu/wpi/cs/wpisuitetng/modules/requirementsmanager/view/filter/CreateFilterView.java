@@ -30,10 +30,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOper
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
-
 
 /**
  * View for creating and editing filters
@@ -42,7 +42,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  * 
  */
 
-public class CreateFilterView extends JPanel implements ActionListener, ISaveNotifier {
+public class CreateFilterView extends JPanel implements ActionListener,
+		ISaveNotifier {
 
 	/**
 	 * Enum for setting the mode of this view, either creating or editing
@@ -77,12 +78,15 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 
 	private JButton butSave;
 	private JButton butCancel;
-	
+
 	/** Filter view */
 	private FilterView filterView;
-	
+
 	/** Controller for saving a filter */
 	private SaveFilterController saveFilterController;
+
+	/** Controller for Adding a filter */
+	private AddFilterController addFilterController;
 
 	/**
 	 * Creates a filter view to create a new filter
@@ -115,9 +119,10 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 		this.filterView = filterView;
 		this.filter = filter;
 		this.mode = mode;
-		
+
 		saveFilterController = new SaveFilterController(this);
-		
+		addFilterController = new AddFilterController(this);
+
 		labField = new JLabel("Field");
 		labOperation = new JLabel("Operation");
 		labEqualTo = new JLabel("Equal");
@@ -130,7 +135,7 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 		cboxField.setBackground(Color.WHITE);
 		cboxOperation.setBackground(Color.WHITE);
 		cboxEqualTo.setBackground(Color.WHITE);
-		
+
 		butSave = new JButton("Save");
 		butCancel = new JButton("Cancel");
 
@@ -172,23 +177,19 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualTo);
 		layout.putConstraint(SpringLayout.WEST, cboxEqualTo,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		
+
 		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
 				SpringLayout.SOUTH, cboxEqualTo);
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		
+
 		layout.putConstraint(SpringLayout.NORTH, butCancel, VERTICAL_PADDING,
 				SpringLayout.SOUTH, cboxEqualTo);
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING,
 				SpringLayout.EAST, butSave);
 
-
-
 		setLayout(layout);
-		
-		
-		
+
 		add(labField);
 		add(labOperation);
 		add(labEqualTo);
@@ -201,18 +202,19 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 		add(butSave);
 		add(butCancel);
 
-		this.setMinimumSize(new Dimension(butSave.getPreferredSize().width + HORIZONTAL_PADDING * 3 + 
-					butCancel.getPreferredSize().width, 0));
-		
+		this.setMinimumSize(new Dimension(butSave.getPreferredSize().width
+				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
+				0));
+
 		// add the action listeners
 		cboxField.addActionListener(this);
 		cboxOperation.addActionListener(this);
 		cboxEqualTo.addActionListener(this);
 
-		//add action listeners to save
+		// add action listeners to save
 		butSave.addActionListener(this);
 		butCancel.addActionListener(this);
-		
+
 		// populate the fields in the combo boxes
 		populateFieldComboBox();
 		populateOperationComboBox();
@@ -260,7 +262,7 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 			cboxOperation.addItem("Occurs before");
 			cboxOperation.addItem("Occurs after");
 			cboxOperation.addItem("Occurs between");
-			
+
 		}
 
 	}
@@ -306,17 +308,25 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 			txtEqualTo.setVisible(true);
 		}
 	}
-	
+
 	public void onSavePressed() {
-		
-		System.out.println(filter + " " + cboxField.getSelectedItem() + " " + FilterField.getFromString((String)cboxField.getSelectedItem()));
-		
-		filter.setField(FilterField.getFromString((String)cboxField.getSelectedItem()));
-		filter.setOperation(FilterOperation.getFromString((String) cboxOperation.getSelectedItem()));
-		
-		FilterField field = FilterField.getFromString((String)cboxField.getSelectedItem());
-		
-		//get the equal to value from the text box or combo box
+
+		System.out.println(filter
+				+ " "
+				+ cboxField.getSelectedItem()
+				+ " "
+				+ FilterField.getFromString((String) cboxField
+						.getSelectedItem()));
+
+		filter.setField(FilterField.getFromString((String) cboxField
+				.getSelectedItem()));
+		filter.setOperation(FilterOperation
+				.getFromString((String) cboxOperation.getSelectedItem()));
+
+		FilterField field = FilterField.getFromString((String) cboxField
+				.getSelectedItem());
+
+		// get the equal to value from the text box or combo box
 		switch (field) {
 		case EFFORT:
 		case ESTIMATE:
@@ -327,26 +337,33 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 			break;
 
 		case PRIORITY:
-			filter.setValue(Priority.getFromString((String)cboxEqualTo.getSelectedItem()));
+			filter.setValue(Priority.getFromString((String) cboxEqualTo
+					.getSelectedItem()));
 			break;
 		case STATUS:
-			filter.setValue(Status.getFromString((String)cboxEqualTo.getSelectedItem()));
+			filter.setValue(Status.getFromString((String) cboxEqualTo
+					.getSelectedItem()));
 			break;
 		case TYPE:
-			filter.setValue(Type.getFromString((String)cboxEqualTo.getSelectedItem()));			
-			break;			
+			filter.setValue(Type.getFromString((String) cboxEqualTo
+					.getSelectedItem()));
+			break;
 		}
-		
-		saveFilterController.saveFilter(filter);
+
+		if (mode == Mode.CREATE) {
+			addFilterController.addFilter(filter);
+		} else {
+			saveFilterController.saveFilter(filter);
+		}
 	}
-	
+
 	public void onCancelPressed() {
 		txtEqualTo.setText("");
 		cboxField.setSelectedItem("Name");
-		
+
 		populateOperationComboBox();
 		updateEqualsField();
-		
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -355,12 +372,10 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 			populateOperationComboBox();
 			updateEqualsField();
 		}
-		
-		
+
 		else if (source.equals(butSave)) {
 			onSavePressed();
-		}
-		else if (source.equals(butCancel)) {
+		} else if (source.equals(butCancel)) {
 			onCancelPressed();
 		}
 	}
@@ -370,14 +385,14 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 		filterView.refreshTableView();
 	}
 
-
 	public void responseError(int statusCode, String statusMessage) {
-		System.out.println("Filter Errored!! " + statusMessage + "code: " + statusCode);
+		System.out.println("Filter Errored!! " + statusMessage + "code: "
+				+ statusCode);
 	}
 
 	public void fail(Exception exception) {
 		System.out.println("Filter Failed!!");
 		exception.printStackTrace();
 	}
-	
+
 }

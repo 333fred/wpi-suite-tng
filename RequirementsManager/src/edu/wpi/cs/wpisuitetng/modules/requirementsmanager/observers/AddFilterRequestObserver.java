@@ -12,7 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
+import java.util.Arrays;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -23,8 +27,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 
 public class AddFilterRequestObserver implements RequestObserver {
-
-	private AddFilterController controller;
+	
+	
+	private ISaveNotifier notifier;
 
 	/**
 	 * Creates a request observer with the given controller as a callback
@@ -32,8 +37,8 @@ public class AddFilterRequestObserver implements RequestObserver {
 	 * @param controller
 	 *            the controller to callback
 	 */
-	public AddFilterRequestObserver(AddFilterController controller) {
-		this.controller = controller;
+	public AddFilterRequestObserver(ISaveNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	/**
@@ -41,9 +46,15 @@ public class AddFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		ResponseModel response = iReq.getResponse();
+		ResponseModel response = iReq.getResponse();		
 
-		// TODO: Determine what to do with the response
+		if (response.getStatusCode() == 200) {
+			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
+			FilterDatabase.getInstance().addFilters(Arrays.asList(filters));
+		}
+		
+		notifier.responseSuccess();
+		
 	}
 
 	/**
@@ -51,8 +62,8 @@ public class AddFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
-
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
+				.getResponse().getStatusMessage());
 	}
 
 	/**
@@ -60,7 +71,7 @@ public class AddFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Auto-generated method stub
+		notifier.fail(exception);
 
 	}
 

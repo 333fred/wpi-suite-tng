@@ -230,6 +230,7 @@ public class ManagerLayer {
 		Session s = getSessionFromCookies(cook);
 
 		Model m;
+		System.out.println("!!!!~~+" + args[0] + args[1]);
 		m = (Model) map.get(args[0]+args[1]).makeEntity(s,content);
         
         return m.toJSON();
