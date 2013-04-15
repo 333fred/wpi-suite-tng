@@ -16,5 +16,21 @@ public enum FilterOperation {
 	public String toString() {
 		return name;
 	}
+	
+	/** Return the enum that the given string represents
+	 * 
+	 * @param str String to parse
+	 * @return The enum value, or null if it doesnt exist 
+	 */
+	
+	public static FilterOperation getFromString(String str) {
+		for (FilterOperation operation: values()) {
+			if (str.equals(operation.toString())) {
+				return operation;
+			}
+		}
+		
+		return null;
+	}
 
 }

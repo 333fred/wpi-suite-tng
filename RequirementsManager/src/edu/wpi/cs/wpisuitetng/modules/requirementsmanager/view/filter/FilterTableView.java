@@ -58,4 +58,12 @@ public class FilterTableView extends JPanel {
 		setPreferredSize(new Dimension(100,500));
 
 	}
+	
+	/** Refreshes the table view 
+	 * 
+	 */
+	
+	public void refresh() {
+		
+	}
 }

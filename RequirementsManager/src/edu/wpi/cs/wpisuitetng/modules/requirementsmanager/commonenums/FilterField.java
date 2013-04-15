@@ -18,4 +18,20 @@ public enum FilterField {
 	public String toString() {
 		return name;
 	}
+	
+	/** Return the enum that the given string represents
+	 * 
+	 * @param str String to parse
+	 * @return The enum value, or null if it doesnt exist 
+	 */
+	
+	public static FilterField getFromString(String str) {
+		for (FilterField field: values()) {
+			if (str.equals(field.toString())) {
+				return field;
+			}
+		}
+		
+		return null;
+	}
 }

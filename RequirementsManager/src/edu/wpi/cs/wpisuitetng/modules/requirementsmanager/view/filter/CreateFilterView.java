@@ -25,9 +25,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
-
-
 
 
 /**
@@ -37,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  * 
  */
 
-public class CreateFilterView extends JPanel implements ActionListener {
+public class CreateFilterView extends JPanel implements ActionListener, ISaveNotifier {
 
 	/**
 	 * Enum for setting the mode of this view, either creating or editing
@@ -72,13 +74,19 @@ public class CreateFilterView extends JPanel implements ActionListener {
 
 	private JButton butSave;
 	private JButton butCancel;
+	
+	/** Filter view */
+	private FilterView filterView;
+	
+	/** Controller for saving a filter */
+	private SaveFilterController saveFilterController;
 
 	/**
 	 * Creates a filter view to create a new filter
 	 * 
 	 */
-	public CreateFilterView() {
-		this(new Filter(), Mode.CREATE);
+	public CreateFilterView(FilterView filterView) {
+		this(filterView, new Filter(), Mode.CREATE);
 	}
 
 	/**
@@ -87,8 +95,8 @@ public class CreateFilterView extends JPanel implements ActionListener {
 	 * @param filter
 	 *            The filter to edit
 	 */
-	public CreateFilterView(Filter filter) {
-		this(new Filter(), Mode.EDIT);
+	public CreateFilterView(FilterView filterView, Filter filter) {
+		this(filterView, new Filter(), Mode.EDIT);
 	}
 
 	/**
@@ -100,8 +108,11 @@ public class CreateFilterView extends JPanel implements ActionListener {
 	 *            The editing mode
 	 */
 
-	private CreateFilterView(Filter filter, Mode mode) {
-
+	private CreateFilterView(FilterView filterView, Filter filter, Mode mode) {
+		this.filterView = filterView;
+		
+		saveFilterController = new SaveFilterController(this);
+		
 		labField = new JLabel("Field");
 		labOperation = new JLabel("Operation");
 		labEqualTo = new JLabel("Equal");
@@ -293,6 +304,35 @@ public class CreateFilterView extends JPanel implements ActionListener {
 	
 	public void onSavePressed() {
 		
+		filter.setField(FilterField.getFromString((String)cboxField.getSelectedItem()));
+		filter.setOperation(FilterOperation.getFromString((String) cboxOperation.getSelectedItem()));
+		
+		FilterField field = FilterField.getFromString((String)cboxField.getSelectedItem());
+		
+		switch (field) {
+		case EFFORT:
+		case ESTIMATE:
+		case ITERATION:
+		case NAME:
+		case RELEASE_NUMBER:
+			filter.setValue(txtEqualTo.getText());
+			break;
+
+		case PRIORITY:
+			
+			break;
+		case STATUS:
+			
+			break;
+		case TYPE:
+			
+			break;
+
+
+			
+		}
+		
+		saveFilterController.saveFilter(filter);
 	}
 	
 	public void onCancelPressed() {
@@ -318,6 +358,20 @@ public class CreateFilterView extends JPanel implements ActionListener {
 		else if (source.equals(butCancel)) {
 			onCancelPressed();
 		}
+	}
+
+	public void responseSuccess() {
+		onCancelPressed();
+		filterView.refreshTableView();
+	}
+
+
+	public void responseError(int statusCode, String statusMessage) {
+		
+	}
+
+	public void fail(Exception exception) {
+		
 	}
 	
 }

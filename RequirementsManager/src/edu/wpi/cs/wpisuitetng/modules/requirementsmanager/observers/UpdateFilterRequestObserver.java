@@ -12,7 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
@@ -23,7 +23,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 public class UpdateFilterRequestObserver implements RequestObserver {
 
-	public SaveFilterController controller;
+	private ISaveNotifier notifier;
 
 	/**
 	 * Creates a request observer with the given controller as a callback
@@ -31,8 +31,8 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 	 * @param controller
 	 *            the controller to callback
 	 */
-	public UpdateFilterRequestObserver(SaveFilterController controller) {
-		this.controller = controller;
+	public UpdateFilterRequestObserver(ISaveNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		// TODO Auto-generated method stub
+		notifier.responseSuccess();
 
 	}
 
@@ -49,8 +49,8 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
-
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
+				.getResponse().getStatusMessage());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Auto-generated method stub
+		notifier.fail(exception);
 
 	}
 

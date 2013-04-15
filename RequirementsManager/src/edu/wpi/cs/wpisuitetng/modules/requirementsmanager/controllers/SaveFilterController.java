@@ -25,6 +25,12 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class SaveFilterController {
 
+	private ISaveNotifier notifier;
+	
+	public SaveFilterController(ISaveNotifier notifier) {
+		this.notifier = notifier;
+	}
+	
 	/**
 	 * Saves a filter
 	 * 
@@ -32,8 +38,7 @@ public class SaveFilterController {
 	 *            the filter to save
 	 */
 	public void saveFilter(Filter toAdd) {
-		final RequestObserver requestObserver = new UpdateFilterRequestObserver(
-				this);
+		final RequestObserver requestObserver = new UpdateFilterRequestObserver(notifier);
 		Request request;
 		request = Network.getInstance().makeRequest(
 				"requirementsmanager/filter", HttpMethod.POST);
