@@ -341,7 +341,7 @@ public class Requirement extends AbstractModel {
 	 * @param id
 	 *            the id to add
 	 */
-	public void addSubRequirement(int id) {
+	public void addSubRequirement(Integer id) {
 		this.subRequirements.add(id);
 	}
 
@@ -352,8 +352,9 @@ public class Requirement extends AbstractModel {
 	 *            The ID to delete
 	 * @return true if the id was present, false if not
 	 */
-	public boolean removeSubRequirement(int id) {
-		return this.subRequirements.remove(id) != null;
+	public boolean removeSubRequirement(Integer id) {
+		this.subRequirements.remove(id);
+		return true;
 	}
 
 	/**
@@ -502,7 +503,7 @@ public class Requirement extends AbstractModel {
 	 * @param id
 	 *            the id to add
 	 */
-	public void addPUID(int id) {
+	public void addPUID(Integer id) {
 		this.pUID.add(id);
 	}
 
@@ -513,8 +514,9 @@ public class Requirement extends AbstractModel {
 	 *            the ID to remove
 	 * @return if the ID was in the list or not
 	 */
-	public boolean removePUID(int id) {
-		return this.pUID.remove(id) != null;
+	public boolean removePUID(Integer id) {
+		this.pUID.remove(id);
+		return true;
 	}
 
 	/**
