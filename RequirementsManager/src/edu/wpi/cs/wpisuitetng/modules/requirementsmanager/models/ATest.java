@@ -90,10 +90,10 @@ public class ATest implements Event {
 
 	@Override
 	public String getContent() {
-		String temp = "<html><i>" + parseNewLines(getDescription());
+		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
 		String completeMessage;
 		if (this.status == ATestStatus.PASSED) {
-			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
+			completeMessage = "</body><br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
 		} else if (this.status == ATestStatus.FAILED) {
 			completeMessage = "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>";
 		} else {

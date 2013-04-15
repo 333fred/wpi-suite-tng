@@ -108,12 +108,12 @@ public class Task implements Event {
 
 	@Override
 	public String getContent() {
-		String temp = "<html><i>" + parseNewLines(getDescription());
+		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
 		String userMessage;
 		String completeMessage;
 		String estimateMessage;
 		if (assignedUser == null) {
-			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned"
+			userMessage = "</body><br><FONT COLOR=\"gray\">No User Assigned"
 					+ "</FONT COLOR>";
 		} else {
 			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser

@@ -158,7 +158,7 @@ public class Note implements Event {
 
 	@Override
 	public String getContent() {
-		return "<html><i>" + parseNewLines(getNote()) + "</i></html>";
+		return "<html><body style=\"width: 300px\"><i>" + parseNewLines(getNote()) + "</i></body></html>";
 	}
 
 	/**
