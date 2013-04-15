@@ -94,7 +94,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		this.tree.setDropMode(DropMode.ON);
 		// final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 
-		this.tree.setTransferHandler(new TreeTransferHandler());
+		this.tree.setTransferHandler(new TreeTransferHandler(tabController));
 		this.tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 

@@ -12,6 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+
 /**
  * Notifier for Saving an iteration / requirement
  */
@@ -41,4 +44,8 @@ public interface ISaveNotifier {
 	 */
 
 	public void fail(Exception exception);
+
+	public MainTabController getTabController();
+
+	public Requirement getDraggedRequirement();
 }

@@ -344,7 +344,7 @@ public class StatView extends Tab implements ActionListener {
 				piePlot.setCircular(true);
 				piePlot.setLabelGap(0.02);
 				piePlot.setForegroundAlpha(0.7f);
-				PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator("{0} = {1} ({2})");//, new DecimalFormat("0"), new DecimalFormat("0.00%"));
+				PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator("{0} = {1} ({2})");
 				piePlot.setLabelGenerator(generator); 
 				break;
 				

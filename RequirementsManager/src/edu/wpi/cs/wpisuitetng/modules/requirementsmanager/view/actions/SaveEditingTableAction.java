@@ -14,6 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
@@ -81,5 +82,17 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 		this.tableView.displayEditInformation("Unable to complete request: "
 				+ exception.getMessage());
 		this.tableView.refresh();
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

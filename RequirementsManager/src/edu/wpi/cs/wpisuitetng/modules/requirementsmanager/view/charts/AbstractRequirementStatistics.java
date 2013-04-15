@@ -42,8 +42,6 @@ public AbstractRequirementStatistics(){
 
 	public PieDataset toPieDataset(){
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
-		
-
 		for(String key : data.keySet()){
 			if (this.data.get(key) != 0) {//remove zero elements		
 				pieDataset.setValue(key, data.get(key));

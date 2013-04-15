@@ -33,6 +33,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 
 /**
@@ -378,6 +380,18 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 	public void fail(Exception exception) {
 		System.out.println("Filter Failed!!");
 		exception.printStackTrace();
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

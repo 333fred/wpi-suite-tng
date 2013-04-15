@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotif
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
@@ -563,6 +564,18 @@ public class IterationView extends Tab implements ISaveNotifier {
 		
 		}
 		return true;
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
