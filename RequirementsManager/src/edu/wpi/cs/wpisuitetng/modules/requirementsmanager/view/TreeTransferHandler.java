@@ -108,8 +108,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 
 		// don't allow dropping into completed iterations
 		Date currentDate = new Date();
-		Iteration iteration = IterationDatabase.getInstance().getIteration(
-				target.toString());
+		Iteration iteration = IterationDatabase.getInstance().getIteration(target.toString().replace(" (Closed)", ""));
 		if (currentDate.compareTo(iteration.getEndDate()) > 0
 				&& iteration.getId() != -1) {
 			return false;
