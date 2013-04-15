@@ -8,22 +8,23 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
  *
  */
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 
 public class IterationTest {
 

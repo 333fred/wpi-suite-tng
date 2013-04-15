@@ -12,9 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import com.google.gson.Gson;
-
-import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 public class Task implements Event {

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 

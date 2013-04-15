@@ -24,9 +24,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 /**
  * @author Fredric Silberberg
  * 
- *         Observer for the request to get all iterations from the server. For
- *         now, it just returns a standard dummy list of iterations until we are
- *         assigned the story for iteration management
+ *         Observer for the request to get all iterations from the server.
  * 
  */
 public class RetrieveAllIterationsRequestObserver implements RequestObserver {
