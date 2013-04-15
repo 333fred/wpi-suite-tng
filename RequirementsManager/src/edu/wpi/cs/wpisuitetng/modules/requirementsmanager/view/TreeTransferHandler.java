@@ -276,7 +276,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 		
 		
 		//Refresh the chart
-		StatView.getInstance().updateChart();
+		//StatView.getInstance().updateChart();
 		return true;
 	}
 

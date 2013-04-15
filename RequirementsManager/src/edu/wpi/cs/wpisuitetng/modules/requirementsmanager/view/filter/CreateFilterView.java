@@ -69,10 +69,10 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 	private JLabel labOperation;
 	private JLabel labEqualTo;
 
-	private JComboBox<String> cboxField;
-	private JComboBox<String> cboxOperation;
+	private JComboBox cboxField;
+	private JComboBox cboxOperation;
 
-	private JComboBox<String> cboxEqualTo;
+	private JComboBox cboxEqualTo;
 	private JTextField txtEqualTo;
 
 	private JButton butSave;
@@ -122,9 +122,9 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 		labOperation = new JLabel("Operation");
 		labEqualTo = new JLabel("Equal");
 
-		cboxField = new JComboBox<String>();
-		cboxOperation = new JComboBox<String>();
-		cboxEqualTo = new JComboBox<String>();
+		cboxField = new JComboBox();
+		cboxOperation = new JComboBox();
+		cboxEqualTo = new JComboBox();
 		txtEqualTo = new JTextField();
 
 		cboxField.setBackground(Color.WHITE);
