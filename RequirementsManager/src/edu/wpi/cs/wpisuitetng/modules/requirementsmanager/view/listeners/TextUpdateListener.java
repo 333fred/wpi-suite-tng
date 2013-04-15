@@ -70,25 +70,33 @@ public class TextUpdateListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		String empty = "";
+		// if this component was empty to begin with,
+		if (empty.equals(component.getText().trim())) {
+			this.firstKeyPress = false;
+		} else {
+			this.firstKeyPress = true;
+		}
+
 		if (arg0.getKeyCode() == KeyEvent.VK_TAB || firstKeyPress) {
 			checkIfUpdated();
-		} else {
-			String empty = "";
-			// if this component was empty to begin with,
-			if (empty.equals(component.getText().trim())) {
-				this.firstKeyPress = false;
-			} else {
-				this.firstKeyPress = true;
-			}
-		}
+		}		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
+		String empty = "";
+		// if this component was empty to begin with,
+		if (empty.equals(component.getText().trim())) {
+			this.firstKeyPress = false;
+		} else {
+			this.firstKeyPress = true;
+		}		
+		
 		// as long as we're not reading the key release from tabbing, we can check
 		if (arg0.getKeyCode() != KeyEvent.VK_TAB && firstKeyPress) {
 			checkIfUpdated();
-		}
+		}		
 	}
 
 	@Override
