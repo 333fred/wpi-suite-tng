@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -24,12 +25,14 @@ import java.awt.event.MouseEvent;
 import java.util.Comparator;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
@@ -114,8 +117,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	private boolean isEditable;
 	
+	private TableRowSorter<TableModel> sorter;
+	
+	// TODO: testing only. delete later
 	JTextArea FilterDemo;
-	TableRowSorter<TableModel> sorter;
+	JButton ClearFilter;
+	JTextArea textFilterInfo;
+	
 	
 	/**
 	 * Constructor for a RequirementTableView
@@ -168,10 +176,11 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		textEditInformation.setWrapStyleWord(true);
 
 		
-		
-		FilterDemo = new JTextArea(1, 25);
+		// TODO: for testing only. Delete later
+		FilterDemo = new JTextArea(1, 15);
 		FilterDemo.setOpaque(true);
 		FilterDemo.setEnabled(true);
+		FilterDemo.setBorder((new JTextField()).getBorder());
 		FilterDemo.setDisabledTextColor(Color.BLACK);
 		FilterDemo.setLineWrap(true);
 		FilterDemo.setWrapStyleWord(true);
@@ -186,6 +195,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				newFilter();
 			}
 		});
+		textFilterInfo = new JTextArea(1,20);
+		textFilterInfo.setOpaque(false);
+		textFilterInfo.setEnabled(false);
+		textFilterInfo.setDisabledTextColor(Color.BLACK);
+		textFilterInfo.setLineWrap(true);
+		textFilterInfo.setWrapStyleWord(true);
+		ClearFilter = new JButton("Clear Filter");
+		
+		
 	
 		
 		
@@ -201,7 +219,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		editPanel.add(btnSave);
 		editPanel.add(FilterDemo);
 		editPanel.add(textEditInformation);
-
+		editPanel.add(ClearFilter);
+		editPanel.add(textFilterInfo);
+		
 		editPanel.setPreferredSize(new Dimension(
 				btnEdit.getPreferredSize().width,
 				btnEdit.getPreferredSize().height
@@ -227,10 +247,16 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		
 		
-		
+		// TODO: testing only. delete later
 		editPanelLayout.putConstraint(SpringLayout.EAST, FilterDemo, -5, SpringLayout.WEST, btnEdit);
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.WEST, ClearFilter, 5, SpringLayout.WEST, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, ClearFilter, 0,
+				SpringLayout.VERTICAL_CENTER, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.WEST, textFilterInfo, 5, SpringLayout.WEST, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.NORTH, textFilterInfo, 0,
+				SpringLayout.SOUTH, ClearFilter);
 		
 		
 		
@@ -310,6 +336,27 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		btnSave.setAction(new SaveEditingTableAction(this, sorter));
 		btnEdit.setAction(new EnableEditingAction(this, sorter));
 
+		
+		
+		
+		// TODO: temporary. remove later
+		AbstractAction ClearFilterAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sorter.setRowFilter(null);
+				textFilterInfo.setText("");
+			}
+		};
+		ClearFilter.setAction(ClearFilterAction);
+		ClearFilter.setText("Clear Filter");
+		
+		
+		
+		
+		
+		
+		
+		
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
 		for (int i = 0; i < this.table.getColumnCount(); i++) {
@@ -754,5 +801,24 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
         }
         sorter.setRowFilter(rf);
     }
+	
+	public void IterationFilter(String IterationName) {
+        RowFilter rf = null;
+        //If current expression doesn't parse, don't update.
+        try {
+            rf = RowFilter.regexFilter(IterationName);
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf);
+    }
+	
+	
+	
+	
+	// writes to hidden panel to inform the user of editing, etc..
+	public void displayFilterInformation(String text) {
+		this.textFilterInfo.setText(text);
+	}
 
 }
