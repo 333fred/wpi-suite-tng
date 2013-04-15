@@ -18,11 +18,15 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
@@ -42,59 +46,114 @@ public class SubRequirementPanel extends JPanel {
 	/** The list of requirements that the view is displaying */
 	
 	
-	private JTree requirementTree;
-	private DefaultMutableTreeNode top;
-	private DefaultListModel reqNameString;
-	
-	private JButton assignChildren;
-	private JButton assignParent;
-	
+	private DefaultListModel reqNameString; //List for requirements available to add
+	private JList reqNames;	
 	private JScrollPane scrollPane;
-	public List<Requirement> visitingReqs;
-	public List<Requirement> visitedReqs;
 	
+	private JLabel parentReq;
+	private DefaultListModel subReqList; //List of subrequirements
+	private JList subReqNames;
+	private JScrollPane scrollPaneContainedReqs; //ScrollPane for subreqs/parents
+	
+	private JLabel parentLabel;
+	private JLabel childLabel;
+	
+	private JRadioButton radioParent;
+	private JRadioButton radioChild;
+	private ButtonGroup group;
+	
+	private JButton addReq;
+	private JButton removeReq;
+	private JButton removeParent;
 	
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {		
 		
 		reqNameString = new DefaultListModel();
-		initializeList();		
+		initializeList();
+		reqNames = new JList(reqNameString);
 		
-		this.top = new DefaultMutableTreeNode("Requirements");
-		requirementTree = new JTree(top);
-		requirementTree.setDragEnabled(false);
-		initializeTree();
+		subReqList = new DefaultListModel();
+		initializeListSubReq(requirement);
+		subReqNames = new JList(subReqList);
 		
 		JPanel subreqPane = new JPanel();
 		subreqPane.setLayout(new BorderLayout());
 		
 		SpringLayout layout = new SpringLayout();
 		
-		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+		addReq = new JButton("Add");
+		removeReq = new JButton("Remove Children");
+		removeParent = new JButton("Remove Parent");
 		
-		assignChildren = new JButton("Assign Children");
-		assignParent = new JButton("Assign Parent");
+		parentLabel = new JLabel("Parent:");
+		childLabel = new JLabel("Children:");
+		parentReq = new JLabel("PARENT");
 		
-		buttonsPanel.add(assignChildren);
-		buttonsPanel.add(assignParent);
+		JRadioButton radioChild = new JRadioButton("Add Children");
+		JRadioButton radioParent = new JRadioButton("Add Parent");
+				
+	    group = new ButtonGroup();
+	    group.add(radioChild);
+	    group.add(radioParent);
 		
-		scrollPane = new JScrollPane(requirementTree);
+		scrollPane = new JScrollPane();
+		scrollPane.setViewportView(reqNames);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setBorder(BorderFactory.createEtchedBorder());
 		
-		subreqPane.add(scrollPane, BorderLayout.CENTER);
+		scrollPaneContainedReqs = new JScrollPane();
+		scrollPaneContainedReqs.setViewportView(subReqNames);
+		scrollPaneContainedReqs.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneContainedReqs.setBorder(BorderFactory.createEtchedBorder());
 		
-		layout.putConstraint(SpringLayout.NORTH, subreqPane, 0, SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.NORTH, buttonsPanel, 0,SpringLayout.SOUTH, subreqPane);
-		layout.putConstraint(SpringLayout.WIDTH, subreqPane, 0, SpringLayout.WIDTH, this);
-		layout.putConstraint(SpringLayout.WIDTH, buttonsPanel, 0, SpringLayout.WIDTH, this);
+		layout.putConstraint(SpringLayout.NORTH, parentLabel, 5, SpringLayout.NORTH, this);
+		
+		layout.putConstraint(SpringLayout.NORTH, childLabel, 5, SpringLayout.SOUTH, parentLabel);
+		
+		layout.putConstraint(SpringLayout.NORTH, parentReq, 5, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.WEST, parentReq, 14, SpringLayout.EAST, parentLabel);
+		
+		layout.putConstraint(SpringLayout.NORTH, scrollPaneContainedReqs, 5, SpringLayout.SOUTH, parentLabel);
+		layout.putConstraint(SpringLayout.WEST, scrollPaneContainedReqs, 5, SpringLayout.EAST, childLabel);		
+		
+		layout.putConstraint(SpringLayout.NORTH, removeReq, 5, SpringLayout.SOUTH, scrollPaneContainedReqs);
+		
+		layout.putConstraint(SpringLayout.NORTH, removeParent, 5, SpringLayout.SOUTH, scrollPaneContainedReqs);
+		layout.putConstraint(SpringLayout.WEST, removeParent, 5, SpringLayout.EAST, removeReq);
+		
+		layout.putConstraint(SpringLayout.NORTH, radioParent, 5, SpringLayout.SOUTH, removeReq);
+		
+		layout.putConstraint(SpringLayout.NORTH, radioChild, 5, SpringLayout.SOUTH, removeReq);
+		layout.putConstraint(SpringLayout.WEST, radioChild, 5, SpringLayout.EAST, radioParent);
+		
+		layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, radioParent);
+		layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, childLabel);
+		
+		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, scrollPane);
+		
+		
+		
+		//layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, this);
+		//layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, parentLabel);
+
+		layout.putConstraint(SpringLayout.WIDTH, subreqPane, 5, SpringLayout.WIDTH, this);
+
 		this.setLayout(layout);
+		this.add(scrollPaneContainedReqs);
+		this.add(scrollPane);
+		this.add(parentLabel);
+		this.add(removeParent);
+		this.add(removeReq);
+		this.add(childLabel);
+		this.add(parentReq);
+		this.add(radioChild);
+		this.add(radioParent);
 		this.add(subreqPane);
-		this.add(buttonsPanel);
+		this.add(addReq);
 		
 		//Do other things here
-		assignChildren.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));
-		assignParent.setAction(new AssignParentAction(new AssignParentController(this, requirement, panel)));
+		removeReq.setAction(new RemoveReqAction(new RemoveReqController(this, requirement, panel)));
+		addReq.setAction(new AddReqAction(new AddReqController(this, requirement, panel)));
 		
 		
 	}
@@ -107,60 +166,17 @@ public class SubRequirementPanel extends JPanel {
 		}
 	}
 	
-	public void initializeTree() {
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();
-
-		DefaultMutableTreeNode requirementNode = null;
-		DefaultMutableTreeNode tempNode = null;
-		this.top.removeAllChildren();
-		
-		for (Requirement anReq : requirements) {
-			if(anReq.getpUID().size()==0){
-				requirementNode = new DefaultMutableTreeNode(anReq.getName());
-
-			for (Integer aReq : anReq.getSubRequirements()) {
-				try {
-					tempNode = new DefaultMutableTreeNode(
-							RequirementDatabase.getInstance()
-							.getRequirement(aReq).getName());
-					requirementNode.add(tempNode);
-					cycleTree(aReq, tempNode);
-				} catch (RequirementNotFoundException e) {
-					
-				}
+	private void initializeListSubReq(Requirement requirement) {
+		Requirement tempReq = null;
+		for(int req : requirement.getSubRequirements()) {
+			try {
+				tempReq = RequirementDatabase.getInstance().getRequirement(req);
+			} catch (RequirementNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			this.top.add(requirementNode);
-			}
+				reqNameString.addElement(tempReq.getName());
 		}
-	}
-	
-	private void cycleTree(int aPrevReq, DefaultMutableTreeNode node){
-		DefaultMutableTreeNode tempNode = null;
-
-		Requirement anReq = null;
-		try {
-			anReq = RequirementDatabase.getInstance()
-					.getRequirement(aPrevReq);
-		} catch (RequirementNotFoundException e1) {
-			e1.printStackTrace();
-		}
-
-			for (Integer aReq : anReq.getSubRequirements()) {
-				try {
-					tempNode = new DefaultMutableTreeNode(
-							RequirementDatabase.getInstance()
-							.getRequirement(aReq).getName());
-					node.add(tempNode);
-					cycleTree(aReq, tempNode);
-				} catch (RequirementNotFoundException e) {
-					
-				}
-			}
-
-		}
-	
-	public JTree getTree(){
-		return requirementTree;
 	}
 
 	public boolean checkCycle(Requirement parent, Requirement child) {
@@ -179,67 +195,9 @@ public class SubRequirementPanel extends JPanel {
 			}
 		}
 		return false;
-	}
+	}	
 	
-	public boolean checkDirectedCycle() {
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAllRequirements();
-		visitingReqs = new ArrayList<Requirement>();
-		visitedReqs = new ArrayList<Requirement>();
-		boolean check = false;
-		Requirement tempReq = null;
-
-		for (Requirement anReq : requirements) {
-			if (!visitedReqs.contains(anReq)) { //If requirement was not visited
-				visitingReqs.add(anReq); //Add to visiting
-				for (int subreq : anReq.getSubRequirements()) { //Go through sub requirements
-					try {
-						tempReq = RequirementDatabase.getInstance().getRequirement(subreq);
-					} catch (RequirementNotFoundException e) {
-						e.printStackTrace();
-					}
-					if (!visitedReqs.contains(tempReq)) //If this subrequirement hasn't been visited, process
-						check = process(subreq);
-					if(check) return true;
-				}
-				
-				if(visitingReqs.contains(anReq)) //Safety removal
-					visitingReqs.remove(anReq);
-				visitedReqs.add(anReq);
-			}
-		}
-		return false;
+	public JList getList(){
+		return reqNames;
 	}
-	
-	public boolean process(int subreq){
-		boolean check = false;
-		Requirement tempReq = null;
-		Requirement tempReqLoop = null;
-		try {
-			tempReq = RequirementDatabase.getInstance().getRequirement(subreq);
-		} catch (RequirementNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		if(visitingReqs.contains(tempReq))
-			return true;		
-		
-		System.out.println(tempReq.getName() + "HERECT\n");
-		visitingReqs.add(tempReq);
-			for(int anReq : tempReq.getSubRequirements()) {
-				try {
-					tempReqLoop = RequirementDatabase.getInstance().getRequirement(anReq);
-				} catch (RequirementNotFoundException e) {
-					e.printStackTrace();
-				}
-				if(!visitedReqs.contains(tempReqLoop))
-					check = process(tempReqLoop.getrUID());
-				if(check) return true;
-			}		
-		visitingReqs.remove(tempReq);
-		visitedReqs.add(tempReq);
-		return false;		
-	}
-		
-	
 }
