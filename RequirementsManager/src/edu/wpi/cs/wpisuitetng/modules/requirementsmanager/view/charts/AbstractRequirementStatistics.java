@@ -42,11 +42,15 @@ public AbstractRequirementStatistics(){
 
 	public PieDataset toPieDataset(){
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
+		
+
 		for(String key : data.keySet()){
-			pieDataset.setValue(key, data.get(key));
+			if (this.data.get(key) != 0) {//remove zero elements		
+				pieDataset.setValue(key, data.get(key));
+			}
 		}
 		return pieDataset;
-		}
+	}
 
 	public CategoryDataset toCategoryDataset(String category){
 		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
