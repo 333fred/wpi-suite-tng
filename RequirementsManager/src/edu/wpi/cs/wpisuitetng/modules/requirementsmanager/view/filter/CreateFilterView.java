@@ -27,6 +27,9 @@ import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
@@ -309,6 +312,7 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 		
 		FilterField field = FilterField.getFromString((String)cboxField.getSelectedItem());
 		
+		//get the equal to value from the text box or combo box
 		switch (field) {
 		case EFFORT:
 		case ESTIMATE:
@@ -319,13 +323,13 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 			break;
 
 		case PRIORITY:
-			
+			filter.setValue(Priority.getFromString((String)cboxEqualTo.getSelectedItem()));
 			break;
 		case STATUS:
-			
+			filter.setValue(Status.getFromString((String)cboxEqualTo.getSelectedItem()));
 			break;
 		case TYPE:
-			
+			filter.setValue(Type.getFromString((String)cboxEqualTo.getSelectedItem()));			
 			break;
 
 

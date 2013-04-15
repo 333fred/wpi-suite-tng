@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +112,16 @@ public class FilterDatabase extends Thread {
 		} else {
 			throw new FilterNotFoundException(id);
 		}
+	}
+	
+	/**
+	 * Gets all of the filters from the database
+	 * 
+	 * @return List of all the fitlers in the database
+	 */
+	
+	public synchronized List<Filter> getFilters() {
+		return new ArrayList<Filter>(filters.values());
 	}
 
 	/**

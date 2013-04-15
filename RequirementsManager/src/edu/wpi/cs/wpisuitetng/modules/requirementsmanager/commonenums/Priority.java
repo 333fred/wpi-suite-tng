@@ -18,5 +18,36 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  * 
  */
 public enum Priority {
-	BLANK, LOW, MEDIUM, HIGH
+	BLANK("None"), LOW("Low"), MEDIUM("Medium"), HIGH("High");
+	
+	private String name;
+	
+	private Priority(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		return name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	/** Return the enum that the given string represents
+	 * 
+	 * @param str String to parse
+	 * @return The enum value, or null if it doesnt exist 
+	 */
+	
+	public static Priority getFromString(String str) {
+		for (Priority priority: values()) {
+			if (str.equals(priority.toString())) {
+				return priority;
+			}
+		}		
+		return null;
+	}
+	
 }
+
