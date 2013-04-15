@@ -319,9 +319,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration, or
 			// the iteration is this requirement's current iteration or is the
 			// backlog
-			if (currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| iteration.identify(requirement.getIteration())
-					|| iteration.getId() == -1 || iteration.getId() != -2) {
+			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
+					|| requirement.getIteration() == iteration.getId()
+					|| iteration.getId() == -1) && iteration.getId() != -2) {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
@@ -333,9 +333,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration,
 			// or the iteration is this requirement's current iteration,
 			// or it is the backlog, add it to the list
-			if (currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| iteration.identify(requirement.getIteration())
-					|| iteration.getId() == -1 || iteration.getId() != -2) {
+			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
+					|| requirement.getIteration() == iteration.getId()
+					|| iteration.getId() == -1) && iteration.getId() != -2) {
 				availableIterations[currentAvailableIterationIndex] = iteration
 						.getName();
 				currentAvailableIterationIndex++;
