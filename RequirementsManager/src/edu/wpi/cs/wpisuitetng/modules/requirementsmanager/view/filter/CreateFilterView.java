@@ -13,6 +13,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,9 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+
+
+
 
 /**
  * View for creating and editing filters
@@ -107,6 +111,10 @@ public class CreateFilterView extends JPanel implements ActionListener {
 		cboxEqualTo = new JComboBox<String>();
 		txtEqualTo = new JTextField();
 
+		cboxField.setBackground(Color.WHITE);
+		cboxOperation.setBackground(Color.WHITE);
+		cboxEqualTo.setBackground(Color.WHITE);
+		
 		butSave = new JButton("Save");
 		butCancel = new JButton("Cancel");
 
@@ -149,15 +157,17 @@ public class CreateFilterView extends JPanel implements ActionListener {
 		layout.putConstraint(SpringLayout.WEST, cboxEqualTo,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		
+		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
+				SpringLayout.SOUTH, cboxEqualTo);
+		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
+		
 		layout.putConstraint(SpringLayout.NORTH, butCancel, VERTICAL_PADDING,
 				SpringLayout.SOUTH, cboxEqualTo);
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING,
 				SpringLayout.EAST, butSave);
 
-		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, cboxEqualTo);
-		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
+
 
 		setLayout(layout);
 		

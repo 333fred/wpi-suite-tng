@@ -13,37 +13,26 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.awt.BorderLayout;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.SpringLayout;
-import javax.swing.JButton;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PiePlot3D;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.VelocityIterationStatistics;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.TaskRequirementStatistics;
 
 @SuppressWarnings("serial")
 public class StatView extends Tab implements ActionListener {

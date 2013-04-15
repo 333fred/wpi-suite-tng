@@ -56,7 +56,7 @@ public class FilterView extends JPanel {
 		//JScrollPane createScrollPane = new JScrollPane(createFilterView, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, filterTableView, createFilterView);
 	
-		splitPane.setDividerLocation(0.75f);
+		splitPane.setDividerLocation(0.85f);
 		
 		setLayout(new BorderLayout());
 		

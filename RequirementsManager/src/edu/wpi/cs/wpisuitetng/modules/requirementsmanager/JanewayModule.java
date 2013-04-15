@@ -111,7 +111,7 @@ public class JanewayModule implements IJanewayModule {
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftTabbedPane, tabController.getTabView());
-		splitPane.setResizeWeight(0.28);
+		splitPane.setResizeWeight(0.1);
 
 		// create a new JanewayTabModel, passing in the tab view, and a new
 		// JPanel as the toolbar

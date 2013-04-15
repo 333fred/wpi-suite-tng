@@ -16,8 +16,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 
-import javax.swing.JTextArea;
-
 import org.junit.Before;
 import org.junit.Test;
 

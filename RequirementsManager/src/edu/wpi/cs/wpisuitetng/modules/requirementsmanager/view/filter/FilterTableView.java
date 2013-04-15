@@ -1,9 +1,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,12 +25,21 @@ public class FilterTableView extends JPanel {
 
 	/** The scroll pane for the filter table */
 	private JScrollPane scrollPane;
+	
+	/** Button used to enable or disable a filter */
+	private JButton butEnable;
 
+	/** Panel to hold stuff in the scrollPane */
+	private JPanel panel;
+	
 	public FilterTableView() {
-
 		ArrayList<Filter> filters = new ArrayList<Filter>();
-		filters.add(new Filter());
-		filters.add(new Filter());
+		
+		panel = new JPanel();
+		
+		butEnable = new JButton("Disable");
+		butEnable.setEnabled(false);
+		
 		tableModel = new FilterTableModel(filters);
 
 		tableView = new JTable(tableModel);
@@ -42,6 +53,9 @@ public class FilterTableView extends JPanel {
 		setLayout(new BorderLayout());
 
 		add(scrollPane, BorderLayout.CENTER);
+		add(butEnable, BorderLayout.SOUTH);
+		
+		setPreferredSize(new Dimension(100,500));
 
 	}
 }

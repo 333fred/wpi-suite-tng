@@ -12,13 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.awt.event.ActionEvent;
-
-import org.junit.Before;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.*;
+import org.junit.Test;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.ChartType;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.DataType;
 
 public class StatViewTest {
 
