@@ -101,6 +101,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			Iteration iter = selectedIterations.get(0);
 			RequirementTableView tableView = RequirementTableView.getInstance();
 			tableView.IterationFilter(iter.getName());
+			tableView.displayFilterInformation("Filtering by " + iter.getName());
 		} else {
 			// create requiremetn was selected
 			// TODO: make this actualy create a requirement under the given
