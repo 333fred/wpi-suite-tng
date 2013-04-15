@@ -22,9 +22,12 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
@@ -38,7 +41,8 @@ public class SubRequirementPanel extends JPanel {
 	/** The list of requirements that the view is displaying */
 	
 	
-	private JList requirementTable;
+	private JTree requirementTree;
+	private DefaultMutableTreeNode top;
 	private DefaultListModel reqNameString;
 	
 	private JButton assignChildren;
@@ -47,13 +51,15 @@ public class SubRequirementPanel extends JPanel {
 	private JScrollPane scrollPane;
 	
 	
-	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {
-		
+	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {		
 		
 		reqNameString = new DefaultListModel();
-		initializeList();
+		initializeList();		
 		
-		requirementTable = new JList(reqNameString);
+		this.top = new DefaultMutableTreeNode("Requirements");
+		requirementTree = new JTree(top);
+		requirementTree.setDragEnabled(false);
+		initializeTree();
 		
 		JPanel subreqPane = new JPanel();
 		subreqPane.setLayout(new BorderLayout());
@@ -69,7 +75,7 @@ public class SubRequirementPanel extends JPanel {
 		buttonsPanel.add(assignChildren);
 		buttonsPanel.add(assignParent);
 		
-		scrollPane = new JScrollPane(requirementTable);
+		scrollPane = new JScrollPane(requirementTree);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setBorder(BorderFactory.createEtchedBorder());
 		
@@ -83,6 +89,10 @@ public class SubRequirementPanel extends JPanel {
 		this.add(subreqPane);
 		this.add(buttonsPanel);
 		
+		//Do other things here
+		assignChildren.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));
+		assignParent.setAction(new AssignParentAction(new AssignParentController(this, requirement, panel)));
+		
 		
 	}
 	
@@ -93,4 +103,80 @@ public class SubRequirementPanel extends JPanel {
 				reqNameString.addElement(req.getName());
 		}
 	}
+	
+	public void initializeTree() {
+		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();
+
+		DefaultMutableTreeNode requirementNode = null;
+		DefaultMutableTreeNode tempNode = null;
+		this.top.removeAllChildren();
+		
+		for (Requirement anReq : requirements) {
+			if(anReq.getpUID().size()==0){
+				requirementNode = new DefaultMutableTreeNode(anReq.getName());
+
+			for (Integer aReq : anReq.getSubRequirements()) {
+				try {
+					tempNode = new DefaultMutableTreeNode(
+							RequirementDatabase.getInstance()
+							.getRequirement(aReq).getName());
+					requirementNode.add(tempNode);
+					cycleTree(aReq, tempNode);
+				} catch (RequirementNotFoundException e) {
+					
+				}
+			}
+			this.top.add(requirementNode);
+			}
+		}
+	}
+	
+	private void cycleTree(int aPrevReq, DefaultMutableTreeNode node){
+		DefaultMutableTreeNode tempNode = null;
+
+		Requirement anReq = null;
+		try {
+			anReq = RequirementDatabase.getInstance()
+					.getRequirement(aPrevReq);
+		} catch (RequirementNotFoundException e1) {
+			e1.printStackTrace();
+		}
+
+			for (Integer aReq : anReq.getSubRequirements()) {
+				try {
+					tempNode = new DefaultMutableTreeNode(
+							RequirementDatabase.getInstance()
+							.getRequirement(aReq).getName());
+					node.add(tempNode);
+					cycleTree(aReq, tempNode);
+				} catch (RequirementNotFoundException e) {
+					
+				}
+			}
+
+		}
+	
+	public JTree getTree(){
+		return requirementTree;
+	}
+
+	public boolean checkCycle(Requirement parent, Requirement child) {
+		Requirement tempReq = child;
+		
+		while(tempReq!=null){
+			if(parent.getrUID() == tempReq.getrUID()) {
+				return true;
+			}
+			else{
+				/*try {
+					tempReq = RequirementDatabase.getInstance().getRequirement(tempReq.getpUID());
+				} catch (RequirementNotFoundException e) {
+					return false;
+				}*/	
+			}
+		}
+		return false;
+	}
+		
+	
 }

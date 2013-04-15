@@ -113,7 +113,7 @@ public class Task implements Event {
 		String completeMessage;
 		String estimateMessage;
 		if (assignedUser == null) {
-			userMessage = "</body><br><FONT COLOR=\"gray\">No User Assigned"
+			userMessage = "<br><FONT COLOR=\"gray\">No User Assigned"
 					+ "</FONT COLOR>";
 		} else {
 			userMessage = "<br><FONT COLOR=\"blue\">Assignee: " + assignedUser

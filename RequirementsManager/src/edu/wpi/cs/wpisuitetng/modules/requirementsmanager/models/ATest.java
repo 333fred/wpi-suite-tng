@@ -93,7 +93,7 @@ public class ATest implements Event {
 		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
 		String completeMessage;
 		if (this.status == ATestStatus.PASSED) {
-			completeMessage = "</body><br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
+			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
 		} else if (this.status == ATestStatus.FAILED) {
 			completeMessage = "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>";
 		} else {
