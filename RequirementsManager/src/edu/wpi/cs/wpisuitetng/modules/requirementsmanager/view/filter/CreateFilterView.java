@@ -113,6 +113,8 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 
 	private CreateFilterView(FilterView filterView, Filter filter, Mode mode) {
 		this.filterView = filterView;
+		this.filter = filter;
+		this.mode = mode;
 		
 		saveFilterController = new SaveFilterController(this);
 		
@@ -307,6 +309,8 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 	
 	public void onSavePressed() {
 		
+		System.out.println(filter + " " + cboxField.getSelectedItem() + " " + FilterField.getFromString((String)cboxField.getSelectedItem()));
+		
 		filter.setField(FilterField.getFromString((String)cboxField.getSelectedItem()));
 		filter.setOperation(FilterOperation.getFromString((String) cboxOperation.getSelectedItem()));
 		
@@ -330,10 +334,7 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 			break;
 		case TYPE:
 			filter.setValue(Type.getFromString((String)cboxEqualTo.getSelectedItem()));			
-			break;
-
-
-			
+			break;			
 		}
 		
 		saveFilterController.saveFilter(filter);
@@ -371,11 +372,12 @@ public class CreateFilterView extends JPanel implements ActionListener, ISaveNot
 
 
 	public void responseError(int statusCode, String statusMessage) {
-		
+		System.out.println("Filter Errored!! " + statusMessage + "code: " + statusCode);
 	}
 
 	public void fail(Exception exception) {
-		
+		System.out.println("Filter Failed!!");
+		exception.printStackTrace();
 	}
 	
 }

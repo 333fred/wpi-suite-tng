@@ -42,6 +42,7 @@ public class SaveFilterController {
 		Request request;
 		request = Network.getInstance().makeRequest(
 				"requirementsmanager/filter", HttpMethod.POST);
+		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();
 	}

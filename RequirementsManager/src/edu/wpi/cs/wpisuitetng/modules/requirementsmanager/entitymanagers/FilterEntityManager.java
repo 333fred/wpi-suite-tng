@@ -65,6 +65,10 @@ public class FilterEntityManager implements EntityManager<Filter> {
 
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
+		
+		System.out.println("~~Filter: " + newFilter + " Session: " + s);
+		
+		
 		issues = validator.validate(s, newFilter);
 
 		if (issues.size() > 0) {

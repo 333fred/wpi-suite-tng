@@ -63,9 +63,6 @@ public class Filter extends AbstractModel {
 		this.field = field;
 		this.operation = operation;
 		this.value = value;
-		
-		System.out.println("FILTERRR FIELD: " + field + "  " + getField());
-		
 	}
 
 	/**

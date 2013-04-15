@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
 public class FilterTableView extends JPanel {
@@ -56,6 +57,8 @@ public class FilterTableView extends JPanel {
 		add(butEnable, BorderLayout.SOUTH);
 		
 		setPreferredSize(new Dimension(100,500));
+		
+		refresh();
 
 	}
 	
@@ -64,6 +67,7 @@ public class FilterTableView extends JPanel {
 	 */
 	
 	public void refresh() {
-		
+		List<Filter> filters = FilterDatabase.getInstance().getFilters();
+		tableModel.updateFilters(filters);
 	}
 }
