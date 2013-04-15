@@ -18,8 +18,6 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
-
 /** The view for viewing and creating filters 
  * 
  * @author Mitchell

@@ -26,7 +26,6 @@ import javax.swing.KeyStroke;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -87,6 +86,7 @@ public class JanewayModule implements IJanewayModule {
 		// initialize the tab view public void insertTab(String title, Icon
 		// icon, Component component, String tip, int index) {
 		
+		
 
 		// initialize TabController
 		tabController = new MainTabController();
@@ -94,9 +94,8 @@ public class JanewayModule implements IJanewayModule {
 		
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
-
-		//initialize the filters
-		filterView = new FilterView();
+		
+		filterView = tabController.getFilterView();
 		
 		leftTabbedPane = new JTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);

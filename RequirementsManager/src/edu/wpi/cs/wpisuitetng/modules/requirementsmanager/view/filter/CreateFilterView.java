@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import com.toedter.calendar.JDateChooser;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
@@ -69,12 +71,16 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	private JLabel labField;
 	private JLabel labOperation;
 	private JLabel labEqualTo;
+	private JLabel labEqualToBetween;
 
 	private JComboBox<String> cboxField;
 	private JComboBox<String> cboxOperation;
 
 	private JComboBox<String> cboxEqualTo;
 	private JTextField txtEqualTo;
+
+	private JDateChooser calEqualTo;
+	private JDateChooser calEqualToBetween;
 
 	private JButton butSave;
 	private JButton butCancel;
@@ -132,6 +138,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		cboxEqualTo = new JComboBox<String>();
 		txtEqualTo = new JTextField();
 
+		calEqualTo = new JDateChooser();
+		calEqualToBetween = new JDateChooser();
+
 		cboxField.setBackground(Color.WHITE);
 		cboxOperation.setBackground(Color.WHITE);
 		cboxEqualTo.setBackground(Color.WHITE);
@@ -150,6 +159,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labField);
 		layout.putConstraint(SpringLayout.WEST, cboxField, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
+		
+		layout.putConstraint(SpringLayout.EAST, cboxField, 0, SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, labOperation,
 				VERTICAL_PADDING, SpringLayout.SOUTH, cboxField);
@@ -160,6 +171,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labOperation);
 		layout.putConstraint(SpringLayout.WEST, cboxOperation,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		
+		layout.putConstraint(SpringLayout.EAST, cboxOperation, 0, SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, labEqualTo, VERTICAL_PADDING,
 				SpringLayout.SOUTH, cboxOperation);
@@ -172,11 +185,22 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, txtEqualTo, 0,
 				SpringLayout.EAST, cboxField);
+		
+		layout.putConstraint(SpringLayout.EAST, txtEqualTo, 0, SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, cboxEqualTo,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualTo);
 		layout.putConstraint(SpringLayout.WEST, cboxEqualTo,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		
+		layout.putConstraint(SpringLayout.EAST, cboxEqualTo, 0, SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.NORTH, calEqualTo,
+				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualTo);
+		layout.putConstraint(SpringLayout.WEST, calEqualTo, HORIZONTAL_PADDING,
+				SpringLayout.WEST, this);
+		
+		layout.putConstraint(SpringLayout.EAST, calEqualTo, 0, SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
 				SpringLayout.SOUTH, cboxEqualTo);
@@ -198,6 +222,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		add(cboxOperation);
 		add(cboxEqualTo);
 		add(txtEqualTo);
+		add(calEqualTo);
 
 		add(butSave);
 		add(butCancel);
@@ -297,6 +322,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	private void updateEqualsField() {
+		/*
 		if (cboxField.getSelectedItem().equals("Type")
 				|| cboxField.getSelectedItem().equals("Priority")
 				|| cboxField.getSelectedItem().equals("Status")) {
@@ -307,6 +333,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			cboxEqualTo.setVisible(false);
 			txtEqualTo.setVisible(true);
 		}
+		*/
+		txtEqualTo.setVisible(false);
+		cboxEqualTo.setVisible(false);
 	}
 
 	public void onSavePressed() {

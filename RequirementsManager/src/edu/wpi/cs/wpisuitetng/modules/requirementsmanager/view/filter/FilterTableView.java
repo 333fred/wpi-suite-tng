@@ -32,11 +32,14 @@ public class FilterTableView extends JPanel implements IRetrieveAllFiltersNotifi
 	
 	/** Button used to enable or disable a filter */
 	private JButton butEnable;
+	
+	/** Button used to delete a filter */
+	private JButton butDelete;
 
 	/** Panel to hold stuff in the scrollPane */
-	private JPanel panel;
+	private JPanel butPanel;
 	
-	/** THe controlle to retreive filters */
+	/** THe controller to retrieve filters */
 	private RetrieveAllFiltersController filterController;
 	
 	public FilterTableView() {
@@ -44,10 +47,16 @@ public class FilterTableView extends JPanel implements IRetrieveAllFiltersNotifi
 		
 		filterController = new RetrieveAllFiltersController(this);
 		
-		panel = new JPanel();
+		butPanel = new JPanel();
 		
 		butEnable = new JButton("Disable");
 		butEnable.setEnabled(false);
+		
+		butDelete = new JButton("Delete");
+		butDelete.setEnabled(false);
+		
+		butPanel.add(butEnable);
+		butPanel.add(butDelete);
 		
 		tableModel = new FilterTableModel(filters);
 
@@ -62,7 +71,7 @@ public class FilterTableView extends JPanel implements IRetrieveAllFiltersNotifi
 		setLayout(new BorderLayout());
 
 		add(scrollPane, BorderLayout.CENTER);
-		add(butEnable, BorderLayout.SOUTH);
+		add(butPanel, BorderLayout.SOUTH);
 		
 		setPreferredSize(new Dimension(100,500));
 		
@@ -76,7 +85,7 @@ public class FilterTableView extends JPanel implements IRetrieveAllFiltersNotifi
 	
 	public void refresh() {	
 		
-		//get the fitlers from the server 
+		//get the filters from the server 
 		filterController.getAll();
 		
 		List<Filter> filters = FilterDatabase.getInstance().getFilters();

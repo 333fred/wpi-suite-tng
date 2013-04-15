@@ -539,6 +539,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		}
 
 		tabController.refreshIterationTree();
+		tabController.refreshFilterView();
 		changeButtonStatus();
 	}
 
