@@ -18,6 +18,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -30,6 +31,8 @@ import javax.swing.SpringLayout;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PiePlot3D;
@@ -341,7 +344,8 @@ public class StatView extends Tab implements ActionListener {
 				piePlot.setCircular(true);
 				piePlot.setLabelGap(0.02);
 				piePlot.setForegroundAlpha(0.7f);
-				
+				PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator("{0} = {1} ({2})");//, new DecimalFormat("0"), new DecimalFormat("0.00%"));
+				piePlot.setLabelGenerator(generator); 
 				break;
 				
 			case LINE:
