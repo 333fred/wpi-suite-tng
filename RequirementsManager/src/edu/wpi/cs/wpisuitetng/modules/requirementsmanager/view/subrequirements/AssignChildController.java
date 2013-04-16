@@ -56,8 +56,11 @@ public class AssignChildController {
 		
 //		System.out.println("\n"+view.checkDirectedCycle());
 //		view.initializeTree();
-		model.addSubRequirement(anReq.getrUID());
-		anReq.addPUID(model.getrUID());
+		Integer modelID = new Integer(model.getrUID());
+		Integer anReqID = new Integer (anReq.getrUID());
+		
+		model.addSubRequirement(anReqID);
+		anReq.addPUID(modelID);
 		SaveRequirementController controller = new SaveRequirementController(this.ChildView);
 		controller.SaveRequirement(model, false);
 		controller = new SaveRequirementController(new SaveOtherRequirement());

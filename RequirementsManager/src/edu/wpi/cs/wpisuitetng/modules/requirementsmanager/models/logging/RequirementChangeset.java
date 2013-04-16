@@ -152,7 +152,7 @@ public class RequirementChangeset extends Changeset implements Event {
 				}
 			}
 		}
-		if (changes.get("subRequirements") != null) {
+		/*if (changes.get("subRequirements") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change
 			List<Object> added = new ArrayList<Object>();
@@ -204,7 +204,7 @@ public class RequirementChangeset extends Changeset implements Event {
 					content += u.toString() + "<br>";
 				}
 			}
-		}
+		}*/
 		if (changes.get("notes") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change

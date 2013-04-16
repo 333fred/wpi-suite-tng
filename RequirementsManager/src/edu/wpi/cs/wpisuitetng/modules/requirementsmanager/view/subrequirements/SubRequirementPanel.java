@@ -152,9 +152,7 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, radioParent);
 		layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, childLabel);
 		
-		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, scrollPane);
-		
-		
+		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, scrollPane);		
 		
 		//layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, this);
 		//layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, parentLabel);
@@ -177,6 +175,7 @@ public class SubRequirementPanel extends JPanel {
 		//Do other things here
 		removeReq.setAction(new RemoveReqAction(new RemoveReqController(this, requirement, panel)));
 		addReq.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));
+		refreshParentPanel();
 		
 		
 	}
@@ -202,27 +201,13 @@ public class SubRequirementPanel extends JPanel {
 				
 		}
 	}
-
-	public boolean checkCycle(Requirement parent, Requirement child) {
-		Requirement tempReq = child;
-		
-		while(tempReq!=null){
-			if(parent.getrUID() == tempReq.getrUID()) {
-				return true;
-			}
-			else{
-				/*try {
-					tempReq = RequirementDatabase.getInstance().getRequirement(tempReq.getpUID());
-				} catch (RequirementNotFoundException e) {
-					return false;
-				}*/	
-			}
-		}
-		return false;
-	}	
 	
 	public JList getList(){
 		return reqNames;
+	}
+	
+	public JList getListSubReq(){
+		return subReqNames;
 	}
 	
 	public void addValidChildren(){
@@ -283,5 +268,23 @@ public class SubRequirementPanel extends JPanel {
 		addValidChildren();
 		reqNames = new JList(validChildList);
 		scrollPane.setViewportView(reqNames);
+	}
+	
+	public void refreshParentPanel() {
+		
+		Requirement tempReq = null;
+		if(requirement.getpUID().size()==0)
+			parentReq.setText("");
+		else {
+			for(int ID : requirement.getpUID()) {
+				try {
+					tempReq = RequirementDatabase.getInstance()
+					.getRequirement(ID);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			parentReq.setText(tempReq.getName());
+		}			
 	}
 }
