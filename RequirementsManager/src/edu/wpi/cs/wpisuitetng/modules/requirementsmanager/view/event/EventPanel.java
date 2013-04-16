@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -28,6 +29,11 @@ public class EventPanel extends JPanel {
 
 	protected JLabel title;
 	protected JLabel content;
+	
+	private Event event;
+	private int wrapWidth;
+	
+	private static final int WRAP_MAX = 100;
 
 	/**
 	 * The note panel is the panel that is used to create and display notes
@@ -36,16 +42,15 @@ public class EventPanel extends JPanel {
 	 *            the note that is displayed
 	 */
 	public EventPanel(Event event) {
+		if (this.wrapWidth < WRAP_MAX) {
+			this.wrapWidth = WRAP_MAX;
+		}
+		this.event = event;
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		// title = new JLabel("<html><font size=4><b>" + note.getCreator() +
-		// "<font size=.25></b> added on " + new
-		// SimpleDateFormat("MM/dd/yy hh:mm a").format(note.getDate()) +
-		// "</html>");
 		title = new JLabel(event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
-		// content = new JLabel("<html><i>" + note.getNote() + "</i></html>");
-		content = new JLabel(event.getContent());
+		content = new JLabel("<html><body style=\"width: "+this.wrapWidth+"px\">" + event.getContent() +"</HTML>");
 		content.setFont(content.getFont().deriveFont(9));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		this.add(title);
@@ -54,14 +59,27 @@ public class EventPanel extends JPanel {
 				.createCompoundBorder(
 						BorderFactory.createEmptyBorder(5, 0, 5, 0),
 						BorderFactory.createLineBorder(Color.black, 1)),
-				BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+				BorderFactory.createEmptyBorder(8, 8, 8, 8)));	
 	}
-
+	
+	
+	public void setWrapWidth(int wrapWidth) {
+		this.wrapWidth = wrapWidth;
+	}
+	
+	public void paint (Graphics g) {
+		if (this.wrapWidth < WRAP_MAX) {
+			this.wrapWidth = WRAP_MAX;
+		}
+		content.setText("<html><body style=\"width: "+this.wrapWidth+"px\">" + event.getContent() +"</HTML>");
+		super.paint(g);
+	}
+	
 	public JLabel getnoteField() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	public JLabel getNoteList() {
 		// TODO Auto-generated method stub
 		return null;

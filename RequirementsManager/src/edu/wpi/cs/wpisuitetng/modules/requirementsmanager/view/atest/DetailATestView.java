@@ -13,6 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -44,6 +45,8 @@ public class DetailATestView extends JPanel {
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeATestPanel makeATestPanel;
+	private EventCellRenderer cellRenderer;
+	private JScrollPane aTestScrollPane;
 
 	/**
 	 * Construct the panel and add layout components
@@ -69,11 +72,12 @@ public class DetailATestView extends JPanel {
 		// GETSELECTEDVALUES
 		testList = new DefaultListModel();
 		tests = new JList(testList);
-		tests.setCellRenderer(new EventCellRenderer());
+		cellRenderer = new EventCellRenderer();
+		tests.setCellRenderer(cellRenderer);
 		tests.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
-		JScrollPane aTestScrollPane = new JScrollPane();
+		aTestScrollPane = new JScrollPane();
 		aTestScrollPane.getViewport().add(tests);
 
 		// Set up the frame
@@ -306,7 +310,6 @@ public class DetailATestView extends JPanel {
 	 */
 	public void updateRequirement(Requirement newRequirement) {
 		this.requirement = newRequirement;
-
 		// updates the aTests list
 		addaTestsToList();
 	}
@@ -330,5 +333,10 @@ public class DetailATestView extends JPanel {
 	public MakeATestPanel getTestPanel() {
 		// TODO Auto-generated method stub
 		return makeATestPanel;
+	}
+	
+	public void paint(Graphics g) {
+		this.cellRenderer.setWrapWidth(this.aTestScrollPane.getViewport().getWidth());
+		super.paint(g);
 	}
 }

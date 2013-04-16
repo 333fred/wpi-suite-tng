@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Nick, Conor, Matt
+ *    Nick, Conor, Matt, Steve
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -23,6 +24,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -43,7 +47,9 @@ public class DetailTaskView extends JPanel {
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeTaskPanel makeTaskPanel;
-
+	private EventCellRenderer cellRenderer;
+	private JScrollPane taskScrollPane;
+	
 	/**
 	 * Construct the panel and add layout components
 	 * 
@@ -67,11 +73,13 @@ public class DetailTaskView extends JPanel {
 		// GETSELECTEDVALUES
 		taskList = new DefaultListModel();
 		tasks = new JList(taskList);
-		tasks.setCellRenderer(new EventCellRenderer());
+		cellRenderer = new EventCellRenderer();
+		tasks.setCellRenderer(cellRenderer);
+		tasks.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		tasks.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
-		JScrollPane taskScrollPane = new JScrollPane();
+		taskScrollPane = new JScrollPane();
 		taskScrollPane.getViewport().add(tasks);
 
 		// Set up the frame
@@ -98,25 +106,13 @@ public class DetailTaskView extends JPanel {
 
 
 			//Listen for user clicking on tasks
-			tasks.addMouseListener(new MouseAdapter() { 
-				@Override
-				public void mouseClicked(MouseEvent evt) {
-					updateTaskView(); //Update the task view, will change based on number of tasks clicked (0,1,multiple)
-				}
-			});
+			tasks.addListSelectionListener(new ListSelectionListener() {
 
-			//		Timer ensures right fields are enabled/disabled, but is sort of sketchy
-			//		int delay = 1000; // Setting up timer, delay for 1 sec
-			//		int period = 1000; // repeat every 1 sec
-			//		Timer timer = new Timer();
-			//		timer.scheduleAtFixedRate(new TimerTask()
-			//		{
-			//			public void run()
-			//			{
-			//				if(requirement.getStatus() != Status.DELETED)
-			//					updateTaskViewTime(); //Update the view periodically. Used due to swing clicking buggy
-			//			}
-			//		}, delay, period);
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					updateTaskView();
+				} 
+			});
 
 			makeTaskPanel.getAddTask().setEnabled(false);
 			//Make sure save button is unavailable if name field is empty
@@ -184,6 +180,7 @@ public class DetailTaskView extends JPanel {
 				makeTaskPanel.getTaskComplete().setEnabled(false);
 				makeTaskPanel.getTaskComplete().setSelected(false);
 				makeTaskPanel.getUserAssigned().setEnabled(true);
+				makeTaskPanel.getUserAssigned().setSelectedItem("");
 				makeTaskPanel.getTaskField().setText("");
 				makeTaskPanel.getTaskName().setText("");
 				makeTaskPanel.getEstimate().setText("0");
@@ -207,6 +204,7 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getUserAssigned().setEnabled(false);
 					makeTaskPanel.getEstimate().setEnabled(false);
 					makeTaskPanel.getTaskField().setText("");
+					makeTaskPanel.getUserAssigned().setSelectedItem("");
 					makeTaskPanel.getTaskName().setText("");
 					makeTaskPanel.getEstimate().setText("0");
 					makeTaskPanel.getTaskField().setBackground(
@@ -223,7 +221,11 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskFieldPane().setEnabled(true);
 					makeTaskPanel.getTaskField().setEnabled(true);
 					makeTaskPanel.getTaskName().setEnabled(true);
-					makeTaskPanel.getUserAssigned().setEnabled(true);
+					if (getSingleSelectedTask().isCompleted()) {
+						makeTaskPanel.getUserAssigned().setEnabled(false);
+					} else {
+						makeTaskPanel.getUserAssigned().setEnabled(true);				
+					}
 					makeTaskPanel.getEstimate().setEnabled(true);
 					makeTaskPanel.getTaskField().setText(
 							getSingleSelectedTask().getDescription());
@@ -236,6 +238,7 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskField().setBackground(Color.white);
 					makeTaskPanel.getTaskName().setBackground(Color.white);
 					makeTaskPanel.getEstimate().setBackground(Color.white);	
+					makeTaskPanel.getUserAssigned().setSelectedItem(getSingleSelectedTask().getAssignedUser());
 				}
 			}
 		}
@@ -353,5 +356,10 @@ public class DetailTaskView extends JPanel {
 
 	public MakeTaskPanel getTaskPanel() {
 		return makeTaskPanel;
+	}
+	
+	public void paint(Graphics g) {
+		this.cellRenderer.setWrapWidth(this.taskScrollPane.getViewport().getWidth());
+		super.paint(g);
 	}
 }

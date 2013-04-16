@@ -105,7 +105,7 @@ public class Task implements Event {
 
 	@Override
 	public String getContent() {
-		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
+		String temp = "<i>" + parseNewLines(getDescription());
 		String userMessage;
 		String completeMessage;
 		String estimateMessage;
@@ -123,7 +123,7 @@ public class Task implements Event {
 		}
 		estimateMessage = "<br><FONT COLOR=\"red\">Estimate: " + this.estimate + "</FONT COLOR>";
 		// return assembled content string;
-		return temp + userMessage + completeMessage + estimateMessage + "</i></html>";
+		return temp + userMessage + completeMessage + estimateMessage + "</i>";
 	}
 
 	/**
