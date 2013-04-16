@@ -72,6 +72,7 @@ public class DetailTaskView extends JPanel {
 		tasks = new JList(taskList);
 		tasks.setCellRenderer(new EventCellRenderer());
 		tasks.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tasks.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
 		JScrollPane taskScrollPane = new JScrollPane();
