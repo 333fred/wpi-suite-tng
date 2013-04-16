@@ -11,6 +11,8 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
@@ -100,8 +102,13 @@ public class AddRequirementRequestObserver implements RequestObserver {
 			 * }
 			 */
 		}
-
-		this.detailPanel.getMainTabController().closeCurrentTab();
+		// notify the controller
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				detailPanel.getMainTabController().closeCurrentTab();
+			}
+		});
 	}
 
 	/*

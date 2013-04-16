@@ -11,6 +11,8 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveIterationByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
@@ -50,12 +52,18 @@ public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			Iteration[] iteration = Iteration.fromJSONArray(response.getBody());
+			final Iteration[] iteration = Iteration.fromJSONArray(response.getBody());
 
 			IterationDatabase.getInstance().addIteration(iteration[0]);
 
 			// notify the controller
-			controller.receivedData(iteration[0]);
+			// notify the controller
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					controller.receivedData(iteration[0]);
+				}
+			});
 		} else {
 			controller.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()

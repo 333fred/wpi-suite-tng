@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -44,6 +46,13 @@ public class AddFilterRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 
 		// TODO: Determine what to do with the response
+		/*SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				//whatever you do, you should do it in this invokelater
+			}
+		});*/
+
 	}
 
 	/**

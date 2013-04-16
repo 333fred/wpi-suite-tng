@@ -14,6 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
@@ -49,9 +51,16 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 
 		if (response.getStatusCode() == 200) {
-			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
+			final Filter[] filters = Filter.fromJSONArray(iReq.getBody());
 
-			FilterDatabase.getInstance().setFilters(Arrays.asList(filters));
+			// notify the controller
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					FilterDatabase.getInstance().setFilters(
+							Arrays.asList(filters));
+				}
+			});
 		}
 
 	}
