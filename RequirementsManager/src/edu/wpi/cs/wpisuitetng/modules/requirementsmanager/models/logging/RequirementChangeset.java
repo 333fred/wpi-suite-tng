@@ -163,8 +163,8 @@ public class RequirementChangeset extends Changeset implements Event {
 				for (Object o : added) {
 					// TODO: Make it look up the correct name, instead of just
 					// the ID
-					Integer u = (Integer) o;
-					content += u.toString() + "<br>";
+//					Integer u = (Integer) o;
+//					content += u.toString() + "<br>";
 				}
 			}
 			if (removed.size() > 0) {
@@ -190,8 +190,8 @@ public class RequirementChangeset extends Changeset implements Event {
 				for (Object o : added) {
 					// TODO: Make it look up the correct name, instead of just
 					// the ID
-					Integer u = (Integer) o;
-					content += u.toString() + "<br>";
+//					Integer u = (Integer) o;
+//					content += u.toString() + "<br>";
 				}
 			}
 			if (removed.size() > 0) {
