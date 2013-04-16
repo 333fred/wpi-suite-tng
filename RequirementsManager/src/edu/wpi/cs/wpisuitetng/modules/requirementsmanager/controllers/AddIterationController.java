@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * Controller used to add a requirement to the database
+ * Controller used to add an iteration to the database
  */
 public class AddIterationController {
 
@@ -32,10 +32,10 @@ public class AddIterationController {
 	}
 
 	/**
-	 * Adds a requirement to the database
+	 * Adds an iteration to the database
 	 * 
 	 * @param toAdd
-	 *            requirement that will be added
+	 *            iteration that will be added
 	 */
 	public void addIteration(Iteration toAdd) {
 		final RequestObserver requestObserver = new AddIterationRequestObserver(

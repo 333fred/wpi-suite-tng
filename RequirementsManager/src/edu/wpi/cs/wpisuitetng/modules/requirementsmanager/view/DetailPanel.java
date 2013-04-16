@@ -58,11 +58,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.ItemStateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.TextUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskView;
 
 /**
  * JPanel class to display the different fields of the requirement
  */
+@SuppressWarnings("serial")
 public class DetailPanel extends Tab implements ISaveNotifier {
 
 	// Textfields
@@ -92,11 +94,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private DetailNoteView noteView;
 
 	private DetailTaskView taskView;
+	
+	private SubRequirementPanel subRequirementView;
 
 	// the view that shows the notes
 	public DetailLogView logView;
 	// the view that shows the users assigned to the requirement
 	private AssigneePanel userView;
+	private SubRequirementPanel subReqView;
 
 	JButton btnSave;
 
@@ -315,9 +320,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration, or
 			// the iteration is this requirement's current iteration or is the
 			// backlog
-			if (currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| iteration.identify(requirement.getIteration())
-					|| iteration.getId() == -1 || iteration.getId() != -2) {
+			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
+					|| requirement.getIteration() == iteration.getId()
+					|| iteration.getId() == -1) && iteration.getId() != -2) {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
@@ -329,9 +334,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration,
 			// or the iteration is this requirement's current iteration,
 			// or it is the backlog, add it to the list
-			if (currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| iteration.identify(requirement.getIteration())
-					|| iteration.getId() == -1 || iteration.getId() != -2) {
+			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
+					|| requirement.getIteration() == iteration.getId()
+					|| iteration.getId() == -1) && iteration.getId() != -2) {
 				availableIterations[currentAvailableIterationIndex] = iteration
 						.getName();
 				currentAvailableIterationIndex++;
@@ -498,10 +503,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		userView = new AssigneePanel(requirement, this);
 		taskView = new DetailTaskView(this.getRequirement(), this);
 		aTestView = new DetailATestView(this.getRequirement(), this);
+		subRequirementView = new SubRequirementPanel(this.getRequirement(),this);
 
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
-				userView, taskView, aTestView);
+				userView, taskView, aTestView,subRequirementView);
 
 		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
 			eventPane.disableUserButtons();
@@ -1168,7 +1174,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		
 		}
 		
-		if (taskView.hasChanges || noteView.hasChanges) {
+		if (taskView.getTaskPanel().getAddTask().isEnabled() || noteView.getNotePanel().getAddnote().isEnabled() || aTestView.getTestPanel().getAddATest().isEnabled()) {
 			mainTabController.switchToTab(this);
 			
 			Object[] altOptions = {"Discard Changes",
@@ -1192,6 +1198,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			
 		}
 		return true;
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		return null;
 	}
 
 }

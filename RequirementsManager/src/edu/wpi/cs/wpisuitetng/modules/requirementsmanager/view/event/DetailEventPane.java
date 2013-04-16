@@ -33,6 +33,7 @@ public class DetailEventPane extends JTabbedPane {
 	JPanel userListPane;
 	JPanel taskListPane;
 	JPanel atestListPane;
+	JPanel subreqListPane;
 
 	/**
 	 * Creates a new DetailEvent pane, that displays the given NotesListPane,
@@ -96,6 +97,31 @@ public class DetailEventPane extends JTabbedPane {
 				"The tasks assigned to this requirement");
 		addTab("Tests", new ImageIcon(), atestListPane,
 				"The acceptance tests assigned to this requirement");
+	}
+	
+	public DetailEventPane(JPanel notesListPane, JPanel logListPane,
+			JPanel userListPane, JPanel taskListPane, JPanel atestListPane, JPanel subreqListPane) {
+		this.notesListPane = notesListPane;
+		this.logListPane = logListPane;
+		this.userListPane = userListPane;
+		this.taskListPane = taskListPane;
+		this.atestListPane = atestListPane;
+		this.subreqListPane = subreqListPane;
+		
+		// add the given tabs to the pane
+		addTab("Notes", new ImageIcon(), notesListPane,
+				"The notes for this requirement");
+		addTab("Log", new ImageIcon(), logListPane,
+				"The log for this requirement");
+		addTab("Users", new ImageIcon(), userListPane,
+				"The users assigned to this requirement");
+		addTab("Tasks", new ImageIcon(), taskListPane,
+				"The tasks assigned to this requirement");
+		addTab("Tests", new ImageIcon(), atestListPane,
+				"The acceptance tests assigned to this requirement");
+		addTab("Subrequirements", new ImageIcon(), subreqListPane,
+				"The subrequirements for this requirement");
+		
 	}
 	
 	public void disableUserButtons() {

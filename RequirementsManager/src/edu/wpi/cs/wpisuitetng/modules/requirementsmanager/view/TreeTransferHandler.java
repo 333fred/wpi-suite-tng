@@ -35,16 +35,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 @SuppressWarnings("serial")
 class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 	DataFlavor nodesFlavor;
 	DataFlavor[] flavors = new DataFlavor[1];
 	DefaultMutableTreeNode[] nodesToRemove;
-	private String expansionState;
-
-	public TreeTransferHandler() {
+	private MainTabController tabController;
+	private Requirement draggedRequirement;
+	
+	public TreeTransferHandler(MainTabController tabController) {
+		this.tabController = tabController;
 		try {
 			String mimeType = DataFlavor.javaJVMLocalObjectMimeType
 					+ ";class=\""
@@ -69,13 +71,15 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 		// Do not allow a drop on the drag source selections.
 		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
 		JTree tree = (JTree) support.getComponent();
-		int dropRow = tree.getRowForPath(dl.getPath());
+		//int dropRow = tree.getRowForPath(dl.getPath());
 		int[] selRows = tree.getSelectionRows();
+		/*
 		for (int i = 0; i < selRows.length; i++) {
 			if (selRows[i] == dropRow) {
 				return false;
 			}
 		}
+		*/
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
 		TreePath dest = dl.getPath();
@@ -104,8 +108,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 
 		// don't allow dropping into completed iterations
 		Date currentDate = new Date();
-		Iteration iteration = IterationDatabase.getInstance().getIteration(
-				target.toString());
+		Iteration iteration = IterationDatabase.getInstance().getIteration(target.toString().replace(" (Closed)", ""));
 		if (currentDate.compareTo(iteration.getEndDate()) > 0
 				&& iteration.getId() != -1) {
 			return false;
@@ -271,12 +274,10 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 			SaveRequirementController SaveRequirementController = new SaveRequirementController(
 					this);
 			SaveRequirementController.SaveRequirement(requirement, false);
+			this.draggedRequirement = requirement;
 		}
 		
 		
-		
-		//Refresh the chart
-		StatView.getInstance().updateChart();
 		return true;
 	}
 
@@ -325,4 +326,16 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 	public void fail(Exception exception) {
 		// TODO Auto-generated method stub
 	}
+
+	/**
+	 * @return the tabController
+	 */
+	public MainTabController getTabController() {
+		return tabController;
+	}
+	
+	public Requirement getDraggedRequirement() {
+		return draggedRequirement;
+	}
+
 }

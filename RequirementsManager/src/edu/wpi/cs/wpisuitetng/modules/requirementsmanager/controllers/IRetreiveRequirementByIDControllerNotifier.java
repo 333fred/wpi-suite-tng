@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Jason Whitehouse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -17,10 +17,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 public interface IRetreiveRequirementByIDControllerNotifier {
 
 	/**
-	 * Called when the requirement has been received by the server
+	 * Called to retrieve a specific requirement from the server by ID number
 	 * 
 	 * @param requirement
-	 *            The received data
+	 *            The requirement
 	 */
 
 	public void receivedData(Requirement requirement);

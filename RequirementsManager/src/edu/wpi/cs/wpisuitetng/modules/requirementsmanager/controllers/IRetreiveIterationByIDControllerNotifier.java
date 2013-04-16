@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Jason Whitehouse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -17,10 +17,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 public interface IRetreiveIterationByIDControllerNotifier {
 
 	/**
-	 * Called when the requirement has been received by the server
+	 * Called to retrieve a specific iteration from the server by its ID number
 	 * 
-	 * @param requirement
-	 *            The received data
+	 * @param iteration
+	 *            The iteration
 	 */
 
 	public void receivedData(Iteration iteration);

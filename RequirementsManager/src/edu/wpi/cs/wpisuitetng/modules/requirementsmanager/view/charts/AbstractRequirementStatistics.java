@@ -13,21 +13,18 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 
 public abstract class AbstractRequirementStatistics {
 
@@ -46,10 +43,12 @@ public AbstractRequirementStatistics(){
 	public PieDataset toPieDataset(){
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
 		for(String key : data.keySet()){
-			pieDataset.setValue(key, data.get(key));
+			if (this.data.get(key) != 0) {//remove zero elements		
+				pieDataset.setValue(key, data.get(key));
+			}
 		}
 		return pieDataset;
-		}
+	}
 
 	public CategoryDataset toCategoryDataset(String category){
 		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();

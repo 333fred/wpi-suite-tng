@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 /**
  * Panel containing a aTest for a requirement
@@ -113,7 +114,7 @@ public class DetailATestView extends JPanel {
 			//			}
 			//		}, delay, period);
 
-			
+			makeATestPanel.getAddATest().setEnabled(false);
 			//Make sure save button is unavailable if name field is empty
 			makeATestPanel.getaTestField().addKeyListener(new KeyAdapter() { 
 				//For creating a new aTest
@@ -324,5 +325,10 @@ public class DetailATestView extends JPanel {
 	 */
 	public void disableUserButtons() {
 		makeATestPanel.setInputEnabled(false);
+	}
+
+	public MakeATestPanel getTestPanel() {
+		// TODO Auto-generated method stub
+		return makeATestPanel;
 	}
 }

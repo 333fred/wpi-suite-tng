@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Jason Whitehouse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -15,7 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
- * Interface used for RetreiveAllRequiremetnsController, and possibly elsewhere
+ * Interface used for RetreiveAllRequirementsController, and possibly elsewhere
  * Will be notified when data has been returned, or an error was returned
  */
 

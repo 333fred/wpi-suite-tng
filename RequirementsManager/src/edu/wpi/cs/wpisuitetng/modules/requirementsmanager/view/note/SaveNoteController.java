@@ -67,6 +67,5 @@ public class SaveNoteController {
 			}
 
 		}
-		parentView.getNoteView().hasChanges = false;
 	}
 }

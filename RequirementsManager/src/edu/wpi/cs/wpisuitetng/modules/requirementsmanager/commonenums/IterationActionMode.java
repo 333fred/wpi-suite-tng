@@ -7,10 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Team Swagasarus
+ *    @author Team Swagasaurus
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
+
+/**
+ * Enum used to determine what action is being done to an Iteration
+ */
 
 public enum IterationActionMode {
 	EDIT, CREATE

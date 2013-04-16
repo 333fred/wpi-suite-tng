@@ -29,7 +29,6 @@ public class NoteViewListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		panel.hasChanges = true;
 		if (component.getText().trim().equals("")) {
 			panel.disableAddNote();
 		} else {

@@ -12,9 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import com.google.gson.Gson;
-
-import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 public class Task implements Event {
@@ -108,7 +105,7 @@ public class Task implements Event {
 
 	@Override
 	public String getContent() {
-		String temp = "<html><i>" + parseNewLines(getDescription());
+		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
 		String userMessage;
 		String completeMessage;
 		String estimateMessage;

@@ -13,37 +13,31 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.awt.BorderLayout;
-
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.List;
+import java.text.DecimalFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.SpringLayout;
-import javax.swing.JButton;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PiePlot3D;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.VelocityIterationStatistics;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.TaskRequirementStatistics;
 
 @SuppressWarnings("serial")
 public class StatView extends Tab implements ActionListener {
@@ -90,7 +84,6 @@ public class StatView extends Tab implements ActionListener {
 		JPanel sidePanel = new JPanel(sidePanelLayout);		
 		
 		JLabel lblStatisticType = new JLabel("Statistic Type");
-		JLabel lblChartType = new JLabel("Chart Type");
 		
 
 		String[] availableStatisticTypes = {"Status","Assignees","Iterations","Velocity"};
@@ -126,12 +119,16 @@ public class StatView extends Tab implements ActionListener {
 		group.add(makeLineRadio);
 		setSelectedItems();
 		
+		JPanel radioPanel = new JPanel(new GridLayout(3,1));
+		radioPanel.add(makePieRadio);
+		radioPanel.add(makeBarRadio);
+		radioPanel.add(makeLineRadio);
+		radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Chart Type"));
+		
 		sidePanel.add(lblStatisticType);
-		sidePanel.add(lblChartType);
 		sidePanel.add(comboBoxStatisticType);
-		sidePanel.add(makePieRadio);
-		sidePanel.add(makeBarRadio);
-		sidePanel.add(makeLineRadio);
+		sidePanel.add(radioPanel);
+
 		/*
 		sidePanel.add(generateChart);
 		*/
@@ -142,24 +139,16 @@ public class StatView extends Tab implements ActionListener {
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,comboBoxStatisticType,VERTICAL_PADDING,SpringLayout.SOUTH,lblStatisticType);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,comboBoxStatisticType,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
-		sidePanelLayout.putConstraint(SpringLayout.NORTH,lblChartType,VERTICAL_PADDING+FAR,SpringLayout.SOUTH,comboBoxStatisticType);
-		sidePanelLayout.putConstraint(SpringLayout.WEST,lblChartType,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);	
+		sidePanelLayout.putConstraint(SpringLayout.NORTH,radioPanel,VERTICAL_PADDING+FAR,SpringLayout.SOUTH,comboBoxStatisticType);
+		sidePanelLayout.putConstraint(SpringLayout.WEST,radioPanel,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
-		sidePanelLayout.putConstraint(SpringLayout.NORTH,makePieRadio,VERTICAL_PADDING+FAR,SpringLayout.SOUTH,lblChartType);
-		sidePanelLayout.putConstraint(SpringLayout.WEST,makePieRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
-		
+		/*
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeBarRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makePieRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeBarRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
 		
 		sidePanelLayout.putConstraint(SpringLayout.NORTH,makeLineRadio,VERTICAL_PADDING,SpringLayout.SOUTH,makeBarRadio);
 		sidePanelLayout.putConstraint(SpringLayout.WEST,makeLineRadio,HORIZONTAL_PADDING,SpringLayout.WEST,sidePanel);
-		
-		/*
-		// TODO: ascertain that this is an acceptable placement for the generateChart button
-		sidePanelLayout.putConstraint(SpringLayout.NORTH, generateChart, VERTICAL_PADDING+FAR, SpringLayout.SOUTH, makeBarRadio);
-		sidePanelLayout.putConstraint(SpringLayout.WEST, generateChart, HORIZONTAL_PADDING, SpringLayout.WEST, sidePanel);
 		*/
-
 		
 		return sidePanel;
 	}
@@ -355,7 +344,8 @@ public class StatView extends Tab implements ActionListener {
 				piePlot.setCircular(true);
 				piePlot.setLabelGap(0.02);
 				piePlot.setForegroundAlpha(0.7f);
-				
+				PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator("{0} = {1} ({2})");
+				piePlot.setLabelGenerator(generator); 
 				break;
 				
 			case LINE:

@@ -13,13 +13,13 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -133,7 +133,8 @@ public class MakeATestPanel extends JPanel {
 		descaTestLabel = new JLabel("Description:");		
 		String[] availableStatuses = {"","PASSED","FAILED"};		
 		aTestStatusBox = new JComboBox(availableStatuses);
-
+		aTestStatusBox.setBackground(Color.WHITE);
+		
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.black, 1),
@@ -245,5 +246,9 @@ public class MakeATestPanel extends JPanel {
 
 	public JLabel getaTestStatus() {
 		return aTestStatus;
+	}
+
+	public JButton getAddATest() {
+		return addaTest;
 	}
 }

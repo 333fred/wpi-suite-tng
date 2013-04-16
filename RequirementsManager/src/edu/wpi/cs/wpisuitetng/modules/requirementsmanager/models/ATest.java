@@ -12,9 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import com.google.gson.Gson;
-
-import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 public class ATest implements Event {
@@ -90,7 +87,7 @@ public class ATest implements Event {
 
 	@Override
 	public String getContent() {
-		String temp = "<html><i>" + parseNewLines(getDescription());
+		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
 		String completeMessage;
 		if (this.status == ATestStatus.PASSED) {
 			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";

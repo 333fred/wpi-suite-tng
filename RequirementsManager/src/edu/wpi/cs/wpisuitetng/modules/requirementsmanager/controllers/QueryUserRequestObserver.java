@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -20,7 +22,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class QueryUserRequestObserver implements RequestObserver {
 
-	private AssigneePanel parentView;
+	private final AssigneePanel parentView;
 
 	public QueryUserRequestObserver(AssigneePanel parentView) {
 		this.parentView = parentView;
@@ -33,7 +35,14 @@ public class QueryUserRequestObserver implements RequestObserver {
 		final StringListModel users = StringListModel.fromJson(response
 				.getBody());
 
-		this.parentView.setUnassignedUsersList(users);
+		// notify the controller
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				parentView.setUnassignedUsersList(users);
+			}
+		});
+
 	}
 
 	@Override
