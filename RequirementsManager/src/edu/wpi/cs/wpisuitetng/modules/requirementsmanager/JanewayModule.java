@@ -86,6 +86,7 @@ public class JanewayModule implements IJanewayModule {
 		// initialize the tab view public void insertTab(String title, Icon
 		// icon, Component component, String tip, int index) {
 		
+		
 
 		// initialize TabController
 		tabController = new MainTabController();
@@ -93,9 +94,8 @@ public class JanewayModule implements IJanewayModule {
 		
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
-
-		//initialize the filters
-		filterView = new FilterView();
+		
+		filterView = tabController.getFilterView();
 		
 		leftTabbedPane = new JTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);

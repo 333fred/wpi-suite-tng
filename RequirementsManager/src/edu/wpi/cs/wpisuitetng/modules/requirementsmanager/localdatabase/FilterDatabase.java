@@ -17,7 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllFiltersController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.FilterNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
@@ -25,10 +26,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  * Local cache that holds all filters from the server
  */
 
-public class FilterDatabase extends Thread {
+public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifier {
 
 	private Map<Integer, Filter> filters;
-	private SimpleRetrieveAllFiltersController controller;
+	private RetrieveAllFiltersController controller;
 	private static FilterDatabase database;
 
 	/**
@@ -36,7 +37,7 @@ public class FilterDatabase extends Thread {
 	 */
 	private FilterDatabase() {
 		this.filters = new HashMap<Integer, Filter>();
-		this.controller = new SimpleRetrieveAllFiltersController();
+		this.controller = new RetrieveAllFiltersController(this);
 		setDaemon(true);
 	}
 
@@ -69,6 +70,9 @@ public class FilterDatabase extends Thread {
 	 *            the filters to be in the database
 	 */
 	public synchronized void setFilters(List<Filter> filters) {
+		
+		System.out.println("FilterDB SET: " + filters.size());
+		
 		this.filters = new HashMap<Integer, Filter>();
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
@@ -82,6 +86,9 @@ public class FilterDatabase extends Thread {
 	 *            the filters to add/update
 	 */
 	public synchronized void addFilters(List<Filter> filters) {
+		
+		System.out.println("FilterDB: ADD" + filters.size());
+		
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
 		}
@@ -131,6 +138,11 @@ public class FilterDatabase extends Thread {
 	public void run() {
 		// This database should not run continuously, so just update
 		controller.getAll();
+	}
+
+	@Override
+	public void receivedData(Filter[] filters) {
+		
 	}
 
 }

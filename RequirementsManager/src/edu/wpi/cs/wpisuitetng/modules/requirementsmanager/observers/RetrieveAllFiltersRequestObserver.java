@@ -14,6 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
+
 import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
@@ -29,9 +31,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 
 public class RetrieveAllFiltersRequestObserver implements RequestObserver {
-
-	private RetrieveAllFiltersController controller;
-
+	
+	private IRetrieveAllFiltersNotifier notifier;
+	
 	/**
 	 * Creates a Request Observer with the given controller to call back to
 	 * 
@@ -39,8 +41,8 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	 *            the controller to callback to
 	 */
 	public RetrieveAllFiltersRequestObserver(
-			RetrieveAllFiltersController controller) {
-		this.controller = controller;
+			IRetrieveAllFiltersNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		ResponseModel response = iReq.getResponse();
-
+		
 		if (response.getStatusCode() == 200) {
 			final Filter[] filters = Filter.fromJSONArray(iReq.getBody());
 
@@ -59,6 +61,7 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 				public void run() {
 					FilterDatabase.getInstance().setFilters(
 							Arrays.asList(filters));
+					notifier.receivedData(filters);
 				}
 			});
 		}
@@ -71,6 +74,9 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		// TODO Auto-generated method stub
+		System.out.println("Error receiving filters from server: "
+				+ iReq.getResponse().getStatusCode() + " "
+				+ iReq.getResponse().getStatusMessage());
 
 	}
 
@@ -80,7 +86,8 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// TODO Auto-generated method stub
-
+		System.out.println("Failed to get filters from server");
+		exception.printStackTrace();
 	}
 
 }

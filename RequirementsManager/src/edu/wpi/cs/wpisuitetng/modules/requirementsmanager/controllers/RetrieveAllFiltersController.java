@@ -25,6 +25,12 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class RetrieveAllFiltersController {
 
+	private IRetrieveAllFiltersNotifier notifier;
+	
+	public RetrieveAllFiltersController(IRetrieveAllFiltersNotifier notifier) {
+		this.notifier = notifier;
+	}
+	
 	/**
 	 * Retrieves all filters for the current user from the server. The correct
 	 * callback in RetrieveAllFiltersRequestObserver is called upon success or
@@ -32,7 +38,7 @@ public class RetrieveAllFiltersController {
 	 */
 	public void getAll() {
 		final RequestObserver requestObserver = new RetrieveAllFiltersRequestObserver(
-				this);
+				notifier);
 		Request request;
 		request = Network.getInstance().makeRequest(
 				"requirementsmanager/filter", HttpMethod.GET);

@@ -32,6 +32,7 @@ public class Filter extends AbstractModel {
 	private FilterField field;
 	private FilterOperation operation;
 	private Object value;
+	private boolean active;
 
 	/**
 	 * Creates a blank filter with no user
@@ -203,5 +204,21 @@ public class Filter extends AbstractModel {
 		// TODO Auto-generated method stub
 
 	}
+
+	/**
+	 * @return the active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	
 
 }

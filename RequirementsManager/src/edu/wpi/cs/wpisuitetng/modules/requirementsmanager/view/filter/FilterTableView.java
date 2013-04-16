@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -10,10 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
-public class FilterTableView extends JPanel {
+public class FilterTableView extends JPanel implements IRetrieveAllFiltersNotifier {
 
 	/** List of all the filters this is displaying */
 	List<Filter> filters;
@@ -29,17 +32,31 @@ public class FilterTableView extends JPanel {
 	
 	/** Button used to enable or disable a filter */
 	private JButton butEnable;
+	
+	/** Button used to delete a filter */
+	private JButton butDelete;
 
 	/** Panel to hold stuff in the scrollPane */
-	private JPanel panel;
+	private JPanel butPanel;
+	
+	/** THe controller to retrieve filters */
+	private RetrieveAllFiltersController filterController;
 	
 	public FilterTableView() {
 		ArrayList<Filter> filters = new ArrayList<Filter>();
 		
-		panel = new JPanel();
+		filterController = new RetrieveAllFiltersController(this);
+		
+		butPanel = new JPanel();
 		
 		butEnable = new JButton("Disable");
 		butEnable.setEnabled(false);
+		
+		butDelete = new JButton("Delete");
+		butDelete.setEnabled(false);
+		
+		butPanel.add(butEnable);
+		butPanel.add(butDelete);
 		
 		tableModel = new FilterTableModel(filters);
 
@@ -54,7 +71,7 @@ public class FilterTableView extends JPanel {
 		setLayout(new BorderLayout());
 
 		add(scrollPane, BorderLayout.CENTER);
-		add(butEnable, BorderLayout.SOUTH);
+		add(butPanel, BorderLayout.SOUTH);
 		
 		setPreferredSize(new Dimension(100,500));
 		
@@ -66,8 +83,21 @@ public class FilterTableView extends JPanel {
 	 * 
 	 */
 	
-	public void refresh() {
+	public void refresh() {	
+		
+		//get the filters from the server 
+		filterController.getAll();
+		
 		List<Filter> filters = FilterDatabase.getInstance().getFilters();
+		
+		System.out.println("Refreshing filter table: " + filters.size());
+		
 		tableModel.updateFilters(filters);
+	}
+
+	@Override
+	public void receivedData(Filter[] filters) {
+		//put the filters in the table model
+		tableModel.updateFilters(Arrays.asList(filters));	
 	}
 }

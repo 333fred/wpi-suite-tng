@@ -24,6 +24,13 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 
 public class AddFilterController {
+	
+	/** Save notifier */
+	private ISaveNotifier notifier;
+	
+	public AddFilterController(ISaveNotifier notifier) {
+		this.notifier = notifier;
+	}
 
 	/**
 	 * Sends a filter to the server to be stored. The correct callback in
@@ -34,10 +41,10 @@ public class AddFilterController {
 	 */
 	public void addFilter(Filter toAdd) {
 		final RequestObserver requestObserver = new AddFilterRequestObserver(
-				this);
+				notifier);
 		Request request;
 		request = Network.getInstance().makeRequest(
-				"requirementmanager/filter", HttpMethod.PUT);
+				"requirementsmanager/filter", HttpMethod.PUT);
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();

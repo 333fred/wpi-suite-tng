@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
 /**
  * Controller wrapper around the MainTabView Provides convient methods for
@@ -45,6 +46,9 @@ public class MainTabController {
 
 	/** The iteration tree view that is displayed accross this module */
 	private IterationTreeView iterationTreeView;
+	
+	/** THe filter view on the left */
+	private FilterView filterView;
 
 	/**
 	 * Creates a new instance of TabController to manage the specified view
@@ -55,6 +59,7 @@ public class MainTabController {
 
 	public MainTabController() {		
 		this.iterationTreeView = new IterationTreeView(this);
+		filterView = new FilterView();
 		tabView = new MainTabView(this);
 
 		tabView.addChangeListener(new ChangeListener() {
@@ -280,11 +285,18 @@ public class MainTabController {
 	public void refreshIterationTree() {
 		iterationTreeView.refresh();
 	}
+	
+	public void refreshFilterView() {
+		filterView.refreshTableView();
+	}
 
 	public IterationTreeView getIterationTreeView() {
 		return iterationTreeView;
 	}
-	
+
+	public FilterView getFilterView() {
+		return filterView;
+	}
 	/** Closes other tabs
 	 * 
 	 * @param currentIndex Index of the tab not to close
