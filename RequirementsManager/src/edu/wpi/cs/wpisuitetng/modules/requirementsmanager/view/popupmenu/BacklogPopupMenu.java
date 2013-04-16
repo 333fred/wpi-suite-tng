@@ -7,6 +7,8 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
@@ -20,8 +22,6 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 	/** The tab controller used to create new tabs */
 	private MainTabController tabController;
 	
-	/** The iterations that were selected when this was pressed */
-	private List<Iteration> selectedIterations;
 
 	/**
 	 * Creates an BacklogPopupMenu with the given tab controller
@@ -30,10 +30,8 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 	 *            The tab controller to open tabs in
 	 */
 
-	public BacklogPopupMenu(MainTabController tabController,
-			List<Iteration> selectedIterations) {
+	public BacklogPopupMenu(MainTabController tabController) {
 		this.tabController = tabController;
-		this.selectedIterations = selectedIterations;
 
 		menuCreateRequirement = new JMenuItem("New Requirement");
 		menuFilterIteration = new JMenuItem("Filter By Backlog");
@@ -54,10 +52,16 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(menuFilterIteration)) {
-			Iteration iter = selectedIterations.get(0);
-			RequirementTableView tableView = RequirementTableView.getInstance();
-			tableView.IterationFilter(iter.getName());
-			tableView.displayFilterInformation("Filtering by " + iter.getName());
+			Iteration iter;
+			try {
+				// backlog has ID -1
+				iter = IterationDatabase.getInstance().getIteration(-1);
+				RequirementTableView tableView = RequirementTableView.getInstance();
+				tableView.IterationFilter(iter.getName());
+				tableView.displayFilterInformation("Filtering by " + iter.getName());
+			} catch (IterationNotFoundException e1) {
+				e1.printStackTrace();
+			} 
 		} else {
 			tabController.addCreateRequirementTab();
 		}
