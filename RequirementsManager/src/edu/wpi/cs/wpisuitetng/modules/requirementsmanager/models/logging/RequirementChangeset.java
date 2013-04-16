@@ -69,7 +69,7 @@ public class RequirementChangeset extends Changeset implements Event {
 	public String getContent() {
 		// Check for every change in field that could be in this changeset, and
 		// add it to the return string
-		String content = "<html>";
+		String content = "";
 
 		// Start by checking to see if this the creation changeset. If so, then
 		// just say we created the requirement and return
@@ -244,8 +244,6 @@ public class RequirementChangeset extends Changeset implements Event {
 				content += "Added " + modified + " tests(s)<br>";
 			}	
 		}
-
-		content += "</html>";
 
 		return content;
 	}

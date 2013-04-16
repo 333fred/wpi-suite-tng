@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Nick, Conor, Matt
+ *    Nick, Conor, Matt, Steve
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -43,7 +44,9 @@ public class DetailTaskView extends JPanel {
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeTaskPanel makeTaskPanel;
-
+	private EventCellRenderer cellRenderer;
+	private JScrollPane taskScrollPane;
+	
 	/**
 	 * Construct the panel and add layout components
 	 * 
@@ -67,11 +70,12 @@ public class DetailTaskView extends JPanel {
 		// GETSELECTEDVALUES
 		taskList = new DefaultListModel();
 		tasks = new JList(taskList);
-		tasks.setCellRenderer(new EventCellRenderer());
+		cellRenderer = new EventCellRenderer();
+		tasks.setCellRenderer(cellRenderer);
 		tasks.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
-		JScrollPane taskScrollPane = new JScrollPane();
+		taskScrollPane = new JScrollPane();
 		taskScrollPane.getViewport().add(tasks);
 
 		// Set up the frame
@@ -353,5 +357,10 @@ public class DetailTaskView extends JPanel {
 
 	public MakeTaskPanel getTaskPanel() {
 		return makeTaskPanel;
+	}
+	
+	public void paint(Graphics g) {
+		this.cellRenderer.setWrapWidth(this.taskScrollPane.getViewport().getWidth());
+		super.paint(g);
 	}
 }
