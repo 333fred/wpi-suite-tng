@@ -248,15 +248,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		
 		
 		// TODO: testing only. delete later
-		editPanelLayout.putConstraint(SpringLayout.EAST, FilterDemo, -5, SpringLayout.WEST, btnEdit);
-		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo, 0,
-				SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.WEST, ClearFilter, 5, SpringLayout.WEST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, ClearFilter, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.WEST, textFilterInfo, 5, SpringLayout.WEST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textFilterInfo, 0,
 				SpringLayout.SOUTH, ClearFilter);
+		editPanelLayout.putConstraint(SpringLayout.WEST, FilterDemo, 5, SpringLayout.EAST, ClearFilter);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo, 0,
+				SpringLayout.VERTICAL_CENTER, editPanel);
 		
 		
 		
@@ -481,7 +481,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							.substring(0, 1)
 							.concat(requirements[i].getType().toString()
 									.substring(1).toLowerCase())
-							.replaceAll("_s", " S").replaceAll("_f", " F"));
+							.replaceAll(" s", " S").replaceAll(" f", " F"));
 			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? ""
 					: requirements[i]
 							.getPriority()
@@ -496,7 +496,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							.substring(0, 1)
 							.concat(requirements[i].getStatus().toString()
 									.substring(1).toLowerCase())
-							.replaceAll("_p", " P"));
+							.replaceAll(" p", " P"));
 			try {
 				row.addElement(IterationDatabase.getInstance()
 						.getIteration(requirements[i].getIteration()).getName());
