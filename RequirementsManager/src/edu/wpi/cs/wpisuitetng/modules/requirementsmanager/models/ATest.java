@@ -87,7 +87,7 @@ public class ATest implements Event {
 
 	@Override
 	public String getContent() {
-		String temp = "<html><body style=\"width: 300px\"><i>" + parseNewLines(getDescription());
+		String temp = "<i>" + parseNewLines(getDescription());
 		String completeMessage;
 		if (this.status == ATestStatus.PASSED) {
 			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
@@ -97,7 +97,7 @@ public class ATest implements Event {
 			completeMessage = "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>";
 		}
 		// return assembled content string;
-		return temp + completeMessage + "</i></html>";
+		return temp + completeMessage + "</i>";
 	}
 
 	/**
