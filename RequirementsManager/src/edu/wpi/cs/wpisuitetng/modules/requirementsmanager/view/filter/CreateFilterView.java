@@ -17,7 +17,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -36,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterC
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
 
 /**
  * View for creating and editing filters
@@ -72,11 +75,12 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	private JLabel labOperation;
 	private JLabel labEqualTo;
 	private JLabel labEqualToBetween;
+	private JLabel labSaveError;
 
-	private JComboBox<String> cboxField;
-	private JComboBox<String> cboxOperation;
+	private JComboBox cboxField;
+	private JComboBox cboxOperation;
 
-	private JComboBox<String> cboxEqualTo;
+	private JComboBox cboxEqualTo;
 	private JTextField txtEqualTo;
 
 	private JDateChooser calEqualTo;
@@ -93,6 +97,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	/** Controller for Adding a filter */
 	private AddFilterController addFilterController;
+
+	/** The listener to do intime validation */
+	private CreateFilterViewListener createFilterViewListener;
 
 	/**
 	 * Creates a filter view to create a new filter
@@ -126,13 +133,18 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		this.filter = filter;
 		this.mode = mode;
 
+		setBorder(BorderFactory.createTitledBorder("Create filter"));
+
 		saveFilterController = new SaveFilterController(this);
 		addFilterController = new AddFilterController(this);
 
+		createFilterViewListener = new CreateFilterViewListener(this);
+
 		labField = new JLabel("Field");
 		labOperation = new JLabel("Operation");
-		labEqualTo = new JLabel("Equal");
+		labEqualTo = new JLabel();
 		labEqualToBetween = new JLabel("and");
+		labSaveError = new JLabel("JAAAABOUY");
 
 		cboxField = new JComboBox<String>();
 		cboxOperation = new JComboBox<String>();
@@ -148,6 +160,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		butSave = new JButton("Save");
 		butCancel = new JButton("Cancel");
+
+		butSave.setEnabled(false);
 
 		SpringLayout layout = new SpringLayout();
 
@@ -220,13 +234,18 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		layout.putConstraint(SpringLayout.NORTH, calEqualToBetween,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualToBetween);
 
+		layout.putConstraint(SpringLayout.WEST, labSaveError,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, labSaveError,
+				VERTICAL_PADDING, SpringLayout.SOUTH, calEqualToBetween);
+
 		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, calEqualToBetween);
+				SpringLayout.SOUTH, labSaveError);
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 
 		layout.putConstraint(SpringLayout.NORTH, butCancel, VERTICAL_PADDING,
-				SpringLayout.SOUTH, calEqualToBetween);
+				SpringLayout.SOUTH, labSaveError);
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING,
 				SpringLayout.EAST, butSave);
 
@@ -238,6 +257,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		add(labOperation);
 		add(labEqualTo);
 		add(labEqualToBetween);
+		add(labSaveError);
 
 		add(cboxField);
 		add(cboxOperation);
@@ -251,10 +271,10 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		this.setMinimumSize(new Dimension(butSave.getPreferredSize().width
 				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
-				250));
+				275));
 		this.setPreferredSize(new Dimension(butSave.getPreferredSize().width
 				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
-				250));
+				275));
 
 		// add the action listeners
 		cboxField.addActionListener(this);
@@ -264,6 +284,10 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		// add action listeners to save
 		butSave.addActionListener(this);
 		butCancel.addActionListener(this);
+
+		txtEqualTo.addKeyListener(createFilterViewListener);
+		calEqualTo.addPropertyChangeListener(createFilterViewListener);
+		calEqualToBetween.addPropertyChangeListener(createFilterViewListener);
 
 		// populate the fields in the combo boxes
 		populateFieldComboBox();
@@ -284,15 +308,17 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	private void populateOperationComboBox() {
+
+		FilterField field = FilterField.getFromString((String) cboxField
+				.getSelectedItem());
+
 		cboxOperation.removeAllItems();
-		if (cboxField.getSelectedItem().equals("Name")
-				|| cboxField.getSelectedItem().equals("Release Number")) {
+		if (field == FilterField.NAME || field == FilterField.RELEASE_NUMBER) {
 			cboxOperation.addItem("=");
 			cboxOperation.addItem("!=");
 			cboxOperation.addItem("Starts with");
 			cboxOperation.addItem("Contains");
-		} else if (cboxField.getSelectedItem().equals("Estimate")
-				|| cboxField.getSelectedItem().equals("Effort")) {
+		} else if (field == FilterField.ESTIMATE || field == FilterField.EFFORT) {
 
 			cboxOperation.addItem("<");
 			cboxOperation.addItem("<=");
@@ -301,13 +327,12 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			cboxOperation.addItem(">=");
 			cboxOperation.addItem(">");
 
-		} else if (cboxField.getSelectedItem().equals("Type")
-				|| cboxField.getSelectedItem().equals("Priority")
-				|| cboxField.getSelectedItem().equals("Status")) {
+		} else if (field == FilterField.STATUS || field == FilterField.PRIORITY
+				|| field == FilterField.TYPE) {
 
 			cboxOperation.addItem("=");
 			cboxOperation.addItem("!=");
-		} else if (cboxField.getSelectedItem().equals("Iteration")) {
+		} else if (field == FilterField.ITERATION) {
 			cboxOperation.addItem("Equals");
 			cboxOperation.addItem("Occurs before");
 			cboxOperation.addItem("Occurs after");
@@ -320,7 +345,11 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	private void populateEqualComboBox() {
 		// cboxEqualTo
 		cboxEqualTo.removeAllItems();
-		if (cboxField.getSelectedItem().equals("Type")) {
+
+		FilterField field = FilterField.getFromString((String) cboxField
+				.getSelectedItem());
+
+		if (field == FilterField.TYPE) {
 			// BLANK, EPIC, THEME, USER_STORY, NON_FUNCTIONAL, SCENARIO
 			cboxEqualTo.addItem("None");
 			cboxEqualTo.addItem("Epic");
@@ -329,13 +358,13 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			cboxEqualTo.addItem("Non Functional");
 			cboxEqualTo.addItem("Scenario");
 
-		} else if (cboxField.getSelectedItem().equals("Priority")) {
+		} else if (field == FilterField.PRIORITY) {
 			// BLANK, LOW, MEDIUM, HIGH
 			cboxEqualTo.addItem("None");
 			cboxEqualTo.addItem("Low");
 			cboxEqualTo.addItem("Medium");
 			cboxEqualTo.addItem("High");
-		} else if (cboxField.getSelectedItem().equals("Status")) {
+		} else if (field == FilterField.STATUS) {
 			// BLANK, NEW, IN_PROGRESS, OPEN, COMPLETE, DELETED
 			cboxEqualTo.addItem("None");
 			cboxEqualTo.addItem("New");
@@ -348,34 +377,38 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	private void updateEqualsField() {
 
-		if (cboxField.getSelectedItem().equals("Type")
-				|| cboxField.getSelectedItem().equals("Priority")
-				|| cboxField.getSelectedItem().equals("Status")) {
-			System.out.println("ENUM!");
+		FilterField field = FilterField.getFromString((String) cboxField
+				.getSelectedItem());
+
+		if (field == FilterField.TYPE || field == FilterField.PRIORITY
+				|| field == FilterField.STATUS) {
+
 			cboxEqualTo.setVisible(true);
 			txtEqualTo.setVisible(false);
 			calEqualTo.setVisible(false);
 			calEqualToBetween.setVisible(false);
 			labEqualToBetween.setVisible(false);
 			populateEqualComboBox();
-		} else if (cboxField.getSelectedItem().equals("Iteration")) {
-			System.out.println("ITERATION!");
+		} else if (field == FilterField.ITERATION) {
 			cboxEqualTo.setVisible(false);
-			txtEqualTo.setVisible(false);
-			calEqualTo.setVisible(true);
 
 			if (cboxOperation.getSelectedItem().equals("Occurs between")) {
+				calEqualTo.setVisible(true);
 				calEqualToBetween.setVisible(true);
 				labEqualToBetween.setVisible(true);
-				System.out.println("OCCURS BETWEEN");
-			} else {
-				System.out.println("NOT OCCURS BETWEEN |"
-						+ cboxOperation.getSelectedItem());
+				txtEqualTo.setVisible(false);
+			} else if (cboxOperation.getSelectedItem().equals("Equals")) {
+				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
 				labEqualToBetween.setVisible(false);
+				txtEqualTo.setVisible(true);
+			} else {
+				calEqualTo.setVisible(true);
+				calEqualToBetween.setVisible(false);
+				labEqualToBetween.setVisible(false);
+				txtEqualTo.setVisible(false);
 			}
 		} else {
-			System.out.println("TEXT!");
 			cboxEqualTo.setVisible(false);
 			txtEqualTo.setVisible(true);
 			calEqualTo.setVisible(false);
@@ -386,29 +419,73 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	public void onSavePressed() {
 
-		System.out.println(filter
-				+ " "
-				+ cboxField.getSelectedItem()
-				+ " "
-				+ FilterField.getFromString((String) cboxField
-						.getSelectedItem()));
-
-		filter.setField(FilterField.getFromString((String) cboxField
-				.getSelectedItem()));
-		filter.setOperation(FilterOperation
-				.getFromString((String) cboxOperation.getSelectedItem()));
-
+		boolean error = false;
+		String errorString = "";
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
+		FilterOperation operation = FilterOperation
+				.getFromString((String) cboxOperation.getSelectedItem());
+
+		String equalToStr;
 
 		// get the equal to value from the text box or combo box
 		switch (field) {
 		case EFFORT:
 		case ESTIMATE:
-		case ITERATION:
+			equalToStr = txtEqualTo.getText().trim();
+			// check to make sure this is an int
+			try {
+				Integer.parseInt(equalToStr);
+				filter.setValue(equalToStr);
+			} catch (NumberFormatException e) {
+				error = true;
+				errorString = "Value must be a number";
+			}
+
+			break;
 		case NAME:
 		case RELEASE_NUMBER:
-			filter.setValue(txtEqualTo.getText());
+			equalToStr = txtEqualTo.getText().trim();
+			if (equalToStr.isEmpty()) {
+				errorString = "Value cannot be blank";
+				error = true;
+			} else {
+				filter.setValue(equalToStr);
+			}
+
+			break;
+
+		case ITERATION:
+			if (operation == FilterOperation.OCCURS_BETWEEN) {
+				Date startDate = calEqualTo.getDate();
+				Date endDate = calEqualToBetween.getDate();
+
+				if (endDate.after(startDate)) {
+					filter.setValue(new FilterIterationBetween(calEqualTo
+							.getDate(), calEqualToBetween.getDate()));
+				} else {
+					errorString = "Start date must before end date";
+					error = true;
+
+				}
+			} else if (operation == FilterOperation.EQUAL) {
+				equalToStr = txtEqualTo.getText().trim();
+				if (equalToStr.isEmpty()) {
+					errorString = "Value cannot be blank";
+					error = true;
+				}
+				else {
+					filter.setValue(equalToStr);
+				}
+			} else {
+				if (calEqualTo.getDate() == null) {
+					error = true;
+					errorString = "Date cannot be blank";
+				}
+				else {
+					filter.setValue(calEqualTo.getDate());	
+				}
+			}
 			break;
 
 		case PRIORITY:
@@ -424,16 +501,30 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getSelectedItem()));
 			break;
 		}
+		if (!error) {
+			// no error, we shall save
+			filter.setField(FilterField.getFromString((String) cboxField
+					.getSelectedItem()));
+			filter.setOperation(FilterOperation
+					.getFromString((String) cboxOperation.getSelectedItem()));
 
-		if (mode == Mode.CREATE) {
-			addFilterController.addFilter(filter);
+			if (mode == Mode.CREATE) {
+				addFilterController.addFilter(filter);
+			} else {
+				saveFilterController.saveFilter(filter);
+			}
+			onCancelPressed();
 		} else {
-			saveFilterController.saveFilter(filter);
+			// there was an error set text bot
+			labSaveError.setText(errorString);
 		}
 	}
 
 	public void onCancelPressed() {
+		labSaveError.setText("");
 		txtEqualTo.setText("");
+		calEqualTo.setDate(null);
+		calEqualToBetween.setDate(null);
 		cboxField.setSelectedItem("Name");
 
 		populateOperationComboBox();
@@ -441,14 +532,87 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	}
 
+	/** Updates the status of the save button */
+
+	public void updateSave() {
+		boolean error = false;
+		String errorString = "";
+		FilterField field = FilterField.getFromString((String) cboxField
+				.getSelectedItem());
+
+		String equalToStr;
+
+		// get the equal to value from the text box or combo box
+		switch (field) {
+		case EFFORT:
+		case ESTIMATE:
+			equalToStr = txtEqualTo.getText().trim();
+			// check to make sure this is an int
+			try {
+				Integer.parseInt(equalToStr);
+			} catch (NumberFormatException e) {
+				error = true;
+				errorString = "Value must be a number";
+			}
+
+			break;
+		case NAME:
+		case RELEASE_NUMBER:
+			equalToStr = txtEqualTo.getText().trim();
+			if (equalToStr.isEmpty()) {
+				errorString = "Value cannot be blank";
+				error = true;
+			}
+
+			break;
+
+		case ITERATION:
+			if (filter.getOperation() == FilterOperation.OCCURS_BETWEEN) {
+				Date startDate = calEqualTo.getDate();
+				Date endDate = calEqualToBetween.getDate();
+
+				if (calEqualTo.getDate() == null) {
+					errorString = "Start Date cannot be blank";
+					error = true;
+				} else if (calEqualToBetween.getDate() == null) {
+					errorString = "End Date cannot be blank";
+					error = true;
+				} else if (endDate.before(startDate)) {
+					errorString = "Start date must before end date";
+					error = true;
+				}
+			} else {
+				if (calEqualTo.getDate() == null) {
+					error = true;
+					errorString = "Date cannot be blank";
+				}
+			}
+			break;
+
+		case PRIORITY:
+		case STATUS:
+		case TYPE:
+			break;
+		}
+		if (!error) {
+			labSaveError.setText("");
+			butSave.setEnabled(true);
+		} else {
+			// there was an error set text bot
+			labSaveError.setText(errorString);
+			butSave.setEnabled(false);
+		}
+	}
+
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-
+		updateSave();
 		if (source.equals(cboxField)) {
 			populateOperationComboBox();
 			updateEqualsField();
 		} else if (source.equals(cboxOperation)) {
-			if (cboxOperation.getItemCount() != 0 && cboxField.getSelectedItem().equals("Iteration")) {
+			if (cboxOperation.getItemCount() != 0
+					&& cboxField.getSelectedItem().equals("Iteration")) {
 				updateEqualsField();
 			}
 		} else if (source.equals(butSave)) {
