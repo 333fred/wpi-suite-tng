@@ -12,6 +12,7 @@ public class ToggleSelectionModel extends DefaultListSelectionModel {
 
 	@Override
 	public void setSelectionInterval(int index0, int index1) {
+		//if shift 
 		if (!gestureStarted) {
 			if (isSelectedIndex(index0)) {
 				super.removeSelectionInterval(index0, index1);
