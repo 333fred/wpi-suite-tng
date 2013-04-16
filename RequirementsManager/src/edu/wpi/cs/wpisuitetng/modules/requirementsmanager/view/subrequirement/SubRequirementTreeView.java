@@ -183,7 +183,8 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 				if (iterationName.equals("Backlog")) {
 					backLogSingleSel = true;
 					// user has selected backlog
-					BacklogPopupMenu menu = new BacklogPopupMenu(tabController);
+					List<Iteration> selectedIterations = getSelectedIterations();
+					BacklogPopupMenu menu = new BacklogPopupMenu(tabController, selectedIterations);
 					menu.show(this, x, y);
 				}
 			}
@@ -533,11 +534,11 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 			System.out.println(iterationName);
 
 			Iteration toAdd = getIterationFromName(iterationName);
-			if (iterationName.equals("Backlog")
+	      /*if (iterationName.equals("Backlog")
 					|| iterationName.equals("Deleted") || toAdd == null) {
 				continue; // either iteration was not found, or user tried to
 							// open backlog
-			}
+			}*/
 			selectedIterations.add(toAdd);
 		}
 		return selectedIterations;
