@@ -12,6 +12,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -78,13 +80,14 @@ public class SubRequirementPanel extends JPanel {
 		validChildList = new DefaultListModel();
 		//initializeList();
 		addValidChildren();
-		reqNames = new JList(validChildList);
+		reqNames = new JList();
 		
 		childrenList = new DefaultListModel();
 		initializeListSubReq(requirement);
 		subReqNames = new JList(childrenList);
 		
 		validParentList = new DefaultListModel();
+		addValidParents();
 		
 		JPanel subreqPane = new JPanel();
 		subreqPane.setLayout(new BorderLayout());
@@ -114,7 +117,9 @@ public class SubRequirementPanel extends JPanel {
 		
 		JRadioButton radioChild = new JRadioButton("Add Children");
 		JRadioButton radioParent = new JRadioButton("Add Parent");
-				
+		
+		radioChild.setSelected(true);
+		
 	    group = new ButtonGroup();
 	    group.add(radioChild);
 	    group.add(radioParent);
@@ -177,7 +182,19 @@ public class SubRequirementPanel extends JPanel {
 		addReq.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));
 		refreshParentPanel();
 		
+		radioChild.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				refreshReqPanel();
+			}
+		});
 		
+		radioParent.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				refreshReqPanelForParents();
+			}
+		});
+		
+		refreshReqPanel();
 	}
 	
 	private void initializeList() {
@@ -287,6 +304,13 @@ public class SubRequirementPanel extends JPanel {
 		validChildList = new DefaultListModel();
 		addValidChildren();
 		reqNames = new JList(validChildList);
+		scrollPane.setViewportView(reqNames);
+	}
+	
+	public void refreshReqPanelForParents() {
+		validParentList = new DefaultListModel();
+		addValidParents();
+		reqNames = new JList(validParentList);
 		scrollPane.setViewportView(reqNames);
 	}
 	
