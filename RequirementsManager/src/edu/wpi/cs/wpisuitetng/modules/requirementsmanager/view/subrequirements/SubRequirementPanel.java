@@ -213,14 +213,34 @@ public class SubRequirementPanel extends JPanel {
 	public void addValidChildren(){
 		List<Requirement> requirements = RequirementDatabase.getInstance()
 				.getAllRequirements();
+		
+		int rootID;
+		rootID = checkParentRoot(this.requirement);
 		for (Requirement req : requirements){
 			if (req.getpUID().size() == 0){
-				if (!containsCurrentRequirement(req,this.requirement)){
+				if (req.getrUID()!=rootID){
 					validChildList.addElement(req.getName());
 				}
 			}
 			
 		}
+	}
+	
+	public int checkParentRoot(Requirement aReq){
+		Requirement tempReq = null;
+		if(aReq.getpUID().size()==0){
+			return aReq.getrUID();
+		}
+		else{
+			try {
+				tempReq = RequirementDatabase.getInstance()
+				.getRequirement(aReq.getpUID().get(0));
+			} catch (RequirementNotFoundException e) {
+				e.printStackTrace();
+			}
+			return checkParentRoot(tempReq);
+		}
+			
 	}
 	
 	public void addValidParents(){
