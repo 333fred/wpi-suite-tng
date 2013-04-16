@@ -50,5 +50,9 @@ var data = [
         {label: 'Viewing Statistics',
     	folder: false,
     	id: 3
+    	},
+    	{label: 'Editing Estimates',
+    	folder: false,
+    	id: 4
     	}
     ]

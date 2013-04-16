@@ -17,6 +17,8 @@ import java.util.Arrays;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import javax.swing.SwingUtilities;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -48,13 +50,23 @@ public class AddFilterRequestObserver implements RequestObserver {
 	public void responseSuccess(IRequest iReq) {
 		ResponseModel response = iReq.getResponse();		
 
+
 		if (response.getStatusCode() == 200) {
 			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
 			FilterDatabase.getInstance().addFilters(Arrays.asList(filters));
+	
+	
+			// TODO: Determine what to do with the response
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					notifier.responseSuccess();
+				}
+			});
+			
 		}
-		
-		notifier.responseSuccess();
-		
+
+
 	}
 
 	/**

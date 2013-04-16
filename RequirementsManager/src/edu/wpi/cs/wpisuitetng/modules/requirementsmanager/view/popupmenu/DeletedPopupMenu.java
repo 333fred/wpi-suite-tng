@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu;
 
 import java.awt.event.ActionEvent;
@@ -13,58 +16,50 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
-public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
+/**
+ * @author Alex C
+ *
+ */
+public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
 
-	/** Menu options for the PopupMenu */
-	private JMenuItem menuCreateRequirement;
-	private JMenuItem menuFilterBacklog;
+	private JMenuItem menuFilterDeleted;
 
 	/** The tab controller used to create new tabs */
 	private MainTabController tabController;
-	
-
+		
 	/**
-	 * Creates an BacklogPopupMenu with the given tab controller
+	 * Creates a DeletedPopupMenu with the given tab controller
 	 * 
-	 * @param tabController
-	 *            The tab controller to open tabs in
+	 * @param tabController 
+	 * 		The tab controller to open tabs in
 	 */
-
-	public BacklogPopupMenu(MainTabController tabController) {
+	public DeletedPopupMenu(MainTabController tabController) {
 		this.tabController = tabController;
 
-		menuCreateRequirement = new JMenuItem("New Requirement");
-		menuFilterBacklog = new JMenuItem("Filter By Backlog");
+		menuFilterDeleted = new JMenuItem("Filter By Deleted");
 		
-		menuCreateRequirement.addActionListener(this);
-		menuFilterBacklog.addActionListener(this);
-	
-		add(menuCreateRequirement);
-		add(menuFilterBacklog);
+		menuFilterDeleted.addActionListener(this);
+
+		add(menuFilterDeleted);
 
 	}
-
+	
 	/**
-	 * The action listener that is called when the user selects a menu option
-	 * 
+	 * The action listener is called when the user selects a menu option
 	 */
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(menuFilterBacklog)) {
+		if (e.getSource().equals(menuFilterDeleted)) {
 			Iteration iter;
 			try {
-				// backlog has ID -1
-				iter = IterationDatabase.getInstance().getIteration(-1);
+				// deleted has ID -2
+				iter = IterationDatabase.getInstance().getIteration(-2);
 				RequirementTableView tableView = RequirementTableView.getInstance();
 				tableView.IterationFilter(iter.getName());
 				tableView.displayFilterInformation("Filtering by " + iter.getName());
 			} catch (IterationNotFoundException e1) {
 				e1.printStackTrace();
 			} 
-		} else {
-			tabController.addCreateRequirementTab();
-		}
+		}		
 	}
-
 }

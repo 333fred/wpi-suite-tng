@@ -13,6 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JList;
@@ -25,6 +26,8 @@ import javax.swing.ListCellRenderer;
  * 
  */
 public class EventCellRenderer implements ListCellRenderer {
+
+	private int wrapWidth;
 
 	/**
 	 * Method to create and add a panel to display and paint a specified value.
@@ -40,6 +43,7 @@ public class EventCellRenderer implements ListCellRenderer {
 			int index, boolean isSelected, boolean cellHasFocus) {
 		final JPanel panel;
 		panel = new EventPanel((Event) value);
+		((EventPanel) panel).setWrapWidth(wrapWidth);
 
 		if (isSelected) {
 			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
@@ -58,4 +62,7 @@ public class EventCellRenderer implements ListCellRenderer {
 		return panel;
 	}
 
+	public void setWrapWidth(int wrapWidth) {
+		this.wrapWidth = wrapWidth;
+	}
 }

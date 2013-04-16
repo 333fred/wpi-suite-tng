@@ -13,7 +13,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -56,14 +59,19 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			Iteration[] iterations = Iteration
+			final Iteration[] iterations = Iteration
 					.fromJSONArray(response.getBody());
 
 			IterationDatabase.getInstance().setIterations(
 					Arrays.asList(iterations));
 
 			// notify the controller
-			controller.receivedData(iterations);
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					controller.receivedData(iterations);
+				}
+			});
 		} else {
 			controller.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()

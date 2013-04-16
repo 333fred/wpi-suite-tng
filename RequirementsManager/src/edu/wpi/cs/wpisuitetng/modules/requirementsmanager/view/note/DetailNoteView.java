@@ -7,11 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Zac Chupka, Maddie Burris
+ *    Zac Chupka, Maddie Burris, Steve Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -25,18 +26,24 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRe
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteViewListener;
 
+
 /**
  * Panel containing a note for a requirement
  * 
  * @author Zac Chupka, Maddie Burris
  */
 public class DetailNoteView extends JPanel {
+	
+	private JScrollPane noteScrollPane;
+	
 	/** For Notes */
 	protected DefaultListModel noteList;
 	protected JList notes;
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeNotePanel makeNotePanel;
+
+	private EventCellRenderer cellRenderer;
 
 	/**
 	 * Construct the panel and add layout components
@@ -57,11 +64,12 @@ public class DetailNoteView extends JPanel {
 		// Create the note list
 		noteList = new DefaultListModel();
 		notes = new JList(noteList);
-		notes.setCellRenderer(new EventCellRenderer());
+		cellRenderer = new EventCellRenderer();
+		notes.setCellRenderer(cellRenderer);
 		notes.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
+		this.noteScrollPane = new JScrollPane();
 		noteScrollPane.getViewport().add(notes);
 
 		// Set up the frame
@@ -84,6 +92,11 @@ public class DetailNoteView extends JPanel {
 		addNotesToList();
 	}
 
+	public void paint(Graphics g) {
+		this.cellRenderer.setWrapWidth(this.noteScrollPane.getViewport().getWidth());
+		super.paint(g);
+	}
+	
 	/**
 	 * Method to populate this object's list of notes from the current
 	 * requirement's list of notes

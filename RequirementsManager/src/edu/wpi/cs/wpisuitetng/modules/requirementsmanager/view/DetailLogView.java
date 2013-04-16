@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Zac Chupka, Maddie Burris
+ *    Zac Chupka, Maddie Burris, Steve Kordell
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -33,7 +34,9 @@ public class DetailLogView extends JPanel {
 	protected JList log;
 	private Requirement requirement;
 	private DetailPanel parentView;
-
+	private EventCellRenderer cellRenderer;
+	private JScrollPane logScrollPane;
+	
 	/**
 	 * Construct the panel and add layout components
 	 * 
@@ -51,17 +54,18 @@ public class DetailLogView extends JPanel {
 		// Create the log list
 		logList = new DefaultListModel();
 		log = new JList(logList);
-		log.setCellRenderer(new EventCellRenderer());
+		cellRenderer = new EventCellRenderer();
+		log.setCellRenderer(cellRenderer);
 		log.setSelectionModel(new ToggleSelectionModel());
 
 		// Add the list to the scroll pane
-		JScrollPane noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(log);
+		logScrollPane = new JScrollPane();
+		logScrollPane.getViewport().add(log);
 
 		// Set up the frame
 		JPanel logPane = new JPanel();
 		logPane.setLayout(new BorderLayout());
-		logPane.add(noteScrollPane, BorderLayout.CENTER);
+		logPane.add(logScrollPane, BorderLayout.CENTER);
 
 		add(logPane, BorderLayout.CENTER);
 
@@ -75,4 +79,10 @@ public class DetailLogView extends JPanel {
 			this.logList.addElement(aLog);
 		}
 	}
+	
+	public void paint(Graphics g) {
+		this.cellRenderer.setWrapWidth(this.logScrollPane.getViewport().getWidth());
+		super.paint(g);
+	}
+	
 }

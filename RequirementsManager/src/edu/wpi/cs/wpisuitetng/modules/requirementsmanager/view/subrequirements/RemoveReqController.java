@@ -18,7 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
-public class AssignChildController {
+public class RemoveReqController {
 	private final SubRequirementPanel view;
 	private final Requirement model;
 	private final DetailPanel ChildView;
@@ -33,7 +33,7 @@ public class AssignChildController {
 	 * @param ChildView
 	 *            the DetailPanel
 	 */
-	public AssignChildController(SubRequirementPanel subRequirementPanel, Requirement model,
+	public RemoveReqController(SubRequirementPanel subRequirementPanel, Requirement model,
 			DetailPanel ChildView) {
 		this.view = subRequirementPanel;
 		this.model = model;
@@ -41,26 +41,18 @@ public class AssignChildController {
 	}
 
 	/**
-	 * Save a child requirement to the server
+	 * Save a note to the server
 	 */
 	public void saveChild() {
-
-		String selectedIndex = (String) view.getList().getSelectedValue();
-		System.out.println(selectedIndex);
-		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
-		System.out.println(model.getSubRequirements().size());
-		System.out.println(anReq.getpUID().size());
-		System.out.println(anReq.getName());
-		//view.checkCycle(anReq, model);
-//		System.out.println("\n" + anReq.getName());
 		
-//		System.out.println("\n"+view.checkDirectedCycle());
-//		view.initializeTree();
+		String selectedIndex = (String) view.getListSubReq().getSelectedValue();
+		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
+		
 		Integer modelID = new Integer(model.getrUID());
 		Integer anReqID = new Integer (anReq.getrUID());
-		
-		model.addSubRequirement(anReqID);
-		anReq.addPUID(modelID);
+
+		model.removeSubRequirement(anReqID);
+		anReq.removePUID(modelID);
 		SaveRequirementController controller = new SaveRequirementController(this.ChildView);
 		controller.SaveRequirement(model, false);
 		controller = new SaveRequirementController(new SaveOtherRequirement());
@@ -68,9 +60,6 @@ public class AssignChildController {
 		
 		view.refreshSubReqPanel();
 		view.refreshReqPanel();
-		
-		System.out.println(model.getSubRequirements().size());
-		System.out.println(anReq.getpUID().size());
 
 	}
 

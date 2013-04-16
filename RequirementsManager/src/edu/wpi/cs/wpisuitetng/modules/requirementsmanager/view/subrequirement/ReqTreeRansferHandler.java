@@ -36,6 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 
 @SuppressWarnings("serial")
@@ -337,5 +338,17 @@ class ReqTreeRansferHandler extends TransferHandler implements ISaveNotifier {
 	@Override
 	public void fail(Exception exception) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

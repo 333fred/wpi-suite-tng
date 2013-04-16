@@ -11,6 +11,8 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -27,7 +29,7 @@ public class AddIterationRequestObserver implements RequestObserver {
 
 	private AddIterationController controller;
 
-	private IterationView iterationView;
+	private final IterationView iterationView;
 
 	public AddIterationRequestObserver(AddIterationController controller,
 			IterationView iterationView) {
@@ -50,8 +52,12 @@ public class AddIterationRequestObserver implements RequestObserver {
 		// get the response from the request
 		ResponseModel response = request.getResponse();
 
-		this.iterationView.getMainTabController().closeCurrentTab();
-
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				iterationView.getMainTabController().closeCurrentTab();
+			}
+		});
 		/*
 		 * if (response.getStatusCode() == 201) { // parse the Requirement from
 		 * the body final Requirement requirement =

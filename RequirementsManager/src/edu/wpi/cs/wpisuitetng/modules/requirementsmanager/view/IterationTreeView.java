@@ -51,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.AnywherePopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.BacklogPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.DeletedPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
@@ -94,7 +95,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		this.tree.setDropMode(DropMode.ON);
 		// final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 
-		this.tree.setTransferHandler(new TreeTransferHandler());
+		this.tree.setTransferHandler(new TreeTransferHandler(tabController));
 		this.tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -182,6 +183,13 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					// user has selected backlog
 					BacklogPopupMenu menu = new BacklogPopupMenu(tabController);
 					menu.show(this, x, y);
+				}
+				if (iterationName.equals("Deleted")) {
+					// set flag, perhaps rename later
+					backLogSingleSel = true;
+					// user has selected deleted
+					DeletedPopupMenu delMenu = new DeletedPopupMenu(tabController);
+					delMenu.show(this, x, y);
 				}
 			}
 
@@ -509,7 +517,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					|| iterationName.equals("Deleted") || toAdd == null) {
 				continue; // either iteration was not found, or user tried to
 							// open backlog
-			}
+			} 
 			selectedIterations.add(toAdd);
 		}
 		return selectedIterations;

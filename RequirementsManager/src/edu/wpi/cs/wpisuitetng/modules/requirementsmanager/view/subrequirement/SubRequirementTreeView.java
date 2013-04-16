@@ -52,6 +52,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.AnywherePopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.BacklogPopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.DeletedPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.IterationPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
@@ -185,6 +186,13 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 					// user has selected backlog
 					BacklogPopupMenu menu = new BacklogPopupMenu(tabController);
 					menu.show(this, x, y);
+				}
+				if (iterationName.equals("Deleted")) {
+					// set flag, perhaps rename later
+					backLogSingleSel = true;
+					// user has selected deleted
+					DeletedPopupMenu delMenu = new DeletedPopupMenu(tabController);
+					delMenu.show(this, x, y);
 				}
 			}
 

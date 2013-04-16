@@ -38,7 +38,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterC
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+
 
 /**
  * View for creating and editing filters
@@ -146,9 +151,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		labEqualToBetween = new JLabel("and");
 		labSaveError = new JLabel("JAAAABOUY");
 
-		cboxField = new JComboBox<String>();
-		cboxOperation = new JComboBox<String>();
-		cboxEqualTo = new JComboBox<String>();
+		cboxField = new JComboBox();
+		cboxOperation = new JComboBox();
+		cboxEqualTo = new JComboBox();
 		txtEqualTo = new JTextField();
 
 		calEqualTo = new JDateChooser();
@@ -637,4 +642,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		exception.printStackTrace();
 	}
 
+	@Override
+	public MainTabController getTabController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

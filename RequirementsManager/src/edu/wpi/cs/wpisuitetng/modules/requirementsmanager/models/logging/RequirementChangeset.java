@@ -22,7 +22,10 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.Changeset;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
@@ -69,7 +72,7 @@ public class RequirementChangeset extends Changeset implements Event {
 	public String getContent() {
 		// Check for every change in field that could be in this changeset, and
 		// add it to the return string
-		String content = "<html>";
+		String content = "";
 
 		// Start by checking to see if this the creation changeset. If so, then
 		// just say we created the requirement and return
@@ -159,23 +162,40 @@ public class RequirementChangeset extends Changeset implements Event {
 			List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("subRequirements"));
 			if (added.size() > 0) {
-				content += "Added " + added.size() + " Sub-Requirement(s)<br>";
+				content += "Added " + added.size()
+						+ " Sub-Requirement(s)<br><I>";
 				for (Object o : added) {
-					// TODO: Make it look up the correct name, instead of just
-					// the ID
-					Integer u = (Integer) o;
-					content += u.toString() + "<br>";
+					Integer i = (int) Math.round((Double) o);
+					content += "&nbsp;&nbsp;&nbsp;";
+					try {
+						Requirement tempReq = RequirementDatabase.getInstance()
+								.getRequirement(i);
+						content += tempReq.getName() + "<br>";
+					} catch (RequirementNotFoundException e) {
+						content += "Unknown requirement with ID "
+								+ i.toString() + "<br>";
+						e.printStackTrace();
+					}
 				}
+				content += "</I>";
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + removed.size()
-						+ " Sub-Requirement(s)<br>";
+						+ " Sub-Requirement(s)<br><I>";
 				for (Object o : removed) {
-					// TODO: Make it look up the correct name, instead of just
-					// the ID
-					Integer u = (Integer) o;
-					content += u.toString() + "<br>";
+					Integer i = (int) Math.round((Double) o);
+					content += "&nbsp;&nbsp;&nbsp;";
+					try {
+						Requirement tempReq = RequirementDatabase.getInstance()
+								.getRequirement(i);
+						content += tempReq.getName() + "<br>";
+					} catch (RequirementNotFoundException e) {
+						content += "Unknown requirement with ID "
+								+ i.toString() + "<br>";
+						e.printStackTrace();
+					}
 				}
+				content += "</I>";
 			}
 		}
 		if (changes.get("pUID") != null) {
@@ -186,23 +206,40 @@ public class RequirementChangeset extends Changeset implements Event {
 			oldToNewList(added, removed, changes.get("pUID"));
 			if (added.size() > 0) {
 				content += "Added " + added.size()
-						+ " Parent Requirement(s)<br>";
+						+ " Parent Requirement(s)<br><I>";
 				for (Object o : added) {
-					// TODO: Make it look up the correct name, instead of just
-					// the ID
-					Integer u = (Integer) o;
-					content += u.toString() + "<br>";
+					Integer i = (int) Math.round((Double) o);
+					content += "&nbsp;&nbsp;&nbsp;";
+					try {
+						Requirement tempReq = RequirementDatabase.getInstance()
+								.getRequirement(i);
+						content += tempReq.getName() + "<br>";
+					} catch (RequirementNotFoundException e) {
+						content += "Unknown requirement with ID "
+								+ i.toString() + "<br>";
+						e.printStackTrace();
+					}
+
 				}
+				content += "</I>";
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + removed.size()
-						+ " Parent Requirement(s)<br>";
+						+ " Parent Requirement(s)<br><I>";
 				for (Object o : removed) {
-					// TODO: Make it look up the correct name, instead of just
-					// the ID
-					Integer u = (Integer) o;
-					content += u.toString() + "<br>";
+					Integer i = (int) Math.round((Double) o);
+					content += "&nbsp;&nbsp;&nbsp;";
+					try {
+						Requirement tempReq = RequirementDatabase.getInstance()
+								.getRequirement(i);
+						content += tempReq.getName() + "<br>";
+					} catch (RequirementNotFoundException e) {
+						content += "Unknown requirement with ID "
+								+ i.toString() + "<br>";
+						e.printStackTrace();
+					}
 				}
+				content += "</I>";
 			}
 		}
 		if (changes.get("notes") != null) {
@@ -229,9 +266,9 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 			if (modified > 0) {
 				content += "Added " + modified + " task(s)<br>";
-			}			
+			}
 		}
-		if(changes.get("aTests") != null){
+		if (changes.get("aTests") != null) {
 			List<Object> added = new ArrayList<Object>();
 			List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("aTests"));
@@ -242,10 +279,8 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 			if (modified > 0) {
 				content += "Added " + modified + " tests(s)<br>";
-			}	
+			}
 		}
-
-		content += "</html>";
 
 		return content;
 	}

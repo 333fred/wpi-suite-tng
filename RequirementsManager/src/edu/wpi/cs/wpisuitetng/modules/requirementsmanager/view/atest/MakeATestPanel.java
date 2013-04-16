@@ -133,7 +133,8 @@ public class MakeATestPanel extends JPanel {
 		descaTestLabel = new JLabel("Description:");		
 		String[] availableStatuses = {"","PASSED","FAILED"};		
 		aTestStatusBox = new JComboBox(availableStatuses);
-
+		aTestStatusBox.setBackground(Color.WHITE);
+		
 		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		this.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.black, 1),

@@ -64,6 +64,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 /**
  * JPanel class to display the different fields of the requirement
  */
+@SuppressWarnings("serial")
 public class DetailPanel extends Tab implements ISaveNotifier {
 
 	// Textfields
@@ -319,9 +320,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration, or
 			// the iteration is this requirement's current iteration or is the
 			// backlog
-			if (currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| iteration.identify(requirement.getIteration())
-					|| iteration.getId() == -1 || iteration.getId() != -2) {
+			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
+					|| requirement.getIteration() == iteration.getId()
+					|| iteration.getId() == -1) && iteration.getId() != -2) {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
@@ -333,9 +334,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// if the current date is before the end date of the iteration,
 			// or the iteration is this requirement's current iteration,
 			// or it is the backlog, add it to the list
-			if (currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| iteration.identify(requirement.getIteration())
-					|| iteration.getId() == -1 || iteration.getId() != -2) {
+			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
+					|| requirement.getIteration() == iteration.getId()
+					|| iteration.getId() == -1) && iteration.getId() != -2) {
 				availableIterations[currentAvailableIterationIndex] = iteration
 						.getName();
 				currentAvailableIterationIndex++;
@@ -1197,6 +1198,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			
 		}
 		return true;
+	}
+
+	@Override
+	public MainTabController getTabController() {
+		return null;
+	}
+
+	@Override
+	public Requirement getDraggedRequirement() {
+		return null;
 	}
 
 }
