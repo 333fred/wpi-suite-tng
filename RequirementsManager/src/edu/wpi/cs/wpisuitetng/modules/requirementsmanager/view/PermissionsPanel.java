@@ -46,29 +46,33 @@ public class PermissionsPanel extends Tab {
 
 		SpringLayout layout = new SpringLayout();
 		SpringLayout radioLayout = new SpringLayout();
+		
 		radioPanel.setLayout(radioLayout);
 		setLayout(layout);
 
 		// construct the list of users
 		userList = new JList(users);
+	
 
 		/** Construct the admin button */
-		adminButton = new JRadioButton("Admin");
+		adminButton = new JRadioButton("Admin", false);
+		adminButton.setEnabled(true);
 
 		/** Construct the update button */
-		updateButton = new JRadioButton("Update");
+		updateButton = new JRadioButton("Update", false);
 
 		/** Construct the none button */
-		noPermissionButton = new JRadioButton("None");
+		noPermissionButton = new JRadioButton("None", false);
 
 		JScrollPane userScroll = new JScrollPane();
 		userScroll.setBorder(null);
 		userScroll.getViewport().add(userList);
-
+		
+		
 		// set constraints for the overall panel
 		layout.putConstraint(SpringLayout.WEST, radioPanel, 15,
 				SpringLayout.EAST, userScroll);
-		layout.putConstraint(SpringLayout.WEST, userScroll, 0,
+		layout.putConstraint(SpringLayout.WEST, radioPanel, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, userScroll, 0,
 				SpringLayout.NORTH, this);
@@ -89,6 +93,7 @@ public class PermissionsPanel extends Tab {
 		radioPanel.add(adminButton);
 		radioPanel.add(updateButton);
 		radioPanel.add(noPermissionButton);
+		radioPanel.add(new JLabel("TEST"));
 		
 		add(userScroll);
 		add(radioPanel);
