@@ -39,11 +39,12 @@ public class FilterView extends JPanel {
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, filterTableView, createFilterView);
 	
-		splitPane.setDividerLocation(0.85f);
+		splitPane.setDividerLocation(0.75f);
 		
 		setLayout(new BorderLayout());
 		
-		add(splitPane, BorderLayout.CENTER);
+		add(filterTableView, BorderLayout.CENTER);
+		add(createFilterView, BorderLayout.SOUTH);
 
 	}
 	

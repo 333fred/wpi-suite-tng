@@ -132,6 +132,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		labField = new JLabel("Field");
 		labOperation = new JLabel("Operation");
 		labEqualTo = new JLabel("Equal");
+		labEqualToBetween = new JLabel("and");
 
 		cboxField = new JComboBox<String>();
 		cboxOperation = new JComboBox<String>();
@@ -159,8 +160,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labField);
 		layout.putConstraint(SpringLayout.WEST, cboxField, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		
-		layout.putConstraint(SpringLayout.EAST, cboxField, 0, SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.EAST, cboxField, 0,
+				SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, labOperation,
 				VERTICAL_PADDING, SpringLayout.SOUTH, cboxField);
@@ -171,8 +173,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labOperation);
 		layout.putConstraint(SpringLayout.WEST, cboxOperation,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		
-		layout.putConstraint(SpringLayout.EAST, cboxOperation, 0, SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.EAST, cboxOperation, 0,
+				SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, labEqualTo, VERTICAL_PADDING,
 				SpringLayout.SOUTH, cboxOperation);
@@ -185,51 +188,73 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, txtEqualTo, 0,
 				SpringLayout.EAST, cboxField);
-		
-		layout.putConstraint(SpringLayout.EAST, txtEqualTo, 0, SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.EAST, txtEqualTo, 0,
+				SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, cboxEqualTo,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualTo);
 		layout.putConstraint(SpringLayout.WEST, cboxEqualTo,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		
-		layout.putConstraint(SpringLayout.EAST, cboxEqualTo, 0, SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.EAST, cboxEqualTo, 0,
+				SpringLayout.EAST, butCancel);
 
 		layout.putConstraint(SpringLayout.NORTH, calEqualTo,
 				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualTo);
 		layout.putConstraint(SpringLayout.WEST, calEqualTo, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
-		
-		layout.putConstraint(SpringLayout.EAST, calEqualTo, 0, SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.EAST, calEqualTo, 0,
+				SpringLayout.EAST, butCancel);
+
+		layout.putConstraint(SpringLayout.WEST, labEqualToBetween,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, labEqualToBetween,
+				VERTICAL_PADDING, SpringLayout.SOUTH, calEqualTo);
+
+		layout.putConstraint(SpringLayout.WEST, calEqualToBetween,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.EAST, calEqualToBetween, 0,
+				SpringLayout.EAST, butCancel);
+		layout.putConstraint(SpringLayout.NORTH, calEqualToBetween,
+				VERTICAL_PADDING_CLOSE, SpringLayout.SOUTH, labEqualToBetween);
 
 		layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
-				SpringLayout.SOUTH, cboxEqualTo);
+				SpringLayout.SOUTH, calEqualToBetween);
 		layout.putConstraint(SpringLayout.WEST, butSave, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 
 		layout.putConstraint(SpringLayout.NORTH, butCancel, VERTICAL_PADDING,
-				SpringLayout.SOUTH, cboxEqualTo);
+				SpringLayout.SOUTH, calEqualToBetween);
 		layout.putConstraint(SpringLayout.WEST, butCancel, HORIZONTAL_PADDING,
 				SpringLayout.EAST, butSave);
 
 		setLayout(layout);
 
+		labEqualToBetween.setVisible(false);
+
 		add(labField);
 		add(labOperation);
 		add(labEqualTo);
+		add(labEqualToBetween);
 
 		add(cboxField);
 		add(cboxOperation);
 		add(cboxEqualTo);
 		add(txtEqualTo);
 		add(calEqualTo);
+		add(calEqualToBetween);
 
 		add(butSave);
 		add(butCancel);
 
 		this.setMinimumSize(new Dimension(butSave.getPreferredSize().width
 				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
-				0));
+				250));
+		this.setPreferredSize(new Dimension(butSave.getPreferredSize().width
+				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
+				250));
 
 		// add the action listeners
 		cboxField.addActionListener(this);
@@ -322,20 +347,41 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	private void updateEqualsField() {
-		/*
+
 		if (cboxField.getSelectedItem().equals("Type")
 				|| cboxField.getSelectedItem().equals("Priority")
 				|| cboxField.getSelectedItem().equals("Status")) {
+			System.out.println("ENUM!");
 			cboxEqualTo.setVisible(true);
 			txtEqualTo.setVisible(false);
+			calEqualTo.setVisible(false);
+			calEqualToBetween.setVisible(false);
+			labEqualToBetween.setVisible(false);
 			populateEqualComboBox();
+		} else if (cboxField.getSelectedItem().equals("Iteration")) {
+			System.out.println("ITERATION!");
+			cboxEqualTo.setVisible(false);
+			txtEqualTo.setVisible(false);
+			calEqualTo.setVisible(true);
+
+			if (cboxOperation.getSelectedItem().equals("Occurs between")) {
+				calEqualToBetween.setVisible(true);
+				labEqualToBetween.setVisible(true);
+				System.out.println("OCCURS BETWEEN");
+			} else {
+				System.out.println("NOT OCCURS BETWEEN |"
+						+ cboxOperation.getSelectedItem());
+				calEqualToBetween.setVisible(false);
+				labEqualToBetween.setVisible(false);
+			}
 		} else {
+			System.out.println("TEXT!");
 			cboxEqualTo.setVisible(false);
 			txtEqualTo.setVisible(true);
+			calEqualTo.setVisible(false);
+			calEqualToBetween.setVisible(false);
+			labEqualToBetween.setVisible(false);
 		}
-		*/
-		txtEqualTo.setVisible(false);
-		cboxEqualTo.setVisible(false);
 	}
 
 	public void onSavePressed() {
@@ -397,12 +443,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
+
 		if (source.equals(cboxField)) {
 			populateOperationComboBox();
 			updateEqualsField();
-		}
-
-		else if (source.equals(butSave)) {
+		} else if (source.equals(cboxOperation)) {
+			if (cboxOperation.getItemCount() != 0 && cboxField.getSelectedItem().equals("Iteration")) {
+				updateEqualsField();
+			}
+		} else if (source.equals(butSave)) {
 			onSavePressed();
 		} else if (source.equals(butCancel)) {
 			onCancelPressed();
