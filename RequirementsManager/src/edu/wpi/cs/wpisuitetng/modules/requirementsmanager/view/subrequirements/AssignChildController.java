@@ -60,6 +60,7 @@ public class AssignChildController {
 		anReq.addPUID(model.getrUID());
 		SaveRequirementController controller = new SaveRequirementController(this.ChildView);
 		controller.SaveRequirement(model, false);
+		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 		
 		System.out.println(model.getSubRequirements().size());
