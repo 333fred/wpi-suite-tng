@@ -270,4 +270,18 @@ public class SubRequirementPanel extends JPanel {
 		}
 		
 	}
+
+	public void refreshSubReqPanel() {
+		childrenList = new DefaultListModel();
+		initializeListSubReq(requirement);
+		subReqNames = new JList(childrenList);
+		scrollPaneContainedReqs.setViewportView(subReqNames);		
+	}
+
+	public void refreshReqPanel() {
+		validChildList = new DefaultListModel();
+		addValidChildren();
+		reqNames = new JList(validChildList);
+		scrollPane.setViewportView(reqNames);
+	}
 }

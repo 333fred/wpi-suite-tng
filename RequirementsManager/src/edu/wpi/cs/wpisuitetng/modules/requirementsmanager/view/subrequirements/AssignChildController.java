@@ -63,6 +63,9 @@ public class AssignChildController {
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 		
+		view.refreshSubReqPanel();
+		view.refreshReqPanel();
+		
 		System.out.println(model.getSubRequirements().size());
 		System.out.println(anReq.getpUID().size());
 
