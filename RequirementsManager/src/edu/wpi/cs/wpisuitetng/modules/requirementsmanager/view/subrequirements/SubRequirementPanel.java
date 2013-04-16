@@ -264,33 +264,32 @@ public class SubRequirementPanel extends JPanel {
 		List<Requirement> requirements = RequirementDatabase.getInstance()
 				.getAllRequirements();
 		for(Requirement req : requirements){
-			if (!containsCurrentRequirement(req,this.requirement)){
+			if (!containsCurrentRequirement(req)){
 				validParentList.addElement(req.getName());
 			}
 		}
 	}
 	
-	public boolean containsCurrentRequirement(Requirement req, Requirement current){
-		if (req.getrUID() == current.getrUID()){
+	public boolean containsCurrentRequirement(Requirement req) {
+		System.out.println(req.getName());
+		Requirement child = null;
+		Boolean check = false;
+		if (req.equals(requirement)) {
 			return true;
-		}
-		else{
-			List<Integer> subReqs = req.getSubRequirements();
-			if (subReqs.size() > 0){
-				for (int i = 0; i < subReqs.size(); i ++){
-					try {
-						Requirement child = RequirementDatabase.getInstance()
-								.getRequirement(subReqs.get(i));
-						return containsCurrentRequirement(child,current);
-					} catch (RequirementNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		} else {
+			for (Integer i : req.getSubRequirements()) {				
+				try {
+					child = RequirementDatabase.getInstance()
+							.getRequirement(i);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
 				}
+				check = containsCurrentRequirement(child);
+				if(check) return check;
 			}
 			return false;
 		}
-		
+
 	}
 
 	public void refreshSubReqPanel() {
