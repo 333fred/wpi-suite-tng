@@ -17,7 +17,7 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 
 	/** Menu options for the PopupMenu */
 	private JMenuItem menuCreateRequirement;
-	private JMenuItem menuFilterIteration;
+	private JMenuItem menuFilterBacklog;
 
 	/** The tab controller used to create new tabs */
 	private MainTabController tabController;
@@ -34,13 +34,13 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 		this.tabController = tabController;
 
 		menuCreateRequirement = new JMenuItem("New Requirement");
-		menuFilterIteration = new JMenuItem("Filter By Backlog");
+		menuFilterBacklog = new JMenuItem("Filter By Backlog");
 		
 		menuCreateRequirement.addActionListener(this);
-		menuFilterIteration.addActionListener(this);
+		menuFilterBacklog.addActionListener(this);
 	
 		add(menuCreateRequirement);
-		add(menuFilterIteration);
+		add(menuFilterBacklog);
 
 	}
 
@@ -51,7 +51,7 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(menuFilterIteration)) {
+		if (e.getSource().equals(menuFilterBacklog)) {
 			Iteration iter;
 			try {
 				// backlog has ID -1
