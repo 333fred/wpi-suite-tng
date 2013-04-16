@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 
@@ -105,7 +106,17 @@ public class MainTabController {
 		SwingUtilities.invokeLater(new AddTabInvokable(tabView,title,icon,tab,tip));
 		return new TabWrap(tabView, tab);
 	}
-
+	
+	/**
+	 * Adds a tab to modify permissions
+	 * 
+	 * @return The permissions tab to be added
+	 */
+	public TabWrap addPermissionTab() {
+		
+		return addTab("Permissions", new ImageIcon(), new PermissionsPanel(), "Permissions");
+	}
+	
 	/**
 	 * Adds a tab to create a new requirement
 	 * 
@@ -200,7 +211,7 @@ public class MainTabController {
 	}
 
 	/**
-	 * Adds teh Requirement Table View to the tabs
+	 * Adds the Requirement Table View to the tabs
 	 * 
 	 * @return The tab that was added
 	 */
@@ -327,5 +338,4 @@ public class MainTabController {
 		}	
 		return openTabs;
 	}
-
 }
