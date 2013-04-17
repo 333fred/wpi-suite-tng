@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.network.Network;
 
 /**
  * Action invoked upon use of the User Manual key
@@ -50,9 +51,12 @@ public class CreateHelpPanelAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//File input = new File("http://dastardlybanana.com/Docs/RequirementsManager/"); // Html file is our input
+		//go to current url + Documentation/
+		String docURI = Network.getInstance().getDefaultNetworkConfiguration().getApiUrl();
+		docURI = docURI.substring(0, docURI.length() - 3) +"Documentation/";
 		URI input = null;
 		try {
-			input = new URI("http://dastardlybanana.com/Docs/RequirementsManager/");
+			input = new URI(docURI);
 		} catch (URISyntaxException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
