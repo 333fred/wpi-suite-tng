@@ -12,8 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import java.util.Arrays;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
@@ -50,8 +48,8 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 
 		if (response.getStatusCode() == 200) {
-			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
-			FilterDatabase.getInstance().addFilters(Arrays.asList(filters));
+			Filter filter = Filter.fromJSON(response.getBody());
+			FilterDatabase.getInstance().addFilter(filter);
 		}
 		
 		notifier.responseSuccess();

@@ -14,11 +14,11 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
-import javax.swing.SwingUtilities;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -29,8 +29,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 
 public class AddFilterRequestObserver implements RequestObserver {
-	
-	
+
 	private ISaveNotifier notifier;
 
 	/**
@@ -48,24 +47,20 @@ public class AddFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		ResponseModel response = iReq.getResponse();		
-
+		ResponseModel response = iReq.getResponse();
 
 		if (response.getStatusCode() == 200) {
-			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
+			Filter[] filters = Filter.fromJSONArray(response.getBody());
 			FilterDatabase.getInstance().addFilters(Arrays.asList(filters));
-	
-	
-			// TODO: Determine what to do with the response
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					notifier.responseSuccess();
-				}
-			});
-			
 		}
 
+		// TODO: Determine what to do with the response
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				notifier.responseSuccess();
+			}
+		});
 
 	}
 

@@ -32,7 +32,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	
-	private IRetrieveAllFiltersNotifier notifier;
+	private final IRetrieveAllFiltersNotifier notifier;
 	
 	/**
 	 * Creates a Request Observer with the given controller to call back to
@@ -53,12 +53,13 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 		
 		if (response.getStatusCode() == 200) {
-			final Filter[] filters = Filter.fromJSONArray(iReq.getBody());
+			final Filter[] filters = Filter.fromJSONArray(response.getBody());			
+			
 
 			// notify the controller
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
-				public void run() {
+				public void run() {	
 					FilterDatabase.getInstance().setFilters(
 							Arrays.asList(filters));
 					notifier.receivedData(filters);
