@@ -524,7 +524,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	private void getIterationsFromServer() {
 		retreiveAllIterationsController.getAll();
-		;
 	}
 
 	/**

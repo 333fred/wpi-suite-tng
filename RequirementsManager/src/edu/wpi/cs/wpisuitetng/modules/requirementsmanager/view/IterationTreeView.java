@@ -429,7 +429,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 	private void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
-		;
 	}
 
 	/**

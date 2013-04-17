@@ -58,8 +58,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.Require
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
 
 @SuppressWarnings("serial")
-public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
-		IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+public class SubRequirementTreeView extends JPanel implements
+		IDatabaseListener, IReceivedAllRequirementNotifier,
+		IRetreivedAllIterationsNotifier {
 
 	protected static final int ROOT_LEVEL = 0;
 	protected static final int ITERATION_LEVEL = 1;
@@ -191,7 +192,8 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 					// set flag, perhaps rename later
 					backLogSingleSel = true;
 					// user has selected deleted
-					DeletedPopupMenu delMenu = new DeletedPopupMenu(tabController);
+					DeletedPopupMenu delMenu = new DeletedPopupMenu(
+							tabController);
 					delMenu.show(this, x, y);
 				}
 			}
@@ -358,19 +360,19 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 		Date acurrentDate = new Date();
 
 		for (Requirement anReq : requirements) {
-			if(anReq.getpUID().size()==0){
+			if (anReq.getpUID().size() == 0) {
 				requirementNode = new DefaultMutableTreeNode(anReq.getName());
 
-			for (Integer aReq : anReq.getSubRequirements()) {
-				try {
-					requirementNode.add(new DefaultMutableTreeNode(
-							RequirementDatabase.getInstance()
-									.getRequirement(aReq).getName()));
-				} catch (RequirementNotFoundException e) {
-					
+				for (Integer aReq : anReq.getSubRequirements()) {
+					try {
+						requirementNode.add(new DefaultMutableTreeNode(
+								RequirementDatabase.getInstance()
+										.getRequirement(aReq).getName()));
+					} catch (RequirementNotFoundException e) {
+
+					}
 				}
-			}
-			this.top.add(requirementNode);
+				this.top.add(requirementNode);
 			}
 		}
 
@@ -382,30 +384,29 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 		this.tree.setCellRenderer(renderer);
 		restoreExpanstionState(this.tree, 0, eState);
 	}
-	
+
 	public void cycleSubReq(Integer anReq) {
-		
+
 		Requirement actualReq = new Requirement();
-		
+
 		try {
-			actualReq = RequirementDatabase.getInstance()
-					.getRequirement(anReq);
+			actualReq = RequirementDatabase.getInstance().getRequirement(anReq);
 		} catch (RequirementNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		DefaultMutableTreeNode requirementNode = new DefaultMutableTreeNode(
 				actualReq.getName());
-		
+
 		for (Integer aReq : actualReq.getSubRequirements()) {
 			try {
 				requirementNode.add(new DefaultMutableTreeNode(
-						RequirementDatabase.getInstance()
-								.getRequirement(aReq).getName()));
-				//cycleSubReq(aReq);
+						RequirementDatabase.getInstance().getRequirement(aReq)
+								.getName()));
+				// cycleSubReq(aReq);
 			} catch (RequirementNotFoundException e) {
-				
+
 			}
 		}
 	}
@@ -457,7 +458,6 @@ public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
 
 	private void getIterationsFromServer() {
 		retrieveAllIterationsController.getAll();
-		;
 	}
 
 	/**

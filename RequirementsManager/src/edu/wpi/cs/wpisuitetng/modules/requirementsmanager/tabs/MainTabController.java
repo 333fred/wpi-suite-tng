@@ -308,7 +308,7 @@ public class MainTabController {
 			if (i == currentIndex) continue;
 			if (openTabs[i] instanceof Tab) {
 				closeTab(openTabs[i]);
-			};
+			}
 		}
 	}
 	
