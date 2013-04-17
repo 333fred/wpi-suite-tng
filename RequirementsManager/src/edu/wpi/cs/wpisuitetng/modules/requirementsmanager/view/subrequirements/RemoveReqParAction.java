@@ -20,8 +20,8 @@ import javax.swing.AbstractAction;
  * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.subrequirements.AssignParent()}
  */
 @SuppressWarnings("serial")
-public class AddReqAction extends AbstractAction {
-	public final AddReqController controller;
+public class RemoveReqParAction extends AbstractAction {
+	public final RemoveReqParController controller;
 
 	/**
 	 * Construct the action
@@ -29,8 +29,8 @@ public class AddReqAction extends AbstractAction {
 	 * @param controller
 	 *            the controller to trigger
 	 */
-	public AddReqAction(AddReqController controller) {
-		super("Add");
+	public RemoveReqParAction(RemoveReqParController controller) {
+		super("Remove Parent");
 		this.controller = controller;
 	}
 
