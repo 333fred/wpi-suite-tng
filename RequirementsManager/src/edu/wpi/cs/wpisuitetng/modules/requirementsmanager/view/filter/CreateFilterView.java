@@ -401,7 +401,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				labEqualToBetween.setVisible(true);
 				txtEqualTo.setVisible(false);
 			} else if (operation == FilterOperation.EQUAL || operation == FilterOperation.NOT_EQUAL) {
-				System.out.println("Equals?");
 				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
 				labEqualToBetween.setVisible(false);
@@ -512,7 +511,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getFromString((String) cboxOperation.getSelectedItem()));
 
 			if (mode == Mode.CREATE) {
-				System.out.println("CreateFilterView: Adding Filter");
 				addFilterController.addFilter(filter);
 
 			} else {
@@ -583,7 +581,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			if (operation == FilterOperation.OCCURS_BETWEEN) {
 				Date startDate = calEqualTo.getDate();
 				Date endDate = calEqualToBetween.getDate();
-				// System.out.println("Occures Between");
 				if (calEqualTo.getDate() == null) {
 					errorString = "Start Date cannot be blank";
 					error = true;
@@ -596,7 +593,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				}
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
-				System.out.println("WAAAT");
 				equalToStr = txtEqualTo.getText().trim();
 				if (equalToStr.isEmpty()) {
 					errorString = "Value cannot be blank";

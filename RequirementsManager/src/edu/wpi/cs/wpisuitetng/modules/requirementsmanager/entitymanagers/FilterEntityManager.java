@@ -65,10 +65,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		newFilter.setCreator(s.getUser());
 
 		// Validate the filter, and error if failure
-		List<ValidationIssue> issues;
-		
-		System.out.println("~~Filter: " + newFilter + " Session: " + s);
-		
+		List<ValidationIssue> issues;	
 		
 		issues = validator.validate(s, newFilter);
 
@@ -94,7 +91,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	@Override
 	public Filter[] getEntity(Session s, String id) throws NotFoundException,
 			WPISuiteException {
-		System.out.println("\n\n\n\n\n\n YA'LL\n\n\n\n\n\n\n\n");
 
 		// Attempt to get the filter id
 		final int filterId = Integer.parseInt(id);
@@ -150,7 +146,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	public Filter[] getAll(Session s) throws WPISuiteException {
 		//List<Model> models = db.retrieveAll(new Filter(), s.getProject());
 		//List<Filter> filters = new ArrayList<Filter>();
-		System.out.println("\n\n\n\n\n\nHEY YA'LL\n\n\n\n\n\n\n\n");
 		Filter[] filters = db.retrieveAll(new Filter(), s.getProject()).toArray(
 				new Filter[0]);
 		return filters;

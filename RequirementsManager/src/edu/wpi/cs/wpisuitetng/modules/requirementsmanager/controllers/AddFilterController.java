@@ -40,7 +40,6 @@ public class AddFilterController {
 	 *            the filter to be stored
 	 */
 	public void addFilter(Filter toAdd) {
-		System.out.println("Filter: Sending toAdd to server");
 		final RequestObserver requestObserver = new AddFilterRequestObserver(
 				notifier);
 		Request request;

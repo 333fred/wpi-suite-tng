@@ -64,6 +64,7 @@ public class Filter extends AbstractModel {
 		this.field = field;
 		this.operation = operation;
 		this.value = value;
+		active = true;
 	}
 
 	/**
