@@ -43,7 +43,7 @@ public class FilterTableModel implements TableModel {
 		tableData = new ArrayList<String[]>();
 		listeners = new ArrayList<TableModelListener>();
 		
-		String[] columnNames = {"Field", "Operation", "Value"};
+		String[] columnNames = {"Id", "Field", "Operation", "Value"};
 		this.columnNames = columnNames;
 		
 		updateFilters(filters);
@@ -60,9 +60,11 @@ public class FilterTableModel implements TableModel {
 		for (Filter filter: filters) {
 			//create the new column data
 			String[] columnData = new String[getColumnCount()];
-			columnData[0] = filter.getField().toString();
-			columnData[1] = filter.getOperation().toString();
-			columnData[2] = filter.getValue().toString();
+			int ci = 0;
+			columnData[ci++] = filter.getId() + "";
+			columnData[ci++] = filter.getField().toString();
+			columnData[ci++] = filter.getOperation().toString();
+			columnData[ci++] = filter.getValue().toString();
 			//add the row
 			tableData.add(columnData);
 		}
@@ -111,8 +113,17 @@ public class FilterTableModel implements TableModel {
 	/** Returns the filter at the given row index 
 	 */
 	
-	public Filter getFilterAt(int index) {
-		return filters.get(index);
+	public Filter getFilterAt(int rowIndex) {
+		return getFilterById(Integer.parseInt((String)getValueAt(rowIndex, 0)));
+	}
+	
+	private Filter getFilterById(int id) {
+		for (Filter filter : filters) {
+			if (filter.getId() == id) {
+				return filter;
+			}
+		}
+		return null;
 	}
 
 }
