@@ -26,7 +26,9 @@ import javax.swing.KeyStroke;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrievePermissionsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
@@ -61,6 +63,9 @@ public class JanewayModule implements IJanewayModule {
 
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
+	
+	/** The controller for retrieving the current users permissions set */
+	private RetrievePermissionsController permController;
 
 	/**
 	 * Creates a new instance of JanewayModule, initializing the tabs to be
@@ -79,6 +84,8 @@ public class JanewayModule implements IJanewayModule {
 		// Start the database threads
 		RequirementDatabase.getInstance().start();
 		IterationDatabase.getInstance().start();
+		permController = new RetrievePermissionsController();
+		permController.get();
 
 		// initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();

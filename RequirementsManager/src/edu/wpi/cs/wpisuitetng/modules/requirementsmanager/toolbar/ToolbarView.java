@@ -22,6 +22,9 @@ import javax.swing.SpringLayout;
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrievePermissionsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -54,6 +57,7 @@ public class ToolbarView extends DefaultToolbarView {
 	 *            The MainTabController this view should open tabs with
 	 */
 	public ToolbarView(MainTabController tabController) {
+		
 		// Note: User Manual button is being deprecated in favor of it's own
 		// toolbar
 		// Construct the content panel
@@ -89,6 +93,12 @@ public class ToolbarView extends DefaultToolbarView {
 		createPermissions = new JButton("Show Permissions");
 		createPermissions.setAction(new CreatePermissionPanelAction(
 				tabController));
+		if(PermissionModel.getInstance().getPermission() == UserPermissionLevels.ADMIN) {
+			createPermissions.setEnabled(true);
+			PermissionsDatabase.getInstance().start();
+		}
+		else
+			createPermissions.setEnabled(false);
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
