@@ -26,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOper
  */
 
 public class Filter extends AbstractModel {
-	
+
 	private int id;
 	private User creator;
 	private FilterField field;
@@ -50,21 +50,40 @@ public class Filter extends AbstractModel {
 	public Filter(User u) {
 		this(u, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
-	
-	/** Creates a filter with the given fields
-	 *
-	 * @param user The user who created the filter
-	 * @param field The field that this filter operates on
-	 * @param operation The operation for the filter
-	 * @param value The value the filter looks for
+
+	/**
+	 * Creates a filter with the given fields
+	 * 
+	 * @param user
+	 *            The user who created the filter
+	 * @param field
+	 *            The field that this filter operates on
+	 * @param operation
+	 *            The operation for the filter
+	 * @param value
+	 *            The value the filter looks for
 	 */
-	public Filter(User user, FilterField field, FilterOperation operation, Object value) {
+	public Filter(User user, FilterField field, FilterOperation operation,
+			Object value) {
 		this.id = -1;
 		this.creator = user;
 		this.field = field;
 		this.operation = operation;
 		this.value = value;
 		active = true;
+	}
+
+	/**
+	 * Checks a requirement to see if it should be filtered
+	 * 
+	 * @param toFilter
+	 *            the requirement to check
+	 * @return true if the requirement should be filtered out, false otherwise
+	 */
+	public boolean shouldFilter(Requirement toFilter) {
+		// TODO: Need to do all the logic to determine what type of filter we
+		// are, and return true or false
+		return false;
 	}
 
 	/**
@@ -214,12 +233,11 @@ public class Filter extends AbstractModel {
 	}
 
 	/**
-	 * @param active the active to set
+	 * @param active
+	 *            the active to set
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
-	
 
 }
