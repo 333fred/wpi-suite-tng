@@ -565,17 +565,4 @@ public class IterationView extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
-
-	@Override
-	public MainTabController getTabController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Requirement getDraggedRequirement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

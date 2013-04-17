@@ -641,16 +641,4 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		System.out.println("Filter Failed!!");
 		exception.printStackTrace();
 	}
-
-	@Override
-	public MainTabController getTabController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Requirement getDraggedRequirement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

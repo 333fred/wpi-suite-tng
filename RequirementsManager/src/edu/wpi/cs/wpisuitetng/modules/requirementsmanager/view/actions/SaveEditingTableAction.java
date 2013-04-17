@@ -83,16 +83,4 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 				+ exception.getMessage());
 		this.tableView.refresh();
 	}
-
-	@Override
-	public MainTabController getTabController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Requirement getDraggedRequirement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

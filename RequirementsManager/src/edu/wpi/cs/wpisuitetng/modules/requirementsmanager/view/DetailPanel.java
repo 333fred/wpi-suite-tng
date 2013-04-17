@@ -1199,15 +1199,4 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
-
-	@Override
-	public MainTabController getTabController() {
-		return null;
-	}
-
-	@Override
-	public Requirement getDraggedRequirement() {
-		return null;
-	}
-
 }
