@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  * 
  */
 
-public abstract class Tab extends JPanel {
+public class Tab extends JPanel {
 
 	/**
 	 * Function called when the tab gains focus
