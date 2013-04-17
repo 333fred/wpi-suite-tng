@@ -19,48 +19,49 @@ import javax.swing.JTabbedPane;
 
 public class UnclosableTabComponent extends JLabel {
 
-    /** The tabcontroller */
-    private MainTabController tabController;
-    /** The tabbed pane */
-    private JTabbedPane tabbedPane;
+	/** The tabcontroller */
+	private MainTabController tabController;
+	/** The tabbed pane */
+	private JTabbedPane tabbedPane;
 
-    public UnclosableTabComponent(MainTabController tabController, String text) {
-	super(text);
-	this.tabController = tabController;
-	tabbedPane = tabController.getTabView();
+	public UnclosableTabComponent(MainTabController tabController, String text) {
+		super(text);
+		this.tabController = tabController;
+		tabbedPane = tabController.getTabView();
 
-	addMouseListener(new MouseListener(this));
-    }
-
-    private class MouseListener extends MouseAdapter {
-
-	private UnclosableTabComponent component;
-
-	public MouseListener(UnclosableTabComponent component) {
-	    this.component = component;
+		addMouseListener(new MouseListener(this));
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	    if (e.getButton() == MouseEvent.BUTTON1) {
-		final int index = tabbedPane.indexOfTabComponent(component);
-		if (index > -1) {
-		    tabbedPane.setSelectedIndex(index);
-		}
-	    } else if (e.getButton() == MouseEvent.BUTTON3) {
+	private class MouseListener extends MouseAdapter {
 
-		final int index = tabbedPane.indexOfTabComponent(component);
-		if (index > -1) {
-		    int tabsOpen = tabController.getNumberOfOpenTabs();
-		    if (tabsOpen > 1) {
-			TabPopupMenu popupMenu = new TabPopupMenu(index,
-				tabController, TabPopupMenu.CloseMode.CLOSE_ONLY_OTHERS);
-			popupMenu.show(component, 5, 5); // off set of 5,5
-		    }
+		private UnclosableTabComponent component;
+
+		private MouseListener(UnclosableTabComponent component) {
+			this.component = component;
 		}
-	    }
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				final int index = tabbedPane.indexOfTabComponent(component);
+				if (index > -1) {
+					tabbedPane.setSelectedIndex(index);
+				}
+			} else if (e.getButton() == MouseEvent.BUTTON3) {
+
+				final int index = tabbedPane.indexOfTabComponent(component);
+				if (index > -1) {
+					int tabsOpen = tabController.getNumberOfOpenTabs();
+					if (tabsOpen > 1) {
+						TabPopupMenu popupMenu = new TabPopupMenu(index,
+								tabController,
+								TabPopupMenu.CloseMode.CLOSE_ONLY_OTHERS);
+						popupMenu.show(component, 5, 5); // off set of 5,5
+					}
+				}
+			}
+		}
+
 	}
-
-    }
 
 }

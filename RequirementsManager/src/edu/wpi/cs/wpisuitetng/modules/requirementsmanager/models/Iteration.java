@@ -201,11 +201,7 @@ public class Iteration extends AbstractModel {
 	public Boolean identify(Object o) {
 		if (o instanceof Iteration) {
 			Iteration i = (Iteration) o;
-			if (i.getId() == this.id) {
-				return true;
-			} else {
-				return false;
-			}
+			return i.getId() == this.id;
 		} else {
 			return false;
 		}

@@ -339,16 +339,4 @@ class ReqTreeRansferHandler extends TransferHandler implements ISaveNotifier {
 	public void fail(Exception exception) {
 		// TODO Auto-generated method stub
 	}
-
-	@Override
-	public MainTabController getTabController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Requirement getDraggedRequirement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

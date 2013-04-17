@@ -44,8 +44,5 @@ public interface ISaveNotifier {
 	 */
 
 	public void fail(Exception exception);
-
-	public MainTabController getTabController();
-
-	public Requirement getDraggedRequirement();
+	
 }

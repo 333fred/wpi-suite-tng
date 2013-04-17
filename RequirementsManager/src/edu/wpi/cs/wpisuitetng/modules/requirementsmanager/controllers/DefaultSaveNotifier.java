@@ -40,16 +40,4 @@ public class DefaultSaveNotifier implements ISaveNotifier {
 
 	}
 
-	@Override
-	public MainTabController getTabController() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Requirement getDraggedRequirement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

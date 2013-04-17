@@ -16,6 +16,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -96,22 +97,30 @@ public class TaskTest {
 				t1.parseNewLines("\n\ntestt\nest\n"));
 	}
 
-	@Test
+	@Test	
 	public void testGetContent() {
 		t1.setCompleted(true);
 		assertEquals(
-				"<html><i>Desc1<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<html><body style=\"width: 300px\"><i>Desc1<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
 				t1.getContent());
 		assertEquals(
-				"<html><i>Desc2<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"red\">In Progress</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<html><body style=\"width: 300px\"><i>Desc2<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"red\">In Progress</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
 				t2.getContent());
 		t1.setDescription("Desc1\nDesc");
 		assertEquals(
-				"<html><i>Desc1<br>Desc<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<html><body style=\"width: 300px\"><i>Desc1<br>Desc<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
 				t1.getContent());
 		t1.setAssignedUser(u1.getName());
 		assertEquals(
-				"<html><i>Desc1<br>Desc<br><FONT COLOR=\"blue\">Assignee: name</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<html><body style=\"width: 300px\"><i>Desc1<br>Desc<br><FONT COLOR=\"blue\">Assignee: name</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
 				t1.getContent());
 	}
+	
+	/*@Test
+	public void testTest(){
+		assertEquals(
+				"<html><i>Desc1<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				t1.getContent());	
+		
+	}*/
 }

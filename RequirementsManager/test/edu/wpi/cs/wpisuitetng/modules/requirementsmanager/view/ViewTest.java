@@ -33,7 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
-//TODO: Learn how to better test GUI panels
+//TODO: fix all of this.... none of it actually runs....
 public class ViewTest {
 
 	// Create a dummy test so that JUnit doesn't break
@@ -50,7 +50,7 @@ public class ViewTest {
 	
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp(){
 
 		Network.initNetwork(new MockNetwork());
 		Network.getInstance().setDefaultNetworkConfiguration(

@@ -188,7 +188,7 @@ public class IterationDatabase extends Thread {
 	 */
 	@Override
 	public void run() {
-		while (!interrupted()) {
+		while (!Thread.interrupted()) {
 			// Trigger an update
 			controller.getAll();
 			try {

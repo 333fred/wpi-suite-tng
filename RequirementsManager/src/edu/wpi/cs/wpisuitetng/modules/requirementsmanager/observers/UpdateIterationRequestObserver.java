@@ -57,26 +57,8 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 
 		notifier.responseSuccess();
 		
-		StatView.getInstance().updateChart();
-		
-		
-		if (notifier.getTabController() != null) {
-		
-			Requirement requirement = notifier.getDraggedRequirement();
-			
-			for (int i = 0; i < notifier.getTabController().getTabView().getTabCount(); i++) {
-				if (notifier.getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
-					if (((((DetailPanel) notifier.getTabController().getTabView().getComponentAt(i))).getModel().getrUID()) == (requirement.getrUID())) {
-						try {
-							(((DetailPanel) notifier.getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
-						} catch (IterationNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-			
-		}
+		StatView.getInstance().updateChart();		
+
 		
 		// detailPanel.logView.refresh(req);
 

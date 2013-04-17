@@ -139,10 +139,6 @@ public class ATest implements Event {
 
 
 	public boolean isPassed() {
-		if (this.getStatus() == ATestStatus.PASSED) {
-			return true;
-		} else {
-			return false;
-		}
+		return this.getStatus() == ATestStatus.PASSED;
 	}
 }
