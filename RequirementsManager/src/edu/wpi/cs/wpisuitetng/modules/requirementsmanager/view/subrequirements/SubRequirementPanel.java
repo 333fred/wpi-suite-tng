@@ -142,7 +142,8 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, parentReq, 14, SpringLayout.EAST, parentLabel);
 		
 		layout.putConstraint(SpringLayout.NORTH, scrollPaneContainedReqs, 5, SpringLayout.SOUTH, parentLabel);
-		layout.putConstraint(SpringLayout.WEST, scrollPaneContainedReqs, 5, SpringLayout.EAST, childLabel);		
+		layout.putConstraint(SpringLayout.WEST, scrollPaneContainedReqs, 5, SpringLayout.EAST, childLabel);	
+		layout.putConstraint(SpringLayout.EAST, scrollPaneContainedReqs, 5, SpringLayout.EAST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeReq, 5, SpringLayout.SOUTH, scrollPaneContainedReqs);
 		
@@ -156,6 +157,7 @@ public class SubRequirementPanel extends JPanel {
 		
 		layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, radioParent);
 		layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, childLabel);
+		layout.putConstraint(SpringLayout.EAST, scrollPane, 5, SpringLayout.EAST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, scrollPane);		
 		
