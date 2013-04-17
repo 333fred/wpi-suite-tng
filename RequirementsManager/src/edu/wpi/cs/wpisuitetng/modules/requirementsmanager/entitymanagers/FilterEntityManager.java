@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -22,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
@@ -120,16 +122,19 @@ public class FilterEntityManager implements EntityManager<Filter> {
 					.toArray(new Filter[0]);
 		} catch (WPISuiteException e) {
 			e.printStackTrace();
+			System.out.println("GetFilter retreive exception");
 		}
 
 		// Check for filter existence
 		if (filter.length < 1 || filter[0] == null) {
+			System.out.println("GetFilter existance exception");
 			throw new NotFoundException();
 		}
 
 		// Make sure the filter belongs to this user
 		Filter f = filter[0];
-		if (f.getCreator() != s.getUser()) {
+		if (!f.getCreator().equals(s.getUser())) {
+			System.out.println("GetFilter user check exception");
 			throw new NotFoundException();
 		}
 
@@ -141,21 +146,18 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	@Override
 	public Filter[] getAll(Session s) throws WPISuiteException {
-		//List<Model> models = db.retrieveAll(new Filter(), s.getProject());
-		//List<Filter> filters = new ArrayList<Filter>();
-		Filter[] filters = db.retrieveAll(new Filter(), s.getProject()).toArray(
-				new Filter[0]);
-		return filters;
+		List<Model> models = db.retrieveAll(new Filter(), s.getProject());
+		List<Filter> filters = new ArrayList<Filter>();
 
-		/*// Make sure that we only return filters that belong to current user
+		// Make sure that we only return filters that belong to current user
 		for (Model m : models) {
 			Filter f = (Filter) m;
-			if (f.getCreator() == s.getUser()) {
+			if (f.getCreator().equals(s.getUser())) {
 				filters.add(f);
 			}
 		}
 
-		return filters.toArray(new Filter[0]);*/
+		return filters.toArray(new Filter[0]);
 	}
 
 	/**
@@ -168,7 +170,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		Filter updatedFilter = Filter.fromJSON(content);
 		Filter oldFilter;
 
-		System.out.println("Update Filter: " + updatedFilter.getCreator());
+		System.out.println("Update Filter: " + updatedFilter);
 		
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
@@ -185,14 +187,18 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		try {
 			oldFilter = getFilter(updatedFilter.getId(), s);
 		} catch (NotFoundException e) {
+			System.out.println("update, getfilter ");
 			throw new WPISuiteException();
 		}
 
 		// Coppy values from the old filter to the new filter
 		updateMapper.map(updatedFilter, oldFilter);
+		
+		System.out.println("Update Filter2: " + updatedFilter);
+		System.out.println("Old Filter2: " + oldFilter);
 
 		// Save the filter and return
-		if (!db.save(updatedFilter, s.getProject())) {
+		if (!db.save(oldFilter, s.getProject())) {
 			throw new WPISuiteException();
 		}
 

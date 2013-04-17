@@ -21,9 +21,11 @@ public class FilterTable extends  JTable {
 		
 		if (!tableModel.getFilterAt(row).isActive()) {
 			c.setBackground(Color.LIGHT_GRAY);
+			//System.out.println("NOT ACTIVE:" + tableModel.getFilterAt(row));
 		}
 		else {
 			c.setBackground(Color.WHITE);
+			//System.out.println("ACTIVE!!! :" + tableModel.getFilterAt(row));
 		}
 
 		return c;
