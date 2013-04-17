@@ -135,31 +135,36 @@ public class SubRequirementPanel extends JPanel {
 		scrollPaneContainedReqs.setBorder(BorderFactory.createEtchedBorder());
 		
 		layout.putConstraint(SpringLayout.NORTH, parentLabel, 5, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.WEST, parentLabel, 16, SpringLayout.WEST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, childLabel, 5, SpringLayout.SOUTH, parentLabel);
+		layout.putConstraint(SpringLayout.WEST, childLabel, 16, SpringLayout.WEST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, parentReq, 5, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.WEST, parentReq, 14, SpringLayout.EAST, parentLabel);
 		
 		layout.putConstraint(SpringLayout.NORTH, scrollPaneContainedReqs, 5, SpringLayout.SOUTH, parentLabel);
 		layout.putConstraint(SpringLayout.WEST, scrollPaneContainedReqs, 5, SpringLayout.EAST, childLabel);	
-		layout.putConstraint(SpringLayout.EAST, scrollPaneContainedReqs, 5, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.EAST, scrollPaneContainedReqs, -64, SpringLayout.EAST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeReq, 5, SpringLayout.SOUTH, scrollPaneContainedReqs);
+		layout.putConstraint(SpringLayout.WEST, removeReq, 16, SpringLayout.WEST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeParent, 5, SpringLayout.SOUTH, scrollPaneContainedReqs);
 		layout.putConstraint(SpringLayout.WEST, removeParent, 5, SpringLayout.EAST, removeReq);
 		
 		layout.putConstraint(SpringLayout.NORTH, radioParent, 5, SpringLayout.SOUTH, removeReq);
+		layout.putConstraint(SpringLayout.WEST, radioParent, 16, SpringLayout.WEST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, radioChild, 5, SpringLayout.SOUTH, removeReq);
 		layout.putConstraint(SpringLayout.WEST, radioChild, 5, SpringLayout.EAST, radioParent);
 		
 		layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, radioParent);
 		layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, childLabel);
-		layout.putConstraint(SpringLayout.EAST, scrollPane, 5, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.EAST, scrollPane, -64, SpringLayout.EAST, this);
 		
-		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, scrollPane);		
+		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, scrollPane);
+		layout.putConstraint(SpringLayout.WEST, addReq, 16, SpringLayout.WEST, this);
 		
 		//layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, this);
 		//layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, parentLabel);
