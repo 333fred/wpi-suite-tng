@@ -107,11 +107,13 @@ public class MainTabView extends JTabbedPane {
 	 * @param component
 	 *            The new component
 	 */
-
+/*
+ *  Not needed anymore, should have removed previously
 	@Override
 	public void setComponentAt(int index, Component component) {
 		super.setComponentAt(index, component);
 	}
+	*/
 	
 	
 	/** Override setSelctedIndex to stop tabs from being selected, if the current tab doesn't allow

@@ -70,6 +70,9 @@ public class Note implements Event {
 
 	@Override
 	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
 		Note note;
 		if (o instanceof Note) {
 			note = (Note) o;
@@ -158,7 +161,7 @@ public class Note implements Event {
 
 	@Override
 	public String getContent() {
-		return "<I>" + parseNewLines(getNote()) +"</I>";
+		return "<I>" + parseNewLines(getNote()) + "</I>";
 	}
 
 	/**

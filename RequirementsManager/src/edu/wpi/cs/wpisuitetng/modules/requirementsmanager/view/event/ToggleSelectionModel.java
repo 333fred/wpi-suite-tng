@@ -25,7 +25,7 @@ public class ToggleSelectionModel extends DefaultListSelectionModel {
 
 	@Override
 	public void setValueIsAdjusting(boolean isAdjusting) {
-		if (isAdjusting == false) {
+		if (!isAdjusting) {
 			gestureStarted = false;
 		}
 	}

@@ -43,7 +43,7 @@ public class IterationValidator {
 			issues.add(new ValidationIssue("Iteration must have a name"));
 		} else {
 			i.setName(i.getName().trim());
-			if (i.getName() == "" || i.getName().isEmpty()) {
+			if (i.getName().isEmpty()) {
 				issues.add(new ValidationIssue(
 						"Iteration name cannot be blank!"));
 			}

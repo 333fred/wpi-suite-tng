@@ -306,9 +306,7 @@ public class MainTabController {
 		Tab[] openTabs = getOpenTabs();
 		for (int i=0;i<openTabs.length;i++) {
 			if (i == currentIndex) continue;
-			if (openTabs[i] instanceof Tab) {
-				closeTab(openTabs[i]);
-			}
+			closeTab(openTabs[i]);
 		}
 	}
 	
@@ -317,10 +315,9 @@ public class MainTabController {
 	public void closeAllTabs() {
 		Tab[] openTabs = getOpenTabs();
 		for (int i=0;i<openTabs.length;i++) {
-			if (openTabs[i] instanceof Tab) {
-				closeTab(openTabs[i]);
-				System.out.println("Ya?");
-			}
+			closeTab(openTabs[i]);
+			System.out.println("Ya?");
+
 		}
 	}
 	

@@ -45,7 +45,7 @@ public class AssigneeRequirementStatistics extends AbstractRequirementStatistics
 				}		
 				// otherwise, simply increment the value
 				else{
-					Integer oldValue = (Integer)data.get(user);
+					Integer oldValue = data.get(user);
 					data.put(user, new Integer(oldValue.intValue() + 1));
 				}		
 			}
