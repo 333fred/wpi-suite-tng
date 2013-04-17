@@ -74,6 +74,19 @@ public class Filter extends AbstractModel {
 	}
 
 	/**
+	 * Checks a requirement to see if it should be filtered
+	 * 
+	 * @param toFilter
+	 *            the requirement to check
+	 * @return true if the requirement should be filtered out, false otherwise
+	 */
+	public boolean shouldFilter(Requirement toFilter) {
+		// TODO: Need to do all the logic to determine what type of filter we
+		// are, and return true or false
+		return false;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

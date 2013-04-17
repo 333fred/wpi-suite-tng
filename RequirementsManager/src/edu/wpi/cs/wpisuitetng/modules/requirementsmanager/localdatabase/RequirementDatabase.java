@@ -20,6 +20,7 @@ import java.util.Map;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
@@ -125,6 +126,26 @@ public class RequirementDatabase extends Thread {
 		List<Requirement> list = new ArrayList<Requirement>();
 		list = Arrays.asList(requirements.values().toArray(new Requirement[0]));
 		return list;
+	}
+
+	/**
+	 * Returns only the requirements that need to be filtered out of the view
+	 * 
+	 * @return the list of filtered requirements
+	 */
+	public synchronized List<Requirement> getFilteredRequirements() {
+		List<Requirement> filteredReqs = getAllRequirements();
+		List<Filter> filters = FilterDatabase.getInstance().getActiveFilters();
+		// Loop through the filters and requirements and remove anything that
+		// should be filtered
+		for (Filter f : filters) {
+			for (Requirement r : filteredReqs) {
+				if (f.shouldFilter(r)) {
+					filteredReqs.remove(r);
+				}
+			}
+		}
+		return filteredReqs;
 	}
 
 	/**
