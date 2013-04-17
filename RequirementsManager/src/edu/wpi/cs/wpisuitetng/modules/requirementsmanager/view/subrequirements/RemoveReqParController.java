@@ -12,11 +12,13 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
-public class AddReqController {
+public class RemoveReqParController {
 	private final SubRequirementPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
@@ -31,7 +33,7 @@ public class AddReqController {
 	 * @param parentView
 	 *            the DetailPanel
 	 */
-	public AddReqController(SubRequirementPanel subRequirementPanel, Requirement model,
+	public RemoveReqParController(SubRequirementPanel subRequirementPanel, Requirement model,
 			DetailPanel parentView) {
 		this.view = subRequirementPanel;
 		this.model = model;
@@ -42,7 +44,27 @@ public class AddReqController {
 	 * Save a note to the server
 	 */
 	public void saveParent() {
-		
+		String selectedIndex = (String) view.getListSubReq().getSelectedValue();
+
+		if (selectedIndex != null) {
+			Requirement anReq = RequirementDatabase.getInstance()
+					.getRequirement(selectedIndex);
+
+			Integer modelID = new Integer(model.getrUID());
+			Integer anReqID = new Integer(anReq.getrUID());
+
+			model.removePUID(anReqID);
+			anReq.removeSubRequirement(modelID);
+			SaveRequirementController controller = new SaveRequirementController(
+					this.parentView);
+			controller.SaveRequirement(model, false);
+			controller = new SaveRequirementController(
+					new SaveOtherRequirement());
+			controller.SaveRequirement(anReq, false);
+
+			view.refreshSubReqPanel();
+			view.refreshReqPanel();
+		}
 	}
 
 	}

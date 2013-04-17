@@ -161,7 +161,7 @@ public class Note implements Event {
 
 	@Override
 	public String getContent() {
-		return "<I>" + parseNewLines(getNote()) + "</I>";
+		return "<i>" + parseNewLines(getNote()) + "</i>";
 	}
 
 	/**

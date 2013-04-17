@@ -101,18 +101,18 @@ public class TaskTest {
 	public void testGetContent() {
 		t1.setCompleted(true);
 		assertEquals(
-				"<html><body style=\"width: 300px\"><i>Desc1<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<i>Desc1<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i>",
 				t1.getContent());
 		assertEquals(
-				"<html><body style=\"width: 300px\"><i>Desc2<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"red\">In Progress</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<i>Desc2<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"red\">In Progress</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i>",
 				t2.getContent());
 		t1.setDescription("Desc1\nDesc");
 		assertEquals(
-				"<html><body style=\"width: 300px\"><i>Desc1<br>Desc<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<i>Desc1<br>Desc<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i>",
 				t1.getContent());
 		t1.setAssignedUser(u1.getName());
 		assertEquals(
-				"<html><body style=\"width: 300px\"><i>Desc1<br>Desc<br><FONT COLOR=\"blue\">Assignee: name</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
+				"<i>Desc1<br>Desc<br><FONT COLOR=\"blue\">Assignee: name</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i>",
 				t1.getContent());
 	}
 	

@@ -48,6 +48,7 @@ public class SubRequirementPanel extends JPanel {
 	/** The list of requirements that the view is displaying */
 	
 	private Requirement requirement;
+	private DetailPanel panel;
 	
 	private DefaultListModel validChildList; //List of requirements available to add as children
 	private JList reqNames;	
@@ -76,6 +77,7 @@ public class SubRequirementPanel extends JPanel {
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {		
 		
 		this.requirement = requirement;
+		this.panel = panel;
 		
 		validChildList = new DefaultListModel();
 		//initializeList();
@@ -187,23 +189,35 @@ public class SubRequirementPanel extends JPanel {
 		//Do other things here
 		removeReq.setAction(new RemoveReqAction(new RemoveReqController(this, requirement, panel)));
 		addReq.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));
+		removeParent.setAction(new RemoveReqParAction(new RemoveReqParController(this, requirement, panel)));
 		refreshParentPanel();
 		
 		radioChild.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				refreshReqPanel();
+				setActionToChild();
 			}
 		});
 		
 		radioParent.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				refreshReqPanelForParents();
+				setActionToParent();
 			}
 		});
 		
 		refreshReqPanel();
 	}
 	
+	protected void setActionToParent() {
+		addReq.setAction(new AssignParentAction(new AssignParentController(this, requirement, panel)));
+		
+	}
+
+	protected void setActionToChild() {
+		addReq.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));		
+	}
+
 	private void initializeList() {
 		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();
 		
@@ -271,17 +285,18 @@ public class SubRequirementPanel extends JPanel {
 		List<Requirement> requirements = RequirementDatabase.getInstance()
 				.getAllRequirements();
 		for(Requirement req : requirements){
-			if (!containsCurrentRequirement(req)){
+			if (!containsCurrentRequirement(req, requirement)){
+				if(!containsCurrentRequirement(requirement,req))
 				validParentList.addElement(req.getName());
 			}
 		}
 	}
 	
-	public boolean containsCurrentRequirement(Requirement req) {
+	public boolean containsCurrentRequirement(Requirement req, Requirement current) {
 		System.out.println(req.getName());
 		Requirement child = null;
 		Boolean check = false;
-		if (req.equals(requirement)) {
+		if (req.equals(current)) {
 			return true;
 		} else {
 			for (Integer i : req.getSubRequirements()) {				
@@ -291,7 +306,7 @@ public class SubRequirementPanel extends JPanel {
 				} catch (RequirementNotFoundException e) {
 					e.printStackTrace();
 				}
-				check = containsCurrentRequirement(child);
+				check = containsCurrentRequirement(child, current);
 				if(check) return check;
 			}
 			return false;

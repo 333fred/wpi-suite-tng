@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
@@ -42,7 +44,21 @@ public class AssignParentController {
 	 * Save a note to the server
 	 */
 	public void saveParent() {
+		String selectedIndex = (String) view.getList().getSelectedValue();
+		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
+
+		Integer modelID = new Integer(model.getrUID());
+		Integer anReqID = new Integer (anReq.getrUID());
 		
+		model.addPUID(anReqID);
+		anReq.addSubRequirement(modelID);
+		SaveRequirementController controller = new SaveRequirementController(this.parentView);
+		controller.SaveRequirement(model, false);
+		controller = new SaveRequirementController(new SaveOtherRequirement());
+		controller.SaveRequirement(anReq, false);
+		
+		view.refreshSubReqPanel();
+		view.refreshReqPanel();
 	}
 
 	}
