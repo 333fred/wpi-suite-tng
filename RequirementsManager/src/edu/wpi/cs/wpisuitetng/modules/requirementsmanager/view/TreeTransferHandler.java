@@ -283,10 +283,10 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 		return getClass().getName();
 	}
 
-	public class NodesTransferable implements Transferable {
+	private class NodesTransferable implements Transferable {
 		DefaultMutableTreeNode[] nodes;
 
-		public NodesTransferable(DefaultMutableTreeNode[] nodes) {
+		private NodesTransferable(DefaultMutableTreeNode[] nodes) {
 			this.nodes = nodes;
 		}
 
