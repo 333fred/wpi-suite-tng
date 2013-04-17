@@ -50,7 +50,7 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 
 		if (response.getStatusCode() == 200) {
-			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
+			Filter[] filters = Filter.fromJSONArray(response.getBody());
 			FilterDatabase.getInstance().addFilters(Arrays.asList(filters));
 		}
 		

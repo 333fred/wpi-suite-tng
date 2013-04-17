@@ -38,12 +38,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterC
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-
 
 /**
  * View for creating and editing filters
@@ -319,26 +316,27 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		cboxOperation.removeAllItems();
 		if (field == FilterField.NAME || field == FilterField.RELEASE_NUMBER) {
-			cboxOperation.addItem("=");
-			cboxOperation.addItem("!=");
+			cboxOperation.addItem("Equal");
+			cboxOperation.addItem("Not equal");
 			cboxOperation.addItem("Starts with");
 			cboxOperation.addItem("Contains");
 		} else if (field == FilterField.ESTIMATE || field == FilterField.EFFORT) {
 
 			cboxOperation.addItem("<");
 			cboxOperation.addItem("<=");
-			cboxOperation.addItem("=");
-			cboxOperation.addItem("!=");
+			cboxOperation.addItem("Equal");
+			cboxOperation.addItem("Not equal");
 			cboxOperation.addItem(">=");
 			cboxOperation.addItem(">");
 
 		} else if (field == FilterField.STATUS || field == FilterField.PRIORITY
 				|| field == FilterField.TYPE) {
 
-			cboxOperation.addItem("=");
-			cboxOperation.addItem("!=");
+			cboxOperation.addItem("Equal");
+			cboxOperation.addItem("Not equal");
 		} else if (field == FilterField.ITERATION) {
-			cboxOperation.addItem("Equals");
+			cboxOperation.addItem("Equal");
+			cboxOperation.addItem("Not equal");
 			cboxOperation.addItem("Occurs before");
 			cboxOperation.addItem("Occurs after");
 			cboxOperation.addItem("Occurs between");
@@ -396,13 +394,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			populateEqualComboBox();
 		} else if (field == FilterField.ITERATION) {
 			cboxEqualTo.setVisible(false);
-
-			if (cboxOperation.getSelectedItem().equals("Occurs between")) {
+			FilterOperation operation = FilterOperation.getFromString( (String) cboxOperation.getSelectedItem());
+			if (operation == FilterOperation.OCCURS_BETWEEN) {
 				calEqualTo.setVisible(true);
 				calEqualToBetween.setVisible(true);
 				labEqualToBetween.setVisible(true);
 				txtEqualTo.setVisible(false);
-			} else if (cboxOperation.getSelectedItem().equals("Equals")) {
+			} else if (operation == FilterOperation.EQUAL || operation == FilterOperation.NOT_EQUAL) {
+				System.out.println("Equals?");
 				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
 				labEqualToBetween.setVisible(false);
@@ -473,22 +472,21 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					error = true;
 
 				}
-			} else if (operation == FilterOperation.EQUAL) {
+			} else if (operation == FilterOperation.EQUAL
+					|| operation == FilterOperation.NOT_EQUAL) {
 				equalToStr = txtEqualTo.getText().trim();
 				if (equalToStr.isEmpty()) {
 					errorString = "Value cannot be blank";
 					error = true;
-				}
-				else {
+				} else {
 					filter.setValue(equalToStr);
 				}
 			} else {
 				if (calEqualTo.getDate() == null) {
 					error = true;
 					errorString = "Date cannot be blank";
-				}
-				else {
-					filter.setValue(calEqualTo.getDate());	
+				} else {
+					filter.setValue(calEqualTo.getDate());
 				}
 			}
 			break;
@@ -514,14 +512,19 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getFromString((String) cboxOperation.getSelectedItem()));
 
 			if (mode == Mode.CREATE) {
+				System.out.println("CreateFilterView: Adding Filter");
 				addFilterController.addFilter(filter);
+
 			} else {
 				saveFilterController.saveFilter(filter);
 			}
-			onCancelPressed();
+			txtEqualTo.setBackground(Color.WHITE);
+			calEqualTo.setBackground(Color.WHITE);
 		} else {
 			// there was an error set text bot
 			labSaveError.setText(errorString);
+			txtEqualTo.setBackground(new Color(243, 243, 209));
+			calEqualTo.setBackground(new Color(243, 243, 209));
 		}
 	}
 
@@ -540,10 +543,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	/** Updates the status of the save button */
 
 	public void updateSave() {
+		if (cboxOperation.getItemCount() == 0) {
+			return;
+		}
 		boolean error = false;
 		String errorString = "";
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
+		FilterOperation operation = FilterOperation
+				.getFromString((String) cboxOperation.getSelectedItem());
 
 		String equalToStr;
 
@@ -572,10 +580,10 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			break;
 
 		case ITERATION:
-			if (filter.getOperation() == FilterOperation.OCCURS_BETWEEN) {
+			if (operation == FilterOperation.OCCURS_BETWEEN) {
 				Date startDate = calEqualTo.getDate();
 				Date endDate = calEqualToBetween.getDate();
-
+				// System.out.println("Occures Between");
 				if (calEqualTo.getDate() == null) {
 					errorString = "Start Date cannot be blank";
 					error = true;
@@ -586,6 +594,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					errorString = "Start date must before end date";
 					error = true;
 				}
+			} else if (operation == FilterOperation.EQUAL
+					|| operation == FilterOperation.NOT_EQUAL) {
+				System.out.println("WAAAT");
+				equalToStr = txtEqualTo.getText().trim();
+				if (equalToStr.isEmpty()) {
+					errorString = "Value cannot be blank";
+					error = true;
+				}			
+
 			} else {
 				if (calEqualTo.getDate() == null) {
 					error = true;
@@ -602,10 +619,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		if (!error) {
 			labSaveError.setText("");
 			butSave.setEnabled(true);
+			txtEqualTo.setBackground(Color.WHITE);
+			calEqualTo.setBackground(Color.WHITE);
 		} else {
 			// there was an error set text bot
 			labSaveError.setText(errorString);
-			butSave.setEnabled(false);
+			butSave.setEnabled(false);			
+			txtEqualTo.setBackground(new Color(243, 243, 209));
+			calEqualTo.setBackground(new Color(243, 243, 209));
 		}
 	}
 
