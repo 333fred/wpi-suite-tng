@@ -64,8 +64,12 @@ public class FilterTableView extends JPanel implements
 
 	/** Controller to save a filter */
 	private SaveFilterController saveFilterController;
+	
+	/** The FilterView this view is contained in */
+	private FilterView filterView;
 
-	public FilterTableView() {
+	public FilterTableView(FilterView filterView) {
+		this.filterView = filterView;
 		ArrayList<Filter> filters = new ArrayList<Filter>();
 
 		filterController = new RetrieveAllFiltersController(this);
@@ -197,6 +201,8 @@ public class FilterTableView extends JPanel implements
 				filter.setActive(active);
 				saveFilterController.saveFilter(filter);
 			}
+			//notify the listeners that we made changes
+			filterView.notifyListeners();
 
 		} else if (source.equals(butDelete)) {
 			// we will need to work on delete.

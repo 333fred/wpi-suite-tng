@@ -542,7 +542,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				saveFilterController.saveFilter(filter);
 			}
 			txtEqualTo.setBackground(Color.WHITE);
-			calEqualTo.setBackground(Color.WHITE);
+			calEqualTo.setBackground(Color.WHITE);			
+		
+			
 		} else {
 			// there was an error set text bot
 			labSaveError.setText(errorString);
@@ -677,6 +679,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	public void responseSuccess() {
+		filterView.notifyListeners();
 		onCancelPressed();
 		filterView.refreshTableView();
 	}
