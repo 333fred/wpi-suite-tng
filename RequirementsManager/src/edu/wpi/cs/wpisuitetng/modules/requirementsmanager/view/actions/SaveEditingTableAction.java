@@ -39,7 +39,12 @@ public class SaveEditingTableAction extends AbstractAction implements
 		RequirementDatabase rdb = RequirementDatabase.getInstance();
 
 		boolean[] changedRows = tableView.getTable().getEditedRows();
-		tableView.getTable().getCellEditor().stopCellEditing();
+		
+		// if the user is still currently editing a cell, and they try to save
+		if (tableView.getTable().getCellEditor() != null) {
+			// stop editing first before saving
+			tableView.getTable().getCellEditor().stopCellEditing();
+		}
 		
 
 		for (int i = 0; i < changedRows.length; i++) {
