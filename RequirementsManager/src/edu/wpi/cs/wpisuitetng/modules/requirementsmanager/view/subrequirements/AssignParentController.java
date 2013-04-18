@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick, Matt
  * 		
  *******************************************************************************/
 
@@ -75,9 +75,9 @@ public class AssignParentController {
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 		
-		view.refreshSubReqPanel();
-		view.refreshReqPanelForParents();
-		view.refreshParentPanel();
+		view.refreshTopPanel();
+		view.refreshValidParents();
+		view.refreshParentLabel();
 	}
 
 	}

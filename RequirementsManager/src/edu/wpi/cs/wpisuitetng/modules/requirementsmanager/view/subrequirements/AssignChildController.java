@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick, Matt
  * 		
  *******************************************************************************/
 
@@ -46,16 +46,8 @@ public class AssignChildController {
 	public void saveChild() {
 
 		String selectedIndex = (String) view.getList().getSelectedValue();
-		System.out.println(selectedIndex);
 		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
-		System.out.println(model.getSubRequirements().size());
-		System.out.println(anReq.getpUID().size());
-		System.out.println(anReq.getName());
-		//view.checkCycle(anReq, model);
-//		System.out.println("\n" + anReq.getName());
-		
-//		System.out.println("\n"+view.checkDirectedCycle());
-//		view.initializeTree();
+
 		Integer modelID = new Integer(model.getrUID());
 		Integer anReqID = new Integer (anReq.getrUID());
 		
@@ -66,11 +58,8 @@ public class AssignChildController {
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 		
-		view.refreshSubReqPanel();
-		view.refreshReqPanel();
-		
-		System.out.println(model.getSubRequirements().size());
-		System.out.println(anReq.getpUID().size());
+		view.refreshTopPanel();
+		view.refreshValidChildren();
 
 	}
 
