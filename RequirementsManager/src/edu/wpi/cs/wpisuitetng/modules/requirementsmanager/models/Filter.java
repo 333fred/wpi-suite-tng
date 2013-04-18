@@ -124,13 +124,13 @@ public class Filter extends AbstractModel {
 	private boolean checkString(String value) {
 		switch (getOperation()) {
 		case EQUAL:
-			return stringValue.equals(getValue());
+			return value.equals(getValue());
 		case NOT_EQUAL:
-			return !stringValue.equals(getValue());
+			return !value.equals(getValue());
 		case CONTAINS:
-			return stringValue.contains((String) getValue());
+			return value.contains((String) getValue());
 		case STARTS_WITH:
-			return stringValue.startsWith((String) getValue());
+			return value.startsWith((String) getValue());
 		default:
 			// we shold not get to default, what type of magic is this
 			System.out.println("MAGIC!!!!!!!");
