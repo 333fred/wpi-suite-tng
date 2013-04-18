@@ -13,7 +13,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,21 +30,17 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EtchedBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 @SuppressWarnings("serial")
 public class PermissionsPanel extends Tab {
-	
-	private List<PermissionModel> allUserPermissions = PermissionsDatabase.getInstance().getAllPermissions();
 
 	/** A list to display */
 	private JList userList;
 
 	/** A list of users to display */
-	private String[] users = new String[allUserPermissions.size()];
+	private String[] users = new String[50];
 
 	/** A button to select admnistrative permission level */
 	private JRadioButton adminButton;
@@ -66,10 +61,9 @@ public class PermissionsPanel extends Tab {
 		JPanel radioPanel = new JPanel();
 
 		radioPanel.setLayout(radioLayout);
-		int i = 0;
-		for(PermissionModel perm: allUserPermissions) {
-			users[i] = perm.getInstance().getUser().getName();
-			i++;
+
+		for (int i = 0; i < 50; i++) {
+			users[i] = "demo" + (i + 1);
 		}
 
 		// radioPanel.setLayout(radioLayout);

@@ -29,7 +29,7 @@ public class RetrieveAllPermissionsController {
 	public void getAll() {
 		final RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
 		Request request = Network.getInstance().makeRequest(
-				"requirementsmanager/permissionmodel", HttpMethod.GET);
+				"requirementsmanager/permissionsmodel", HttpMethod.GET);
 		request.addObserver(observer);
 		request.send();
 	}

@@ -32,7 +32,7 @@ public class RetrieveFilterByIDController {
 				this);
 		Request request;
 		request = Network.getInstance().makeRequest(
-				"requirementsmanager/filter", HttpMethod.GET);
+				"requirementsmamager/filter", HttpMethod.GET);
 		request.addObserver(requestObserver);
 		request.send();
 	}

@@ -68,14 +68,17 @@ public class Janeway {
 		// Start the GUI
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				final JanewayFrame gui = JanewayFrame.initialize(modules);
 				final LoginFrame loginGui = new LoginFrame("Janeway");
 				
 				if (args.length > 0 && args[0].equals("-nologin")) {
 					loginGui.setVisible(false);
+					gui.setVisible(true);
 				}
 				else {
 					loginGui.setVisible(true);
-				  	loginGui.getConnectButton().addActionListener(new LoginController(loginGui));
+					gui.setVisible(false);
+				  	loginGui.getConnectButton().addActionListener(new LoginController(gui, loginGui));
 					//Comment out above and use this if you don't want to display the login screen (for testing)
 					/*
 				  	loginGui.setVisible(false); //true
@@ -84,10 +87,6 @@ public class Janeway {
 				}
 			}
 		});
-	}
-	
-	public static List<IJanewayModule> getMods() {
-		return modules;
 	}
 	
 	/**

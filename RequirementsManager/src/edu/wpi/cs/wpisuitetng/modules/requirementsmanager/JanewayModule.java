@@ -74,37 +74,16 @@ public class JanewayModule implements IJanewayModule {
 	 */
 
 	public JanewayModule() {
-//
-//		// temp fix to init network
-//		// TODO: Replace this
-//		final NetworkConfiguration config = new NetworkConfiguration(
-//				"http://localhost:8080");
-//		Network.getInstance().setDefaultNetworkConfiguration(config);
 
+		// temp fix to init network
+		// TODO: Replace this
+		final NetworkConfiguration config = new NetworkConfiguration(
+				"http://localhost:8080");
+		Network.getInstance().setDefaultNetworkConfiguration(config);
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
-	 */
-	@Override
-	public String getName() {
-		return "Requirements Manager";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
-	 */
-	@Override
-	public List<JanewayTabModel> getTabs() {
 		// Start the database threads
 		RequirementDatabase.getInstance().start();
 		IterationDatabase.getInstance().start();
-		
 		permController = new RetrievePermissionsController();
 		permController.get();
 
@@ -150,6 +129,25 @@ public class JanewayModule implements IJanewayModule {
 		tabs.add(tab1);
 
 		registerKeyboardShortcuts(tab1);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
+	 */
+	@Override
+	public String getName() {
+		return "Requirements Manager";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
+	 */
+	@Override
+	public List<JanewayTabModel> getTabs() {
 		return tabs;
 	}
 
