@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
@@ -32,8 +33,8 @@ public class RemoveReqParController {
 	 * @param parentView
 	 *            the DetailPanel
 	 */
-	public RemoveReqParController(SubRequirementPanel subRequirementPanel, Requirement model,
-			DetailPanel parentView) {
+	public RemoveReqParController(SubRequirementPanel subRequirementPanel,
+			Requirement model, DetailPanel parentView) {
 		this.view = subRequirementPanel;
 		this.model = model;
 		this.parentView = parentView;
@@ -43,11 +44,16 @@ public class RemoveReqParController {
 	 * Save a note to the server
 	 */
 	public void saveParent() {
-		String selectedIndex = (String) view.getListSubReq().getSelectedValue();
 
-		if (selectedIndex != null) {
-			Requirement anReq = RequirementDatabase.getInstance()
-					.getRequirement(selectedIndex);
+		Requirement anReq = null;
+		if (model.getpUID().size() != 0) {
+			try {
+				anReq = RequirementDatabase.getInstance().getRequirement(
+						model.getpUID().get(0));
+			} catch (RequirementNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			Integer modelID = new Integer(model.getrUID());
 			Integer anReqID = new Integer(anReq.getrUID());
@@ -61,9 +67,14 @@ public class RemoveReqParController {
 					new SaveOtherRequirement());
 			controller.SaveRequirement(anReq, false);
 
+			view.refreshParentPanel();
 			view.refreshSubReqPanel();
-			view.refreshReqPanel();
+			if(view.parentSelected)
+				view.refreshReqPanelForParents();
+			else
+				view.refreshReqPanel();
+
 		}
 	}
 
-	}
+}

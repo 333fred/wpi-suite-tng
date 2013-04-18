@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
@@ -45,19 +46,37 @@ public class AssignParentController {
 	public void saveParent() {
 		String selectedIndex = (String) view.getList().getSelectedValue();
 		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
+		Requirement anParReq = null;
 
 		Integer modelID = new Integer(model.getrUID());
-		Integer anReqID = new Integer (anReq.getrUID());
+		Integer anReqID = new Integer(anReq.getrUID());
+
+		SaveRequirementController controller = null;
+		
+		if(model.getpUID().size()>0){
+			try {
+				anParReq = RequirementDatabase.getInstance().getRequirement(model.getpUID().get(0));
+			} catch (RequirementNotFoundException e) {
+				e.printStackTrace();
+			}
+			anParReq.getSubRequirements().remove(modelID);		
+			model.getpUID().remove(0);
+			controller = new SaveRequirementController(new SaveOtherRequirement());
+			controller.SaveRequirement(anParReq, false);
+		}
 		
 		model.addPUID(anReqID);
 		anReq.addSubRequirement(modelID);
-		SaveRequirementController controller = new SaveRequirementController(this.parentView);
+			
+			
+		controller = new SaveRequirementController(this.parentView);
 		controller.SaveRequirement(model, false);
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 		
 		view.refreshSubReqPanel();
-		view.refreshReqPanel();
+		view.refreshReqPanelForParents();
+		view.refreshParentPanel();
 	}
 
 	}

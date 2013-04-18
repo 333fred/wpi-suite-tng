@@ -32,8 +32,8 @@ public class RemoveReqController {
 	 * @param ChildView
 	 *            the DetailPanel
 	 */
-	public RemoveReqController(SubRequirementPanel subRequirementPanel, Requirement model,
-			DetailPanel ChildView) {
+	public RemoveReqController(SubRequirementPanel subRequirementPanel,
+			Requirement model, DetailPanel ChildView) {
 		this.view = subRequirementPanel;
 		this.model = model;
 		this.ChildView = ChildView;
@@ -43,23 +43,29 @@ public class RemoveReqController {
 	 * Save a note to the server
 	 */
 	public void saveChild() {
-		
+
 		String selectedIndex = (String) view.getListSubReq().getSelectedValue();
-		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
-		
+		Requirement anReq = RequirementDatabase.getInstance().getRequirement(
+				selectedIndex);
+
 		Integer modelID = new Integer(model.getrUID());
-		Integer anReqID = new Integer (anReq.getrUID());
+		Integer anReqID = new Integer(anReq.getrUID());
 
 		model.removeSubRequirement(anReqID);
 		anReq.removePUID(modelID);
-		SaveRequirementController controller = new SaveRequirementController(this.ChildView);
+		SaveRequirementController controller = new SaveRequirementController(
+				this.ChildView);
 		controller.SaveRequirement(model, false);
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
-		
+
 		view.refreshSubReqPanel();
-		view.refreshReqPanel();
+		view.refreshParentPanel();
+		if(view.parentSelected)
+			view.refreshReqPanelForParents();
+		else
+			view.refreshReqPanel();
 
 	}
 
-	}
+}
