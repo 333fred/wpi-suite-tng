@@ -34,7 +34,7 @@ public class RetrievePermissionsController {
 		}
 		final RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
 		Request request = Network.getInstance().makeRequest(
-				"requirementsmanager/permissionsmodel/user", HttpMethod.GET);
+				"requirementsmanager/permissionmodel/user", HttpMethod.GET);
 		request.addObserver(observer);
 		request.send();
 	}

@@ -42,7 +42,7 @@ public class AddFilterController {
 				this);
 		Request request;
 		request = Network.getInstance().makeRequest(
-				"requirementmanager/filter", HttpMethod.PUT);
+				"requirementsmanager/filter", HttpMethod.PUT);
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();
