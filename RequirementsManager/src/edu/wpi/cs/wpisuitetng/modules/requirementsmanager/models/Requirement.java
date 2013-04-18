@@ -683,5 +683,9 @@ public class Requirement extends AbstractModel {
 	public void addTask(Task task) {
 		this.tasks.add(task);
 	}
+	
+	public String toString() {
+		return this.getName();
+	}
 
 }

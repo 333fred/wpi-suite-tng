@@ -71,6 +71,8 @@ public class SubRequirementPanel extends JPanel {
 	private JButton addReq;
 	private JButton removeReq;
 	private JButton removeParent;
+	
+	public Boolean parentSelected;
 
 	
 	
@@ -78,6 +80,7 @@ public class SubRequirementPanel extends JPanel {
 		
 		this.requirement = requirement;
 		this.panel = panel;
+		parentSelected = false;
 		
 		validChildList = new DefaultListModel();
 		//initializeList();
@@ -194,15 +197,17 @@ public class SubRequirementPanel extends JPanel {
 		
 		radioChild.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				refreshReqPanel();
 				setActionToChild();
+				refreshReqPanel();
+				parentSelected = false;
 			}
 		});
 		
 		radioParent.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				refreshReqPanelForParents();
 				setActionToParent();
+				refreshReqPanelForParents();
+				parentSelected = true;
 			}
 		});
 		
@@ -281,22 +286,11 @@ public class SubRequirementPanel extends JPanel {
 			
 	}
 	
-	public void addValidParents(){
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAllRequirements();
-		for(Requirement req : requirements){
-			if (!containsCurrentRequirement(req, requirement)){
-				if(!containsCurrentRequirement(requirement,req))
-				validParentList.addElement(req.getName());
-			}
-		}
-	}
-	
 	public boolean containsCurrentRequirement(Requirement req, Requirement current) {
 		System.out.println(req.getName());
 		Requirement child = null;
 		Boolean check = false;
-		if (req.equals(current)) {
+		if (req.getrUID()==current.getrUID()) {
 			return true;
 		} else {
 			for (Integer i : req.getSubRequirements()) {				
@@ -311,7 +305,26 @@ public class SubRequirementPanel extends JPanel {
 			}
 			return false;
 		}
-
+	}
+	
+	public void addValidParents(){
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getAllRequirements();
+		Requirement parentReq = null;
+		if(requirement.getpUID().size()>0){
+			try {
+				parentReq = RequirementDatabase.getInstance()
+						.getRequirement(requirement.getpUID().get(0));
+			} catch (RequirementNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		for(Requirement req : requirements){
+				if(!containsCurrentRequirement(requirement,req)){
+					if(!req.equals(parentReq))
+						validParentList.addElement(req.getName());
+				}
+		}
 	}
 
 	public void refreshSubReqPanel() {
