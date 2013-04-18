@@ -83,7 +83,7 @@ public class Filter extends AbstractModel {
 	 * 
 	 * @param toFilter
 	 *            the requirement to check
-	 * @return true if the requirement should be filtered out, false otherwise
+	 * @return true if the requirement should be kept, false if it should be removed
 	 */
 	public boolean shouldFilter(Requirement toFilter) {
 		//if this is not active return false
