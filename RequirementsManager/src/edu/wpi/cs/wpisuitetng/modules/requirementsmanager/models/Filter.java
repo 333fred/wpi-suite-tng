@@ -12,12 +12,16 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import java.util.Date;
+
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 
 /**
  * This is a model for a filter. They are used by the UI to determine what to
@@ -82,9 +86,150 @@ public class Filter extends AbstractModel {
 	 * @return true if the requirement should be filtered out, false otherwise
 	 */
 	public boolean shouldFilter(Requirement toFilter) {
-		// TODO: Need to do all the logic to determine what type of filter we
-		// are, and return true or false
+
+		switch (getField()) {
+		case NAME:
+			return checkString(toFilter.getName());
+		case RELEASE_NUMBER:
+			return checkString(toFilter.getReleaseNum());
+		case TYPE:
+			return checkEnum(toFilter.getType());
+		case PRIORITY:
+			return checkEnum(toFilter.getPriority());
+		case STATUS:
+			return checkEnum(toFilter.getStatus());
+		case ITERATION:
+			return checkIteration(toFilter.getIteration());
+		case ESTIMATE:
+			return checkInteger(toFilter.getEstimate());
+		case EFFORT:
+			return checkInteger(toFilter.getEffort());
+		}
+
 		return false;
+	}
+
+	/**
+	 * Helper function for shouldFilter that checks string values
+	 * 
+	 * @param value
+	 *            String value to check
+	 * @return whether to filter or not
+	 */
+
+	private boolean checkString(String value) {
+		switch (getOperation()) {
+		case EQUAL:
+			return stringValue.equals(getValue());
+		case NOT_EQUAL:
+			return !stringValue.equals(getValue());
+		case CONTAINS:
+			return stringValue.contains((String) getValue());
+		case STARTS_WITH:
+			return stringValue.startsWith((String) getValue());
+		default:
+			// we shold not get to default, what type of magic is this
+			System.out.println("MAGIC!!!!!!!");
+			return false;
+		}
+	}
+
+	/**
+	 * Helper function for shouldFilter that checks enum values
+	 * 
+	 * @param value
+	 *            enum value to check
+	 * @return whether to filter or not
+	 */
+
+	private boolean checkEnum(Enum value) {
+		switch (getOperation()) {
+		case EQUAL:
+			return value.equals(getValue());
+
+		case NOT_EQUAL:
+			return value.equals(getValue());
+		default:
+			System.out.println("MAGIC!!!!!!!");
+			return false;
+		}
+	}
+
+	/**
+	 * Helper function for shouldFilter that checks integer values
+	 * 
+	 * @param value
+	 *            integer value to check
+	 * @return whether to filter or not
+	 */
+
+	private boolean checkInteger(int value) {
+		switch (getOperation()) {
+		case EQUAL:
+			return value == (int) getValue();
+		case NOT_EQUAL:
+			return value != (int) getValue();
+		case LESS_THAN:
+			return value < (int) getValue();
+		case LESS_THAN_EQUAL:
+			return value <= (int) getValue();
+		case GREATER_THAN_EQUAL:
+			return value >= (int) getValue();
+		case GREATER_THAN:
+			return value > (int) getValue();
+		default:
+			System.out.println("MAGIC!!!!!!!");
+			return false;
+
+		}
+	}
+
+	/**
+	 * Helper function for shouldFilter that checks iteration values
+	 * 
+	 * @param value
+	 *            The id of the iteration to check
+	 * @return whether to filter or not
+	 */
+
+	/*
+	 * LESS_THAN("<"), LESS_THAN_EQUAL("<="), EQUAL("Equal"), NOT_EQUAL(
+	 * "Not equal"), GREATER_THAN_EQUAL(">="), GREATER_THAN(">"),
+	 * OCCURS_BETWEEN( "Occurs between"), OCCURS_AFTER("Occurs after"),
+	 * OCCURS_BEFORE( "Occurs before"), CONTAINS("Contains"),
+	 * STARTS_WITH("Starts with"); // lets check which field we need to
+	 */
+
+	private boolean checkIteration(int value) {
+		Iteration reqIteration;
+		Date valueDate;
+		try {
+			reqIteration = IterationDatabase.getInstance().getIteration(value);
+		} catch (IterationNotFoundException e) {
+			// iteration is not value
+			return false;
+		}
+
+		switch (getOperation()) {
+		case EQUAL:
+			return value == (int) getValue();
+		case NOT_EQUAL:
+			return value != (int) getValue();
+		case OCCURS_AFTER:
+			valueDate = (Date) getValue();
+			// less than one if this date is before argument
+			return reqIteration.getStartDate().compareTo(valueDate) >= 0;
+		case OCCURS_BEFORE:
+			valueDate = (Date) getValue();
+			// less than one if this date is before argument
+			return reqIteration.getStartDate().compareTo(valueDate) <= 0;
+		case OCCURS_BETWEEN:
+			return ((FilterIterationBetween) getValue())
+					.isIterationBetween(reqIteration);
+		default:
+			System.out.println("MAGIC!!!!!!!");
+			return false;
+		}
 	}
 
 	/**
@@ -241,7 +386,7 @@ public class Filter extends AbstractModel {
 	public boolean isActive() {
 		return active;
 	}
-	
+
 	/**
 	 * @return the active
 	 */
@@ -265,12 +410,11 @@ public class Filter extends AbstractModel {
 	}
 
 	/**
-	 * @param stringValue the stringValue to set
+	 * @param stringValue
+	 *            the stringValue to set
 	 */
 	public void setStringValue(String stringValue) {
 		this.stringValue = stringValue;
 	}
-	
-	
 
 }
