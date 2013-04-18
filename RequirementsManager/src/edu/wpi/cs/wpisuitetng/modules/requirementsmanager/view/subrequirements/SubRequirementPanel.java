@@ -37,7 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * @author Kyle, Matt, Chris
  *
  */
-public class SubRequirementPanel extends JPanel {
+public class SubRequirementPanel extends JPanel{
 	
 	/** The list of requirements that the view is displaying */
 	
@@ -289,7 +289,6 @@ public class SubRequirementPanel extends JPanel {
 	}
 	
 	public boolean containsCurrentRequirement(Requirement req, Requirement current) {
-		System.out.println(req.getName());
 		Requirement child = null;
 		Boolean check = false;
 		if (req.getrUID()==current.getrUID()) {
@@ -351,12 +350,13 @@ public class SubRequirementPanel extends JPanel {
 		updateAddButtontext();
 	}
 	
-	public void updateAddButtontext(){
-		if (requirement.getpUID().size() > 0){
-			addReq.setText("Change Parent");
-		}
-		else{
-			addReq.setText("Assign parent");
+	public void updateAddButtontext() {
+		if (parentSelected) {
+			if (requirement.getpUID().size() > 0) {
+				addReq.setText("Change Parent");
+			} else {
+				addReq.setText("Assign Parent");
+			}
 		}
 	}
 	

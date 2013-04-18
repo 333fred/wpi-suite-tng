@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
 /**
  * Controller wrapper around the MainTabView Provides convient methods for
@@ -49,6 +50,8 @@ public class MainTabController {
 	
 	/** THe filter view on the left */
 	private FilterView filterView;
+	
+	private SubRequirementTreeView subRequirementTreeView;
 
 	/**
 	 * Creates a new instance of TabController to manage the specified view
@@ -59,6 +62,7 @@ public class MainTabController {
 
 	public MainTabController() {		
 		this.iterationTreeView = new IterationTreeView(this);
+		subRequirementTreeView = new SubRequirementTreeView(this);
 		filterView = new FilterView();
 		tabView = new MainTabView(this);
 
@@ -289,6 +293,10 @@ public class MainTabController {
 	public void refreshFilterView() {
 		filterView.refreshTableView();
 	}
+	
+	public void refreshSubReqView() {
+		subRequirementTreeView.getRequirementsFromServer();
+	}
 
 	public IterationTreeView getIterationTreeView() {
 		return iterationTreeView;
@@ -296,6 +304,10 @@ public class MainTabController {
 
 	public FilterView getFilterView() {
 		return filterView;
+	}
+	
+	public SubRequirementTreeView getSubReqView() {
+		return subRequirementTreeView;
 	}
 	/** Closes other tabs
 	 * 

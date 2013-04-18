@@ -33,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarControl
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
@@ -55,6 +56,8 @@ public class JanewayModule implements IJanewayModule {
 	
 	/** The view that will display filters */
 	private FilterView filterView;
+	
+	private SubRequirementTreeView subRequirementTreeView;
 	
 	/** The tabbed pane on the left for filters and iterations */
 	private JTabbedPane leftTabbedPane;
@@ -97,9 +100,12 @@ public class JanewayModule implements IJanewayModule {
 		
 		filterView = tabController.getFilterView();
 		
+		subRequirementTreeView = tabController.getSubReqView();
+		
 		leftTabbedPane = new JTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
+		leftTabbedPane.addTab("SubReqs", subRequirementTreeView);
 		
 		// initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);
