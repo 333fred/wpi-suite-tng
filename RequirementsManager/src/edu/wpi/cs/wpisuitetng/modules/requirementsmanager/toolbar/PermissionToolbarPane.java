@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
@@ -71,9 +72,14 @@ public class PermissionToolbarPane extends JPanel {
 		} else {
 			createPermissions.setEnabled(false);
 		}
-
+		User usr = PermissionModel.getInstance().getUser();
+		
 		nameLabel.setText("The current user is: ");
-		userName.setText(ConfigManager.getConfig().getUserName());
+		if(!(usr == null)) {
+			if(!(usr.getName() == null)) {
+				userName.setText(usr.getName()); }}
+		else
+			userName.setText("User is NULL");
 		permissionLabel.setText("your current permission is: ");
 		userLevel.setText(PermissionModel.getInstance().getPermission()
 				.toString());
@@ -140,6 +146,14 @@ public class PermissionToolbarPane extends JPanel {
 			createPermissions.setEnabled(false);
 			PermissionsDatabase.getInstance().interrupt();
 		}
+		User usr = PermissionModel.getInstance().getUser();
+		if(!(usr == null)) {
+			if(!(usr.getName() == null)) {
+				userName.setText(usr.getName()); }}
+		else
+			userName.setText("User is NULL");
+		userLevel.setText(PermissionModel.getInstance().getPermission()
+				.toString());
 	}
 
 	public double getLabelWidth() {

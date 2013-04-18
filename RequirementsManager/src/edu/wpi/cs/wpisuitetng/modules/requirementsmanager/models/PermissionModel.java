@@ -81,6 +81,8 @@ public class PermissionModel extends AbstractModel {
 				.fromJson(content, PermissionModel[].class)[0];
 		setUserPermissionLevelStatic(json.getPermission());
 		setUserStatic(json.getUser());
+		System.out.println(json.getUser());
+		System.out.println(getInstance().getUser());
 		return getInstance();
 	}
 
