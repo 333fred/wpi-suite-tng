@@ -21,11 +21,10 @@ body {
 
 #MenuContainer {
 	float:left;
-	top : 60px;
+	top : 69px;
 	width: 220px;
 	height : 100%;
 	background-color: white;
-
 	border-right: 1px solid;
 	border-color: rgba(0, 0, 0, 0.6);
 	padding: 10px;

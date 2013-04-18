@@ -58,5 +58,9 @@ var data = [
     	{label: 'Sort Requirements',
     	folder: false,
     	id: 5
+    	},
+    	{label: 'Closing Tabs',
+    	folder: false,
+    	id: 6
     	}
     ]
