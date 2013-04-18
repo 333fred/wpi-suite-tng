@@ -27,13 +27,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class AddIterationRequestObserver implements RequestObserver {
 
-	private AddIterationController controller;
-
 	private final IterationView iterationView;
 
-	public AddIterationRequestObserver(AddIterationController controller,
-			IterationView iterationView) {
-		this.controller = controller;
+	public AddIterationRequestObserver(IterationView iterationView) {
 		this.iterationView = iterationView;
 	}
 

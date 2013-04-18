@@ -31,9 +31,12 @@ import com.toedter.calendar.JCalendar;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
@@ -50,8 +53,10 @@ public class IterationView extends Tab implements ISaveNotifier {
 	}
 
 	/** Controller for adding an iteration */
-	private AddIterationController addIterationController;
 	private SaveIterationController saveIterationController;
+
+	/** Controller for iteration interaction */
+	private IterationController iterationController;
 
 	/** The maintab controller */
 	private MainTabController mainTabController;
@@ -114,7 +119,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		calendarError = false;
 
 		// initilize the add iteration controller
-		addIterationController = new AddIterationController(this);
+		iterationController = new IterationController();
 		saveIterationController = new SaveIterationController(this);
 		// initlaize JComponents
 
@@ -131,13 +136,13 @@ public class IterationView extends Tab implements ISaveNotifier {
 		labCalendarError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 
 		butSave = new JButton();
-		butSave.setAction(new SaveAction());
+		butSave.setAction(new SaveAction(this));
 
 		if (status == Status.CREATE) {
 			butSave.setText("Create");
 		} else {
 			butSave.setText("Save");
-		}		
+		}
 
 		butCancel = new JButton("Cancel");
 		butCancel.setAction(new CancelAction());
@@ -156,11 +161,11 @@ public class IterationView extends Tab implements ISaveNotifier {
 		// populate fields, if editing
 		if (status == Status.EDIT) {
 			txtName.setText(iteration.getName());
-			calStartDate.setDate((Date)iteration.getStartDate().clone());
-			calEndDate.setDate((Date)iteration.getEndDate().clone());
+			calStartDate.setDate((Date) iteration.getStartDate().clone());
+			calEndDate.setDate((Date) iteration.getEndDate().clone());
 			txtEstimate.setText(iteration.getEstimate() + "");
 		}
-		
+
 		butSave.setEnabled(false);
 
 		txtName.addKeyListener(new IterationViewListener(this, txtName));
@@ -286,6 +291,17 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	private class SaveAction extends AbstractAction {
 
+		private IterationView view;
+
+		/**
+		 * Creates a save action with the given view for a parent
+		 * 
+		 * @param view
+		 */
+		public SaveAction(IterationView view) {
+			this.view = view;
+		}
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// pull the values from the fields
@@ -295,12 +311,16 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 			if (status == Status.CREATE) {
 				Iteration toAdd = new Iteration(name, startDate, endDate);
-				addIterationController.addIteration(toAdd);
+				AddIterationRequestObserver observer = new AddIterationRequestObserver(
+						view);
+				iterationController.create(iteration, observer);
 			} else {
 				iteration.setName(name);
 				iteration.setStartDate(startDate);
 				iteration.setEndDate(endDate);
-				saveIterationController.saveIteration(iteration);
+				UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(
+						view);
+				iterationController.save(iteration, observer);
 			}
 
 		}
@@ -343,7 +363,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	/**
 	 * Determiens the proper error message to be shown in the Name Error field
-	 *
+	 * 
 	 */
 
 	private void setNameError() {
@@ -397,21 +417,21 @@ public class IterationView extends Tab implements ISaveNotifier {
 	public void updateSave(JComponent source) {
 		setNameError();
 		setCalendarError();
-		
-		
+
 		if (nameError || calendarError) {
 			butSave.setEnabled(false);
 		} else if (status == Status.EDIT) {
-			if (txtName.getText().trim().equals(iteration.getName()) && compareDatesWithoutTime(calStartDate.getDate(), iteration.getStartDate()) == 0 
-					&& compareDatesWithoutTime(calEndDate.getDate(), iteration.getEndDate()) == 0) {
+			if (txtName.getText().trim().equals(iteration.getName())
+					&& compareDatesWithoutTime(calStartDate.getDate(),
+							iteration.getStartDate()) == 0
+					&& compareDatesWithoutTime(calEndDate.getDate(),
+							iteration.getEndDate()) == 0) {
 				butSave.setEnabled(false);
-			}
-			else {
+			} else {
 				butSave.setEnabled(true);
 			}
-			
-		}
-		else {
+
+		} else {
 			butSave.setEnabled(true);
 		}
 	}
@@ -455,14 +475,12 @@ public class IterationView extends Tab implements ISaveNotifier {
 		// get all iterations from the local database
 		List<Iteration> iterations = IterationDatabase.getInstance()
 				.getAllIterations();
-		
+
 		Date origStart = iteration.getStartDate();
 		Date origEnd = iteration.getEndDate();
-		
-	
+
 		iteration.setEndDate(calEndDate.getDate());
 		iteration.setStartDate(calStartDate.getDate());
-
 
 		for (Iteration i : iterations) {
 			if (i.getId() == iteration.getId()) {
@@ -473,10 +491,8 @@ public class IterationView extends Tab implements ISaveNotifier {
 			}
 		}
 
-
 		iteration.setStartDate(origStart);
 		iteration.setEndDate(origEnd);
-
 
 		return false;
 	}
@@ -531,32 +547,27 @@ public class IterationView extends Tab implements ISaveNotifier {
 	public int getIterationId() {
 		return iteration.getId();
 	}
-	
+
 	@Override
 	public boolean onTabClosed() {
 		if (butSave.isEnabled()) {
-			Object[] options = {"Save Changes",
-			                    "Discard Changes",
-			                    "Cancel"};
-			int res = JOptionPane.showOptionDialog(this,
-			    "There are unsaved changes, are you sure you want to continue?",
-			    "Confirm Close",
-			    JOptionPane.YES_NO_CANCEL_OPTION,
-			    JOptionPane.QUESTION_MESSAGE,
-			    null,
-			    options,
-			    options[2]);
-			
+			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
+			int res = JOptionPane
+					.showOptionDialog(
+							this,
+							"There are unsaved changes, are you sure you want to continue?",
+							"Confirm Close", JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[2]);
+
 			if (res == 0) {
 				butSave.getAction().actionPerformed(null);
-			} 
-			else if (res == 1) {
+			} else if (res == 1) {
 				return true;
-			}
-			else if (res == 2) {
+			} else if (res == 2) {
 				return false;
 			}
-		
+
 		}
 		return true;
 	}

@@ -34,13 +34,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class AddRequirementRequestObserver implements RequestObserver {
 
-	private AddRequirementController controller;
-
 	DetailPanel detailPanel;
 
-	public AddRequirementRequestObserver(AddRequirementController controller,
-			DetailPanel detailPanel) {
-		this.controller = controller;
+	public AddRequirementRequestObserver(DetailPanel detailPanel) {
 		this.detailPanel = detailPanel;
 	}
 

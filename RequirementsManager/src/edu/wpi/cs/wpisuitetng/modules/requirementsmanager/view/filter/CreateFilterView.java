@@ -37,12 +37,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddFilterRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateFilterRequestObserver;
 
 /**
  * View for creating and editing filters
@@ -97,10 +100,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	private FilterView filterView;
 
 	/** Controller for saving a filter */
-	private SaveFilterController saveFilterController;
-
-	/** Controller for Adding a filter */
-	private AddFilterController addFilterController;
+	private FilterController filterController;
 
 	/** The listener to do intime validation */
 	private CreateFilterViewListener createFilterViewListener;
@@ -142,8 +142,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		setBorder(BorderFactory.createTitledBorder("Create filter"));
 
-		saveFilterController = new SaveFilterController(this);
-		addFilterController = new AddFilterController(this);
+		filterController = new FilterController();
 
 		createFilterViewListener = new CreateFilterViewListener(this);
 
@@ -297,7 +296,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		calEqualToBetween.addPropertyChangeListener(createFilterViewListener);
 
 		iterations = new ArrayList<Iteration>();
-		//update the iterations
+		// update the iterations
 		updateIterations();
 		// populate the fields in the combo boxes
 		populateFieldComboBox();
@@ -387,7 +386,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	private void updateEqualsField() {
-		
+
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
 
@@ -411,15 +410,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cboxEqualTo.setVisible(false);
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
-				
-				//update the iterations
+
+				// update the iterations
 				updateIterations();
-				
-				cboxEqualTo.removeAllItems();	
+
+				cboxEqualTo.removeAllItems();
 				for (Iteration iteration : iterations) {
 					cboxEqualTo.addItem(iteration.getName());
 				}
-				
+
 				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
 				labEqualToBetween.setVisible(false);
@@ -498,7 +497,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					error = true;
 					errorString = "Invalid iteration";
 				}
-				//save the ID of the iteration
+				// save the ID of the iteration
 				filter.setValue(iterations.get(iterationIndex).getId());
 				filterStringValue = iterations.get(iterationIndex).getName();
 			} else {
@@ -530,17 +529,21 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getSelectedItem()));
 			filter.setOperation(FilterOperation
 					.getFromString((String) cboxOperation.getSelectedItem()));
-			
+
 			if (filterStringValue == null) {
 				filterStringValue = filter.getValue().toString();
 			}
 			filter.setStringValue(filterStringValue);
 
 			if (mode == Mode.CREATE) {
-				addFilterController.addFilter(filter);
+				AddFilterRequestObserver observer = new AddFilterRequestObserver(
+						this);
+				filterController.create(filter, observer);
 
 			} else {
-				saveFilterController.saveFilter(filter);
+				UpdateFilterRequestObserver observer = new UpdateFilterRequestObserver(
+						this);
+				filterController.save(filter, observer);
 			}
 			txtEqualTo.setBackground(Color.WHITE);
 			calEqualTo.setBackground(Color.WHITE);
@@ -664,12 +667,12 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			onCancelPressed();
 		}
 	}
-	
+
 	private void updateIterations() {
 		iterations.clear();
 
-		
-		for (Iteration iteration : IterationDatabase.getInstance().getAllIterations()) {
+		for (Iteration iteration : IterationDatabase.getInstance()
+				.getAllIterations()) {
 			System.out.println(iteration);
 			if (iteration.isOpen()) {
 				iterations.add(iteration);
