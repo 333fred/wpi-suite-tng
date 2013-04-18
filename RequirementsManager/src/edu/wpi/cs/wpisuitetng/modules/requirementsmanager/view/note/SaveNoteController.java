@@ -12,9 +12,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
@@ -61,9 +63,10 @@ public class SaveNoteController {
 			// We want to save the note to the server immediately, but only if
 			// the requirement hasn't been just created
 			if (model.getName().length() > 0) {
-				SaveRequirementController controller = new SaveRequirementController(
+				RequirementsController controller = new RequirementsController();
+				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 						this.parentView);
-				controller.SaveRequirement(model, false);
+				controller.save(model, observer);
 			}
 
 		}

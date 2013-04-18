@@ -46,6 +46,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrievePermissionsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
@@ -58,6 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreivedAllIterationsNotifier;
@@ -513,8 +515,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * Updates the permission of the current user
 	 */
 	private void getPermissionFromServer() {
-		RetrievePermissionsController controller = new RetrievePermissionsController();
-		controller.get();
+		PermissionModelController controller = new PermissionModelController();
+		RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
+		
+		controller.get(0, observer);
 	}
 
 	/**

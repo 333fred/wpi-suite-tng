@@ -9,10 +9,11 @@ import javax.swing.AbstractAction;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
@@ -35,8 +36,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		SaveRequirementController saveController = new SaveRequirementController(
-				this);
+		RequirementsController saveController = new RequirementsController();
 		RequirementDatabase rdb = RequirementDatabase.getInstance();
 
 		boolean[] changedRows = tableView.getTable().getEditedRows();
@@ -50,7 +50,8 @@ public class SaveEditingTableAction extends AbstractAction implements
 				try {
 					Requirement reqToChange = rdb.getRequirement(id);
 					reqToChange.setEstimate(newEstimate);
-					saveController.SaveRequirement(reqToChange, false);
+					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this);
+					saveController.save(reqToChange, observer);
 				} catch (RequirementNotFoundException e1) {
 					System.out
 							.println("The requirement was not found: SaveEditingTableAction:51");

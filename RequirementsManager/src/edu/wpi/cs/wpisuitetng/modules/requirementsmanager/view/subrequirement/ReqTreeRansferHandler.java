@@ -27,12 +27,14 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 
@@ -243,50 +245,46 @@ class ReqTreeRansferHandler extends TransferHandler implements ISaveNotifier {
 			index = parent.getChildCount();
 		}
 		// Add data to model.
-		for (int i = 0; i < nodes.length; i++) {	//OVER HERE
+		for (int i = 0; i < nodes.length; i++) { // OVER HERE
 			model.insertNodeInto(nodes[i], parent, index++);
-			SaveRequirementController saveRequirementController = new SaveRequirementController(
+			RequirementsController controller = new RequirementsController();
+			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 					this);
-			/*try {
-				Iteration anIteration = IterationDatabase.getInstance()
-						.getIteration(
-								RequirementDatabase.getInstance()
-										.getRequirement(nodes[i].toString())
-										.getIteration());
-				anIteration.removeRequirement(RequirementDatabase.getInstance()
-						.getRequirement(nodes[i].toString()).getrUID());
-				saveIterationController.saveIteration(anIteration);
-			} catch (IterationNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-			
+			/*
+			 * try { Iteration anIteration = IterationDatabase.getInstance()
+			 * .getIteration( RequirementDatabase.getInstance()
+			 * .getRequirement(nodes[i].toString()) .getIteration());
+			 * anIteration.removeRequirement(RequirementDatabase.getInstance()
+			 * .getRequirement(nodes[i].toString()).getrUID());
+			 * saveIterationController.saveIteration(anIteration); } catch
+			 * (IterationNotFoundException e) { // TODO Auto-generated catch
+			 * block e.printStackTrace(); }
+			 */
+
 			Requirement anReq = RequirementDatabase.getInstance()
 					.getRequirement(nodes[i].getParent().toString());
 			Requirement requirement = RequirementDatabase.getInstance()
 					.getRequirement(nodes[i].toString());
 			anReq.addSubRequirement(requirement.getrUID());
-			saveRequirementController.SaveRequirement(anReq, false);
-			
-			if(requirement.getpUID().size()>0){
-			for(int num : requirement.getpUID()) {
-				try {
-					RequirementDatabase.getInstance()
-					.getRequirement(num).removeSubRequirement(requirement.getrUID());
-					requirement.removePUID(num);
-				} catch (RequirementNotFoundException e) {
-					e.printStackTrace();
+			controller.save(anReq, observer);
+
+			if (requirement.getpUID().size() > 0) {
+				for (int num : requirement.getpUID()) {
+					try {
+						RequirementDatabase.getInstance().getRequirement(num)
+								.removeSubRequirement(requirement.getrUID());
+						requirement.removePUID(num);
+					} catch (RequirementNotFoundException e) {
+						e.printStackTrace();
+					}
 				}
-			}			
 			}
-				
+
 			requirement.addPUID(anReq.getrUID());
-			saveRequirementController.SaveRequirement(requirement, false);
+			controller.save(anReq, observer);
 		}
-		
-		
-		
-		//Refresh the chart
+
+		// Refresh the chart
 		StatView.getInstance().updateChart();
 		return true;
 	}

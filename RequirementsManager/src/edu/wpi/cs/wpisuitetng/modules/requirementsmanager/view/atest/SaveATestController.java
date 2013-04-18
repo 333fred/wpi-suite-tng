@@ -15,9 +15,11 @@ import java.awt.Color;
 
 import javax.swing.JList;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
@@ -59,8 +61,8 @@ public class SaveATestController {
 		if (tests == null) { // Creating a aTest!
 			System.out.println("aTestS WAS NULL, ISSUE");
 		} else if (tests.length < 1) {
-			//aTest must have a name and description of at least one character
-			if (testText.length() > 0 && testName.length() > 0) { 
+			// aTest must have a name and description of at least one character
+			if (testText.length() > 0 && testName.length() > 0) {
 				ATest tempTest = new ATest(testName, testText);
 				tempTest.setId(this.model.getTests().size() + 1);
 				this.model.addTest(tempTest);
@@ -70,18 +72,19 @@ public class SaveATestController {
 				view.getaTestField().requestFocusInWindow();
 				// We want to save the aTest to the server immediately, but only
 				// if the requirement hasn't been just created
-				if (model.getName().length() > 0) { 
+				if (model.getName().length() > 0) {
 					// Save to requirement!
-					SaveRequirementController controller = new SaveRequirementController(
+					RequirementsController controller = new RequirementsController();
+					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this.parentView);
-					controller.SaveRequirement(model, false);
+					controller.save(model, observer);
 				}
 			}
 		} else {
-			
+
 			// Modifying aTests
-			for (Object aTest : tests) { 
-				if (tests.length == 1) { 
+			for (Object aTest : tests) {
+				if (tests.length == 1) {
 					// If only one is selected, edit the fields
 					if (testText.length() > 0 && testName.length() > 0) {
 						((ATest) aTest).setName(view.getaTestName().getText());
@@ -90,20 +93,25 @@ public class SaveATestController {
 					}
 				}
 				// Check the completion status on the aTests
-				((ATest) aTest).setStatus(ATest.ATestStatus.valueOf(view.getaTestStatusBox().getSelectedItem().equals("") ? "BLANK" : view.getaTestStatusBox().getSelectedItem().toString()));
+				((ATest) aTest).setStatus(ATest.ATestStatus
+						.valueOf(view.getaTestStatusBox().getSelectedItem()
+								.equals("") ? "BLANK" : view
+								.getaTestStatusBox().getSelectedItem()
+								.toString()));
 			}
-			
+
 			// Save to requirement!
-			if (model.getName().length() > 0) { 
-				SaveRequirementController controller = new SaveRequirementController(
+			if (model.getName().length() > 0) {
+				RequirementsController controller = new RequirementsController();
+				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 						this.parentView);
-				controller.SaveRequirement(model, false);
+				controller.save(model, observer);
 			}
 			view.getaTestName().setText("");
 			view.getaTestField().setText("");
 			view.getaTestField().requestFocusInWindow();
 		}
-		
+
 		this.tests.clearSelection();
 		view.getaTestStatus()
 				.setText(

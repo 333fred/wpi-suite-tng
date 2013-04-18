@@ -26,9 +26,11 @@ import javax.swing.KeyStroke;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrievePermissionsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
@@ -52,20 +54,20 @@ public class JanewayModule implements IJanewayModule {
 
 	/** the IterationTreeView that will be displayed accross the module */
 	private IterationTreeView iterationTreeView;
-	
+
 	/** The view that will display filters */
 	private FilterView filterView;
-	
+
 	private SubRequirementTreeView subRequirementTreeView;
-	
+
 	/** The tabbed pane on the left for filters and iterations */
 	private JTabbedPane leftTabbedPane;
 
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
-	
+
 	/** The controller for retrieving the current users permissions set */
-	private RetrievePermissionsController permController;
+	private PermissionModelController permController;
 
 	/**
 	 * Creates a new instance of JanewayModule, initializing the tabs to be
@@ -78,33 +80,31 @@ public class JanewayModule implements IJanewayModule {
 		// Start the database threads
 		RequirementDatabase.getInstance().start();
 		IterationDatabase.getInstance().start();
-		permController = new RetrievePermissionsController();
-		permController.get();
+		permController = new PermissionModelController();
+		RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
+		permController.get(0, observer);
 
 		// initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();
 
 		// initialize the tab view public void insertTab(String title, Icon
 		// icon, Component component, String tip, int index) {
-		
-		
 
 		// initialize TabController
 		tabController = new MainTabController();
-	
-		
+
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
-		
+
 		filterView = tabController.getFilterView();
-		
+
 		subRequirementTreeView = tabController.getSubReqView();
-		
+
 		leftTabbedPane = new JTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
 		leftTabbedPane.addTab("SubReqs", subRequirementTreeView);
-		
+
 		// initialize the toolbarView
 		toolbarView = new ToolbarView(tabController);
 

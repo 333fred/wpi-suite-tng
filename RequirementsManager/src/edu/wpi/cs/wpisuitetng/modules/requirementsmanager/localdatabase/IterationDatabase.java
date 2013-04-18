@@ -17,9 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SimpleRetrieveAllIterationsRequestObserver;
 
 /**
  * Maintains a local database of iterations
@@ -28,13 +30,15 @@ public class IterationDatabase extends Thread {
 
 	private Map<Integer, Iteration> iterations;
 	private List<IDatabaseListener> listeners;
-	private SimpleRetrieveAllIterationsController controller;
+	private IterationController controller;
+	private SimpleRetrieveAllIterationsRequestObserver observer;
 	private static IterationDatabase db;
 
 	private IterationDatabase() {
 		this.iterations = new HashMap<Integer, Iteration>();
 		this.listeners = new ArrayList<IDatabaseListener>();
-		this.controller = new SimpleRetrieveAllIterationsController();
+		this.controller = new IterationController();
+		this.observer = new SimpleRetrieveAllIterationsRequestObserver();
 		setDaemon(true);
 	}
 
@@ -190,7 +194,7 @@ public class IterationDatabase extends Thread {
 	public void run() {
 		while (!Thread.interrupted()) {
 			// Trigger an update
-			controller.getAll();
+			controller.getAll(observer);
 			try {
 				// Sleep for five minutes
 				Thread.sleep(300000);
