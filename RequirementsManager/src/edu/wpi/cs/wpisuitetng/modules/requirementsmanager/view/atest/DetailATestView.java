@@ -23,6 +23,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
@@ -96,14 +98,13 @@ public class DetailATestView extends JPanel {
 					new SaveATestAction(new SaveATestController(makeATestPanel,
 							requirement, parentView, tests)));
 
-			// Listen for user clicking on aTests
-			tests.addMouseListener(new MouseAdapter() {
+			//Listen for user clicking on acceptance tests
+			tests.addListSelectionListener(new ListSelectionListener() {
+
 				@Override
-				public void mouseClicked(MouseEvent evt) {
-					updateaTestView(); // Update the aTest view, will change
-										// based on number of aTests clicked
-										// (0,1,multiple)
-				}
+				public void valueChanged(ListSelectionEvent e) {
+					updateaTestView();
+				} 
 			});
 
 			// Timer ensures right fields are enabled/disabled, but is sort of
