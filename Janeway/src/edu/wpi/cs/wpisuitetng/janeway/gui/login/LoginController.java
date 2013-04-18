@@ -25,7 +25,11 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.codec.binary.Base64;
 
+import edu.wpi.cs.wpisuitetng.janeway.Janeway;
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
+import edu.wpi.cs.wpisuitetng.janeway.gui.container.JanewayFrame;
+import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
+import edu.wpi.cs.wpisuitetng.janeway.modules.ModuleLoader;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
@@ -52,9 +56,8 @@ public class LoginController implements ActionListener {
 	 * @param mainGUI the main application GUI to load after login
 	 * @param view the view containing the login form
 	 */
-	public LoginController(JFrame mainGUI, LoginFrame view) {
+	public LoginController(/*JFrame mainGUI,*/ LoginFrame view) {
 		this.view = view;
-		this.mainGUI = mainGUI;
 	}
 
 	@Override
@@ -195,6 +198,7 @@ public class LoginController implements ActionListener {
 			System.out.println(Network.getInstance().getDefaultNetworkConfiguration().getRequestHeaders().get("cookie").get(0));
 			
 			// Show the main GUI
+			mainGUI = JanewayFrame.initialize(Janeway.getMods());
 			mainGUI.setVisible(true);
 			view.dispose();
 		}

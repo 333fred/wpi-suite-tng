@@ -97,8 +97,10 @@ public class ToolbarView extends DefaultToolbarView {
 			createPermissions.setEnabled(true);
 			PermissionsDatabase.getInstance().start();
 		}
-		else
-			createPermissions.setEnabled(false);
+		else {
+			PermissionsDatabase.getInstance().start();
+			createPermissions.setEnabled(true);
+		}
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
