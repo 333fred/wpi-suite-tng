@@ -64,7 +64,7 @@ public class SubRequirementPanel extends JPanel {
 	private ButtonGroup btnGroup;
 	
 	private JButton addReq;
-	private JButton removeReq;
+	private JButton removeChild;
 	private JButton removeParent;
 	
 	public Boolean parentSelected;
@@ -95,9 +95,9 @@ public class SubRequirementPanel extends JPanel {
 		SpringLayout layout = new SpringLayout();
 		
 		addReq = new JButton("Add");
-		removeReq = new JButton("Remove Children");
-		removeParent = new JButton("Remove Parent");
+		removeChild = new JButton("Remove Children");
 		
+		removeParent = new JButton("Remove Parent");
 		parentLabel = new JLabel("Parent:");
 		childLabel = new JLabel("Children:");
 		parentReq = new JLabel();
@@ -147,16 +147,16 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, topScrollPane, 5, SpringLayout.EAST, childLabel);	
 		layout.putConstraint(SpringLayout.EAST, topScrollPane, -64, SpringLayout.EAST, this);
 		
-		layout.putConstraint(SpringLayout.NORTH, removeReq, 5, SpringLayout.SOUTH, topScrollPane);
-		layout.putConstraint(SpringLayout.WEST, removeReq, 16, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, removeChild, 5, SpringLayout.SOUTH, topScrollPane);
+		layout.putConstraint(SpringLayout.WEST, removeChild, 16, SpringLayout.WEST, this);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeParent, 5, SpringLayout.SOUTH, topScrollPane);
-		layout.putConstraint(SpringLayout.WEST, removeParent, 5, SpringLayout.EAST, removeReq);
+		layout.putConstraint(SpringLayout.WEST, removeParent, 5, SpringLayout.EAST, removeChild);
 		
-		layout.putConstraint(SpringLayout.NORTH, radioChild, 5, SpringLayout.SOUTH, removeReq);
+		layout.putConstraint(SpringLayout.NORTH, radioChild, 5, SpringLayout.SOUTH, removeChild);
 		layout.putConstraint(SpringLayout.WEST, radioChild, 16, SpringLayout.WEST, this);
 		
-		layout.putConstraint(SpringLayout.NORTH, radioParent, 5, SpringLayout.SOUTH, removeReq);
+		layout.putConstraint(SpringLayout.NORTH, radioParent, 5, SpringLayout.SOUTH, removeChild);
 		layout.putConstraint(SpringLayout.WEST, radioParent, 5, SpringLayout.EAST, radioChild);
 		
 		layout.putConstraint(SpringLayout.NORTH, bottomScrollPane, 5, SpringLayout.SOUTH, radioParent);
@@ -165,6 +165,7 @@ public class SubRequirementPanel extends JPanel {
 		
 		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH, bottomScrollPane);
 		layout.putConstraint(SpringLayout.WEST, addReq, 16, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.EAST, addReq, 0, SpringLayout.EAST, removeChild);
 		
 		//layout.putConstraint(SpringLayout.NORTH, scrollPane, 5, SpringLayout.SOUTH, this);
 		//layout.putConstraint(SpringLayout.WEST, scrollPane, 5, SpringLayout.EAST, parentLabel);
@@ -176,7 +177,7 @@ public class SubRequirementPanel extends JPanel {
 		this.add(bottomScrollPane);
 		this.add(parentLabel);
 		this.add(removeParent);
-		this.add(removeReq);
+		this.add(removeChild);
 		this.add(childLabel);
 		this.add(parentReq);
 		this.add(radioChild);
@@ -185,7 +186,7 @@ public class SubRequirementPanel extends JPanel {
 		this.add(addReq);
 		
 		//Do other things here
-		removeReq.setAction(new RemoveChildAction(new RemoveChildController(this, requirement, panel)));
+		removeChild.setAction(new RemoveChildAction(new RemoveChildController(this, requirement, panel)));
 		addReq.setAction(new AssignChildAction(new AssignChildController(this, requirement, panel)));
 		removeParent.setAction(new RemoveParentAction(new RemoveParentController(this, requirement, panel)));
 		refreshParentLabel();
@@ -346,7 +347,8 @@ public class SubRequirementPanel extends JPanel {
 				}
 			}
 			parentReq.setText(tempReq.getName());
-		}			
+		}	
+		updateAddButtontext();
 	}
 	
 	public void updateAddButtontext(){

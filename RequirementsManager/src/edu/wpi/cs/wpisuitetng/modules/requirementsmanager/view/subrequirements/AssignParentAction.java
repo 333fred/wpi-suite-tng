@@ -30,7 +30,6 @@ public class AssignParentAction extends AbstractAction {
 	 *            the controller to trigger
 	 */
 	public AssignParentAction(AssignParentController controller) {
-		super("Assign Parent");
 		this.controller = controller;
 	}
 
