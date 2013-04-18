@@ -318,7 +318,7 @@ public class Iteration extends AbstractModel {
 				estimate += RequirementDatabase.getInstance()
 						.getRequirement(rUID).getEstimate();
 			} catch (RequirementNotFoundException e) {
-				// do nothing
+				System.out.println("Requirement id " + rUID + " not found");
 			}
 
 		}

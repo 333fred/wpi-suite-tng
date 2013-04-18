@@ -3,19 +3,14 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 
 /**

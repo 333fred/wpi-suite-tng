@@ -369,7 +369,8 @@ public class SubRequirementTreeView extends JPanel implements
 								RequirementDatabase.getInstance()
 										.getRequirement(aReq).getName()));
 					} catch (RequirementNotFoundException e) {
-
+						System.out
+								.println("Requirement not found: SubRequirementTreeView:372");
 					}
 				}
 				this.top.add(requirementNode);
@@ -406,7 +407,8 @@ public class SubRequirementTreeView extends JPanel implements
 								.getName()));
 				// cycleSubReq(aReq);
 			} catch (RequirementNotFoundException e) {
-
+				System.out
+						.println("Requirement Not Found: SubRequirementTreeView:410");
 			}
 		}
 	}

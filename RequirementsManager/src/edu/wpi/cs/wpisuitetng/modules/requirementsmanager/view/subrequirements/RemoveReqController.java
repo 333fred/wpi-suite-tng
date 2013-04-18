@@ -16,7 +16,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 public class RemoveReqController {
 	private final SubRequirementPanel view;

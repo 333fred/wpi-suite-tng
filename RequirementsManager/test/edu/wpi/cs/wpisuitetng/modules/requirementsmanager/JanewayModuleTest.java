@@ -2,13 +2,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 
 public class JanewayModuleTest {
 

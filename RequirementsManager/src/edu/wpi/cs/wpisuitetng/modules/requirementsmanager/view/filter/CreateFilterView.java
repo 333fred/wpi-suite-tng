@@ -39,8 +39,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotif
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
  * View for creating and editing filters
