@@ -64,7 +64,7 @@ public class FilterTableModel implements TableModel {
 			columnData[ci++] = filter.getId() + "";
 			columnData[ci++] = filter.getField().toString();
 			columnData[ci++] = filter.getOperation().toString();
-			columnData[ci++] = filter.getValue().toString();
+			columnData[ci++] = filter.getStringValue();
 			//add the row
 			tableData.add(columnData);
 		}

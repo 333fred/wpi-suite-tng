@@ -32,6 +32,7 @@ public class Filter extends AbstractModel {
 	private FilterField field;
 	private FilterOperation operation;
 	private Object value;
+	private String stringValue;
 	private boolean active;
 
 	/**
@@ -255,5 +256,21 @@ public class Filter extends AbstractModel {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	/**
+	 * @return the stringValue
+	 */
+	public String getStringValue() {
+		return stringValue;
+	}
+
+	/**
+	 * @param stringValue the stringValue to set
+	 */
+	public void setStringValue(String stringValue) {
+		this.stringValue = stringValue;
+	}
+	
+	
 
 }

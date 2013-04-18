@@ -16,7 +16,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -116,23 +115,14 @@ public class FilterTableView extends JPanel implements
 	 */
 
 	public void refresh() {
-
 		// get the filters from the server
 		filterController.getAll();
-
-		List<Filter> filters = FilterDatabase.getInstance().getFilters();
-
-		System.out.println("Refreshing filter table: " + filters.size());
-
-		tableModel.updateFilters(filters);
+		updateFilters();
 	}
 
 	@Override
 	public void receivedData(Filter[] filters) {
-		// put the filters in the table model
-		tableModel.updateFilters(Arrays.asList(filters));
-		System.out.println("RECEIVED FILTERS: " + filters.length);
-		//tableView.repaint();
+		updateFilters();
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
@@ -161,8 +151,13 @@ public class FilterTableView extends JPanel implements
 
 	@Override
 	public void responseSuccess() {
-		tableModel.updateFilters(FilterDatabase.getInstance().getFilters());
+		updateFilters();
 		tableView.repaint();
+	}
+
+	private void updateFilters() {
+		List<Filter> filters = FilterDatabase.getInstance().getFilters();
+		tableModel.updateFilters(filters);
 	}
 
 	@Override
