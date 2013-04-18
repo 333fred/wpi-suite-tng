@@ -458,8 +458,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			equalToStr = txtEqualTo.getText().trim();
 			// check to make sure this is an int
 			try {
-				Integer.parseInt(equalToStr);
-				filter.setValue(equalToStr);
+				filter.setValue(Integer.parseInt(equalToStr));
 			} catch (NumberFormatException e) {
 				error = true;
 				errorString = "Value must be a number";
