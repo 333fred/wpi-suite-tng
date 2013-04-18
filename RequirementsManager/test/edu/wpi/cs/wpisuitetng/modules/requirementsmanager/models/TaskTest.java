@@ -96,7 +96,7 @@ public class TaskTest {
 				t1.parseNewLines("\n\ntestt\nest\n"));
 	}
 
-	@Test	
+	@Test
 	public void testGetContent() {
 		t1.setCompleted(true);
 		assertEquals(
@@ -115,11 +115,15 @@ public class TaskTest {
 				t1.getContent());
 	}
 	
-	/*@Test
-	public void testTest(){
-		assertEquals(
-				"<html><i>Desc1<br><FONT COLOR=\"gray\">No User Assigned</FONT COLOR><br><FONT COLOR=\"blue\">Currently Completed</FONT COLOR><br><FONT COLOR=\"red\">Estimate: 0</FONT COLOR></i></html>",
-				t1.getContent());	
-		
-	}*/
+	@Test
+	public void testIDGetterandSetter(){
+			t1.setId(123);
+			assertEquals(123, t1.getId());		
+	}
+	
+	@Test
+	public void testEstimateGetterandSetter(){
+			t1.setEstimate(10);
+			assertEquals(10, t1.getEstimate());		
+	}
 }

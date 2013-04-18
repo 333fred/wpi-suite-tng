@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick, Matt
  *    
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
@@ -17,11 +17,11 @@ import javax.swing.AbstractAction;
 
 /**
  * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.subrequirements.AssignParent()}
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.subrequirements.AssignChild()}
  */
 @SuppressWarnings("serial")
-public class RemoveReqParAction extends AbstractAction {
-	public final RemoveReqParController controller;
+public class RemoveChildAction extends AbstractAction {
+	public final RemoveChildController controller;
 
 	/**
 	 * Construct the action
@@ -29,8 +29,8 @@ public class RemoveReqParAction extends AbstractAction {
 	 * @param controller
 	 *            the controller to trigger
 	 */
-	public RemoveReqParAction(RemoveReqParController controller) {
-		super("Remove Parent");
+	public RemoveChildAction(RemoveChildController controller) {
+		super("Remove Children");
 		this.controller = controller;
 	}
 
@@ -40,7 +40,7 @@ public class RemoveReqParAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.saveParent();
+		controller.saveChild();
 	}
 
 }

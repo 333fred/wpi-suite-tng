@@ -325,11 +325,30 @@ public class Iteration extends AbstractModel {
 
 		return estimate;
 
-	}
+	}	
 
 	public static List<Iteration> sortIterations(List<Iteration> iterations) {
 		Collections.sort(iterations, new IterationComparator());
 		return iterations;
 	}
+	
+	/** Returns a boolean indicating whether this iteration is open
+	 *  Checks to make sure that the end date is not before now
+	 * 
+	 * @return True if it is open, false otherwise
+	 */
+	
+	public boolean isOpen() {
+		Date currentDate = new Date();
+		return (currentDate.compareTo(getEndDate()) <= 0 || getId() == -1 || getId() == -2);
+	}
 
+	public String toString() {
+		if ((new Date()).compareTo(this.getEndDate()) > 0 && this.getId() != -1) {
+			return this.getName()+ " (Closed)"; 
+		} else {
+			return this.getName();
+		}
+	}
+	
 }

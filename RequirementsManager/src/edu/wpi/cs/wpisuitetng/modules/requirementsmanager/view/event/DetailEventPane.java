@@ -45,59 +45,6 @@ public class DetailEventPane extends JTabbedPane {
 	 *            TheJPanel that represents the list of logs to represent
 	 */
 
-	public DetailEventPane(JPanel notesListPane, JPanel logListPane,
-			JPanel userListPane) {
-		this.notesListPane = notesListPane;
-		this.logListPane = logListPane;
-		this.userListPane = userListPane;
-
-		// add the given tabs to the pane
-		addTab("Notes", new ImageIcon(), notesListPane,
-				"The notes for this requirement");
-		addTab("Log", new ImageIcon(), logListPane,
-				"The log for this requirement");
-		addTab("Users", new ImageIcon(), userListPane,
-				"The users assigned to this requirement");
-	}
-
-	public DetailEventPane(JPanel notesListPane, JPanel logListPane,
-			JPanel userListPane, JPanel taskListPane) {
-		this.notesListPane = notesListPane;
-		this.logListPane = logListPane;
-		this.userListPane = userListPane;
-		this.taskListPane = taskListPane;
-
-		// add the given tabs to the pane
-		addTab("Notes", new ImageIcon(), notesListPane,
-				"The notes for this requirement");
-		addTab("Log", new ImageIcon(), logListPane,
-				"The log for this requirement");
-		addTab("Users", new ImageIcon(), userListPane,
-				"The users assigned to this requirement");
-		addTab("Tasks", new ImageIcon(), taskListPane,
-				"The tasks assigned to this requirement");
-	}
-
-	public DetailEventPane(JPanel notesListPane, JPanel logListPane,
-			JPanel userListPane, JPanel taskListPane, JPanel atestListPane) {
-		this.notesListPane = notesListPane;
-		this.logListPane = logListPane;
-		this.userListPane = userListPane;
-		this.taskListPane = taskListPane;
-		this.atestListPane = atestListPane;
-		
-		// add the given tabs to the pane
-		addTab("Notes", new ImageIcon(), notesListPane,
-				"The notes for this requirement");
-		addTab("Log", new ImageIcon(), logListPane,
-				"The log for this requirement");
-		addTab("Users", new ImageIcon(), userListPane,
-				"The users assigned to this requirement");
-		addTab("Tasks", new ImageIcon(), taskListPane,
-				"The tasks assigned to this requirement");
-		addTab("Tests", new ImageIcon(), atestListPane,
-				"The acceptance tests assigned to this requirement");
-	}
 	
 	public DetailEventPane(JPanel notesListPane, JPanel logListPane,
 			JPanel userListPane, JPanel taskListPane, JPanel atestListPane, JPanel subreqListPane) {

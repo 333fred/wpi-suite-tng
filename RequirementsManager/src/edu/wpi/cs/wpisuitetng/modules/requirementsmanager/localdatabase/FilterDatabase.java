@@ -26,7 +26,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  * Local cache that holds all filters from the server
  */
 
-public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifier {
+public class FilterDatabase extends Thread implements
+		IRetrieveAllFiltersNotifier {
 
 	private Map<Integer, Filter> filters;
 	private RetrieveAllFiltersController controller;
@@ -69,7 +70,7 @@ public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifie
 	 * @param filters
 	 *            the filters to be in the database
 	 */
-	public synchronized void setFilters(List<Filter> filters) {		
+	public synchronized void setFilters(List<Filter> filters) {
 		this.filters = new HashMap<Integer, Filter>();
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
@@ -82,7 +83,7 @@ public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifie
 	 * @param filters
 	 *            the filters to add/update
 	 */
-	public synchronized void addFilters(List<Filter> filters) {		
+	public synchronized void addFilters(List<Filter> filters) {
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
 		}
@@ -114,15 +115,30 @@ public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifie
 			throw new FilterNotFoundException(id);
 		}
 	}
-	
+
 	/**
 	 * Gets all of the filters from the database
 	 * 
 	 * @return List of all the fitlers in the database
 	 */
-	
+
 	public synchronized List<Filter> getFilters() {
 		return new ArrayList<Filter>(filters.values());
+	}
+
+	/**
+	 * Returns all of the currently active filters
+	 * 
+	 * @return the list of currently active filters
+	 */
+	public synchronized List<Filter> getActiveFilters() {
+		List<Filter> activeFilters = new ArrayList<Filter>();
+		for (Filter f : getFilters()) {
+			if (f.isActive()) {
+				activeFilters.add(f);
+			}
+		}
+		return activeFilters;
 	}
 
 	/**
@@ -136,7 +152,7 @@ public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifie
 
 	@Override
 	public void receivedData(Filter[] filters) {
-		
+
 	}
 
 }

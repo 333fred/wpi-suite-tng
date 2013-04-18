@@ -348,6 +348,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
+		DefaultMutableTreeNode requirementNode = null;
+		Requirement requirement = null;
 		this.top.removeAllChildren();
 		// iterations = IterationDatabase.getInstance().getAllIterations();
 
@@ -356,16 +358,15 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		Date acurrentDate = new Date();
 
 		for (Iteration anIteration : iterations) {
-			iterationNode = new DefaultMutableTreeNode(
-					(acurrentDate.compareTo(anIteration.getEndDate()) > 0 && anIteration
-							.getId() != -1) ? anIteration.getName()
-							+ " (Closed)" : anIteration.getName());
-
+			//iterationNode = new DefaultMutableTreeNode((acurrentDate.compareTo(anIteration.getEndDate()) > 0 && anIteration.getId() != -1) ? anIteration.getName()+ " (Closed)" : anIteration.getName());
+			iterationNode = new DefaultMutableTreeNode(anIteration);
+			//iterationNode.setUserObject(anIteration);
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
-					iterationNode.add(new DefaultMutableTreeNode(
-							RequirementDatabase.getInstance()
-									.getRequirement(aReq).getName()));
+					requirement = RequirementDatabase.getInstance().getRequirement(aReq);
+					requirementNode = new DefaultMutableTreeNode(requirement);
+					//requirementNode.setUserObject(requirement);
+					iterationNode.add(requirementNode);
 				} catch (RequirementNotFoundException e) {
 					System.out
 							.println("Requirement Not Found: IterationTreeView:369");
@@ -374,10 +375,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			this.top.add(iterationNode);
 		}
 
-		((DefaultTreeModel) this.tree.getModel())
-				.nodeStructureChanged(this.top);
-		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree
-				.getCellRenderer();
+		((DefaultTreeModel) this.tree.getModel()).nodeStructureChanged(this.top);
+		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree.getCellRenderer();
 		renderer.setLeafIcon(null);
 		this.tree.setCellRenderer(renderer);
 		restoreExpanstionState(this.tree, 0, eState);

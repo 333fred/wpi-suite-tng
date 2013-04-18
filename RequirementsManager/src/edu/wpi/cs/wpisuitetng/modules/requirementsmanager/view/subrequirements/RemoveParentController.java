@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick, Matt
  * 		
  *******************************************************************************/
 
@@ -18,7 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
-public class RemoveReqParController {
+public class RemoveParentController {
 	private final SubRequirementPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
@@ -33,7 +33,7 @@ public class RemoveReqParController {
 	 * @param parentView
 	 *            the DetailPanel
 	 */
-	public RemoveReqParController(SubRequirementPanel subRequirementPanel,
+	public RemoveParentController(SubRequirementPanel subRequirementPanel,
 			Requirement model, DetailPanel parentView) {
 		this.view = subRequirementPanel;
 		this.model = model;
@@ -67,12 +67,12 @@ public class RemoveReqParController {
 					new SaveOtherRequirement());
 			controller.SaveRequirement(anReq, false);
 
-			view.refreshParentPanel();
-			view.refreshSubReqPanel();
+			view.refreshParentLabel();
+			view.refreshTopPanel();
 			if(view.parentSelected)
-				view.refreshReqPanelForParents();
+				view.refreshValidParents();
 			else
-				view.refreshReqPanel();
+				view.refreshValidChildren();
 
 		}
 	}
