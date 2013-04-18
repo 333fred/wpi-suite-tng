@@ -50,7 +50,6 @@ public class ViewTest {
 
 	@Before
 	public void setUp() {
-
 		Network.initNetwork(new MockNetwork());
 		final NetworkConfiguration config = new NetworkConfiguration(
 				"http://localhost:8080");
