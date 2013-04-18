@@ -361,7 +361,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		String shortCols = "Estimate|Effort";
 		for (int i = 0; i < this.table.getColumnCount(); i++) {
 			if (this.table.getColumnName(i).matches(shortCols)) {
-				this.table.getColumnModel().getColumn(i).setPreferredWidth(12);
+				this.table.getColumnModel().getColumn(i).setPreferredWidth(10);
 			}
 		}
 

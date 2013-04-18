@@ -69,10 +69,7 @@ public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifie
 	 * @param filters
 	 *            the filters to be in the database
 	 */
-	public synchronized void setFilters(List<Filter> filters) {
-		
-		System.out.println("FilterDB SET: " + filters.size());
-		
+	public synchronized void setFilters(List<Filter> filters) {		
 		this.filters = new HashMap<Integer, Filter>();
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
@@ -85,10 +82,7 @@ public class FilterDatabase extends Thread implements IRetrieveAllFiltersNotifie
 	 * @param filters
 	 *            the filters to add/update
 	 */
-	public synchronized void addFilters(List<Filter> filters) {
-		
-		System.out.println("FilterDB: ADD" + filters.size());
-		
+	public synchronized void addFilters(List<Filter> filters) {		
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
 		}

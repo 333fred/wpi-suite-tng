@@ -105,6 +105,7 @@ public class StatView extends Tab implements ActionListener {
 		makeLineRadio.setMnemonic(KeyEvent.VK_B);
 		makeLineRadio.setActionCommand("Line Chart");
 		makeLineRadio.addActionListener(this);
+		makeLineRadio.setEnabled(false);
 		
 		/*
 		generateChart = new JButton("Generate Chart");
@@ -205,6 +206,9 @@ public class StatView extends Tab implements ActionListener {
 			if (chartType == ChartType.LINE) {
 				updateChartType(ChartType.PIE);
 				makePieRadio.setSelected(true);
+				makePieRadio.setEnabled(true);
+				makeBarRadio.setEnabled(true);
+				makeLineRadio.setEnabled(false);				
 			}
 			updateChartDataType(DataType.STATUS);
 			
@@ -212,12 +216,18 @@ public class StatView extends Tab implements ActionListener {
 			if (chartType == ChartType.LINE) {
 				updateChartType(ChartType.PIE);
 				makePieRadio.setSelected(true);
+				makePieRadio.setEnabled(true);
+				makeBarRadio.setEnabled(true);
+				makeLineRadio.setEnabled(false);
 			}
 			updateChartDataType(DataType.ITERATION);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Assignees")) {
 			if (chartType == ChartType.LINE) {
 				updateChartType(ChartType.PIE);
 				makePieRadio.setSelected(true);
+				makePieRadio.setEnabled(true);
+				makeBarRadio.setEnabled(true);
+				makeLineRadio.setEnabled(false);
 			}
 			updateChartDataType(DataType.ASSIGNEE);
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Estimates")) {
@@ -228,6 +238,9 @@ public class StatView extends Tab implements ActionListener {
 			updateChartDataType(DataType.VELOCITY);
 			updateChartType(ChartType.LINE);
 			makeLineRadio.setSelected(true);
+			makePieRadio.setEnabled(false);
+			makeBarRadio.setEnabled(false);
+			makeLineRadio.setEnabled(true);
 			
 		} else if (comboBoxStatisticType.getSelectedItem().equals("Tasks")) {
 			updateChartDataType(DataType.TASK);

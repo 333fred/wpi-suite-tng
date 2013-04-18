@@ -19,7 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
-public class AssignParentController {
+public class RemoveReqParController {
 	private final SubRequirementPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
@@ -34,8 +34,8 @@ public class AssignParentController {
 	 * @param parentView
 	 *            the DetailPanel
 	 */
-	public AssignParentController(SubRequirementPanel subRequirementPanel, Requirement model,
-			DetailPanel parentView) {
+	public RemoveReqParController(SubRequirementPanel subRequirementPanel,
+			Requirement model, DetailPanel parentView) {
 		this.view = subRequirementPanel;
 		this.model = model;
 		this.parentView = parentView;
@@ -45,39 +45,37 @@ public class AssignParentController {
 	 * Save a note to the server
 	 */
 	public void saveParent() {
-		String selectedIndex = (String) view.getList().getSelectedValue();
-		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
-		Requirement anParReq = null;
 
-		Integer modelID = new Integer(model.getrUID());
-		Integer anReqID = new Integer(anReq.getrUID());
-
-		SaveRequirementController controller = null;
-		
-		if(model.getpUID().size()>0){
+		Requirement anReq = null;
+		if (model.getpUID().size() != 0) {
 			try {
-				anParReq = RequirementDatabase.getInstance().getRequirement(model.getpUID().get(0));
+				anReq = RequirementDatabase.getInstance().getRequirement(
+						model.getpUID().get(0));
 			} catch (RequirementNotFoundException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			anParReq.getSubRequirements().remove(modelID);		
-			model.getpUID().remove(0);
-			controller = new SaveRequirementController(new SaveOtherRequirement());
-			controller.SaveRequirement(anParReq, false);
+
+			Integer modelID = new Integer(model.getrUID());
+			Integer anReqID = new Integer(anReq.getrUID());
+
+			model.removePUID(anReqID);
+			anReq.removeSubRequirement(modelID);
+			SaveRequirementController controller = new SaveRequirementController(
+					this.parentView);
+			controller.SaveRequirement(model, false);
+			controller = new SaveRequirementController(
+					new SaveOtherRequirement());
+			controller.SaveRequirement(anReq, false);
+
+			view.refreshParentPanel();
+			view.refreshSubReqPanel();
+			if(view.parentSelected)
+				view.refreshReqPanelForParents();
+			else
+				view.refreshReqPanel();
+
 		}
-		
-		model.addPUID(anReqID);
-		anReq.addSubRequirement(modelID);
-			
-			
-		controller = new SaveRequirementController(this.parentView);
-		controller.SaveRequirement(model, false);
-		controller = new SaveRequirementController(new SaveOtherRequirement());
-		controller.SaveRequirement(anReq, false);
-		
-		view.refreshSubReqPanel();
-		view.refreshReqPanelForParents();
-		view.refreshParentPanel();
 	}
 
-	}
+}
