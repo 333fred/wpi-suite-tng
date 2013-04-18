@@ -5,7 +5,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;

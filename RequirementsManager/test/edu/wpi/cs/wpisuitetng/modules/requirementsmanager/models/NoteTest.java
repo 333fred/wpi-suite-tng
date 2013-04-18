@@ -124,6 +124,6 @@ public class NoteTest {
 	public void testGetContent() {
 		n1 = new Note(bob, new Date(1, 2, 3), note);
 		assertEquals(n1.getContent(),
-				"<i>" + n1.parseNewLines(n1.getNote()) + "</i>");		
+		"<I>" + n1.parseNewLines(n1.getNote()) + "</I>");		
 	}
 }

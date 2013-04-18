@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick, Matt
  * 		
  *******************************************************************************/
 
@@ -17,7 +17,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 public class AssignParentController {
 	private final SubRequirementPanel view;
@@ -75,9 +74,9 @@ public class AssignParentController {
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 		
-		view.refreshSubReqPanel();
-		view.refreshReqPanelForParents();
-		view.refreshParentPanel();
+		view.refreshTopPanel();
+		view.refreshValidParents();
+		view.refreshParentLabel();
 	}
 
 	}

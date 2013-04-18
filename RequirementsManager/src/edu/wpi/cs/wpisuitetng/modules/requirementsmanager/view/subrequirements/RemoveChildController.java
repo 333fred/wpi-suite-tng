@@ -16,9 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
-public class RemoveReqController {
+public class RemoveChildController {
 	private final SubRequirementPanel view;
 	private final Requirement model;
 	private final DetailPanel ChildView;
@@ -33,7 +32,7 @@ public class RemoveReqController {
 	 * @param ChildView
 	 *            the DetailPanel
 	 */
-	public RemoveReqController(SubRequirementPanel subRequirementPanel,
+	public RemoveChildController(SubRequirementPanel subRequirementPanel,
 			Requirement model, DetailPanel ChildView) {
 		this.view = subRequirementPanel;
 		this.model = model;
@@ -41,7 +40,7 @@ public class RemoveReqController {
 	}
 
 	/**
-	 * Save a note to the server
+	 * Save a subRequirementt to the server
 	 */
 	public void saveChild() {
 
@@ -60,12 +59,12 @@ public class RemoveReqController {
 		controller = new SaveRequirementController(new SaveOtherRequirement());
 		controller.SaveRequirement(anReq, false);
 
-		view.refreshSubReqPanel();
-		view.refreshParentPanel();
+		view.refreshTopPanel();
+		view.refreshParentLabel();
 		if(view.parentSelected)
-			view.refreshReqPanelForParents();
+			view.refreshValidParents();
 		else
-			view.refreshReqPanel();
+			view.refreshValidChildren();
 
 	}
 

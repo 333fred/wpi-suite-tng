@@ -90,7 +90,8 @@ public class IterationValidator {
 		try {
 			iterations = manager.getAll(s);
 		} catch (WPISuiteException e) {
-			// TODO: something other than nothing
+			System.out
+					.println("There was an error retrieving iterations from the database: IterationValidator:93");
 		}
 		for (Iteration itr : iterations) {
 			// if an iteration overlaps with the one being validated
@@ -118,15 +119,22 @@ public class IterationValidator {
 	}
 
 	public static boolean overlapExists(Iteration alpha, Iteration beta) {
-		
-		/*System.out.println("COMPARING: "+alpha+", "+beta);
-		System.out.println(alpha.getName() + ":  "+alpha.getStartDate().toString() +"  "+ alpha.getEndDate().toString());
-		System.out.println(beta.getName() + ":  "+beta.getStartDate().toString() +"  "+ beta.getEndDate().toString());
-		System.out.println(compareDatesWithoutTime(alpha.getStartDate(), beta.getStartDate()) + "\n" + compareDatesWithoutTime(alpha.getEndDate(),
-				beta.getStartDate()));
-		System.out.println(compareDatesWithoutTime(alpha.getStartDate(), beta.getEndDate()) + "\n" + compareDatesWithoutTime(alpha.getEndDate(),
-				beta.getEndDate()));*/
-		
+
+		/*
+		 * System.out.println("COMPARING: "+alpha+", "+beta);
+		 * System.out.println(alpha.getName() +
+		 * ":  "+alpha.getStartDate().toString() +"  "+
+		 * alpha.getEndDate().toString()); System.out.println(beta.getName() +
+		 * ":  "+beta.getStartDate().toString() +"  "+
+		 * beta.getEndDate().toString());
+		 * System.out.println(compareDatesWithoutTime(alpha.getStartDate(),
+		 * beta.getStartDate()) + "\n" +
+		 * compareDatesWithoutTime(alpha.getEndDate(), beta.getStartDate()));
+		 * System.out.println(compareDatesWithoutTime(alpha.getStartDate(),
+		 * beta.getEndDate()) + "\n" +
+		 * compareDatesWithoutTime(alpha.getEndDate(), beta.getEndDate()));
+		 */
+
 		// check if alpha starts before beta starts and ends on or before it
 		// starts
 		if (compareDatesWithoutTime(alpha.getStartDate(), beta.getStartDate()) == -1
@@ -141,10 +149,10 @@ public class IterationValidator {
 						beta.getEndDate()) == 1) {
 			return false;
 		}
-		//System.out.println("OVERLAP!");
+		// System.out.println("OVERLAP!");
 		return true;
 	}
-	
+
 	/**
 	 * Compares the two given dates based upon, year, month, and day
 	 * 
@@ -160,15 +168,19 @@ public class IterationValidator {
 		Calendar calendar1 = Calendar.getInstance();
 		Calendar tempCalendar = Calendar.getInstance();
 		Calendar calendar2 = Calendar.getInstance();
-		
-		//We can simply round off everything smaller than days, and then compare
-		tempCalendar.setTime(date1);
-		calendar1.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH));
-		
-		tempCalendar.setTime(date2);
-		calendar2.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH));
 
-		
+		// We can simply round off everything smaller than days, and then
+		// compare
+		tempCalendar.setTime(date1);
+		calendar1.set(tempCalendar.get(Calendar.YEAR),
+				tempCalendar.get(Calendar.MONTH),
+				tempCalendar.get(Calendar.DAY_OF_MONTH));
+
+		tempCalendar.setTime(date2);
+		calendar2.set(tempCalendar.get(Calendar.YEAR),
+				tempCalendar.get(Calendar.MONTH),
+				tempCalendar.get(Calendar.DAY_OF_MONTH));
+
 		return calendar1.getTime().compareTo(calendar2.getTime());
 	}
 

@@ -43,6 +43,9 @@ public class RequirementsTable extends JTable {
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
+		if(!view.isEditable()){
+			return;
+		}
 		if(editedRows == null){
 			editedRows = new boolean[super.getRowCount()];
 		} else if (editedRows.length < super.getRowCount()){
@@ -64,12 +67,13 @@ public class RequirementsTable extends JTable {
 					super.setValueAt(Integer.toString(i), row, col);
 				}
 			} else {
-				editedRows[super.convertRowIndexToModel(row)] = true;
+				selectionModel.removeSelectionInterval(convertRowIndexToModel(row),convertRowIndexToModel(row));
+				super.getCellEditor().stopCellEditing();
 				super.setValueAt(value, row, col);
 			}
 		} catch (NumberFormatException e) {
 			return;
-		}
+		}					
 	}
 	
 	@Override

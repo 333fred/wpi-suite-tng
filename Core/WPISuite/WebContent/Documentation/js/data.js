@@ -28,6 +28,10 @@ var data = [
 				    	label: 'Tasks',
 				    	folder: false,
 				    	id: 14
+				    }, {
+				    	label: 'Acceptance Tests',
+				    	folder: false,
+				    	id: 15
 			    }
 		]},
 		{label: 'Iterations',
@@ -54,5 +58,13 @@ var data = [
     	{label: 'Editing Estimates',
     	folder: false,
     	id: 4
+    	},
+    	{label: 'Sort Requirements',
+    	folder: false,
+    	id: 5
+    	},
+    	{label: 'Closing Tabs',
+    	folder: false,
+    	id: 6
     	}
     ]
