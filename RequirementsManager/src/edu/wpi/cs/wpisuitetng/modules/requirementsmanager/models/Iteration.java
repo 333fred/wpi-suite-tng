@@ -332,4 +332,12 @@ public class Iteration extends AbstractModel {
 		return iterations;
 	}
 
+	public String toString() {
+		if ((new Date()).compareTo(this.getEndDate()) > 0 && this.getId() != -1) {
+			return this.getName()+ " (Closed)"; 
+		} else {
+			return this.getName();
+		}
+	}
+	
 }
