@@ -19,7 +19,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
@@ -81,6 +80,6 @@ public class FilterTest {
 		assertTrue(f1.isActive());
 		f1.setActive(false);
 		assertFalse(f1.isActive());
-		assertTrue(f1.getActive());
+		assertFalse(f1.getActive());
 	}
 }
