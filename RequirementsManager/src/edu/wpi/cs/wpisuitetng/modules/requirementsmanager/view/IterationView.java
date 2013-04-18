@@ -29,14 +29,12 @@ import javax.swing.SpringLayout;
 
 import com.toedter.calendar.JCalendar;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
@@ -51,9 +49,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 	private enum Status {
 		CREATE, EDIT
 	}
-
-	/** Controller for adding an iteration */
-	private SaveIterationController saveIterationController;
 
 	/** Controller for iteration interaction */
 	private IterationController iterationController;
@@ -120,7 +115,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 		// initilize the add iteration controller
 		iterationController = new IterationController();
-		saveIterationController = new SaveIterationController(this);
 		// initlaize JComponents
 
 		labName = new JLabel("Name:");

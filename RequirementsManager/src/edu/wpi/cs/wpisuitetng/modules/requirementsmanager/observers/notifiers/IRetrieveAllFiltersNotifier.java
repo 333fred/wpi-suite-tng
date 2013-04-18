@@ -10,7 +10,7 @@
  *    Mitchell Caisse
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 

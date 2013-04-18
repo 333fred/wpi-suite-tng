@@ -25,11 +25,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.UserEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 
 public class UserEntityManagerTest {
 

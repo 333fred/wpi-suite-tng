@@ -27,15 +27,15 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 @SuppressWarnings("serial")
@@ -245,22 +245,25 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 		// Add data to model.
 		for (int i = 0; i < nodes.length; i++) {
 			model.insertNodeInto(nodes[i], parent, index++);
-			SaveIterationController saveIterationController = new SaveIterationController(this);
+			IterationController iterationController = new IterationController();
 			Requirement requirement = (Requirement) (((DefaultMutableTreeNode) nodes[i].getUserObject()).getUserObject());
 			Iteration anIteration;
 			try {
 				anIteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
 				anIteration.removeRequirement(requirement.getrUID());
-				saveIterationController.saveIteration(anIteration);
+				UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(this);
+				iterationController.save(anIteration, observer);
 			} catch (IterationNotFoundException e) {
 				e.printStackTrace();
 			}
 			anIteration = (Iteration) ((DefaultMutableTreeNode)nodes[i].getParent()).getUserObject();
 			anIteration.addRequirement(requirement.getrUID());
-			saveIterationController.saveIteration(anIteration);
+			UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(this);
+			iterationController.save(anIteration, observer);
 			requirement.setIteration(anIteration.getId());
-			SaveRequirementController SaveRequirementController = new SaveRequirementController(this);
-			SaveRequirementController.SaveRequirement(requirement, false);
+			RequirementsController requirementController = new RequirementsController();
+			UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(this);
+			requirementController.save(requirement, observer);
 			this.draggedRequirement = requirement;
 		}
 

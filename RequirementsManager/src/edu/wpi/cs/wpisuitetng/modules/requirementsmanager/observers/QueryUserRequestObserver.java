@@ -10,7 +10,7 @@
  *    @author
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import javax.swing.SwingUtilities;
 

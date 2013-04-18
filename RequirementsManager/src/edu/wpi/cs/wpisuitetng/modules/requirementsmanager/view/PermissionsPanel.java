@@ -12,11 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import java.awt.GridLayout;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -25,12 +20,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.SpringLayout;
-import javax.swing.border.EtchedBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 @SuppressWarnings("serial")

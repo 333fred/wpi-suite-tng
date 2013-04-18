@@ -10,20 +10,20 @@
  *    @author Mitchell Caisse
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
-public interface IRetreiveRequirementByIDControllerNotifier {
+public interface IRetreiveIterationByIDControllerNotifier {
 
 	/**
-	 * Called to retrieve a specific requirement from the server by ID number
+	 * Called to retrieve a specific iteration from the server by its ID number
 	 * 
-	 * @param requirement
-	 *            The requirement
+	 * @param iteration
+	 *            The iteration
 	 */
 
-	public void receivedData(Requirement requirement);
+	public void receivedData(Iteration iteration);
 
 	/**
 	 * Called when a error was returned from the server, instead of data

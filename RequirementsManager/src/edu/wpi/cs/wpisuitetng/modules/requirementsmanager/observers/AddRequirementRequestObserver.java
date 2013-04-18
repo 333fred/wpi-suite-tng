@@ -13,14 +13,13 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSaveNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.DefaultSaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -58,8 +57,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		RequirementDatabase.getInstance().addRequirement(
 				Requirement.fromJSON(response.getBody()));
 
-		SaveIterationController saveIterationController = new SaveIterationController(
-				new DefaultSaveNotifier());
+		IterationController iterationController = new IterationController();
 
 		if (response.getStatusCode() == 201) {
 			// parse the Requirement from the body
@@ -73,7 +71,9 @@ public class AddRequirementRequestObserver implements RequestObserver {
 					anIteration = IterationDatabase.getInstance().getIteration(
 							-1);
 					anIteration.addRequirement(requirement.getrUID());
-					saveIterationController.saveIteration(anIteration);
+					UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(
+							new DefaultSaveNotifier());
+					iterationController.save(anIteration, observer);
 				} catch (IterationNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

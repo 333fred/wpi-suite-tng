@@ -10,7 +10,8 @@
  *    @author Mitchell Caisse
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
+
 
 /**
  * A default Save Notifier that does nothing

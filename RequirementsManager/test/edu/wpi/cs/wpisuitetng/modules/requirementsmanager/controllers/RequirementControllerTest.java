@@ -14,19 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockNetwork;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.network.Network;
-import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
 public class RequirementControllerTest {
 

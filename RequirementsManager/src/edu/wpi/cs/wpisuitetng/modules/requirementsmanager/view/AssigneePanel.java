@@ -27,9 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.QueryUserController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.UserController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.QueryUserRequestObserver;
 
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
@@ -65,7 +66,7 @@ public class AssigneePanel extends JPanel {
 		this.requirement = requirement;
 		this.detailPanel = detailPanel;
 
-		QueryUserController userController = new QueryUserController(this);
+		UserController userController = new UserController();
 
 		// initialize the two test string arrays
 		unassignedUsersList = new DefaultListModel();
@@ -170,7 +171,8 @@ public class AssigneePanel extends JPanel {
 		add(assignedScroll);
 
 		this.initializeLists(new ArrayList<String>());
-		userController.getUsers();
+		QueryUserRequestObserver observer = new QueryUserRequestObserver(this);
+		userController.getAll(observer);
 	}
 
 	/**

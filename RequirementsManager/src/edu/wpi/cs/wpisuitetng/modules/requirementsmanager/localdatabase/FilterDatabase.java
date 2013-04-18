@@ -13,14 +13,16 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.FilterNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllFiltersRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetrieveAllFiltersNotifier;
 
 /**
  * Local cache that holds all filters from the server
@@ -30,7 +32,7 @@ public class FilterDatabase extends Thread implements
 		IRetrieveAllFiltersNotifier {
 
 	private Map<Integer, Filter> filters;
-	private RetrieveAllFiltersController controller;
+	private FilterController controller;
 	private static FilterDatabase database;
 
 	/**
@@ -38,7 +40,7 @@ public class FilterDatabase extends Thread implements
 	 */
 	private FilterDatabase() {
 		this.filters = new HashMap<Integer, Filter>();
-		this.controller = new RetrieveAllFiltersController(this);
+		this.controller = new FilterController();
 		setDaemon(true);
 	}
 
@@ -147,12 +149,17 @@ public class FilterDatabase extends Thread implements
 	@Override
 	public void run() {
 		// This database should not run continuously, so just update
-		controller.getAll();
+		RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
+				this);
+		controller.getAll(observer);
 	}
 
+	/**
+	 * Sets the received filters to be in the database
+	 */
 	@Override
 	public void receivedData(Filter[] filters) {
-
+		setFilters(Arrays.asList(filters));
 	}
 
 }

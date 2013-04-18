@@ -45,10 +45,8 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrievePermissionsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
@@ -58,6 +56,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.UnclosableTabComponent;
@@ -86,10 +89,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
 
-	/** Controller for receiving all requirements from the server */
-	private RetrieveAllRequirementsController retreiveAllRequirementsController;
-
-	private RetrieveAllIterationsController retreiveAllIterationsController;
+	private RequirementsController requirementsController;
+	private IterationController iterationController;
 
 	/** The list of requirements that the view is displaying */
 	private Requirement[] requirements;
@@ -138,10 +139,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		firstPaint = false;
 		// register this listener to the Database
 		RequirementDatabase.getInstance().registerListener(this);
-		retreiveAllIterationsController = new RetrieveAllIterationsController(
-				this);
-		retreiveAllRequirementsController = new RetrieveAllRequirementsController(
-				this);
+
+		iterationController = new IterationController();
+		requirementsController = new RequirementsController();
 		// init the toolbar group
 		initializeToolbarGroup();
 
@@ -242,15 +242,18 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				0, SpringLayout.SOUTH, btnEdit);
 
 		// TODO: testing only. delete later
-		editPanelLayout.putConstraint(SpringLayout.WEST, ClearFilter, 5, SpringLayout.WEST, editPanel);
-		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, ClearFilter, 0,
-				SpringLayout.VERTICAL_CENTER, editPanel);
-		editPanelLayout.putConstraint(SpringLayout.WEST, textFilterInfo, 5, SpringLayout.WEST, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.WEST, ClearFilter, 5,
+				SpringLayout.WEST, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER,
+				ClearFilter, 0, SpringLayout.VERTICAL_CENTER, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.WEST, textFilterInfo, 5,
+				SpringLayout.WEST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textFilterInfo, 0,
 				SpringLayout.SOUTH, ClearFilter);
-		editPanelLayout.putConstraint(SpringLayout.WEST, FilterDemo, 5, SpringLayout.EAST, ClearFilter);
-		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo, 0,
-				SpringLayout.VERTICAL_CENTER, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.WEST, FilterDemo, 5,
+				SpringLayout.EAST, ClearFilter);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo,
+				0, SpringLayout.VERTICAL_CENTER, editPanel);
 		JScrollPane scrollPane = new JScrollPane(this.table);
 		this.table.setFillsViewportHeight(true);
 		this.table.getColumnModel().removeColumn(
@@ -495,11 +498,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 
 	private void getRequirementsFromServer() {
-		retreiveAllRequirementsController.getAll();
+		RetrieveAllRequirementsRequestObserver observer = new RetrieveAllRequirementsRequestObserver(
+				this);
+		requirementsController.getAll(observer);
 	}
 
 	private void getIterationsFromServer() {
-		retreiveAllIterationsController.getAll();
+		RetrieveAllIterationsRequestObserver observer = new RetrieveAllIterationsRequestObserver(
+				this);
+		iterationController.getAll(observer);
 	}
 
 	/**
@@ -638,12 +645,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		if (!requirementIsOpen) {
 			// create the controller for fetching the new requirement
-			RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
+			RequirementsController controller = new RequirementsController();
+			RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
 					new OpenRequirementTabAction(tabController,
 							requirementToFetch));
 
 			// get the requirement from the server
-			retreiveRequirementController.get(requirementToFetch.getrUID());
+			controller.get(requirementToFetch.getrUID(), observer);
 		}
 	}
 
@@ -692,8 +700,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
-		this.requirements = RequirementDatabase.getInstance().getFilteredRequirements().toArray(new Requirement[0]);
-		//this.requirements = requirements;
+		this.requirements = RequirementDatabase.getInstance()
+				.getFilteredRequirements().toArray(new Requirement[0]);
+		// this.requirements = requirements;
 		updateListView();
 
 	}

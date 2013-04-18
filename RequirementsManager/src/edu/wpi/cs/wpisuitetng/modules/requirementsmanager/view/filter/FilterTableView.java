@@ -25,13 +25,14 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllFiltersRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateFilterRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetrieveAllFiltersNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 public class FilterTableView extends JPanel implements
@@ -59,17 +60,12 @@ public class FilterTableView extends JPanel implements
 	/** Panel to hold stuff in the scrollPane */
 	private JPanel butPanel;
 
-	/** THe controller to retrieve filters */
-	private RetrieveAllFiltersController filterController;
-
-	/** Controller to save a filter */
-	private SaveFilterController saveFilterController;
+	/** The controller to retrieve filters */
+	private FilterController filterController;
 
 	public FilterTableView() {
 		ArrayList<Filter> filters = new ArrayList<Filter>();
-
-		filterController = new RetrieveAllFiltersController(this);
-		saveFilterController = new SaveFilterController(this);
+		filterController = new FilterController();
 
 		butPanel = new JPanel();
 
@@ -116,7 +112,9 @@ public class FilterTableView extends JPanel implements
 
 	public void refresh() {
 		// get the filters from the server
-		filterController.getAll();
+		RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
+				this);
+		filterController.getAll(observer);
 		updateFilters();
 	}
 
@@ -195,7 +193,8 @@ public class FilterTableView extends JPanel implements
 			for (int row : selRows) {
 				Filter filter = tableModel.getFilterAt(row);
 				filter.setActive(active);
-				saveFilterController.saveFilter(filter);
+				UpdateFilterRequestObserver observer = new UpdateFilterRequestObserver(this);
+				filterController.save(filter, observer);
 			}
 
 		} else if (source.equals(butDelete)) {

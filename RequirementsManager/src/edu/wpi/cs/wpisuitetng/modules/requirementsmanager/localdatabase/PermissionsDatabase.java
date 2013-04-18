@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllPermissionsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.PermissionsNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllPermissionsRequestObserver;
 
 /**
  * Maintains a local database of user permissions.
@@ -35,13 +35,13 @@ public class PermissionsDatabase extends Thread {
 
 	private Map<User, PermissionModel> permissions;
 	private List<IDatabaseListener> listeners;
-	private RetrieveAllPermissionsController controller;
+	private PermissionModelController controller;
 	private static PermissionsDatabase db;
 
 	private PermissionsDatabase() {
 		permissions = new HashMap<User, PermissionModel>();
 		this.listeners = new ArrayList<IDatabaseListener>();
-		this.controller = new RetrieveAllPermissionsController();
+		this.controller = new PermissionModelController();
 		setDaemon(true);
 	}
 
@@ -183,7 +183,8 @@ public class PermissionsDatabase extends Thread {
 		interrupted();
 		while (!interrupted()) {
 			// Trigger an update
-			controller.getAll();
+			RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
+			controller.getAll(observer);
 			try {
 				// Sleep for five minutes
 				Thread.sleep(300000);
