@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Kyle
+ *    
+ *******************************************************************************/
+
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
+
+import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest.ATestStatus;
+
+
+public class AcceptanceTestTest {
+	
+	ATest a1;
+	
+	String name = "name";
+	String desc = "desc";
+	
+	@Before
+	public void setUp() {
+		a1 = new ATest(name, desc);
+	}
+	
+	@Test
+	public void testStatus() {
+		a1.setStatus(ATestStatus.PASSED);
+		assertTrue(a1.isPassed());
+		a1.setStatus(ATestStatus.FAILED);
+		assertEquals(a1.getStatus(), ATestStatus.FAILED);
+		assertFalse(a1.isPassed());
+	}
+	
+	@Test
+	public void testDesciption() {
+		a1.setDescription("test");
+		assertEquals(a1.getDescription(), "test");
+	}
+	
+	@Test
+	public void testName() {
+		a1.setName("name");
+		assertEquals(a1.getName(), "name");	
+	}
+	
+	@Test
+	public void testTitle() {
+		assertEquals(a1.getTitle(), "<html><font size=4><b>" + "name" + "</b></html>");
+	}
+	
+	@Test
+	public void testId() {
+		a1.setId(1);
+		assertEquals(a1.getId(), 1);
+	}
+	
+	@Test
+	public void testParseNewLines() {
+		String text = "text\n";
+		assertEquals(a1.parseNewLines(text), "text<br>");
+	}
+	
+	@Test
+	public void testContent() {
+		String temp = "<i>" + a1.parseNewLines(a1.getDescription());
+		assertEquals(a1.getContent(), temp + "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>" + "</i>");
+		a1.setStatus(ATestStatus.PASSED);
+		assertEquals(a1.getContent(), temp + "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>" + "</i>");
+		a1.setStatus(ATestStatus.FAILED);
+		assertEquals(a1.getContent(), temp + "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>" + "</i>");
+	}
+	
+}
