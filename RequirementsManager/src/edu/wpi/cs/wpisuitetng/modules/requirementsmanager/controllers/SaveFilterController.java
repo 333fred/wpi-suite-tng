@@ -38,6 +38,11 @@ public class SaveFilterController {
 	 *            the filter to save
 	 */
 	public void saveFilter(Filter toAdd) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new UpdateFilterRequestObserver(notifier);
 		Request request;
 		request = Network.getInstance().makeRequest(

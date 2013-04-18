@@ -37,6 +37,11 @@ public class RetrieveRequirementByIDController {
 	 * Sends a request for all of the requirements
 	 */
 	public void get(int id) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new RetrieveRequirementByIDRequestObserver(
 				this);
 		Request request;

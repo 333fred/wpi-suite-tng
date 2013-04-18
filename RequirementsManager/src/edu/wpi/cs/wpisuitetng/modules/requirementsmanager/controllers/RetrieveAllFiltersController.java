@@ -31,6 +31,11 @@ public class RetrieveAllFiltersController {
 	 * failure
 	 */
 	public void getAll() {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new RetrieveAllFiltersRequestObserver(
 				this);
 		Request request;

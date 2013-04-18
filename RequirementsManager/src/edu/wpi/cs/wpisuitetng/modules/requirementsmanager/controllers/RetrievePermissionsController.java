@@ -27,6 +27,11 @@ public class RetrievePermissionsController {
 	 * Gets the permissions for the current user
 	 */
 	public void get() {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
 		Request request = Network.getInstance().makeRequest(
 				"requirementsmanager/permissionsmodel/user", HttpMethod.GET);

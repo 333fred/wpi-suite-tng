@@ -33,6 +33,11 @@ public class AddFilterController {
 	 *            the filter to be stored
 	 */
 	public void addFilter(Filter toAdd) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new AddFilterRequestObserver(
 				this);
 		Request request;

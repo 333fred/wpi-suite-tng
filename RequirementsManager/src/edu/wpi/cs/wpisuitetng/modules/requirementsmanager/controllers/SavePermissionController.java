@@ -34,6 +34,11 @@ public class SavePermissionController {
 	 *            the permission to save/update
 	 */
 	public void save(PermissionModel toAdd) throws UnauthorizedException {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		// Throw an exception if the user can't save permissions
 		if (PermissionModel.getInstance().getPermission() != UserPermissionLevels.ADMIN) {
 			throw new UnauthorizedException(UserPermissionLevels.ADMIN,

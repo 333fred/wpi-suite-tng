@@ -75,12 +75,6 @@ public class JanewayModule implements IJanewayModule {
 
 	public JanewayModule() {
 
-		// temp fix to init network
-		// TODO: Replace this
-		final NetworkConfiguration config = new NetworkConfiguration(
-				"http://localhost:8080");
-		Network.getInstance().setDefaultNetworkConfiguration(config);
-
 		// Start the database threads
 		RequirementDatabase.getInstance().start();
 		IterationDatabase.getInstance().start();

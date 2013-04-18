@@ -37,6 +37,11 @@ public class AddRequirementController {
 	 *            requirement that will be added
 	 */
 	public void AddRequirement(Requirement toAdd) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new AddRequirementRequestObserver(
 				this, detailPanel); // you will probably want to pass your view
 									// to the observer as well

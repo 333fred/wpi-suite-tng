@@ -40,6 +40,11 @@ public class SaveRequirementController {
 	 *            tab that will be closed
 	 */
 	public void SaveRequirement(Requirement toAdd, boolean closeTab) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new UpdateRequirementRequestObserver(
 				notifier);
 		Request request;
