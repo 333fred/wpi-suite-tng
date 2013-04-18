@@ -28,6 +28,10 @@ var data = [
 				    	label: 'Tasks',
 				    	folder: false,
 				    	id: 14
+				    }, {
+				    	label: 'Acceptance Tests',
+				    	folder: false,
+				    	id: 15
 			    }
 		]},
 		{label: 'Iterations',
