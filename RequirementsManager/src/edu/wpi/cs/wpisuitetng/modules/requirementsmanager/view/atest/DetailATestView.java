@@ -30,7 +30,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.MakeNotePanel;
 
 /**
  * Panel containing a aTest for a requirement
@@ -66,8 +65,6 @@ public class DetailATestView extends JPanel {
 		// Set up the aTest panel
 		makeATestPanel = new MakeATestPanel(requirement, parentView);
 
-
-
 		// Create the aTest list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
 		testList = new DefaultListModel();
@@ -92,39 +89,46 @@ public class DetailATestView extends JPanel {
 		addaTestsToList();
 		// ,aTests.getSelectedValues()
 
-		if(requirement.getStatus() != Status.DELETED) {
-			//Set the action of the save button to the default (create new aTest)
-			makeATestPanel.getAddaTest().setAction(new SaveATestAction(new SaveATestController(makeATestPanel, requirement, parentView, tests)));
+		if (requirement.getStatus() != Status.DELETED) {
+			// Set the action of the save button to the default (create new
+			// aTest)
+			makeATestPanel.getAddaTest().setAction(
+					new SaveATestAction(new SaveATestController(makeATestPanel,
+							requirement, parentView, tests)));
 
-
-			//Listen for user clicking on aTests
-			tests.addMouseListener(new MouseAdapter() { 
+			// Listen for user clicking on aTests
+			tests.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent evt) {
-					updateaTestView(); //Update the aTest view, will change based on number of aTests clicked (0,1,multiple)
+					updateaTestView(); // Update the aTest view, will change
+										// based on number of aTests clicked
+										// (0,1,multiple)
 				}
 			});
 
-			//		Timer ensures right fields are enabled/disabled, but is sort of sketchy
-			//		int delay = 1000; // Setting up timer, delay for 1 sec
-			//		int period = 1000; // repeat every 1 sec
-			//		Timer timer = new Timer();
-			//		timer.scheduleAtFixedRate(new TimeraTest()
-			//		{
-			//			public void run()
-			//			{
-			//				if(requirement.getStatus() != Status.DELETED)
-			//					updateaTestViewTime(); //Update the view periodically. Used due to swing clicking buggy
-			//			}
-			//		}, delay, period);
+			// Timer ensures right fields are enabled/disabled, but is sort of
+			// sketchy
+			// int delay = 1000; // Setting up timer, delay for 1 sec
+			// int period = 1000; // repeat every 1 sec
+			// Timer timer = new Timer();
+			// timer.scheduleAtFixedRate(new TimeraTest()
+			// {
+			// public void run()
+			// {
+			// if(requirement.getStatus() != Status.DELETED)
+			// updateaTestViewTime(); //Update the view periodically. Used due
+			// to swing clicking buggy
+			// }
+			// }, delay, period);
 
 			makeATestPanel.getAddATest().setEnabled(false);
-			//Make sure save button is unavailable if name field is empty
-			makeATestPanel.getaTestField().addKeyListener(new KeyAdapter() { 
-				//For creating a new aTest
+			// Make sure save button is unavailable if name field is empty
+			makeATestPanel.getaTestField().addKeyListener(new KeyAdapter() {
+				// For creating a new aTest
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if (makeATestPanel.getaTestField().getText().trim().equals("")
+					if (makeATestPanel.getaTestField().getText().trim()
+							.equals("")
 							&& tests.getSelectedValues().length == 0)
 						makeATestPanel.getAddaTest().setEnabled(false);
 					else if (!makeATestPanel.getaTestName().getText().trim()
@@ -132,13 +136,14 @@ public class DetailATestView extends JPanel {
 						makeATestPanel.getAddaTest().setEnabled(true);
 				}
 			});
-			
-			//Make sure save button is unavailable if desc field is empty
-			//for creating a new aTest
-			makeATestPanel.getaTestName().addKeyListener(new KeyAdapter() { 
-				@Override                                                 
+
+			// Make sure save button is unavailable if desc field is empty
+			// for creating a new aTest
+			makeATestPanel.getaTestName().addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyReleased(KeyEvent e) {
-					if (makeATestPanel.getaTestName().getText().trim().equals("")
+					if (makeATestPanel.getaTestName().getText().trim()
+							.equals("")
 							&& tests.getSelectedValues().length == 0)
 						makeATestPanel.getAddaTest().setEnabled(false);
 					else if (!makeATestPanel.getaTestField().getText().trim()
@@ -147,16 +152,18 @@ public class DetailATestView extends JPanel {
 				}
 			});
 
-		}else{
-			//Requirement is set to delted, so disable all of the fields
+		} else {
+			// Requirement is set to delted, so disable all of the fields
 			makeATestPanel.getaTestFieldPane().setEnabled(false);
 			makeATestPanel.getaTestField().setEnabled(false);
 			makeATestPanel.getaTestName().setEnabled(false);
 			makeATestPanel.getAddaTest().setEnabled(false);
 			makeATestPanel.getaTestStatus().setText("");
 
-			makeATestPanel.getaTestField().setBackground(makeATestPanel.getBackground());
-			makeATestPanel.getaTestName().setBackground(makeATestPanel.getBackground());
+			makeATestPanel.getaTestField().setBackground(
+					makeATestPanel.getBackground());
+			makeATestPanel.getaTestName().setBackground(
+					makeATestPanel.getBackground());
 		}
 
 	}
@@ -167,18 +174,18 @@ public class DetailATestView extends JPanel {
 	 * currently not used. Would be called by the timer to update the view aTest
 	 * 
 	 */
-	private void updateaTestView(){
-		if(requirement.getStatus() != Status.DELETED){
+	private void updateaTestView() {
+		if (requirement.getStatus() != Status.DELETED) {
 			makeATestPanel.getAddaTest().setAction(
-					new SaveATestAction(new SaveATestController(
-							makeATestPanel, requirement, parentView, tests), tests
+					new SaveATestAction(new SaveATestController(makeATestPanel,
+							requirement, parentView, tests), tests
 							.getSelectedValues()));
 
 			if (tests.getSelectedValues().length == 0) {
 				makeATestPanel
-				.getaTestStatus()
-				.setText(
-						"No acceptance tests selected. Fill name and description to create a new one.");
+						.getaTestStatus()
+						.setText(
+								"No acceptance tests selected. Fill name and description to create a new one.");
 				makeATestPanel.getaTestStatusBox().setEnabled(false);
 				makeATestPanel.getaTestStatusBox().setSelectedItem("");
 				makeATestPanel.getaTestField().setText("");
@@ -187,15 +194,15 @@ public class DetailATestView extends JPanel {
 				makeATestPanel.getaTestName().setBackground(Color.white);
 				if (makeATestPanel.getaTestName().getText().trim().equals("")
 						|| makeATestPanel.getaTestField().getText().trim()
-						.equals(""))
+								.equals(""))
 					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
 				makeATestPanel.getaTestStatusBox().setEnabled(true);
 				if (tests.getSelectedValues().length > 1) {
 					makeATestPanel
-					.getaTestStatus()
-					.setText(
-							"Multiple acceptance tests selected. Can only change status.");
+							.getaTestStatus()
+							.setText(
+									"Multiple acceptance tests selected. Can only change status.");
 					makeATestPanel.getaTestFieldPane().setEnabled(false);
 					makeATestPanel.getaTestField().setEnabled(false);
 					makeATestPanel.getaTestName().setEnabled(false);
@@ -208,15 +215,18 @@ public class DetailATestView extends JPanel {
 							makeATestPanel.getBackground());
 				} else {
 					makeATestPanel
-					.getaTestStatus()
-					.setText(
-							"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
+							.getaTestStatus()
+							.setText(
+									"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
 					makeATestPanel.getaTestFieldPane().setEnabled(true);
 					makeATestPanel.getaTestField().setEnabled(true);
 					makeATestPanel.getaTestName().setEnabled(true);
-					makeATestPanel.getaTestField().setText(getSingleSelectedaTest().getDescription());
-					makeATestPanel.getaTestName().setText(getSingleSelectedaTest().getName());
-					makeATestPanel.getaTestStatusBox().setSelectedItem(getSingleSelectedaTest().getStatus().toString());
+					makeATestPanel.getaTestField().setText(
+							getSingleSelectedaTest().getDescription());
+					makeATestPanel.getaTestName().setText(
+							getSingleSelectedaTest().getName());
+					makeATestPanel.getaTestStatusBox().setSelectedItem(
+							getSingleSelectedaTest().getStatus().toString());
 					makeATestPanel.getaTestField().setBackground(Color.white);
 					makeATestPanel.getaTestName().setBackground(Color.white);
 				}
@@ -227,36 +237,36 @@ public class DetailATestView extends JPanel {
 	/**
 	 * updateaTestViewTime
 	 * 
-	 * currently not used. Would be called by the timer to update the view aTest 
+	 * currently not used. Would be called by the timer to update the view aTest
 	 * and populate the fields
 	 * 
 	 */
-	private void updateaTestViewTime(){
-		if(requirement.getStatus() != Status.DELETED){
+	private void updateaTestViewTime() {
+		if (requirement.getStatus() != Status.DELETED) {
 			makeATestPanel.getAddaTest().setAction(
-					new SaveATestAction(new SaveATestController(
-							makeATestPanel, requirement, parentView, tests), tests
+					new SaveATestAction(new SaveATestController(makeATestPanel,
+							requirement, parentView, tests), tests
 							.getSelectedValues()));
 
 			if (tests.getSelectedValues().length == 0) {
 				makeATestPanel
-				.getaTestStatus()
-				.setText(
-						"No acceptance test selected. Fill name and description to create a new one.");
+						.getaTestStatus()
+						.setText(
+								"No acceptance test selected. Fill name and description to create a new one.");
 				makeATestPanel.getaTestStatusBox().setEnabled(false);
 				makeATestPanel.getaTestField().setBackground(Color.white);
 				makeATestPanel.getaTestName().setBackground(Color.white);
 				if (makeATestPanel.getaTestName().getText().trim().equals("")
 						|| makeATestPanel.getaTestField().getText().trim()
-						.equals(""))
+								.equals(""))
 					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
 				makeATestPanel.getaTestStatusBox().setEnabled(true);
 				if (tests.getSelectedValues().length > 1) {
 					makeATestPanel
-					.getaTestStatus()
-					.setText(
-							"Multiple acceptance tests selected. Can only change status.");
+							.getaTestStatus()
+							.setText(
+									"Multiple acceptance tests selected. Can only change status.");
 					makeATestPanel.getaTestFieldPane().setEnabled(false);
 					makeATestPanel.getaTestField().setEnabled(false);
 					makeATestPanel.getaTestName().setEnabled(false);
@@ -266,9 +276,9 @@ public class DetailATestView extends JPanel {
 							makeATestPanel.getBackground());
 				} else {
 					makeATestPanel
-					.getaTestStatus()
-					.setText(
-							"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
+							.getaTestStatus()
+							.setText(
+									"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
 					makeATestPanel.getaTestFieldPane().setEnabled(true);
 					makeATestPanel.getaTestField().setEnabled(true);
 					makeATestPanel.getaTestName().setEnabled(true);
@@ -278,7 +288,7 @@ public class DetailATestView extends JPanel {
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Method to populate this object's list of aTests from the current
@@ -294,7 +304,8 @@ public class DetailATestView extends JPanel {
 	}
 
 	/**
-	 * simple getter for the list of aTests of which this view is currently aware
+	 * simple getter for the list of aTests of which this view is currently
+	 * aware
 	 * 
 	 * @return the list of aTests
 	 */
@@ -334,9 +345,10 @@ public class DetailATestView extends JPanel {
 		// TODO Auto-generated method stub
 		return makeATestPanel;
 	}
-	
+
 	public void paint(Graphics g) {
-		this.cellRenderer.setWrapWidth(this.aTestScrollPane.getViewport().getWidth());
+		this.cellRenderer.setWrapWidth(this.aTestScrollPane.getViewport()
+				.getWidth());
 		super.paint(g);
 	}
 }

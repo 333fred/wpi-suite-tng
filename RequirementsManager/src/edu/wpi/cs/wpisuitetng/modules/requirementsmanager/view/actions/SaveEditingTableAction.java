@@ -14,18 +14,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
  * @author Alex
- *
+ * 
  */
-public class SaveEditingTableAction extends AbstractAction implements ISaveNotifier {
+public class SaveEditingTableAction extends AbstractAction implements
+		ISaveNotifier {
 	private RequirementTableView tableView;
 	TableRowSorter<TableModel> sorter;
-	
-	public SaveEditingTableAction(RequirementTableView tableView, TableRowSorter<TableModel> sorter) {
+
+	public SaveEditingTableAction(RequirementTableView tableView,
+			TableRowSorter<TableModel> sorter) {
 		super("Save Changes");
 		this.tableView = tableView;
 		this.sorter = sorter;
@@ -36,14 +37,17 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 	
 		SaveRequirementController saveController = new SaveRequirementController(this);
 		RequirementDatabase rdb = RequirementDatabase.getInstance();
-		
+
 		boolean[] changedRows = tableView.getTable().getEditedRows();
 		tableView.getTable().getCellEditor().stopCellEditing();
 		
+
 		for (int i = 0; i < changedRows.length; i++) {
 			if (changedRows[i]) {
-				int id = Integer.parseInt((String)this.tableView.getTable().getModel().getValueAt(i, 0));
-				int newEstimate = Integer.parseInt((String)this.tableView.getTable().getModel().getValueAt(i, 6));
+				int id = Integer.parseInt((String) this.tableView.getTable()
+						.getModel().getValueAt(i, 0));
+				int newEstimate = Integer.parseInt((String) this.tableView
+						.getTable().getModel().getValueAt(i, 6));
 				try {
 					Requirement reqToChange = rdb.getRequirement(id);
 					reqToChange.setEstimate(newEstimate);
@@ -53,6 +57,7 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 				}			
 			}
 		}
+		
 		
 		if (tableView.isEditable()) {
 			tableView.setEditable(false);
@@ -68,11 +73,11 @@ public class SaveEditingTableAction extends AbstractAction implements ISaveNotif
 	public void responseSuccess() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void responseError(int statusCode, String statusMessage) {
-		this.tableView.displayEditInformation("Received " + statusCode + " error from server: "
-				+ statusMessage);
+		this.tableView.displayEditInformation("Received " + statusCode
+				+ " error from server: " + statusMessage);
 		this.tableView.refresh();
 	}
 

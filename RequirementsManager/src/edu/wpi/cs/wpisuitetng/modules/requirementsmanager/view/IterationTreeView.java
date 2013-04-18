@@ -188,7 +188,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					// set flag, perhaps rename later
 					backLogSingleSel = true;
 					// user has selected deleted
-					DeletedPopupMenu delMenu = new DeletedPopupMenu(tabController);
+					DeletedPopupMenu delMenu = new DeletedPopupMenu(
+							tabController);
 					delMenu.show(this, x, y);
 				}
 			}
@@ -367,8 +368,8 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					//requirementNode.setUserObject(requirement);
 					iterationNode.add(requirementNode);
 				} catch (RequirementNotFoundException e) {
-					// System.out.println("Requirement Not Found");
-					// Unnecessary to do anything here...I think
+					System.out
+							.println("Requirement Not Found: IterationTreeView:369");
 				}
 			}
 			this.top.add(iterationNode);
@@ -515,7 +516,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					|| iterationName.equals("Deleted") || toAdd == null) {
 				continue; // either iteration was not found, or user tried to
 							// open backlog
-			} 
+			}
 			selectedIterations.add(toAdd);
 		}
 		return selectedIterations;
