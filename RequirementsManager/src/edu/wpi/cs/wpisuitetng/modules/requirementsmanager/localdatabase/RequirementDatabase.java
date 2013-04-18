@@ -131,19 +131,29 @@ public class RequirementDatabase extends Thread {
 	/**
 	 * Returns only the requirements that need to be filtered out of the view
 	 * 
+	 * 
+	 * TODO: How to filter? If filter name == A and name == B, either or? so if one returns TRUE, keep it?
 	 * @return the list of filtered requirements
 	 */
 	public synchronized List<Requirement> getFilteredRequirements() {
-		List<Requirement> filteredReqs = getAllRequirements();
+		List<Requirement> filteredReqs = new ArrayList<Requirement>();
+		List<Requirement> allReqs = getAllRequirements();
 		List<Filter> filters = FilterDatabase.getInstance().getActiveFilters();
+		
 		// Loop through the filters and requirements and remove anything that
 		// should be filtered
+		/*
 		for (Filter f : filters) {
-			for (Requirement r : filteredReqs) {
-				if (f.shouldFilter(r)) {
+			for (Requirement r : allReqs) {
+				if (!f.shouldFilter(r)) {
 					filteredReqs.remove(r);
 				}
 			}
+		}
+		*/
+		
+		for (Requirement r : allReqs) {
+			
 		}
 		return filteredReqs;
 	}

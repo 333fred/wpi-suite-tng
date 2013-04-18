@@ -449,6 +449,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				.getFromString((String) cboxOperation.getSelectedItem());
 
 		String equalToStr;
+		String filterStringValue = null;
 
 		// get the equal to value from the text box or combo box
 		switch (field) {
@@ -497,7 +498,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					error = true;
 					errorString = "Invalid iteration";
 				}
-				filter.setValue(iterations.get(iterationIndex));
+				//save the ID of the iteration
+				filter.setValue(iterations.get(iterationIndex).getId());
+				filterStringValue = iterations.get(iterationIndex).getName();
 			} else {
 				if (calEqualTo.getDate() == null) {
 					error = true;
@@ -527,6 +530,11 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getSelectedItem()));
 			filter.setOperation(FilterOperation
 					.getFromString((String) cboxOperation.getSelectedItem()));
+			
+			if (filterStringValue == null) {
+				filterStringValue = filter.getValue().toString();
+			}
+			filter.setStringValue(filterStringValue);
 
 			if (mode == Mode.CREATE) {
 				addFilterController.addFilter(filter);
@@ -611,7 +619,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				}
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
-					//its a combo box, no error
 
 			} else {
 				if (calEqualTo.getDate() == null) {
