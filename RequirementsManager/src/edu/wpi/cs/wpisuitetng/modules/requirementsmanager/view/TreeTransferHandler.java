@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotif
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
@@ -38,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 @SuppressWarnings("serial")
-class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
+public class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 	DataFlavor nodesFlavor;
 	DataFlavor[] flavors = new DataFlavor[1];
 	DefaultMutableTreeNode[] nodesToRemove;
@@ -98,15 +99,13 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 			return false;
 		}
 		// Do not allow dropping of deleted requirements
-		if (RequirementDatabase.getInstance()
-				.getRequirement(firstNode.toString()).getStatus() == Status.DELETED) {
+		if (((Requirement) firstNode.getUserObject()).getStatus() == Status.DELETED) {
 			return false;
 		}
 
 		// don't allow dropping into completed iterations
 		Date currentDate = new Date();
-		Iteration iteration = IterationDatabase.getInstance().getIteration(
-				target.toString().replace(" (Closed)", ""));
+		Iteration iteration = (Iteration) target.getUserObject();
 		if (currentDate.compareTo(iteration.getEndDate()) > 0
 				&& iteration.getId() != -1) {
 			return false;
@@ -246,31 +245,21 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 		// Add data to model.
 		for (int i = 0; i < nodes.length; i++) {
 			model.insertNodeInto(nodes[i], parent, index++);
-			SaveIterationController saveIterationController = new SaveIterationController(
-					this);
+			SaveIterationController saveIterationController = new SaveIterationController(this);
+			Requirement requirement = (Requirement) (((DefaultMutableTreeNode) nodes[i].getUserObject()).getUserObject());
+			Iteration anIteration;
 			try {
-				Iteration anIteration = IterationDatabase.getInstance()
-						.getIteration(
-								RequirementDatabase.getInstance()
-										.getRequirement(nodes[i].toString())
-										.getIteration());
-				anIteration.removeRequirement(RequirementDatabase.getInstance()
-						.getRequirement(nodes[i].toString()).getrUID());
+				anIteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
+				anIteration.removeRequirement(requirement.getrUID());
 				saveIterationController.saveIteration(anIteration);
 			} catch (IterationNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Iteration anIteration = IterationDatabase.getInstance()
-					.getIteration(nodes[i].getParent().toString());
-			anIteration.addRequirement(RequirementDatabase.getInstance()
-					.getRequirement(nodes[i].toString()).getrUID());
+			anIteration = (Iteration) ((DefaultMutableTreeNode)nodes[i].getParent()).getUserObject();
+			anIteration.addRequirement(requirement.getrUID());
 			saveIterationController.saveIteration(anIteration);
-			Requirement requirement = RequirementDatabase.getInstance()
-					.getRequirement(nodes[i].toString());
 			requirement.setIteration(anIteration.getId());
-			SaveRequirementController SaveRequirementController = new SaveRequirementController(
-					this);
+			SaveRequirementController SaveRequirementController = new SaveRequirementController(this);
 			SaveRequirementController.SaveRequirement(requirement, false);
 			this.draggedRequirement = requirement;
 		}
@@ -321,16 +310,7 @@ class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
 							.getComponentAt(i))).getModel().getrUID()) == (requirement
 							.getrUID())) {
 						try {
-							(((DetailPanel) getTabController().getTabView()
-									.getComponentAt(i)))
-									.getComboBoxIteration()
-									.setSelectedItem(
-											IterationDatabase
-													.getInstance()
-													.getIteration(
-															requirement
-																	.getIteration())
-													.getName());
+							(((DetailPanel) getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
 						} catch (IterationNotFoundException e) {
 							e.printStackTrace();
 						}

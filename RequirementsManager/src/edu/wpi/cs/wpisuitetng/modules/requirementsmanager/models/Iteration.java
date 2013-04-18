@@ -343,4 +343,12 @@ public class Iteration extends AbstractModel {
 		return (currentDate.compareTo(getEndDate()) <= 0 || getId() == -1 || getId() == -2);
 	}
 
+	public String toString() {
+		if ((new Date()).compareTo(this.getEndDate()) > 0 && this.getId() != -1) {
+			return this.getName()+ " (Closed)"; 
+		} else {
+			return this.getName();
+		}
+	}
+	
 }

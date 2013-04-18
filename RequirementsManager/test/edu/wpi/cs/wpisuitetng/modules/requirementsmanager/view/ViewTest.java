@@ -47,14 +47,14 @@ public class ViewTest {
 	String mockSsid;
 	Data db;
 	User testUser;
-	
-	
+
 	@Before
-	public void setUp(){
+	public void setUp() {
 
 		Network.initNetwork(new MockNetwork());
-		Network.getInstance().setDefaultNetworkConfiguration(
-				new NetworkConfiguration("http://wpisuitetng"));
+		final NetworkConfiguration config = new NetworkConfiguration(
+				"http://localhost:8080");
+		Network.getInstance().setDefaultNetworkConfiguration(config);
 		// initialize database and session info
 		testUser = new User(null, "testUser", null, -1);
 		testProject = new Project("test", "1");
@@ -62,14 +62,14 @@ public class ViewTest {
 		defaultSession = new Session(testUser, testProject, mockSsid);
 		db = new MockData(new HashSet<Object>());
 		db.save(testUser);
-		DetailTest1 = new DetailPanel(IterationTest ,  TabControllerTest); 
+		DetailTest1 = new DetailPanel(IterationTest, TabControllerTest);
 	}
-	
+
 	@Test
 	public void testGetMainTabControl() throws Exception {
 		assertEquals(TabControllerTest, this.DetailTest1.getMainTabController());
 	}
-	
+
 	@Test
 	public void testGetTextName() throws Exception {
 		assertEquals("", this.DetailTest1.getTextName().getText());
