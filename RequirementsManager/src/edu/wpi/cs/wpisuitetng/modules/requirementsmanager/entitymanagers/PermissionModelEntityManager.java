@@ -12,7 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
-import edu.wpi.cs.wpisuitetng.Permission;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -20,6 +19,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
@@ -55,7 +55,7 @@ public class PermissionModelEntityManager implements
 		// The user already has permissions assigned to them, so there's been a
 		// problem. Throw a bad request
 		if (db.retrieve(PermissionModel.class, "user", s.getUser(),
-				s.getProject()) != null) {
+				s.getProject()).toArray(new PermissionModel[0]).length != 0) {
 			throw new BadRequestException();
 		}
 
@@ -64,7 +64,7 @@ public class PermissionModelEntityManager implements
 		// default
 		PermissionModel model = new PermissionModel();
 		model.setUser(s.getUser());
-		model.setPermission(s.getUser().getPermission(s.getUser()) == Permission.WRITE ? UserPermissionLevels.ADMIN
+		model.setPermission(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevels.ADMIN
 				: UserPermissionLevels.NONE);
 
 		// Save the permission to the database
@@ -81,8 +81,15 @@ public class PermissionModelEntityManager implements
 	@Override
 	public PermissionModel[] getEntity(Session s, String id)
 			throws NotFoundException, WPISuiteException {
-		return db.retrieve(PermissionModel.class, "user", s.getUser(),
-				s.getProject()).toArray(new PermissionModel[0]);
+		try {
+			// Attempt to make permissions for the user
+			PermissionModel[] perms = { makeEntity(s, "") };
+			return perms;
+		} catch (BadRequestException e) {
+			// Get the pre-existing perms and return it
+			return db.retrieve(PermissionModel.class, "user", s.getUser(),
+					s.getProject()).toArray(new PermissionModel[0]);
+		}
 	}
 
 	/**

@@ -47,9 +47,6 @@ public class ToolbarView extends DefaultToolbarView {
 	/** Button for creating statistics panel */
 	private JButton createStatistics;
 
-	/** Button for creating a permissions panel */
-	private JButton createPermissions;
-
 	/**
 	 * Create a ToolbarView.
 	 * 
@@ -57,22 +54,19 @@ public class ToolbarView extends DefaultToolbarView {
 	 *            The MainTabController this view should open tabs with
 	 */
 	public ToolbarView(MainTabController tabController) {
-		
+
 		// Note: User Manual button is being deprecated in favor of it's own
 		// toolbar
 		// Construct the content panel
 		JPanel content = new JPanel();
 		JPanel resourcePanel = new JPanel();
-		JPanel permissionPanel = new JPanel();
+		PermissionToolbarPane permissionPanel = PermissionToolbarPane.createSingleton(tabController);
 		SpringLayout layout = new SpringLayout();
 		SpringLayout resourceLayout = new SpringLayout();
-		SpringLayout permissionLayout = new SpringLayout();
 		content.setLayout(layout);
 		content.setOpaque(false);
 		resourcePanel.setLayout(resourceLayout);
 		resourcePanel.setOpaque(false);
-		permissionPanel.setLayout(permissionLayout);
-		permissionPanel.setOpaque(false);
 
 		// Construct the create Requirement button
 		createRequirement = new JButton("Create Requirement");
@@ -89,16 +83,7 @@ public class ToolbarView extends DefaultToolbarView {
 		createStatistics = new JButton("Show Statistics");
 		createStatistics.setAction(new CreateStatPanelAction(tabController));
 
-		// Construct the permissions button
-		createPermissions = new JButton("Show Permissions");
-		createPermissions.setAction(new CreatePermissionPanelAction(
-				tabController));
-		if(PermissionModel.getInstance().getPermission() == UserPermissionLevels.ADMIN) {
-			createPermissions.setEnabled(true);
-			PermissionsDatabase.getInstance().start();
-		}
-		else
-			createPermissions.setEnabled(false);
+
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -150,66 +135,6 @@ public class ToolbarView extends DefaultToolbarView {
 
 		// content.add(searchField);
 
-		// create objects for user permission panel
-		JLabel nameLabel = new JLabel();
-		JLabel userName = new JLabel();
-		JLabel permissionLabel = new JLabel();
-		JLabel userLevel = new JLabel();
-
-		nameLabel.setText("The current user is: ");
-		userName.setText(ConfigManager.getConfig().getUserName());
-		permissionLabel.setText("your current permission is: ");
-		userLevel.setText(PermissionModel.getInstance().getPermission()
-				.toString());
-
-		// stack all the labels on top of each other
-		permissionLayout.putConstraint(SpringLayout.NORTH, nameLabel, 3,
-				SpringLayout.NORTH, permissionPanel);
-		permissionLayout.putConstraint(SpringLayout.NORTH, userName, 3,
-				SpringLayout.SOUTH, nameLabel);
-		permissionLayout.putConstraint(SpringLayout.NORTH, permissionLabel, 3,
-				SpringLayout.SOUTH, userName);
-		permissionLayout.putConstraint(SpringLayout.NORTH, userLevel, 3,
-				SpringLayout.SOUTH, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.NORTH, createPermissions,
-				3, SpringLayout.SOUTH, userLevel);
-
-		// center everything horizontally
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				nameLabel, 0, SpringLayout.HORIZONTAL_CENTER, permissionPanel);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				userName, 0, SpringLayout.HORIZONTAL_CENTER, permissionPanel);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				userLevel, 0, SpringLayout.HORIZONTAL_CENTER, permissionPanel);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				permissionLabel, 0, SpringLayout.HORIZONTAL_CENTER, permissionPanel);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				createPermissions, 0, SpringLayout.HORIZONTAL_CENTER, permissionPanel);
-		
-		// match everything to nameLabel width
-		permissionLayout.putConstraint(SpringLayout.EAST, nameLabel, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, nameLabel, 0,
-				SpringLayout.WEST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.EAST, userName, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, userName, 0,
-				SpringLayout.WEST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.EAST, userLevel, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, userLevel, 0,
-				SpringLayout.WEST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.EAST, createPermissions, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, createPermissions, 0,
-				SpringLayout.WEST, permissionLabel);
-
-		permissionPanel.add(nameLabel);
-		permissionPanel.add(userName);
-		permissionPanel.add(permissionLabel);
-		permissionPanel.add(userLevel);
-		permissionPanel.add(createPermissions);
-
 		// Construct a new toolbar group to be added to the end of the toolbar
 		ToolbarGroupView toolbarGroup = new ToolbarGroupView("Home", content);
 		ToolbarGroupView helpToolbar = new ToolbarGroupView("Resources",
@@ -221,7 +146,7 @@ public class ToolbarView extends DefaultToolbarView {
 		Double toolbarGroupWidth = Math.max(createRequirement
 				.getPreferredSize().getWidth() + 40,
 		// 40 accounts for margins between the buttons
-				permissionLabel.getPreferredSize().getWidth() + 10);
+				permissionPanel.getLabelWidth() + 10);
 
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 		addGroup(toolbarGroup);

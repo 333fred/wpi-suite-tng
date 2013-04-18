@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.PermissionToolbarPane;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -27,6 +28,7 @@ public class RetrievePermissionsRequestObserver implements RequestObserver {
 		// Get the response and call the singleton initializer
 		ResponseModel response = iReq.getResponse();
 		PermissionModel.fromJSONSingleton(response.getBody());
+		PermissionToolbarPane.getInstance().refreshPermission();
 	}
 
 	/**

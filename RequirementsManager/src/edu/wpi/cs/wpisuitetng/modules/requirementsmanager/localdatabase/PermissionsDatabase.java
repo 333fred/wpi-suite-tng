@@ -25,43 +25,44 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
-
 /**
  * Maintains a local database of user permissions.
+ * 
  * @author Conor
- *
+ * 
  */
 public class PermissionsDatabase extends Thread {
-	
+
 	private Map<User, PermissionModel> permissions;
 	private List<IDatabaseListener> listeners;
 	private RetrieveAllPermissionsController controller;
 	private static PermissionsDatabase db;
-	
+
 	private PermissionsDatabase() {
 		permissions = new HashMap<User, PermissionModel>();
 		this.listeners = new ArrayList<IDatabaseListener>();
 		this.controller = new RetrieveAllPermissionsController();
 		setDaemon(true);
 	}
-	
+
 	public static PermissionsDatabase getInstance() {
 		if (db == null) {
 			db = new PermissionsDatabase();
 		}
 		return db;
 	}
-	
+
 	/**
 	 * Sets the permissions to the given map
 	 * 
 	 * @param permissions
 	 */
-	public synchronized void setPermissions(Map<User, PermissionModel> permissions) {
+	public synchronized void setPermissions(
+			Map<User, PermissionModel> permissions) {
 		this.permissions = permissions;
 		updateListeners();
 	}
-	
+
 	/**
 	 * Sets the permissions to the given list. This removes everything in the
 	 * map and adds only things in the list
@@ -76,6 +77,7 @@ public class PermissionsDatabase extends Thread {
 		}
 		updateListeners();
 	}
+
 	/**
 	 * Adds the given permissions to the map. The difference between this and
 	 * set permissions is that this doesn't erase all permissions, only
@@ -90,7 +92,7 @@ public class PermissionsDatabase extends Thread {
 		}
 		updateListeners();
 	}
-	
+
 	/**
 	 * Adds or updates a specific permission
 	 * 
@@ -101,15 +103,14 @@ public class PermissionsDatabase extends Thread {
 		permissions.put(i.getUser(), i);
 		updateListeners();
 	}
-	
+
 	/**
 	 * Get a specific permission from the local database
 	 * 
 	 * @param u
 	 *            the user of requirement to get
-	 * @return the permissions requested
-	 *             couldn't find the requirement
-	 * @throws PermissionsNotFoundException 
+	 * @return the permissions requested couldn't find the requirement
+	 * @throws PermissionsNotFoundException
 	 */
 	public synchronized PermissionModel getPermissions(User u)
 			throws RequirementNotFoundException, PermissionsNotFoundException {
@@ -127,10 +128,11 @@ public class PermissionsDatabase extends Thread {
 	 */
 	public synchronized List<PermissionModel> getAllPermissions() {
 		List<PermissionModel> list = new ArrayList<PermissionModel>();
-		list = Arrays.asList(permissions.values().toArray(new PermissionModel[0]));
+		list = Arrays.asList(permissions.values().toArray(
+				new PermissionModel[0]));
 		return list;
 	}
-	
+
 	/**
 	 * Call the update method on all registered listeners
 	 */
@@ -146,7 +148,7 @@ public class PermissionsDatabase extends Thread {
 			listeners.remove(l);
 		}
 	}
-	
+
 	/**
 	 * Registers a database listener
 	 * 
@@ -177,6 +179,8 @@ public class PermissionsDatabase extends Thread {
 	 */
 	@Override
 	public void run() {
+		// Clear interrupted status
+		interrupted();
 		while (!interrupted()) {
 			// Trigger an update
 			controller.getAll();
@@ -189,7 +193,7 @@ public class PermissionsDatabase extends Thread {
 			}
 		}
 	}
-	
+
 	// TODO documentation
 	public PermissionModel getPermission(String string) {
 		for (PermissionModel aPer : permissions.values()) {
