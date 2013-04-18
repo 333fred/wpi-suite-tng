@@ -7,49 +7,50 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Jason Whitehouse
+ *    @author Fredric
  *******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddRequirementRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.UnauthorizedException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * Controller used to add a requirement to the database
+ * Controller that saves permissions to the server
  */
-public class AddRequirementController {
 
-	DetailPanel detailPanel;
-
-	public AddRequirementController(DetailPanel detailPanel) {
-		this.detailPanel = detailPanel;
-	}
+public class SavePermissionController {
 
 	/**
-	 * Adds a requirement to the database
+	 * Saves the given permissions to the server
 	 * 
 	 * @param toAdd
-	 *            requirement that will be added
+	 *            the permission to save/update
 	 */
-	public void AddRequirement(Requirement toAdd) {
+	public void save(PermissionModel toAdd) throws UnauthorizedException {
 		// If the network hasn't been initialized, then this will fail, so
 		// return
 		if (Network.getInstance().isInitialized()) {
 			return;
 		}
-		final RequestObserver requestObserver = new AddRequirementRequestObserver(
-				this, detailPanel); // you will probably want to pass your view
-									// to the observer as well
+		// Throw an exception if the user can't save permissions
+		if (PermissionModel.getInstance().getPermission() != UserPermissionLevels.ADMIN) {
+			throw new UnauthorizedException(UserPermissionLevels.ADMIN,
+					PermissionModel.getInstance().getPermission());
+		}
+		final RequestObserver requestObserver = new SavePermissionRequestObserver();
 		Request request;
 		request = Network.getInstance().makeRequest(
-				"requirementsmanager/requirement", HttpMethod.PUT);
+				"requirementsmanager/permissionmodel", HttpMethod.POST);
 		request.setBody(toAdd.toJSON());
 		request.addObserver(requestObserver);
 		request.send();
 	}
+
 }

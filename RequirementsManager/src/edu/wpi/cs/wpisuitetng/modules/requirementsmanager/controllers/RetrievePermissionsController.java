@@ -12,33 +12,30 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveFilterByIDRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
-import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
-public class RetrieveFilterByIDController {
+/**
+ * Controller to retrieve the Permissions for the current user
+ */
+
+public class RetrievePermissionsController {
 
 	/**
-	 * Retrieves a given filter from the server. The correct callback in
-	 * RetriveFilterByIDRequestObserver is called upon success or failure
-	 * 
-	 * @param id
-	 *            the id of the filter to be retrieved
+	 * Gets the permissions for the current user
 	 */
-	public void get(int id) {
+	public void get() {
 		// If the network hasn't been initialized, then this will fail, so
 		// return
 		if (Network.getInstance().isInitialized()) {
 			return;
 		}
-		final RequestObserver requestObserver = new RetrieveFilterByIDRequestObserver(
-				this);
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmamager/filter", HttpMethod.GET);
-		request.addObserver(requestObserver);
+		final RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
+		Request request = Network.getInstance().makeRequest(
+				"requirementsmanager/permissionmodel/user", HttpMethod.GET);
+		request.addObserver(observer);
 		request.send();
 	}
 

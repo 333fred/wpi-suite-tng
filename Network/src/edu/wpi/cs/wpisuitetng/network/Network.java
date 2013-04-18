@@ -22,73 +22,97 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 public class Network {
 	/** The singleton instance of Network. */
 	private static Network instance = null;
-	
+
 	/** The default NetworkConfiguration. */
 	protected NetworkConfiguration defaultNetworkConfiguration;
-	
+
 	/**
 	 * Constructs a new Network
 	 */
-	protected Network() {}
-	
+	protected Network() {
+	}
+
 	/**
-	 * Makes a Request using the defaultNetworkConfiguration, the given path, and the given requestMethod.
+	 * Makes a Request using the defaultNetworkConfiguration, the given path,
+	 * and the given requestMethod.
 	 * 
-	 * @param path				The core API subpath to make a request to.
-	 * @param requestMethod		The requestMethod to use.
+	 * @param path
+	 *            The core API subpath to make a request to.
+	 * @param requestMethod
+	 *            The requestMethod to use.
 	 * 
-	 * @return	A Request.
+	 * @return A Request.
 	 * 
-	 * @throws RuntimeException			If there is an error using the configured URL.
-	 * @throws NullPointerException		If the requestMethod is null or there is a configuration error.
+	 * @throws RuntimeException
+	 *             If there is an error using the configured URL.
+	 * @throws NullPointerException
+	 *             If the requestMethod is null or there is a configuration
+	 *             error.
 	 */
-	public Request makeRequest(String path, HttpMethod requestMethod) {		
+	public Request makeRequest(String path, HttpMethod requestMethod) {
 		if (requestMethod == null) {
 			throw new NullPointerException("requestMethod may not be null");
 		}
-		
+
 		return new Request(defaultNetworkConfiguration, path, requestMethod);
 	}
-	
+
 	/**
 	 * Sets the default NetworkConfiguration.
 	 * 
-	 * @param config	The new default NetworkConfiguration.
+	 * @param config
+	 *            The new default NetworkConfiguration.
 	 * 
-	 * @throws NullPointerException		If the config parameter that has been passed is null.
+	 * @throws NullPointerException
+	 *             If the config parameter that has been passed is null.
 	 */
-	public void setDefaultNetworkConfiguration(NetworkConfiguration config) throws NullPointerException {
+	public void setDefaultNetworkConfiguration(NetworkConfiguration config)
+			throws NullPointerException {
 		if (config == null) {
-			throw new NullPointerException("The config parameter may not be null.");
+			throw new NullPointerException(
+					"The config parameter may not be null.");
 		}
-		
+
 		this.defaultNetworkConfiguration = config;
 	}
-	
+
 	/**
-	 * Replaces the Network instance with the provided instance. This method can be
-	 * used to replace instance with subclasses of Network for testing purposes.
-	 * @param network the new Network instance
+	 * Replaces the Network instance with the provided instance. This method can
+	 * be used to replace instance with subclasses of Network for testing
+	 * purposes.
+	 * 
+	 * @param network
+	 *            the new Network instance
 	 */
 	public static void initNetwork(Network network) {
 		instance = network;
 	}
-	
+
+	/**
+	 * Returns whether the network has been initialized
+	 * 
+	 * @return true if the network has been initialized, false otherwise
+	 */
+	public boolean isInitialized() {
+		return this.defaultNetworkConfiguration == null;
+	}
+
 	/**
 	 * Returns a copy of the default NetworkConfiguration.
 	 * 
-	 * @return	The default NetworkConfiguration.
+	 * @return The default NetworkConfiguration.
 	 * 
-	 * @throws RuntimeException if the defaultNetworkConfiguration is null.
+	 * @throws RuntimeException
+	 *             if the defaultNetworkConfiguration is null.
 	 */
 	public NetworkConfiguration getDefaultNetworkConfiguration() {
 		if (defaultNetworkConfiguration == null) {
 			throw new RuntimeException("Default network configuration is null.");
 		}
-		
+
 		return new NetworkConfiguration(defaultNetworkConfiguration);
 	}
-	
+
 	/**
 	 * Returns the singleton instance of Network.
 	 * 
@@ -98,7 +122,7 @@ public class Network {
 		if (instance == null) {
 			instance = new Network();
 		}
-		
+
 		return instance;
 	}
 }

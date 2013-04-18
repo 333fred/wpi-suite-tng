@@ -38,6 +38,11 @@ public class AddIterationController {
 	 *            iteration that will be added
 	 */
 	public void addIteration(Iteration toAdd) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		final RequestObserver requestObserver = new AddIterationRequestObserver(
 				this, iterationView); // you will probably want to pass your
 										// view

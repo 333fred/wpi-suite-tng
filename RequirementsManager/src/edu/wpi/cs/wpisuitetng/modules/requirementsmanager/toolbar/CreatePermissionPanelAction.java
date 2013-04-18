@@ -7,8 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		@author Alex Gorowara
- ********************************************************************************/
+ *    @author Alex Woodyard
+ *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
 
@@ -19,35 +19,19 @@ import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
-/**
- * Action invoked upon use of the Create Iteration key Heavily adapted from
- * CreateDefectAction in the DefectTracker module
- * 
- * @author Alex Gorowara
- * 
- *         Action that creates a new Iteration
- */
-@SuppressWarnings("serial")
-public class CreateStatPanelAction extends AbstractAction {
-
+public class CreatePermissionPanelAction extends AbstractAction {
+	
 	private final MainTabController controller;
-
-	/**
-	 * Create a CreateIterationAction
-	 * 
-	 * @param controller
-	 *            When the action is performed, controller.addCreateDefectTab()
-	 *            is called
-	 */
-	public CreateStatPanelAction(MainTabController controller) {
-		super("Show Statistics");
+	
+	public CreatePermissionPanelAction(MainTabController controller){
+		super("Edit Permissions");
 		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
+		putValue(MNEMONIC_KEY, KeyEvent.VK_P);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.addStatTab();
+		controller.addPermissionTab();		
 	}
 
 }

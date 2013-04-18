@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
+import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -30,6 +31,11 @@ public class QueryUserRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseSuccess(IRequest iReq) {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
 		ResponseModel response = iReq.getResponse();
 
 		final StringListModel users = StringListModel.fromJson(response

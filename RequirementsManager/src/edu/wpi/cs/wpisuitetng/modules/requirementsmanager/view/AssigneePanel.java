@@ -70,16 +70,7 @@ public class AssigneePanel extends JPanel {
 		// initialize the two test string arrays
 		unassignedUsersList = new DefaultListModel();
 
-		/*
-		 * for (int i=0;i<50;i++) { unassignedUsersList.add(i, "Value " +
-		 * (i+1)); }
-		 */
-
 		assignedUsersList = new DefaultListModel();
-		// assignedUsersList.addElement("Value 1a");
-		// assignedUsersList.addElement("Value 2a");
-		// assignedUsersList.addElement("Value 3a");
-		// assignedUsersList.addElement("Value 4a");
 
 		// initialize the list of the assigned and unassigned users
 		unassignedUsers = new JList(unassignedUsersList);

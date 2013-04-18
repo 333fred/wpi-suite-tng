@@ -37,6 +37,12 @@ public class RetrieveAllRequirementsController {
 	 * Sends a request for all of the requirements
 	 */
 	public void getAll() {
+		// If the network hasn't been initialized, then this will fail, so
+		// return
+		if (Network.getInstance().isInitialized()) {
+			return;
+		}
+
 		final RequestObserver requestObserver = new RetrieveAllRequirementsRequestObserver(
 				this);
 		Request request;
