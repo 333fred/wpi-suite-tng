@@ -679,9 +679,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	public void responseSuccess() {
-		filterView.notifyListeners();
 		onCancelPressed();
 		filterView.refreshTableView();
+		filterView.notifyListeners();
 	}
 
 	public void responseError(int statusCode, String statusMessage) {
