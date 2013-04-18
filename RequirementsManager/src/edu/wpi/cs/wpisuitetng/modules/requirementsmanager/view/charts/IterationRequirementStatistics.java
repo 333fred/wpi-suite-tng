@@ -1,15 +1,15 @@
 /*******************************************************************************
-* Copyright (c) 2013 -- WPI Suite: Team Swagasarus
-*
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* Alex Gorowara
-* Steve Kordell
-*******************************************************************************/
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Alex Gorowara
+ * Steve Kordell
+ *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.util.List;
@@ -23,54 +23,75 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
-* class to contain data on how many requirements are assigned to each iteration
-*
-*/
-public class IterationRequirementStatistics extends AbstractRequirementStatistics {
-	
-	/* (non-Javadoc)
-	* @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
-	*/
+ * class to contain data on how many requirements are assigned to each iteration
+ * 
+ */
+public class IterationRequirementStatistics extends
+		AbstractRequirementStatistics {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
+	 * IRequirementStatistics#update()
+	 */
 	@Override
-	public void update(){
-	
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-		
+	public void update() {
+
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getAllRequirements(); // refresh list of requirements TODO: is
+										// there a better way to do this?
+
 		// for every possible status
-		for(Iteration iteration: IterationDatabase.getInstance().getAllIterations()){
-			this.data.put(iteration.getName(), new Integer(0));	// set the number of counted requirements with that status to zero
+		for (Iteration iteration : IterationDatabase.getInstance()
+				.getAllIterations()) {
+			this.data.put(iteration.getName(), new Integer(0)); // set the
+																// number of
+																// counted
+																// requirements
+																// with that
+																// status to
+																// zero
 		}
-		
+
 		// for every requirement in this project
-		for(Requirement requirement : requirements){
-		
-			try{
-				Iteration iteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
+		for (Requirement requirement : requirements) {
+
+			try {
+				Iteration iteration = IterationDatabase.getInstance()
+						.getIteration(requirement.getIteration());
 				Integer oldValue = this.data.get(iteration.getName());
-				//System.out.println(oldValue);
-				this.data.put(iteration.getName(), new Integer(oldValue.intValue() + 1));	// increment the number of requirements for a given iteration
+				// System.out.println(oldValue);
+				this.data.put(iteration.getName(),
+						new Integer(oldValue.intValue() + 1)); // increment the
+																// number of
+																// requirements
+																// for a given
+																// iteration
+			} catch (IterationNotFoundException e) {
+				System.out
+						.println("Iteration wasn't found, disregarding: IterationRequirementStatistics:54");
 			}
-			catch(IterationNotFoundException e){
-			// do not account for iterations which do not exist
-			}
-		
+
 		}
-	
+
 	}
-	
-	public JFreeChart buildLineChart(){
+
+	public JFreeChart buildLineChart() {
 		this.update();
-		return this.buildLineChart("Requirements by Iteration", "Iteration", "Requirements");
+		return this.buildLineChart("Requirements by Iteration", "Iteration",
+				"Requirements");
 	}
-	
-	public JFreeChart buildPieChart(){
+
+	public JFreeChart buildPieChart() {
 		this.update();
 		return this.buildPieChart("Requirements by Iteration");
 	}
-	
-	public JFreeChart buildBarChart(){
+
+	public JFreeChart buildBarChart() {
 		this.update();
-		return this.buildBarChart("Requirements by Iteration", "Iteration", "Requirements");
+		return this.buildBarChart("Requirements by Iteration", "Iteration",
+				"Requirements");
 	}
 
 }

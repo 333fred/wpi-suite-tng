@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
+ * Contributors: Nick, Matt
  *    
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
@@ -30,7 +30,6 @@ public class AssignParentAction extends AbstractAction {
 	 *            the controller to trigger
 	 */
 	public AssignParentAction(AssignParentController controller) {
-		super("Assign Parent");
 		this.controller = controller;
 	}
 

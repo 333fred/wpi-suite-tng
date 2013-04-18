@@ -235,7 +235,7 @@ public class MainTabController {
 		try {
 			tabView.removeTabAt(tabView.getSelectedIndex());
 		} catch (IndexOutOfBoundsException e) {
-			// do nothing, tried to close tab that does not exist
+			System.out.println("Tried to close a tab that does not exist: MainTabController:238");
 		}
 	}
 	
@@ -247,7 +247,7 @@ public class MainTabController {
 			}
 		}
 		catch (IndexOutOfBoundsException e) {
-			// do nothing, tried to close tab that does not exist
+			System.out.println("Tried to close a tab that does not exist: MainTabController:250");
 		}
 	}
 	
@@ -269,7 +269,7 @@ public class MainTabController {
 			tabView.setSelectedIndex(tabIndex);
 
 		} catch (IndexOutOfBoundsException e) {
-			// an invalid tab was requested, do nothing
+			System.out.println("Tried to close an invalid tab : MainTabController:272");
 		}
 	}
 	

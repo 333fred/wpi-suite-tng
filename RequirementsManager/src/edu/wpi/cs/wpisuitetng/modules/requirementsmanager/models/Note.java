@@ -91,6 +91,17 @@ public class Note implements Event {
 		return true;
 	}
 
+	@Override
+	public int hashCode() {
+		int retVal = 0;
+
+		retVal += 17 * this.creator.hashCode();
+		retVal += 31 * this.date.hashCode();
+		retVal += 13 * this.note.hashCode();
+
+		return retVal;
+	}
+
 	/**
 	 * @return the note
 	 */

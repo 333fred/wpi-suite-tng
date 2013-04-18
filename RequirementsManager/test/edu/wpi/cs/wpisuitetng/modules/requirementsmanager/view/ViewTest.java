@@ -29,7 +29,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 
@@ -50,7 +49,6 @@ public class ViewTest {
 
 	@Before
 	public void setUp() {
-
 		Network.initNetwork(new MockNetwork());
 		final NetworkConfiguration config = new NetworkConfiguration(
 				"http://localhost:8080");

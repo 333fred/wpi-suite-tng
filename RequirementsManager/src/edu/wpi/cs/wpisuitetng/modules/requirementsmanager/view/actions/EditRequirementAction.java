@@ -171,7 +171,8 @@ public class EditRequirementAction extends AbstractAction {
 					requirement.setEstimate(Integer.parseInt(parentView
 							.getTextEstimate().getText()));
 				} catch (NumberFormatException except) {
-					// not necessary to do anything
+					System.out
+							.println("The number is incorrectly formatted: EditRequirement:174");
 				}
 
 				controller.SaveRequirement(requirement, true);
