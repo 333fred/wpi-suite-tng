@@ -86,7 +86,11 @@ public class Filter extends AbstractModel {
 	 * @return true if the requirement should be filtered out, false otherwise
 	 */
 	public boolean shouldFilter(Requirement toFilter) {
-
+		//if this is not active return false
+		if (!isActive()) {
+			return false;
+		}
+		
 		switch (getField()) {
 		case NAME:
 			return checkString(toFilter.getName());
