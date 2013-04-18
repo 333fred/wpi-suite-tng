@@ -170,17 +170,17 @@ public class Filter extends AbstractModel {
 	private boolean checkInteger(int value) {
 		switch (getOperation()) {
 		case EQUAL:
-			return value == (int) getValue();
+			return value == (Integer) getValue();
 		case NOT_EQUAL:
-			return value != (int) getValue();
+			return value != (Integer) getValue();
 		case LESS_THAN:
-			return value < (int) getValue();
+			return value < (Integer) getValue();
 		case LESS_THAN_EQUAL:
-			return value <= (int) getValue();
+			return value <= (Integer) getValue();
 		case GREATER_THAN_EQUAL:
-			return value >= (int) getValue();
+			return value >= (Integer) getValue();
 		case GREATER_THAN:
-			return value > (int) getValue();
+			return value > (Integer) getValue();
 		default:
 			System.out.println("MAGIC!!!!!!!");
 			return false;
@@ -216,9 +216,9 @@ public class Filter extends AbstractModel {
 
 		switch (getOperation()) {
 		case EQUAL:
-			return value == (int) getValue();
+			return value == (Integer) getValue();
 		case NOT_EQUAL:
-			return value != (int) getValue();
+			return value != (Integer) getValue();
 		case OCCURS_AFTER:
 			valueDate = (Date) getValue();
 			// less than one if this date is before argument

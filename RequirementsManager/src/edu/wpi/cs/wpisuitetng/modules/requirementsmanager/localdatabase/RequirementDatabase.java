@@ -134,14 +134,14 @@ public class RequirementDatabase extends Thread {
 	 * @return the list of filtered requirements
 	 */
 	public synchronized List<Requirement> getFilteredRequirements() {
-		List<Requirement> filteredReqs = getAllRequirements();
+		List<Requirement> filteredReqs = new ArrayList<Requirement>();
 		List<Filter> filters = FilterDatabase.getInstance().getActiveFilters();
 		// Loop through the filters and requirements and remove anything that
 		// should be filtered
 		for (Filter f : filters) {
-			for (Requirement r : filteredReqs) {
-				if (f.shouldFilter(r)) {
-					filteredReqs.remove(r);
+			for (Requirement r : getAllRequirements()) {
+				if (!f.shouldFilter(r)) {
+					filteredReqs.add(r);
 				}
 			}
 		}

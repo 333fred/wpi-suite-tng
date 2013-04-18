@@ -707,7 +707,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
-		this.requirements = requirements;
+		this.requirements = RequirementDatabase.getInstance().getFilteredRequirements().toArray(new Requirement[0]);
+		//this.requirements = requirements;
 		updateListView();
 
 	}
