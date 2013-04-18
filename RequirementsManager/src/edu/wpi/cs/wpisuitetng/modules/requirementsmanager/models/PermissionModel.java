@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    @author Fredric
+ *    @contributor Conor
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -84,6 +85,11 @@ public class PermissionModel extends AbstractModel {
 		System.out.println(json.getUser());
 		System.out.println(getInstance().getUser());
 		return getInstance();
+	}
+	
+	public static PermissionModel[] fromJSONArray(String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, PermissionModel[].class);
 	}
 
 	/**

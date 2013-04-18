@@ -8,11 +8,13 @@
  *
  * Contributors:
  *    @author Alex Woodyard
+ *    @contributor Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,19 +32,24 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EtchedBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 @SuppressWarnings("serial")
 public class PermissionsPanel extends Tab {
+	
+	/**List of locally stored permissions*/
+	private List<PermissionModel> localPermissions;
 
 	/** A list to display */
 	private JList userList;
 
 	/** A list of users to display */
-	private String[] users = new String[50];
+	private String[] users;
 
-	/** A button to select admnistrative permission level */
+	/** A button to select administrative permission level */
 	private JRadioButton adminButton;
 
 	/** A button to select update permission level */
@@ -61,9 +68,13 @@ public class PermissionsPanel extends Tab {
 		JPanel radioPanel = new JPanel();
 
 		radioPanel.setLayout(radioLayout);
-
-		for (int i = 0; i < 50; i++) {
-			users[i] = "demo" + (i + 1);
+		
+		/**Initialize the list of local permissions*/
+		localPermissions = PermissionsDatabase.getInstance().getAllPermissions();
+		System.out.println(localPermissions.size());
+		users = new String[localPermissions.size()];
+		for (int i = 0; i < users.length; i++) {
+			users[i] = localPermissions.get(i).getUser().getName();
 		}
 
 		// radioPanel.setLayout(radioLayout);

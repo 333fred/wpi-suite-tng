@@ -141,7 +141,8 @@ public class PermissionToolbarPane extends JPanel {
 				.toString());
 		if (PermissionModel.getInstance().getPermission() == UserPermissionLevels.ADMIN) {
 			createPermissions.setEnabled(true);
-			PermissionsDatabase.getInstance().start();
+			if(!(PermissionsDatabase.getInstance().isAlive()))
+					PermissionsDatabase.getInstance().start();
 		} else {
 			createPermissions.setEnabled(false);
 			PermissionsDatabase.getInstance().interrupt();

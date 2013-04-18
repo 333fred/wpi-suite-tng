@@ -184,6 +184,7 @@ public class PermissionsDatabase extends Thread {
 		while (!interrupted()) {
 			// Trigger an update
 			controller.getAll();
+			System.out.println("Got permissions from server");
 			try {
 				// Sleep for five minutes
 				Thread.sleep(300000);
@@ -194,10 +195,14 @@ public class PermissionsDatabase extends Thread {
 		}
 	}
 
-	// TODO documentation
+	/**
+	 * Searchs perm database for a username to find permissions for
+	 * @param Name of user to find perm for
+	 * @return Permissions for named user or null if permission does not exist
+	 */
 	public PermissionModel getPermission(String string) {
 		for (PermissionModel aPer : permissions.values()) {
-			if (aPer.getInstance().getUser().getName().equals(string)) {
+			if (aPer.getInstance().getUser().getUsername().equals(string)) {
 				return aPer;
 			}
 		}
