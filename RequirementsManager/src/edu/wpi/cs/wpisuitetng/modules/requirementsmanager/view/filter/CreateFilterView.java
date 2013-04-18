@@ -165,7 +165,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		cboxOperation.setBackground(Color.WHITE);
 		cboxEqualTo.setBackground(Color.WHITE);
 
-		butSave = new JButton("Save");
+		butSave = new JButton("Create");
 		butCancel = new JButton("Cancel");
 
 		butSave.setEnabled(false);
@@ -297,7 +297,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		calEqualToBetween.addPropertyChangeListener(createFilterViewListener);
 
 		iterations = new ArrayList<Iteration>();
-		//update the iterations
+		// update the iterations
 		updateIterations();
 		// populate the fields in the combo boxes
 		populateFieldComboBox();
@@ -387,7 +387,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	private void updateEqualsField() {
-		
+
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
 
@@ -411,15 +411,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cboxEqualTo.setVisible(false);
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
-				
-				//update the iterations
+
+				// update the iterations
 				updateIterations();
-				
-				cboxEqualTo.removeAllItems();	
+
+				cboxEqualTo.removeAllItems();
 				for (Iteration iteration : iterations) {
 					cboxEqualTo.addItem(iteration.getName());
 				}
-				
+
 				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
 				labEqualToBetween.setVisible(false);
@@ -497,7 +497,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					error = true;
 					errorString = "Invalid iteration";
 				}
-				//save the ID of the iteration
+				// save the ID of the iteration
 				filter.setValue(iterations.get(iterationIndex).getId());
 				filterStringValue = iterations.get(iterationIndex).getName();
 			} else {
@@ -529,7 +529,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getSelectedItem()));
 			filter.setOperation(FilterOperation
 					.getFromString((String) cboxOperation.getSelectedItem()));
-			
+
 			if (filterStringValue == null) {
 				filterStringValue = filter.getValue().toString();
 			}
@@ -542,9 +542,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				saveFilterController.saveFilter(filter);
 			}
 			txtEqualTo.setBackground(Color.WHITE);
-			calEqualTo.setBackground(Color.WHITE);			
-		
-			
+			calEqualTo.setBackground(Color.WHITE);
+
 		} else {
 			// there was an error set text bot
 			labSaveError.setText(errorString);
@@ -665,12 +664,12 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			onCancelPressed();
 		}
 	}
-	
+
 	private void updateIterations() {
 		iterations.clear();
 
-		
-		for (Iteration iteration : IterationDatabase.getInstance().getAllIterations()) {
+		for (Iteration iteration : IterationDatabase.getInstance()
+				.getAllIterations()) {
 			System.out.println(iteration);
 			if (iteration.isOpen()) {
 				iterations.add(iteration);
@@ -692,5 +691,43 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	public void fail(Exception exception) {
 		System.out.println("Filter Failed!!");
 		exception.printStackTrace();
+	}
+
+	/**
+	 * Enables editing of the given filter
+	 * 
+	 * @param toEdit
+	 *            Filter to edit
+	 */
+
+	public void editFilter(Filter toEdit) {
+		filter = toEdit;
+		updateMode(Mode.EDIT);
+	}
+
+	/**
+	 * Cancels the editing of the filter
+	 * 
+	 */
+
+	public void cancelEdit() {
+		filter = new Filter();
+		updateMode(Mode.CREATE);
+	}
+
+	/**
+	 * Updates the mode
+	 * 
+	 */
+
+	public void updateMode(Mode newMode) {
+		this.mode = newMode;
+		if (mode == Mode.CREATE) {
+			butSave.setText("Create");
+			butCancel.setText("Cancel");
+		} else {
+			butSave.setText("Save");
+			butCancel.setText("Cancel Editing");
+		}
 	}
 }
