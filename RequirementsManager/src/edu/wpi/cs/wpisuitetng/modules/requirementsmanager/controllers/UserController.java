@@ -12,11 +12,13 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
+
 /**
  * Manages retrieving users from the server
  */
 
-public class UserController extends AbstractController {
+public class UserController extends AbstractController<StringListModel> {
 
 	/**
 	 * Creates a controller to retrieve users from the server

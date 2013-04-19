@@ -20,7 +20,7 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
  * retrieving one, retrieving all, creating, and saving a model
  */
 
-public interface IModelController {
+public interface IModelController<T extends AbstractModel> {
 
 	/**
 	 * Gets the model with the given id from the server
@@ -48,7 +48,7 @@ public interface IModelController {
 	 * @param observer
 	 *            the observer to handle server response
 	 */
-	public void create(AbstractModel model, RequestObserver observer);
+	public void create(T model, RequestObserver observer);
 
 	/**
 	 * Updates the given model on server. It must be created once before it is
@@ -59,7 +59,7 @@ public interface IModelController {
 	 * @param observer
 	 *            the observer to handle server response
 	 */
-	public void save(AbstractModel model, RequestObserver observer);
+	public void save(T model, RequestObserver observer);
 
 	/**
 	 * Deletes the given model on server.
@@ -69,5 +69,5 @@ public interface IModelController {
 	 * @param observer
 	 *            the observer to handle server response
 	 */
-	public void delete(AbstractModel model, RequestObserver observer);
+	public void delete(T model, RequestObserver observer);
 }

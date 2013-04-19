@@ -18,7 +18,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.Permission;
-import edu.wpi.cs.wpisuitetng.modules.Model;
+import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
@@ -28,8 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * @author Fredric
  */
 
-@SuppressWarnings("serial")
-public class StringListModel implements Model {
+public class StringListModel extends AbstractModel {
 
 	List<String> users;
 

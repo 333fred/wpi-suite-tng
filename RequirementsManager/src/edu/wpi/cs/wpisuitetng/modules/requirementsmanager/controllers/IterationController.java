@@ -12,17 +12,39 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.RequestObserver;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
+
 /**
  * Controller to handle all server communication with Iteration objects.
  */
 
-public class IterationController extends AbstractController {
+public class IterationController extends AbstractController<Iteration> {
 
 	/**
 	 * Creates a controller to send Iteration requests to the server
 	 */
 	public IterationController() {
 		super("iteration");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete(Iteration model, RequestObserver observer) {
+		if (isSafeToSend()) {
+			return;
+		}
+		Request request;
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/" + type + "/" + model.getId(),
+				HttpMethod.DELETE);
+		request.addObserver(observer);
+		request.send();
 	}
 
 }

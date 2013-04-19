@@ -24,7 +24,8 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * fields to the server methods
  */
 
-public abstract class AbstractController implements IModelController {
+public abstract class AbstractController<T extends AbstractModel> implements
+		IModelController<T> {
 
 	String type;
 
@@ -85,7 +86,7 @@ public abstract class AbstractController implements IModelController {
 	 *            the observer that will handle the server response
 	 */
 	@Override
-	public void create(AbstractModel model, RequestObserver observer) {
+	public void create(T model, RequestObserver observer) {
 		if (isSafeToSend()) {
 			return;
 		}
@@ -107,34 +108,13 @@ public abstract class AbstractController implements IModelController {
 	 *            the observer that will handle the server response
 	 */
 	@Override
-	public void save(AbstractModel model, RequestObserver observer) {
+	public void save(T model, RequestObserver observer) {
 		if (isSafeToSend()) {
 			return;
 		}
 		Request request;
 		request = Network.getInstance().makeRequest(
 				"requirementsmanager/" + type, HttpMethod.POST);
-		request.setBody(model.toJSON());
-		request.addObserver(observer);
-		request.send();
-	}
-
-	/**
-	 * Creates a server delete request for a model of the given type
-	 * 
-	 * @param model
-	 *            the model to delete
-	 * @param observer
-	 *            the observer that will handle the server response
-	 */
-	@Override
-	public void delete(AbstractModel model, RequestObserver observer) {
-		if (isSafeToSend()) {
-			return;
-		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type, HttpMethod.DELETE);
 		request.setBody(model.toJSON());
 		request.addObserver(observer);
 		request.send();

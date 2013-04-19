@@ -12,17 +12,39 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.RequestObserver;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
+
 /**
  * Controller to handle all server communication with Requirement objects.
  */
 
-public class RequirementsController extends AbstractController {
+public class RequirementsController extends AbstractController<Requirement> {
 
 	/**
 	 * Creates a controller to send Requirement requests to the server
 	 */
 	public RequirementsController() {
 		super("requirement");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete(Requirement model, RequestObserver observer) {
+		if (isSafeToSend()) {
+			return;
+		}
+		Request request;
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/" + type + "/" + model.getrUID(),
+				HttpMethod.DELETE);
+		request.addObserver(observer);
+		request.send();
 	}
 
 }
