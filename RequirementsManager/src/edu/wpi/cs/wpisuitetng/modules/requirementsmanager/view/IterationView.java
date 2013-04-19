@@ -520,9 +520,9 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	@Override
 	public void responseSuccess() {
+		mainTabController.refreshSubReqView();
 		mainTabController.refreshIterationTree();
 		mainTabController.closeCurrentTab();
-
 	}
 
 	@Override
