@@ -367,8 +367,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			// iterationNode.setUserObject(anIteration);
 			for (Integer aReq : anIteration.getRequirements()) {
 				try {
-					requirement = RequirementDatabase.getInstance()
-							.getRequirement(aReq);
+					requirement = RequirementDatabase.getInstance().get(aReq);
 					requirementNode = new DefaultMutableTreeNode(requirement);
 					// requirementNode.setUserObject(requirement);
 					iterationNode.add(requirementNode);

@@ -684,7 +684,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		iterations.clear();
 
 		for (Iteration iteration : IterationDatabase.getInstance()
-				.getAllIterations()) {
+				.getAll()) {
 			System.out.println(iteration);
 			if (iteration.isOpen()) {
 				iterations.add(iteration);

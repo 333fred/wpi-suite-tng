@@ -38,8 +38,8 @@ public class QueryUserRequestObserver implements RequestObserver {
 		}
 		ResponseModel response = iReq.getResponse();
 
-		final StringListModel users = StringListModel.fromJson(response
-				.getBody());
+		final StringListModel users = StringListModel.fromJSONArray(response
+				.getBody())[0];
 
 		// notify the controller
 		SwingUtilities.invokeLater(new Runnable() {

@@ -53,7 +53,7 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 			Requirement[] requirements = Requirement.fromJSONArray(response
 					.getBody());
 
-			RequirementDatabase.getInstance().addRequirement(requirements[0]);
+			RequirementDatabase.getInstance().add(requirements[0]);
 
 			// notify the controller
 			notifier.receivedData(requirements[0]);

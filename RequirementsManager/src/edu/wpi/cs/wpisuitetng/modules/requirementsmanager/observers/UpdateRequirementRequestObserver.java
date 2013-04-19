@@ -59,7 +59,7 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 																		// logger
 
 		Requirement req = Requirement.fromJSON(response.getBody());
-		RequirementDatabase.getInstance().addRequirement(req);
+		RequirementDatabase.getInstance().add(req);
 
 		notifier.responseSuccess();
 		/*

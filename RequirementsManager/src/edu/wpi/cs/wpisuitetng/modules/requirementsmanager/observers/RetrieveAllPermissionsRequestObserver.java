@@ -38,7 +38,7 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 		final PermissionModel[] permissions = PermissionModel.fromJSONArray(response
 				.getBody());
 
-		PermissionsDatabase.getInstance().setPermissions(
+		PermissionsDatabase.getInstance().set(
 				Arrays.asList(permissions));
 		}
 

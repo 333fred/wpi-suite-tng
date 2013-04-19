@@ -50,7 +50,7 @@ public class AddFilterRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 
 		Filter filter = Filter.fromJSON(response.getBody());
-		FilterDatabase.getInstance().addFilter(filter);
+		FilterDatabase.getInstance().add(filter);
 
 		// TODO: Determine what to do with the response
 		SwingUtilities.invokeLater(new Runnable() {

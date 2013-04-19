@@ -107,21 +107,6 @@ public class DetailATestView extends JPanel {
 				} 
 			});
 
-			// Timer ensures right fields are enabled/disabled, but is sort of
-			// sketchy
-			// int delay = 1000; // Setting up timer, delay for 1 sec
-			// int period = 1000; // repeat every 1 sec
-			// Timer timer = new Timer();
-			// timer.scheduleAtFixedRate(new TimeraTest()
-			// {
-			// public void run()
-			// {
-			// if(requirement.getStatus() != Status.DELETED)
-			// updateaTestViewTime(); //Update the view periodically. Used due
-			// to swing clicking buggy
-			// }
-			// }, delay, period);
-
 			makeATestPanel.getAddATest().setEnabled(false);
 			// Make sure save button is unavailable if name field is empty
 			makeATestPanel.getaTestField().addKeyListener(new KeyAdapter() {

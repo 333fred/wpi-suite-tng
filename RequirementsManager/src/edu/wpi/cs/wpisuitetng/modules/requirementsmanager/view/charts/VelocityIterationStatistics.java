@@ -35,7 +35,7 @@ public class VelocityIterationStatistics extends AbstractRequirementStatistics {
 	@Override
 	public void update(){
 	
-		List<Iteration> iterations = IterationDatabase.getInstance().getAllIterations();	// refresh list of iterations
+		List<Iteration> iterations = IterationDatabase.getInstance().getAll();	// refresh list of iterations
 		
 		for(Iteration anIteration: iterations){
 			

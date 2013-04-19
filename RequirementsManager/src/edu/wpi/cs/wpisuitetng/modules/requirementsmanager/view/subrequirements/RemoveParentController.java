@@ -49,7 +49,7 @@ public class RemoveParentController {
 		Requirement anReq = null;
 		if (model.getpUID().size() != 0) {
 			try {
-				anReq = RequirementDatabase.getInstance().getRequirement(
+				anReq = RequirementDatabase.getInstance().get(
 						model.getpUID().get(0));
 			} catch (RequirementNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -61,6 +61,10 @@ public class RemoveParentController {
 
 			model.removePUID(anReqID);
 			anReq.removeSubRequirement(modelID);
+
+			// ************
+			anReq.setEstimate(anReq.getEstimate() - model.getEstimate());
+
 			RequirementsController controller = new RequirementsController();
 			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 					this.parentView);

@@ -468,7 +468,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 	private boolean doIterationsOverlapWithCurrent() {
 		// get all iterations from the local database
 		List<Iteration> iterations = IterationDatabase.getInstance()
-				.getAllIterations();
+				.getAll();
 
 		Date origStart = iteration.getStartDate();
 		Date origEnd = iteration.getEndDate();
@@ -503,7 +503,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 		// get all iterations from the local database
 		List<Iteration> iterations = IterationDatabase.getInstance()
-				.getAllIterations();
+				.getAll();
 
 		for (Iteration i : iterations) {
 			if (i.getId() == iteration.getId()) {

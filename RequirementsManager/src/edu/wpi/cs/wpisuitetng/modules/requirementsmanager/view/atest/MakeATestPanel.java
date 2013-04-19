@@ -86,9 +86,9 @@ public class MakeATestPanel extends JPanel {
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						aTestDescription.transferFocus();
+						aTestName.transferFocus();
 					} else {
-						aTestDescription.transferFocusBackward();
+						aTestName.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -102,7 +102,6 @@ public class MakeATestPanel extends JPanel {
 		aTestDescription = new JTextArea();
 		aTestDescription.setLineWrap(true);
 		aTestDescription.setWrapStyleWord(true);
-		aTestDescription.setBorder((new JTextField()).getBorder());
 		aTestDescription.setDisabledTextColor(Color.GRAY);
 		
 		aTestDescription.addKeyListener(new KeyAdapter() {

@@ -2,40 +2,36 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.DropMode;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.TreeTransferHandler;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
 public class SubRequirementTreeView extends JPanel implements
-		IDatabaseListener, IReceivedAllRequirementNotifier,
-		IRetreivedAllIterationsNotifier {
+		IDatabaseListener, IReceivedAllRequirementNotifier {
 	private JTree tree;
 	private JScrollPane treeView;
 	private DefaultMutableTreeNode top;
-	private RequirementsController requirementsController;
-	private IterationController iterationController;
+	private RetrieveAllRequirementsRequestObserver retrieveAllRequirementsController;
 
 	private MainTabController tabController;
 
@@ -48,17 +44,19 @@ public class SubRequirementTreeView extends JPanel implements
 		super(new BorderLayout());
 		this.tabController = tabController;
 
-		requirementsController = new RequirementsController();
-		iterationController = new IterationController();
+		retrieveAllRequirementsController = new RetrieveAllRequirementsRequestObserver(
+				this);
+
 		firstPaint = true;
 
 		this.top = new DefaultMutableTreeNode("Requirements");
 		this.tree = new JTree(top);
 		this.tree.setEditable(false);
-		this.tree.setDragEnabled(false);
-		// this.tree.setDropMode(DropMode.ON);
+		this.tree.setDragEnabled(true);
+		this.tree.setDropMode(DropMode.ON);
 
-		this.tree.setTransferHandler(new TreeTransferHandler(tabController));
+		this.tree.setTransferHandler(new SubReqTreeTransferHandler(
+				tabController));
 		this.tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -67,14 +65,8 @@ public class SubRequirementTreeView extends JPanel implements
 
 		RequirementDatabase.getInstance().registerListener(this);
 
-		requirements = RequirementDatabase.getInstance().getAllRequirements();
+		requirements = RequirementDatabase.getInstance().getAll();
 		updateTreeView();
-	}
-
-	public void getRequirementsFromServer() {
-		RetrieveAllRequirementsRequestObserver observer = new RetrieveAllRequirementsRequestObserver(
-				this);
-		requirementsController.getAll(observer);
 	}
 
 	public void updateTreeView() {
@@ -92,8 +84,8 @@ public class SubRequirementTreeView extends JPanel implements
 
 					for (Integer aReq : anReq.getSubRequirements()) {
 						try {
-							tempReq = RequirementDatabase.getInstance()
-									.getRequirement(aReq);
+							tempReq = RequirementDatabase.getInstance().get(
+									aReq);
 							subRequirementNode = new DefaultMutableTreeNode(
 									tempReq);
 							requirementNode.add(subRequirementNode);
@@ -101,7 +93,6 @@ public class SubRequirementTreeView extends JPanel implements
 						} catch (RequirementNotFoundException e) {
 							System.out
 									.println("Requirement not found: SubRequirementTreeView:372");
-							requirementNode = new DefaultMutableTreeNode("POOP");
 						}
 					}
 					this.top.add(requirementNode);
@@ -161,8 +152,7 @@ public class SubRequirementTreeView extends JPanel implements
 
 		for (Integer aReq : anReq.getSubRequirements()) {
 			try {
-				tempReq = RequirementDatabase.getInstance()
-						.getRequirement(aReq);
+				tempReq = RequirementDatabase.getInstance().get(aReq);
 				subRequirementNode = new DefaultMutableTreeNode(tempReq);
 				node.add(subRequirementNode);
 				updateTreeNodes(tempReq, subRequirementNode);
@@ -189,8 +179,7 @@ public class SubRequirementTreeView extends JPanel implements
 	}
 
 	public void refresh() {
-		this.requirements = RequirementDatabase.getInstance()
-				.getAllRequirements();
+		this.requirements = RequirementDatabase.getInstance().getAll();
 		updateTreeView();
 	}
 
@@ -204,19 +193,10 @@ public class SubRequirementTreeView extends JPanel implements
 		super.paint(g);
 		if (firstPaint) {
 			firstPaint = false;
-			getRequirementsFromServer();
-			getIterationsFromServer();
+
+			refresh();
+			// getRequirementsFromServer();
 		}
 	}
 
-	private void getIterationsFromServer() {
-		RetrieveAllIterationsRequestObserver observer = new RetrieveAllIterationsRequestObserver(
-				this);
-		iterationController.getAll(observer);
-	}
-
-	@Override
-	public void receivedData(Iteration[] iterations) {
-		updateTreeView();
-	}
 }

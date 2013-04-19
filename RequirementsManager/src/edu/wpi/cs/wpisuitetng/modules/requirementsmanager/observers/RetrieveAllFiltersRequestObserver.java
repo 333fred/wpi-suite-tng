@@ -58,7 +58,7 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {	
-					FilterDatabase.getInstance().setFilters(
+					FilterDatabase.getInstance().set(
 							Arrays.asList(filters));
 					notifier.receivedData(filters);
 				}

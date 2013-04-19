@@ -261,7 +261,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			}
 		} catch (WPISuiteException e) {
 			// If we thew an exception, we didn't find the iteration, so throw
-			// a iteration not found exception
+			// an iteration not found exception
 			throw new IterationNotFoundException(id);
 		}
 	}

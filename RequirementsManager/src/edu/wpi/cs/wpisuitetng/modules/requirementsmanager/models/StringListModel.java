@@ -101,6 +101,11 @@ public class StringListModel implements Model {
 		return parser.fromJson(content, StringListModel.class);
 	}
 
+	public static StringListModel[] fromJSONArray(String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, StringListModel[].class);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

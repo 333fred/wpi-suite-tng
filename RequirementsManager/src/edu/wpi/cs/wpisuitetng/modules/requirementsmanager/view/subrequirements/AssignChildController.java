@@ -53,6 +53,10 @@ public class AssignChildController {
 		Integer anReqID = new Integer(anReq.getrUID());
 
 		model.addSubRequirement(anReqID);
+		
+		//*************
+		model.setEstimate(model.getEstimate() + anReq.getEstimate());
+		
 		anReq.addPUID(modelID);
 		RequirementsController controller = new RequirementsController();
 		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(

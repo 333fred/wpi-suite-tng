@@ -54,7 +54,7 @@ public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 			// parse the response
 			final Iteration[] iteration = Iteration.fromJSONArray(response.getBody());
 
-			IterationDatabase.getInstance().addIteration(iteration[0]);
+			IterationDatabase.getInstance().add(iteration[0]);
 
 			// notify the notifier
 			// notify the notifier
