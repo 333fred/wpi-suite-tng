@@ -716,6 +716,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
+		
+		System.out.println("We received new requirements from the database");
+		
 		this.requirements = RequirementDatabase.getInstance().getFilteredRequirements().toArray(new Requirement[0]);
 		//this.requirements = requirements;
 		if (this.requirements.length == 0) {
@@ -838,8 +841,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 
 	public void filtersUpdated() {
-		refresh();
-		
+		refresh();		
 	}
 
 }
