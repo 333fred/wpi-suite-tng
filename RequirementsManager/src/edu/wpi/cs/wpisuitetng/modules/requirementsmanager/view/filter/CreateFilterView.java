@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
@@ -649,6 +650,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			break;
 		}
 		
+		
 		/*
 		//check to see if editing.
 		boolean fieldsEqual = filter.getField() ==   FilterField.getFromString((String)cboxField.getSelectedItem());
@@ -820,5 +822,16 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			break;
 		
 		}
+	}
+	
+	public boolean isFilterDuplicate(Filter toCheck) {
+		List<Filter> filters = FilterDatabase.getInstance().getAll();
+		
+		for (Filter filter : filters) {
+			if (filter.equalToWithoutId(toCheck)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

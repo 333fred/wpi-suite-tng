@@ -449,15 +449,17 @@ public class Filter extends AbstractModel {
 				&& (operation == FilterOperation.EQUAL || operation == FilterOperation.NOT_EQUAL)) {
 			Iteration iteration;
 			try {
-				iteration = IterationDatabase.getInstance().get((Integer)getValue());
+				iteration = IterationDatabase.getInstance().get(
+						(Integer) getValue());
 			} catch (IterationNotFoundException e) {
-				//this filter has an invalid 
-				//TODO: we should delete this filter, doesnt seem like a good idea to delete it here
+				// this filter has an invalid
+				// TODO: we should delete this filter, doesnt seem like a good
+				// idea to delete it here
 				return "Not Found";
 			}
-			
+
 			return iteration.getName();
-			//we must get the operation, otherwise we return to string
+			// we must get the operation, otherwise we return to string
 
 		}
 		return getValue().toString();
@@ -469,6 +471,12 @@ public class Filter extends AbstractModel {
 	 */
 	public void setStringValue(String stringValue) {
 		this.stringValue = stringValue;
+	}
+
+	public boolean equalToWithoutId(Filter other) {
+		return getField().equals(other.getField())
+				&& getOperation().equals(other.getOperation())
+				&& getValue().equals(other.getValue());
 	}
 
 }
