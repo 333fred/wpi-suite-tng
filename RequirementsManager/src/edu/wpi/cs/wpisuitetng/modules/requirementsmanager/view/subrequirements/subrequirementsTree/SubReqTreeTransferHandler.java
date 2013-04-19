@@ -85,18 +85,20 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
-		// Do not allowing dropping requirements into requirements with parents
-		if (firstNode.getLevel() != 1) {
+		if(firstNode==target || target==firstNode.getParent())
 			return false;
-		}
+		// Do not allowing dropping requirements into requirements with parents
+		/*if (firstNode.getLevel() != 1) {
+			return false;
+		}*/
 		// Don't allow dropping into requirement that is already in
-		TreeNode tempNode = target;
+		/*TreeNode tempNode = target;
 		while(tempNode!=null){
 			if(tempNode==firstNode)
 				return false;
 			else
 				tempNode = tempNode.getParent();
-		}
+		}*/
 		return true;
 	}
 
@@ -228,9 +230,21 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 			
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement anRequirement = (Requirement) target.getUserObject();
+			Requirement parentRequirement = null;
 			
 			Integer anReqID = new Integer(anRequirement.getrUID());
 			Integer reqID = new Integer(requirement.getrUID());
+			
+			if(requirement.getpUID().size()>0){
+				try {
+					parentRequirement = RequirementDatabase.getInstance().getRequirement(requirement.getpUID().get(0));
+					parentRequirement.removeSubRequirement(reqID);
+					requirement.removePUID(parentRequirement.getrUID());
+					RequirementsController.save(parentRequirement, reqObserver);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
 			
 			anRequirement.addSubRequirement(reqID);
 			requirement.addPUID(anReqID);
