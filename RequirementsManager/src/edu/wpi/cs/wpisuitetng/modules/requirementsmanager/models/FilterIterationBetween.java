@@ -38,7 +38,10 @@ public class FilterIterationBetween implements Serializable {
 	 */
 	
 	public boolean isIterationBetween(Iteration iteration) {
-		return false;	                                                        
+		Date iterationStartDate = iteration.getStartDate();
+		Date iterationEndDate = iteration.getEndDate();
+		
+		return iterationStartDate.compareTo(startDate) >= 0 && iterationEndDate.compareTo(endDate) <= 0;	                                                        
 	}
 	
 	public Date getStartDate() {
@@ -47,5 +50,9 @@ public class FilterIterationBetween implements Serializable {
 	
 	public Date getEndDate() {
 		return endDate;
+	}
+	
+	public String toString() {
+		return startDate.toString() + " and " + endDate.toString();
 	}
 }
