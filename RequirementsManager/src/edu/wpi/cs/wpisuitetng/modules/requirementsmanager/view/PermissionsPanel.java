@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    @author Alex Woodyard
- *    @contributor Conor Geary
+ *    @author Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
@@ -66,6 +66,7 @@ public class PermissionsPanel extends Tab {
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		System.out.println(localPermissions.size());
 		users = new String[localPermissions.size()];
+		
 		for (int i = 0; i < users.length; i++) {
 			users[i] = localPermissions.get(i).getUser().getName();
 		}
