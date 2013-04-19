@@ -750,8 +750,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 	
 	public void populateFieldsFromFilter() {
-		cboxField.setSelectedItem(filter.getField());
-		cboxOperation.setSelectedItem(filter.getOperation());
+		cboxField.setSelectedItem(filter.getField().toString());
+		cboxOperation.setSelectedItem(filter.getOperation().toString());
 		
 		switch (filter.getField()) {	
 		//special iteration case. woo woo
@@ -760,7 +760,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			case EQUAL:
 			case NOT_EQUAL:
 				
-				int iterationId = ((Double)filter.getValue()).intValue();
+				int iterationId = ((Integer)filter.getValue());
 				Iteration iteration;
 				try {
 					iteration = IterationDatabase.getInstance().get(iterationId);
@@ -800,7 +800,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		case PRIORITY:			
 		case STATUS:			
 		case TYPE:
-			cboxEqualTo.setSelectedItem(filter.getValue());
+			cboxEqualTo.setSelectedItem(filter.getValue().toString());
 			break;
 		
 		}

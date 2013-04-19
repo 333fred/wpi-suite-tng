@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -53,6 +54,10 @@ public class FilterIterationBetween implements Serializable {
 	}
 	
 	public String toString() {
-		return startDate.toString() + " and " + endDate.toString();
+		return dateToStringNoTime(startDate) + " and " + dateToStringNoTime(endDate);
+	}
+	
+	public String dateToStringNoTime(Date date) {
+		return new SimpleDateFormat("MM/dd/yyyy").format(date);
 	}
 }
