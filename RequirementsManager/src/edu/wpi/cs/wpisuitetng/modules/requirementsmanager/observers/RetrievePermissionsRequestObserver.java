@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    @author Fredric
+ *    @author Conor
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;

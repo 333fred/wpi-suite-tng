@@ -37,6 +37,7 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 		// parse the response
 		final PermissionModel[] permissions = PermissionModel.fromJSONArray(response
 				.getBody());
+		System.out.println("Permissions Array Size: " + permissions.length);
 
 		PermissionsDatabase.getInstance().set(
 				Arrays.asList(permissions));
@@ -49,7 +50,7 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
+		System.out.println("Permission Request Error");
 
 	}
 
@@ -58,7 +59,7 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Auto-generated method stub
+		System.out.println("Permission Request Failure");
 
 	}
 
