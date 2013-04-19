@@ -51,20 +51,29 @@ var data = [
 		        	id: 22
 			    }]
             },
+        {label: 'Filters',
+        folder: true,
+        id: 3,
+    	children: [{
+    				label : 'Creating Filters',
+                    folder : false,
+                    id : 30
+    			}]
+    		},   
         {label: 'Viewing Statistics',
-    	folder: false,
-    	id: 3
-    	},
-    	{label: 'Editing Estimates',
     	folder: false,
     	id: 4
     	},
-    	{label: 'Sort Requirements',
+    	{label: 'Editing Estimates',
     	folder: false,
     	id: 5
     	},
-    	{label: 'Closing Tabs',
+    	{label: 'Sort Requirements',
     	folder: false,
     	id: 6
+    	},
+    	{label: 'Closing Tabs',
+    	folder: false,
+    	id: 7
     	}
     ]
