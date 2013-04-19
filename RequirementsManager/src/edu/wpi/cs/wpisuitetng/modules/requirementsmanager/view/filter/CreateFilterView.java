@@ -94,6 +94,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	private JButton butSave;
 	private JButton butCancel;
+	
+	private int butCancelWidth;
+	private int butSaveWidth;
 
 	/** Filter view */
 	private FilterView filterView;
@@ -163,8 +166,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		cboxOperation.setBackground(Color.WHITE);
 		cboxEqualTo.setBackground(Color.WHITE);
 
-		butSave = new JButton("Create");
-		butCancel = new JButton("Cancel");
+		butSave = new JButton("Create");		
+		butCancel = new JButton("Cancel Editing");
+		
+		butCancelWidth = butCancel.getPreferredSize().width;
+		butSaveWidth = butSave.getPreferredSize().width;
+		
+		butCancel.setText("Cancel");
+		butCancel.setPreferredSize(new Dimension(butCancelWidth, butCancel.getPreferredSize().height));
 
 		butSave.setEnabled(false);
 
@@ -275,10 +284,10 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		add(butCancel);
 
 		this.setMinimumSize(new Dimension(butSave.getPreferredSize().width
-				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
+				+ HORIZONTAL_PADDING * 4 + butCancel.getPreferredSize().width,
 				275));
 		this.setPreferredSize(new Dimension(butSave.getPreferredSize().width
-				+ HORIZONTAL_PADDING * 3 + butCancel.getPreferredSize().width,
+				+ HORIZONTAL_PADDING * 4 + butCancel.getPreferredSize().width,
 				275));
 
 		// add the action listeners
@@ -559,7 +568,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 
 	public void onCancelPressed() {
-		labSaveError.setText("");
+		labSaveError.setText("  ");
 		txtEqualTo.setText("");
 		calEqualTo.setDate(null);
 		calEqualToBetween.setDate(null);
@@ -649,7 +658,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		
 		
 		if (!error) {
-			labSaveError.setText("");
+			labSaveError.setText("  ");
 			butSave.setEnabled(true);
 			txtEqualTo.setBackground(Color.WHITE);
 			calEqualTo.setBackground(Color.WHITE);
@@ -675,8 +684,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			}
 		} else if (source.equals(butSave)) {
 			onSavePressed();
+		
+		
 		} else if (source.equals(butCancel)) {
-			onCancelPressed();
+			if (mode == Mode.CREATE) {
+				onCancelPressed();
+			} else {
+				cancelEdit();
+			}
 		}
 	}
 
@@ -685,7 +700,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		for (Iteration iteration : IterationDatabase.getInstance()
 				.getAll()) {
-			System.out.println(iteration);
 			if (iteration.isOpen()) {
 				iterations.add(iteration);
 			}
@@ -736,13 +750,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	 * 
 	 */
 
-	public void updateMode(Mode newMode) {
+	public void updateMode(Mode newMode) {		
 		this.mode = newMode;
 		if (mode == Mode.CREATE) {
 			butSave.setText("Create");
 			butCancel.setText("Cancel");
+			butCancel.setPreferredSize(new Dimension(butCancelWidth, butCancel.getPreferredSize().height));
 		} else {
 			butSave.setText("Save");
+			butSave.setPreferredSize(new Dimension(butSaveWidth, butSave.getPreferredSize().height));
 			butCancel.setText("Cancel Editing");
 			populateFieldsFromFilter(); // populate the fields from the given filter
 			updateSave();

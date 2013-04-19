@@ -39,7 +39,7 @@ public class IterationRequirementStatistics extends
 	public void update() {
 
 		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAll(); // refresh list of requirements
+				.getFilteredRequirements(); // refresh list of requirements
 
 		// for every possible status
 		for (Iteration iteration : IterationDatabase.getInstance()

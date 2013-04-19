@@ -81,7 +81,7 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements ActionList
 			for(int reqID : tempReq.getSubRequirements()){
 				try {
 					tempSubReq = RequirementDatabase.getInstance().get(reqID);
-					menuChild = new JMenuItem(tempSubReq.getName());
+					menuChild = new JMenuItem(tempSubReq.getName(), tempSubReq.getrUID());
 					menuChild.addActionListener(this);
 					menuRemoveChildren.add(menuChild);
 				} catch (RequirementNotFoundException e) {
@@ -119,7 +119,12 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements ActionList
 			controller.save(tempReq, reqObserver);
 				
 		}else if(!e.getSource().equals(menuRemoveChildren)){
-			otherReq = RequirementDatabase.getInstance().getRequirement(((JMenuItem) e.getSource()).getText());
+			//otherReq = RequirementDatabase.getInstance().getRequirement(((JMenuItem) e.getSource()).getText());
+			try {
+				otherReq = RequirementDatabase.getInstance().get(((JMenuItem) e.getSource()).getMnemonic());
+			} catch (RequirementNotFoundException e1) {
+				e1.printStackTrace();
+			}
 			otherReq.removePUID(tempReq.getrUID());
 			tempReq.removeSubRequirement(otherReq.getrUID());
 			controller.save(otherReq, reqObserver);

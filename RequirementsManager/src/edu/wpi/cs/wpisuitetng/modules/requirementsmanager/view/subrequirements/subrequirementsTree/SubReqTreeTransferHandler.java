@@ -80,6 +80,10 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
+		Requirement requirement = (Requirement) firstNode.getUserObject();
+		Requirement anRequirement = (Requirement) target.getUserObject();
+		if(containsCurrentRequirement(requirement,anRequirement))
+			return false;
 		if (firstNode.getLevel() == 0)
 			return false;
 		if (firstNode == target || target == firstNode.getParent())
@@ -154,6 +158,27 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 	/** Defensive copy used in createTransferable. */
 	private DefaultMutableTreeNode copy(TreeNode node) {
 		return new DefaultMutableTreeNode(node);
+	}
+	
+	public boolean containsCurrentRequirement(Requirement req,
+			Requirement current) {
+		Requirement child = null;
+		Boolean check = false;
+		if (req.getrUID() == current.getrUID()) {
+			return true;
+		} else {
+			for (Integer i : req.getSubRequirements()) {
+				try {
+					child = RequirementDatabase.getInstance().get(i);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+				check = containsCurrentRequirement(child, current);
+				if (check)
+					return check;
+			}
+			return false;
+		}
 	}
 
 	@Override
