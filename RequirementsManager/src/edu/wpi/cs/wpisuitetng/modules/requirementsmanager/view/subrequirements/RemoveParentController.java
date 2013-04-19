@@ -61,6 +61,10 @@ public class RemoveParentController {
 
 			model.removePUID(anReqID);
 			anReq.removeSubRequirement(modelID);
+			
+			//************
+			anReq.setEstimate(anReq.getEstimate() - model.getEstimate());
+			
 			RequirementsController controller = new RequirementsController();
 			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 					this.parentView);
