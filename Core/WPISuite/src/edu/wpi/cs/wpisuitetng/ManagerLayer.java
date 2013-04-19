@@ -33,12 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.defecttracker.entitymanagers.CommentManager;
 import edu.wpi.cs.wpisuitetng.modules.defecttracker.entitymanagers.DefectManager;
 import edu.wpi.cs.wpisuitetng.modules.postboard.model.PostBoardEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.FilterEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.IterationEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.PermissionModelEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.UserEntityManager;
-
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.*;
 
 /**
  * This singleton class responds to API requests directed at 
