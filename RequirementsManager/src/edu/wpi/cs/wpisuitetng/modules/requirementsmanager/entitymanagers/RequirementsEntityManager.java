@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.logger.ChangesetCallback;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
@@ -62,7 +63,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 		final Requirement newRequirement = Requirement.fromJSON(content);
 
-		newRequirement.setrUID(Count() + 1); // we have to set the UID
+		newRequirement.setrUID(getId(s)); // we have to set the UID
 
 		List<ValidationIssue> issues = validator.validate(s, newRequirement,
 				RequirementActionMode.CREATE);
@@ -275,6 +276,35 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			// If we thew an exception, we didn't find the requirement, so throw
 			// a requirement not found exception
 			throw new RequirementNotFoundException(id);
+		}
+	}
+
+	/**
+	 * Gets the next valid id for this class
+	 * 
+	 * @param s
+	 *            the current session
+	 * @return the new id
+	 * @throws WPISuiteException
+	 *             if there was a lookup error
+	 */
+	private int getId(Session s) throws WPISuiteException {
+		try {
+			IdManager idManager;
+			if (db.retrieve(IdManager.class, "type", "requirement",
+					s.getProject()).size() != 0) {
+				idManager = db.retrieve(IdManager.class, "type", "requirement",
+						s.getProject()).toArray(new IdManager[0])[0];
+			} else {
+				idManager = new IdManager("filter");
+			}
+			int id = idManager.getNextId();
+			if (!db.save(idManager, s.getProject())) {
+				throw new WPISuiteException();
+			}
+			return id;
+		} catch (WPISuiteException ex) {
+			throw ex;
 		}
 	}
 
