@@ -28,10 +28,12 @@ public class UserController extends AbstractController<StringListModel> {
 		super("stringlistmodel");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(StringListModel model, RequestObserver observer) {
-		// TODO Auto-generated method stub
-		
+		// Nothing is stored on the server, do nothing.
 	}
 
 }
