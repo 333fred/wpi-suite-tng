@@ -38,7 +38,14 @@ public class FilterIterationBetween implements Serializable {
 	 */
 	
 	public boolean isIterationBetween(Iteration iteration) {
-		return false;
-	                                                        
+		return false;	                                                        
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public Date getEndDate() {
+		return endDate;
 	}
 }

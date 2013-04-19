@@ -131,6 +131,7 @@ public class FilterTableView extends JPanel implements
 		if (tableView.getSelectedRowCount() == 0) {
 			butEnable.setEnabled(false);
 			butDelete.setEnabled(true);
+			filterView.cancelEdit();
 		} else if (tableView.getSelectedRowCount() == 1) {
 			butEnable.setEnabled(true);
 			butDelete.setEnabled(true);
@@ -142,11 +143,15 @@ public class FilterTableView extends JPanel implements
 			} else {
 				butEnable.setText("Enable");
 			}
+			
+			filterView.editFilter(filter);
+			
 
 		} else {
 			// multiple filters are selected
 			butEnable.setEnabled(true);
 			butDelete.setEnabled(true);
+			filterView.cancelEdit();
 		}
 
 	}

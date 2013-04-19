@@ -37,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
@@ -356,6 +357,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
+		FilterOperation operation = FilterOperation.getFromString((String) cboxOperation.getSelectedItem());
 
 		if (field == FilterField.TYPE) {
 			// BLANK, EPIC, THEME, USER_STORY, NON_FUNCTIONAL, SCENARIO
@@ -380,6 +382,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			cboxEqualTo.addItem("Open");
 			cboxEqualTo.addItem("Completed");
 			cboxEqualTo.addItem("Deleted");
+		}
+		else if ( field == FilterField.ITERATION && (operation == FilterOperation.EQUAL || operation == FilterOperation.NOT_EQUAL)) {
+			// update the iterations
+			updateIterations();
+
+			cboxEqualTo.removeAllItems();
+			for (Iteration iteration : iterations) {
+				cboxEqualTo.addItem(iteration.getName());
+			}	
 		}
 	}
 
@@ -409,13 +420,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
 
-				// update the iterations
-				updateIterations();
-
-				cboxEqualTo.removeAllItems();
-				for (Iteration iteration : iterations) {
-					cboxEqualTo.addItem(iteration.getName());
-				}
+				populateEqualComboBox();
 
 				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
@@ -634,6 +639,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		case TYPE:
 			break;
 		}
+		
+		/*
+		//check to see if editing.
+		boolean fieldsEqual = filter.getField() ==   FilterField.getFromString((String)cboxField.getSelectedItem());
+		boolean operationEqual = filter.getOperation() == FilterOperation.getFromString((String) cboxOperation.getSelectedItem());
+		*/
+		
+		
+		
 		if (!error) {
 			labSaveError.setText("");
 			butSave.setEnabled(true);
@@ -714,6 +728,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	public void cancelEdit() {
 		filter = new Filter();
 		updateMode(Mode.CREATE);
+		onCancelPressed(); // clear all fields
 	}
 
 	/**
@@ -729,6 +744,65 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		} else {
 			butSave.setText("Save");
 			butCancel.setText("Cancel Editing");
+			populateFieldsFromFilter(); // populate the fields from the given filter
+			updateSave();
+		}
+	}
+	
+	public void populateFieldsFromFilter() {
+		cboxField.setSelectedItem(filter.getField());
+		cboxOperation.setSelectedItem(filter.getOperation());
+		
+		switch (filter.getField()) {	
+		//special iteration case. woo woo
+		case ITERATION:
+			switch (filter.getOperation()) {
+			case EQUAL:
+			case NOT_EQUAL:
+				
+				int iterationId = ((Double)filter.getValue()).intValue();
+				Iteration iteration;
+				try {
+					iteration = IterationDatabase.getInstance().getIteration(iterationId);
+				} catch (IterationNotFoundException e) {
+					//iteration is no longer in existance, we should probally delete this filter,
+					cancelEdit();
+					return;
+				}
+				
+				cboxEqualTo.setSelectedItem(iteration.getName());				
+				
+				break;
+			case OCCURS_AFTER:
+			case OCCURS_BEFORE:
+				calEqualTo.setDate((Date)filter.getValue());
+				break;
+			case OCCURS_BETWEEN:
+				FilterIterationBetween fib = (FilterIterationBetween) filter.getValue();
+				calEqualTo.setDate(fib.getStartDate());
+				calEqualToBetween.setDate(fib.getEndDate());
+				break;
+			default:
+				System.out.println("BLACK MAGIC!!!!!!!!!, CreateFilterView ln 749");
+			}
+			
+			break;
+			
+		//string and integer types
+		case NAME:		
+		case RELEASE_NUMBER:
+		case EFFORT:
+		case ESTIMATE:
+			txtEqualTo.setText(filter.getValue().toString());
+			break;
+			
+		//theese are the three enum types
+		case PRIORITY:			
+		case STATUS:			
+		case TYPE:
+			cboxEqualTo.setSelectedItem(filter.getValue());
+			break;
+		
 		}
 	}
 }

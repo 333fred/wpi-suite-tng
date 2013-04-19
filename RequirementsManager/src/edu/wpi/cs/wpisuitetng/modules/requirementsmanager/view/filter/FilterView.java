@@ -20,6 +20,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+
 /** The view for viewing and creating filters 
  * 
  * @author Mitchell
@@ -84,6 +86,23 @@ public class FilterView extends JPanel {
 		for (FilterUpdateListener listener : filterUpdateListeners) {
 			listener.filtersUpdated();
 		}
+	}
+	
+	/** Edits the given filter
+	 * 
+	 * @param toEdit
+	 */
+	
+	public void editFilter(Filter toEdit) {
+		createFilterView.editFilter(toEdit);
+	}
+	
+	/** Cancels the editing of the filter 
+	 * 
+	 */
+	
+	public void cancelEdit() {
+		createFilterView.cancelEdit();
 	}
 	
 }
