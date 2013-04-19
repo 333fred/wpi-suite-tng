@@ -58,6 +58,10 @@ var data = [
     				label : 'Creating Filters',
                     folder : false,
                     id : 30
+    			}, {
+    				label : 'Using Filters',
+    				folders : false,
+    				id : 31
     			}]
     		},   
         {label: 'Viewing Statistics',
