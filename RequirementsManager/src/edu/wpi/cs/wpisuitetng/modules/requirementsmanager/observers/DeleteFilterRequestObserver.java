@@ -5,11 +5,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
-import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class DeleteFilterRequestObserver implements RequestObserver {
 
+	/** the notifier to notify of the response received */
 	private ISaveNotifier notifier;
+	
+	/** The filter to delete if this responds sucessfully */
+	private Filter toDelete;
 
 	/**
 	 * Creates a request observer with the given controller as a callback
@@ -17,8 +20,9 @@ public class DeleteFilterRequestObserver implements RequestObserver {
 	 * @param controller
 	 *            the controller to callback
 	 */
-	public DeleteFilterRequestObserver(ISaveNotifier notifier) {
+	public DeleteFilterRequestObserver(ISaveNotifier notifier, Filter toDelete) {
 		this.notifier = notifier;
+		this.toDelete = toDelete;
 	}
 
 	/**
@@ -26,16 +30,11 @@ public class DeleteFilterRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		/*
-		 * we are deletting this filter, not sure if db call actualy returns a
-		 * filter? if (response.getStatusCode() == 200) { Filter filter =
-		 * Filter.fromJSON(response.getBody());
-		 * FilterDatabase.getInstance().add(filter); }
-		 */
-
-		ResponseModel response = iReq.getResponse();
+		//we cannot remove filter from the DB, it returns success. but makes sense		
+		
+		FilterDatabase.getInstance().remove(toDelete);
+		
 		notifier.responseSuccess();
-
 	}
 
 	/**

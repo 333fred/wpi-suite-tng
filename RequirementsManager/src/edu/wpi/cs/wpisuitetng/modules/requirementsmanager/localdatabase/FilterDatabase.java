@@ -117,6 +117,15 @@ public class FilterDatabase extends AbstractDatabase<Filter> implements
 		}
 		return activeFilters;
 	}
+	
+	/** Removes the given filter from the database
+	 * 
+	 * @param toRemove
+	 */
+	
+	public synchronized void remove(Filter toRemove) {
+		filters.remove(toRemove.getId());
+	}
 
 	/**
 	 * {@inheritDoc}
