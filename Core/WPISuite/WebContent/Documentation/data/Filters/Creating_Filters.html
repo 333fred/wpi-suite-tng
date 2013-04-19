@@ -4,7 +4,7 @@
 	Navigate to the filters by clicking on the &quot;Filters&quot; tab in the requirement tree view in the left most panel of the Janeway client.
 	<br>
 	<br>
-	You can filter out requirements in the table view by any of it's fields, which includes:<b>
+	You can filter out requirements in the table view by any of it's fields, which includes:
 	<br>
 	&nbsp;&nbsp;&nbsp;<b>Name</b>, <b>Type</b>, <b>Priority</b>, <b>Status</b>, <b>Iteration</b>, <b>Estimate</b>, <b>Effort</b>, and <b>Release Number</b>
 	<br>
@@ -39,13 +39,78 @@
 	Now that you know what each operation is and how it functions, here is a list of each field, which operation they can use, and how to enter the value(s):
 	<br>
 	<br>
-	&nbsp;&nbsp;&nbsp;<b>Name:</b>
+
+
+	<table border="1">
+		<tr>
+			<td><b>FIELD</b></td>
+			<td>Name</td>
+			<td>Type</td>
+			<td>Priority</td>
+		</tr>
+		<tr>
+			<td><b>OPERATION</b></td>
+			<td>Equal, Not Equal, Starts With, Contains</td>
+			<td>Equal, Not Equal</td>
+			<td>Equal, Not Equal</td>
+		</tr>
+		<tr>
+			<td><b>VALUE</b></td>
+			<td>Text box below operations, can be any String</td>
+			<td>drop down menu: choose between the fields for type of requirement</td>
+			<td>drop down menu: choose between High, Medium, or Low</td>
+		</tr>
+	</table>
+
+<br>
+
+	<table border="1">
+		<tr>
+			<td><b>FIELD</b></td>
+			<td>Status</td>
+			<td>Estimate</td>
+			<td>Effort</td>
+		</tr>
+		<tr>
+			<td><b>OPERATION</b></td>
+			<td>Equal, Not Equal</td>
+			<td><, <=, Equals, Not Equals, >, >=</td>
+			<td><, <=, Equals, Not Equals, >, >=</td>
+		</tr>
+		<tr>
+			<td><b>VALUE</b></td>
+			<td>drop down menu: choose between the fields for status of requirement</td>
+			<td>Text box below operations, can be any positive number</td>
+			<td>Text box below operations, can be any positive number</td>
+		</tr>
+	</table>
+
+<br>
+
+	<table border="1">
+		<tr>
+			<td><b>FIELD</b></td>
+			<td>Iteration</td>
+			<td>Release Number</td>
+		</tr>
+		<tr>
+			<td><b>OPERATION</b></td>
+			<td>Equals, Not Equals, Occurs Before, Occurs After, Occurs Between</td>
+			<td>Equal, Not Equal, Starts With, Contains</td>
+		</tr>
+		<tr>
+			<td><b>VALUE</b></td>
+			<td>** See  note below **</td>
+			<td>Text box below operations, can be any String</td>
+		</tr>
+	</table>
 	<br>
-	<ul>
-		<li></li>
-	</ul>
-	<br>
-	<br>
+	<div class= "note"> <b>* Operations for Iterations and its value </b><br><br>
+							<b>Equal and Not Equal:</b> drop down menu containing deleted, backlog, and existing iterations <br>
+							<b>Occurs Before and Occurs After:</b> a small button located on the right side of the text box that will display a calendar like the one seen in &quot;Creating an Iteration&quot; to choose dates. <br>
+							<b>Occurs Between:</b> same as Occurs Before/After, but you pick a start date and an end date</div><br>
+
+
 	After you have completed filling out the fields for your filter, click the &quot;Save&quot; button on the bottom of the filter tab panel. Your filter will appear in the space above the field selection.
 
 
