@@ -36,7 +36,7 @@ public class SimpleRetrieveAllIterationsRequestObserver implements
 			Iteration[] iterations = Iteration
 					.fromJSONArray(response.getBody());
 
-			IterationDatabase.getInstance().setIterations(
+			IterationDatabase.getInstance().set(
 					Arrays.asList(iterations));
 		} else {
 		}

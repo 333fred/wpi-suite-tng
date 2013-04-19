@@ -52,7 +52,7 @@ public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
 			Iteration iter;
 			try {
 				// deleted has ID -2
-				iter = IterationDatabase.getInstance().getIteration(-2);
+				iter = IterationDatabase.getInstance().get(-2);
 				RequirementTableView tableView = RequirementTableView.getInstance();
 				tableView.IterationFilter(iter.getName());
 				tableView.displayFilterInformation("Filtering by " + iter.getName());

@@ -54,7 +54,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		// get the response from the request
 		ResponseModel response = request.getResponse();
 
-		RequirementDatabase.getInstance().addRequirement(
+		RequirementDatabase.getInstance().add(
 				Requirement.fromJSON(response.getBody()));
 
 		IterationController iterationController = new IterationController();
@@ -68,7 +68,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 			if (requirement != null) {
 				Iteration anIteration;
 				try {
-					anIteration = IterationDatabase.getInstance().getIteration(
+					anIteration = IterationDatabase.getInstance().get(
 							-1);
 					anIteration.addRequirement(requirement.getrUID());
 					UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(

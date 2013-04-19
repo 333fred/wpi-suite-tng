@@ -354,7 +354,7 @@ public class SubRequirementTreeView extends JPanel implements
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode requirementNode = null;
 		this.top.removeAllChildren();
-		requirements = RequirementDatabase.getInstance().getAllRequirements();
+		requirements = RequirementDatabase.getInstance().getAll();
 
 		// sort the iterations
 		// requirements = Requirement.sortRequirements(requirements);
@@ -367,8 +367,8 @@ public class SubRequirementTreeView extends JPanel implements
 				for (Integer aReq : anReq.getSubRequirements()) {
 					try {
 						requirementNode.add(new DefaultMutableTreeNode(
-								RequirementDatabase.getInstance()
-										.getRequirement(aReq).getName()));
+								RequirementDatabase.getInstance().get(aReq)
+										.getName()));
 					} catch (RequirementNotFoundException e) {
 						System.out
 								.println("Requirement not found: SubRequirementTreeView:372");
@@ -392,7 +392,7 @@ public class SubRequirementTreeView extends JPanel implements
 		Requirement actualReq = new Requirement();
 
 		try {
-			actualReq = RequirementDatabase.getInstance().getRequirement(anReq);
+			actualReq = RequirementDatabase.getInstance().get(anReq);
 		} catch (RequirementNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -404,8 +404,7 @@ public class SubRequirementTreeView extends JPanel implements
 		for (Integer aReq : actualReq.getSubRequirements()) {
 			try {
 				requirementNode.add(new DefaultMutableTreeNode(
-						RequirementDatabase.getInstance().getRequirement(aReq)
-								.getName()));
+						RequirementDatabase.getInstance().get(aReq).getName()));
 				// cycleSubReq(aReq);
 			} catch (RequirementNotFoundException e) {
 				System.out

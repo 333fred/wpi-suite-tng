@@ -37,7 +37,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 @SuppressWarnings("serial")
-public class SubReqTreeTransferHandler extends TransferHandler implements ISaveNotifier {
+public class SubReqTreeTransferHandler extends TransferHandler implements
+		ISaveNotifier {
 	DataFlavor nodesFlavor;
 	DataFlavor[] flavors = new DataFlavor[1];
 	DefaultMutableTreeNode[] nodesToRemove;
@@ -60,13 +61,11 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
-		/*if (!support.isDrop()) {
-			return false;
-		}
-		support.setShowDropLocation(true);
-		if (!support.isDataFlavorSupported(nodesFlavor)) {
-			return false;
-		}*/
+		/*
+		 * if (!support.isDrop()) { return false; }
+		 * support.setShowDropLocation(true); if
+		 * (!support.isDataFlavorSupported(nodesFlavor)) { return false; }
+		 */
 		// Do not allow a drop on the drag source selections.
 		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
 		JTree tree = (JTree) support.getComponent();
@@ -81,11 +80,11 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
-		if(firstNode.getLevel()==0)
+		if (firstNode.getLevel() == 0)
 			return false;
-		if(firstNode==target || target==firstNode.getParent())
-			return false;		
-		
+		if (firstNode == target || target == firstNode.getParent())
+			return false;
+
 		return true;
 	}
 
@@ -202,19 +201,22 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 		if (childIndex == -1) { // DropMode.ON
 			index = parent.getChildCount();
 		}
-		// Add data to model		
-		//for (int i = 0; i < nodes.length; i++) {
-			//model.insertNodeInto(nodes[i], parent, index++);
-			int[] selRows = tree.getSelectionRows();
-			dest = dl.getPath();
-			TreePath path = tree.getPathForRow(selRows[0]);
-			
-			DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();
-			DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-		
-			RequirementsController RequirementsController = new RequirementsController();
-			UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(this);
-			
+		// Add data to model
+		// for (int i = 0; i < nodes.length; i++) {
+		// model.insertNodeInto(nodes[i], parent, index++);
+		int[] selRows = tree.getSelectionRows();
+		dest = dl.getPath();
+		TreePath path = tree.getPathForRow(selRows[0]);
+
+		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
+				.getLastPathComponent();
+		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
+				.getLastPathComponent();
+
+		RequirementsController RequirementsController = new RequirementsController();
+		UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(
+				this);
+
 		if (target.getLevel() != 0) {
 
 			Requirement requirement = (Requirement) firstNode.getUserObject();
@@ -226,8 +228,8 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 
 			if (requirement.getpUID().size() > 0) {
 				try {
-					parentRequirement = RequirementDatabase.getInstance()
-							.getRequirement(requirement.getpUID().get(0));
+					parentRequirement = RequirementDatabase.getInstance().get(
+							requirement.getpUID().get(0));
 					parentRequirement.removeSubRequirement(reqID);
 					requirement.removePUID(parentRequirement.getrUID());
 					RequirementsController.save(parentRequirement, reqObserver);
@@ -241,16 +243,16 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 			RequirementsController.save(anRequirement, reqObserver);
 			RequirementsController.save(requirement, reqObserver);
 			this.draggedRequirement = requirement;
-		}else{
-			
+		} else {
+
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement parentRequirement = null;
 			Integer reqID = new Integer(requirement.getrUID());
-			
+
 			if (requirement.getpUID().size() > 0) {
 				try {
-					parentRequirement = RequirementDatabase.getInstance()
-							.getRequirement(requirement.getpUID().get(0));
+					parentRequirement = RequirementDatabase.getInstance().get(
+							requirement.getpUID().get(0));
 					parentRequirement.removeSubRequirement(reqID);
 					requirement.removePUID(parentRequirement.getrUID());
 					RequirementsController.save(parentRequirement, reqObserver);
@@ -307,7 +309,16 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 							.getComponentAt(i))).getModel().getrUID()) == (requirement
 							.getrUID())) {
 						try {
-							(((DetailPanel) getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+							(((DetailPanel) getTabController().getTabView()
+									.getComponentAt(i)))
+									.getComboBoxIteration()
+									.setSelectedItem(
+											IterationDatabase
+													.getInstance()
+													.get(
+															requirement
+																	.getIteration())
+													.getName());
 						} catch (IterationNotFoundException e) {
 							e.printStackTrace();
 						}

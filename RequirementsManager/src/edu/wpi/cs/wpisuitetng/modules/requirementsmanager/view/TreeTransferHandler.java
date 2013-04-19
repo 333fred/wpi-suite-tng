@@ -249,7 +249,7 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 			Requirement requirement = (Requirement) (((DefaultMutableTreeNode) nodes[i].getUserObject()).getUserObject());
 			Iteration anIteration;
 			try {
-				anIteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
+				anIteration = IterationDatabase.getInstance().get(requirement.getIteration());
 				anIteration.removeRequirement(requirement.getrUID());
 				UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(this);
 				iterationController.save(anIteration, observer);
@@ -313,7 +313,7 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 							.getComponentAt(i))).getModel().getrUID()) == (requirement
 							.getrUID())) {
 						try {
-							(((DetailPanel) getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().getIteration(requirement.getIteration()).getName());
+							(((DetailPanel) getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().get(requirement.getIteration()).getName());
 						} catch (IterationNotFoundException e) {
 							e.printStackTrace();
 						}

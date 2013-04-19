@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    @author Conor
+ *    @author Fredric
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
@@ -21,30 +22,29 @@ import java.util.Map;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.PermissionsNotFoundException;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllPermissionsRequestObserver;
 
 /**
  * Maintains a local database of user permissions.
- * 
- * @author Conor
- * 
  */
-public class PermissionsDatabase extends Thread {
+public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 
 	private Map<User, PermissionModel> permissions;
-	private List<IDatabaseListener> listeners;
 	private PermissionModelController controller;
 	private static PermissionsDatabase db;
 
 	private PermissionsDatabase() {
+		super(300000);
 		permissions = new HashMap<User, PermissionModel>();
-		this.listeners = new ArrayList<IDatabaseListener>();
 		this.controller = new PermissionModelController();
-		setDaemon(true);
 	}
 
+	/**
+	 * Gets the singleton Permissions Database instance
+	 * 
+	 * @return the permissions database
+	 */
 	public static PermissionsDatabase getInstance() {
 		if (db == null) {
 			db = new PermissionsDatabase();
@@ -53,24 +53,9 @@ public class PermissionsDatabase extends Thread {
 	}
 
 	/**
-	 * Sets the permissions to the given map
-	 * 
-	 * @param permissions
+	 * {@inheritDoc}
 	 */
-	public synchronized void setPermissions(
-			Map<User, PermissionModel> permissions) {
-		this.permissions = permissions;
-		updateListeners();
-	}
-
-	/**
-	 * Sets the permissions to the given list. This removes everything in the
-	 * map and adds only things in the list
-	 * 
-	 * @param permissions
-	 *            the permissions to add
-	 */
-	public synchronized void setPermissions(List<PermissionModel> permissions) {
+	public synchronized void set(List<PermissionModel> permissions) {
 		this.permissions = new HashMap<User, PermissionModel>();
 		for (PermissionModel i : permissions) {
 			this.permissions.put(i.getUser(), i);
@@ -79,14 +64,9 @@ public class PermissionsDatabase extends Thread {
 	}
 
 	/**
-	 * Adds the given permissions to the map. The difference between this and
-	 * set permissions is that this doesn't erase all permissions, only
-	 * adds/updates the given list
-	 * 
-	 * @param permissions
-	 *            the permissions to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addPermissions(List<PermissionModel> permissions) {
+	public synchronized void addAll(List<PermissionModel> permissions) {
 		for (PermissionModel i : permissions) {
 			this.permissions.put(i.getUser(), i);
 		}
@@ -94,12 +74,9 @@ public class PermissionsDatabase extends Thread {
 	}
 
 	/**
-	 * Adds or updates a specific permission
-	 * 
-	 * @param i
-	 *            the permission to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addPermissions(PermissionModel i) {
+	public synchronized void add(PermissionModel i) {
 		permissions.put(i.getUser(), i);
 		updateListeners();
 	}
@@ -109,11 +86,12 @@ public class PermissionsDatabase extends Thread {
 	 * 
 	 * @param u
 	 *            the user of requirement to get
-	 * @return the permissions requested couldn't find the requirement
+	 * @return the permissions requested
 	 * @throws PermissionsNotFoundException
+	 *             if the permissions wasn't there
 	 */
 	public synchronized PermissionModel getPermissions(User u)
-			throws RequirementNotFoundException, PermissionsNotFoundException {
+			throws PermissionsNotFoundException {
 		if (permissions.get(u) != null) {
 			return permissions.get(u);
 		} else {
@@ -122,55 +100,21 @@ public class PermissionsDatabase extends Thread {
 	}
 
 	/**
-	 * Gets all the permissions in the local database
-	 * 
-	 * @return all the current arrays
+	 * {@inheritDoc}
 	 */
-	public synchronized List<PermissionModel> getAllPermissions() {
+	public synchronized PermissionModel get(int id)
+			throws PermissionsNotFoundException {
+		throw new PermissionsNotFoundException(PermissionModel.getUserStatic());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public synchronized List<PermissionModel> getAll() {
 		List<PermissionModel> list = new ArrayList<PermissionModel>();
 		list = Arrays.asList(permissions.values().toArray(
 				new PermissionModel[0]));
 		return list;
-	}
-
-	/**
-	 * Call the update method on all registered listeners
-	 */
-	public synchronized void updateListeners() {
-		List<IDatabaseListener> removes = new ArrayList<IDatabaseListener>();
-		for (IDatabaseListener l : listeners) {
-			l.update();
-			if (l.shouldRemove()) {
-				removes.add(l);
-			}
-		}
-		for (IDatabaseListener l : removes) {
-			listeners.remove(l);
-		}
-	}
-
-	/**
-	 * Registers a database listener
-	 * 
-	 * @param listener
-	 *            the listener to register
-	 */
-	public synchronized void registerListener(IDatabaseListener listener) {
-		if (listener != null) {
-			listeners.add(listener);
-		}
-	}
-
-	/**
-	 * Removes a given listener from the list of listeners
-	 * 
-	 * @param listener
-	 *            the listener to be removed
-	 * @return True if the listener was removed or did not exits, false
-	 *         otherwise
-	 */
-	public synchronized boolean removeListener(IDatabaseListener listener) {
-		return listeners.remove(listener);
 	}
 
 	/**
@@ -180,14 +124,14 @@ public class PermissionsDatabase extends Thread {
 	@Override
 	public void run() {
 		// Clear interrupted status
-		interrupted();
-		while (!interrupted()) {
+		Thread.interrupted();
+		while (!Thread.interrupted()) {
 			// Trigger an update
 			RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
 			controller.getAll(observer);
 			try {
 				// Sleep for five minutes
-				Thread.sleep(300000);
+				Thread.sleep(secs);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 				return;
@@ -196,13 +140,16 @@ public class PermissionsDatabase extends Thread {
 	}
 
 	/**
-	 * Searchs perm database for a username to find permissions for
-	 * @param Name of user to find perm for
+	 * Searches perm database for a username to find permissions for
+	 * 
+	 * @param name
+	 *            of user to find perm for
 	 * @return Permissions for named user or null if permission does not exist
 	 */
-	public PermissionModel getPermission(String string) {
+	public PermissionModel getPermission(String name) {
 		for (PermissionModel aPer : permissions.values()) {
-			if (aPer.getInstance().getUser().getUsername().equals(string)) {
+			if (PermissionModel.getInstance().getUser().getUsername()
+					.equals(name)) {
 				return aPer;
 			}
 		}

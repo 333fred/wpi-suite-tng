@@ -57,7 +57,7 @@ public class AssignParentController {
 
 		if (model.getpUID().size() > 0) {
 			try {
-				anParReq = RequirementDatabase.getInstance().getRequirement(
+				anParReq = RequirementDatabase.getInstance().get(
 						model.getpUID().get(0));
 			} catch (RequirementNotFoundException e) {
 				e.printStackTrace();
@@ -72,8 +72,8 @@ public class AssignParentController {
 
 		model.addPUID(anReqID);
 		anReq.addSubRequirement(modelID);
-		
-		//*********
+
+		// *********
 		anReq.setEstimate(anReq.getEstimate() + model.getEstimate());
 
 		controller = new RequirementsController();

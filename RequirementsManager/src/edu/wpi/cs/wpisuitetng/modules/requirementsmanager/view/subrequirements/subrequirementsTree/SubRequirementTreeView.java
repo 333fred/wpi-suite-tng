@@ -26,8 +26,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
-public class SubRequirementTreeView extends JPanel implements IDatabaseListener,
-IReceivedAllRequirementNotifier {
+public class SubRequirementTreeView extends JPanel implements
+		IDatabaseListener, IReceivedAllRequirementNotifier {
 	private JTree tree;
 	private JScrollPane treeView;
 	private DefaultMutableTreeNode top;
@@ -44,8 +44,9 @@ IReceivedAllRequirementNotifier {
 		super(new BorderLayout());
 		this.tabController = tabController;
 
-		retrieveAllRequirementsController = new RetrieveAllRequirementsRequestObserver(this);
-		
+		retrieveAllRequirementsController = new RetrieveAllRequirementsRequestObserver(
+				this);
+
 		firstPaint = true;
 
 		this.top = new DefaultMutableTreeNode("Requirements");
@@ -54,15 +55,17 @@ IReceivedAllRequirementNotifier {
 		this.tree.setDragEnabled(true);
 		this.tree.setDropMode(DropMode.ON);
 
-		this.tree.setTransferHandler(new SubReqTreeTransferHandler(tabController));
-		this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		this.tree.setTransferHandler(new SubReqTreeTransferHandler(
+				tabController));
+		this.tree.getSelectionModel().setSelectionMode(
+				TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		treeView = new JScrollPane(tree);
 		this.add(treeView, BorderLayout.CENTER);
-		
+
 		RequirementDatabase.getInstance().registerListener(this);
-		
-		requirements = RequirementDatabase.getInstance().getAllRequirements();
+
+		requirements = RequirementDatabase.getInstance().getAll();
 		updateTreeView();
 	}
 
@@ -71,7 +74,7 @@ IReceivedAllRequirementNotifier {
 		DefaultMutableTreeNode requirementNode = null;
 		DefaultMutableTreeNode subRequirementNode = null;
 		Requirement tempReq = null;
-		this.top.removeAllChildren();		
+		this.top.removeAllChildren();
 
 		if (requirements != null) {
 			for (Requirement anReq : requirements) {
@@ -81,11 +84,12 @@ IReceivedAllRequirementNotifier {
 
 					for (Integer aReq : anReq.getSubRequirements()) {
 						try {
-							tempReq = RequirementDatabase.getInstance()
-									.getRequirement(aReq);
-							subRequirementNode = new DefaultMutableTreeNode(tempReq);
+							tempReq = RequirementDatabase.getInstance().get(
+									aReq);
+							subRequirementNode = new DefaultMutableTreeNode(
+									tempReq);
 							requirementNode.add(subRequirementNode);
-							updateTreeNodes(tempReq, subRequirementNode);							
+							updateTreeNodes(tempReq, subRequirementNode);
 						} catch (RequirementNotFoundException e) {
 							System.out
 									.println("Requirement not found: SubRequirementTreeView:372");
@@ -94,16 +98,18 @@ IReceivedAllRequirementNotifier {
 					this.top.add(requirementNode);
 				}
 			}
-			
-			((DefaultTreeModel) this.tree.getModel()).nodeStructureChanged(this.top);
-			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree.getCellRenderer();
+
+			((DefaultTreeModel) this.tree.getModel())
+					.nodeStructureChanged(this.top);
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree
+					.getCellRenderer();
 			renderer.setLeafIcon(null);
 			this.tree.setCellRenderer(renderer);
 			restoreExpanstionState(this.tree, 0, eState);
-			
+
 		}
 	}
-	
+
 	public static void restoreExpanstionState(JTree tree, int row,
 			String expansionState) {
 		StringTokenizer stok = new StringTokenizer(expansionState, ",");
@@ -140,26 +146,26 @@ IReceivedAllRequirementNotifier {
 		return path1.equals(path2);
 	}
 
-	public void updateTreeNodes(Requirement anReq, DefaultMutableTreeNode node){
+	public void updateTreeNodes(Requirement anReq, DefaultMutableTreeNode node) {
 		DefaultMutableTreeNode subRequirementNode = null;
 		Requirement tempReq = null;
-		
+
 		for (Integer aReq : anReq.getSubRequirements()) {
 			try {
-				tempReq = RequirementDatabase.getInstance().getRequirement(aReq);
+				tempReq = RequirementDatabase.getInstance().get(aReq);
 				subRequirementNode = new DefaultMutableTreeNode(tempReq);
 				node.add(subRequirementNode);
-				updateTreeNodes(tempReq, subRequirementNode);				
+				updateTreeNodes(tempReq, subRequirementNode);
 			} catch (RequirementNotFoundException e) {
 				System.out
 						.println("GRRR Requirement not found: SubRequirementTreeView:372");
-			}			
+			}
 		}
 	}
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
-		//this.requirements = Arrays.asList(requirements);
+		// this.requirements = Arrays.asList(requirements);
 		refresh();
 	}
 
@@ -173,24 +179,23 @@ IReceivedAllRequirementNotifier {
 	}
 
 	public void refresh() {
-		this.requirements = RequirementDatabase.getInstance().getAllRequirements();
+		this.requirements = RequirementDatabase.getInstance().getAll();
 		updateTreeView();
 	}
 
-	
 	@Override
 	public boolean shouldRemove() {
 		return false;
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (firstPaint) {
 			firstPaint = false;
-			
-		refresh();
-			//getRequirementsFromServer();
+
+			refresh();
+			// getRequirementsFromServer();
 		}
 	}
 

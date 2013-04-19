@@ -36,7 +36,7 @@ public class SimpleRetrieveAllFiltersRequestObserver implements RequestObserver 
 		if (response.getStatusCode() == 200) {
 			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
 
-			FilterDatabase.getInstance().setFilters(Arrays.asList(filters));
+			FilterDatabase.getInstance().set(Arrays.asList(filters));
 		}
 	}
 

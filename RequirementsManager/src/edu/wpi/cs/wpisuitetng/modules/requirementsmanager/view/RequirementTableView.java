@@ -487,7 +487,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							.replaceAll(" p", " P"));
 			try {
 				row.addElement(IterationDatabase.getInstance()
-						.getIteration(requirements[i].getIteration()).getName());
+						.get(requirements[i].getIteration()).getName());
 			} catch (IterationNotFoundException e) {
 				row.addElement("Iteration Not Found");
 			}

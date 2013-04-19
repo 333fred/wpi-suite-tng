@@ -49,7 +49,7 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 
 		//if (response.getStatusCode() == 200) {
 			Filter filter = Filter.fromJSON(response.getBody());
-			FilterDatabase.getInstance().addFilter(filter);
+			FilterDatabase.getInstance().add(filter);
 		//}
 		
 		notifier.responseSuccess();

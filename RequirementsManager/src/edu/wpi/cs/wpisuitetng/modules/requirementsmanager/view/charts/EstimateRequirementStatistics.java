@@ -1,15 +1,15 @@
 /*******************************************************************************
-* Copyright (c) 2013 -- WPI Suite: Team Swagasarus
-*
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* * Chris Keane
-* * Maddie Burris
-*******************************************************************************/
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * * Chris Keane
+ * * Maddie Burris
+ *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
@@ -21,42 +21,47 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
-* class to contain data on estimate for each requirements 
-*/
+ * class to contain data on estimate for each requirements
+ */
 
+public class EstimateRequirementStatistics extends
+		AbstractRequirementStatistics {
 
-public class EstimateRequirementStatistics extends AbstractRequirementStatistics {
-
-	/* (non-Javadoc)
-	* @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
-	*/
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
+	 * IRequirementStatistics#update()
+	 */
 	@Override
-	public void update(){
-	
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-		
-		
+	public void update() {
+
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getAll(); // refresh list of requirements
+
 		// for each requirement
-		for(Requirement requirement: requirements){
-			//get the estimate for each requirement
+		for (Requirement requirement : requirements) {
+			// get the estimate for each requirement
 			data.put(requirement.getName(), requirement.getEstimate());
-		
+
 		}
-	
+
 	}
-	
-	public JFreeChart buildPieChart(){
+
+	public JFreeChart buildPieChart() {
 		return this.buildPieChart("Requirements by Estimate");
 	}
-	
-	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Requirements by Estimate", "Requirement", "Estimate");
+
+	public JFreeChart buildBarChart() {
+		JFreeChart barChart = this.buildBarChart("Requirements by Estimate",
+				"Requirement", "Estimate");
 		return barChart;
 	}
 
-	public JFreeChart buildLineChart(){
+	public JFreeChart buildLineChart() {
 		this.update();
-		return this.buildLineChart("Estimates by Requirements", "Requirement", "Estimate");
+		return this.buildLineChart("Estimates by Requirements", "Requirement",
+				"Estimate");
 	}
 
 }
