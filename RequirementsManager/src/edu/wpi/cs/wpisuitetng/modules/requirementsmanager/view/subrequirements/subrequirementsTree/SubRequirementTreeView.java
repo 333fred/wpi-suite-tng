@@ -2,12 +2,17 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.DropMode;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SpringLayout;
@@ -19,11 +24,17 @@ import javax.swing.tree.TreeSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subreqpopupmenu.SubReqAnywherePopupMenu;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subreqpopupmenu.SubReqRequirementPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
 public class SubRequirementTreeView extends JPanel implements
@@ -67,6 +78,101 @@ public class SubRequirementTreeView extends JPanel implements
 
 		requirements = RequirementDatabase.getInstance().getAll();
 		updateTreeView();
+		MouseListener ml = new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					int selRow = tree.getRowForLocation(e.getX(), e.getY());
+					TreePath selPath = tree.getPathForLocation(e.getX(),
+							e.getY());
+					if (selRow != -1) {
+						if (e.getClickCount() == 2) {
+							onDoubleClick(selRow, selPath);
+						}
+					}
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+					// this was a right click
+
+					int selRow = tree.getRowForLocation(e.getX(), e.getY());
+					TreePath selPath = tree.getPathForLocation(e.getX(),
+							e.getY());
+					onRightClick(e.getX(), e.getY(), selRow, selPath);
+				}
+			}
+		};
+		this.tree.addMouseListener(ml);
+	}
+
+	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
+				// add a menu offset
+				x += 10;
+
+				// we right clicked on something in particular
+				JPopupMenu menuToShow;
+				if (selRow != -1) {					
+					int levelClickedOn = ((DefaultMutableTreeNode) selPath
+							.getLastPathComponent()).getLevel();
+					System.out.println("LevelClickedOn: " + levelClickedOn);
+
+					if (tree.getSelectionModel().getSelectionMode() == TreeSelectionModel.SINGLE_TREE_SELECTION) {
+						// we are in single selection mode
+						tree.setSelectionPath(selPath);
+
+					} else {
+						// multi selection mode
+						tree.addSelectionPath(selPath);
+					}
+				if(levelClickedOn>0){
+					List<Requirement> selectedRequirements = new ArrayList<Requirement>();
+					TreePath path = tree.getPathForRow(selRow);
+					DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+					Requirement tempReq = (Requirement) firstNode.getUserObject();
+					selectedRequirements.add(tempReq);
+					menuToShow = new SubReqRequirementPopupMenu(tabController,selectedRequirements);
+					menuToShow.show(this, x, y);
+					}
+				}
+				else{
+					menuToShow = new SubReqAnywherePopupMenu(tabController);
+					menuToShow.show(this, x, y);
+				}
+		
+	}
+
+	protected void onDoubleClick(int selRow, TreePath selPath) {
+		if (((DefaultMutableTreeNode) selPath.getLastPathComponent()).getLevel() == 0) {
+			return;
+		}
+		boolean requirementIsOpen = false;
+		// TODO Auto-generated method stub
+		Requirement requirement = RequirementDatabase.getInstance()
+				.getRequirement(
+						((DefaultMutableTreeNode) selPath
+								.getLastPathComponent()).toString());
+
+		// Check to make sure the requirement is not already being
+		// displayed. This is assuming that the list view is displayed in
+		// the left most tab, index 0
+		for (int i = 0; i < this.tabController.getTabView().getTabCount(); i++) {
+			if (this.tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+				if (((((DetailPanel) this.tabController.getTabView()
+						.getComponentAt(i))).getModel().getrUID()) == (requirement
+						.getrUID())) {
+					this.tabController.switchToTab(i);
+					requirementIsOpen = true;
+				}
+			}
+		}
+		if (!requirementIsOpen) {
+			// create the controller for fetching the new requirement
+			RequirementsController controller = new RequirementsController();
+			RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
+					new OpenRequirementTabAction(tabController, requirement));
+
+			// get the requirement from the server
+			controller.get(requirement.getrUID(), observer);
+		}
+		
 	}
 
 	public void updateTreeView() {
