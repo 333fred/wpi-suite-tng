@@ -763,7 +763,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				int iterationId = ((Double)filter.getValue()).intValue();
 				Iteration iteration;
 				try {
-					iteration = IterationDatabase.getInstance().getIteration(iterationId);
+					iteration = IterationDatabase.getInstance().get(iterationId);
 				} catch (IterationNotFoundException e) {
 					//iteration is no longer in existance, we should probally delete this filter,
 					cancelEdit();
