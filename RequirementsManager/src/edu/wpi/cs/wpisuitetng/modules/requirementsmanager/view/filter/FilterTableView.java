@@ -213,7 +213,7 @@ public class FilterTableView extends JPanel implements
 			int[] selRows = tableView.getSelectedRows();
 			for (int row : selRows) {
 				Filter filter = tableModel.getFilterAt(row);
-				DeleteFilterRequestObserver observer = new DeleteFilterRequestObserver(this);
+				DeleteFilterRequestObserver observer = new DeleteFilterRequestObserver(this, filter);
 				filterController.delete(filter, observer);
 			}
 			//notify the listeners that we made changes
