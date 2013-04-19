@@ -12,8 +12,15 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import java.util.Arrays;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
+import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 
@@ -22,7 +29,18 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
+		
 		// TODO Auto-generated method stub
+		// Get the response and call the singleton initializer
+		ResponseModel response = iReq.getResponse();
+		if (response.getStatusCode() == 200) {
+		// parse the response
+		final PermissionModel[] permissions = PermissionModel.fromJSONArray(response
+				.getBody());
+
+		PermissionsDatabase.getInstance().setPermissions(
+				Arrays.asList(permissions));
+		}
 
 	}
 
