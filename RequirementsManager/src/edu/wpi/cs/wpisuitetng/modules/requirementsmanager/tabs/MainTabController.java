@@ -64,7 +64,7 @@ public class MainTabController {
 	public MainTabController() {
 		this.iterationTreeView = new IterationTreeView(this);
 		subRequirementTreeView = new SubRequirementTreeView(this);
-		filterView = new FilterView();
+		filterView = FilterView.getInstance();
 		tabView = new MainTabView(this);
 
 		tabView.addChangeListener(new ChangeListener() {

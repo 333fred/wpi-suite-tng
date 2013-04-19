@@ -28,7 +28,7 @@ public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
 	public void update() {
 		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAll(); // refresh list of requirements
+				.getFilteredRequirements(); // refresh list of requirements
 		// for every possible status
 		for (Status status : Status.values()) {
 			this.data.put(status.toString(), 0); // insert the status in the

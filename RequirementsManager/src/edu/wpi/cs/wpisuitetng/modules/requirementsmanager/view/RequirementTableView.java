@@ -70,6 +70,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveEditingTableAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpdateListener;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
 /**
  * RequirementListView is the basic GUI that will display a list of the current
@@ -137,7 +138,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	@SuppressWarnings("rawtypes")
 	private RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
-		tabController.getFilterView().addFilterUpdateListener(this);
+		FilterView.getInstance().addFilterUpdateListener(this);
 		firstPaint = false;
 		// register this listener to the Database
 		RequirementDatabase.getInstance().registerListener(this);

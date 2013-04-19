@@ -30,6 +30,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
 public class FilterView extends JPanel {
 
+	/** */
+	private static FilterView fv;
+	
 	/** View for displaying and enabling / disabling filters */
 	private FilterTableView filterTableView;
 	
@@ -54,6 +57,18 @@ public class FilterView extends JPanel {
 		add(filterTableView, BorderLayout.CENTER);
 		add(createFilterView, BorderLayout.SOUTH);
 
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	
+	public static FilterView getInstance() {
+		if (fv == null) {
+			fv = new FilterView();
+		}
+		return fv;
 	}
 	
 	/** Refreshes the filters displayed in the table view 
