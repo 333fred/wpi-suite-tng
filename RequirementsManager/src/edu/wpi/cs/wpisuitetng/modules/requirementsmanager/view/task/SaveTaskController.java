@@ -15,9 +15,11 @@ import java.awt.Color;
 
 import javax.swing.JList;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
@@ -95,9 +97,10 @@ public class SaveTaskController {
 				// if the requirement hasn't been just created
 				if (model.getName().length() > 0) { 
 					// Save to requirement!
-					SaveRequirementController controller = new SaveRequirementController(
+					RequirementsController controller = new RequirementsController();
+					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this.parentView);
-					controller.SaveRequirement(model, false);
+					controller.save(model, observer);
 				}
 				parentView.getComboBoxStatus().removeItem("Complete");
 			}
@@ -132,9 +135,10 @@ public class SaveTaskController {
 			
 			// Save to requirement!
 			if (model.getName().length() > 0) { 
-				SaveRequirementController controller = new SaveRequirementController(
+				RequirementsController controller = new RequirementsController();
+				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 						this.parentView);
-				controller.SaveRequirement(model, false);
+				controller.save(model, observer);
 			}
 			view.getTaskName().setText("");
 			view.getTaskField().setText("");
