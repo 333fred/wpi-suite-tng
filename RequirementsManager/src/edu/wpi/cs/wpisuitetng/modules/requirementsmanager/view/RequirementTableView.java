@@ -341,10 +341,12 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			public void actionPerformed(ActionEvent e) {
 				sorter.setRowFilter(null);
 				textTreeFilterInfo.setText("");
+				ClearFilter.setEnabled(false);
 			}
 		};
 		ClearFilter.setAction(ClearFilterAction);
 		ClearFilter.setText("Clear Tree Filter");
+		ClearFilter.setEnabled(false);
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
 		for (int i = 0; i < this.table.getColumnCount(); i++) {
@@ -822,6 +824,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			return;
 		}
 		sorter.setRowFilter(rf);
+		ClearFilter.setEnabled(true);
 	}
 
 	// writes to hidden panel to inform the user of editing, etc..
