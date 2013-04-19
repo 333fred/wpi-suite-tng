@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
+import javax.swing.SwingUtilities;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.PermissionToolbarPane;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -26,9 +28,20 @@ public class RetrievePermissionsRequestObserver implements RequestObserver {
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		// Get the response and call the singleton initializer
-		ResponseModel response = iReq.getResponse();
-		PermissionModel.fromJSONSingleton(response.getBody());
-		PermissionToolbarPane.getInstance().refreshPermission();
+		final ResponseModel response = iReq.getResponse();
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					PermissionModel.fromJSONSingleton(response.getBody());
+					PermissionToolbarPane.getInstance().refreshPermission();
+				} catch (IllegalThreadStateException ex) {
+					System.out.println("Thread State");
+				}
+			}
+		});
+
 	}
 
 	/**

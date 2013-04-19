@@ -307,7 +307,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 				Iteration toAdd = new Iteration(name, startDate, endDate);
 				AddIterationRequestObserver observer = new AddIterationRequestObserver(
 						view);
-				iterationController.create(iteration, observer);
+				iterationController.create(toAdd, observer);
 			} else {
 				iteration.setName(name);
 				iteration.setStartDate(startDate);
