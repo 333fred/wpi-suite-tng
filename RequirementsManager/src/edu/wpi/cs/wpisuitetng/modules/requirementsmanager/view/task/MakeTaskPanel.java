@@ -94,9 +94,9 @@ public class MakeTaskPanel extends JPanel {
 			public void keyPressed(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						taskDescription.transferFocus();
+						taskName.transferFocus();
 					} else {
-						taskDescription.transferFocusBackward();
+						taskName.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -110,7 +110,6 @@ public class MakeTaskPanel extends JPanel {
 		taskDescription = new JTextArea();
 		taskDescription.setLineWrap(true);
 		taskDescription.setWrapStyleWord(true);
-		taskDescription.setBorder((new JTextField()).getBorder());
 		taskDescription.setDisabledTextColor(Color.GRAY);
 		
 		taskDescription.addKeyListener(new KeyAdapter() {

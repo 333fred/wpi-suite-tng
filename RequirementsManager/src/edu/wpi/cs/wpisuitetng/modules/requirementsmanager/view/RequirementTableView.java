@@ -817,7 +817,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter(IterationName);
+			rf = RowFilter.regexFilter("^"+IterationName+"$", 5);
 		} catch (java.util.regex.PatternSyntaxException e) {
 			return;
 		}
