@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric, Alex Woodyard, Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
@@ -92,43 +92,30 @@ public class PermissionToolbarPane extends JPanel {
 		permissionLayout.putConstraint(SpringLayout.NORTH, nameLabel, 3,
 				SpringLayout.NORTH, this);
 		permissionLayout.putConstraint(SpringLayout.NORTH, userName, 3,
-				SpringLayout.SOUTH, nameLabel);
+				SpringLayout.NORTH, this);
 		permissionLayout.putConstraint(SpringLayout.NORTH, permissionLabel, 3,
-				SpringLayout.SOUTH, userName);
+				SpringLayout.SOUTH, nameLabel);
 		permissionLayout.putConstraint(SpringLayout.NORTH, userLevel, 3,
-				SpringLayout.SOUTH, permissionLabel);
+				SpringLayout.SOUTH, userName);
 		permissionLayout.putConstraint(SpringLayout.NORTH, createPermissions,
 				3, SpringLayout.SOUTH, userLevel);
 
 		// center everything horizontally
 		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				nameLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				userName, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				userLevel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-				permissionLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
 				createPermissions, 0, SpringLayout.HORIZONTAL_CENTER, this);
 
-		// match everything to nameLabel width
-		permissionLayout.putConstraint(SpringLayout.EAST, nameLabel, 0,
-				SpringLayout.EAST, permissionLabel);
 		permissionLayout.putConstraint(SpringLayout.WEST, nameLabel, 0,
-				SpringLayout.WEST, permissionLabel);
+				SpringLayout.WEST, this);
+		permissionLayout.putConstraint(SpringLayout.EAST, nameLabel, 0,
+				SpringLayout.WEST, userName);
 		permissionLayout.putConstraint(SpringLayout.EAST, userName, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, userName, 0,
-				SpringLayout.WEST, permissionLabel);
+				SpringLayout.EAST, this);
+		permissionLayout.putConstraint(SpringLayout.WEST, permissionLabel, 0,
+				SpringLayout.WEST, this);
+		permissionLayout.putConstraint(SpringLayout.EAST, permissionLabel, 0,
+				SpringLayout.WEST, userLevel);
 		permissionLayout.putConstraint(SpringLayout.EAST, userLevel, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, userLevel, 0,
-				SpringLayout.WEST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.EAST, createPermissions, 0,
-				SpringLayout.EAST, permissionLabel);
-		permissionLayout.putConstraint(SpringLayout.WEST, createPermissions, 0,
-				SpringLayout.WEST, permissionLabel);
+				SpringLayout.EAST, this);
 
 		this.add(nameLabel);
 		this.add(userName);
@@ -158,13 +145,14 @@ public class PermissionToolbarPane extends JPanel {
 				userName.setText(usr.getName());
 			}
 		} else
-			userName.setText("User is NULL");
+			userName.setText("NULL");
 		userLevel.setText(PermissionModel.getInstance().getPermission()
 				.toString());
 	}
 
 	public double getLabelWidth() {
-		return permissionLabel.getPreferredSize().getWidth();
+		return Math.max((permissionLabel.getPreferredSize().getWidth() + userLevel.getPreferredSize().getWidth()),
+				(nameLabel.getPreferredSize().getWidth() + userName.getPreferredSize().getWidth()));
 	}
 
 }

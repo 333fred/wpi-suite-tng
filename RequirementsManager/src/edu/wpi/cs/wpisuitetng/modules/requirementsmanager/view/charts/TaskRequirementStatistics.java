@@ -38,7 +38,7 @@ public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 	@Override
 	public void update() {
 		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAll(); // refresh list of requirements
+				.getFilteredRequirements(); // refresh list of requirements
 
 		// for each requirement
 		for (Requirement requirement : requirements) {

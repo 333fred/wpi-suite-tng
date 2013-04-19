@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SavePermissionsAction;
 
 @SuppressWarnings("serial")
 public class PermissionsPanel extends Tab {
@@ -58,6 +59,7 @@ public class PermissionsPanel extends Tab {
 		SpringLayout layout = new SpringLayout();
 		SpringLayout radioLayout = new SpringLayout();
 		saveButton = new JButton("Save Changes");
+		
 		JPanel radioPanel = new JPanel();
 
 		radioPanel.setLayout(radioLayout);
@@ -133,6 +135,10 @@ public class PermissionsPanel extends Tab {
 		radioLayout.putConstraint(SpringLayout.WEST, radioPanel, 0,
 					SpringLayout.WEST, saveButton);
 
+		// assign an action to the save button
+		if(!userList.isSelectionEmpty())
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userList.getSelectedIndex())));
+
 		// add the buttons to the panel
 		radioPanel.add(adminButton);
 		radioPanel.add(updateButton);
@@ -171,5 +177,15 @@ public class PermissionsPanel extends Tab {
 			noPermissionButton.setSelected(false);
 		}
 
+	}
+	
+	public UserPermissionLevels getPermission(){
+		if(adminButton.isSelected())
+			return UserPermissionLevels.ADMIN;
+		else if(updateButton.isSelected())
+			return UserPermissionLevels.UPDATE;
+		else if(noPermissionButton.isSelected())
+			return UserPermissionLevels.NONE;
+		return null;
 	}
 }

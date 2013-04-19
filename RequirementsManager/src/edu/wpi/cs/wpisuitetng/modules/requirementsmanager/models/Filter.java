@@ -29,9 +29,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
  * display on the screen. We and reload them on the database so that the user
  * doesn't loose filters upon restarting Janeway
  * 
- *  The value of the fitler is stored in a JSON String to make it correctly
- *  load and save to the server, The FilterValueType enum assists with this as
- *  well
+ * The value of the fitler is stored in a JSON String to make it correctly load
+ * and save to the server, The FilterValueType enum assists with this as well
  * 
  */
 
@@ -41,13 +40,13 @@ public class Filter extends AbstractModel {
 	private User creator;
 	private FilterField field;
 	private FilterOperation operation;
-	
+
 	/** String of the value, will store the JSON for the object */
 	private String jsonValue;
 	private String stringValue;
 	private boolean active;
-	
-	/** Enum representing the  type of value in this filter */
+
+	/** Enum representing the type of value in this filter */
 	private FilterValueType valueType;
 
 	/**
@@ -64,7 +63,7 @@ public class Filter extends AbstractModel {
 	 *            the creator of the filter
 	 */
 	public Filter(User u) {
-		this(u, FilterField.NAME, FilterOperation.EQUAL,new String());
+		this(u, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class Filter extends AbstractModel {
 		this.creator = user;
 		this.field = field;
 		this.operation = operation;
-		setValue(value); //set the value and valu type
+		setValue(value); // set the value and valu type
 		active = true;
 	}
 
@@ -94,14 +93,15 @@ public class Filter extends AbstractModel {
 	 * 
 	 * @param toFilter
 	 *            the requirement to check
-	 * @return true if the requirement should be kept, false if it should be removed
+	 * @return true if the requirement should be kept, false if it should be
+	 *         removed
 	 */
 	public boolean shouldFilter(Requirement toFilter) {
-		//if this is not active return false
+		// if this is not active return false
 		if (!isActive()) {
 			return false;
 		}
-		
+
 		switch (getField()) {
 		case NAME:
 			return checkString(toFilter.getName());
@@ -163,7 +163,7 @@ public class Filter extends AbstractModel {
 			return value.equals(getValue());
 
 		case NOT_EQUAL:
-			return value.equals(getValue());
+			return !value.equals(getValue());
 		default:
 			System.out.println("MAGIC!!!!!!!");
 			return false;
@@ -191,7 +191,7 @@ public class Filter extends AbstractModel {
 		case GREATER_THAN_EQUAL:
 			return value >= (Integer) getValue();
 		case GREATER_THAN:
-			return value > (Integer)getValue();
+			return value > (Integer) getValue();
 		default:
 			System.out.println("MAGIC!!!!!!!");
 			return false;
@@ -279,27 +279,29 @@ public class Filter extends AbstractModel {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, Filter[].class);
 	}
-	
-	/** Returns a properly casted type of the  Value Object
+
+	/**
+	 * Returns a properly casted type of the Value Object
 	 * 
 	 * @return
 	 */
-	
+
 	public Object getValue() {
 		final Gson gson = new Gson();
 		Object o = gson.fromJson(jsonValue, valueType.getClassType());
 		return o;
 	}
-	
-	/** Sets the  value type of the filter with the given value.
+
+	/**
+	 * Sets the value type of the filter with the given value.
 	 * 
 	 * @param value
 	 */
-	
+
 	public void setValue(Object value) {
 		valueType = FilterValueType.getFromClassType(value.getClass());
 		final Gson gson = new Gson();
-		jsonValue = gson.toJson(value); // convert the object to JSON	
+		jsonValue = gson.toJson(value); // convert the object to JSON
 	}
 
 	/**
@@ -321,7 +323,8 @@ public class Filter extends AbstractModel {
 	@Override
 	public String toString() {
 		return "[Filter ID:" + id + " Field:" + field + " Operation:"
-				+ operation + " Value: " + jsonValue + " Active: " + active + "]";
+				+ operation + " Value: " + jsonValue + " Active: " + active
+				+ "]";
 	}
 
 	/**
@@ -392,7 +395,8 @@ public class Filter extends AbstractModel {
 	}
 
 	/**
-	 * @param jsonValue the jsonValue to set
+	 * @param jsonValue
+	 *            the jsonValue to set
 	 */
 	public void setJsonValue(String jsonValue) {
 		this.jsonValue = jsonValue;
@@ -441,7 +445,22 @@ public class Filter extends AbstractModel {
 	 * @return the stringValue
 	 */
 	public String getStringValue() {
-		return stringValue;
+		if (field == FilterField.ITERATION
+				&& (operation == FilterOperation.EQUAL || operation == FilterOperation.NOT_EQUAL)) {
+			Iteration iteration;
+			try {
+				iteration = IterationDatabase.getInstance().get((Integer)getValue());
+			} catch (IterationNotFoundException e) {
+				//this filter has an invalid 
+				//TODO: we should delete this filter, doesnt seem like a good idea to delete it here
+				return "Not Found";
+			}
+			
+			return iteration.getName();
+			//we must get the operation, otherwise we return to string
+
+		}
+		return getValue().toString();
 	}
 
 	/**
