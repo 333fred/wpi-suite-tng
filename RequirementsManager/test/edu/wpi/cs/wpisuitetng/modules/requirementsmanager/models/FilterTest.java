@@ -60,6 +60,7 @@ public class FilterTest {
 	User u2;
 	Requirement r1;
 	Requirement r2;
+	Requirement r3;
 	
 	String name = "name";
 	String name2 = "name2";
@@ -83,12 +84,36 @@ public class FilterTest {
 		f2 = new Filter(u2);
 		f3 = new Filter(u1, FilterField.NAME, FilterOperation.EQUAL, "name");
 		f4 = new Filter(u1, FilterField.NAME, FilterOperation.NOT_EQUAL, "name2");
-		r1 = new Requirement(name, description, releaseNum, type,
+		f5 = new Filter(u1, FilterField.NAME, FilterOperation.CONTAINS, "e2");
+		f6 = new Filter(u1, FilterField.NAME, FilterOperation.STARTS_WITH, "e");
+		f7 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.EQUAL, "v1");
+		f8 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.NOT_EQUAL, "v1");
+		f9 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.CONTAINS, "v");
+		f10 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f11 = new Filter(u1, FilterField.TYPE, FilterOperation.EQUAL, Type.USER_STORY);
+		f12 = new Filter(u1, FilterField.TYPE, FilterOperation.NOT_EQUAL, Type.USER_STORY);
+		f13 = new Filter(u1, FilterField.PRIORITY, FilterOperation.EQUAL, Priority.HIGH);
+		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
+		f15 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f16 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f17 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f18 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f19 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f20 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f21 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f22 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		r1 = new Requirement(name, description, releaseNum, type.USER_STORY,
 				subRequirements, notes, iteration, estimate, effort, assignees,
 				pUID, tasks);
-		r2 = new Requirement(name2, description, releaseNum, type,
+		r2 = new Requirement(name2, description, "v2", type.THEME,
 				subRequirements, notes, iteration, estimate, effort, assignees,
 				pUID, tasks);
+		r3 = new Requirement("example", description, "3.0", type.EPIC,
+				subRequirements, notes, iteration, estimate, effort, assignees,
+				pUID, tasks);
+		r1.setPriority(Priority.HIGH);
+		r2.setPriority(Priority.MEDIUM);
+		r3.setPriority(Priority.LOW);
 	}
 	
 	@Test
@@ -97,6 +122,26 @@ public class FilterTest {
 		assertFalse(f3.shouldFilter(r2));
 		assertTrue(f4.shouldFilter(r1));
 		assertFalse(f4.shouldFilter(r2));
+		assertTrue(f5.shouldFilter(r2));
+		assertFalse(f5.shouldFilter(r1));
+		assertTrue(f6.shouldFilter(r3));
+		assertFalse(f6.shouldFilter(r1));
+		assertTrue(f7.shouldFilter(r1));
+		assertFalse(f7.shouldFilter(r2));
+		assertTrue(f8.shouldFilter(r2));
+		assertFalse(f8.shouldFilter(r1));
+		assertTrue(f9.shouldFilter(r1));
+		assertFalse(f9.shouldFilter(r3));
+		assertTrue(f10.shouldFilter(r1));
+		assertFalse(f10.shouldFilter(r3));
+		assertTrue(f11.shouldFilter(r1));
+		assertFalse(f11.shouldFilter(r3));
+		assertTrue(f12.shouldFilter(r3));
+		assertFalse(f12.shouldFilter(r1));
+		assertTrue(f13.shouldFilter(r1));
+		assertFalse(f13.shouldFilter(r3));
+		assertTrue(f14.shouldFilter(r3));
+		assertFalse(f14.shouldFilter(r1));
 		f1.setActive(false);
 		assertFalse(f1.shouldFilter(r1));
 		
@@ -137,8 +182,9 @@ public class FilterTest {
 	
 	@Test
 	public void testToString() {
-		assertEquals(f1.toString(), "[Filter ID:" + -1 + " Field:" + FilterField.NAME + " Operation:"
-				+ FilterOperation.EQUAL + " Value: " + new String() + " Active: " + true + "]");
+		assertEquals(f1.toString(), "[Filter ID:" + f1.getId() + " Field:" + f1.getField() + " Operation:"
+				+ f1.getOperation() + " Value: " + f1.getJsonValue() + " Active: " + f1.getActive()
+				+ "]");
 	}
 	
 	@Test
@@ -149,9 +195,11 @@ public class FilterTest {
 		assertFalse(f1.getActive());
 	}
 	
-	@Test
+	// TODO: Change this test once getStringValue() is finalized
+	/*@Test
 	public void testStringValue() {
 		f1.setStringValue("test");
 		assertEquals(f1.getStringValue(), "test");
 	}
+	*/
 }
