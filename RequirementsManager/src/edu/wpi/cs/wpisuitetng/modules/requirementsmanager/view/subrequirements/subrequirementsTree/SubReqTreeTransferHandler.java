@@ -64,13 +64,13 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
-		if (!support.isDrop()) {
+		/*if (!support.isDrop()) {
 			return false;
 		}
 		support.setShowDropLocation(true);
 		if (!support.isDataFlavorSupported(nodesFlavor)) {
 			return false;
-		}
+		}*/
 		// Do not allow a drop on the drag source selections.
 		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
 		JTree tree = (JTree) support.getComponent();
@@ -85,20 +85,11 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
+		if(firstNode.getLevel()==0)
+			return false;
 		if(firstNode==target || target==firstNode.getParent())
-			return false;
-		// Do not allowing dropping requirements into requirements with parents
-		/*if (firstNode.getLevel() != 1) {
-			return false;
-		}*/
-		// Don't allow dropping into requirement that is already in
-		/*TreeNode tempNode = target;
-		while(tempNode!=null){
-			if(tempNode==firstNode)
-				return false;
-			else
-				tempNode = tempNode.getParent();
-		}*/
+			return false;		
+		
 		return true;
 	}
 
@@ -228,16 +219,19 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 			RequirementsController RequirementsController = new RequirementsController();
 			UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(this);
 			
+		if (target.getLevel() != 0) {
+
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement anRequirement = (Requirement) target.getUserObject();
 			Requirement parentRequirement = null;
-			
+
 			Integer anReqID = new Integer(anRequirement.getrUID());
 			Integer reqID = new Integer(requirement.getrUID());
-			
-			if(requirement.getpUID().size()>0){
+
+			if (requirement.getpUID().size() > 0) {
 				try {
-					parentRequirement = RequirementDatabase.getInstance().getRequirement(requirement.getpUID().get(0));
+					parentRequirement = RequirementDatabase.getInstance()
+							.getRequirement(requirement.getpUID().get(0));
 					parentRequirement.removeSubRequirement(reqID);
 					requirement.removePUID(parentRequirement.getrUID());
 					RequirementsController.save(parentRequirement, reqObserver);
@@ -245,13 +239,31 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 					e.printStackTrace();
 				}
 			}
-			
+
 			anRequirement.addSubRequirement(reqID);
 			requirement.addPUID(anReqID);
-			RequirementsController.save(anRequirement, reqObserver);			
+			RequirementsController.save(anRequirement, reqObserver);
 			RequirementsController.save(requirement, reqObserver);
 			this.draggedRequirement = requirement;
-		//}
+		}else{
+			
+			Requirement requirement = (Requirement) firstNode.getUserObject();
+			Requirement parentRequirement = null;
+			Integer reqID = new Integer(requirement.getrUID());
+			
+			if (requirement.getpUID().size() > 0) {
+				try {
+					parentRequirement = RequirementDatabase.getInstance()
+							.getRequirement(requirement.getpUID().get(0));
+					parentRequirement.removeSubRequirement(reqID);
+					requirement.removePUID(parentRequirement.getrUID());
+					RequirementsController.save(parentRequirement, reqObserver);
+					RequirementsController.save(requirement, reqObserver);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
 		return true;
 	}
