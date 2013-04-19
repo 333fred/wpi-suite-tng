@@ -44,67 +44,53 @@
 	<table border="1">
 		<tr>
 			<td><b>FIELD</b></td>
+			<td><b>OPERATION</b></td>
+			<td><b>VALUE</b></td>
+		</tr>
+		<tr>
 			<td>Name</td>
+			<td>Equal, Not Equal, Starts With, Contains</td>
+			<td>Text box below operations, can be any String</td>
+		</tr>
+		<tr>
 			<td>Type</td>
+			<td>Equal, Not Equal</td>
+			<td>Drop down menu: choose between the fields for type of requirement</td>
+		</tr>
+		<tr>
 			<td>Priority</td>
-		</tr>
-		<tr>
-			<td><b>OPERATION</b></td>
-			<td>Equal, Not Equal, Starts With, Contains</td>
 			<td>Equal, Not Equal</td>
-			<td>Equal, Not Equal</td>
+			<td>Drop down menu: choose between High, Medium, or Low</td>
 		</tr>
 		<tr>
-			<td><b>VALUE</b></td>
-			<td>Text box below operations, can be any String</td>
-			<td>drop down menu: choose between the fields for type of requirement</td>
-			<td>drop down menu: choose between High, Medium, or Low</td>
-		</tr>
-	</table>
-
-<br>
-
-	<table border="1">
-		<tr>
-			<td><b>FIELD</b></td>
 			<td>Status</td>
-			<td>Estimate</td>
-			<td>Effort</td>
-		</tr>
-		<tr>
-			<td><b>OPERATION</b></td>
 			<td>Equal, Not Equal</td>
-			<td><, <=, Equals, Not Equals, >, >=</td>
-			<td><, <=, Equals, Not Equals, >, >=</td>
+			<td>Drop down menu: choose between the fields for status of requirement</td>
 		</tr>
 		<tr>
-			<td><b>VALUE</b></td>
-			<td>drop down menu: choose between the fields for status of requirement</td>
+			<td>Estimate</td>
+			<td><, <=, Equals, Not Equals, >, >=</td>
 			<td>Text box below operations, can be any positive number</td>
+		</tr>
+		<tr>
+			<td>Effort</td>
+			<td><, <=, Equals, Not Equals, >, >=</td>
 			<td>Text box below operations, can be any positive number</td>
+		</tr>
+		<tr>
+			<td>Iteration</td>
+			<td>Equals, Not Equals, Occurs Before, Occurs After, Occurs Between</td>
+			<td>** See note below **</td>
+		</tr>
+		<tr>
+			<td>Release Number</td>
+			<td>Equal, Not Equal, Starts With, Contains</td>
+			<td>Text box below operations, can be any String</td>
 		</tr>
 	</table>
 
 <br>
 
-	<table border="1">
-		<tr>
-			<td><b>FIELD</b></td>
-			<td>Iteration</td>
-			<td>Release Number</td>
-		</tr>
-		<tr>
-			<td><b>OPERATION</b></td>
-			<td>Equals, Not Equals, Occurs Before, Occurs After, Occurs Between</td>
-			<td>Equal, Not Equal, Starts With, Contains</td>
-		</tr>
-		<tr>
-			<td><b>VALUE</b></td>
-			<td>** See  note below **</td>
-			<td>Text box below operations, can be any String</td>
-		</tr>
-	</table>
-	<br>
 	<div class= "note"> <b>* Operations for Iterations and its value </b><br><br>
 							<b>Equal and Not Equal:</b> drop down menu containing deleted, backlog, and existing iterations <br>
 							<b>Occurs Before and Occurs After:</b> a small button located on the right side of the text box that will display a calendar like the one seen in &quot;Creating an Iteration&quot; to choose dates. <br>
