@@ -678,6 +678,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		} else if (source.equals(butCancel)) {
 			onCancelPressed();
 		}
+		
 	}
 
 	private void updateIterations() {
@@ -783,7 +784,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				calEqualToBetween.setDate(fib.getEndDate());
 				break;
 			default:
-				System.out.println("BLACK MAGIC!!!!!!!!!, CreateFilterView ln 749");
+				System.out.println("BLACK MAGIC!!!!!!!!!, CreateFilterView ln 786");
 			}
 			
 			break;

@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterCont
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.DeleteFilterRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllFiltersRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateFilterRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetrieveAllFiltersNotifier;
@@ -208,8 +209,15 @@ public class FilterTableView extends JPanel implements
 			//notify the listeners that we made changes
 			filterView.notifyListeners();
 
-		} else if (source.equals(butDelete)) {
-			// we will need to work on delete.
+		} else if (source.equals(butDelete)) {			
+			int[] selRows = tableView.getSelectedRows();
+			for (int row : selRows) {
+				Filter filter = tableModel.getFilterAt(row);
+				DeleteFilterRequestObserver observer = new DeleteFilterRequestObserver(this);
+				filterController.delete(filter, observer);
+			}
+			//notify the listeners that we made changes
+			filterView.notifyListeners();
 		}
 	}
 }
