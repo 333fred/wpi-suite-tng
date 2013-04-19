@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.FilterValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
 
@@ -58,14 +59,14 @@ public class FilterEntityManager implements EntityManager<Filter> {
 
 		Filter newFilter = Filter.fromJSON(content);
 
-		newFilter.setId(Count() + 1);
+		newFilter.setId(getId(s));
 
 		// Set the user of the filter
 		newFilter.setCreator(s.getUser());
 
 		// Validate the filter, and error if failure
-		List<ValidationIssue> issues;	
-		
+		List<ValidationIssue> issues;
+
 		issues = validator.validate(s, newFilter);
 
 		if (issues.size() > 0) {
@@ -171,7 +172,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		Filter oldFilter;
 
 		System.out.println("Update Filter: " + updatedFilter);
-		
+
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
 		issues = validator.validate(s, updatedFilter);
@@ -193,7 +194,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 
 		// Coppy values from the old filter to the new filter
 		updateMapper.map(updatedFilter, oldFilter);
-		
+
 		System.out.println("Update Filter2: " + updatedFilter);
 		System.out.println("Old Filter2: " + oldFilter);
 
@@ -246,6 +247,35 @@ public class FilterEntityManager implements EntityManager<Filter> {
 				session.getUsername()).get(0);
 		if (!user.getRole().equals(role)) {
 			throw new UnauthorizedException();
+		}
+	}
+
+	/**
+	 * Gets the next valid id for this class
+	 * 
+	 * @param s
+	 *            the current session
+	 * @return the new id
+	 * @throws WPISuiteException
+	 *             if there was a lookup error
+	 */
+	private int getId(Session s) throws WPISuiteException {
+		try {
+			IdManager idManager;
+			if (db.retrieve(IdManager.class, "type", "filter", s.getProject())
+					.size() != 0) {
+				idManager = db.retrieve(IdManager.class, "type", "filter",
+						s.getProject()).toArray(new IdManager[0])[0];
+			} else {
+				idManager = new IdManager("filter");
+			}
+			int id = idManager.getNextId();
+			if (!db.save(idManager, s.getProject())) {
+				throw new WPISuiteException();
+			}
+			return id;
+		} catch (WPISuiteException ex) {
+			throw ex;
 		}
 	}
 

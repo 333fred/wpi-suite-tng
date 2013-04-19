@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.IterationActionMode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.IterationValidator;
@@ -58,7 +59,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		final Iteration newIteration = Iteration.fromJSON(content);
 
 		// Get the id for the new iteration
-		newIteration.setId(Count() + 1);
+		newIteration.setId(getId(s));
 
 		// Validate the new iteration
 		List<ValidationIssue> issues = validator.validate(s, newIteration,
@@ -317,6 +318,35 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 				session.getUsername()).get(0);
 		if (!user.getRole().equals(role)) {
 			throw new UnauthorizedException();
+		}
+	}
+
+	/**
+	 * Gets the next valid id for this class
+	 * 
+	 * @param s
+	 *            the current session
+	 * @return the new id
+	 * @throws WPISuiteException
+	 *             if there was a lookup error
+	 */
+	private int getId(Session s) throws WPISuiteException {
+		try {
+			IdManager idManager;
+			if (db.retrieve(IdManager.class, "type", "iteration",
+					s.getProject()).size() != 0) {
+				idManager = db.retrieve(IdManager.class, "type", "iteration",
+						s.getProject()).toArray(new IdManager[0])[0];
+			} else {
+				idManager = new IdManager("filter");
+			}
+			int id = idManager.getNextId();
+			if (!db.save(idManager, s.getProject())) {
+				throw new WPISuiteException();
+			}
+			return id;
+		} catch (WPISuiteException ex) {
+			throw ex;
 		}
 	}
 
