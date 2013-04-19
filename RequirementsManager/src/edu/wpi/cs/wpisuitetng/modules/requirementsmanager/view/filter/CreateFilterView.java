@@ -36,13 +36,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOper
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddFilterController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveFilterController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddFilterRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateFilterRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 
 /**
  * View for creating and editing filters
@@ -97,10 +99,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	private FilterView filterView;
 
 	/** Controller for saving a filter */
-	private SaveFilterController saveFilterController;
-
-	/** Controller for Adding a filter */
-	private AddFilterController addFilterController;
+	private FilterController filterController;
 
 	/** The listener to do intime validation */
 	private CreateFilterViewListener createFilterViewListener;
@@ -142,8 +141,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		setBorder(BorderFactory.createTitledBorder("Create filter"));
 
-		saveFilterController = new SaveFilterController(this);
-		addFilterController = new AddFilterController(this);
+		filterController = new FilterController();
 
 		createFilterViewListener = new CreateFilterViewListener(this);
 
@@ -165,7 +163,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		cboxOperation.setBackground(Color.WHITE);
 		cboxEqualTo.setBackground(Color.WHITE);
 
-		butSave = new JButton("Save");
+		butSave = new JButton("Create");
 		butCancel = new JButton("Cancel");
 
 		butSave.setEnabled(false);
@@ -297,7 +295,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		calEqualToBetween.addPropertyChangeListener(createFilterViewListener);
 
 		iterations = new ArrayList<Iteration>();
-		//update the iterations
+		// update the iterations
 		updateIterations();
 		// populate the fields in the combo boxes
 		populateFieldComboBox();
@@ -359,6 +357,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
+		FilterOperation operation = FilterOperation.getFromString((String) cboxOperation.getSelectedItem());
 
 		if (field == FilterField.TYPE) {
 			// BLANK, EPIC, THEME, USER_STORY, NON_FUNCTIONAL, SCENARIO
@@ -384,10 +383,19 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			cboxEqualTo.addItem("Completed");
 			cboxEqualTo.addItem("Deleted");
 		}
+		else if ( field == FilterField.ITERATION && (operation == FilterOperation.EQUAL || operation == FilterOperation.NOT_EQUAL)) {
+			// update the iterations
+			updateIterations();
+
+			cboxEqualTo.removeAllItems();
+			for (Iteration iteration : iterations) {
+				cboxEqualTo.addItem(iteration.getName());
+			}	
+		}
 	}
 
 	private void updateEqualsField() {
-		
+
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
 
@@ -411,15 +419,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cboxEqualTo.setVisible(false);
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
-				
-				//update the iterations
-				updateIterations();
-				
-				cboxEqualTo.removeAllItems();	
-				for (Iteration iteration : iterations) {
-					cboxEqualTo.addItem(iteration.getName());
-				}
-				
+
+				populateEqualComboBox();
+
 				calEqualTo.setVisible(false);
 				calEqualToBetween.setVisible(false);
 				labEqualToBetween.setVisible(false);
@@ -497,7 +499,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					error = true;
 					errorString = "Invalid iteration";
 				}
-				//save the ID of the iteration
+				// save the ID of the iteration
 				filter.setValue(iterations.get(iterationIndex).getId());
 				filterStringValue = iterations.get(iterationIndex).getName();
 			} else {
@@ -529,22 +531,25 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					.getSelectedItem()));
 			filter.setOperation(FilterOperation
 					.getFromString((String) cboxOperation.getSelectedItem()));
-			
+
 			if (filterStringValue == null) {
 				filterStringValue = filter.getValue().toString();
 			}
 			filter.setStringValue(filterStringValue);
 
 			if (mode == Mode.CREATE) {
-				addFilterController.addFilter(filter);
+				AddFilterRequestObserver observer = new AddFilterRequestObserver(
+						this);
+				filterController.create(filter, observer);
 
 			} else {
-				saveFilterController.saveFilter(filter);
+				UpdateFilterRequestObserver observer = new UpdateFilterRequestObserver(
+						this);
+				filterController.save(filter, observer);
 			}
 			txtEqualTo.setBackground(Color.WHITE);
-			calEqualTo.setBackground(Color.WHITE);			
-		
-			
+			calEqualTo.setBackground(Color.WHITE);
+
 		} else {
 			// there was an error set text bot
 			labSaveError.setText(errorString);
@@ -634,6 +639,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		case TYPE:
 			break;
 		}
+		
+		/*
+		//check to see if editing.
+		boolean fieldsEqual = filter.getField() ==   FilterField.getFromString((String)cboxField.getSelectedItem());
+		boolean operationEqual = filter.getOperation() == FilterOperation.getFromString((String) cboxOperation.getSelectedItem());
+		*/
+		
+		
+		
 		if (!error) {
 			labSaveError.setText("");
 			butSave.setEnabled(true);
@@ -665,12 +679,12 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			onCancelPressed();
 		}
 	}
-	
+
 	private void updateIterations() {
 		iterations.clear();
 
-		
-		for (Iteration iteration : IterationDatabase.getInstance().getAllIterations()) {
+		for (Iteration iteration : IterationDatabase.getInstance()
+				.getAll()) {
 			System.out.println(iteration);
 			if (iteration.isOpen()) {
 				iterations.add(iteration);
@@ -692,5 +706,103 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	public void fail(Exception exception) {
 		System.out.println("Filter Failed!!");
 		exception.printStackTrace();
+	}
+
+	/**
+	 * Enables editing of the given filter
+	 * 
+	 * @param toEdit
+	 *            Filter to edit
+	 */
+
+	public void editFilter(Filter toEdit) {
+		filter = toEdit;
+		updateMode(Mode.EDIT);
+	}
+
+	/**
+	 * Cancels the editing of the filter
+	 * 
+	 */
+
+	public void cancelEdit() {
+		filter = new Filter();
+		updateMode(Mode.CREATE);
+		onCancelPressed(); // clear all fields
+	}
+
+	/**
+	 * Updates the mode
+	 * 
+	 */
+
+	public void updateMode(Mode newMode) {
+		this.mode = newMode;
+		if (mode == Mode.CREATE) {
+			butSave.setText("Create");
+			butCancel.setText("Cancel");
+		} else {
+			butSave.setText("Save");
+			butCancel.setText("Cancel Editing");
+			populateFieldsFromFilter(); // populate the fields from the given filter
+			updateSave();
+		}
+	}
+	
+	public void populateFieldsFromFilter() {
+		cboxField.setSelectedItem(filter.getField());
+		cboxOperation.setSelectedItem(filter.getOperation());
+		
+		switch (filter.getField()) {	
+		//special iteration case. woo woo
+		case ITERATION:
+			switch (filter.getOperation()) {
+			case EQUAL:
+			case NOT_EQUAL:
+				
+				int iterationId = ((Double)filter.getValue()).intValue();
+				Iteration iteration;
+				try {
+					iteration = IterationDatabase.getInstance().get(iterationId);
+				} catch (IterationNotFoundException e) {
+					//iteration is no longer in existance, we should probally delete this filter,
+					cancelEdit();
+					return;
+				}
+				
+				cboxEqualTo.setSelectedItem(iteration.getName());				
+				
+				break;
+			case OCCURS_AFTER:
+			case OCCURS_BEFORE:
+				calEqualTo.setDate((Date)filter.getValue());
+				break;
+			case OCCURS_BETWEEN:
+				FilterIterationBetween fib = (FilterIterationBetween) filter.getValue();
+				calEqualTo.setDate(fib.getStartDate());
+				calEqualToBetween.setDate(fib.getEndDate());
+				break;
+			default:
+				System.out.println("BLACK MAGIC!!!!!!!!!, CreateFilterView ln 749");
+			}
+			
+			break;
+			
+		//string and integer types
+		case NAME:		
+		case RELEASE_NUMBER:
+		case EFFORT:
+		case ESTIMATE:
+			txtEqualTo.setText(filter.getValue().toString());
+			break;
+			
+		//theese are the three enum types
+		case PRIORITY:			
+		case STATUS:			
+		case TYPE:
+			cboxEqualTo.setSelectedItem(filter.getValue());
+			break;
+		
+		}
 	}
 }

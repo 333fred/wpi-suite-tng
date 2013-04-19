@@ -18,7 +18,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -37,10 +36,13 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PiePlot3D;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpdateListener;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
 @SuppressWarnings("serial")
-public class StatView extends Tab implements ActionListener {
+public class StatView extends Tab implements ActionListener, FilterUpdateListener {
 
 	private static StatView sv;
 	private JComboBox comboBoxStatisticType;
@@ -57,8 +59,10 @@ public class StatView extends Tab implements ActionListener {
 
 	
 	private StatView() {
+		
 		chartType = ChartType.PIE;
 		chartDataType = DataType.STATUS;
+		FilterView.getInstance().addFilterUpdateListener(this);
 		
 		this.setLayout(new BorderLayout());
 		JPanel chart = new ChartPanel(createPieStatusChart());
@@ -395,6 +399,11 @@ public class StatView extends Tab implements ActionListener {
 
 	public DataType getChartDataType() {
 		return chartDataType;
+	}
+
+	@Override
+	public void filtersUpdated() {
+		updateChart();
 	}
 
 }

@@ -11,9 +11,9 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreiveRequirementByIDControllerNotifier;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 
 	/** The controller managing the request */
-	private RetrieveRequirementByIDController controller;
+	private IRetreiveRequirementByIDControllerNotifier notifier;
 
 	/**
 	 * Construct the observer
@@ -36,8 +36,8 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 	 * @param controller
 	 */
 	public RetrieveRequirementByIDRequestObserver(
-			RetrieveRequirementByIDController controller) {
-		this.controller = controller;
+			IRetreiveRequirementByIDControllerNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	@Override
@@ -53,12 +53,12 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 			Requirement[] requirements = Requirement.fromJSONArray(response
 					.getBody());
 
-			RequirementDatabase.getInstance().addRequirement(requirements[0]);
+			RequirementDatabase.getInstance().add(requirements[0]);
 
 			// notify the controller
-			controller.receivedData(requirements[0]);
+			notifier.receivedData(requirements[0]);
 		} else {
-			controller.errorReceivingData("Received "
+			notifier.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()
 					+ " error from server: "
 					+ iReq.getResponse().getStatusMessage());
@@ -68,7 +68,7 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		// an error occurred
-		controller.errorReceivingData("Received "
+		notifier.errorReceivingData("Received "
 				+ iReq.getResponse().getStatusCode() + " error from server: "
 				+ iReq.getResponse().getStatusMessage());
 	}
@@ -76,7 +76,7 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// an error occurred
-		controller.errorReceivingData("Unable to complete request: "
+		notifier.errorReceivingData("Unable to complete request: "
 				+ exception.getMessage());
 	}
 

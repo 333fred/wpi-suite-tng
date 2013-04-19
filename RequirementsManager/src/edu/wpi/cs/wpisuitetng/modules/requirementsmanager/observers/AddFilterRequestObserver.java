@@ -16,9 +16,9 @@ import java.util.Arrays;
 
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -50,7 +50,7 @@ public class AddFilterRequestObserver implements RequestObserver {
 		ResponseModel response = iReq.getResponse();
 
 		Filter filter = Filter.fromJSON(response.getBody());
-		FilterDatabase.getInstance().addFilter(filter);
+		FilterDatabase.getInstance().add(filter);
 
 		// TODO: Determine what to do with the response
 		SwingUtilities.invokeLater(new Runnable() {

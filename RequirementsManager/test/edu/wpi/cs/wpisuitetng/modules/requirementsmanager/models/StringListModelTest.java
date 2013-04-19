@@ -12,16 +12,15 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 public class StringListModelTest {
 	

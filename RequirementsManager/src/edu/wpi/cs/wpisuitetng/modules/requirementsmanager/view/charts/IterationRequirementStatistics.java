@@ -39,12 +39,11 @@ public class IterationRequirementStatistics extends
 	public void update() {
 
 		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAllRequirements(); // refresh list of requirements TODO: is
-										// there a better way to do this?
+				.getFilteredRequirements(); // refresh list of requirements
 
 		// for every possible status
 		for (Iteration iteration : IterationDatabase.getInstance()
-				.getAllIterations()) {
+				.getAll()) {
 			this.data.put(iteration.getName(), new Integer(0)); // set the
 																// number of
 																// counted
@@ -59,7 +58,7 @@ public class IterationRequirementStatistics extends
 
 			try {
 				Iteration iteration = IterationDatabase.getInstance()
-						.getIteration(requirement.getIteration());
+						.get(requirement.getIteration());
 				Integer oldValue = this.data.get(iteration.getName());
 				// System.out.println(oldValue);
 				this.data.put(iteration.getName(),

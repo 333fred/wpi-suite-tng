@@ -17,27 +17,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllIterationsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SimpleRetrieveAllIterationsRequestObserver;
 
 /**
  * Maintains a local database of iterations
  */
-public class IterationDatabase extends Thread {
+public class IterationDatabase extends AbstractDatabase<Iteration> {
 
 	private Map<Integer, Iteration> iterations;
-	private List<IDatabaseListener> listeners;
-	private SimpleRetrieveAllIterationsController controller;
+	private IterationController controller;
+	private SimpleRetrieveAllIterationsRequestObserver observer;
 	private static IterationDatabase db;
 
 	private IterationDatabase() {
+		super(300000);
 		this.iterations = new HashMap<Integer, Iteration>();
-		this.listeners = new ArrayList<IDatabaseListener>();
-		this.controller = new SimpleRetrieveAllIterationsController();
-		setDaemon(true);
+		this.controller = new IterationController();
+		this.observer = new SimpleRetrieveAllIterationsRequestObserver();
 	}
 
+	/**
+	 * Gets the singleton iterations database instance
+	 * 
+	 * @return the database instance
+	 */
 	public static IterationDatabase getInstance() {
 		if (db == null) {
 			db = new IterationDatabase();
@@ -46,23 +52,9 @@ public class IterationDatabase extends Thread {
 	}
 
 	/**
-	 * Sets the iteration to the given map
-	 * 
-	 * @param iterations
+	 * {@inheritDoc}
 	 */
-	public synchronized void setIterations(Map<Integer, Iteration> iterations) {
-		this.iterations = iterations;
-		updateListeners();
-	}
-
-	/**
-	 * Sets the iterations to the given list. This removes everything in the map
-	 * and adds only things in the list
-	 * 
-	 * @param iterations
-	 *            the iterations to add
-	 */
-	public synchronized void setIterations(List<Iteration> iterations) {
+	public synchronized void set(List<Iteration> iterations) {
 		this.iterations = new HashMap<Integer, Iteration>();
 		for (Iteration i : iterations) {
 			this.iterations.put(i.getId(), i);
@@ -71,14 +63,9 @@ public class IterationDatabase extends Thread {
 	}
 
 	/**
-	 * Adds the given iterations to the map. The difference between this and set
-	 * iterations is that this doesn't erase all iterations, only adds/updates
-	 * the given list
-	 * 
-	 * @param iterations
-	 *            the iterations to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addIterations(List<Iteration> iterations) {
+	public synchronized void addAll(List<Iteration> iterations) {
 		for (Iteration i : iterations) {
 			this.iterations.put(i.getId(), i);
 		}
@@ -86,32 +73,31 @@ public class IterationDatabase extends Thread {
 	}
 
 	/**
-	 * Adds or updates a specific iteration
-	 * 
-	 * @param i
-	 *            the iteration to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addIteration(Iteration i) {
+	public synchronized void add(Iteration i) {
 		iterations.put(i.getId(), i);
 		updateListeners();
 	}
 
 	/**
-	 * Get a specific iteration from the local database
-	 * 
-	 * @param id
-	 *            the id of iteration to get
-	 * @return the iteration requested
-	 * @throws IterationNotFoundException
-	 *             couldn't find the iteration
+	 * {@inheritDoc}
 	 */
-	public synchronized Iteration getIteration(int id)
-			throws IterationNotFoundException {
+	public synchronized Iteration get(int id) throws IterationNotFoundException {
 		if (iterations.get(id) != null) {
 			return iterations.get(id);
 		} else {
 			throw new IterationNotFoundException(id);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public synchronized List<Iteration> getAll() {
+		List<Iteration> list = new ArrayList<Iteration>();
+		list = new ArrayList<Iteration>(iterations.values());
+		return list;
 	}
 
 	/**
@@ -132,57 +118,6 @@ public class IterationDatabase extends Thread {
 	}
 
 	/**
-	 * Gets all the iterations in the local database
-	 * 
-	 * @return all the current arrays
-	 */
-	public synchronized List<Iteration> getAllIterations() {
-		List<Iteration> list = new ArrayList<Iteration>();
-		list = new ArrayList<Iteration>(iterations.values());
-		return list;
-	}
-
-	/**
-	 * Removes a given listener from the list of listeners
-	 * 
-	 * @param listener
-	 *            the listener to be removed
-	 * @return True if the listener was removed or did not exits, false
-	 *         otherwise
-	 */
-	public synchronized boolean removeListener(IDatabaseListener listener) {
-		return listeners.remove(listener);
-	}
-
-	/**
-	 * Call the update method on all registered listeners
-	 */
-	public synchronized void updateListeners() {
-		List<IDatabaseListener> removes = new ArrayList<IDatabaseListener>();
-		for (IDatabaseListener l : listeners) {
-			l.update();
-			if (l.shouldRemove()) {
-				removes.add(l);
-			}
-		}
-		for (IDatabaseListener l : removes) {
-			listeners.remove(l);
-		}
-	}
-
-	/**
-	 * Registers a database listener
-	 * 
-	 * @param listener
-	 *            the listener to register
-	 */
-	public synchronized void registerListener(IDatabaseListener listener) {
-		if (listener != null) {
-			listeners.add(listener);
-		}
-	}
-
-	/**
 	 * Runs every 5 minutes and updates the local iterations database, which
 	 * will trigger an update of all listeners
 	 */
@@ -190,15 +125,14 @@ public class IterationDatabase extends Thread {
 	public void run() {
 		while (!Thread.interrupted()) {
 			// Trigger an update
-			controller.getAll();
+			controller.getAll(observer);
 			try {
 				// Sleep for five minutes
-				Thread.sleep(300000);
+				Thread.sleep(secs);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 				return;
 			}
 		}
 	}
-
 }

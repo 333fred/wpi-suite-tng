@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		Alex Gorowara
+ *		@author Alex Gorowara, Alex Woodyard
  ********************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
@@ -38,8 +38,6 @@ public class ToolbarView extends DefaultToolbarView {
 	/** Button for creating statistics panel */
 	private JButton createStatistics;
 
-	// private JPlaceholderTextField searchField;
-
 	/**
 	 * Create a ToolbarView.
 	 * 
@@ -47,11 +45,13 @@ public class ToolbarView extends DefaultToolbarView {
 	 *            The MainTabController this view should open tabs with
 	 */
 	public ToolbarView(MainTabController tabController) {
+
 		// Note: User Manual button is being deprecated in favor of it's own
 		// toolbar
 		// Construct the content panel
 		JPanel content = new JPanel();
 		JPanel resourcePanel = new JPanel();
+		PermissionToolbarPane permissionPanel = PermissionToolbarPane.createSingleton(tabController);
 		SpringLayout layout = new SpringLayout();
 		SpringLayout resourceLayout = new SpringLayout();
 		content.setLayout(layout);
@@ -73,6 +73,8 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the Stat button
 		createStatistics = new JButton("Show Statistics");
 		createStatistics.setAction(new CreateStatPanelAction(tabController));
+
+
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -97,17 +99,21 @@ public class ToolbarView extends DefaultToolbarView {
 		resourceLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
 				createHelp, 0, SpringLayout.HORIZONTAL_CENTER, resourcePanel);
 
-		resourceLayout.putConstraint(SpringLayout.NORTH, createStatistics, 10, SpringLayout.SOUTH, createHelp);
-		resourceLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, createStatistics, 0, SpringLayout.HORIZONTAL_CENTER, resourcePanel);
-		
-		resourceLayout.putConstraint(SpringLayout.WEST, createHelp, 0, SpringLayout.WEST, createStatistics);
-		resourceLayout.putConstraint(SpringLayout.EAST, createHelp, 0, SpringLayout.EAST, createStatistics);
-/*
-		layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8,
-				SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.SOUTH, createHelpPanel, 17,
-				SpringLayout.SOUTH, createIteration);
-				*/
+		resourceLayout.putConstraint(SpringLayout.NORTH, createStatistics, 10,
+				SpringLayout.SOUTH, createHelp);
+		resourceLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
+				createStatistics, 0, SpringLayout.HORIZONTAL_CENTER,
+				resourcePanel);
+
+		resourceLayout.putConstraint(SpringLayout.WEST, createHelp, 0,
+				SpringLayout.WEST, createStatistics);
+		resourceLayout.putConstraint(SpringLayout.EAST, createHelp, 0,
+				SpringLayout.EAST, createStatistics);
+		/*
+		 * layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8,
+		 * SpringLayout.WEST, content); layout.putConstraint(SpringLayout.SOUTH,
+		 * createHelpPanel, 17, SpringLayout.SOUTH, createIteration);
+		 */
 
 		// Add buttons to the content panel
 		// content.add(createIteration);
@@ -122,15 +128,23 @@ public class ToolbarView extends DefaultToolbarView {
 
 		// Construct a new toolbar group to be added to the end of the toolbar
 		ToolbarGroupView toolbarGroup = new ToolbarGroupView("Home", content);
-		ToolbarGroupView helpToolbar = new ToolbarGroupView("Resources", resourcePanel);
+		ToolbarGroupView helpToolbar = new ToolbarGroupView("Resources",
+				resourcePanel);
+		ToolbarGroupView permissionToolbar = new ToolbarGroupView(
+				"Permissions", permissionPanel);
 
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = createRequirement.getPreferredSize()
-				.getWidth() + 40; // 40 accounts for margins between the buttons
+		Double toolbarGroupWidth = Math.max(createRequirement
+				.getPreferredSize().getWidth() + 40,
+		// 40 accounts for margins between the buttons
+				permissionPanel.getLabelWidth() + 10);
+
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 		addGroup(toolbarGroup);
 		helpToolbar.setPreferredWidth(toolbarGroupWidth.intValue());
 		addGroup(helpToolbar);
+		permissionToolbar.setPreferredWidth(toolbarGroupWidth.intValue());
+		addGroup(permissionToolbar);
 
 		// This is the help toolbar
 		ToolbarGroupView toolbarView = new ToolbarGroupView("Help");
@@ -144,6 +158,6 @@ public class ToolbarView extends DefaultToolbarView {
 		// Calculate the width of the toolbar
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 		// addGroup(toolbarView);
-	}
 
+	}
 }

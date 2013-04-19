@@ -12,17 +12,27 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
-public class IterationNotFoundException extends Exception {
-	private long id;
+/**
+ * An exception to manage iteration not found
+ */
 
-	public IterationNotFoundException(long id2) {
-		this.id = id2;
+public class IterationNotFoundException extends NotFoundException {
+
+	/**
+	 * Creates a new not found exception for an iteration
+	 * 
+	 * @param id
+	 *            the not found iteration
+	 */
+	public IterationNotFoundException(Integer id) {
+		super(id);
 	}
 
 	/**
 	 * @return the id
 	 */
-	public long getId() {
-		return id;
+	public int getId() {
+		return (Integer) notFound;
+
 	}
 }

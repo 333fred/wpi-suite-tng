@@ -20,13 +20,15 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.DefaultSaveNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.DefaultSaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
@@ -63,8 +65,7 @@ public class EditRequirementAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		SaveRequirementController controller = new SaveRequirementController(
-				this.parentView);
+		RequirementsController controller = new RequirementsController();
 
 		// Checks to make sure the name entered is valid and updates the GUI if
 		// it is
@@ -114,14 +115,15 @@ public class EditRequirementAction extends AbstractAction {
 
 			try {
 
-				SaveIterationController saveIterationController = new SaveIterationController(
+				IterationController iterationController = new IterationController();
+				UpdateIterationRequestObserver iterationObserver = new UpdateIterationRequestObserver(
 						new DefaultSaveNotifier());
 
 				try {
 					Iteration anIteration = IterationDatabase.getInstance()
-							.getIteration(requirement.getIteration());
+							.get(requirement.getIteration());
 					anIteration.removeRequirement(requirement.getrUID());
-					saveIterationController.saveIteration(anIteration);
+					iterationController.save(anIteration, iterationObserver);
 				} catch (IterationNotFoundException e1) {
 					e1.printStackTrace();
 				}/*
@@ -144,7 +146,7 @@ public class EditRequirementAction extends AbstractAction {
 				Iteration anIteration = IterationDatabase.getInstance()
 						.getIteration(newIteration);
 				anIteration.addRequirement(requirement.getrUID());
-				saveIterationController.saveIteration(anIteration);
+				iterationController.save(anIteration, iterationObserver);
 
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
@@ -175,7 +177,9 @@ public class EditRequirementAction extends AbstractAction {
 							.println("The number is incorrectly formatted: EditRequirement:174");
 				}
 
-				controller.SaveRequirement(requirement, true);
+				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+						this.parentView);
+				controller.save(requirement, observer);
 				parentView.closeTabAfterSave();
 			} catch (NumberFormatException except) {
 				parentView

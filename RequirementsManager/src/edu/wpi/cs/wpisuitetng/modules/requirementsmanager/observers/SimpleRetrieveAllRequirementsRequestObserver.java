@@ -36,11 +36,8 @@ public class SimpleRetrieveAllRequirementsRequestObserver implements
 			Requirement[] requirements = Requirement.fromJSONArray(response
 					.getBody());
 
-			RequirementDatabase.getInstance().setRequirements(
-					Arrays.asList(requirements));
-		} else {
+			RequirementDatabase.getInstance().set(Arrays.asList(requirements));
 		}
-
 	}
 
 	@Override

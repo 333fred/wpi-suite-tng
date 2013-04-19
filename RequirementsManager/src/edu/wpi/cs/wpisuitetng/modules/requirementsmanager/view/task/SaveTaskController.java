@@ -15,9 +15,10 @@ import java.awt.Color;
 
 import javax.swing.JList;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
@@ -57,31 +58,31 @@ public class SaveTaskController {
 		final String taskText = view.getTaskField().getText();
 		final String taskName = view.getTaskName().getText();
 		int taskEstimate;
-		
-		if(!view.getEstimate().getText().equals(""))
+
+		if (!view.getEstimate().getText().equals(""))
 			taskEstimate = Integer.parseInt(view.getEstimate().getText());
 		else
 			taskEstimate = -1;
-		
+
 		int estimateSum = 0;
-		
-		for(Task altTask : model.getTasks())
+
+		for (Task altTask : model.getTasks())
 			estimateSum = estimateSum + altTask.getEstimate();
-		
+
 		if (tasks == null) { // Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
 		} else if (tasks.length < 1) {
-			//Task must have a name and description of at least one character
-			if (taskText.length() > 0 && taskName.length() > 0) { 
+			// Task must have a name and description of at least one character
+			if (taskText.length() > 0 && taskName.length() > 0) {
 				Task tempTask = new Task(taskName, taskText);
 				if ((view.getUserAssigned().getSelectedItem() == ""))
 					tempTask.setAssignedUser(null);
 				else
 					tempTask.setAssignedUser((String) view.getUserAssigned()
 							.getSelectedItem());
-				
-				if(taskEstimate!=-1){
-					if(taskEstimate+estimateSum <= model.getEstimate())
+
+				if (taskEstimate != -1) {
+					if (taskEstimate + estimateSum <= model.getEstimate())
 						tempTask.setEstimate(taskEstimate);
 				}
 
@@ -93,59 +94,63 @@ public class SaveTaskController {
 				view.getTaskField().requestFocusInWindow();
 				// We want to save the task to the server immediately, but only
 				// if the requirement hasn't been just created
-				if (model.getName().length() > 0) { 
+				if (model.getName().length() > 0) {
 					// Save to requirement!
-					SaveRequirementController controller = new SaveRequirementController(
+					RequirementsController controller = new RequirementsController();
+					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this.parentView);
-					controller.SaveRequirement(model, false);
+					controller.save(model, observer);
 				}
 				parentView.getComboBoxStatus().removeItem("Complete");
 			}
 		} else {
-			
+
 			// Modifying tasks
-			for (Object aTask : tasks) { 
-				if (tasks.length == 1) { 
+			for (Object aTask : tasks) {
+				if (tasks.length == 1) {
 					// If only one is selected, edit the fields
 					if (taskText.length() > 0 && taskName.length() > 0) {
 						((Task) aTask).setName(view.getTaskName().getText());
 						((Task) aTask).setDescription(view.getTaskField()
 								.getText());
 					}
-					
+
 					if ((view.getUserAssigned().getSelectedItem() == ""))
 						((Task) aTask).setAssignedUser(null);
 					else
 						((Task) aTask).setAssignedUser((String) view
 								.getUserAssigned().getSelectedItem());
-					
-					if(taskEstimate!=-1){
-						if(taskEstimate+estimateSum-((Task) aTask).getEstimate() <= model.getEstimate())
+
+					if (taskEstimate != -1) {
+						if (taskEstimate + estimateSum
+								- ((Task) aTask).getEstimate() <= model
+									.getEstimate())
 							((Task) aTask).setEstimate(taskEstimate);
 					}
-					
+
 				}
 				// Check the completion status on the tasks
 				((Task) aTask)
 						.setCompleted(view.getTaskComplete().isSelected());
 			}
-			
+
 			// Save to requirement!
-			if (model.getName().length() > 0) { 
-				SaveRequirementController controller = new SaveRequirementController(
+			if (model.getName().length() > 0) {
+				RequirementsController controller = new RequirementsController();
+				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 						this.parentView);
-				controller.SaveRequirement(model, false);
+				controller.save(model, observer);
 			}
 			view.getTaskName().setText("");
 			view.getTaskField().setText("");
 			view.getTaskField().requestFocusInWindow();
 		}
-		
+
 		for (Object aTask : tasks) {
-			if(!((Task) aTask).isCompleted())
+			if (!((Task) aTask).isCompleted())
 				parentView.getComboBoxStatus().removeItem("Complete");
 		}
-		
+
 		this.tasks.clearSelection();
 		view.getTaskStatus()
 				.setText(

@@ -13,7 +13,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -27,13 +26,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class AddIterationRequestObserver implements RequestObserver {
 
-	private AddIterationController controller;
-
 	private final IterationView iterationView;
 
-	public AddIterationRequestObserver(AddIterationController controller,
-			IterationView iterationView) {
-		this.controller = controller;
+	public AddIterationRequestObserver(IterationView iterationView) {
 		this.iterationView = iterationView;
 	}
 

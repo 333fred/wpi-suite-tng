@@ -20,8 +20,9 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
@@ -49,8 +50,9 @@ public class SaveRequirementAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e1) {
-		AddRequirementController controller = new AddRequirementController(
+		AddRequirementRequestObserver observer = new AddRequirementRequestObserver(
 				this.parentView);
+		RequirementsController controller = new RequirementsController();
 
 		if (!parentView.getTextName().getText().trim().equals("")) {
 			parentView.getTextName().setBackground(Color.WHITE);
@@ -94,7 +96,7 @@ public class SaveRequirementAction extends AbstractAction {
 						.getComboBoxStatus().getSelectedItem().toString()
 						.toUpperCase().replaceAll(" ", "_")));
 
-				controller.AddRequirement(requirement);
+				controller.create(requirement, observer);
 			} catch (NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");

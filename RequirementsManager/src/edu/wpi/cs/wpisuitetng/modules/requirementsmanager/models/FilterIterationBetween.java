@@ -12,15 +12,16 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Value object for filtering iterations between a specified dates 
  */
 
-public class FilterIterationBetween {
+public class FilterIterationBetween implements Serializable {
 
-	
+	private static final long serialVersionUID = 490510282591238771L;
 	private Date startDate;
 	private Date endDate;
 	
@@ -37,7 +38,14 @@ public class FilterIterationBetween {
 	 */
 	
 	public boolean isIterationBetween(Iteration iteration) {
-		return false;
-	                                                        
+		return false;	                                                        
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public Date getEndDate() {
+		return endDate;
 	}
 }

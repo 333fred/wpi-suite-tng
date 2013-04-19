@@ -13,9 +13,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveIterationByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreiveIterationByIDControllerNotifier;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -29,17 +29,17 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 
-	/** The controller managing the request */
-	private RetrieveIterationByIDController controller;
+	/** The notifier managing the request */
+	private IRetreiveIterationByIDControllerNotifier notifier;
 
 	/**
 	 * Construct the observer
 	 * 
-	 * @param controller
+	 * @param notifier
 	 */
 	public RetrieveIterationByIDRequestObserver(
-			RetrieveIterationByIDController controller) {
-		this.controller = controller;
+			IRetreiveIterationByIDControllerNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	@Override
@@ -54,18 +54,18 @@ public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 			// parse the response
 			final Iteration[] iteration = Iteration.fromJSONArray(response.getBody());
 
-			IterationDatabase.getInstance().addIteration(iteration[0]);
+			IterationDatabase.getInstance().add(iteration[0]);
 
-			// notify the controller
-			// notify the controller
+			// notify the notifier
+			// notify the notifier
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					controller.receivedData(iteration[0]);
+					notifier.receivedData(iteration[0]);
 				}
 			});
 		} else {
-			controller.errorReceivingData("Received "
+			notifier.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()
 					+ " error from server: "
 					+ iReq.getResponse().getStatusMessage());
@@ -75,7 +75,7 @@ public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		// an error occurred
-		controller.errorReceivingData("Received "
+		notifier.errorReceivingData("Received "
 				+ iReq.getResponse().getStatusCode() + " error from server: "
 				+ iReq.getResponse().getStatusMessage());
 	}
@@ -83,7 +83,7 @@ public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// an error occurred
-		controller.errorReceivingData("Unable to complete request: "
+		notifier.errorReceivingData("Unable to complete request: "
 				+ exception.getMessage());
 	}
 

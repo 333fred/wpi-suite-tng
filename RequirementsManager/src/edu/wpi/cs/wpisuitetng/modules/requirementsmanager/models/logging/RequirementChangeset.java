@@ -118,9 +118,9 @@ public class RequirementChangeset extends Changeset implements Event {
 					.intValue();
 			try {
 				String oldName = IterationDatabase.getInstance()
-						.getIteration(oldIteration).getName();
+						.get(oldIteration).getName();
 				String newName = IterationDatabase.getInstance()
-						.getIteration(newIteration).getName();
+						.get(newIteration).getName();
 				content += oldToNew("Iteration", new FieldChange<String>(
 						oldName, newName));
 			} catch (IterationNotFoundException e) {
@@ -169,7 +169,7 @@ public class RequirementChangeset extends Changeset implements Event {
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
 						Requirement tempReq = RequirementDatabase.getInstance()
-								.getRequirement(i);
+								.get(i);
 						content += tempReq.getName() + "<br>";
 					} catch (RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
@@ -187,7 +187,7 @@ public class RequirementChangeset extends Changeset implements Event {
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
 						Requirement tempReq = RequirementDatabase.getInstance()
-								.getRequirement(i);
+								.get(i);
 						content += tempReq.getName() + "<br>";
 					} catch (RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
@@ -212,7 +212,7 @@ public class RequirementChangeset extends Changeset implements Event {
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
 						Requirement tempReq = RequirementDatabase.getInstance()
-								.getRequirement(i);
+								.get(i);
 						content += tempReq.getName() + "<br>";
 					} catch (RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
@@ -231,7 +231,7 @@ public class RequirementChangeset extends Changeset implements Event {
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
 						Requirement tempReq = RequirementDatabase.getInstance()
-								.getRequirement(i);
+								.get(i);
 						content += tempReq.getName() + "<br>";
 					} catch (RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "

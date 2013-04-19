@@ -12,9 +12,10 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class AssignChildController {
@@ -32,8 +33,8 @@ public class AssignChildController {
 	 * @param ChildView
 	 *            the DetailPanel
 	 */
-	public AssignChildController(SubRequirementPanel subRequirementPanel, Requirement model,
-			DetailPanel ChildView) {
+	public AssignChildController(SubRequirementPanel subRequirementPanel,
+			Requirement model, DetailPanel ChildView) {
 		this.view = subRequirementPanel;
 		this.model = model;
 		this.ChildView = ChildView;
@@ -45,21 +46,26 @@ public class AssignChildController {
 	public void saveChild() {
 
 		String selectedIndex = (String) view.getList().getSelectedValue();
-		Requirement anReq = RequirementDatabase.getInstance().getRequirement(selectedIndex);
+		Requirement anReq = RequirementDatabase.getInstance().getRequirement(
+				selectedIndex);
 
 		Integer modelID = new Integer(model.getrUID());
-		Integer anReqID = new Integer (anReq.getrUID());
-		
+		Integer anReqID = new Integer(anReq.getrUID());
+
 		model.addSubRequirement(anReqID);
-		anReq.addPUID(modelID);
-		SaveRequirementController controller = new SaveRequirementController(this.ChildView);
-		controller.SaveRequirement(model, false);
-		controller = new SaveRequirementController(new SaveOtherRequirement());
-		controller.SaveRequirement(anReq, false);
 		
+		anReq.addPUID(modelID);
+		RequirementsController controller = new RequirementsController();
+		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+				this.ChildView);
+		controller.save(model, observer);
+		observer = new UpdateRequirementRequestObserver(
+				new SaveOtherRequirement());
+		controller.save(anReq, observer);
+
 		view.refreshTopPanel();
 		view.refreshValidChildren();
 
 	}
 
-	}
+}

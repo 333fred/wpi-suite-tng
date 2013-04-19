@@ -12,9 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -59,7 +59,7 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 																		// logger
 
 		Requirement req = Requirement.fromJSON(response.getBody());
-		RequirementDatabase.getInstance().addRequirement(req);
+		RequirementDatabase.getInstance().add(req);
 
 		notifier.responseSuccess();
 		/*

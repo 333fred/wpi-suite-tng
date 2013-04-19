@@ -36,17 +36,19 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
@@ -68,8 +70,8 @@ public class SubRequirementTreeView extends JPanel implements
 
 	private JTree tree;
 	private DefaultMutableTreeNode top;
-	private RetrieveAllIterationsController retrieveAllIterationsController;
-	private RetrieveAllRequirementsController retrieveAllRequirementsController;
+	private IterationController iterationsController;
+	private RequirementsController requirementsController;
 
 	private MainTabController tabController;
 
@@ -85,10 +87,8 @@ public class SubRequirementTreeView extends JPanel implements
 		iterations = new ArrayList<Iteration>();
 		requirements = new ArrayList<Requirement>();
 
-		retrieveAllIterationsController = new RetrieveAllIterationsController(
-				this);
-		retrieveAllRequirementsController = new RetrieveAllRequirementsController(
-				this);
+		iterationsController = new IterationController();
+		requirementsController = new RequirementsController();
 
 		firstPaint = true;
 
@@ -334,11 +334,12 @@ public class SubRequirementTreeView extends JPanel implements
 		}
 		if (!requirementIsOpen) {
 			// create the controller for fetching the new requirement
-			RetrieveRequirementByIDController retreiveRequirementController = new RetrieveRequirementByIDController(
+			RequirementsController controller = new RequirementsController();
+			RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
 					new OpenRequirementTabAction(tabController, requirement));
 
 			// get the requirement from the server
-			retreiveRequirementController.get(requirement.getrUID());
+			controller.get(requirement.getrUID(), observer);
 		}
 	}
 
@@ -353,7 +354,7 @@ public class SubRequirementTreeView extends JPanel implements
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode requirementNode = null;
 		this.top.removeAllChildren();
-		requirements = RequirementDatabase.getInstance().getAllRequirements();
+		requirements = RequirementDatabase.getInstance().getAll();
 
 		// sort the iterations
 		// requirements = Requirement.sortRequirements(requirements);
@@ -366,8 +367,8 @@ public class SubRequirementTreeView extends JPanel implements
 				for (Integer aReq : anReq.getSubRequirements()) {
 					try {
 						requirementNode.add(new DefaultMutableTreeNode(
-								RequirementDatabase.getInstance()
-										.getRequirement(aReq).getName()));
+								RequirementDatabase.getInstance().get(aReq)
+										.getName()));
 					} catch (RequirementNotFoundException e) {
 						System.out
 								.println("Requirement not found: SubRequirementTreeView:372");
@@ -391,7 +392,7 @@ public class SubRequirementTreeView extends JPanel implements
 		Requirement actualReq = new Requirement();
 
 		try {
-			actualReq = RequirementDatabase.getInstance().getRequirement(anReq);
+			actualReq = RequirementDatabase.getInstance().get(anReq);
 		} catch (RequirementNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -403,8 +404,7 @@ public class SubRequirementTreeView extends JPanel implements
 		for (Integer aReq : actualReq.getSubRequirements()) {
 			try {
 				requirementNode.add(new DefaultMutableTreeNode(
-						RequirementDatabase.getInstance().getRequirement(aReq)
-								.getName()));
+						RequirementDatabase.getInstance().get(aReq).getName()));
 				// cycleSubReq(aReq);
 			} catch (RequirementNotFoundException e) {
 				System.out
@@ -455,11 +455,15 @@ public class SubRequirementTreeView extends JPanel implements
 	 * 
 	 */
 	private void getRequirementsFromServer() {
-		retrieveAllRequirementsController.getAll();
+		RetrieveAllRequirementsRequestObserver observer = new RetrieveAllRequirementsRequestObserver(
+				this);
+		requirementsController.getAll(observer);
 	}
 
 	private void getIterationsFromServer() {
-		retrieveAllIterationsController.getAll();
+		RetrieveAllIterationsRequestObserver observer = new RetrieveAllIterationsRequestObserver(
+				this);
+		iterationsController.getAll(observer);
 	}
 
 	/**

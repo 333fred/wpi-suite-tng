@@ -15,9 +15,9 @@ import java.util.Arrays;
 
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreivedAllIterationsNotifier;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -31,12 +31,11 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 
-	private RetrieveAllIterationsController controller; // Controller for
-														// callback
+	private IRetreivedAllIterationsNotifier notifier;
 
 	public RetrieveAllIterationsRequestObserver(
-			RetrieveAllIterationsController controller) {
-		this.controller = controller;
+			IRetreivedAllIterationsNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	// TODO: implement server connection once required
@@ -58,21 +57,21 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			final Iteration[] iterations = Iteration
-					.fromJSONArray(response.getBody());
+			final Iteration[] iterations = Iteration.fromJSONArray(response
+					.getBody());
 
-			IterationDatabase.getInstance().setIterations(
+			IterationDatabase.getInstance().set(
 					Arrays.asList(iterations));
 
 			// notify the controller
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					controller.receivedData(iterations);
+					notifier.receivedData(iterations);
 				}
 			});
 		} else {
-			controller.errorReceivingData("Received "
+			notifier.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()
 					+ " error from server: "
 					+ iReq.getResponse().getStatusMessage());
@@ -89,7 +88,7 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		// TODO Auto-generated method stub
-		controller.errorReceivingData("Received "
+		notifier.errorReceivingData("Received "
 				+ iReq.getResponse().getStatusCode() + " error from server: "
 				+ iReq.getResponse().getStatusMessage());
 	}
@@ -104,7 +103,7 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// TODO Auto-generated method stub
-		controller.errorReceivingData("Unable to complete request: "
+		notifier.errorReceivingData("Unable to complete request: "
 				+ exception.getMessage());
 	}
 

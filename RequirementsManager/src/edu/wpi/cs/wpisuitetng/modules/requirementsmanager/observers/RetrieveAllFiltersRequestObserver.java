@@ -14,13 +14,11 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
 import java.util.Arrays;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
-
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetrieveAllFiltersNotifier;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -60,7 +58,7 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {	
-					FilterDatabase.getInstance().setFilters(
+					FilterDatabase.getInstance().set(
 							Arrays.asList(filters));
 					notifier.receivedData(filters);
 				}

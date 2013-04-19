@@ -1,15 +1,15 @@
 /*******************************************************************************
-* Copyright (c) 2013 -- WPI Suite: Team Swagasarus
-*
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-* *Chris Keane
-* *Maddie Burris
-*******************************************************************************/
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * *Chris Keane
+ * *Maddie Burris
+ *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
@@ -21,42 +21,46 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
-* class to contain data on how effort spent on requirements
-* 
-*/
-
+ * class to contain data on how effort spent on requirements
+ * 
+ */
 
 public class ActualRequirementStatistics extends AbstractRequirementStatistics {
 
-	/* (non-Javadoc)
-	* @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.IRequirementStatistics#update()
-	*/
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
+	 * IRequirementStatistics#update()
+	 */
 	@Override
-	public void update(){
-	
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAllRequirements();	// refresh list of requirements TODO: is there a better way to do this?
-		
-		
+	public void update() {
+
+		List<Requirement> requirements = RequirementDatabase.getInstance()
+				.getFilteredRequirements(); // refresh list of requirements
+
 		// for each requirement
-		for(Requirement requirement: requirements){
-			//get amount of effort spent per requirement
+		for (Requirement requirement : requirements) {
+			// get amount of effort spent per requirement
 			data.put(requirement.getName(), requirement.getEffort());
-		
+
 		}
-	
+
 	}
-	
-	public JFreeChart buildLineChart(){
+
+	public JFreeChart buildLineChart() {
 		this.update();
-		return this.buildLineChart("Requirements by Actual Effort", "Requirment", "Effort");
+		return this.buildLineChart("Requirements by Actual Effort",
+				"Requirment", "Effort");
 	}
-	
-	public JFreeChart buildPieChart(){
+
+	public JFreeChart buildPieChart() {
 		return this.buildPieChart("Requirements by Actual Effort");
 	}
-	
-	public JFreeChart buildBarChart(){
-		JFreeChart barChart = this.buildBarChart("Requirements by Actual Effort", "Requirement", "Effort");
+
+	public JFreeChart buildBarChart() {
+		JFreeChart barChart = this.buildBarChart(
+				"Requirements by Actual Effort", "Requirement", "Effort");
 		return barChart;
 	}
 

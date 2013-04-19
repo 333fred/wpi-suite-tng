@@ -18,28 +18,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SimpleRetrieveAllRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SimpleRetrieveAllRequirementsRequestObserver;
 
 /**
  * Maintains a local database of requirements
  */
-public class RequirementDatabase extends Thread {
+public class RequirementDatabase extends AbstractDatabase<Requirement> {
 
 	private Map<Integer, Requirement> requirements;
-	private List<IDatabaseListener> listeners;
-	private SimpleRetrieveAllRequirementsController controller;
+	private RequirementsController controller;
+	private SimpleRetrieveAllRequirementsRequestObserver observer;
 	private static RequirementDatabase db;
 
 	private RequirementDatabase() {
+		super(300000);
 		requirements = new HashMap<Integer, Requirement>();
-		this.listeners = new ArrayList<IDatabaseListener>();
-		this.controller = new SimpleRetrieveAllRequirementsController();
-		setDaemon(true);
+		this.controller = new RequirementsController();
+		this.observer = new SimpleRetrieveAllRequirementsRequestObserver();
 	}
 
+	/**
+	 * Gets the current static database
+	 * 
+	 * @return the current databse instance
+	 */
 	public static RequirementDatabase getInstance() {
 		if (db == null) {
 			db = new RequirementDatabase();
@@ -48,67 +55,42 @@ public class RequirementDatabase extends Thread {
 	}
 
 	/**
-	 * Sets the requirement to the given map
-	 * 
-	 * @param requirements
+	 * {@inheritDoc}
 	 */
-	public synchronized void setRequirements(
-			Map<Integer, Requirement> requirements) {
-		this.requirements = requirements;
-		updateListeners();
-	}
-
-	/**
-	 * Sets the requirements to the given list. This removes everything in the
-	 * map and adds only things in the list
-	 * 
-	 * @param requirements
-	 *            the requirements to add
-	 */
-	public synchronized void setRequirements(List<Requirement> requirements) {
+	@Override
+	public synchronized void set(List<Requirement> models) {
 		this.requirements = new HashMap<Integer, Requirement>();
-		for (Requirement i : requirements) {
+		for (Requirement i : models) {
 			this.requirements.put(i.getrUID(), i);
 		}
 		updateListeners();
 	}
 
 	/**
-	 * Adds the given requirements to the map. The difference between this and
-	 * set requirements is that this doesn't erase all requirements, only
-	 * adds/updates the given list
-	 * 
-	 * @param requirements
-	 *            the requirements to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addRequirements(List<Requirement> requirements) {
-		for (Requirement i : requirements) {
+	@Override
+	public synchronized void addAll(List<Requirement> models) {
+		for (Requirement i : models) {
 			this.requirements.put(i.getrUID(), i);
 		}
 		updateListeners();
 	}
 
 	/**
-	 * Adds or updates a specific requirement
-	 * 
-	 * @param i
-	 *            the requirement to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addRequirement(Requirement i) {
-		requirements.put(i.getrUID(), i);
+	@Override
+	public synchronized void add(Requirement model) {
+		requirements.put(model.getrUID(), model);
 		updateListeners();
 	}
 
 	/**
-	 * Get a specific requirement from the local database
-	 * 
-	 * @param id
-	 *            the id of requirement to get
-	 * @return the requirement requested
-	 * @throws RequirementNotFoundException
-	 *             couldn't find the requirement
+	 * {@inheritDoc}
 	 */
-	public synchronized Requirement getRequirement(int id)
+	@Override
+	public synchronized Requirement get(int id)
 			throws RequirementNotFoundException {
 		if (requirements.get(id) != null) {
 			return requirements.get(id);
@@ -118,31 +100,29 @@ public class RequirementDatabase extends Thread {
 	}
 
 	/**
-	 * Gets all the requirements in the local database
-	 * 
-	 * @return all the current arrays
+	 * {@inheritDoc}
 	 */
-	public synchronized List<Requirement> getAllRequirements() {
-		List<Requirement> list = new ArrayList<Requirement>();
-		list = Arrays.asList(requirements.values().toArray(new Requirement[0]));
-		return list;
+	@Override
+	public synchronized List<Requirement> getAll() {
+		return Arrays.asList(requirements.values().toArray(new Requirement[0]));
 	}
 
 	/**
 	 * Returns only the requirements that need to be filtered out of the view
 	 * 
 	 * 
-	 * TODO: How to filter? If filter name == A and name == B, either or? so if one returns TRUE, keep it?
+	 * TODO: How to filter? If filter name == A and name == B, either or? so if
+	 * one returns TRUE, keep it?
+	 * 
 	 * @return the list of filtered requirements
 	 */
 	public synchronized List<Requirement> getFilteredRequirements() {
-		List<Requirement> filteredReqs = new ArrayList<Requirement>(getAllRequirements());
-		List<Requirement> allReqs = getAllRequirements();
+		List<Requirement> filteredReqs = new ArrayList<Requirement>(getAll());
+		List<Requirement> allReqs = getAll();
 		List<Filter> filters = FilterDatabase.getInstance().getActiveFilters();
-		
+
 		// Loop through the filters and requirements and remove anything that
 		// should be filtered
-		
 		for (Filter f : filters) {
 			for (Requirement r : allReqs) {
 				if (!f.shouldFilter(r)) {
@@ -150,52 +130,13 @@ public class RequirementDatabase extends Thread {
 				}
 			}
 		}
-		
+
 		/*
-		for (Requirement r : allReqs) {
-			
-		}*/
+		 * for (Requirement r : allReqs) {
+		 * 
+		 * }
+		 */
 		return filteredReqs;
-	}
-
-	/**
-	 * Call the update method on all registered listeners
-	 */
-	public synchronized void updateListeners() {
-		List<IDatabaseListener> removes = new ArrayList<IDatabaseListener>();
-		for (IDatabaseListener l : listeners) {
-			l.update();
-			if (l.shouldRemove()) {
-				removes.add(l);
-			}
-		}
-		for (IDatabaseListener l : removes) {
-			listeners.remove(l);
-		}
-	}
-
-	/**
-	 * Registers a database listener
-	 * 
-	 * @param listener
-	 *            the listener to register
-	 */
-	public synchronized void registerListener(IDatabaseListener listener) {
-		if (listener != null) {
-			listeners.add(listener);
-		}
-	}
-
-	/**
-	 * Removes a given listener from the list of listeners
-	 * 
-	 * @param listener
-	 *            the listener to be removed
-	 * @return True if the listener was removed or did not exits, false
-	 *         otherwise
-	 */
-	public synchronized boolean removeListener(IDatabaseListener listener) {
-		return listeners.remove(listener);
 	}
 
 	/**
@@ -206,10 +147,10 @@ public class RequirementDatabase extends Thread {
 	public void run() {
 		while (!Thread.interrupted()) {
 			// Trigger an update
-			controller.getAll();
+			controller.getAll(observer);
 			try {
 				// Sleep for five minutes
-				Thread.sleep(300000);
+				Thread.sleep(secs);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 				return;
@@ -217,10 +158,17 @@ public class RequirementDatabase extends Thread {
 		}
 	}
 
-	// TODO documentation
-	public Requirement getRequirement(String string) {
+	/**
+	 * Gets a requirement by name. This will not detect duplicates, but return
+	 * the first in the list
+	 * 
+	 * @param name
+	 *            the name to match
+	 * @return the first requirement with that name
+	 */
+	public Requirement getRequirement(String name) {
 		for (Requirement aReq : requirements.values()) {
-			if (aReq.getName().equals(string)) {
+			if (aReq.getName().equals(name)) {
 				return aReq;
 			}
 		}

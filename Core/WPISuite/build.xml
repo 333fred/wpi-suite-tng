@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="WPISuite" default="compile">
+<project name="WPISuite" default="war">
 	<import file="../../build-common.xml"/>
 
 	<path id="classpath">
@@ -49,7 +49,7 @@
 	</target>
 	
 	<target name="war" depends="clean,compile">
-		<war destfile="build/WPISuite.war" webxml="WebContent/WEB-INF/web.xml">
+		<war destfile="build/WPISuite-team3.war" webxml="WebContent/WEB-INF/web.xml">
 			<fileset dir="WebContent"/>
 			<lib dir="WebContent/WEB-INF/lib"/>
 			<classes dir="build/"/>

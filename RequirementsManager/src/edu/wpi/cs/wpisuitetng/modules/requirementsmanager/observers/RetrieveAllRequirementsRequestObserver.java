@@ -15,9 +15,9 @@ import java.util.Arrays;
 
 import javax.swing.SwingUtilities;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -28,9 +28,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * 
  */
 public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
-
-	/** The controller managing the request */
-	private RetrieveAllRequirementsController controller;
+	private IReceivedAllRequirementNotifier notifier;
 
 	/**
 	 * Construct the observer
@@ -38,8 +36,8 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 	 * @param controller
 	 */
 	public RetrieveAllRequirementsRequestObserver(
-			RetrieveAllRequirementsController controller) {
-		this.controller = controller;
+			IReceivedAllRequirementNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	@Override
@@ -52,21 +50,20 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			final Requirement[] requirements = Requirement.fromJSONArray(response
-					.getBody());
+			final Requirement[] requirements = Requirement
+					.fromJSONArray(response.getBody());
 
-			RequirementDatabase.getInstance().setRequirements(
-					Arrays.asList(requirements));
+			RequirementDatabase.getInstance().set(Arrays.asList(requirements));
 
 			// notify the controller
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					controller.receivedData(requirements);
+					notifier.receivedData(requirements);
 				}
 			});
 		} else {
-			controller.errorReceivingData("Received "
+			notifier.errorReceivingData("Received "
 					+ iReq.getResponse().getStatusCode()
 					+ " error from server: "
 					+ iReq.getResponse().getStatusMessage());
@@ -76,7 +73,7 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		// an error occurred
-		controller.errorReceivingData("Received "
+		notifier.errorReceivingData("Received "
 				+ iReq.getResponse().getStatusCode() + " error from server: "
 				+ iReq.getResponse().getStatusMessage());
 	}
@@ -84,7 +81,7 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		// an error occurred
-		controller.errorReceivingData("Unable to complete request: "
+		notifier.errorReceivingData("Unable to complete request: "
 				+ exception.getMessage());
 	}
 

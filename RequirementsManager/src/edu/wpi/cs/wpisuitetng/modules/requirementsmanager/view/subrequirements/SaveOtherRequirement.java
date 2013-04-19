@@ -11,7 +11,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 
 //TODO: What is the point of this class?
 

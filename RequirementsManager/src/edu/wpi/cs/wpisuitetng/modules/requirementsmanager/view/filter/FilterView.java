@@ -20,6 +20,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+
 /** The view for viewing and creating filters 
  * 
  * @author Mitchell
@@ -28,6 +30,9 @@ import javax.swing.JSplitPane;
 
 public class FilterView extends JPanel {
 
+	/** */
+	private static FilterView fv;
+	
 	/** View for displaying and enabling / disabling filters */
 	private FilterTableView filterTableView;
 	
@@ -52,6 +57,18 @@ public class FilterView extends JPanel {
 		add(filterTableView, BorderLayout.CENTER);
 		add(createFilterView, BorderLayout.SOUTH);
 
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	
+	public static FilterView getInstance() {
+		if (fv == null) {
+			fv = new FilterView();
+		}
+		return fv;
 	}
 	
 	/** Refreshes the filters displayed in the table view 
@@ -84,6 +101,23 @@ public class FilterView extends JPanel {
 		for (FilterUpdateListener listener : filterUpdateListeners) {
 			listener.filtersUpdated();
 		}
+	}
+	
+	/** Edits the given filter
+	 * 
+	 * @param toEdit
+	 */
+	
+	public void editFilter(Filter toEdit) {
+		createFilterView.editFilter(toEdit);
+	}
+	
+	/** Cancels the editing of the filter 
+	 * 
+	 */
+	
+	public void cancelEdit() {
+		createFilterView.cancelEdit();
 	}
 	
 }

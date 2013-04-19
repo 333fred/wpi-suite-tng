@@ -12,10 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class RemoveParentController {
@@ -48,7 +49,7 @@ public class RemoveParentController {
 		Requirement anReq = null;
 		if (model.getpUID().size() != 0) {
 			try {
-				anReq = RequirementDatabase.getInstance().getRequirement(
+				anReq = RequirementDatabase.getInstance().get(
 						model.getpUID().get(0));
 			} catch (RequirementNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -60,16 +61,18 @@ public class RemoveParentController {
 
 			model.removePUID(anReqID);
 			anReq.removeSubRequirement(modelID);
-			SaveRequirementController controller = new SaveRequirementController(
+
+			RequirementsController controller = new RequirementsController();
+			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 					this.parentView);
-			controller.SaveRequirement(model, false);
-			controller = new SaveRequirementController(
+			controller.save(model, observer);
+			observer = new UpdateRequirementRequestObserver(
 					new SaveOtherRequirement());
-			controller.SaveRequirement(anReq, false);
+			controller.save(anReq, observer);
 
 			view.refreshParentLabel();
 			view.refreshTopPanel();
-			if(view.parentSelected)
+			if (view.parentSelected)
 				view.refreshValidParents();
 			else
 				view.refreshValidChildren();

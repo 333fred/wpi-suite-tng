@@ -12,9 +12,10 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.SaveRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class RemoveChildController {
@@ -53,15 +54,18 @@ public class RemoveChildController {
 
 		model.removeSubRequirement(anReqID);
 		anReq.removePUID(modelID);
-		SaveRequirementController controller = new SaveRequirementController(
+		
+		RequirementsController controller = new RequirementsController();
+		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 				this.ChildView);
-		controller.SaveRequirement(model, false);
-		controller = new SaveRequirementController(new SaveOtherRequirement());
-		controller.SaveRequirement(anReq, false);
+		controller.save(model, observer);
+		observer = new UpdateRequirementRequestObserver(
+				new SaveOtherRequirement());
+		controller.save(anReq, observer);
 
 		view.refreshTopPanel();
 		view.refreshParentLabel();
-		if(view.parentSelected)
+		if (view.parentSelected)
 			view.refreshValidParents();
 		else
 			view.refreshValidChildren();

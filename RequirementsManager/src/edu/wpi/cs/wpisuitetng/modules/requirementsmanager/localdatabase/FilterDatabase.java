@@ -13,33 +13,35 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetrieveAllFiltersNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllFiltersController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.FilterController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.FilterNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllFiltersRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetrieveAllFiltersNotifier;
 
 /**
  * Local cache that holds all filters from the server
  */
 
-public class FilterDatabase extends Thread implements
+public class FilterDatabase extends AbstractDatabase<Filter> implements
 		IRetrieveAllFiltersNotifier {
 
 	private Map<Integer, Filter> filters;
-	private RetrieveAllFiltersController controller;
+	private FilterController controller;
 	private static FilterDatabase database;
 
 	/**
 	 * Private constructor for creating the database singleton
 	 */
 	private FilterDatabase() {
+		super(0); // The run will be overridden, so give it 0 seconds
 		this.filters = new HashMap<Integer, Filter>();
-		this.controller = new RetrieveAllFiltersController(this);
-		setDaemon(true);
+		this.controller = new FilterController();
 	}
 
 	/**
@@ -55,60 +57,38 @@ public class FilterDatabase extends Thread implements
 	}
 
 	/**
-	 * Sets the current filter database to the given map
-	 * 
-	 * @param filters
-	 *            the map of filters
+	 * {@inheritDoc}
 	 */
-	public synchronized void setFilters(Map<Integer, Filter> filters) {
-		this.filters = filters;
-	}
-
-	/**
-	 * Sets the map of filters to be the given list
-	 * 
-	 * @param filters
-	 *            the filters to be in the database
-	 */
-	public synchronized void setFilters(List<Filter> filters) {
+	public synchronized void set(List<Filter> filters) {
 		this.filters = new HashMap<Integer, Filter>();
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
 		}
+		updateListeners();
 	}
 
 	/**
-	 * Adds/updates the given list of filters
-	 * 
-	 * @param filters
-	 *            the filters to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addFilters(List<Filter> filters) {
+	public synchronized void addAll(List<Filter> filters) {
 		for (Filter f : filters) {
 			this.filters.put(f.getId(), f);
 		}
+		updateListeners();
 	}
 
 	/**
-	 * Adds the given filter to the list of filters
-	 * 
-	 * @param f
-	 *            the filter to add/update
+	 * {@inheritDoc}
 	 */
-	public synchronized void addFilter(Filter f) {
+	public synchronized void add(Filter f) {
 		this.filters.put(f.getId(), f);
+		updateListeners();
 	}
 
 	/**
-	 * Gets the filter with the given id from the database
-	 * 
-	 * @param id
-	 *            the id of the requested filter
-	 * @return the requested filter
-	 * @throws FilterNotFoundException
-	 *             if we can't find the filter
+	 * {@inheritDoc}
 	 */
-	public synchronized Filter getId(int id) throws FilterNotFoundException {
+	public synchronized Filter get(int id) throws FilterNotFoundException {
 		if (filters.get(id) != null) {
 			return filters.get(id);
 		} else {
@@ -117,12 +97,9 @@ public class FilterDatabase extends Thread implements
 	}
 
 	/**
-	 * Gets all of the filters from the database
-	 * 
-	 * @return List of all the fitlers in the database
+	 * {@inheritDoc}
 	 */
-
-	public synchronized List<Filter> getFilters() {
+	public synchronized List<Filter> getAll() {
 		return new ArrayList<Filter>(filters.values());
 	}
 
@@ -133,12 +110,21 @@ public class FilterDatabase extends Thread implements
 	 */
 	public synchronized List<Filter> getActiveFilters() {
 		List<Filter> activeFilters = new ArrayList<Filter>();
-		for (Filter f : getFilters()) {
+		for (Filter f : getAll()) {
 			if (f.isActive()) {
 				activeFilters.add(f);
 			}
 		}
 		return activeFilters;
+	}
+	
+	/** Removes the given filter from the database
+	 * 
+	 * @param toRemove
+	 */
+	
+	public synchronized void remove(Filter toRemove) {
+		filters.remove(toRemove.getId());
 	}
 
 	/**
@@ -147,12 +133,17 @@ public class FilterDatabase extends Thread implements
 	@Override
 	public void run() {
 		// This database should not run continuously, so just update
-		controller.getAll();
+		RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
+				this);
+		controller.getAll(observer);
 	}
 
+	/**
+	 * Sets the received filters to be in the database
+	 */
 	@Override
 	public void receivedData(Filter[] filters) {
-
+		set(Arrays.asList(filters));
 	}
 
 }

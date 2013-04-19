@@ -37,8 +37,6 @@ import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.ISaveNotifier;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveRequirementByIDController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -46,6 +44,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.CancelAction;
@@ -94,7 +93,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private DetailNoteView noteView;
 
 	private DetailTaskView taskView;
-	
+
 	private SubRequirementPanel subRequirementView;
 
 	// the view that shows the notes
@@ -123,9 +122,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private static final int VERTICAL_CLOSE2 = -10;
 	private static final int HORIZONTAL_PADDING = 20;
 
-	/** The controller for retrieving the requirement from the sever */
-	private RetrieveRequirementByIDController retreiveRequirementController;
-
 	private SpringLayout layout;
 
 	// add labels to the overall panel
@@ -138,6 +134,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblEstimate;
 	private JLabel lblActual;
 	private JLabel lblRelease;
+	private JLabel lblTotalEstimate;
+	private JLabel lblTotEstDisplay;
 
 	private JScrollPane scroll;
 	private JButton btnCancel;
@@ -309,7 +307,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		comboBoxPriority.addItemListener(comboBoxPriorityListener);
 
 		List<Iteration> iterationList = IterationDatabase.getInstance()
-				.getAllIterations();
+				.getAll();
 		iterationList = Iteration.sortIterations(iterationList);
 
 		int availableIterationNum = 0;
@@ -321,8 +319,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// the iteration is this requirement's current iteration or is the
 			// backlog
 			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| requirement.getIteration() == iteration.getId()
-					|| iteration.getId() == -1) && iteration.getId() != -2) {
+					|| requirement.getIteration() == iteration.getId() || iteration
+					.getId() == -1) && iteration.getId() != -2) {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
@@ -335,8 +333,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// or the iteration is this requirement's current iteration,
 			// or it is the backlog, add it to the list
 			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| requirement.getIteration() == iteration.getId()
-					|| iteration.getId() == -1) && iteration.getId() != -2) {
+					|| requirement.getIteration() == iteration.getId() || iteration
+					.getId() == -1) && iteration.getId() != -2) {
 				availableIterations[currentAvailableIterationIndex] = iteration
 						.getName();
 				currentAvailableIterationIndex++;
@@ -503,13 +501,15 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		userView = new AssigneePanel(requirement, this);
 		taskView = new DetailTaskView(this.getRequirement(), this);
 		aTestView = new DetailATestView(this.getRequirement(), this);
-		subRequirementView = new SubRequirementPanel(this.getRequirement(),this);
+		subRequirementView = new SubRequirementPanel(this.getRequirement(),
+				this);
 
 		// create the new eventPane
 		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
-				userView, taskView, aTestView,subRequirementView);
+				userView, taskView, aTestView, subRequirementView);
 
-		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
+		if (requirement.getStatus() == Status.DELETED
+				|| requirement.getStatus() == Status.COMPLETE) {
 			eventPane.disableUserButtons();
 		}
 
@@ -586,17 +586,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			textActual.setBackground(Color.WHITE);
 		}
 
-		// prevent requirements with subrequirements from having their estimates
-		// changed
-		if (requirement.getSubRequirements() != null
-				&& requirement.getSubRequirements().size() > 0) {
-			// TODO: ensure that the estimate of any requirement with
-			// subrequirements
-			// is the sum of the estimates of its subrequirements
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-
 	}
 
 	/**
@@ -613,6 +602,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblEstimate = new JLabel("Estimate:");
 		lblActual = new JLabel("Actual:");
 		lblRelease = new JLabel("Release Number:");
+		lblTotalEstimate = new JLabel("Total Estimate:");
+		lblTotEstDisplay = new JLabel("");
 
 		mainPanel.add(lblName);
 		mainPanel.add(lblDescription);
@@ -623,6 +614,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.add(lblEstimate);
 		mainPanel.add(lblActual);
 		mainPanel.add(lblRelease);
+		mainPanel.add(lblTotalEstimate);
+		mainPanel.add(lblTotEstDisplay);
 	}
 
 	/**
@@ -634,11 +627,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimate.setText(Integer.toString(getRequirement().getEstimate()));
 		textActual.setText(Integer.toString(getRequirement().getEffort()));
 		textRelease.setText(getRequirement().getReleaseNum());
+		lblTotEstDisplay.setText(getTotalEstimate().toString());
 
 		try {
 			getComboBoxIteration().setSelectedItem(
 					IterationDatabase.getInstance()
-							.getIteration(getRequirement().getIteration())
+							.get(getRequirement().getIteration())
 							.getName());
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
@@ -735,9 +729,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textActual, HORIZONTAL_PADDING,
 				SpringLayout.EAST, comboBoxStatus);
-		layout.putConstraint(SpringLayout.WEST, lblRelease, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblRelease, 0,
+				SpringLayout.WEST, lblActual);
 		layout.putConstraint(SpringLayout.WEST, textRelease,
+				0, SpringLayout.WEST, lblActual);
+		layout.putConstraint(SpringLayout.WEST, lblTotalEstimate,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		// layout.putConstraint(SpringLayout.WEST, saveError,
 		// HORIZONTAL_PADDING,
@@ -788,6 +786,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.SOUTH, textEstimate);
 		layout.putConstraint(SpringLayout.NORTH, textRelease, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblRelease);
+		layout.putConstraint(SpringLayout.NORTH, lblTotalEstimate, VERTICAL_PADDING,
+				SpringLayout.SOUTH, textEstimate);
+		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay, VERTICAL_PADDING
+				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblTotalEstimate);
 		// layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
 		// SpringLayout.SOUTH, textRelease);
 		// layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
@@ -805,15 +807,15 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private void determineAvailableStatusOptions() {
 		// String[] availableStatuses = { "New", "In Progress",
 		// "Open","Complete", "Deleted"};
-		
+
 		Boolean hasComplete = true;
-		for (Task aTask : requirement.getTasks()){
-			if(!aTask.isCompleted())
+		for (Task aTask : requirement.getTasks()) {
+			if (!aTask.isCompleted())
 				hasComplete = false;
 		}
-		if(!hasComplete)
+		if (!hasComplete)
 			this.comboBoxStatus.removeItem("Complete");
-		
+
 		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			this.comboBoxStatus.removeItem("New");
@@ -827,14 +829,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// New: New, Deleted
 			this.comboBoxStatus.removeItem("In Progress");
 			this.comboBoxStatus.removeItem("Open");
-			if(hasComplete)
+			if (hasComplete)
 				this.comboBoxStatus.removeItem("Complete");
 		}
 		if (getRequirement().getStatus() == Status.OPEN) {
 			// Open: Open, Deleted
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
-			if(hasComplete)
+			if (hasComplete)
 				this.comboBoxStatus.removeItem("Complete");
 		}
 		if (getRequirement().getStatus() == Status.COMPLETE) {
@@ -846,11 +848,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			// Deleted: Open, Deleted, Complete
 			this.comboBoxStatus.removeItem("New");
 			this.comboBoxStatus.removeItem("In Progress");
-			if(hasComplete)
+			if (hasComplete)
 				this.comboBoxStatus.removeItem("Complete");
 		}
-		
-			
+
 	}
 
 	DefaultListModel listModel = new DefaultListModel();
@@ -1045,7 +1046,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		JPanel panel = new JPanel();
 		Color defaultColor = panel.getBackground();
 
-		if (getRequirement().getStatus() != Status.DELETED && getRequirement().getStatus() != Status.COMPLETE)
+		if (getRequirement().getStatus() != Status.DELETED
+				&& getRequirement().getStatus() != Status.COMPLETE)
 			return;
 		textName.setEnabled(false);
 		textName.setBackground(defaultColor);
@@ -1084,8 +1086,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 		Requirement updatedRequirement;
 		try {
-			updatedRequirement = RequirementDatabase.getInstance()
-					.getRequirement(this.requirement.getrUID());
+			updatedRequirement = RequirementDatabase.getInstance().get(
+					this.requirement.getrUID());
 			logView.refresh(updatedRequirement);
 		} catch (RequirementNotFoundException e) {
 			System.out.println("Unable to find requirement? Wat?");
@@ -1125,19 +1127,19 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public DefaultListModel getTaskList() {
 		return taskView.getTaskList();
 	}
-	
 
 	public DefaultListModel getTestList() {
 		return aTestView.getaTestList();
 	}
+
 	public DetailTaskView getTaskView() {
 		return taskView;
 	}
-	
+
 	public DetailNoteView getNoteView() {
 		return noteView;
 	}
-	
+
 	public AssigneePanel getUserView() {
 		return userView;
 	}
@@ -1145,58 +1147,73 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	@Override
 	public boolean onTabClosed() {
 		if (btnSave.isEnabled()) {
-			
+
 			mainTabController.switchToTab(this);
-			
-			Object[] options = {"Save Changes",
-			                    "Discard Changes",
-			                    "Cancel"};
-			
-			int res = JOptionPane.showOptionDialog(this,
-			    "There are unsaved changes, are you sure you want to continue?",
-			    requirement.getName() + ": Confirm Close",
-			    JOptionPane.YES_NO_CANCEL_OPTION,
-			    JOptionPane.QUESTION_MESSAGE,
-			    null,
-			    options,
-			    options[2]);
-			
+
+			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
+
+			int res = JOptionPane
+					.showOptionDialog(
+							this,
+							"There are unsaved changes, are you sure you want to continue?",
+							requirement.getName() + ": Confirm Close",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[2]);
+
 			if (res == 0) {
 				closeTabAfterSave();
 				btnSave.getAction().actionPerformed(null);
-			} 
-			else if (res == 1) {
+			} else if (res == 1) {
 				return true;
-			}
-			else if (res == 2) {
+			} else if (res == 2) {
 				return false;
 			}
-		
-		}
-		
-		if (taskView.getTaskPanel().getAddTask().isEnabled() || noteView.getNotePanel().getAddnote().isEnabled() || aTestView.getTestPanel().getAddATest().isEnabled()) {
-			mainTabController.switchToTab(this);
-			
-			Object[] altOptions = {"Discard Changes",
-			"Cancel"};
-			
-			int res = JOptionPane.showOptionDialog(this,
-				    "There are unsaved changes in subtabs, are you sure you want to continue?",
-				    requirement.getName() + ": Confirm Close",
-				    JOptionPane.YES_NO_CANCEL_OPTION,
-				    JOptionPane.QUESTION_MESSAGE,
-				    null,
-				    altOptions,
-				    altOptions[1]);				
 
-				if (res == 0) {
-					return true;
-				}
-				else if (res == 1) {
-					return false;
-				}
-			
+		}
+
+		if (taskView.getTaskPanel().getAddTask().isEnabled()
+				|| noteView.getNotePanel().getAddnote().isEnabled()
+				|| aTestView.getTestPanel().getAddATest().isEnabled()) {
+			mainTabController.switchToTab(this);
+
+			Object[] altOptions = { "Discard Changes", "Cancel" };
+
+			int res = JOptionPane
+					.showOptionDialog(
+							this,
+							"There are unsaved changes in subtabs, are you sure you want to continue?",
+							requirement.getName() + ": Confirm Close",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, altOptions,
+							altOptions[1]);
+
+			if (res == 0) {
+				return true;
+			} else if (res == 1) {
+				return false;
+			}
+
 		}
 		return true;
+	}
+	
+	private Integer getTotalEstimate(){
+		return traverseTreeEstimates(this.requirement, this.requirement.getEstimate());
+	}
+	
+	private int traverseTreeEstimates(Requirement current, int totals) {
+		Requirement child = null;
+		int sum=0;
+
+			for (Integer i : current.getSubRequirements()) {
+				try {
+					child = RequirementDatabase.getInstance().get(i);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+				sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
+			}
+			return totals+sum;
 	}
 }
