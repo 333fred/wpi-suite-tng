@@ -66,7 +66,7 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 			Iteration iter;
 			try {
 				// backlog has ID -1
-				iter = IterationDatabase.getInstance().getIteration(-1);
+				iter = IterationDatabase.getInstance().get(-1);
 				RequirementTableView tableView = RequirementTableView.getInstance();
 				tableView.IterationFilter(iter.getName());
 				tableView.displayFilterInformation("Filtering by " + iter.getName());

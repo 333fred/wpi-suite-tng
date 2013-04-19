@@ -40,13 +40,12 @@ public class SaveEditingTableAction extends AbstractAction implements
 		RequirementDatabase rdb = RequirementDatabase.getInstance();
 
 		boolean[] changedRows = tableView.getTable().getEditedRows();
-		
+
 		// if the user is still currently editing a cell, and they try to save
 		if (tableView.getTable().getCellEditor() != null) {
 			// stop editing first before saving
 			tableView.getTable().getCellEditor().stopCellEditing();
 		}
-		
 
 		for (int i = 0; i < changedRows.length; i++) {
 			if (changedRows[i]) {
@@ -55,17 +54,17 @@ public class SaveEditingTableAction extends AbstractAction implements
 				int newEstimate = Integer.parseInt((String) this.tableView
 						.getTable().getModel().getValueAt(i, 6));
 				try {
-					Requirement reqToChange = rdb.getRequirement(id);
+					Requirement reqToChange = rdb.get(id);
 					reqToChange.setEstimate(newEstimate);
-					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this);
+					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+							this);
 					saveController.save(reqToChange, observer);
 				} catch (RequirementNotFoundException e1) {
 					e1.printStackTrace();
-				}			
+				}
 			}
 		}
-		
-		
+
 		if (tableView.isEditable()) {
 			tableView.setEditable(false);
 			tableView.displayEditInformation("");

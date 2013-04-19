@@ -53,8 +53,7 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 			final Requirement[] requirements = Requirement
 					.fromJSONArray(response.getBody());
 
-			RequirementDatabase.getInstance().setRequirements(
-					Arrays.asList(requirements));
+			RequirementDatabase.getInstance().set(Arrays.asList(requirements));
 
 			// notify the controller
 			SwingUtilities.invokeLater(new Runnable() {

@@ -158,7 +158,7 @@ public class FilterTableView extends JPanel implements
 	}
 
 	private void updateFilters() {
-		List<Filter> filters = FilterDatabase.getInstance().getFilters();
+		List<Filter> filters = FilterDatabase.getInstance().getAll();
 		tableModel.updateFilters(filters);
 	}
 

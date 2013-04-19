@@ -60,7 +60,7 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 			final Iteration[] iterations = Iteration.fromJSONArray(response
 					.getBody());
 
-			IterationDatabase.getInstance().setIterations(
+			IterationDatabase.getInstance().set(
 					Arrays.asList(iterations));
 
 			// notify the controller

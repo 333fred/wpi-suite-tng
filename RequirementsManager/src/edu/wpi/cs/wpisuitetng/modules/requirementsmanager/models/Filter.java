@@ -208,7 +208,7 @@ public class Filter extends AbstractModel {
 		Iteration reqIteration;
 		Date valueDate;
 		try {
-			reqIteration = IterationDatabase.getInstance().getIteration(value);
+			reqIteration = IterationDatabase.getInstance().get(value);
 		} catch (IterationNotFoundException e) {
 			// iteration is not value
 			return false;

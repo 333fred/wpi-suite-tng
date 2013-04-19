@@ -270,7 +270,7 @@ class ReqTreeRansferHandler extends TransferHandler implements ISaveNotifier {
 			if (requirement.getpUID().size() > 0) {
 				for (int num : requirement.getpUID()) {
 					try {
-						RequirementDatabase.getInstance().getRequirement(num)
+						RequirementDatabase.getInstance().get(num)
 								.removeSubRequirement(requirement.getrUID());
 						requirement.removePUID(num);
 					} catch (RequirementNotFoundException e) {

@@ -63,7 +63,7 @@ public class PermissionsPanel extends Tab {
 		radioPanel.setLayout(radioLayout);
 		
 		/**Initialize the list of local permissions*/
-		localPermissions = PermissionsDatabase.getInstance().getAllPermissions();
+		localPermissions = PermissionsDatabase.getInstance().getAll();
 		System.out.println(localPermissions.size());
 		users = new String[localPermissions.size()];
 		for (int i = 0; i < users.length; i++) {

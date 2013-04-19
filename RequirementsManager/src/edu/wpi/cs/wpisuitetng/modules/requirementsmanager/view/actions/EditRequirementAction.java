@@ -121,7 +121,7 @@ public class EditRequirementAction extends AbstractAction {
 
 				try {
 					Iteration anIteration = IterationDatabase.getInstance()
-							.getIteration(requirement.getIteration());
+							.get(requirement.getIteration());
 					anIteration.removeRequirement(requirement.getrUID());
 					iterationController.save(anIteration, iterationObserver);
 				} catch (IterationNotFoundException e1) {

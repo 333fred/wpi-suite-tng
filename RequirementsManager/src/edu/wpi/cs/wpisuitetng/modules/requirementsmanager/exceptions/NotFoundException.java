@@ -7,32 +7,36 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    @author Fredric
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
+import edu.wpi.cs.wpisuitetng.modules.Model;
+
 /**
- * An exception to manage iteration not found
+ * Abstract superclass for all the not found exceptions
  */
 
-public class IterationNotFoundException extends NotFoundException {
+public class NotFoundException extends Exception {
+
+	protected Object notFound;
 
 	/**
-	 * Creates a new not found exception for an iteration
+	 * Creates a new not found exception for a model
 	 * 
-	 * @param id
-	 *            the not found iteration
+	 * @param notFound
+	 *            the model not found
 	 */
-	public IterationNotFoundException(Integer id) {
-		super(id);
+	public NotFoundException(Object notFound) {
+		this.notFound = notFound;
 	}
 
 	/**
-	 * @return the id
+	 * @return the notFound
 	 */
-	public int getId() {
-		return (Integer) notFound;
-
+	public Object getNotFound() {
+		return notFound;
 	}
+
 }
