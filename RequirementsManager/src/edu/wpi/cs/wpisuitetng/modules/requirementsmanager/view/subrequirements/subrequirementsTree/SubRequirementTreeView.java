@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.DropMode;
 import javax.swing.JPanel;
@@ -11,11 +12,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SpringLayout;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IRetreivedAllIterationsNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllIterationsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveAllRequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
@@ -31,6 +35,7 @@ public class SubRequirementTreeView extends JPanel implements
 	private JScrollPane treeView;
 	private DefaultMutableTreeNode top;
 	private RetrieveAllRequirementsController retrieveAllRequirementsController;
+	private RetrieveAllIterationsController retrieveAllIterationsController;
 
 	private MainTabController tabController;
 
@@ -44,6 +49,7 @@ public class SubRequirementTreeView extends JPanel implements
 		this.tabController = tabController;
 
 		retrieveAllRequirementsController = new RetrieveAllRequirementsController(this);
+		retrieveAllIterationsController = new RetrieveAllIterationsController(this);
 		
 		firstPaint = true;
 
@@ -60,14 +66,13 @@ public class SubRequirementTreeView extends JPanel implements
 		this.add(treeView, BorderLayout.CENTER);
 		
 		RequirementDatabase.getInstance().registerListener(this);
+		
+		requirements = RequirementDatabase.getInstance().getAllRequirements();
 		updateTreeView();
 	}
 
-	public void getRequirementsFromServer() {
-		retrieveAllRequirementsController.getAll();
-	}
-
 	public void updateTreeView() {
+		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode requirementNode = null;
 		DefaultMutableTreeNode subRequirementNode = null;
 		Requirement tempReq = null;
@@ -96,11 +101,26 @@ public class SubRequirementTreeView extends JPanel implements
 				}
 			}
 			
+			((DefaultTreeModel) this.tree.getModel()).nodeStructureChanged(this.top);
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree.getCellRenderer();
+			renderer.setLeafIcon(null);
+			this.tree.setCellRenderer(renderer);
+			restoreExpanstionState(this.tree, 0, eState);
+			
 		}
 	}
 	
+	public static void restoreExpanstionState(JTree tree, int row,
+			String expansionState) {
+		StringTokenizer stok = new StringTokenizer(expansionState, ",");
+		while (stok.hasMoreTokens()) {
+			int token = row + Integer.parseInt(stok.nextToken());
+			tree.expandRow(token);
+		}
+	}
+
 	public static String getExpansionState(JTree tree, int row) {
-		/*TreePath rowPath = tree.getPathForRow(row);
+		TreePath rowPath = tree.getPathForRow(row);
 		StringBuffer buf = new StringBuffer();
 		int rowCount = tree.getRowCount();
 		for (int i = row; i < rowCount; i++) {
@@ -111,8 +131,19 @@ public class SubRequirementTreeView extends JPanel implements
 			} else
 				break;
 		}
-		return buf.toString();*/
-		return null;
+		return buf.toString();
+	}
+
+	public static boolean isDescendant(TreePath path1, TreePath path2) {
+		int count1 = path1.getPathCount();
+		int count2 = path2.getPathCount();
+		if (count1 <= count2)
+			return false;
+		while (count1 != count2) {
+			path1 = path1.getParentPath();
+			count1--;
+		}
+		return path1.equals(path2);
 	}
 
 	public void updateTreeNodes(Requirement anReq, DefaultMutableTreeNode node){
@@ -134,24 +165,30 @@ public class SubRequirementTreeView extends JPanel implements
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
-		this.requirements = Arrays.asList(requirements);
-		this.updateTreeView();
+		//this.requirements = Arrays.asList(requirements);
+		refresh();
 	}
 
 	@Override
 	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void update() {
-		this.updateTreeView();
 	}
 
+	public void refresh() {
+		this.requirements = RequirementDatabase.getInstance().getAllRequirements();
+		updateTreeView();
+	}
+	
+	public void getRequirementsFromServer() {
+		retrieveAllRequirementsController.getAll();
+	}
+	
 	@Override
 	public boolean shouldRemove() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -166,13 +203,12 @@ public class SubRequirementTreeView extends JPanel implements
 	}
 
 	private void getIterationsFromServer() {
-		// TODO Auto-generated method stub
-		
+		retrieveAllIterationsController.getAll();
 	}
 
 	@Override
 	public void receivedData(Iteration[] iterations) {
-		update();		
+		updateTreeView();
 	}
 
 }

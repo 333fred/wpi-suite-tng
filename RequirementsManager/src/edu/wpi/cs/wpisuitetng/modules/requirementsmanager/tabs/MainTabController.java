@@ -84,6 +84,7 @@ public class MainTabController {
 
 	private void onChangeTab() {
 		refreshIterationTree();
+		refreshSubReqView();
 
 		System.out.println("Change Tab Controller");
 		Component selectedComponent = tabView.getSelectedComponent();
@@ -300,7 +301,7 @@ public class MainTabController {
 	}
 
 	public void refreshSubReqView() {
-		subRequirementTreeView.getRequirementsFromServer();
+		subRequirementTreeView.refresh();
 	}
 
 	public IterationTreeView getIterationTreeView() {
