@@ -12,23 +12,23 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RetrieveFilterByIDController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreiveRequirementByIDControllerNotifier;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 public class RetrieveFilterByIDRequestObserver implements RequestObserver {
 
-	private RetrieveFilterByIDController controller;
+	private IRetreiveRequirementByIDControllerNotifier notifier;
 
 	/**
-	 * Creates a Request Observer with the given controller to call back to
+	 * Creates a Request Observer with the given notifier to call back to
 	 * 
-	 * @param controller
-	 *            the controller to callback to
+	 * @param notifier
+	 *            the notifier to callback to
 	 */
 	public RetrieveFilterByIDRequestObserver(
-			RetrieveFilterByIDController controller) {
-		this.controller = controller;
+			IRetreiveRequirementByIDControllerNotifier notifier) {
+		this.notifier = notifier;
 	}
 
 	/**
