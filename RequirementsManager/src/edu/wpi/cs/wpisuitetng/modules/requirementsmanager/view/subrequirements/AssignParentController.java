@@ -67,7 +67,7 @@ public class AssignParentController {
 			controller = new RequirementsController();
 			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 					new SaveOtherRequirement());
-			controller.save(model, observer);
+			controller.save(anParReq, observer);
 		}
 
 		model.addPUID(anReqID);
@@ -79,7 +79,7 @@ public class AssignParentController {
 		controller = new RequirementsController();
 		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 				this.parentView);
-		controller.save(model, observer);
+		controller.save(anReq, observer);
 		observer = new UpdateRequirementRequestObserver(
 				new SaveOtherRequirement());
 		controller.save(model, observer);

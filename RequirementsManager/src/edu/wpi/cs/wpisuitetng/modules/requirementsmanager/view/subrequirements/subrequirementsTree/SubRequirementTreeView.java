@@ -85,7 +85,7 @@ IReceivedAllRequirementNotifier {
 									.getRequirement(aReq);
 							subRequirementNode = new DefaultMutableTreeNode(tempReq);
 							requirementNode.add(subRequirementNode);
-							updateTreeNodes(tempReq, subRequirementNode);
+							updateTreeNodes(tempReq, subRequirementNode);							
 						} catch (RequirementNotFoundException e) {
 							System.out
 									.println("Requirement not found: SubRequirementTreeView:372");
@@ -149,7 +149,7 @@ IReceivedAllRequirementNotifier {
 				tempReq = RequirementDatabase.getInstance().getRequirement(aReq);
 				subRequirementNode = new DefaultMutableTreeNode(tempReq);
 				node.add(subRequirementNode);
-				updateTreeNodes(tempReq, subRequirementNode);
+				updateTreeNodes(tempReq, subRequirementNode);				
 			} catch (RequirementNotFoundException e) {
 				System.out
 						.println("GRRR Requirement not found: SubRequirementTreeView:372");

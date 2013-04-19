@@ -213,44 +213,31 @@ public class SubReqTreeTransferHandler extends TransferHandler implements ISaveN
 		if (childIndex == -1) { // DropMode.ON
 			index = parent.getChildCount();
 		}
-		// Add data to model.
-		/*for (int i = 0; i < nodes.length; i++) {
-			model.insertNodeInto(nodes[i], parent, index++);
-			SaveIterationController saveIterationController = new SaveIterationController(this);
-			Requirement requirement = (Requirement) (((DefaultMutableTreeNode) nodes[i].getUserObject()).getUserObject());
-			Iteration anIteration;
-			try {
-				anIteration = IterationDatabase.getInstance().getIteration(requirement.getIteration());
-				anIteration.removeRequirement(requirement.getrUID());
-				saveIterationController.saveIteration(anIteration);
-			} catch (IterationNotFoundException e) {
-				e.printStackTrace();
-			}
-			anIteration = (Iteration) ((DefaultMutableTreeNode)nodes[i].getParent()).getUserObject();
-			anIteration.addRequirement(requirement.getrUID());
-			saveIterationController.saveIteration(anIteration);
-			requirement.setIteration(anIteration.getId());
-			RequirementsController RequirementsController = new RequirementsController(this);
-			RequirementsController.save(requirement, false);
-			this.draggedRequirement = requirement;
-		}*/
-		for (int i = 0; i < nodes.length; i++) {
-			model.insertNodeInto(nodes[i], parent, index++);
+		// Add data to model		
+		//for (int i = 0; i < nodes.length; i++) {
+			//model.insertNodeInto(nodes[i], parent, index++);
+			int[] selRows = tree.getSelectionRows();
+			dest = dl.getPath();
+			TreePath path = tree.getPathForRow(selRows[0]);
+			
+			DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();
+			DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+		
 			RequirementsController RequirementsController = new RequirementsController();
 			UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(this);
 			
-			Requirement requirement = (Requirement) (((DefaultMutableTreeNode) nodes[i].getUserObject()).getUserObject());
-			Requirement anRequirement = (Requirement) ((DefaultMutableTreeNode)nodes[i].getParent()).getUserObject();
+			Requirement requirement = (Requirement) firstNode.getUserObject();
+			Requirement anRequirement = (Requirement) target.getUserObject();
 			
 			Integer anReqID = new Integer(anRequirement.getrUID());
 			Integer reqID = new Integer(requirement.getrUID());
 			
 			anRequirement.addSubRequirement(reqID);
-			RequirementsController.save(anRequirement, reqObserver);
 			requirement.addPUID(anReqID);
+			RequirementsController.save(anRequirement, reqObserver);			
 			RequirementsController.save(requirement, reqObserver);
 			this.draggedRequirement = requirement;
-		}
+		//}
 
 		return true;
 	}
