@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric, Alex Woodyard, Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
@@ -101,14 +101,6 @@ public class PermissionToolbarPane extends JPanel {
 				3, SpringLayout.SOUTH, userLevel);
 
 		// center everything horizontally
-		// permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-		// nameLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		// permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-		// userName, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		// permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-		// userLevel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		// permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
-		// permissionLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
 				createPermissions, 0, SpringLayout.HORIZONTAL_CENTER, this);
 
@@ -124,26 +116,6 @@ public class PermissionToolbarPane extends JPanel {
 				SpringLayout.WEST, userLevel);
 		permissionLayout.putConstraint(SpringLayout.EAST, userLevel, 0,
 				SpringLayout.EAST, this);
-
-		// match everything to nameLabel width
-		// permissionLayout.putConstraint(SpringLayout.EAST, nameLabel, 0,
-		// SpringLayout.EAST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.WEST, nameLabel, 0,
-		// SpringLayout.WEST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.EAST, userName, 0,
-		// SpringLayout.EAST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.WEST, userName, 0,
-		// SpringLayout.WEST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.EAST, userLevel, 0,
-		// SpringLayout.EAST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.WEST, userLevel, 0,
-		// SpringLayout.WEST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.EAST, createPermissions,
-		// 0,
-		// SpringLayout.EAST, permissionLabel);
-		// permissionLayout.putConstraint(SpringLayout.WEST, createPermissions,
-		// 0,
-		// SpringLayout.WEST, permissionLabel);
 
 		this.add(nameLabel);
 		this.add(userName);
