@@ -66,8 +66,8 @@ public class RemoveParentController {
 			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 					this.parentView);
 			controller.save(model, observer);
-			observer = new UpdateRequirementRequestObserver(
-					new SaveOtherRequirement());
+			//observer = new UpdateRequirementRequestObserver(
+			//		new SaveOtherRequirement());
 			controller.save(anReq, observer);
 
 			view.refreshParentLabel();

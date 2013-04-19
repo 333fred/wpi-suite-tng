@@ -1077,6 +1077,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	@Override
 	public void responseSuccess() {
 
+			for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
+				if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+					(((DetailPanel) mainTabController.getTabView()
+							.getComponentAt(i))).updateTotalEstimate();
+					System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
+				}
+			}
+
 		// if the tab should close, close it
 		if (closeTab) {
 			getMainTabController().closeCurrentTab();
@@ -1092,6 +1100,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} catch (RequirementNotFoundException e) {
 			System.out.println("Unable to find requirement? Wat?");
 		}
+		
 
 	}
 
@@ -1196,6 +1205,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 		}
 		return true;
+	}
+	
+	public void updateTotalEstimate(){
+		lblTotEstDisplay.setText(getTotalEstimate().toString());
 	}
 	
 	private Integer getTotalEstimate(){

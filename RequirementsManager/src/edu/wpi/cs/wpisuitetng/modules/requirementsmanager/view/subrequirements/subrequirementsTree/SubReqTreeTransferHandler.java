@@ -74,16 +74,19 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
+		
 		TreePath dest = dl.getPath();
 		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
 				.getLastPathComponent();
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
-		Requirement requirement = (Requirement) firstNode.getUserObject();
-		Requirement anRequirement = (Requirement) target.getUserObject();
-		if(containsCurrentRequirement(requirement,anRequirement))
-			return false;
+		if (firstNode.getLevel() != 0 && target.getLevel() != 0) {
+			Requirement requirement = (Requirement) firstNode.getUserObject();
+			Requirement anRequirement = (Requirement) target.getUserObject();
+			if (containsCurrentRequirement(requirement, anRequirement))
+				return false;
+		}
 		if (firstNode.getLevel() == 0)
 			return false;
 		if (firstNode == target || target == firstNode.getParent())
@@ -324,34 +327,14 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 
 	@Override
 	public void responseSuccess() {
-		if (getTabController() != null) {
-
-			Requirement requirement = getDraggedRequirement();
-
+		System.out.println("TREE PLEASE REFRESH\n\n\n");
 			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
-					if (((((DetailPanel) getTabController().getTabView()
-							.getComponentAt(i))).getModel().getrUID()) == (requirement
-							.getrUID())) {
-						try {
-							(((DetailPanel) getTabController().getTabView()
-									.getComponentAt(i)))
-									.getComboBoxIteration()
-									.setSelectedItem(
-											IterationDatabase
-													.getInstance()
-													.get(
-															requirement
-																	.getIteration())
-													.getName());
-						} catch (IterationNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
+					(((DetailPanel) getTabController().getTabView()
+							.getComponentAt(i))).updateTotalEstimate();
+					System.out.println("TREE PLEASE REFRESH\n\n\n");
 				}
 			}
-
-		}
 	}
 
 	@Override
