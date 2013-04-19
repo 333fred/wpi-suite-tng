@@ -73,9 +73,6 @@ public class AssignParentController {
 		model.addPUID(anReqID);
 		anReq.addSubRequirement(modelID);
 
-		// *********
-		anReq.setEstimate(anReq.getEstimate() + model.getEstimate());
-
 		controller = new RequirementsController();
 		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 				this.parentView);
