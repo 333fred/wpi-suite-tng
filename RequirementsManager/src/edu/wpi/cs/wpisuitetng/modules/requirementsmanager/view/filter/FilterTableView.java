@@ -63,7 +63,11 @@ public class FilterTableView extends JPanel implements
 	/** The controller to retrieve filters */
 	private FilterController filterController;
 
-	public FilterTableView() {
+	/** The FilterView this view is contained in */
+	private FilterView filterView;
+
+	public FilterTableView(FilterView filterView) {
+		this.filterView = filterView;
 		ArrayList<Filter> filters = new ArrayList<Filter>();
 		filterController = new FilterController();
 
@@ -196,6 +200,8 @@ public class FilterTableView extends JPanel implements
 				UpdateFilterRequestObserver observer = new UpdateFilterRequestObserver(this);
 				filterController.save(filter, observer);
 			}
+			//notify the listeners that we made changes
+			filterView.notifyListeners();
 
 		} else if (source.equals(butDelete)) {
 			// we will need to work on delete.

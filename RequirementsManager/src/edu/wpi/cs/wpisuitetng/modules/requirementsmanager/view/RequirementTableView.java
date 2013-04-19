@@ -71,6 +71,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEdi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveEditingTableAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpdateListener;
 
 /**
  * RequirementListView is the basic GUI that will display a list of the current
@@ -84,7 +85,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveEditi
 @SuppressWarnings("serial")
 public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		IDatabaseListener, IReceivedAllRequirementNotifier,
-		IRetreivedAllIterationsNotifier {
+		IRetreivedAllIterationsNotifier, FilterUpdateListener {
 
 	private static RequirementTableView tv;
 
@@ -137,7 +138,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	@SuppressWarnings("rawtypes")
 	private RequirementTableView(MainTabController tabController) {
 		this.tabController = tabController;
-
+		tabController.getFilterView().addFilterUpdateListener(this);
 		firstPaint = false;
 		// register this listener to the Database
 		RequirementDatabase.getInstance().registerListener(this);
@@ -814,6 +815,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	// writes to hidden panel to inform the user of editing, etc..
 	public void displayFilterInformation(String text) {
 		this.textFilterInfo.setText(text);
+	}
+
+	/** 
+	 * {@inheritDoc}
+	 */
+
+	public void filtersUpdated() {
+		refresh();
+		
 	}
 
 }

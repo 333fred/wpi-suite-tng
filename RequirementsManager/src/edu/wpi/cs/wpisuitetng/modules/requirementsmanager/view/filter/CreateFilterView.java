@@ -162,7 +162,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		cboxOperation.setBackground(Color.WHITE);
 		cboxEqualTo.setBackground(Color.WHITE);
 
-		butSave = new JButton("Save");
+		butSave = new JButton("Create");
 		butCancel = new JButton("Cancel");
 
 		butSave.setEnabled(false);
@@ -455,8 +455,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			equalToStr = txtEqualTo.getText().trim();
 			// check to make sure this is an int
 			try {
-				Integer.parseInt(equalToStr);
-				filter.setValue(equalToStr);
+				filter.setValue(Integer.parseInt(equalToStr));
 			} catch (NumberFormatException e) {
 				error = true;
 				errorString = "Value must be a number";
@@ -545,6 +544,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			}
 			txtEqualTo.setBackground(Color.WHITE);
 			calEqualTo.setBackground(Color.WHITE);
+
 		} else {
 			// there was an error set text bot
 			labSaveError.setText(errorString);
@@ -681,6 +681,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	public void responseSuccess() {
 		onCancelPressed();
 		filterView.refreshTableView();
+		filterView.notifyListeners();
 	}
 
 	public void responseError(int statusCode, String statusMessage) {
@@ -691,5 +692,43 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	public void fail(Exception exception) {
 		System.out.println("Filter Failed!!");
 		exception.printStackTrace();
+	}
+
+	/**
+	 * Enables editing of the given filter
+	 * 
+	 * @param toEdit
+	 *            Filter to edit
+	 */
+
+	public void editFilter(Filter toEdit) {
+		filter = toEdit;
+		updateMode(Mode.EDIT);
+	}
+
+	/**
+	 * Cancels the editing of the filter
+	 * 
+	 */
+
+	public void cancelEdit() {
+		filter = new Filter();
+		updateMode(Mode.CREATE);
+	}
+
+	/**
+	 * Updates the mode
+	 * 
+	 */
+
+	public void updateMode(Mode newMode) {
+		this.mode = newMode;
+		if (mode == Mode.CREATE) {
+			butSave.setText("Create");
+			butCancel.setText("Cancel");
+		} else {
+			butSave.setText("Save");
+			butCancel.setText("Cancel Editing");
+		}
 	}
 }

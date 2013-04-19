@@ -170,17 +170,17 @@ public class Filter extends AbstractModel {
 	private boolean checkInteger(int value) {
 		switch (getOperation()) {
 		case EQUAL:
-			return value == (Integer) getValue();
+			return value == (Double) getValue();
 		case NOT_EQUAL:
-			return value != (Integer) getValue();
+			return value != (Double) getValue();
 		case LESS_THAN:
-			return value < (Integer) getValue();
+			return value < (Double) getValue();
 		case LESS_THAN_EQUAL:
-			return value <= (Integer) getValue();
+			return value <= (Double) getValue();
 		case GREATER_THAN_EQUAL:
-			return value >= (Integer) getValue();
+			return value >= (Double) getValue();
 		case GREATER_THAN:
-			return value > (Integer) getValue();
+			return value > (Double)getValue();
 		default:
 			System.out.println("MAGIC!!!!!!!");
 			return false;

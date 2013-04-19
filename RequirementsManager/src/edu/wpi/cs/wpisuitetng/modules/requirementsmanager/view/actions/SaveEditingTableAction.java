@@ -40,6 +40,8 @@ public class SaveEditingTableAction extends AbstractAction implements
 		RequirementDatabase rdb = RequirementDatabase.getInstance();
 
 		boolean[] changedRows = tableView.getTable().getEditedRows();
+		tableView.getTable().getCellEditor().stopCellEditing();
+		
 
 		for (int i = 0; i < changedRows.length; i++) {
 			if (changedRows[i]) {
@@ -53,13 +55,12 @@ public class SaveEditingTableAction extends AbstractAction implements
 					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this);
 					saveController.save(reqToChange, observer);
 				} catch (RequirementNotFoundException e1) {
-					System.out
-							.println("The requirement was not found: SaveEditingTableAction:51");
-				}
+					e1.printStackTrace();
+				}			
 			}
 		}
-
-		// TODO Auto-generated method stub
+		
+		
 		if (tableView.isEditable()) {
 			tableView.setEditable(false);
 			tableView.displayEditInformation("");
@@ -73,7 +74,6 @@ public class SaveEditingTableAction extends AbstractAction implements
 	@Override
 	public void responseSuccess() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -14,6 +14,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -32,10 +34,14 @@ public class FilterView extends JPanel {
 	/** View for creating and editing filters */
 	private CreateFilterView createFilterView;
 	
+	/** List of the filter update listeners */
+	private List<FilterUpdateListener> filterUpdateListeners;
+	
 	public FilterView() {
 		
-		filterTableView = new FilterTableView();
-		createFilterView = new CreateFilterView(this);			
+		filterTableView = new FilterTableView(this);
+		createFilterView = new CreateFilterView(this);	
+		filterUpdateListeners = new ArrayList<FilterUpdateListener>();
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, filterTableView, createFilterView);
 	
@@ -54,6 +60,30 @@ public class FilterView extends JPanel {
 	
 	public void refreshTableView() {
 		filterTableView.refresh();
-	}                          
+	}   
+	
+	/** Adds the given listener
+	 * 
+	 * @param listener THe listener to add
+	 */
+	
+	public void addFilterUpdateListener(FilterUpdateListener listener) {
+		filterUpdateListeners.add(listener);
+	}
+	
+	/** Removes the given listener 
+	 * 
+	 * @param listener The listener to remove
+	 */
+	
+	public void removeFilterUpdateListener(FilterUpdateListener listener) {
+		filterUpdateListeners.remove(listener);
+	}
+	
+	protected void notifyListeners() {
+		for (FilterUpdateListener listener : filterUpdateListeners) {
+			listener.filtersUpdated();
+		}
+	}
 	
 }
