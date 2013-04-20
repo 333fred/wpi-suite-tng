@@ -338,7 +338,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 				idManager = db.retrieve(IdManager.class, "type", "iteration",
 						s.getProject()).toArray(new IdManager[0])[0];
 			} else {
-				idManager = new IdManager("filter");
+				idManager = new IdManager("iteration");
 			}
 			int id = idManager.getNextId();
 			if (!db.save(idManager, s.getProject())) {
