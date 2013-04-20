@@ -1076,11 +1076,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	@Override
 	public void responseSuccess() {
-
+		
 			for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
 				if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
 					(((DetailPanel) mainTabController.getTabView()
 							.getComponentAt(i))).updateTotalEstimate();
+					(((DetailPanel) mainTabController.getTabView()
+							.getComponentAt(i))).updateSubReqTab();
 					System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
 				}
 			}
@@ -1207,16 +1209,22 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		return true;
 	}
 	
+	public void updateSubReqTab(){
+		subRequirementView.refreshAll();
+	}
+	
 	public void updateTotalEstimate(){
 		Integer estimate = 0;
 		
-		List<Requirement> requirements = RequirementDatabase.getInstance().getAll();
-		for(Requirement tempReq : requirements){
-			if(tempReq.getrUID()==requirement.getrUID())
-				estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());
+		Requirement tempReq = null;
+		try {
+			tempReq = RequirementDatabase.getInstance().get(requirement.getrUID());
+			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());			
+			lblTotEstDisplay.setText(estimate.toString());
+		} catch (RequirementNotFoundException e) {
+			e.printStackTrace();
 		}
 		
-		lblTotEstDisplay.setText(estimate.toString());
 	}
 	
 	private Integer getTotalEstimate(){

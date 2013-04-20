@@ -327,12 +327,13 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 
 	@Override
 	public void responseSuccess() {
-		System.out.println("TREE PLEASE REFRESH\n\n\n");
+		
 			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
 					(((DetailPanel) getTabController().getTabView()
 							.getComponentAt(i))).updateTotalEstimate();
-					System.out.println("TREE HERE HERE HERE\n\n\n");
+					(((DetailPanel) getTabController().getTabView()
+							.getComponentAt(i))).updateSubReqTab();
 				}
 			}
 	}
