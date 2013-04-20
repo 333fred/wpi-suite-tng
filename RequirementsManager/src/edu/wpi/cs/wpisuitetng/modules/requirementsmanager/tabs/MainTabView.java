@@ -28,7 +28,7 @@ import javax.swing.JTabbedPane;
 
 public class MainTabView extends JTabbedPane {
 
-	/** boolean indicating whether hte first tab has been added */
+	/** boolean indicating whether the first tab has been added */
 	private boolean firstTab;
 	
 	/** The tab controller for this tab view */

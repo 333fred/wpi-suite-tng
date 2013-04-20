@@ -33,8 +33,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SavePermi
 
 @SuppressWarnings("serial")
 public class PermissionsPanel extends Tab {
-	
-	/**List of locally stored permissions*/
+
+	/** List of locally stored permissions */
 	private List<PermissionModel> localPermissions;
 
 	/** A list to display */
@@ -56,29 +56,27 @@ public class PermissionsPanel extends Tab {
 	private JButton saveButton;
 
 	public PermissionsPanel() {
+		PermissionModel model = PermissionModel.getInstance();
 		SpringLayout layout = new SpringLayout();
 		SpringLayout radioLayout = new SpringLayout();
 		saveButton = new JButton("Save Changes");
-		
+
 		JPanel radioPanel = new JPanel();
 
 		radioPanel.setLayout(radioLayout);
-		
-		/**Initialize the list of local permissions*/
+		setLayout(layout);
+		/** Initialize the list of local permissions */
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		System.out.println(localPermissions.size());
 		users = new String[localPermissions.size()];
-		
+
 		for (int i = 0; i < users.length; i++) {
 			users[i] = localPermissions.get(i).getUser().getName();
 		}
 
-		// radioPanel.setLayout(radioLayout);
-
-		setLayout(layout);
-
 		// construct the list of users
 		userList = new JList(users);
+		userList.setSelectedIndex(0);
 
 		/** Construct the admin button */
 		adminButton = new JRadioButton("Admin", false);
@@ -92,14 +90,20 @@ public class PermissionsPanel extends Tab {
 		JScrollPane userScroll = new JScrollPane();
 		userScroll.setBorder(null);
 		userScroll.getViewport().add(userList);
-		userScroll.setSize(200, 300);
 
 		// Create a group for all the buttons
 		ButtonGroup group = new ButtonGroup();
 		group.add(adminButton);
 		group.add(updateButton);
 		group.add(noPermissionButton);
-		// setSelectedItems(selectedUser.getPermissionLevel());
+		if (!userList.isSelectionEmpty()) {
+			String name = (String) userList.getSelectedValue();
+			for (PermissionModel mod : localPermissions) {
+				if (name.equals(mod.getUser().getName())) {
+					setSelectedButtons(mod.getPermission());
+				}
+			}
+		}
 
 		// set constraints for the overall panel
 		layout.putConstraint(SpringLayout.WEST, userScroll, 0,
@@ -133,11 +137,19 @@ public class PermissionsPanel extends Tab {
 		radioLayout.putConstraint(SpringLayout.NORTH, saveButton, 10,
 				SpringLayout.SOUTH, noPermissionButton);
 		radioLayout.putConstraint(SpringLayout.WEST, radioPanel, 0,
-					SpringLayout.WEST, saveButton);
+				SpringLayout.WEST, saveButton);
+		radioLayout.putConstraint(SpringLayout.EAST, saveButton,
+				(int) saveButton.getPreferredSize().getWidth(),
+				SpringLayout.WEST, radioPanel);
+		
+		radioLayout.putConstraint(SpringLayout.SOUTH, saveButton,
+				(int) saveButton.getPreferredSize().getHeight(),
+				SpringLayout.NORTH, saveButton);
 
 		// assign an action to the save button
-		if(!userList.isSelectionEmpty())
-			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userList.getSelectedIndex())));
+		if (!userList.isSelectionEmpty())
+			saveButton.setAction(new SavePermissionsAction(this,
+					localPermissions.get(userList.getSelectedIndex())));
 
 		// add the buttons to the panel
 		radioPanel.add(adminButton);
@@ -178,13 +190,13 @@ public class PermissionsPanel extends Tab {
 		}
 
 	}
-	
-	public UserPermissionLevels getPermission(){
-		if(adminButton.isSelected())
+
+	public UserPermissionLevels getPermission() {
+		if (adminButton.isSelected())
 			return UserPermissionLevels.ADMIN;
-		else if(updateButton.isSelected())
+		else if (updateButton.isSelected())
 			return UserPermissionLevels.UPDATE;
-		else if(noPermissionButton.isSelected())
+		else if (noPermissionButton.isSelected())
 			return UserPermissionLevels.NONE;
 		return null;
 	}
