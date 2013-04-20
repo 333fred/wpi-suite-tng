@@ -332,7 +332,7 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
 					(((DetailPanel) getTabController().getTabView()
 							.getComponentAt(i))).updateTotalEstimate();
-					System.out.println("TREE PLEASE REFRESH\n\n\n");
+					System.out.println("TREE HERE HERE HERE\n\n\n");
 				}
 			}
 	}

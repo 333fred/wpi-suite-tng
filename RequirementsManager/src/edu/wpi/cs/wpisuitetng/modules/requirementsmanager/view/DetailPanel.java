@@ -1208,11 +1208,19 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 	
 	public void updateTotalEstimate(){
-		lblTotEstDisplay.setText(getTotalEstimate().toString());
+		Integer estimate = 0;
+		
+		List<Requirement> requirements = RequirementDatabase.getInstance().getAll();
+		for(Requirement tempReq : requirements){
+			if(tempReq.getrUID()==requirement.getrUID())
+				estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());
+		}
+		
+		lblTotEstDisplay.setText(estimate.toString());
 	}
 	
 	private Integer getTotalEstimate(){
-		return traverseTreeEstimates(this.requirement, this.requirement.getEstimate());
+			return traverseTreeEstimates(requirement, requirement.getEstimate());
 	}
 	
 	private int traverseTreeEstimates(Requirement current, int totals) {
@@ -1222,10 +1230,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			for (Integer i : current.getSubRequirements()) {
 				try {
 					child = RequirementDatabase.getInstance().get(i);
+					sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
 				} catch (RequirementNotFoundException e) {
 					e.printStackTrace();
-				}
-				sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
+				}				
 			}
 			return totals+sum;
 	}
