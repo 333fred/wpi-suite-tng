@@ -1076,6 +1076,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	@Override
 	public void responseSuccess() {
+		
+			for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
+				if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+					(((DetailPanel) mainTabController.getTabView()
+							.getComponentAt(i))).updateTotalEstimate();
+					(((DetailPanel) mainTabController.getTabView()
+							.getComponentAt(i))).updateSubReqTab();
+					System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
+				}
+			}
 
 		// if the tab should close, close it
 		if (closeTab) {
@@ -1092,6 +1102,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} catch (RequirementNotFoundException e) {
 			System.out.println("Unable to find requirement? Wat?");
 		}
+		
 
 	}
 
@@ -1198,8 +1209,26 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		return true;
 	}
 	
+	public void updateSubReqTab(){
+		subRequirementView.refreshAll();
+	}
+	
+	public void updateTotalEstimate(){
+		Integer estimate = 0;
+		
+		Requirement tempReq = null;
+		try {
+			tempReq = RequirementDatabase.getInstance().get(requirement.getrUID());
+			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());			
+			lblTotEstDisplay.setText(estimate.toString());
+		} catch (RequirementNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	private Integer getTotalEstimate(){
-		return traverseTreeEstimates(this.requirement, this.requirement.getEstimate());
+			return traverseTreeEstimates(requirement, requirement.getEstimate());
 	}
 	
 	private int traverseTreeEstimates(Requirement current, int totals) {
@@ -1209,10 +1238,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			for (Integer i : current.getSubRequirements()) {
 				try {
 					child = RequirementDatabase.getInstance().get(i);
+					sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
 				} catch (RequirementNotFoundException e) {
 					e.printStackTrace();
-				}
-				sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
+				}				
 			}
 			return totals+sum;
 	}

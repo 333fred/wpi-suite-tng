@@ -54,6 +54,8 @@ public class AssignParentController {
 		Integer anReqID = new Integer(anReq.getrUID());
 
 		RequirementsController controller = null;
+		
+		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this.parentView);
 
 		if (model.getpUID().size() > 0) {
 			try {
@@ -65,8 +67,6 @@ public class AssignParentController {
 			anParReq.getSubRequirements().remove(modelID);
 			model.getpUID().remove(0);
 			controller = new RequirementsController();
-			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-					new SaveOtherRequirement());
 			controller.save(anParReq, observer);
 		}
 
@@ -74,11 +74,7 @@ public class AssignParentController {
 		anReq.addSubRequirement(modelID);
 
 		controller = new RequirementsController();
-		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-				this.parentView);
 		controller.save(anReq, observer);
-		observer = new UpdateRequirementRequestObserver(
-				new SaveOtherRequirement());
 		controller.save(model, observer);
 
 		view.refreshTopPanel();

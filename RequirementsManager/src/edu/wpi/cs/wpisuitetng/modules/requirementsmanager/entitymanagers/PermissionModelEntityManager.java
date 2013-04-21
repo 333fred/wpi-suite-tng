@@ -189,7 +189,7 @@ public class PermissionModelEntityManager implements
 				idManager = db.retrieve(IdManager.class, "type", "permissions",
 						s.getProject()).toArray(new IdManager[0])[0];
 			} else {
-				idManager = new IdManager("filter");
+				idManager = new IdManager("permissions");
 			}
 			int id = idManager.getNextId();
 			if (!db.save(idManager, s.getProject())) {

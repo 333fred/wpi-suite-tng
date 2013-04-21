@@ -190,12 +190,12 @@ public class FilterTest {
 	}
 	
 	@Test
-	public void testToString() {
-		assertEquals(f1.toString(), "[Filter ID:" + f1.getId() + " Field:" + f1.getField() + " Operation:"
-				+ f1.getOperation() + " Value: " + f1.getJsonValue() + " Active: " + f1.getActive()
-				+ "]");
+	public void testToStringsetJsonValueandgetJsonValue() {
+		f1.setJsonValue("string");
+		String JsonVal = f1.getJsonValue();
+		assertEquals(f1.toString(), "[Filter ID:" + -1 + " Field:" + FilterField.NAME + " Operation:"
+				+ FilterOperation.EQUAL + " Value: " + JsonVal + " Active: " + true + "]");
 	}
-	
 	@Test
 	public void testActive() {
 		assertTrue(f1.isActive());
@@ -204,6 +204,7 @@ public class FilterTest {
 		assertFalse(f1.getActive());
 	}
 	
+
 	// TODO: Change this test once getStringValue() is finalized
 	/*@Test
 	public void testStringValue() {
@@ -211,4 +212,5 @@ public class FilterTest {
 		assertEquals(f1.getStringValue(), "test");
 	}
 	*/
+
 }

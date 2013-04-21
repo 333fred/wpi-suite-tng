@@ -296,7 +296,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 				idManager = db.retrieve(IdManager.class, "type", "requirement",
 						s.getProject()).toArray(new IdManager[0])[0];
 			} else {
-				idManager = new IdManager("filter");
+				idManager = new IdManager("requirement");
 			}
 			int id = idManager.getNextId();
 			if (!db.save(idManager, s.getProject())) {
