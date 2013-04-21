@@ -20,13 +20,14 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 
 /**
- * Contains the permission for the current user
+ * Contains the permLevel for the current user
  */
 
 public class PermissionModel extends AbstractModel {
 
+	private int id;
 	private User user;
-	private UserPermissionLevel permission;
+	private UserPermissionLevel permLevel;
 	private static PermissionModel model;
 	private static boolean initialized = false;
 
@@ -41,9 +42,9 @@ public class PermissionModel extends AbstractModel {
 	}
 
 	/**
-	 * Gets the singleton permission instance for this object
+	 * Gets the singleton permLevel instance for this object
 	 * 
-	 * @return the singleton permission instance
+	 * @return the singleton permLevel instance
 	 */
 	public static PermissionModel getInstance() {
 		init();
@@ -55,7 +56,8 @@ public class PermissionModel extends AbstractModel {
 	 */
 	public PermissionModel() {
 		this.user = null;
-		this.permission = UserPermissionLevel.NONE;
+		this.permLevel = UserPermissionLevel.NONE;
+		this.setId(-1);
 	}
 
 	/**
@@ -72,7 +74,7 @@ public class PermissionModel extends AbstractModel {
 	 * 
 	 * @param content
 	 *            the json encoded string
-	 * @return the singleton permission model
+	 * @return the singleton permLevel model
 	 */
 	public static PermissionModel fromJSONSingleton(String content) {
 		init();
@@ -80,13 +82,21 @@ public class PermissionModel extends AbstractModel {
 		System.out.println("Json Received " + content);
 		PermissionModel json = parser
 				.fromJson(content, PermissionModel[].class)[0];
-		setUserPermissionLevelStatic(json.getPermission());
+		setUserPermissionLevelStatic(json.getPermLevel());
 		setUserStatic(json.getUser());
 		System.out.println(json.getUser());
 		System.out.println(getInstance().getUser());
 		return getInstance();
 	}
-	
+
+	/**
+	 * Converts a JSON encoded array of Permission model to an instantiated
+	 * object
+	 * 
+	 * @param content
+	 *            the JSON encoded array
+	 * @return the array of permLevel models
+	 */
 	public static PermissionModel[] fromJSONArray(String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, PermissionModel[].class);
@@ -98,7 +108,7 @@ public class PermissionModel extends AbstractModel {
 	 * 
 	 * @param content
 	 *            the JSON encoded server
-	 * @return the non-singleton permission model
+	 * @return the non-singleton permLevel model
 	 */
 	public static PermissionModel fromJSON(String content) {
 		init();
@@ -122,9 +132,9 @@ public class PermissionModel extends AbstractModel {
 	}
 
 	/**
-	 * Gets the user from the static permission model
+	 * Gets the user from the static permLevel model
 	 * 
-	 * @return the permission model
+	 * @return the permLevel model
 	 */
 	public static User getUserStatic() {
 		init();
@@ -132,7 +142,7 @@ public class PermissionModel extends AbstractModel {
 	}
 
 	/**
-	 * Sets the user in the static permission model
+	 * Sets the user in the static permLevel model
 	 * 
 	 * @param u
 	 *            the user to set
@@ -143,43 +153,60 @@ public class PermissionModel extends AbstractModel {
 	}
 
 	/**
-	 * @return the permission
+	 * @return the permLevel encoded as a UserPermissions class
 	 */
-	public UserPermissionLevel getPermission() {
-		return permission;
-	}
-	
 	public UserPermissions getUserPermissions() {
-		return new UserPermissions(permission);
+		return new UserPermissions(permLevel);
 	}
 
 	/**
-	 * Gets the permission level from the static permission model
+	 * Gets the permLevel level from the static permLevel model
 	 * 
-	 * @return the permission level
+	 * @return the permLevel level
 	 */
 	public static UserPermissionLevel getPermissionStatic() {
 		init();
-		return model.getPermission();
+		return model.getPermLevel();
 	}
 
 	/**
-	 * Sets the permission level of the static permission model
+	 * Sets the permLevel level of the static permLevel model
 	 * 
 	 * @param level
 	 *            the level to set
 	 */
 	public static void setUserPermissionLevelStatic(UserPermissionLevel level) {
 		init();
-		model.setPermission(level);
+		model.setPermLevel(level);
 	}
 
 	/**
-	 * @param permission
-	 *            the permission to set
+	 * @return the permLevel
 	 */
-	public void setPermission(UserPermissionLevel permission) {
-		this.permission = permission;
+	public UserPermissionLevel getPermLevel() {
+		return permLevel;
+	}
+
+	/**
+	 * @param permLevel the permLevel to set
+	 */
+	public void setPermLevel(UserPermissionLevel permission) {
+		this.permLevel = permission;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

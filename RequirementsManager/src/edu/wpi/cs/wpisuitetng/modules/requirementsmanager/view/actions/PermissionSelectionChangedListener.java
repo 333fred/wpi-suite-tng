@@ -12,12 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
@@ -42,7 +39,7 @@ public class PermissionSelectionChangedListener implements
 		for (PermissionModel m : panel.getLocalDatabase()) {
 			if (panel.getUserList().getSelectedValue()
 					.equals(m.getUser().getName()))
-				panel.setSelectedButtons(m.getPermission());
+				panel.setSelectedButtons(m.getPermLevel());
 		}
 	}
 }

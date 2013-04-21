@@ -105,7 +105,7 @@ public class PermissionsPanel extends Tab {
 			String name = (String) userList.getSelectedValue();
 			for (PermissionModel mod : localPermissions) {
 				if (name.equals(mod.getUser().getName())) {
-					setSelectedButtons(mod.getPermission());
+					setSelectedButtons(mod.getPermLevel());
 				}
 			}
 		}
