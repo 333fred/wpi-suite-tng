@@ -105,7 +105,7 @@ public class SubRequirementPanel extends JPanel {
 		parentReq = new JLabel();
 
 		if (this.requirement.getpUID().size() == 0) {
-			parentReq.setText("None");
+			parentReq.setText("");
 		} else {
 			try {
 				parentReq.setText(RequirementDatabase.getInstance()
@@ -215,12 +215,14 @@ public class SubRequirementPanel extends JPanel {
 		this.add(addReq);
 
 		// Do other things here
+		if(requirement.getStatus()!=Status.DELETED&&requirement.getStatus()!=Status.COMPLETE){
 		removeChild.setAction(new RemoveChildAction(new RemoveChildController(
 				this, requirement, panel)));
 		addReq.setAction(new AssignChildAction(new AssignChildController(this,
 				requirement, panel)));
 		removeParent.setAction(new RemoveParentAction(
 				new RemoveParentController(this, requirement, panel)));
+		
 		refreshParentLabel();
 
 		radioChild.addActionListener(new ActionListener() {
@@ -241,6 +243,8 @@ public class SubRequirementPanel extends JPanel {
 		});
 
 		refreshValidChildren();
+		
+		}
 	}
 
 	private void initializeBottomListToValidChildren() {
@@ -274,8 +278,10 @@ public class SubRequirementPanel extends JPanel {
 		rootID = checkParentRoot(this.requirement);
 		for (Requirement req : requirements) {
 			if (req.getpUID().size() == 0) {
-				if (req.getrUID() != rootID) {
-					validChildList.addElement(req.getName());
+				if (req.getStatus() != Status.DELETED) {
+					if (req.getrUID() != rootID) {
+						validChildList.addElement(req.getName());
+					}
 				}
 			}
 
@@ -295,9 +301,11 @@ public class SubRequirementPanel extends JPanel {
 			}
 		}
 		for (Requirement req : requirements) {
-			if (!containsCurrentRequirement(requirement, req)) {
-				if (!req.equals(parentReq))
-					validParentList.addElement(req.getName());
+			if (req.getStatus() != Status.DELETED) {
+				if (!containsCurrentRequirement(requirement, req)) {
+					if (!req.equals(parentReq))
+						validParentList.addElement(req.getName());
+				}
 			}
 		}
 	}
