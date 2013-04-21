@@ -25,6 +25,7 @@ import javax.swing.tree.TreeSelectionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
@@ -126,6 +127,8 @@ public class SubRequirementTreeView extends JPanel implements
 					List<Requirement> selectedRequirements = new ArrayList<Requirement>();
 					TreePath path = tree.getPathForRow(selRow);
 					DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+					if(firstNode.getUserObject().equals("Deleted"))
+						return;
 					Requirement tempReq = (Requirement) firstNode.getUserObject();
 					selectedRequirements.add(tempReq);
 					menuToShow = new SubReqRequirementPopupMenu(tabController,selectedRequirements);
@@ -182,6 +185,7 @@ public class SubRequirementTreeView extends JPanel implements
 		Requirement tempReq = null;
 		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
 		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();
+		List<Requirement> deletedReqs = new ArrayList<Requirement>();
 		this.top.removeAllChildren();
 
 		if (requirements != null) {
@@ -189,12 +193,15 @@ public class SubRequirementTreeView extends JPanel implements
 				if (anReq.getpUID().size() == 0){
 					if(anReq.getSubRequirements().size()>0)
 						topReqsWithChildren.add(anReq);
+					else if(anReq.getStatus()!=Status.DELETED)
+						topReqsWOChildren.add(anReq);
 					else
-						topReqsWOChildren.add(anReq);					
+						deletedReqs.add(anReq);
 				}
 			}
 			topReqsWOChildren = Requirement.sortRequirements(topReqsWOChildren);
 			topReqsWithChildren = Requirement.sortRequirements(topReqsWithChildren);
+			deletedReqs = Requirement.sortRequirements(deletedReqs);
 			
 			for (Requirement anReq : topReqsWithChildren) {
 
@@ -235,6 +242,13 @@ public class SubRequirementTreeView extends JPanel implements
 					this.top.add(requirementNode);
 			}
 			
+			DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode("Deleted");
+			for (Requirement anReq : deletedReqs) {
+				requirementNode = new DefaultMutableTreeNode(anReq);
+				deletedNode.add(requirementNode);
+				}
+			this.top.add(deletedNode);
+				
 //			for (Requirement anReq : requirements) {
 //
 //				if (anReq.getpUID().size() == 0) {
