@@ -81,15 +81,14 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
 		TreePath dest = dl.getPath();
-		
-		//Prevent Dragging outside the tree
 		if (dest == null) {
 			return false;
 		}
-		
-		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();
+		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();		
+		if (selRows == null) {
+			return false;
+		}
 		TreePath path = tree.getPathForRow(selRows[0]);
-	
 		
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();

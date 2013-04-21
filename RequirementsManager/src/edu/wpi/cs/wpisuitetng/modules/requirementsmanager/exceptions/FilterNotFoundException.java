@@ -12,7 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
 /**
  * Thrown when a filter is not found in the database
