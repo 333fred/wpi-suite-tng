@@ -40,12 +40,8 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 
 	// TODO: implement server connection once required
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
-	 * .cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -60,8 +56,7 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 			final Iteration[] iterations = Iteration.fromJSONArray(response
 					.getBody());
 
-			IterationDatabase.getInstance().set(
-					Arrays.asList(iterations));
+			IterationDatabase.getInstance().set(Arrays.asList(iterations));
 
 			// notify the controller
 			SwingUtilities.invokeLater(new Runnable() {

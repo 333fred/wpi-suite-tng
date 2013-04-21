@@ -85,6 +85,8 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
+		if(target.getUserObject().equals("Deleted")||firstNode.getUserObject().equals("Deleted"))
+			return false;
 		if (firstNode.getLevel() != 0 && target.getLevel() != 0) {
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement anRequirement = (Requirement) target.getUserObject();
