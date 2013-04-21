@@ -376,7 +376,7 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(topReqNames.getSelectedValues().length==0)
+				if(bottomReqNames.getSelectedValues().length==0)
 					removeChild.setEnabled(false);
 				else
 					removeChild.setEnabled(true);
@@ -396,7 +396,7 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(topReqNames.getSelectedValues().length==0)
+				if(bottomReqNames.getSelectedValues().length==0)
 					removeChild.setEnabled(false);
 				else
 					removeChild.setEnabled(true);
