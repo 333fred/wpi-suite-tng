@@ -1,18 +1,6 @@
 
 
 var data = [
-		{label: 'ADMINS',
-		folder: true,
-		id: 1,
-		children: [{
-						label: 'Creating Users',
-						folder: false,
-						id: 10
-					},  {label: 'Adding Users',
-						folder: false,
-						id: 11
-					}
-		]},
 		
 		{label: 'Getting Started',
 		folder: false,
@@ -92,5 +80,18 @@ var data = [
     	{label: 'Closing Tabs',
     	folder: false,
     	id: 9
-    	}
+    	},
+    	{label: 'Admin',
+		folder: true,
+		id: 1,
+		children: [{
+						label: 'Creating Users',
+						folder: false,
+						id: 10
+					},  {label: 'Adding Users',
+						folder: false,
+						id: 11
+					}
+		]},
+		
     ]
