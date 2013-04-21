@@ -42,6 +42,8 @@ public class EditIterationAction extends AbstractAction {
 		// Iteration[] iterationsToOpen =
 		// iterationTreeView.getSelectedIterations();
 
+		System.out.println("WE ARE IN HERE");
+		
 		List<Iteration> iterationsToOpen = iterationTreeView
 				.getSelectedIterations();
 		int numIterations = iterationsToOpen.size();
@@ -66,7 +68,7 @@ public class EditIterationAction extends AbstractAction {
 				}
 			}
 			if (!IterationIsOpen) {
-				tabController.addEditIterationTab(i);
+				tabController.addIterationTab(i, IterationView.Status.EDIT);
 			}
 		}
 

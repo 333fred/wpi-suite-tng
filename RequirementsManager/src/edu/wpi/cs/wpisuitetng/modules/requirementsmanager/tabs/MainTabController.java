@@ -171,8 +171,8 @@ public class MainTabController {
 				"Statistics");
 	}
 
-	public TabWrap addEditIterationTab(Iteration iteration) {
-
+	public TabWrap addIterationTab(Iteration iteration, IterationView.Status status) {		
+			
 		// check if this iteration is open already
 		boolean iterationOpen = false;
 
@@ -188,7 +188,10 @@ public class MainTabController {
 		}
 
 		// iteration was not open, add it
-		IterationView iterationView = new IterationView(iteration, this);
+		
+		System.out.println("We are adding an iteration tab");
+		
+		IterationView iterationView = new IterationView(iteration, status, this);
 		return addTab(iteration.getName(), new ImageIcon(), iterationView,
 				iteration.getName());
 	}
