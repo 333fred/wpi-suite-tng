@@ -94,8 +94,8 @@ public class FilterTest {
 		f12 = new Filter(u1, FilterField.TYPE, FilterOperation.NOT_EQUAL, Type.USER_STORY);
 		f13 = new Filter(u1, FilterField.PRIORITY, FilterOperation.EQUAL, Priority.HIGH);
 		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
-		f15 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f16 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f15 = new Filter(u1, FilterField.STATUS, FilterOperation.EQUAL, Status.NEW);
+		f16 = new Filter(u1, FilterField.STATUS, FilterOperation.NOT_EQUAL, Status.IN_PROGRESS);
 		f17 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		f18 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		f19 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
@@ -114,7 +114,12 @@ public class FilterTest {
 		r1.setPriority(Priority.HIGH);
 		r2.setPriority(Priority.MEDIUM);
 		r3.setPriority(Priority.LOW);
+		r1.setStatus(Status.NEW);
+		r2.setStatus(Status.BLANK);
+		r3.setStatus(Status.IN_PROGRESS);
 	}
+		
+		
 	
 	@Test
 	public void testShouldFilter() {
@@ -142,6 +147,10 @@ public class FilterTest {
 		assertFalse(f13.shouldFilter(r3));
 		assertTrue(f14.shouldFilter(r3));
 		assertFalse(f14.shouldFilter(r1));
+		assertTrue(f15.shouldFilter(r1));
+		assertFalse(f15.shouldFilter(r3));
+		assertTrue(f16.shouldFilter(r1));
+		assertFalse(f16.shouldFilter(r3));
 		f1.setActive(false);
 		assertFalse(f1.shouldFilter(r1));
 		
