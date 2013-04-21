@@ -39,7 +39,7 @@ public class AssigneeRequirementStatistics extends
 	@Override
 	public void update() {
 		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getAll(); // refresh list of requirements
+				.getFilteredRequirements(); // refresh list of requirements
 		// TODO: replace with a method to get all users, record them as
 		// zero-counts in the map, and then simply work through and increment
 		// for each requirement

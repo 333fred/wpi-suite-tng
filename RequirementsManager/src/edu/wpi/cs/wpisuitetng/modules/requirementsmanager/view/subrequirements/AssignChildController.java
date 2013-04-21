@@ -54,16 +54,13 @@ public class AssignChildController {
 
 		model.addSubRequirement(anReqID);
 		
-		//*************
-		model.setEstimate(model.getEstimate() + anReq.getEstimate());
-		
 		anReq.addPUID(modelID);
 		RequirementsController controller = new RequirementsController();
 		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 				this.ChildView);
 		controller.save(model, observer);
-		observer = new UpdateRequirementRequestObserver(
-				new SaveOtherRequirement());
+		//observer = new UpdateRequirementRequestObserver(
+		//		new SaveOtherRequirement());
 		controller.save(anReq, observer);
 
 		view.refreshTopPanel();

@@ -134,6 +134,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblEstimate;
 	private JLabel lblActual;
 	private JLabel lblRelease;
+	private JLabel lblTotalEstimate;
+	private JLabel lblTotEstDisplay;
 
 	private JScrollPane scroll;
 	private JButton btnCancel;
@@ -584,17 +586,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			textActual.setBackground(Color.WHITE);
 		}
 
-		// prevent requirements with subrequirements from having their estimates
-		// changed
-		if (requirement.getSubRequirements() != null
-				&& requirement.getSubRequirements().size() > 0) {
-			// TODO: ensure that the estimate of any requirement with
-			// subrequirements
-			// is the sum of the estimates of its subrequirements
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-
 	}
 
 	/**
@@ -611,6 +602,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblEstimate = new JLabel("Estimate:");
 		lblActual = new JLabel("Actual:");
 		lblRelease = new JLabel("Release Number:");
+		lblTotalEstimate = new JLabel("Total Estimate:");
+		lblTotEstDisplay = new JLabel("");
 
 		mainPanel.add(lblName);
 		mainPanel.add(lblDescription);
@@ -621,6 +614,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.add(lblEstimate);
 		mainPanel.add(lblActual);
 		mainPanel.add(lblRelease);
+		mainPanel.add(lblTotalEstimate);
+		mainPanel.add(lblTotEstDisplay);
 	}
 
 	/**
@@ -632,6 +627,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimate.setText(Integer.toString(getRequirement().getEstimate()));
 		textActual.setText(Integer.toString(getRequirement().getEffort()));
 		textRelease.setText(getRequirement().getReleaseNum());
+		lblTotEstDisplay.setText(getTotalEstimate().toString());
 
 		try {
 			getComboBoxIteration().setSelectedItem(
@@ -733,9 +729,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textActual, HORIZONTAL_PADDING,
 				SpringLayout.EAST, comboBoxStatus);
-		layout.putConstraint(SpringLayout.WEST, lblRelease, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblRelease, 0,
+				SpringLayout.WEST, lblActual);
 		layout.putConstraint(SpringLayout.WEST, textRelease,
+				0, SpringLayout.WEST, lblActual);
+		layout.putConstraint(SpringLayout.WEST, lblTotalEstimate,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		// layout.putConstraint(SpringLayout.WEST, saveError,
 		// HORIZONTAL_PADDING,
@@ -786,6 +786,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.SOUTH, textEstimate);
 		layout.putConstraint(SpringLayout.NORTH, textRelease, VERTICAL_PADDING
 				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblRelease);
+		layout.putConstraint(SpringLayout.NORTH, lblTotalEstimate, VERTICAL_PADDING,
+				SpringLayout.SOUTH, textEstimate);
+		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay, VERTICAL_PADDING
+				+ VERTICAL_CLOSE, SpringLayout.SOUTH, lblTotalEstimate);
 		// layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
 		// SpringLayout.SOUTH, textRelease);
 		// layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
@@ -1072,6 +1076,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	@Override
 	public void responseSuccess() {
+		
+			for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
+				if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+					(((DetailPanel) mainTabController.getTabView()
+							.getComponentAt(i))).updateTotalEstimate();
+					(((DetailPanel) mainTabController.getTabView()
+							.getComponentAt(i))).updateSubReqTab();
+					System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
+				}
+			}
 
 		// if the tab should close, close it
 		if (closeTab) {
@@ -1088,6 +1102,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} catch (RequirementNotFoundException e) {
 			System.out.println("Unable to find requirement? Wat?");
 		}
+		
 
 	}
 
@@ -1192,5 +1207,42 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 		}
 		return true;
+	}
+	
+	public void updateSubReqTab(){
+		subRequirementView.refreshAll();
+	}
+	
+	public void updateTotalEstimate(){
+		Integer estimate = 0;
+		
+		Requirement tempReq = null;
+		try {
+			tempReq = RequirementDatabase.getInstance().get(requirement.getrUID());
+			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());			
+			lblTotEstDisplay.setText(estimate.toString());
+		} catch (RequirementNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private Integer getTotalEstimate(){
+			return traverseTreeEstimates(requirement, requirement.getEstimate());
+	}
+	
+	private int traverseTreeEstimates(Requirement current, int totals) {
+		Requirement child = null;
+		int sum=0;
+
+			for (Integer i : current.getSubRequirements()) {
+				try {
+					child = RequirementDatabase.getInstance().get(i);
+					sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
+				} catch (RequirementNotFoundException e) {
+					e.printStackTrace();
+				}				
+			}
+			return totals+sum;
 	}
 }

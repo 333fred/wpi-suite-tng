@@ -405,4 +405,22 @@ public class SubRequirementPanel extends JPanel {
 				requirement, panel)));
 	}
 
+	public void refreshAll() {
+		try {
+			Requirement tempReq = RequirementDatabase.getInstance().get(requirement.getrUID());
+			if(tempReq!=null){
+				requirement = tempReq;
+				refreshTopPanel();
+				refreshParentLabel();
+				if (parentSelected)
+					refreshValidParents();
+				else
+					refreshValidChildren();
+			}
+		} catch (RequirementNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 }

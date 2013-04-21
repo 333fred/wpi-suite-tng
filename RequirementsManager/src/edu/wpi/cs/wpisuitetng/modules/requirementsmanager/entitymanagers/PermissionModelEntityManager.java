@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 
 /**
@@ -169,6 +170,35 @@ public class PermissionModelEntityManager implements
 	public int Count() throws WPISuiteException {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	/**
+	 * Gets the next valid id for this class
+	 * 
+	 * @param s
+	 *            the current session
+	 * @return the new id
+	 * @throws WPISuiteException
+	 *             if there was a lookup error
+	 */
+	private int getId(Session s) throws WPISuiteException {
+		try {
+			IdManager idManager;
+			if (db.retrieve(IdManager.class, "type", "permissions",
+					s.getProject()).size() != 0) {
+				idManager = db.retrieve(IdManager.class, "type", "permissions",
+						s.getProject()).toArray(new IdManager[0])[0];
+			} else {
+				idManager = new IdManager("permissions");
+			}
+			int id = idManager.getNextId();
+			if (!db.save(idManager, s.getProject())) {
+				throw new WPISuiteException();
+			}
+			return id;
+		} catch (WPISuiteException ex) {
+			throw ex;
+		}
 	}
 
 	/**
