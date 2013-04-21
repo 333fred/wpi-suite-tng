@@ -71,9 +71,11 @@ public class FilterTest {
 	}
 	
 	@Test
-	public void testToString() {
+	public void testToStringsetJsonValueandgetJsonValue() {
+		f1.setJsonValue("string");
+		String JsonVal = f1.getJsonValue();
 		assertEquals(f1.toString(), "[Filter ID:" + -1 + " Field:" + FilterField.NAME + " Operation:"
-				+ FilterOperation.EQUAL + " Value: " + new String() + " Active: " + true + "]");
+				+ FilterOperation.EQUAL + " Value: " + JsonVal + " Active: " + true + "]");
 	}
 	
 	@Test
@@ -82,5 +84,12 @@ public class FilterTest {
 		f1.setActive(false);
 		assertFalse(f1.isActive());
 		assertFalse(f1.getActive());
+	}
+	
+	@Test
+	public void morestuff(){
+		Requirement requirement = new Requirement();
+		
+		f1.shouldFilter(requirement);
 	}
 }
