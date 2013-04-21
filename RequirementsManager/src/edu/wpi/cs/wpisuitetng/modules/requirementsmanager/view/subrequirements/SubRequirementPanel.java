@@ -277,7 +277,7 @@ public class SubRequirementPanel extends JPanel {
 		rootID = checkParentRoot(this.requirement);
 		for (Requirement req : requirements) {
 			if (req.getpUID().size() == 0) {
-				if (req.getStatus() != Status.DELETED) {
+				if (req.getStatus() != Status.DELETED && req.getStatus() != Status.COMPLETE) {
 					if (req.getrUID() != rootID) {
 						validChildList.addElement(req.getName());
 					}
@@ -300,7 +300,7 @@ public class SubRequirementPanel extends JPanel {
 			}
 		}
 		for (Requirement req : requirements) {
-			if (req.getStatus() != Status.DELETED) {
+			if (req.getStatus() != Status.DELETED && req.getStatus()!=Status.COMPLETE) {
 				if (!containsCurrentRequirement(requirement, req)) {
 					if (!req.equals(parentReq))
 						validParentList.addElement(req.getName());
