@@ -68,7 +68,7 @@ public class EditIterationAction extends AbstractAction {
 				}
 			}
 			if (!IterationIsOpen) {
-				tabController.addIterationTab(i, IterationView.Status.EDIT);
+				tabController.addIterationTab(i);
 			}
 		}
 

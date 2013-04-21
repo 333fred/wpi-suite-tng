@@ -16,8 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest.DetailATestView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskView;
 
 /**
  * Class for displaying the note view and the log view on the right side of the
@@ -75,6 +77,14 @@ public class DetailEventPane extends JTabbedPane {
 	public void disableUserButtons() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((DetailNoteView) notesListPane).disableUserButtons();
+		((SubRequirementPanel) subreqListPane).disableUserButtons();
+		((DetailATestView) atestListPane).disableUserButtons();
+		((DetailTaskView) taskListPane).disableUserButtons();
+	}
+	
+	//Notes, Tests, Tasks
+	public void disableUsersAndSubReqs() {
+		((DetailATestView) atestListPane).disableUserButtons();
 		((SubRequirementPanel) subreqListPane).disableUserButtons();
 	}
 }
