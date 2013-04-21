@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.*;
@@ -31,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOper
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 
 public class FilterTest {
 	
@@ -56,6 +58,24 @@ public class FilterTest {
 	Filter f20;
 	Filter f21;
 	Filter f22;
+	Filter f23;
+	Filter f24;
+	Filter f25;
+	Filter f26;
+	Filter f27;
+	Filter f28;
+	Filter f29;
+	Filter f30;
+	Filter f31;
+	Filter f32;
+	Filter f33;
+	Filter f34;
+	Filter f35;
+	Filter f36;
+	Filter f37;
+	Filter f38;
+	Filter f39;
+	Filter f40;
 	User u1;
 	User u2;
 	Requirement r1;
@@ -69,9 +89,20 @@ public class FilterTest {
 	Type type;
 	Status status;
 	Priority priority;
-	private int iteration = 0;
-	private int estimate  = 1;
-	private int effort  = 2;
+	Iteration iteration1;
+	String Iname;
+	Date startDate;
+	Date endDate;
+	int iterationID1 = 0;
+	int iterationID2 = 1;
+	int iterationID3 = 2;
+	private int estimate1  = 1;
+	private int estimate2  = 2;
+	private int estimate3  = 3;
+	private int effort1  = 1;
+	private int effort2 = 2;
+	private int effort3 = 3;
+	private List<Integer> reqs = new ArrayList<Integer>();
 	private List<String> assignees = new ArrayList<String>();
 	private List<Integer> subRequirements = new ArrayList<Integer>();
 	private List<Integer> pUID = new ArrayList<Integer>();
@@ -79,7 +110,7 @@ public class FilterTest {
 	private List<Task> tasks = new ArrayList<Task>();
 	
 	@Before
-	public void setUp() {
+	public void setUp() {		
 		f1 = new Filter(u1);
 		f2 = new Filter(u2);
 		f3 = new Filter(u1, FilterField.NAME, FilterOperation.EQUAL, "name");
@@ -95,21 +126,41 @@ public class FilterTest {
 		f13 = new Filter(u1, FilterField.PRIORITY, FilterOperation.EQUAL, Priority.HIGH);
 		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
 		f15 = new Filter(u1, FilterField.STATUS, FilterOperation.EQUAL, Status.NEW);
-		f16 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, iteration);
-		f17 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 0);
-		f18 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.EQUAL, 1);
-		f19 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f20 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f21 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f22 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		//f16 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, 0);
+		//f17 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BEFORE, startDate);
+		//f18 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BETWEEN, 2);
+		//f20 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_AFTER, endDate);
+		//f21= new Filter(u1, FilterField.ITERATION, FilterOperation.NOT_EQUAL, 0);
+		f23 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f24 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 0);
+		f25 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.EQUAL, 1);
+		f26 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.NOT_EQUAL, 1);
+		f27 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN, 2);
+		f28 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN_EQUAL, 2);
+		f29 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN_EQUAL, 2);
+		
+		f30 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN, 1);
+		f31 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN_EQUAL, 2);
+		f32 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN, 2);
+		f33 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN_EQUAL, 2);
+		f34 = new Filter(u1, FilterField.EFFORT, FilterOperation.EQUAL, 1);
+		f35 = new Filter(u1, FilterField.EFFORT, FilterOperation.NOT_EQUAL, 1);
+		
+		f36 = new Filter(u1, FilterField.NAME, FilterOperation.GREATER_THAN, 1);
+		f37 = new Filter(u1, FilterField.TYPE, FilterOperation.CONTAINS, 1);
+		f38 = new Filter(u1, FilterField.ITERATION, FilterOperation.CONTAINS, 1);
+		f39 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.CONTAINS, 1);
+		iteration1 = new Iteration(Iname, startDate, endDate, iterationID1,
+				reqs);
+		IterationDatabase.getInstance().add(iteration1);
 		r1 = new Requirement(name, description, releaseNum, type.USER_STORY,
-				subRequirements, notes, iteration, estimate, effort, assignees,
+				subRequirements, notes, iterationID1, estimate1, effort1, assignees,
 				pUID, tasks);
 		r2 = new Requirement(name2, description, "v2", type.THEME,
-				subRequirements, notes, iteration, estimate, effort, assignees,
+				subRequirements, notes, iterationID2, estimate2, effort2, assignees,
 				pUID, tasks);
 		r3 = new Requirement("example", description, "3.0", type.EPIC,
-				subRequirements, notes, iteration, estimate, effort, assignees,
+				subRequirements, notes, iterationID3, estimate3, effort3, assignees,
 				pUID, tasks);
 		r1.setPriority(Priority.HIGH);
 		r2.setPriority(Priority.MEDIUM);
@@ -144,12 +195,54 @@ public class FilterTest {
 		assertTrue(f14.shouldFilter(r3));
 		assertFalse(f14.shouldFilter(r1));		
 		assertTrue(f15.shouldFilter(r1));
-		//assertEquals(f16.shouldFilter(r1), 0);   Maddie is working on these
-		//assertEquals(f17.shouldFilter(r1), 1);
-		assertTrue(f18.shouldFilter(r1));
+		
+//		assertTrue(f16.shouldFilter(r1));		
+//		assertTrue(f17.shouldFilter(r1));
+//		assertTrue(f18.shouldFilter(r1));
+//		assertTrue(f19.shouldFilter(r1));
+		
+		assertTrue(f24.shouldFilter(r1));
+		assertTrue(f25.shouldFilter(r1));
+		assertTrue(f26.shouldFilter(r2));
+		assertTrue(f27.shouldFilter(r1));
+		assertTrue(f28.shouldFilter(r1));
+		assertTrue(f28.shouldFilter(r2));
+		assertTrue(f29.shouldFilter(r2));
+		assertTrue(f29.shouldFilter(r3));
+		
+		assertTrue(f30.shouldFilter(r2));
+		assertTrue(f31.shouldFilter(r2));
+		assertTrue(f31.shouldFilter(r3));
+		assertTrue(f32.shouldFilter(r1));
+		assertTrue(f33.shouldFilter(r1));
+		assertTrue(f33.shouldFilter(r2));
+		assertTrue(f34.shouldFilter(r1));
+		assertTrue(f35.shouldFilter(r2));
 		f1.setActive(false);
 		assertFalse(f1.shouldFilter(r1));
 		
+	}
+	
+	@Test
+	public void breakCheckString(){
+		//fieldOperation = something other than equal, not equal, contains, starts with
+		assertFalse(f36.shouldFilter(r1));
+	}
+	
+	@Test
+	public void breakCheckEnum(){
+		//fieldOperation = something other than equal or not equal
+		assertFalse(f37.shouldFilter(r1));
+	}
+	
+	@Test public void breakCheckIteration(){
+		//use contains for field operation
+		assertFalse(f38.shouldFilter(r1));
+	}
+	
+	@Test
+	public void breakCheckInteger(){
+		assertFalse(f39.shouldFilter(r1));		
 	}
 	
 	@Test
