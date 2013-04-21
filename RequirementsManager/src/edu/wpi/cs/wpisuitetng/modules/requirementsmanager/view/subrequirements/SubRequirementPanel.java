@@ -27,6 +27,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -82,15 +84,16 @@ public class SubRequirementPanel extends JPanel {
 
 		validChildList = new DefaultListModel();
 		// initializeList();
-		addValidChildren();
+		//addValidChildren();
 		bottomReqNames = new JList();
 
 		childrenList = new DefaultListModel();
-		initializeTopList(requirement);
-		topReqNames = new JList(childrenList);
+		//initializeTopList(requirement);
+		//topReqNames = new JList(childrenList);
+		topReqNames = new JList();
 
 		validParentList = new DefaultListModel();
-		addValidParents();
+		//addValidParents();
 
 		JPanel subreqPane = new JPanel();
 		subreqPane.setLayout(new BorderLayout());
@@ -218,8 +221,6 @@ public class SubRequirementPanel extends JPanel {
 				requirement, panel)));
 		removeParent.setAction(new RemoveParentAction(
 				new RemoveParentController(this, requirement, panel)));
-		
-		refreshParentLabel();
 
 		radioChild.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -238,7 +239,7 @@ public class SubRequirementPanel extends JPanel {
 			}
 		});
 
-		refreshValidChildren();
+		refreshAll();
 		
 		}
 	}
@@ -348,6 +349,19 @@ public class SubRequirementPanel extends JPanel {
 		initializeTopList(requirement);
 		topReqNames = new JList(childrenList);
 		topScrollPane.setViewportView(topReqNames);
+		if(childrenList.size()==0)
+			removeChild.setEnabled(false);
+		else
+			removeChild.setEnabled(true);
+		topReqNames.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(topReqNames.getSelectedValues().length==0)
+					removeChild.setEnabled(false);
+				else
+					removeChild.setEnabled(true);
+			} 
+		});
 	}
 
 	public void refreshValidChildren() {
@@ -355,6 +369,19 @@ public class SubRequirementPanel extends JPanel {
 		addValidChildren();
 		bottomReqNames = new JList(validChildList);
 		bottomScrollPane.setViewportView(bottomReqNames);
+		if(validChildList.size()==0)
+			addReq.setEnabled(false);
+		else
+			addReq.setEnabled(true);
+		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(topReqNames.getSelectedValues().length==0)
+					removeChild.setEnabled(false);
+				else
+					removeChild.setEnabled(true);
+			} 
+		});
 	}
 
 	public void refreshValidParents() {
@@ -362,14 +389,29 @@ public class SubRequirementPanel extends JPanel {
 		addValidParents();
 		bottomReqNames = new JList(validParentList);
 		bottomScrollPane.setViewportView(bottomReqNames);
+		if(validParentList.size()==0)
+			addReq.setEnabled(false);
+		else
+			addReq.setEnabled(true);
+		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(topReqNames.getSelectedValues().length==0)
+					removeChild.setEnabled(false);
+				else
+					removeChild.setEnabled(true);
+			} 
+		});
 	}
 
 	public void refreshParentLabel() {
 
 		Requirement tempReq = null;
-		if (requirement.getpUID().size() == 0)
+		if (requirement.getpUID().size() == 0) {
 			parentReq.setText("");
-		else {
+			removeParent.setEnabled(false);
+		} else {
+			removeParent.setEnabled(true);
 			for (int ID : requirement.getpUID()) {
 				try {
 					tempReq = RequirementDatabase.getInstance().get(ID);
