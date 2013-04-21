@@ -28,6 +28,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
+	/** The singleton instance of this class */
+	private static ToolbarView _instance;
+	
 	private JButton createHelp;
 
 	/** Button for creating a requirement */
@@ -39,13 +42,35 @@ public class ToolbarView extends DefaultToolbarView {
 	/** Button for creating statistics panel */
 	private JButton createStatistics;
 
+	/** Returns the instance of this toolbar view, and sets the tab controller
+	 * 
+	 * @param tabController
+	 * @return
+	 */
+	
+	public static ToolbarView getInstance(MainTabController tabController) {
+		if (_instance == null) {
+			_instance = new ToolbarView(tabController);
+		}
+		return _instance;
+	}
+	
+	/** Returns the instance of the toolbar view, if tab controller was not set, returns null
+	 * 
+	 * @return
+	 */
+	
+	public static ToolbarView getInstance() {		
+		return _instance;
+	}
+	
 	/**
 	 * Create a ToolbarView.
 	 * 
 	 * @param tabController
 	 *            The MainTabController this view should open tabs with
 	 */
-	public ToolbarView(MainTabController tabController) {
+	private ToolbarView(MainTabController tabController) {
 
 		// Note: User Manual button is being deprecated in favor of it's own
 		// toolbar
