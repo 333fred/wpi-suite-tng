@@ -29,7 +29,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
-import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 
 /**
  * Class for creating a right click menu in IterationTreeView, when a user right

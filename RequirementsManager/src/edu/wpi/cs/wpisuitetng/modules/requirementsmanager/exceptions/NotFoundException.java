@@ -12,8 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
-import edu.wpi.cs.wpisuitetng.modules.Model;
-
 /**
  * Abstract superclass for all the not found exceptions
  */

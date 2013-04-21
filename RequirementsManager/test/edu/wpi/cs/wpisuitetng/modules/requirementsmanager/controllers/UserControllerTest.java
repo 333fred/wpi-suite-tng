@@ -17,10 +17,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockRequest;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
-import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class UserControllerTest extends AbstractControllerTest<StringListModel> {
 

@@ -12,8 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
-import java.util.Arrays;
-
 import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;

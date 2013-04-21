@@ -12,15 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
 public class PermissionSelectionChangedListener implements MouseListener {
@@ -53,14 +50,12 @@ public class PermissionSelectionChangedListener implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//unsued
-		return;
+		// unused
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 
 	@Override
@@ -68,7 +63,9 @@ public class PermissionSelectionChangedListener implements MouseListener {
 		JTable target = (JTable) e.getSource();
 		int row = target.getSelectedRow();
 		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
-			if (panel.getUserList().getValueAt(row, 0)
+			if (panel
+					.getUserList()
+					.getValueAt(row, 0)
 					.equals(panel.getLocalDatabase().get(i).getUser().getName()))
 				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
 						.getPermLevel());
@@ -77,13 +74,11 @@ public class PermissionSelectionChangedListener implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 }

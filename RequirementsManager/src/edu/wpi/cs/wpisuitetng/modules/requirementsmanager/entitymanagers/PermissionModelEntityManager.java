@@ -22,7 +22,6 @@ import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 
 /**

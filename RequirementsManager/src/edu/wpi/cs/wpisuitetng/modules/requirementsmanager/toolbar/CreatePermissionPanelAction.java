@@ -18,7 +18,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 
 public class CreatePermissionPanelAction extends AbstractAction {
 
