@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    Steven Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
@@ -64,7 +64,7 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		if (!support.isDrop()) {
 			return false;
-		}
+		}		
 		support.setShowDropLocation(true);
 		if (!support.isDataFlavorSupported(nodesFlavor)) {
 			return false;
@@ -81,9 +81,16 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
 		TreePath dest = dl.getPath();
-		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
-				.getLastPathComponent();
+		
+		//Prevent Dragging outside the tree
+		if (dest == null) {
+			return false;
+		}
+		
+		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();
 		TreePath path = tree.getPathForRow(selRows[0]);
+	
+		
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
 		if (firstNode.getChildCount() > 0

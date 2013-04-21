@@ -18,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Permissi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -39,6 +40,8 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 				.getBody());
 		System.out.println("Permissions Array Size: " + permissions.length);
 
+		ToolbarView.getInstance().refreshPermissions();
+		
 		PermissionsDatabase.getInstance().set(
 				Arrays.asList(permissions));
 		}

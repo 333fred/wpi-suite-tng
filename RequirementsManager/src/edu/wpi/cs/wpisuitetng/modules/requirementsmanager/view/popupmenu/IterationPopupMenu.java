@@ -20,7 +20,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
@@ -61,7 +63,12 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 
 		// we only have on selected iteration
 		if (selectedIterations.size() == 1) {
-			menuEditIteration = new JMenuItem("Edit Iteration");
+			if (PermissionModel.getInstance().getUserPermissions()
+					.canEditIteration()) {
+				menuEditIteration = new JMenuItem("Edit Iteration");
+			} else {
+				menuEditIteration = new JMenuItem("View Iteration");
+			}
 			menuFilterIteration = new JMenuItem("Filter By Iteration");
 			// menuCreateRequirement = new JMenuItem("New Requirement");
 
@@ -74,7 +81,13 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			// add(menuCreateRequirement);
 
 		} else {
-			menuEditIteration = new JMenuItem("Edit Iterations");
+
+			if (PermissionModel.getInstance().getUserPermissions()
+					.canEditIteration()) {
+				menuEditIteration = new JMenuItem("Edit Iterations");
+			} else {
+				menuEditIteration = new JMenuItem("View Iterations");
+			}
 			menuFilterIteration = new JMenuItem("Filter By Iteration");
 			menuEditIteration.addActionListener(this);
 			menuFilterIteration.addActionListener(this);
@@ -93,21 +106,16 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(menuEditIteration)) {
 			// edit iteration was selected
-			// TODO: Add check that the iteration tab isn't already opened
+			// TODO: Add check that the iteration tab isn't already opened			
 			for (Iteration i : selectedIterations) {
-				tabController.addEditIterationTab(i);
+				tabController.addIterationTab(i);
 			}
+			
 		} else if (e.getSource().equals(menuFilterIteration)) {
 			Iteration iter = selectedIterations.get(0);
 			RequirementTableView tableView = RequirementTableView.getInstance();
 			tableView.IterationFilter(iter.getName());
 			tableView.displayFilterInformation("Filtering by " + iter.getName());
-		} else {
-			// create requiremetn was selected
-			// TODO: make this actualy create a requirement under the given
-			// iteration
-			tabController.addCreateRequirementTab(selectedIterations.get(0));
-		}
+		} 
 	}
-
 }

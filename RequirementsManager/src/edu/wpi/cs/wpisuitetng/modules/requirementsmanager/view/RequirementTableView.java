@@ -65,6 +65,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.UnclosableTabComponent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.PermissionToolbarPane;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEditingAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
@@ -91,6 +92,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
 
+
 	private RequirementsController requirementsController;
 	private IterationController iterationController;
 
@@ -101,7 +103,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * The View that will display on the toolbar and contain buttons relating to
 	 * this view
 	 */
-	private ToolbarGroupView toolbarView;
+	private ToolbarGroupView toolbarGroupView;
 
 	/** The View and Refresh buttons used on the toolbar */
 	private JButton butView;
@@ -447,9 +449,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		// content.add(butView);
 		content.add(butRefresh);
 
-		toolbarView = new ToolbarGroupView("Refresh", content);
+		toolbarGroupView = new ToolbarGroupView("Refresh", content);
 		// set the width of the group so it is not too long
-		toolbarView.setPreferredWidth((int) (butView.getPreferredSize()
+		toolbarGroupView.setPreferredWidth((int) (butView.getPreferredSize()
 				.getWidth() + 40));
 
 	}
@@ -478,7 +480,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							.substring(0, 1)
 							.concat(requirements[i].getType().toString()
 									.substring(1).toLowerCase())
-							.replaceAll(" s", " S").replaceAll(" f", " F"));
+							.replaceAll(" s", " S").replaceAll(" f", "-F"));
 			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? ""
 					: requirements[i]
 							.getPriority()
@@ -559,7 +561,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public ToolbarGroupView getGroup() {
-		return toolbarView;
+		return toolbarGroupView;
 	}
 
 	/**
@@ -570,8 +572,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
-		System.out.println("We are refreshing the table view");
-
+		System.out.println("We are refreshing the table view");		
 		if (isEditable) {
 			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
@@ -598,6 +599,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		tabController.refreshIterationTree();
 		PermissionToolbarPane.getInstance().refreshPermission();
+		ToolbarView.getInstance().refreshPermissions();
 		tabController.refreshFilterView();
 		tabController.refreshSubReqView();
 		changeButtonStatus();
