@@ -105,12 +105,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private SpringLayout layout;
 
 	//OnChange Action Listeners
-	private final TextUpdateListener textTitleListener;
-	private final TextUpdateListener textDescriptionListener;
+	private TextUpdateListener textTitleListener;
+	private TextUpdateListener textDescriptionListener;
 	private ItemStateListener comboBoxTypeListener;
 	private ItemStateListener comboBoxStatusListener;
 	private ItemStateListener comboBoxPriorityListener;
-	private final ItemStateListener comboBoxIterationListener;
+	private ItemStateListener comboBoxIterationListener;
 	private final TextUpdateListener textEstimateListener;
 	private final TextUpdateListener textActualListener;
 	private final TextUpdateListener textReleaseListener;
@@ -134,8 +134,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblTotEstDisplay;
 
 	//Sub-panels
-	private JScrollPane scroll;
+	private JScrollPane scrollDescription;
 	private JPanel mainPanel;
+	private DetailEventPane eventPane;
+	private JPanel staticPanel;
+	private JPanel leftPanel;
 
 	//Boolean to indicate whether the tab should be closed upon saving 
 	private boolean closeTab;
@@ -167,153 +170,197 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		layout = new SpringLayout();
 		mainPanel.setLayout(layout);
 
-		addJLabels();
-
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		createComponents();
+		createComponentListeners();
+		addComponents();
+		
+		
+		
+		
+		
+		
+		
+		
 		createTextNameArea();
-
-		
-		
-		mainPanel.add(textName);
-
+		createTextNameValidArea();
+		createTextDescriptionArea();
+		createTextDescriptionValidArea();
+		createSaveErrorArea();
+		createComboBoxes();
+		createTextEstimateArea();
+		createTextActualArea();
+		createTextReleaseArea();
+		createButtons();
 		
 		addTextNameAreaListener();
-		
-		
-		createTextNameValidArea();
-		
-
-		mainPanel.add(textNameValid);
-
-		// Add TextUpdateListeners
-		textTitleListener = new TextUpdateListener(this, textName, textNameValid);
-		textName.addKeyListener(textTitleListener);
-
-		
-		createTextDescriptionArea();
-		
-		
-		
-		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scroll.setSize(400, 450);
-		scroll.setBorder(null);
-		mainPanel.add(scroll);
-
 		addTextDescriptionAreaListener();
+		addComboBoxListeners();
+		addTextEstimateListener();
+		addTextActualListener();
+		addTextReleaseListener();
 		
-		
-		createTextDescriptionValidArea();
-
+		addJLabels();	
+		mainPanel.add(textName);
+		mainPanel.add(textNameValid);
+		mainPanel.add(scrollDescription);	
 		mainPanel.add(textDescriptionValid);
-		
-
-		// Add TextUpdateListeners
-		textDescriptionListener = new TextUpdateListener(this, textDescription,textDescriptionValid);
-		textDescription.addKeyListener(textDescriptionListener);
-
-		createSaveErrorArea();
-
-
-		createComboBoxes();
-		
-
-		
 		mainPanel.add(comboBoxStatus);
 		mainPanel.add(comboBoxType);
 		mainPanel.add(comboBoxPriority);		
+		mainPanel.add(comboBoxIteration);	
+		mainPanel.add(textEstimate);	
+		mainPanel.add(textActual);
+		mainPanel.add(textRelease);
 		
 		
 		
-		addComboBoxListeners();
-
-
 
 		
-		mainPanel.add(comboBoxIteration);
-
-		comboBoxIterationListener = new ItemStateListener(this,getComboBoxIteration());
-		getComboBoxIteration().addItemListener(comboBoxIterationListener);
-
-		textEstimate = new JTextField(9);
-		textEstimate.setBorder((new JTextField()).getBorder());
-		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
-		textEstimate.setName("Estimate");
-		textEstimate.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate
-				.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); // box
-																				// allows
-																				// 12
-																				// numbers
-																				// (around
-																				// max
-																				// int)
-		mainPanel.add(textEstimate);
-
-		textEstimate.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_TAB) {
-					if (event.getModifiers() == 0) {
-						textEstimate.transferFocus();
-					} else {
-						textEstimate.transferFocusBackward();
-					}
-					event.consume();
-				}
-			}
-		});
-
 		// Add TextUpdateListeners,
 		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
 		textEstimate.addKeyListener(textEstimateListener);
 
-		textActual = new JTextField(9);
-		textActual.setBorder((new JTextField()).getBorder());
-		textActual.setEnabled(false); // disabled until complete
-		textActual.setBackground(defaultColor);
-		textActual.setMaximumSize(textActual.getPreferredSize());
-		textActual.setName("Actual");
-		textActual.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textActualDoc = (AbstractDocument) textActual
-				.getDocument();
-		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); // box
-																				// allows
-																				// 12
-																				// numbers
-																				// (around
-																				// max
-																				// int)
-		mainPanel.add(textActual);
-
-		textActual.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_TAB) {
-					if (event.getModifiers() == 0) {
-						textActual.transferFocus();
-					} else {
-						textActual.transferFocusBackward();
-					}
-					event.consume();
-				}
-				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					// don't allow enter, consume the event, do nothing
-					event.consume();
-				}
-			}
-		});
-
 		// Add TextUpdateListeners,
 		textActualListener = new TextUpdateListener(this, textActual, null);
 		textActual.addKeyListener(textActualListener);
+		
+		
+		textReleaseListener = new TextUpdateListener(this, textRelease, null);
+		textRelease.addKeyListener(textReleaseListener);
+		
+		
 
-		textRelease = new JTextField(9);
-		textRelease.setBorder((new JTextField()).getBorder());
-		textRelease.setName("Release");
-		textRelease.setMaximumSize(textRelease.getPreferredSize());
-		textRelease.setDisabledTextColor(Color.GRAY);
-		mainPanel.add(textRelease);
+		addComponentConstraints();
+		loadFields();
 
+		createEventSidePanel();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		scrollPane.getViewport().add(mainPanel);
+		scrollPane.setBorder(null);
+
+		// set the preferred size of mainPanel
+		int preferredHeight = 515;
+		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
+
+		// set the preferred size
+		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+
+		SpringLayout staticPanelLayout = new SpringLayout();
+		staticPanel = new JPanel(staticPanelLayout);
+		leftPanel = new JPanel(new BorderLayout());
+
+		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,SpringLayout.NORTH, staticPanel);
+		staticPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,SpringLayout.WEST, staticPanel);
+
+		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,SpringLayout.NORTH, staticPanel);
+		staticPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,SpringLayout.EAST, btnSave);
+		staticPanelLayout.putConstraint(SpringLayout.WEST, saveError, 10,SpringLayout.EAST, btnCancel);
+		staticPanelLayout.putConstraint(SpringLayout.NORTH, saveError, 5,SpringLayout.SOUTH, staticPanel);
+
+		staticPanel.setPreferredSize(new Dimension(saveError.getPreferredSize().width+ saveError.getPreferredSize().width, btnSave.getPreferredSize().height + 10));
+
+		staticPanel.add(btnSave);
+		staticPanel.add(btnCancel);
+		staticPanel.add(saveError);
+
+		leftPanel.add(scrollPane, BorderLayout.CENTER);
+		leftPanel.add(staticPanel, BorderLayout.SOUTH);
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftPanel, eventPane);
+		add(splitPane);
+
+		splitPane.setResizeWeight(0.5);
+
+		this.determineAvailableStatusOptions();
+		this.disableSaveButton();
+		this.disableAllFieldsIfDeleted();
+
+		// prevent in-progress or complete requirements from having their
+		// estimates changed
+		if (requirement.getStatus() == Status.IN_PROGRESS || requirement.getStatus() == Status.COMPLETE) {
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
+
+		// actual field is editable when requirement is complete
+		if (requirement.getStatus() == Status.COMPLETE) {
+			textActual.setEnabled(true);
+			textActual.setBackground(Color.WHITE);
+		}
+
+	}
+
+	private void createComponentListeners() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void createComponents() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void addComponents() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void createEventSidePanel() {
+		logView = new DetailLogView(this.getRequirement(), this);
+		noteView = new DetailNoteView(this.getRequirement(), this);
+		userView = new AssigneePanel(requirement, this);
+		taskView = new DetailTaskView(this.getRequirement(), this);
+		aTestView = new DetailATestView(this.getRequirement(), this);
+		subRequirementView = new SubRequirementPanel(this.getRequirement(),this);
+		eventPane = new DetailEventPane(noteView, logView, userView, taskView, aTestView, subRequirementView);
+		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
+			eventPane.disableUserButtons();
+		}
+	}
+
+	private void createButtons() {
+		btnSave = new JButton("Save Requirement");
+	
+		btnCancel = new JButton("Cancel");
+		btnCancel.setAction(new CancelAction(this));
+	}
+
+	private void addTextReleaseListener() {
 		textRelease.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -330,111 +377,74 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					event.consume();
 				}
 			}
+		});	
+	}
+
+	private void createTextReleaseArea() {
+		textRelease = new JTextField(9);
+		textRelease.setBorder((new JTextField()).getBorder());
+		textRelease.setName("Release");
+		textRelease.setMaximumSize(textRelease.getPreferredSize());
+		textRelease.setDisabledTextColor(Color.GRAY);
+	}
+
+	private void addTextActualListener() {
+		textActual.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textActual.transferFocus();
+					} else {
+						textActual.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// don't allow enter, consume the event, do nothing
+					event.consume();
+				}
+			}
+		});		
+	}
+
+	private void createTextActualArea() {
+		textActual = new JTextField(9);
+		textActual.setBorder((new JTextField()).getBorder());
+		textActual.setEnabled(false); // disabled until complete
+		textActual.setBackground(defaultColor);
+		textActual.setMaximumSize(textActual.getPreferredSize());
+		textActual.setName("Actual");
+		textActual.setDisabledTextColor(Color.GRAY);
+		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
+		//box allows 12 numbers (around max int)
+		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); 
+	}
+
+	private void addTextEstimateListener() {
+		textEstimate.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textEstimate.transferFocus();
+					} else {
+						textEstimate.transferFocusBackward();
+					}
+					event.consume();
+				}
+			}
 		});
+	}
 
-		textReleaseListener = new TextUpdateListener(this, textRelease, null);
-		textRelease.addKeyListener(textReleaseListener);
-
-		btnSave = new JButton("Save Requirement");
-		// mainPanel.add(btnSave);
-
-		btnCancel = new JButton("Cancel");
-		btnCancel.setAction(new CancelAction(this));
-		// mainPanel.add(btnCancel);
-
-
-
-		addComponentConstraints();
-		loadFields();
-
-		logView = new DetailLogView(this.getRequirement(), this);
-		noteView = new DetailNoteView(this.getRequirement(), this);
-		userView = new AssigneePanel(requirement, this);
-		taskView = new DetailTaskView(this.getRequirement(), this);
-		aTestView = new DetailATestView(this.getRequirement(), this);
-		subRequirementView = new SubRequirementPanel(this.getRequirement(),this);
-
-		// create the new eventPane
-		DetailEventPane eventPane = new DetailEventPane(noteView, logView,
-				userView, taskView, aTestView, subRequirementView);
-
-		if (requirement.getStatus() == Status.DELETED
-				|| requirement.getStatus() == Status.COMPLETE) {
-			eventPane.disableUserButtons();
-		}
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		scrollPane.getViewport().add(mainPanel);
-		scrollPane.setBorder(null);
-
-		// set the preffered size of mainPanel
-		// int preferredHeight = (int) (btnCancel.getLocation().getY() +
-		// btnCancel.getPreferredSize().getHeight() + VERTICAL_PADDING * 2);
-		int preferredHeight = 515;
-		int preferredWidth = (int) (textDescription.getPreferredSize()
-				.getWidth() + HORIZONTAL_PADDING * 2);
-
-		// set the preferred size
-		mainPanel.setPreferredSize(new Dimension(preferredWidth,
-				preferredHeight));
-
-		SpringLayout staticPanelLayout = new SpringLayout();
-		JPanel staticPanel = new JPanel(staticPanelLayout);
-		JPanel leftPanel = new JPanel(new BorderLayout());
-
-		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,
-				SpringLayout.NORTH, staticPanel);
-		staticPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
-				SpringLayout.WEST, staticPanel);
-
-		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,
-				SpringLayout.NORTH, staticPanel);
-		staticPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,
-				SpringLayout.EAST, btnSave);
-		staticPanelLayout.putConstraint(SpringLayout.WEST, saveError, 10,
-				SpringLayout.EAST, btnCancel);
-		staticPanelLayout.putConstraint(SpringLayout.NORTH, saveError, 5,
-				SpringLayout.SOUTH, staticPanel);
-
-		staticPanel.setPreferredSize(new Dimension(
-				saveError.getPreferredSize().width
-						+ saveError.getPreferredSize().width, btnSave
-						.getPreferredSize().height + 10));
-
-		// staticPanel.setPreferredSize(new Dimension(100,150));
-
-		staticPanel.add(btnSave);
-		staticPanel.add(btnCancel);
-		staticPanel.add(saveError);
-
-		leftPanel.add(scrollPane, BorderLayout.CENTER);
-		leftPanel.add(staticPanel, BorderLayout.SOUTH);
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				leftPanel, eventPane);
-		add(splitPane);
-
-		splitPane.setResizeWeight(0.5);
-
-		this.determineAvailableStatusOptions();
-		this.disableSaveButton();
-		this.disableAllFieldsIfDeleted();
-
-		// prevent in-progress or complete requirements from having their
-		// estimates changed
-		if (requirement.getStatus() == Status.IN_PROGRESS
-				|| requirement.getStatus() == Status.COMPLETE) {
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-
-		// actual field is editable when requirement is complete
-		if (requirement.getStatus() == Status.COMPLETE) {
-			textActual.setEnabled(true);
-			textActual.setBackground(Color.WHITE);
-		}
-
+	private void createTextEstimateArea() {
+		textEstimate = new JTextField(9);
+		textEstimate.setBorder((new JTextField()).getBorder());
+		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
+		textEstimate.setName("Estimate");
+		textEstimate.setDisabledTextColor(Color.GRAY);
+		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
+		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); 
 	}
 
 	private void addComboBoxListeners() {
@@ -444,6 +454,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		comboBoxType.addItemListener(comboBoxTypeListener);
 		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
 		comboBoxPriority.addItemListener(comboBoxPriorityListener);
+		comboBoxIterationListener = new ItemStateListener(this,getComboBoxIteration());
+		getComboBoxIteration().addItemListener(comboBoxIterationListener);
 	}
 
 	private void createComboBoxes() {
@@ -539,6 +551,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				}
 			}
 		});		
+		textDescriptionListener = new TextUpdateListener(this, textDescription,textDescriptionValid);
+		textDescription.addKeyListener(textDescriptionListener);
 	}
 
 	private void createTextDescriptionArea() {
@@ -548,7 +562,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textDescription.setBorder((new JTextField()).getBorder());
 		textDescription.setName("Description");
 		textDescription.setDisabledTextColor(Color.GRAY);
-		scroll = new JScrollPane(textDescription);	
+		scrollDescription = new JScrollPane(textDescription);
+		scrollDescription.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollDescription.setSize(400, 450);
+		scrollDescription.setBorder(null);
 	}
 
 	private void createTextNameValidArea() {
@@ -578,6 +595,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				}
 			}
 		});	
+		textTitleListener = new TextUpdateListener(this, textName, textNameValid);
+		textName.addKeyListener(textTitleListener);
 	}
 
 	private void createTextNameArea() {
@@ -720,7 +739,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	 * @param lblEstimate
 	 * @param lblActual
 	 * @param lblRelease
-	 * @param scroll
+	 * @param scrollDescription
 	 * @param btnCancel
 	 */
 	private void addComponentConstraints() {
@@ -742,7 +761,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		// layout.putConstraint(SpringLayout.WEST, btnCancel,
 		// HORIZONTAL_PADDING,
 		// SpringLayout.EAST, btnSave);
-		layout.putConstraint(SpringLayout.WEST, scroll, HORIZONTAL_PADDING,
+		layout.putConstraint(SpringLayout.WEST, scrollDescription, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
@@ -788,10 +807,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				textName);
 		layout.putConstraint(SpringLayout.NORTH, lblDescription,
 				VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
-		layout.putConstraint(SpringLayout.NORTH, scroll, VERTICAL_PADDING
+		layout.putConstraint(SpringLayout.NORTH, scrollDescription, VERTICAL_PADDING
 				+ CLOSE, SpringLayout.SOUTH, lblDescription);
 		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, scroll);
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, scrollDescription);
 		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
 				SpringLayout.SOUTH, textDescriptionValid);
 		layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING
