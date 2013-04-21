@@ -36,7 +36,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -66,7 +68,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 @SuppressWarnings("serial")
 public class DetailPanel extends Tab implements ISaveNotifier {
 
-	//Text fields
+	public enum Mode {
+		CREATE, EDIT, UPDATE, VIEW;
+	}
+	
+	/** VIEW: Only View
+	 *  UPDATE: Change ActualEffort, Notes, Tests, Tasks
+	 *  ADMIN: Everything
+	 */
+
+	// Text fields
 	private JTextArea textName;
 	private JTextArea textDescription;
 	private JTextArea textNameValid;
@@ -75,14 +86,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JTextField textEstimate;
 	private JTextField textActual;
 	private JTextField textRelease;
-	
+
 	// combo boxes
 	private JComboBox comboBoxType;
 	private JComboBox comboBoxStatus;
 	private JComboBox comboBoxPriority;
 	private JComboBox comboBoxIteration;
-	
-	//Event Views
+
+	// Event Views
 	private DetailNoteView noteView;
 	private DetailLogView logView;
 	private AssigneePanel userView;
@@ -92,20 +103,20 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	// requirement that is displayed
 	private Requirement requirement;
-	
+
 	// controller for all the tabs
 	private MainTabController mainTabController;
-	
-	//Buttons
+
+	// Buttons
 	private JButton btnSave;
 	private JButton btnCancel;
-	
-	//layouts
+
+	// layouts
 	private GridLayout mainLayout;
 	private SpringLayout layout;
 	private SpringLayout buttonPanelLayout;
 
-	//OnChange Action Listeners
+	// OnChange Action Listeners
 	private TextUpdateListener textTitleListener;
 	private TextUpdateListener textDescriptionListener;
 	private ItemStateListener comboBoxTypeListener;
@@ -116,12 +127,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private TextUpdateListener textActualListener;
 	private TextUpdateListener textReleaseListener;
 
-	//swing spacing constants
+	// swing spacing constants
 	private static final int VERTICAL_PADDING = 10;
 	private static final int HORIZONTAL_PADDING = 20;
 	private static final int CLOSE = -5;
 
-	//Text labels
+	// Text labels
 	private JLabel lblName;
 	private JLabel lblDescription;
 	private JLabel lblType;
@@ -134,7 +145,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblTotalEstimate;
 	private JLabel lblTotEstDisplay;
 
-	//Sub-panels
+	// Sub-panels
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
 	private JPanel leftPanel;
@@ -143,30 +154,22 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private DetailEventPane eventPane;
 	private JSplitPane splitPane;
 
-	//Boolean to indicate whether the tab should be closed upon saving 
+	// Boolean to indicate whether the tab should be closed upon saving
 	private boolean closeTab;
 
 	private Color defaultColor;
 
-	/**
-	 * Creates a DetailPanel that creates a requirement assigned to the given
-	 * iteration
-	 * 
-	 * @param iteration
-	 *            The iteration to assign this to
-	 * @param mainTabController
-	 *            Tabcontroller
-	 */
-	public DetailPanel(Iteration iteration, MainTabController mainTabController) {
-		this(new Requirement(), mainTabController);
-	}
+	/** The edit mode of this requirement view */
+	private Mode mode;
 
-	public DetailPanel(Requirement requirement,MainTabController mainTabController) {
+	public DetailPanel(Requirement requirement, Mode mode,
+			MainTabController mainTabController) {
 		this.requirement = requirement;
+		this.mode = mode;
 		this.mainTabController = mainTabController;
 
 		createPanels();
-		createComponents();	
+		createComponents();
 		setPanelSizes();
 		createComponentListeners();
 		addComponents();
@@ -174,22 +177,112 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		loadFields();
 		createEventSidePanel();
 		addSplitPane();
+		setDisabledTextColor();
+		disableFieldsMode();
 	}
-	
-	
-	
 
 	private void addSplitPane() {
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftPanel, eventPane);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel,
+				eventPane);
 		add(splitPane);
 		splitPane.setResizeWeight(0.5);
 	}
 
+	/**
+	 * Disables the editing feilds based upon the edit mode
+	 * 
+	 */
+
+	private void disableFieldsMode() {
+		System.out.println("Wat? : " + mode);
+		if (mode == Mode.VIEW) {
+			textName.setEnabled(false);
+			textName.setBackground(defaultColor);
+
+			textDescription.setEnabled(false);
+			textDescription.setBackground(defaultColor);
+
+			getComboBoxIteration().setEnabled(false);
+			getComboBoxIteration().setBackground(defaultColor);
+			getComboBoxIteration().setForeground(Color.BLACK);
+
+			getComboBoxStatus().setEnabled(false);
+			getComboBoxStatus().setBackground(defaultColor);
+			getComboBoxStatus().setForeground(Color.BLACK);
+
+			textRelease.setEnabled(false);
+			textRelease.setBackground(defaultColor);
+
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+
+			textActual.setEnabled(false);
+			textActual.setBackground(defaultColor);
+
+			comboBoxType.setEnabled(false);
+			comboBoxType.setBackground(defaultColor);
+			comboBoxType.setForeground(Color.BLACK);
+
+			comboBoxPriority.setEnabled(false);
+			comboBoxPriority.setBackground(defaultColor);
+			comboBoxPriority.setForeground(Color.BLACK);
+
+		} else if (mode == Mode.UPDATE) {
+			textName.setEnabled(false);
+			textName.setBackground(defaultColor);
+
+			textDescription.setEnabled(false);
+			textDescription.setBackground(defaultColor);
+
+			getComboBoxIteration().setEnabled(false);
+			getComboBoxIteration().setBackground(defaultColor);
+			getComboBoxIteration().setForeground(Color.BLACK);
+
+			getComboBoxStatus().setEnabled(false);
+			getComboBoxStatus().setBackground(defaultColor);
+			getComboBoxStatus().setForeground(Color.BLACK);
+
+			textRelease.setEnabled(false);
+			textRelease.setBackground(defaultColor);
+
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+			
+			comboBoxType.setEnabled(false);
+			comboBoxType.setBackground(defaultColor);
+			comboBoxType.setForeground(Color.BLACK);
+
+			comboBoxPriority.setEnabled(false);
+			comboBoxPriority.setBackground(defaultColor);
+			comboBoxPriority.setForeground(Color.BLACK);
+			
+			
+
+		} else if (mode == Mode.EDIT) {
+			// edit, everything can be edited
+		}
+	}
+
+	/** Sets the disabled text color of all the fields */
+
+	private void setDisabledTextColor() {
+		textName.setDisabledTextColor(Color.BLACK);
+		textDescription.setDisabledTextColor(Color.BLACK);
+		textRelease.setDisabledTextColor(Color.BLACK);
+		textEstimate.setDisabledTextColor(Color.BLACK);
+		textActual.setDisabledTextColor(Color.BLACK);
+	}
+
 	private void setPanelSizes() {
-		buttonPanel.setPreferredSize(new Dimension(textSaveError.getPreferredSize().width+ textSaveError.getPreferredSize().width, btnSave.getPreferredSize().height + 10));
+		buttonPanel.setPreferredSize(new Dimension(textSaveError
+				.getPreferredSize().width
+				+ textSaveError.getPreferredSize().width, btnSave
+				.getPreferredSize().height + 10));
 		int preferredHeight = 515;
-		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
-		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));		
+		int preferredWidth = (int) (textDescription.getPreferredSize()
+				.getWidth() + HORIZONTAL_PADDING * 2);
+		mainPanel.setPreferredSize(new Dimension(preferredWidth,
+				preferredHeight));
 	}
 
 	private void createPanels() {
@@ -198,24 +291,32 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		this.mainLayout = new GridLayout(0, 1);
 		this.setLayout(mainLayout);
 		layout = new SpringLayout();
-		mainPanel.setLayout(layout);	
+		mainPanel.setLayout(layout);
 		mainScrollPane = new JScrollPane();
 		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		mainScrollPane.getViewport().add(mainPanel);
 		mainScrollPane.setBorder(null);
-		
+
 		buttonPanelLayout = new SpringLayout();
 		buttonPanel = new JPanel(buttonPanelLayout);
 		leftPanel = new JPanel(new BorderLayout());
 	}
 
 	private void createComponentListeners() {
-		addTextNameAreaListener();
-		addTextDescriptionAreaListener();
-		addComboBoxListeners();
-		addTextEstimateListener();
-		addTextActualListener();
-		addTextReleaseListener();
+		if (mode == Mode.VIEW) {
+		
+		}
+		else if (mode == Mode.UPDATE) {
+			addTextActualListener();	
+		}
+		else {
+			addTextNameAreaListener();
+			addTextDescriptionAreaListener();
+			addComboBoxListeners();
+			addTextEstimateListener();
+			addTextActualListener();
+			addTextReleaseListener();
+		}
 	}
 
 	private void createComponents() {
@@ -233,23 +334,23 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	private void addComponents() {
-		addJLabels();	
+		addJLabels();
 		mainPanel.add(textName);
 		mainPanel.add(textNameValid);
-		mainPanel.add(scrollDescription);	
+		mainPanel.add(scrollDescription);
 		mainPanel.add(textDescriptionValid);
 		mainPanel.add(comboBoxStatus);
 		mainPanel.add(comboBoxType);
-		mainPanel.add(comboBoxPriority);		
-		mainPanel.add(comboBoxIteration);	
-		mainPanel.add(textEstimate);	
+		mainPanel.add(comboBoxPriority);
+		mainPanel.add(comboBoxIteration);
+		mainPanel.add(textEstimate);
 		mainPanel.add(textActual);
 		mainPanel.add(textRelease);
-		
+
 		buttonPanel.add(btnSave);
 		buttonPanel.add(btnCancel);
 		buttonPanel.add(textSaveError);
-		
+
 		leftPanel.add(mainScrollPane, BorderLayout.CENTER);
 		leftPanel.add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -260,18 +361,37 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		userView = new AssigneePanel(requirement, this);
 		taskView = new DetailTaskView(this.getRequirement(), this);
 		aTestView = new DetailATestView(this.getRequirement(), this);
-		subRequirementView = new SubRequirementPanel(this.getRequirement(),this);
-		eventPane = new DetailEventPane(noteView, logView, userView, taskView, aTestView, subRequirementView);
-		if (requirement.getStatus() == Status.DELETED || requirement.getStatus() == Status.COMPLETE) {
+		subRequirementView = new SubRequirementPanel(this.getRequirement(),
+				this);
+		eventPane = new DetailEventPane(noteView, logView, userView, taskView,
+				aTestView, subRequirementView);
+		if (requirement.getStatus() == Status.DELETED
+				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW) {
 			eventPane.disableUserButtons();
 		}
+		if (mode == Mode.UPDATE) {
+			eventPane.disableUsersAndSubReqs();
+		}
+		
 	}
 
 	private void createButtons() {
 		btnSave = new JButton("Save Requirement");
 		btnCancel = new JButton("Cancel");
-		btnCancel.setAction(new CancelAction(this));		
-		this.disableSaveButton();
+		btnCancel.setAction(new CancelAction(this));
+
+		switch (mode) {
+		case CREATE:
+			btnSave.setText("Create Requirement");
+			break;
+		case EDIT:
+		case UPDATE:
+		case VIEW:
+			btnSave.setText("Save Requirement");
+			break;
+		}
+
+		disableSaveButton();
 	}
 
 	private void addTextReleaseListener() {
@@ -291,7 +411,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					event.consume();
 				}
 			}
-		});	
+		});
 		textReleaseListener = new TextUpdateListener(this, textRelease, null);
 		textRelease.addKeyListener(textReleaseListener);
 	}
@@ -321,7 +441,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					event.consume();
 				}
 			}
-		});	
+		});
 		textActualListener = new TextUpdateListener(this, textActual, null);
 		textActual.addKeyListener(textActualListener);
 	}
@@ -334,10 +454,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActual.setMaximumSize(textActual.getPreferredSize());
 		textActual.setName("Actual");
 		textActual.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
-		//box allows 12 numbers (around max int)
-		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); 
-		
+		AbstractDocument textActualDoc = (AbstractDocument) textActual
+				.getDocument();
+		// box allows 12 numbers (around max int)
+		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
+
 		// actual field is editable when requirement is complete
 		if (requirement.getStatus() == Status.COMPLETE) {
 			textActual.setEnabled(true);
@@ -369,12 +490,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		textEstimate.setName("Estimate");
 		textEstimate.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); 
-		
+		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate
+				.getDocument();
+		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
+
 		// prevent in-progress or complete requirements from having their
 		// estimates changed
-		if (requirement.getStatus() == Status.IN_PROGRESS || requirement.getStatus() == Status.COMPLETE) {
+		if (requirement.getStatus() == Status.IN_PROGRESS
+				|| requirement.getStatus() == Status.COMPLETE) {
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
 		}
@@ -382,40 +505,57 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	private void addComboBoxListeners() {
 		comboBoxStatusListener = new ItemStateListener(this, comboBoxStatus);
-		comboBoxStatus.addItemListener(comboBoxStatusListener);		
+		comboBoxStatus.addItemListener(comboBoxStatusListener);
 		comboBoxTypeListener = new ItemStateListener(this, comboBoxType);
 		comboBoxType.addItemListener(comboBoxTypeListener);
 		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
 		comboBoxPriority.addItemListener(comboBoxPriorityListener);
-		comboBoxIterationListener = new ItemStateListener(this,getComboBoxIteration());
+		comboBoxIterationListener = new ItemStateListener(this,
+				getComboBoxIteration());
 		getComboBoxIteration().addItemListener(comboBoxIterationListener);
 	}
 
 	private void createComboBoxes() {
-		//Type ComboBox
-		String[] availableTypes = { "", "Epic", "Theme", "User Story","Non-functional", "Scenario" };
-		comboBoxType = new JComboBox(availableTypes);
-		comboBoxType.setPrototypeDisplayValue("Non-functional");
+		// Type ComboBox
+
+		comboBoxType = new JComboBox();
 		comboBoxType.setBackground(Color.WHITE);
 
-		//Status ComboBox
-		String[] availableStatuses = { "New", "In Progress", "Open","Complete", "Deleted" };
-		comboBoxStatus = new JComboBox(availableStatuses);
-		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
+		for (Type t : Type.values()) {
+			comboBoxType.addItem(t.toString());
+		}
+		comboBoxType.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
+		comboBoxType.setSelectedIndex(0);
+
+		comboBoxStatus = new JComboBox();
 		comboBoxStatus.setBackground(Color.WHITE);
-		
-		//Priority ComboBox
-		String[] availablePriorities = { "", "High", "Medium", "Low" };
-		comboBoxPriority = new JComboBox(availablePriorities);
-		comboBoxPriority.setPrototypeDisplayValue("Non-functional");
+
+		for (Status t : Status.values()) {
+			comboBoxStatus.addItem(t.toString());
+		}
+		comboBoxStatus.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
+		comboBoxStatus.setSelectedIndex(0);
+
+		this.determineAvailableStatusOptions();
+
+		comboBoxPriority = new JComboBox();
+
 		comboBoxPriority.setBackground(Color.WHITE);
-		
+
+		for (Priority t : Priority.values()) {
+			comboBoxPriority.addItem(t.toString());
+		}
+		comboBoxPriority.setSelectedIndex(0);
+		comboBoxPriority.setPrototypeDisplayValue(Type.NON_FUNCTIONAL
+				.toString());
+
 		createIterationComboBox();
 	}
 
 	private void createIterationComboBox() {
-		List<Iteration> iterationList = IterationDatabase.getInstance().getAll();
-		iterationList = Iteration.sortIterations(iterationList);		
+		List<Iteration> iterationList = IterationDatabase.getInstance()
+				.getAll();
+		iterationList = Iteration.sortIterations(iterationList);
 		int availableIterationNum = 0;
 		int currentAvailableIterationIndex = 0;
 		Date currentDate = new Date();
@@ -483,8 +623,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					event.consume();
 				}
 			}
-		});		
-		textDescriptionListener = new TextUpdateListener(this, textDescription,textDescriptionValid);
+		});
+		textDescriptionListener = new TextUpdateListener(this, textDescription,
+				textDescriptionValid);
 		textDescription.addKeyListener(textDescriptionListener);
 	}
 
@@ -496,7 +637,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textDescription.setName("Description");
 		textDescription.setDisabledTextColor(Color.GRAY);
 		scrollDescription = new JScrollPane(textDescription);
-		scrollDescription.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollDescription
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollDescription.setSize(400, 450);
 		scrollDescription.setBorder(null);
 	}
@@ -527,8 +669,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					event.consume(); // consume the event and do nothing
 				}
 			}
-		});	
-		textTitleListener = new TextUpdateListener(this, textName, textNameValid);
+		});
+		textTitleListener = new TextUpdateListener(this, textName,
+				textNameValid);
 		textName.addKeyListener(textTitleListener);
 	}
 
@@ -537,7 +680,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textName.setLineWrap(true);
 		textName.setWrapStyleWord(true);
 		textName.setMaximumSize(new Dimension(40, 2));
-		AbstractDocument textNameDoc = (AbstractDocument) textName.getDocument();
+		AbstractDocument textNameDoc = (AbstractDocument) textName
+				.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
 		textName.setBorder((new JTextField()).getBorder());
 		textName.setName("Name");
@@ -557,7 +701,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblTotalEstimate = new JLabel("Total Estimate:");
 		lblTotEstDisplay = new JLabel("");
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -579,91 +723,48 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	 * @param requirement
 	 */
 	private void loadFields() {
-		textName.setText(getRequirement().getName());
-		textDescription.setText(getRequirement().getDescription());
-		textEstimate.setText(Integer.toString(getRequirement().getEstimate()));
-		textActual.setText(Integer.toString(getRequirement().getEffort()));
-		textRelease.setText(getRequirement().getReleaseNum());
-		lblTotEstDisplay.setText(getTotalEstimate().toString());
 
-		try {
-			getComboBoxIteration().setSelectedItem(
-					IterationDatabase.getInstance()
-							.get(getRequirement().getIteration())
-							.getName());
-		} catch (IterationNotFoundException e) {
-			System.out.println("Exception Caught: Iteration Not Found.");
-		}
-		switch (getRequirement().getType()) {
-		case BLANK:
-			comboBoxType.setSelectedIndex(0);
-			break;
-		case EPIC:
-			comboBoxType.setSelectedIndex(1);
-			break;
-		case THEME:
-			comboBoxType.setSelectedIndex(2);
-			break;
-		case USER_STORY:
-			comboBoxType.setSelectedIndex(3);
-			break;
-		case NON_FUNCTIONAL:
-			comboBoxType.setSelectedIndex(4);
-			break;
-		case SCENARIO:
-			comboBoxType.setSelectedIndex(5);
-		}
-		
-		switch (getRequirement().getPriority()) {
-		case BLANK:
-			comboBoxPriority.setSelectedIndex(0);
-			break;
-		case HIGH:
-			comboBoxPriority.setSelectedIndex(1);
-			break;
-		case MEDIUM:
-			comboBoxPriority.setSelectedIndex(2);
-			break;
-		case LOW:
-			comboBoxPriority.setSelectedIndex(3);
-			break;
-		}
-		
-		// check if name field is blank
-		if (requirement.getName().trim().equals("")) {
-			btnSave.setAction(new SaveRequirementAction(requirement, this));
+		if (mode == Mode.CREATE) {
+			setSaveButtonAction();
+
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
 			getComboBoxIteration().setEnabled(false);
 			getComboBoxIteration().setBackground(defaultColor);
+			comboBoxStatus.setSelectedItem(Status.NEW.toString());
+
 		} else {
-			btnSave.setAction(new EditRequirementAction(requirement, this));
-			switch (requirement.getStatus()) {
-			case NEW:
-				comboBoxStatus.setSelectedIndex(0);
-				break;
-			case IN_PROGRESS:
-				comboBoxStatus.setSelectedIndex(1);
-				break;
-			case OPEN:
-				comboBoxStatus.setSelectedIndex(2);
-				break;
-			case COMPLETE:
-				comboBoxStatus.setSelectedIndex(3);
-				break;
-			case DELETED:
-				comboBoxStatus.setSelectedIndex(4);
-				break;
-			case BLANK:
-				comboBoxStatus.setSelectedIndex(5);
-				break;
+
+			textName.setText(getRequirement().getName());
+			textDescription.setText(getRequirement().getDescription());
+			textEstimate.setText(Integer.toString(getRequirement()
+					.getEstimate()));
+			textActual.setText(Integer.toString(getRequirement().getEffort()));
+			textRelease.setText(getRequirement().getReleaseNum());
+			lblTotEstDisplay.setText(getTotalEstimate().toString());
+
+			try {
+				getComboBoxIteration()
+						.setSelectedItem(
+								IterationDatabase.getInstance()
+										.get(getRequirement().getIteration())
+										.getName());
+			} catch (IterationNotFoundException e) {
+				System.out.println("Exception Caught: Iteration Not Found.");
 			}
+
+			comboBoxType.setSelectedItem(getRequirement().getType().toString());
+
+			comboBoxPriority.setSelectedItem(getRequirement().getPriority()
+					.toString());
+
+			setSaveButtonAction();
+			comboBoxStatus.setSelectedItem(requirement.getStatus().toString());
+
+			this.disableAllFieldsIfDeleted();
 		}
-		
-		this.disableAllFieldsIfDeleted();
-		this.determineAvailableStatusOptions();
 	}
 
 	/**
@@ -693,8 +794,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textNameValid,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, scrollDescription, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, scrollDescription,
+				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, comboBoxType,
@@ -719,13 +820,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.EAST, comboBoxStatus);
 		layout.putConstraint(SpringLayout.WEST, lblRelease, 0,
 				SpringLayout.WEST, lblActual);
-		layout.putConstraint(SpringLayout.WEST, textRelease,
-				0, SpringLayout.WEST, lblActual);
+		layout.putConstraint(SpringLayout.WEST, textRelease, 0,
+				SpringLayout.WEST, lblActual);
 		layout.putConstraint(SpringLayout.WEST, lblTotalEstimate,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-
 
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
@@ -733,12 +833,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.NORTH, textName, VERTICAL_PADDING
 				+ CLOSE, SpringLayout.SOUTH, lblName);
 		layout.putConstraint(SpringLayout.NORTH, textNameValid,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH,
-				textName);
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, textName);
 		layout.putConstraint(SpringLayout.NORTH, lblDescription,
 				VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
-		layout.putConstraint(SpringLayout.NORTH, scrollDescription, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblDescription);
+		layout.putConstraint(SpringLayout.NORTH, scrollDescription,
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblDescription);
 		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
 				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, scrollDescription);
 		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
@@ -748,18 +847,15 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING,
 				SpringLayout.SOUTH, comboBoxType);
 		layout.putConstraint(SpringLayout.NORTH, comboBoxStatus,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH,
-				lblStatus);
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblStatus);
 		layout.putConstraint(SpringLayout.NORTH, lblPriority, VERTICAL_PADDING,
 				SpringLayout.SOUTH, textDescriptionValid);
 		layout.putConstraint(SpringLayout.NORTH, comboBoxPriority,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH,
-				lblPriority);
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblPriority);
 		layout.putConstraint(SpringLayout.NORTH, lblIteration,
 				VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxPriority);
 		layout.putConstraint(SpringLayout.NORTH, getComboBoxIteration(),
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH,
-				lblIteration);
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblIteration);
 		layout.putConstraint(SpringLayout.NORTH, lblEstimate, VERTICAL_PADDING,
 				SpringLayout.SOUTH, comboBoxStatus);
 		layout.putConstraint(SpringLayout.NORTH, lblActual, VERTICAL_PADDING,
@@ -772,18 +868,24 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.SOUTH, textEstimate);
 		layout.putConstraint(SpringLayout.NORTH, textRelease, VERTICAL_PADDING
 				+ CLOSE, SpringLayout.SOUTH, lblRelease);
-		layout.putConstraint(SpringLayout.NORTH, lblTotalEstimate, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textEstimate);
-		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblTotalEstimate);
+		layout.putConstraint(SpringLayout.NORTH, lblTotalEstimate,
+				VERTICAL_PADDING, SpringLayout.SOUTH, textEstimate);
+		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay,
+				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblTotalEstimate);
 
-		//Align Buttons
-		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,SpringLayout.NORTH, buttonPanel);
-		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,SpringLayout.WEST, buttonPanel);
-		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,SpringLayout.NORTH, buttonPanel);
-		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,SpringLayout.EAST, btnSave);
-		buttonPanelLayout.putConstraint(SpringLayout.WEST, textSaveError, 10,SpringLayout.EAST, btnCancel);
-		buttonPanelLayout.putConstraint(SpringLayout.NORTH, textSaveError, 5,SpringLayout.SOUTH, buttonPanel);	
+		// Align Buttons
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,
+				SpringLayout.NORTH, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
+				SpringLayout.WEST, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,
+				SpringLayout.NORTH, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,
+				SpringLayout.EAST, btnSave);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, textSaveError, 10,
+				SpringLayout.EAST, btnCancel);
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, textSaveError, 5,
+				SpringLayout.SOUTH, buttonPanel);
 	}
 
 	/**
@@ -796,56 +898,54 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		// String[] availableStatuses = { "New", "In Progress",
 		// "Open","Complete", "Deleted"};
 
-		Boolean hasComplete = true;
+		boolean hasComplete = true;
 		for (Task aTask : requirement.getTasks()) {
 			if (!aTask.isCompleted())
 				hasComplete = false;
 		}
 		if (!hasComplete)
-			this.comboBoxStatus.removeItem("Complete");
+			this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 
 		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
-			this.comboBoxStatus.removeItem("New");
-			if (!getRequirement().subReqsCompleted()){
-				this.comboBoxStatus.removeItem("Complete");
+			this.comboBoxStatus.removeItem(Status.NEW.toString());
+			if (!getRequirement().subReqsCompleted()) {
+				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
-			
+
 			if (getRequirement().getSubRequirements().size() > 0
-					|| !getRequirement().tasksCompleted()){
-				this.comboBoxStatus.removeItem("Deleted");	
+					|| !getRequirement().tasksCompleted()) {
+				this.comboBoxStatus.removeItem(Status.DELETED.toString());
 			}
-			// this.comboBoxStatus.removeItem("Open");
-			// this.comboBoxStatus.removeItem("Deleted");
 		} else if (getRequirement().getSubRequirements().size() > 0
 				|| !getRequirement().tasksCompleted()) {
-			this.comboBoxStatus.removeItem("Deleted");
+			this.comboBoxStatus.removeItem(Status.DELETED.toString());
 		}
 		if (getRequirement().getStatus() == Status.NEW) {
 			// New: New, Deleted
-			this.comboBoxStatus.removeItem("In Progress");
-			this.comboBoxStatus.removeItem("Open");
+			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			this.comboBoxStatus.removeItem(Status.OPEN.toString());
 			if (hasComplete)
-				this.comboBoxStatus.removeItem("Complete");
+				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
 		if (getRequirement().getStatus() == Status.OPEN) {
 			// Open: Open, Deleted
-			this.comboBoxStatus.removeItem("New");
-			this.comboBoxStatus.removeItem("In Progress");
+			this.comboBoxStatus.removeItem(Status.NEW.toString());
+			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 			if (hasComplete)
-				this.comboBoxStatus.removeItem("Complete");
+				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
 		if (getRequirement().getStatus() == Status.COMPLETE) {
 			// Complete: Open, Complete, Deleted
-			this.comboBoxStatus.removeItem("New");
-			this.comboBoxStatus.removeItem("In Progress");
+			this.comboBoxStatus.removeItem(Status.NEW.toString());
+			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 		}
 		if (getRequirement().getStatus() == Status.DELETED) {
 			// Deleted: Open, Deleted, Complete
-			this.comboBoxStatus.removeItem("New");
-			this.comboBoxStatus.removeItem("In Progress");
+			this.comboBoxStatus.removeItem(Status.NEW.toString());
+			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 			if (hasComplete)
-				this.comboBoxStatus.removeItem("Complete");
+				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
 
 	}
@@ -1027,6 +1127,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	public void enableSaveButton() {
+		System.out.println("Enable save button called, " + mode);
+		if (mode == Mode.VIEW) {
+			return; // we can not enable save in view mode
+		}
 		this.btnSave.setEnabled(true);
 	}
 
@@ -1072,16 +1176,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	@Override
 	public void responseSuccess() {
-		
-			for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
-				if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
-					(((DetailPanel) mainTabController.getTabView()
-							.getComponentAt(i))).updateTotalEstimate();
-					(((DetailPanel) mainTabController.getTabView()
-							.getComponentAt(i))).updateSubReqTab();
-					System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
-				}
+
+		for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
+			if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+				(((DetailPanel) mainTabController.getTabView()
+						.getComponentAt(i))).updateTotalEstimate();
+				(((DetailPanel) mainTabController.getTabView()
+						.getComponentAt(i))).updateSubReqTab();
+				System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
 			}
+		}
 
 		// if the tab should close, close it
 		if (closeTab) {
@@ -1098,7 +1202,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} catch (RequirementNotFoundException e) {
 			System.out.println("Unable to find requirement? Wat?");
 		}
-		
 
 	}
 
@@ -1204,41 +1307,51 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
-	
-	public void updateSubReqTab(){
+
+	public void updateSubReqTab() {
 		subRequirementView.refreshAll();
 	}
-	
-	public void updateTotalEstimate(){
+
+	public void updateTotalEstimate() {
 		Integer estimate = 0;
-		
+
 		Requirement tempReq = null;
 		try {
-			tempReq = RequirementDatabase.getInstance().get(requirement.getrUID());
-			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());			
+			tempReq = RequirementDatabase.getInstance().get(
+					requirement.getrUID());
+			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());
 			lblTotEstDisplay.setText(estimate.toString());
 		} catch (RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	private Integer getTotalEstimate(){
-			return traverseTreeEstimates(requirement, requirement.getEstimate());
+
+	private Integer getTotalEstimate() {
+		return traverseTreeEstimates(requirement, requirement.getEstimate());
 	}
-	
+
 	private int traverseTreeEstimates(Requirement current, int totals) {
 		Requirement child = null;
-		int sum=0;
+		int sum = 0;
 
-			for (Integer i : current.getSubRequirements()) {
-				try {
-					child = RequirementDatabase.getInstance().get(i);
-					sum = sum + child.getEstimate()+traverseTreeEstimates(child,0);
-				} catch (RequirementNotFoundException e) {
-					e.printStackTrace();
-				}				
+		for (Integer i : current.getSubRequirements()) {
+			try {
+				child = RequirementDatabase.getInstance().get(i);
+				sum = sum + child.getEstimate()
+						+ traverseTreeEstimates(child, 0);
+			} catch (RequirementNotFoundException e) {
+				e.printStackTrace();
 			}
-			return totals+sum;
+		}
+		return totals + sum;
+	}
+
+	private void setSaveButtonAction() {
+		if (mode == Mode.CREATE) {
+			btnSave.setAction(new SaveRequirementAction(requirement, this));
+		} else if (mode == Mode.EDIT) {
+			btnSave.setAction(new EditRequirementAction(requirement, this));
+		}
 	}
 }

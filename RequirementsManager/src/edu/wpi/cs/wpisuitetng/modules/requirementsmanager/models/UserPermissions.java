@@ -61,6 +61,19 @@ public class UserPermissions {
 	public boolean canEditIteration() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
+	
+	/** Determines if a user can edit a requirement
+	 * 
+	 * @return
+	 */
+	
+	public boolean canEditRequirement() {
+		return permissionLevel == UserPermissionLevel.ADMIN;
+	}
+	
+	public boolean canUpdateRequirement() {
+		return permissionLevel == UserPermissionLevel.UPDATE;
+	}
 
 	/**
 	 * Returns the permission level enum of the user

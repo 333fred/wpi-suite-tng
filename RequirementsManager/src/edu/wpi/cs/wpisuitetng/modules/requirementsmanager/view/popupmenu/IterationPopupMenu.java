@@ -106,16 +106,9 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(menuEditIteration)) {
 			// edit iteration was selected
-			// TODO: Add check that the iteration tab isn't already opened
-			IterationView.Status viewStatus;
-			if (PermissionModel.getInstance().getUserPermissions().canEditIteration()) {
-				viewStatus = IterationView.Status.EDIT;
-			} 
-			else {
-				viewStatus = IterationView.Status.VIEW;
-			}
+			// TODO: Add check that the iteration tab isn't already opened			
 			for (Iteration i : selectedIterations) {
-				tabController.addIterationTab(i,viewStatus);
+				tabController.addIterationTab(i);
 			}
 			
 		} else if (e.getSource().equals(menuFilterIteration)) {
@@ -123,11 +116,6 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			RequirementTableView tableView = RequirementTableView.getInstance();
 			tableView.IterationFilter(iter.getName());
 			tableView.displayFilterInformation("Filtering by " + iter.getName());
-		} else {
-			// create requiremetn was selected
-			// TODO: make this actualy create a requirement under the given
-			// iteration
-			tabController.addCreateRequirementTab(selectedIterations.get(0));
-		}
+		} 
 	}
 }
