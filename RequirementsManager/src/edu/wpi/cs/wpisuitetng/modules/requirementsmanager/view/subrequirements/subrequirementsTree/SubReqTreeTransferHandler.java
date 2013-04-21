@@ -76,6 +76,9 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		// which is less than its source level.
 		
 		TreePath dest = dl.getPath();
+		if(dest==null)
+			return false;
+		
 		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
 				.getLastPathComponent();
 		TreePath path = tree.getPathForRow(selRows[0]);
