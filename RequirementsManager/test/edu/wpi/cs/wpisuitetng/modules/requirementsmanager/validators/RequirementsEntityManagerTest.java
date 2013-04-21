@@ -122,7 +122,7 @@ public class RequirementsEntityManagerTest {
 		Requirement created = manager.makeEntity(defaultSession,
 				goodRequirement.toJSON());
 		assertEquals("Name", created.getName());
-		assertSame(db.retrieve(Requirement.class, "rUID", 3).get(0), created);
+		assertSame(db.retrieve(Requirement.class, "rUID", created.getrUID()).get(0), created);
 	}
 
 	@Test(expected = BadRequestException.class)
