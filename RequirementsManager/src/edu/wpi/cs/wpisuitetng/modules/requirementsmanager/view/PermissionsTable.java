@@ -15,15 +15,17 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import javax.swing.JTable;
 
 public class PermissionsTable extends JTable {
-
-//	public PermissionsTable(Object[][] rowData, Object[] columnNames) {
-//		super(rowData, columnNames);
-//	}
-
+/**
+ * 
+ * @param rowData The data to populate the table
+ * @param columnNames The column headers
+ */
 	public PermissionsTable(String[][] rowData, String[] columnNames) {
 		super(rowData, columnNames);
 	}
-
+/**
+ * Override superclass to make cells uneditable
+ */
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
