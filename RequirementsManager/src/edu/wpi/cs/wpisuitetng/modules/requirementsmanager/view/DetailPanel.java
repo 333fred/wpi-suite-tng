@@ -179,6 +179,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		addSplitPane();
 		setDisabledTextColor();
 		disableFieldsMode();
+		disableSaveButton();
 	}
 
 	private void addSplitPane() {
@@ -390,8 +391,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			btnSave.setText("Save Requirement");
 			break;
 		}
-
-		disableSaveButton();
 	}
 
 	private void addTextReleaseListener() {
