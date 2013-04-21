@@ -29,13 +29,20 @@ public class SavePermissionsAction extends AbstractAction {
 	PermissionsPanel panel;
 
 	public SavePermissionsAction(PermissionsPanel panel, PermissionModel model) {
+		super("Save Permission");
 		this.model = model;
 		this.panel = panel;
 	}
-
-	public void actionPerformed(ActionEvent e) {
+	
+	
+	/**
+	 * Saves the currently selected permission in the manger
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e1) {
 		PermissionModelController controller = new PermissionModelController();
 		SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
+		System.out.println("Save Perm Button Pressed");
 		
 		model.setPermission(panel.getPermission());
 		

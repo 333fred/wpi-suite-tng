@@ -110,7 +110,7 @@ public class PermissionModelEntityManager implements
 			throws WPISuiteException {
 		PermissionModel updatedModel = PermissionModel.fromJSON(content);
 		PermissionModel oldModel;
-
+		System.out.println(content);
 		// If the permission exists, then get it. Otherwise, create a new model
 		if ((oldModel = (PermissionModel) db.retrieve(PermissionModel.class,
 				"user", updatedModel.getUser(), s.getProject()).get(0)) == null) {
