@@ -23,7 +23,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
@@ -175,6 +177,22 @@ public class EditRequirementAction extends AbstractAction {
 				} catch (NumberFormatException except) {
 					System.out
 							.println("The number is incorrectly formatted: EditRequirement:174");
+				}
+				
+				if (parentView.getRequirement().getStatus() == Status.DELETED){
+					Integer parentID = parentView.getRequirement().getpUID().get(0);
+					Integer reqID = parentView.getRequirement().getrUID();
+					try {
+						Requirement parent = RequirementDatabase.getInstance().get(parentID);
+						parent.removeSubRequirement(reqID);
+						UpdateRequirementRequestObserver parentObserver = new UpdateRequirementRequestObserver(
+								this.parentView);
+						controller.save(parent, parentObserver);
+					} catch (RequirementNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					requirement.removePUID(parentID);	
 				}
 
 				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(

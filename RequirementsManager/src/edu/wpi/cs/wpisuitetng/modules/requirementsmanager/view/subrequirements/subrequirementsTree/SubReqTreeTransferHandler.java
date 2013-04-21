@@ -87,10 +87,13 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 				.getLastPathComponent();
 		if(target.getUserObject().equals("Deleted")||firstNode.getUserObject().equals("Deleted"))
 			return false;
+		
 		if (firstNode.getLevel() != 0 && target.getLevel() != 0) {
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement anRequirement = (Requirement) target.getUserObject();
 			if(requirement.getStatus()==Status.DELETED || anRequirement.getStatus()==Status.DELETED)
+				return false;
+			if(requirement.getStatus()==Status.COMPLETE || anRequirement.getStatus()==Status.COMPLETE)
 				return false;
 			if (containsCurrentRequirement(requirement, anRequirement))
 				return false;

@@ -193,11 +193,6 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.EAST, addReq, 0, SpringLayout.EAST,
 				removeChild);
 
-		// layout.putConstraint(SpringLayout.NORTH, scrollPane, 5,
-		// SpringLayout.SOUTH, this);
-		// layout.putConstraint(SpringLayout.WEST, scrollPane, 5,
-		// SpringLayout.EAST, parentLabel);
-
 		layout.putConstraint(SpringLayout.WIDTH, subreqPane, 5,
 				SpringLayout.WIDTH, this);
 
@@ -438,8 +433,6 @@ public class SubRequirementPanel extends JPanel {
 		removeChild.setEnabled(false);
 		addReq.setEnabled(false);
 		bottomReqNames.setEnabled(false);
-		topReqNames.setEnabled(false);
-		
+		topReqNames.setEnabled(false);		
 	}
-
 }
