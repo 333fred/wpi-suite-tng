@@ -44,6 +44,7 @@ public class SubRequirementPanel extends JPanel {
 
 	private Requirement requirement;
 	private DetailPanel panel;
+	private JPanel editSubReqPanel;
 
 	// fields for the top half of sub requirement panel
 	private JLabel parentReq;
