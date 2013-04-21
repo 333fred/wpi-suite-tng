@@ -23,7 +23,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.NotFoundExc
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SimpleRetrieveAllRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
 
 /**
  * Maintains a local database of requirements
@@ -32,14 +34,27 @@ public class RequirementDatabase extends AbstractDatabase<Requirement> {
 
 	private Map<Integer, Requirement> requirements;
 	private RequirementsController controller;
-	private SimpleRetrieveAllRequirementsRequestObserver observer;
+	private RetrieveAllRequirementsRequestObserver observer;
 	private static RequirementDatabase db;
 
 	private RequirementDatabase() {
 		super(300000);
 		requirements = new HashMap<Integer, Requirement>();
 		this.controller = new RequirementsController();
-		this.observer = new SimpleRetrieveAllRequirementsRequestObserver();
+		this.observer = new RetrieveAllRequirementsRequestObserver(
+				new IReceivedAllRequirementNotifier() {
+
+					@Override
+					public void receivedData(Requirement[] requirements) {
+						// Nothing to do here
+					}
+
+					@Override
+					public void errorReceivingData(
+							String RetrieveAllRequirementsRequestObserver) {
+						// Nothing to do here
+					}
+				});
 	}
 
 	/**

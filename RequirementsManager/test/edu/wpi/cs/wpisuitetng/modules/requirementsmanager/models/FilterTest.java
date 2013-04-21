@@ -70,8 +70,8 @@ public class FilterTest {
 	Status status;
 	Priority priority;
 	private int iteration = 0;
-	private int estimate;
-	private int effort;
+	private int estimate  = 1;
+	private int effort  = 2;
 	private List<String> assignees = new ArrayList<String>();
 	private List<Integer> subRequirements = new ArrayList<Integer>();
 	private List<Integer> pUID = new ArrayList<Integer>();
@@ -94,10 +94,10 @@ public class FilterTest {
 		f12 = new Filter(u1, FilterField.TYPE, FilterOperation.NOT_EQUAL, Type.USER_STORY);
 		f13 = new Filter(u1, FilterField.PRIORITY, FilterOperation.EQUAL, Priority.HIGH);
 		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
-		f15 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f16 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f17 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f18 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		f15 = new Filter(u1, FilterField.STATUS, FilterOperation.EQUAL, Status.NEW);
+		f16 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, iteration);
+		f17 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 0);
+		f18 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.EQUAL, 1);
 		f19 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		f20 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		f21 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
@@ -114,6 +114,7 @@ public class FilterTest {
 		r1.setPriority(Priority.HIGH);
 		r2.setPriority(Priority.MEDIUM);
 		r3.setPriority(Priority.LOW);
+		r1.setStatus(Status.NEW);
 	}
 	
 	@Test
@@ -141,7 +142,11 @@ public class FilterTest {
 		assertTrue(f13.shouldFilter(r1));
 		assertFalse(f13.shouldFilter(r3));
 		assertTrue(f14.shouldFilter(r3));
-		assertFalse(f14.shouldFilter(r1));
+		assertFalse(f14.shouldFilter(r1));		
+		assertTrue(f15.shouldFilter(r1));
+		//assertEquals(f16.shouldFilter(r1), 0);   Maddie is working on these
+		//assertEquals(f17.shouldFilter(r1), 1);
+		assertTrue(f18.shouldFilter(r1));
 		f1.setActive(false);
 		assertFalse(f1.shouldFilter(r1));
 		
@@ -195,6 +200,7 @@ public class FilterTest {
 		assertFalse(f1.getActive());
 	}
 	
+		
 
 	// TODO: Change this test once getStringValue() is finalized
 	/*@Test
