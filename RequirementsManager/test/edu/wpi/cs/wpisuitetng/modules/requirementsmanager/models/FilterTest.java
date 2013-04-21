@@ -76,26 +76,6 @@ public class FilterTest {
 		f1 = new Filter(u1);
 		f2 = new Filter(u2);	
 		f2 = new Filter(u2);
-		f3 = new Filter(u1, FilterField.NAME, FilterOperation.EQUAL, "name");
-		f4 = new Filter(u1, FilterField.NAME, FilterOperation.NOT_EQUAL, "name2");
-		f5 = new Filter(u1, FilterField.NAME, FilterOperation.CONTAINS, "e2");
-		f6 = new Filter(u1, FilterField.NAME, FilterOperation.STARTS_WITH, "e");
-		f7 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.EQUAL, "v1");
-		f8 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.NOT_EQUAL, "v1");
-		f9 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.CONTAINS, "v");
-		f10 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f11 = new Filter(u1, FilterField.TYPE, FilterOperation.EQUAL, Type.USER_STORY);
-		f12 = new Filter(u1, FilterField.TYPE, FilterOperation.NOT_EQUAL, Type.USER_STORY);
-		f13 = new Filter(u1, FilterField.PRIORITY, FilterOperation.EQUAL, Priority.HIGH);
-		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
-		f15 = new Filter(u1, FilterField.STATUS, FilterOperation.EQUAL, Status.NEW);
-		f16 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, iteration);
-		f17 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 0);
-		f18 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.EQUAL, 1);
-		f19 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f20 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f21 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
-		f22 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		r1 = new Requirement(name, description, releaseNum, type.USER_STORY,
 				subRequirements, notes, 1, 1, 1, assignees,
 				pUID, tasks);
@@ -309,24 +289,26 @@ public class FilterTest {
 		assertFalse(f29.shouldFilter(r3));
 	}
 	
-	/*
+	
 	@Test
 	public void shouldFilterIterationNotEqual() {
 		f30 = new Filter(u1, FilterField.ITERATION, FilterOperation.NOT_EQUAL, 1);
-		assertTrue(f29.shouldFilter(r3));
-		assertFalse(f29.shouldFilter(r1));
+		assertTrue(f30.shouldFilter(r3));
+		assertFalse(f30.shouldFilter(r1));
 	}
 	
 	@Test
 	public void shouldFilterIterationOccursBefore() {
-		f31 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BEFORE, 1);
+		Date d1 = new Date(2013, 4, 18);
+		f31 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BEFORE, d1);
 		assertTrue(f31.shouldFilter(r2));
 		assertFalse(f31.shouldFilter(r1));
 	}
 	
 	@Test
 	public void shouldFilterIterationOccursAfter() {
-		f32 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_AFTER, 1);
+		Date d1 = new Date(2013, 4, 18);
+		f32 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_AFTER, d1);
 		assertTrue(f32.shouldFilter(r3));
 		assertFalse(f32.shouldFilter(r1));
 	}
@@ -337,15 +319,18 @@ public class FilterTest {
 		assertTrue(f33.shouldFilter(r4));
 		assertFalse(f33.shouldFilter(r1));
 	}
-	*/
+	
 	
 	@Test
 	public void testShouldFilterActive() {
+		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
+		f15 = new Filter(u1, FilterField.STATUS, FilterOperation.EQUAL, Status.NEW);
+		f18 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.NOT_EQUAL, 1);
 		assertFalse(f14.shouldFilter(r1));		
 		assertTrue(f15.shouldFilter(r1));
 		//assertEquals(f16.shouldFilter(r1), 0);   Maddie is working on these
 		//assertEquals(f17.shouldFilter(r1), 1);
-		assertTrue(f18.shouldFilter(r1));
+		assertFalse(f18.shouldFilter(r1));
 		f1.setActive(false);
 		assertFalse(f1.shouldFilter(r1));
 		
