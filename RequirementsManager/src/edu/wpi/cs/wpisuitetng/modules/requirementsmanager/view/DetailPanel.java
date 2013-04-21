@@ -856,6 +856,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			this.comboBoxStatus.removeItem("New");
+			if (!getRequirement().subReqsCompleted()){
+				this.comboBoxStatus.removeItem("Complete");
+			}
+			
+			if (getRequirement().getSubRequirements().size() > 0
+					|| !getRequirement().tasksCompleted()){
+				this.comboBoxStatus.removeItem("Deleted");	
+			}
 			// this.comboBoxStatus.removeItem("Open");
 			// this.comboBoxStatus.removeItem("Deleted");
 		} else if (getRequirement().getSubRequirements().size() > 0
