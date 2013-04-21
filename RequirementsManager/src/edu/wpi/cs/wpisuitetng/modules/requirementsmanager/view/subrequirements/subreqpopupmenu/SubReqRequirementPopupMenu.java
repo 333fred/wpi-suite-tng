@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 
 /**
@@ -135,6 +136,15 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements ActionList
 
 	@Override
 	public void responseSuccess() {
+		
+			for (int i = 0; i < tabController.getTabView().getTabCount(); i++) {
+				if (tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+					(((DetailPanel) tabController.getTabView()
+							.getComponentAt(i))).updateTotalEstimate();
+					(((DetailPanel) tabController.getTabView()
+							.getComponentAt(i))).updateSubReqTab();
+				}
+			}
 	}
 
 	@Override

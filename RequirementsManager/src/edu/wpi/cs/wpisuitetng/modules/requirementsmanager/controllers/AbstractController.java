@@ -124,7 +124,7 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	 * Returns whether it is safe to send a request. This is an abstraction in
 	 * case checking become more complicated than calling a Network method
 	 * 
-	 * @return true if it is safe to send, false otherwiseF
+	 * @return true if it is safe to send, false otherwise
 	 */
 	protected static boolean isSafeToSend() {
 		return Network.getInstance().isInitialized();
