@@ -59,6 +59,10 @@ function loadNode(node,reload) {
             $('.figure img').attr('src', function() {
                     return location.pathname.substring(0, location.pathname.lastIndexOf("/")+1) + filePath + "/" + this.getAttribute('data-path');
             });            
+
+            //add links to admin console
+            $("admin").html("<a href='"+location.pathname.split('Documentation')[0]+"'>Admin Console</a>");
+
             //wrap figures
             $('.figure img').click( function() {
                 var imgURL=$(this).attr("src");

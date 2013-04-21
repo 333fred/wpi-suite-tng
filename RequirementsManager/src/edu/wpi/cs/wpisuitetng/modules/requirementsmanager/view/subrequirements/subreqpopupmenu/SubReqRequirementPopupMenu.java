@@ -20,6 +20,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
@@ -69,29 +70,34 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements ActionList
 		Requirement tempReq = selectedRequirements.get(0);
 		Requirement tempSubReq = null;
 		
-		if(tempReq.getpUID().size()>0){
-			menuRemoveParent = new JMenuItem("Remove Parent");
-			menuRemoveParent.addActionListener(this);
-			add(menuRemoveParent);			
-		}
-		
-		if(tempReq.getSubRequirements().size()>0){
-			menuRemoveChildren = new JMenu("Remove Children");
-			JMenuItem menuChild = null;
-			
-			for(int reqID : tempReq.getSubRequirements()){
-				try {
-					tempSubReq = RequirementDatabase.getInstance().get(reqID);
-					menuChild = new JMenuItem(tempSubReq.getName(), tempSubReq.getrUID());
-					menuChild.addActionListener(this);
-					menuRemoveChildren.add(menuChild);
-				} catch (RequirementNotFoundException e) {
-					e.printStackTrace();
-				}
+		if (tempReq.getStatus() != Status.DELETED
+				&& tempReq.getStatus() != Status.COMPLETE) {
+			if (tempReq.getpUID().size() > 0) {
+				menuRemoveParent = new JMenuItem("Remove Parent");
+				menuRemoveParent.addActionListener(this);
+				add(menuRemoveParent);
 			}
-			menuRemoveChildren.addActionListener(this);
-			addSeparator();
-			add(menuRemoveChildren);	
+
+			if (tempReq.getSubRequirements().size() > 0) {
+				menuRemoveChildren = new JMenu("Remove Children");
+				JMenuItem menuChild = null;
+
+				for (int reqID : tempReq.getSubRequirements()) {
+					try {
+						tempSubReq = RequirementDatabase.getInstance().get(
+								reqID);
+						menuChild = new JMenuItem(tempSubReq.getName(),
+								tempSubReq.getrUID());
+						menuChild.addActionListener(this);
+						menuRemoveChildren.add(menuChild);
+					} catch (RequirementNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+				menuRemoveChildren.addActionListener(this);
+				addSeparator();
+				add(menuRemoveChildren);
+			}
 		}
 			
 

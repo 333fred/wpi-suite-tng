@@ -176,23 +176,29 @@ public class EditRequirementAction extends AbstractAction {
 							.getTextEstimate().getText()));
 				} catch (NumberFormatException except) {
 					System.out
-							.println("The number is incorrectly formatted: EditRequirement:174");
+					.println("The number is incorrectly formatted: EditRequirement:174");
 				}
-				
+
 				if (parentView.getRequirement().getStatus() == Status.DELETED){
-					Integer parentID = parentView.getRequirement().getpUID().get(0);
 					Integer reqID = parentView.getRequirement().getrUID();
 					try {
-						Requirement parent = RequirementDatabase.getInstance().get(parentID);
-						parent.removeSubRequirement(reqID);
-						UpdateRequirementRequestObserver parentObserver = new UpdateRequirementRequestObserver(
-								this.parentView);
-						controller.save(parent, parentObserver);
+						if (parentView.getRequirement().getpUID().size() > 0){
+							Integer parentID = parentView.getRequirement().getpUID().get(0);
+							Requirement parent = RequirementDatabase.getInstance().get(parentID);
+							if (parent.getSubRequirements().size() > 0){
+								parent.removeSubRequirement(reqID);
+								UpdateRequirementRequestObserver parentObserver = new UpdateRequirementRequestObserver(
+										this.parentView);
+								controller.save(parent, parentObserver);
+							}
+							requirement.removePUID(parentID);
+						}
 					} catch (RequirementNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					requirement.removePUID(parentID);	
+
+						
 				}
 
 				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
@@ -201,7 +207,7 @@ public class EditRequirementAction extends AbstractAction {
 				parentView.closeTabAfterSave();
 			} catch (NumberFormatException except) {
 				parentView
-						.displaySaveError("Iteration must be an integer value");
+				.displaySaveError("Iteration must be an integer value");
 			}/*
 			 * catch (RequirementNotFoundException e1) { // TODO Auto-generated
 			 * catch block e1.printStackTrace(); }
@@ -209,7 +215,7 @@ public class EditRequirementAction extends AbstractAction {
 		} else {
 			if (parentView.getTextName().getText().trim().equals("")) {
 				parentView.getTextName()
-						.setBackground(new Color(243, 243, 209));
+				.setBackground(new Color(243, 243, 209));
 				parentView.getTextNameValid().setText(
 						"** Field must be non-blank **");
 			}
