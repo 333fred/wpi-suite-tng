@@ -760,6 +760,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			comboBoxStatus.setSelectedItem(requirement.getStatus().toString());
 
 			this.disableAllFieldsIfDeleted();
+			comboBoxStatus.removeItem("None");
 		}
 	}
 

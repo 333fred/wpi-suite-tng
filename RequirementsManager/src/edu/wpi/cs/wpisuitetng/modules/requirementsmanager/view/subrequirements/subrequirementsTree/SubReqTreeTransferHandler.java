@@ -100,6 +100,12 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 			return false;
 		if (firstNode == target || target == firstNode.getParent())
 			return false;
+		
+		if(firstNode.getLevel()!=0){
+			Requirement anRequirement = (Requirement) firstNode.getUserObject();
+			if(anRequirement.getStatus()==Status.DELETED || anRequirement.getStatus()==Status.COMPLETE)
+				return false;
+		}
 
 		return true;
 	}
