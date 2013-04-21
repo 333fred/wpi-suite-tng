@@ -552,8 +552,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 			if (isFilterDuplicate(filter)) {
 				labSaveError.setText("Identical Filter already exists");
-				
-				
+
 			} else {
 				if (mode == Mode.CREATE) {
 					AddFilterRequestObserver observer = new AddFilterRequestObserver(
@@ -596,12 +595,17 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		if (cboxOperation.getItemCount() == 0) {
 			return;
 		}
+
 		boolean error = false;
 		String errorString = "";
 		FilterField field = FilterField.getFromString((String) cboxField
 				.getSelectedItem());
 		FilterOperation operation = FilterOperation
 				.getFromString((String) cboxOperation.getSelectedItem());
+
+		Filter checkFilter = new Filter();
+		checkFilter.setField(field);
+		checkFilter.setOperation(operation);
 
 		String equalToStr;
 
@@ -612,11 +616,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			equalToStr = txtEqualTo.getText().trim();
 			// check to make sure this is an int
 			try {
-				Integer.parseInt(equalToStr);
+				int value = Integer.parseInt(equalToStr);
+				checkFilter.setValue(value);
 			} catch (NumberFormatException e) {
 				error = true;
 				errorString = "Value must be a number";
 			}
+
+	
 
 			break;
 		case NAME:
@@ -625,8 +632,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			if (equalToStr.isEmpty()) {
 				errorString = "Value cannot be blank";
 				error = true;
+			} else {
+				checkFilter.setValue(equalToStr);
 			}
-
 			break;
 
 		case ITERATION:
@@ -642,21 +650,37 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				} else if (endDate.before(startDate)) {
 					errorString = "Start date must before end date";
 					error = true;
+				} else {
+					checkFilter.setValue(new FilterIterationBetween(startDate,
+							endDate));
 				}
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
+
+				int iterationIndex = cboxEqualTo.getSelectedIndex();
+				// save the ID of the iteration
+				filter.setValue(iterations.get(iterationIndex).getId());
 
 			} else {
 				if (calEqualTo.getDate() == null) {
 					error = true;
 					errorString = "Date cannot be blank";
 				}
+				filter.setValue(calEqualTo.getDate());
 			}
 			break;
 
 		case PRIORITY:
+			filter.setValue(Priority.getFromString((String) cboxEqualTo
+					.getSelectedItem()));
+			break;
 		case STATUS:
+			filter.setValue(Status.getFromString((String) cboxEqualTo
+					.getSelectedItem()));
+			break;
 		case TYPE:
+			filter.setValue(Type.getFromString((String) cboxEqualTo
+					.getSelectedItem()));
 			break;
 		}
 
@@ -667,8 +691,13 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 * FilterOperation.getFromString((String)
 		 * cboxOperation.getSelectedItem());
 		 */
+		
+		if (!error && isFilterDuplicate(checkFilter)) {
+			error = true;
+			errorString = "Similar filter already exists";
+		}
 
-		if (!error) {
+		if (!error) {			
 			labSaveError.setText("  ");
 			butSave.setEnabled(true);
 			txtEqualTo.setBackground(Color.WHITE);
