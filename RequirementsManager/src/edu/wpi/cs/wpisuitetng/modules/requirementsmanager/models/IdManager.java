@@ -14,11 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.Permission;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class IdManager extends AbstractModel {
 

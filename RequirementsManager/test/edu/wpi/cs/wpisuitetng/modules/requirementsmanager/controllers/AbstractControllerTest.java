@@ -22,7 +22,6 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockNetwork;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockRequest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.MockRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;

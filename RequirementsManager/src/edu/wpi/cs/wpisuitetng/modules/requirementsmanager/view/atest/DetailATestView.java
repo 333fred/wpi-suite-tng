@@ -16,8 +16,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -330,11 +328,5 @@ public class DetailATestView extends JPanel {
 	public MakeATestPanel getTestPanel() {
 		// TODO Auto-generated method stub
 		return makeATestPanel;
-	}
-
-	public void paint(Graphics g) {
-		this.cellRenderer.setWrapWidth(this.aTestScrollPane.getViewport()
-				.getWidth());
-		super.paint(g);
 	}
 }

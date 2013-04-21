@@ -22,6 +22,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import EDU.purdue.cs.bloat.tree.SRStmt;
+
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
@@ -56,7 +58,6 @@ public class IterationValidatorTest {
 	Calendar startCalendar;
 	Calendar endCalendar;
 
-
 	@Before
 	public void init() {
 		// initialize database and session info
@@ -70,22 +71,22 @@ public class IterationValidatorTest {
 		// set up validator, good & existing iterations
 		startCalendar = Calendar.getInstance();
 		endCalendar = Calendar.getInstance();
-		startCalendar.set(0, 0, 5);
-		endCalendar.set(0,0,10);
+		startCalendar.set(0, 0, 6);
+		endCalendar.set(0, 0, 10);
 		validator = new IterationValidator();
 		goodRequirement = new Requirement();
 		goodRequirement.setName("Name");
 		goodRequirement.setDescription("A quality description");
 
-		existingIteration = new Iteration("Iteration 1", startCalendar.getTime(),
-				endCalendar.getTime(), 0);
+		existingIteration = new Iteration("Iteration 1",
+				startCalendar.getTime(), endCalendar.getTime(), 0);
 		db.save(existingIteration, testProject);
 		db.save(goodRequirement, testProject);
 
 		startCalendar.set(0, 0, 10);
-		endCalendar.set(0,0,12);
-		goodIteration = new Iteration("Good Iteration", startCalendar.getTime(),
-				endCalendar.getTime(), 1);
+		endCalendar.set(0, 0, 12);
+		goodIteration = new Iteration("Good Iteration",
+				startCalendar.getTime(), endCalendar.getTime(), 1);
 	}
 
 	@Test
@@ -161,9 +162,9 @@ public class IterationValidatorTest {
 	// Ensure that incorrect dates (start after they end) cause rejection
 	public void testIncorrectDate() {
 		startCalendar.set(0, 0, 21);
-		endCalendar.set(0,0,20);
-		Iteration incorrect = new Iteration("Iteration 2", startCalendar.getTime(),
-				endCalendar.getTime(), 2);
+		endCalendar.set(0, 0, 20);
+		Iteration incorrect = new Iteration("Iteration 2",
+				startCalendar.getTime(), endCalendar.getTime(), 2);
 		checkNumIssues(1, incorrect, defaultSession, IterationActionMode.CREATE);
 		checkNumIssues(1, incorrect, defaultSession, IterationActionMode.EDIT);
 	}
@@ -216,30 +217,36 @@ public class IterationValidatorTest {
 	public void testOverlapDetection() {
 		startCalendar = Calendar.getInstance();
 		endCalendar = Calendar.getInstance();
-		
+
 		startCalendar.set(0, 0, 3);
-		endCalendar.set(0,0,5);
-		Iteration strictlyBefore = new Iteration("strictlyBeforeBase", startCalendar.getTime(), endCalendar.getTime());
-		
+		endCalendar.set(0, 0, 5);
+		Iteration strictlyBefore = new Iteration("strictlyBeforeBase",
+				startCalendar.getTime(), endCalendar.getTime());
+
 		startCalendar.set(0, 0, 10);
-		endCalendar.set(0,0,12);
-		Iteration strictlyAfter = new Iteration("strictlyAfterBase", startCalendar.getTime(), endCalendar.getTime());
-		
+		endCalendar.set(0, 0, 12);
+		Iteration strictlyAfter = new Iteration("strictlyAfterBase",
+				startCalendar.getTime(), endCalendar.getTime());
+
 		startCalendar.set(0, 0, 3);
-		endCalendar.set(0,0,6);
-		Iteration includesStart = new Iteration("includesBaseStart", startCalendar.getTime(), endCalendar.getTime());
-		
+		endCalendar.set(0, 0, 7);
+		Iteration includesStart = new Iteration("includesBaseStart",
+				startCalendar.getTime(), endCalendar.getTime());
+
 		startCalendar.set(0, 0, 12);
-		endCalendar.set(0,0,9);
-		Iteration includesEnd = new Iteration("includesBaseEnd", startCalendar.getTime(), endCalendar.getTime());
-		
+		endCalendar.set(0, 0, 9);
+		Iteration includesEnd = new Iteration("includesBaseEnd",
+				startCalendar.getTime(), endCalendar.getTime());
+
 		startCalendar.set(0, 0, 3);
-		endCalendar.set(0,0,12);
-		Iteration includes = new Iteration("includesBase", startCalendar.getTime(), endCalendar.getTime());
-		
+		endCalendar.set(0, 0, 12);
+		Iteration includes = new Iteration("includesBase",
+				startCalendar.getTime(), endCalendar.getTime());
+
 		startCalendar.set(0, 0, 6);
-		endCalendar.set(0,0,9);
-		Iteration inside = new Iteration("insideBase", startCalendar.getTime(), endCalendar.getTime());
+		endCalendar.set(0, 0, 9);
+		Iteration inside = new Iteration("insideBase", startCalendar.getTime(),
+				endCalendar.getTime());
 
 		checkNoIssues(strictlyBefore, defaultSession,
 				IterationActionMode.CREATE);
