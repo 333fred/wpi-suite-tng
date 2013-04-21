@@ -21,6 +21,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
@@ -135,19 +136,7 @@ public class MainTabController {
 	 */
 
 	public TabWrap addCreateRequirementTab() {
-		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), this);
-		return addTab("New Requirement", new ImageIcon(), emptyDetailView,
-				"New Requirement");
-	}
-
-	/**
-	 * Adds a tab to create a new requirement assigned to the given iteration
-	 * 
-	 * @return The tab that was added
-	 */
-
-	public TabWrap addCreateRequirementTab(Iteration iteration) {
-		DetailPanel emptyDetailView = new DetailPanel(iteration, this);
+		DetailPanel emptyDetailView = new DetailPanel(new Requirement(), DetailPanel.Mode.CREATE, this);
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView,
 				"New Requirement");
 	}
@@ -171,8 +160,16 @@ public class MainTabController {
 				"Statistics");
 	}
 
-	public TabWrap addIterationTab(Iteration iteration, IterationView.Status status) {		
+	public TabWrap addIterationTab(Iteration iteration) {		
 			
+		IterationView.Status status;
+		if (PermissionModel.getInstance().getUserPermissions().canEditIteration()) {
+			status = IterationView.Status.EDIT;
+		}
+		else {
+			status = IterationView.Status.VIEW;
+		}
+		
 		// check if this iteration is open already
 		boolean iterationOpen = false;
 
@@ -208,7 +205,17 @@ public class MainTabController {
 	 */
 
 	public TabWrap addViewRequirementTab(Requirement requirement) {
-		DetailPanel requirmentDetailView = new DetailPanel(requirement, this);
+		DetailPanel.Mode mode;
+		if (PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+			mode = DetailPanel.Mode.EDIT;
+		}
+		else if (PermissionModel.getInstance().getUserPermissions().canUpdateRequirement()) {
+			mode = DetailPanel.Mode.UPDATE;	
+		}
+		else {
+			mode = DetailPanel.Mode.VIEW;	
+		}
+		DetailPanel requirmentDetailView = new DetailPanel(requirement, mode, this);
 
 		// check if this requirement is already opened
 		for (int i = 0; i < getTabView().getTabCount(); i++) {

@@ -50,7 +50,7 @@ public class PermissionToolbarPane extends JPanel {
 	private JLabel userLevel;
 
 	/**
-	 * 
+	 * Default constructor that creates the pane for the toolbar
 	 */
 	public PermissionToolbarPane(MainTabController tabController) {
 
@@ -149,6 +149,10 @@ public class PermissionToolbarPane extends JPanel {
 				.toString());
 	}
 
+	/**
+	 * 
+	 * @return The width of the widest label
+	 */
 	public double getLabelWidth() {
 		return Math.max((permissionLabel.getPreferredSize().getWidth() + userLevel.getPreferredSize().getWidth()),
 				(nameLabel.getPreferredSize().getWidth() + userName.getPreferredSize().getWidth()));

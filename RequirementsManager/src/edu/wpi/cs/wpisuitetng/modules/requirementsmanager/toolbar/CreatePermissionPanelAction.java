@@ -23,6 +23,11 @@ public class CreatePermissionPanelAction extends AbstractAction {
 
 	private final MainTabController controller;
 
+	/**
+	 * Constructor that creates a new permission panel
+	 * 
+	 * @param controller The main tab controller
+	 */
 	public CreatePermissionPanelAction(MainTabController controller) {
 		super("Edit Permissions");
 		this.controller = controller;

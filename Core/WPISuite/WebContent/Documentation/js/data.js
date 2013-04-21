@@ -91,7 +91,10 @@ var data = [
 					},  {label: 'Adding Users',
 						folder: false,
 						id: 11
-					}
-		]},
+					},  {label: 'Deleting Users',
+						folder: false,
+						id: 12
+				}]
+			},
 		
     ]
