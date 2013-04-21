@@ -25,6 +25,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
@@ -84,9 +85,13 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
+		if(target.getUserObject().equals("Deleted")||firstNode.getUserObject().equals("Deleted"))
+			return false;
 		if (firstNode.getLevel() != 0 && target.getLevel() != 0) {
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement anRequirement = (Requirement) target.getUserObject();
+			if(requirement.getStatus()==Status.DELETED || anRequirement.getStatus()==Status.DELETED)
+				return false;
 			if (containsCurrentRequirement(requirement, anRequirement))
 				return false;
 		}

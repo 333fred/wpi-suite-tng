@@ -14,14 +14,13 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import org.junit.Before;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
 /**
- * Implementation of the abstract controller
+ * Implementation of the iteration controller test
  */
 
-public class RequirementControllerTest extends
-		AbstractControllerTest<Requirement> {
+public class IterationControllerTest extends AbstractControllerTest<Iteration> {
 
 	/**
 	 * {@inheritDoc}
@@ -30,11 +29,12 @@ public class RequirementControllerTest extends
 	@Before
 	public void setup() {
 		setupNetwork();
-		controller = new RequirementsController();
-		model = new Requirement();
+		controller = new IterationController();
+		model = new Iteration();
 		model.setName("Test");
-		model.setrUID(1);
-		id = model.getrUID();
-		modelPath = "/requirementsmanager/requirement";
+		model.setId(1);
+		id = model.getId();
+		modelPath = "/requirementsmanager/iteration";
 	}
+
 }

@@ -75,28 +75,9 @@ public class AddRequirementRequestObserver implements RequestObserver {
 							new DefaultSaveNotifier());
 					iterationController.save(anIteration, observer);
 				} catch (IterationNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
-				// JOptionPane.showMessageDialog(detailPanel,
-				// "SUCCESS","SUCCESS", JOptionPane.OK_OPTION);
-			}/*
-			 * else {
-			 * 
-			 * //Display error in view... here's how defecttracker does it: //
-			 * JOptionPane.showMessageDialog(detailPanel,
-			 * "Unable to parse defect received from server.", //
-			 * "Save Defect Error", JOptionPane.ERROR_MESSAGE);
-			 * 
-			 * } } else { /* Display error in view... here's how defecttracker
-			 * does it: JOptionPane.showMessageDialog(view, "Received " +
-			 * iReq.getResponse().getStatusCode() + " status from server: " +
-			 * iReq.getResponse().getStatusMessage(), "Save Defect Error",
-			 * JOptionPane.ERROR_MESSAGE);
-			 * 
-			 * }
-			 */
+			}
 		}
 		// notify the controller
 		SwingUtilities.invokeLater(new Runnable() {

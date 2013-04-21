@@ -17,6 +17,7 @@ import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
 
 /**
  * Class for displaying the note view and the log view on the right side of the
@@ -74,5 +75,6 @@ public class DetailEventPane extends JTabbedPane {
 	public void disableUserButtons() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((DetailNoteView) notesListPane).disableUserButtons();
+		((SubRequirementPanel) subreqListPane).disableUserButtons();
 	}
 }

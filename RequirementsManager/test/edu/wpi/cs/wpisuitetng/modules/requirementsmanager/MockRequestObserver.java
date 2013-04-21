@@ -10,34 +10,43 @@
  *    @author Fredric
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
-import java.util.Arrays;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
-import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * Simple request observer for adding all filters to the local database
+ * A mock request observer simply stores the request and an enum indicating
+ * success, error, or failure
  */
 
-public class SimpleRetrieveAllFiltersRequestObserver implements RequestObserver {
+public class MockRequestObserver implements RequestObserver {
+
+	/**
+	 * Enum to show the status of the response
+	 */
+	public enum Response {
+		SUCCESS, ERROR, FAILURE, NONE;
+	}
+
+	private Response response;
+	private IRequest request;
+
+	/**
+	 * Creates a new mock request observer, with the enum set to none
+	 */
+	public MockRequestObserver() {
+		response = Response.NONE;
+		request = null;
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		ResponseModel response = iReq.getResponse();
-
-		if (response.getStatusCode() == 200) {
-			Filter[] filters = Filter.fromJSONArray(iReq.getBody());
-
-			FilterDatabase.getInstance().set(Arrays.asList(filters));
-		}
+		response = Response.SUCCESS;
+		request = iReq;
 	}
 
 	/**
@@ -45,8 +54,8 @@ public class SimpleRetrieveAllFiltersRequestObserver implements RequestObserver 
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
-
+		response = Response.ERROR;
+		request = iReq;
 	}
 
 	/**
@@ -54,8 +63,21 @@ public class SimpleRetrieveAllFiltersRequestObserver implements RequestObserver 
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Auto-generated method stub
-
+		response = Response.FAILURE;
+		request = iReq;
 	}
 
+	/**
+	 * @return the response
+	 */
+	public Response getResponse() {
+		return response;
+	}
+
+	/**
+	 * @return the request
+	 */
+	public IRequest getRequest() {
+		return request;
+	}
 }
