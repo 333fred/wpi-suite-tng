@@ -74,9 +74,7 @@ public class FilterTest {
 		IterationDatabase.getInstance().add(i3);
 		IterationDatabase.getInstance().add(i4);
 		f1 = new Filter(u1);
-<<<<<<< HEAD
 		f2 = new Filter(u2);	
-=======
 		f2 = new Filter(u2);
 		f3 = new Filter(u1, FilterField.NAME, FilterOperation.EQUAL, "name");
 		f4 = new Filter(u1, FilterField.NAME, FilterOperation.NOT_EQUAL, "name2");
@@ -98,7 +96,6 @@ public class FilterTest {
 		f20 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		f21 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
 		f22 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
->>>>>>> e87b0a6fc8b735cd1bf4a2f92dd33ce4b43745a2
 		r1 = new Requirement(name, description, releaseNum, type.USER_STORY,
 				subRequirements, notes, 1, 1, 1, assignees,
 				pUID, tasks);
@@ -115,11 +112,9 @@ public class FilterTest {
 		r2.setPriority(Priority.MEDIUM);
 		r3.setPriority(Priority.LOW);
 		r1.setStatus(Status.NEW);
-<<<<<<< HEAD
 		r2.setStatus(Status.BLANK);
 		r3.setStatus(Status.IN_PROGRESS);
-=======
->>>>>>> e87b0a6fc8b735cd1bf4a2f92dd33ce4b43745a2
+
 	}
 		
 		
@@ -206,7 +201,6 @@ public class FilterTest {
 	public void shouldFilterPriorityNotEqual() {
 		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
 		assertTrue(f14.shouldFilter(r3));
-<<<<<<< HEAD
 		assertFalse(f14.shouldFilter(r1));
 	}
 	
@@ -347,13 +341,11 @@ public class FilterTest {
 	
 	@Test
 	public void testShouldFilterActive() {
-=======
 		assertFalse(f14.shouldFilter(r1));		
 		assertTrue(f15.shouldFilter(r1));
 		//assertEquals(f16.shouldFilter(r1), 0);   Maddie is working on these
 		//assertEquals(f17.shouldFilter(r1), 1);
 		assertTrue(f18.shouldFilter(r1));
->>>>>>> e87b0a6fc8b735cd1bf4a2f92dd33ce4b43745a2
 		f1.setActive(false);
 		assertFalse(f1.shouldFilter(r1));
 		
