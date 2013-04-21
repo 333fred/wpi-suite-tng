@@ -61,7 +61,14 @@ function loadNode(node,reload) {
             });            
 
             //add links to admin console
-            $("admin").html("<a href='"+location.pathname.split('Documentation')[0]+"'>Admin Console</a>");
+            $("admin").each(function(){
+                console.log("in each()/ admin");
+                if($(this).text() == 0){
+                    $(this).html("<a href='"+location.pathname.split('Documentation')[0]+"'>Admin Console</a>");
+                } else {
+                    $(this).html("<a href='"+location.pathname.split('Documentation')[0]+"'>"+$(this).text()+"</a>");
+                }
+            });
 
             //wrap figures
             $('.figure img').click( function() {
