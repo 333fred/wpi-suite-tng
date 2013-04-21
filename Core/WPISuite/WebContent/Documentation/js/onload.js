@@ -41,7 +41,7 @@ window.onload = function(){
 
     }
     function loadPageById(nodeId) {
-         console.log("loadPagyById for id= " + nodeId)
+         console.log("loadPageById for id= " + nodeId)
          if(nodeId != "") { 
             node = $tree.tree('getNodeById', nodeId);  
             loadNode(node, true);     
