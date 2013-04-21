@@ -45,15 +45,9 @@ public class PermissionSelectionChangedListener implements MouseListener {
 		}
 	}
 
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
-<<<<<<< HEAD
 		// unused
-=======
-		// unsued
-		return;
->>>>>>> 9319a6f923265dbd9df7c731c7d3ea2caa18dfe4
 	}
 
 	/**
