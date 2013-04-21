@@ -12,7 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

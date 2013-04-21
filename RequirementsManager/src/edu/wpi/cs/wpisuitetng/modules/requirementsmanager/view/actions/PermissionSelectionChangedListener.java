@@ -12,15 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
 public class PermissionSelectionChangedListener implements MouseListener {
@@ -48,11 +45,9 @@ public class PermissionSelectionChangedListener implements MouseListener {
 		}
 	}
 
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 
 	/**
@@ -60,8 +55,7 @@ public class PermissionSelectionChangedListener implements MouseListener {
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 
 	/**
@@ -86,8 +80,7 @@ public class PermissionSelectionChangedListener implements MouseListener {
 	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 
 	/**
@@ -95,7 +88,6 @@ public class PermissionSelectionChangedListener implements MouseListener {
 	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// unsued
-		return;
+		// unused
 	}
 }
