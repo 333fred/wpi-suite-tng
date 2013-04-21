@@ -28,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -73,8 +74,9 @@ public class SubRequirementPanel extends JPanel {
 
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {
 
-		this.requirement = requirement;
+		this.requirement = requirement;		
 		this.panel = panel;
+		
 		parentSelected = false;
 
 		validChildList = new DefaultListModel();
@@ -420,6 +422,15 @@ public class SubRequirementPanel extends JPanel {
 		} catch (RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+	}
+
+	public void disableUserButtons() {
+		removeParent.setEnabled(false);
+		removeChild.setEnabled(false);
+		addReq.setEnabled(false);
+		bottomReqNames.setEnabled(false);
+		topReqNames.setEnabled(false);
 		
 	}
 

@@ -181,10 +181,6 @@ public class PermissionsPanel extends Tab {
 				(int) saveButton.getPreferredSize().getHeight(),
 				SpringLayout.NORTH, saveButton);
 
-		// assign an action to the save button
-		// if (!userTable.isSelectionEmpty())
-		// saveButton.setAction(new SavePermissionsAction(this,
-		// localPermissions.get(userTable.getSelectedIndex())));
 
 		// add the buttons to the panel
 		radioPanel.add(adminButton);
@@ -207,23 +203,26 @@ public class PermissionsPanel extends Tab {
 			adminButton.setSelected(true);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(false);
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
 			break;
 		case UPDATE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(true);
 			noPermissionButton.setSelected(false);
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
 			break;
 		case NONE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(true);
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
 			break;
 		default:
 			adminButton.setSelected(false);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(false);
+			saveButton.setEnabled(false);
 		}
-
 	}
 
 	public UserPermissionLevel getPermission() {

@@ -263,7 +263,7 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 			requirement.setIteration(anIteration.getId());
 			RequirementsController requirementController = new RequirementsController();
 			UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(this);
-			requirementController.save(requirement, observer);
+			requirementController.save(requirement, reqObserver);
 			this.draggedRequirement = requirement;
 		}
 

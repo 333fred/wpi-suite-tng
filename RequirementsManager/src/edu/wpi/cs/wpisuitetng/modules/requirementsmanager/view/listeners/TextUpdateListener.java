@@ -94,7 +94,7 @@ public class TextUpdateListener implements KeyListener {
 		}		
 		
 		// as long as we're not reading the key release from tabbing, we can check
-		if (arg0.getKeyCode() != KeyEvent.VK_TAB && firstKeyPress) {
+		if (arg0.getKeyCode() != KeyEvent.VK_TAB || firstKeyPress) {
 			checkIfUpdated();
 		}		
 	}
@@ -119,8 +119,8 @@ public class TextUpdateListener implements KeyListener {
 		// highlight the field.
 		// Certain fields can be empty
 		if (base.equals(component.getText().trim())) {
-			if (errorComponent != null) { // if there's an error panel to write
-											// to
+			// if there's an error panel to write to
+			if (errorComponent != null) { 
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
 			}

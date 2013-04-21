@@ -65,6 +65,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.UnclosableTabComponent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.PermissionToolbarPane;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.EnableEditingAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequirementTabAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAction;
@@ -91,6 +92,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
 
+
 	private RequirementsController requirementsController;
 	private IterationController iterationController;
 
@@ -101,7 +103,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * The View that will display on the toolbar and contain buttons relating to
 	 * this view
 	 */
-	private ToolbarGroupView toolbarView;
+	private ToolbarGroupView toolbarGroupView;
 
 	/** The View and Refresh buttons used on the toolbar */
 	private JButton butView;
@@ -117,18 +119,19 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	private JButton btnEdit;
 	private JButton btnSave;
+	private JButton btnClearTreeFilter;
 
-	private JTextArea textEditInformation;
+	private JTextArea textEditInfo;
+	private JTextArea textTreeFilterInfo;
+	private JTextArea textFilterInfo;
+	
+	// TODO: get search user story
+	private JTextArea textSearchBox;
 
 	private boolean isEditable;
 
 	private TableRowSorter<TableModel> sorter;
 
-	// TODO: testing only. delete later
-	JTextArea FilterDemo;
-	JButton ClearFilter;
-	JTextArea textTreeFilterInfo;
-	JTextArea textFilterInfo;
 
 	/**
 	 * Constructor for a RequirementTableView
@@ -165,29 +168,54 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		this.rowData = new Vector<Vector>();
 
+		// editing is disabled until the button is pressed
 		isEditable = false;
 
 		this.table = new RequirementsTable(rowData, columnNames, this);
 
 		btnEdit = new JButton("Enable Editing");
 		btnSave = new JButton("Save Changes");
+		btnClearTreeFilter = new JButton("Clear Filter");
+		
+		// save button is diabled until editing is enabled
+		btnSave.setEnabled(false);
+		
+		// set button actions
+		btnSave.setAction(new SaveEditingTableAction(this, sorter));
+		btnEdit.setAction(new EnableEditingAction(this, sorter));
 
-		textEditInformation = new JTextArea(1, 25);
-		textEditInformation.setOpaque(false);
-		textEditInformation.setEnabled(false);
-		textEditInformation.setDisabledTextColor(Color.BLACK);
-		textEditInformation.setLineWrap(true);
-		textEditInformation.setWrapStyleWord(true);
+		AbstractAction ClearFilterAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sorter.setRowFilter(null);
+				textTreeFilterInfo.setText("");
+				btnClearTreeFilter.setEnabled(false);
+			}
+		};
 
-		// TODO: for testing only. Delete later
-		FilterDemo = new JTextArea(1, 15);
-		FilterDemo.setOpaque(true);
-		FilterDemo.setEnabled(true);
-		FilterDemo.setBorder((new JTextField()).getBorder());
-		FilterDemo.setDisabledTextColor(Color.BLACK);
-		FilterDemo.setLineWrap(true);
-		FilterDemo.setWrapStyleWord(true);
-		FilterDemo.getDocument().addDocumentListener(new DocumentListener() {
+		// set clear tree filter's button action
+		btnClearTreeFilter.setAction(ClearFilterAction);
+		btnClearTreeFilter.setText("Clear Tree Filter");
+		// button is disabled until a tree filter is applied
+		btnClearTreeFilter.setEnabled(false);
+
+		textEditInfo = new JTextArea(1, 25);
+		textEditInfo.setOpaque(false);
+		textEditInfo.setEnabled(false);
+		textEditInfo.setDisabledTextColor(Color.BLACK);
+		textEditInfo.setLineWrap(true);
+		textEditInfo.setWrapStyleWord(true);
+
+		// TODO: get search user story
+		textSearchBox = new JTextArea(1, 15);
+		textSearchBox.setOpaque(true);
+		textSearchBox.setEnabled(true);
+		textSearchBox.setBorder((new JTextField()).getBorder());
+		textSearchBox.setDisabledTextColor(Color.BLACK);
+		textSearchBox.setLineWrap(true);
+		textSearchBox.setWrapStyleWord(true);
+		
+		textSearchBox.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				newFilter();
 			}
@@ -200,6 +228,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				newFilter();
 			}
 		});
+		
 		textTreeFilterInfo = new JTextArea(1,20);
 		textTreeFilterInfo.setOpaque(false);
 		textTreeFilterInfo.setEnabled(false);
@@ -213,27 +242,22 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		textFilterInfo.setDisabledTextColor(Color.BLACK);
 		textFilterInfo.setLineWrap(true);
 		textFilterInfo.setWrapStyleWord(true);
-		
-		ClearFilter = new JButton("Clear Filter");
-
-		// TODO: dynamically change this
-		btnSave.setEnabled(false);
-		// TODO: Set this button's action
 
 		SpringLayout editPanelLayout = new SpringLayout();
 		JPanel editPanel = new JPanel(editPanelLayout);
 		editPanel.add(btnEdit);
 		editPanel.add(btnSave);
-	//	editPanel.add(FilterDemo);
+		// TODO: get search box
+	//	editPanel.add(textSearchBox);
 		editPanel.add(textFilterInfo);
-		editPanel.add(textEditInformation);
-		editPanel.add(ClearFilter);
+		editPanel.add(textEditInfo);
+		editPanel.add(btnClearTreeFilter);
 		editPanel.add(textTreeFilterInfo);
 		editPanel.setPreferredSize(new Dimension(
 				btnEdit.getPreferredSize().width,
 				btnEdit.getPreferredSize().height
 						+ (btnEdit.getPreferredSize().height / 2)
-						+ textEditInformation
+						+ textEditInfo
 								.getPreferredScrollableViewportSize().height
 						+ 10));
 
@@ -247,20 +271,19 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		editPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
 
-		editPanelLayout.putConstraint(SpringLayout.WEST, textEditInformation,
+		editPanelLayout.putConstraint(SpringLayout.WEST, textEditInfo,
 				0, SpringLayout.WEST, btnEdit);
-		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInformation,
+		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInfo,
 				0, SpringLayout.SOUTH, btnEdit);
 
-		// TODO: testing only. delete later
-		editPanelLayout.putConstraint(SpringLayout.WEST, ClearFilter, 5, SpringLayout.WEST, editPanel);
-		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, ClearFilter, 0,
+		editPanelLayout.putConstraint(SpringLayout.WEST, btnClearTreeFilter, 5, SpringLayout.WEST, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnClearTreeFilter, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.WEST, textTreeFilterInfo, 5, SpringLayout.WEST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textTreeFilterInfo, 0,
-				SpringLayout.SOUTH, ClearFilter);
-		editPanelLayout.putConstraint(SpringLayout.WEST, FilterDemo, 5, SpringLayout.EAST, ClearFilter);
-		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, FilterDemo, 0,
+				SpringLayout.SOUTH, btnClearTreeFilter);
+		editPanelLayout.putConstraint(SpringLayout.WEST, textSearchBox, 5, SpringLayout.EAST, btnClearTreeFilter);
+		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, textSearchBox, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.EAST, textFilterInfo, 0, SpringLayout.EAST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.SOUTH, textFilterInfo, 0, SpringLayout.SOUTH, editPanel);
@@ -269,7 +292,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		this.table.setFillsViewportHeight(true);
 		this.table.getColumnModel().removeColumn(
 				this.table.getColumnModel().getColumn(0));
-
+		
+		
+		// Create comparators for table sorting
 		Comparator<String> PriorityComparator = new Comparator<String>() {
 			@Override
 			public int compare(String s1, String s2) {
@@ -318,40 +343,24 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			}
 		};
 
+		
 		sorter = new TableRowSorter<TableModel>(table.getModel());
-		/*
-		 * for (int i = 0; i < this.table.getColumnCount(); i++) { if
-		 * (this.table.getColumnName(i).equals("Priority")) {
-		 * sorter.setComparator(i, comparator); } }
-		 */
-		// TODO: find a better way to get the the appropriate columns (for loop
-		// was failing for me for no reason)
+
+		// column 3 sorts by priority
 		sorter.setComparator(3, PriorityComparator);
+		// column 5 sorts by iteration date
 		sorter.setComparator(5, IterationStringComparator);
+		// column 6 and 7 sorts as numbers rather than strings
 		sorter.setComparator(6, numberComparator);
 		sorter.setComparator(7, numberComparator);
+		
 		table.setRowSorter(sorter);
-
-		// TODO: MOVE
-		btnSave.setAction(new SaveEditingTableAction(this, sorter));
-		btnEdit.setAction(new EnableEditingAction(this, sorter));
-
-		// TODO: temporary. remove later
-		AbstractAction ClearFilterAction = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				sorter.setRowFilter(null);
-				textTreeFilterInfo.setText("");
-				ClearFilter.setEnabled(false);
-			}
-		};
-		ClearFilter.setAction(ClearFilterAction);
-		ClearFilter.setText("Clear Tree Filter");
-		ClearFilter.setEnabled(false);
+		
 		// Add to this list of the column does not need equal size
 		String shortCols = "Estimate|Effort";
 		for (int i = 0; i < this.table.getColumnCount(); i++) {
 			if (this.table.getColumnName(i).matches(shortCols)) {
+				// TODO: set width differently?
 				this.table.getColumnModel().getColumn(i).setPreferredWidth(10);
 			}
 		}
@@ -395,10 +404,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		return tv;
 	}
 
-	/*
+	/**
 	 * @author Steve Kordell
 	 */
-	// TODO: More documentation
 	void onDoubleClick(int index) {
 		// update to use this function instead
 		viewRequirement(index);
@@ -441,9 +449,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		// content.add(butView);
 		content.add(butRefresh);
 
-		toolbarView = new ToolbarGroupView("Refresh", content);
+		toolbarGroupView = new ToolbarGroupView("Refresh", content);
 		// set the width of the group so it is not too long
-		toolbarView.setPreferredWidth((int) (butView.getPreferredSize()
+		toolbarGroupView.setPreferredWidth((int) (butView.getPreferredSize()
 				.getWidth() + 40));
 
 	}
@@ -553,7 +561,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public ToolbarGroupView getGroup() {
-		return toolbarView;
+		return toolbarGroupView;
 	}
 
 	/**
@@ -564,8 +572,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
-		System.out.println("We are refreshing the table view");
-
+		System.out.println("We are refreshing the table view");		
 		if (isEditable) {
 			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
@@ -592,6 +599,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		tabController.refreshIterationTree();
 		PermissionToolbarPane.getInstance().refreshPermission();
+		ToolbarView.getInstance().refreshPermissions();
 		tabController.refreshFilterView();
 		tabController.refreshSubReqView();
 		changeButtonStatus();
@@ -599,7 +607,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	/**
 	 * Open a new tab containing a view of the selected requirement in the list
-	 * view TODO: Possibly implement view requirement mode
+	 * view 
 	 */
 
 	public void viewRequirement() {
@@ -716,6 +724,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
+
+		RowFilter rf = sorter.getRowFilter();
+		sorter.setRowFilter(null);
 		
 		System.out.println("We received new requirements from the database");
 		
@@ -727,7 +738,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			textFilterInfo.setText("");
 		}
 		updateListView();
-
+		sorter.setRowFilter(rf);
+		if (this.getTable().getRowCount() == 0) {
+			textFilterInfo.setText("No Requirements Found");
+		}
 	}
 
 	@Override
@@ -754,7 +768,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	// writes to hidden panel to inform the user of editing, etc..
 	public void displayEditInformation(String text) {
-		this.textEditInformation.setText(text);
+		this.textEditInfo.setText(text);
 	}
 
 	// sets the buttons enabled/disabled depending on the isEditable state
@@ -812,7 +826,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter(FilterDemo.getText());
+			rf = RowFilter.regexFilter(textSearchBox.getText());
 		} catch (java.util.regex.PatternSyntaxException e) {
 			return;
 		}
@@ -828,7 +842,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			return;
 		}
 		sorter.setRowFilter(rf);
-		ClearFilter.setEnabled(true);
+		btnClearTreeFilter.setEnabled(true);
 	}
 
 	// writes to hidden panel to inform the user of editing, etc..
@@ -841,7 +855,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 
 	public void filtersUpdated() {
-		refresh();		
+		refresh();
 	}
 
 }

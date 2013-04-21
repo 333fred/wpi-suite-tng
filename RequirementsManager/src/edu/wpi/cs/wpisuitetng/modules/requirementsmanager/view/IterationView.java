@@ -46,8 +46,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Iterati
 public class IterationView extends Tab implements ISaveNotifier {
 
 	/** Status enum, whether created or edited */
-	private enum Status {
-		CREATE, EDIT
+	public enum Status {
+		CREATE, EDIT, VIEW
 	}
 
 	/** Controller for iteration interaction */
@@ -95,17 +95,15 @@ public class IterationView extends Tab implements ISaveNotifier {
 	private final int VERTICAL_PADDING = 10;
 	private final int HORIZONTAL_PADDING = 20;
 
-	public IterationView(Iteration iteration,
-			MainTabController mainTabController) {
-		this(iteration, Status.EDIT, mainTabController);
-	}
 
 	public IterationView(MainTabController mainTabController) {
 		this(new Iteration(), Status.CREATE, mainTabController);
 	}
 
-	private IterationView(Iteration iteration, Status status,
+	public IterationView(Iteration iteration, Status status,
 			MainTabController mainTabController) {
+		System.out.println("IterationVIew Mode: " + status);
+		
 		this.iteration = iteration;
 		this.status = status;
 		this.mainTabController = mainTabController;
@@ -136,12 +134,13 @@ public class IterationView extends Tab implements ISaveNotifier {
 			butSave.setText("Create");
 		} else {
 			butSave.setText("Save");
-		}
+		}		
 
 		butCancel = new JButton("Cancel");
 		butCancel.setAction(new CancelAction());
 
 		txtName = new JTextField();
+		txtName.setDisabledTextColor(Color.BLACK);
 		txtEstimate = new JTextField(10);
 
 		// this text field will always be disabled, as you cant edit it
@@ -153,7 +152,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		calEndDate = new JCalendar();
 
 		// populate fields, if editing
-		if (status == Status.EDIT) {
+		if (status == Status.EDIT || status == Status.VIEW) {
 			txtName.setText(iteration.getName());
 			calStartDate.setDate((Date) iteration.getStartDate().clone());
 			calEndDate.setDate((Date) iteration.getEndDate().clone());
@@ -162,15 +161,24 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 		butSave.setEnabled(false);
 
-		txtName.addKeyListener(new IterationViewListener(this, txtName));
-
-		IterationViewListener startDateListener = new IterationViewListener(
-				this, calStartDate);
-		IterationViewListener endDateListener = new IterationViewListener(this,
-				calEndDate);
-
-		calStartDate.addPropertyChangeListener(startDateListener);
-		calEndDate.addPropertyChangeListener(endDateListener);
+		if (status == Status.VIEW) {
+			txtName.setEnabled(false);
+			calStartDate.setEnabled(false);
+			calEndDate.setEnabled(false);
+			butCancel.setText("Close");
+			butSave.setEnabled(false);
+		}
+		else {
+			txtName.addKeyListener(new IterationViewListener(this, txtName));
+			
+			IterationViewListener startDateListener = new IterationViewListener(
+					this, calStartDate);
+			IterationViewListener endDateListener = new IterationViewListener(this,
+					calEndDate);
+	
+			calStartDate.addPropertyChangeListener(startDateListener);
+			calEndDate.addPropertyChangeListener(endDateListener);
+		}
 
 		SpringLayout layout = new SpringLayout();
 
@@ -218,7 +226,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.EAST, txtName, 0, SpringLayout.EAST,
 				calEndDate);
 
-		if (status == Status.EDIT) {
+		if (status == Status.EDIT || status == Status.VIEW) {
 			layout.putConstraint(SpringLayout.NORTH, labEstimate,
 					VERTICAL_PADDING, SpringLayout.SOUTH, labCalendarError);
 			layout.putConstraint(SpringLayout.WEST, labEstimate,
@@ -259,7 +267,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		add(labStartDate);
 		add(labEndDate);
 
-		if (status == Status.EDIT) {
+		if (status == Status.EDIT || status == Status.VIEW) {
 			add(labEstimate);
 			add(txtEstimate);
 		}

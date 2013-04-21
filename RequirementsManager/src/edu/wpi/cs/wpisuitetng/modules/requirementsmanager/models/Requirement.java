@@ -1,5 +1,4 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +11,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -22,7 +22,10 @@ import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirement.RequirementComparator;
 
 /**
  * This is the basic requirement model. It contains all the fields that can be
@@ -639,7 +642,8 @@ public class Requirement extends AbstractModel {
 	 */
 	public boolean testsPassed() {
 		for (ATest t : this.aTests) {
-			if (t.getStatus() == ATest.ATestStatus.FAILED || t.getStatus() == ATest.ATestStatus.BLANK)
+			if (t.getStatus() == ATest.ATestStatus.FAILED
+					|| t.getStatus() == ATest.ATestStatus.BLANK)
 				return false;
 		}
 		return true;
@@ -649,9 +653,6 @@ public class Requirement extends AbstractModel {
 		this.aTests.add(aTest);
 	}
 
-	
-	
-	
 	/**
 	 * @return the tasks
 	 */
@@ -680,12 +681,32 @@ public class Requirement extends AbstractModel {
 		return true;
 	}
 
+	public boolean subReqsCompleted() {
+		for (Integer R : this.subRequirements) {
+			try {
+				if (RequirementDatabase.getInstance().get(R).getStatus() != status.COMPLETE) {
+					return false;
+				}
+			} catch (RequirementNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+
 	public void addTask(Task task) {
 		this.tasks.add(task);
 	}
-	
+
 	public String toString() {
 		return this.getName();
+	}
+
+	public static List<Requirement> sortRequirements(
+			List<Requirement> requirements) {
+		Collections.sort(requirements, new RequirementComparator());
+		return requirements;
 	}
 
 }
