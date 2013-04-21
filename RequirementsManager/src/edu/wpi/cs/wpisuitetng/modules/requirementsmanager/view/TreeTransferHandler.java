@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    Steven Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
@@ -64,7 +64,7 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		if (!support.isDrop()) {
 			return false;
-		}
+		}		
 		support.setShowDropLocation(true);
 		if (!support.isDataFlavorSupported(nodesFlavor)) {
 			return false;

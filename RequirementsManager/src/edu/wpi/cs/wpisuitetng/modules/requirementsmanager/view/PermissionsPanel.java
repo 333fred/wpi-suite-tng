@@ -82,7 +82,7 @@ public class PermissionsPanel extends Tab {
 
 		permissions = new UserPermissionLevel[localPermissions.size()];
 		for (int i = 0; i < permissions.length; i++) {
-			permissions[i] = localPermissions.get(i).getPermission();
+			permissions[i] = localPermissions.get(i).getPermLevel();
 		}
 		// construct the table of users and their permissions
 		String[] columnNames = new String[2];
@@ -92,7 +92,7 @@ public class PermissionsPanel extends Tab {
 		String[][] rowData = new String[permissions.length][2];
 		for (int i = 0; i < users.length; i++) {
 			rowData[i][0] = localPermissions.get(i).getUser().getName();
-			rowData[i][1] = localPermissions.get(i).getPermission().toString();
+			rowData[i][1] = localPermissions.get(i).getPermLevel().toString();
 		}
 
 		userTable = new PermissionsTable(rowData, columnNames);
@@ -126,7 +126,7 @@ public class PermissionsPanel extends Tab {
 		group.add(adminButton);
 		group.add(updateButton);
 		group.add(noPermissionButton);
-		
+
 		// set constraints for the overall panel
 		layout.putConstraint(SpringLayout.WEST, userScroll, 0,
 				SpringLayout.WEST, this);

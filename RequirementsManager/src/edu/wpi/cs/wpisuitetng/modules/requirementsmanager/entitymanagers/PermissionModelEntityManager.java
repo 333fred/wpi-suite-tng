@@ -55,7 +55,7 @@ public class PermissionModelEntityManager implements
 
 		// The user already has permissions assigned to them, so there's been a
 		// problem. Throw a bad request
-		if (db.retrieve(PermissionModel.class, "user", s.getUser(),
+		if (db.retrieve(PermissionModel.class, "id", s.getUser().getIdNum(),
 				s.getProject()).toArray(new PermissionModel[0]).length != 0) {
 			throw new BadRequestException();
 		}
@@ -65,7 +65,8 @@ public class PermissionModelEntityManager implements
 		// default
 		PermissionModel model = new PermissionModel();
 		model.setUser(s.getUser());
-		model.setPermission(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevel.ADMIN
+		model.setId(s.getUser().getIdNum());
+		model.setPermLevel(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevel.ADMIN
 				: UserPermissionLevel.NONE);
 
 		// Save the permission to the database
@@ -88,8 +89,9 @@ public class PermissionModelEntityManager implements
 			return perms;
 		} catch (BadRequestException e) {
 			// Get the pre-existing perms and return it
-			return db.retrieve(PermissionModel.class, "user", s.getUser(),
-					s.getProject()).toArray(new PermissionModel[0]);
+			return db.retrieve(PermissionModel.class, "id",
+					s.getUser().getIdNum(), s.getProject()).toArray(
+					new PermissionModel[0]);
 		}
 	}
 
@@ -110,16 +112,15 @@ public class PermissionModelEntityManager implements
 			throws WPISuiteException {
 		PermissionModel updatedModel = PermissionModel.fromJSON(content);
 		PermissionModel oldModel;
-		System.out.println(content);
 		// If the permission exists, then get it. Otherwise, create a new model
 		if ((oldModel = (PermissionModel) db.retrieve(PermissionModel.class,
-				"user", updatedModel.getUser(), s.getProject()).get(0)) == null) {
+				"id", updatedModel.getUser().getIdNum(), s.getProject()).get(0)) == null) {
 			oldModel = new PermissionModel();
 		}
 
 		// Update the model
 		updateMapper.map(updatedModel, oldModel);
-		if (!db.save(oldModel)) {
+		if (!db.save(oldModel, s.getProject())) {
 			throw new WPISuiteException();
 		}
 
@@ -170,35 +171,6 @@ public class PermissionModelEntityManager implements
 	public int Count() throws WPISuiteException {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	/**
-	 * Gets the next valid id for this class
-	 * 
-	 * @param s
-	 *            the current session
-	 * @return the new id
-	 * @throws WPISuiteException
-	 *             if there was a lookup error
-	 */
-	private int getId(Session s) throws WPISuiteException {
-		try {
-			IdManager idManager;
-			if (db.retrieve(IdManager.class, "type", "permissions",
-					s.getProject()).size() != 0) {
-				idManager = db.retrieve(IdManager.class, "type", "permissions",
-						s.getProject()).toArray(new IdManager[0])[0];
-			} else {
-				idManager = new IdManager("permissions");
-			}
-			int id = idManager.getNextId();
-			if (!db.save(idManager, s.getProject())) {
-				throw new WPISuiteException();
-			}
-			return id;
-		} catch (WPISuiteException ex) {
-			throw ex;
-		}
 	}
 
 	/**

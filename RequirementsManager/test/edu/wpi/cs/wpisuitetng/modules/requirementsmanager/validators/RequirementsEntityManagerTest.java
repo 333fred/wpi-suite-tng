@@ -36,6 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.RequirementsEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 public class RequirementsEntityManagerTest {
@@ -89,11 +90,15 @@ public class RequirementsEntityManagerTest {
 
 	@Test
 	public void testMakeEntity() throws WPISuiteException {
+		IdManager idManager = new IdManager("requirement");
+		idManager.setCurId(2);
+		db.save(idManager, defaultSession.getProject());
 		Requirement created = manager.makeEntity(defaultSession,
 				goodRequirement.toJSON());
 		assertEquals("Name", created.getName());
-		assertSame(db.retrieve(Requirement.class, "rUID", created.getrUID())
-				.get(0), created);
+		assertSame(
+				db.retrieve(Requirement.class, "rUID", created.getrUID(),
+						defaultSession.getProject()).get(0), created);
 	}
 
 	@Test(expected = BadRequestException.class)
