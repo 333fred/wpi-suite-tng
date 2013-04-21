@@ -17,7 +17,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
@@ -29,15 +29,22 @@ public class SavePermissionsAction extends AbstractAction {
 	PermissionsPanel panel;
 
 	public SavePermissionsAction(PermissionsPanel panel, PermissionModel model) {
+		super("Save Permission");
 		this.model = model;
 		this.panel = panel;
 	}
-
-	public void actionPerformed(ActionEvent e) {
+	
+	
+	/**
+	 * Saves the currently selected permission in the manger
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e1) {
 		PermissionModelController controller = new PermissionModelController();
 		SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
+		System.out.println("Save Perm Button Pressed");
 		
-		model.setPermission(panel.getPermission());
+		model.setPermLevel(panel.getPermission());
 		
 		controller.save(model, observer);
 	}
