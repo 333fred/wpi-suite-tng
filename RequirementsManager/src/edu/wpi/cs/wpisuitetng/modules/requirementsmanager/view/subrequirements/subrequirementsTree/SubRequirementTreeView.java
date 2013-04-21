@@ -180,12 +180,24 @@ public class SubRequirementTreeView extends JPanel implements
 		DefaultMutableTreeNode requirementNode = null;
 		DefaultMutableTreeNode subRequirementNode = null;
 		Requirement tempReq = null;
+		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
+		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();
 		this.top.removeAllChildren();
 
 		if (requirements != null) {
 			for (Requirement anReq : requirements) {
+				if (anReq.getpUID().size() == 0){
+					if(anReq.getSubRequirements().size()>0)
+						topReqsWithChildren.add(anReq);
+					else
+						topReqsWOChildren.add(anReq);					
+				}
+			}
+			topReqsWOChildren = Requirement.sortRequirements(topReqsWOChildren);
+			topReqsWithChildren = Requirement.sortRequirements(topReqsWithChildren);
+			
+			for (Requirement anReq : topReqsWithChildren) {
 
-				if (anReq.getpUID().size() == 0) {
 					requirementNode = new DefaultMutableTreeNode(anReq);
 
 					for (Integer aReq : anReq.getSubRequirements()) {
@@ -202,8 +214,48 @@ public class SubRequirementTreeView extends JPanel implements
 						}
 					}
 					this.top.add(requirementNode);
-				}
 			}
+			
+			for (Requirement anReq : topReqsWOChildren) {
+					requirementNode = new DefaultMutableTreeNode(anReq);
+
+					for (Integer aReq : anReq.getSubRequirements()) {
+						try {
+							tempReq = RequirementDatabase.getInstance().get(
+									aReq);
+							subRequirementNode = new DefaultMutableTreeNode(
+									tempReq);
+							requirementNode.add(subRequirementNode);
+							updateTreeNodes(tempReq, subRequirementNode);
+						} catch (RequirementNotFoundException e) {
+							System.out
+									.println("Requirement not found: SubRequirementTreeView:372");
+						}
+					}
+					this.top.add(requirementNode);
+			}
+			
+//			for (Requirement anReq : requirements) {
+//
+//				if (anReq.getpUID().size() == 0) {
+//					requirementNode = new DefaultMutableTreeNode(anReq);
+//
+//					for (Integer aReq : anReq.getSubRequirements()) {
+//						try {
+//							tempReq = RequirementDatabase.getInstance().get(
+//									aReq);
+//							subRequirementNode = new DefaultMutableTreeNode(
+//									tempReq);
+//							requirementNode.add(subRequirementNode);
+//							updateTreeNodes(tempReq, subRequirementNode);
+//						} catch (RequirementNotFoundException e) {
+//							System.out
+//									.println("Requirement not found: SubRequirementTreeView:372");
+//						}
+//					}
+//					this.top.add(requirementNode);
+//				}
+//			}
 
 			((DefaultTreeModel) this.tree.getModel())
 					.nodeStructureChanged(this.top);
