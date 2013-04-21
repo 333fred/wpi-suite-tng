@@ -623,8 +623,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				errorString = "Value must be a number";
 			}
 
-	
-
 			break;
 		case NAME:
 		case RELEASE_NUMBER:
@@ -671,16 +669,23 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			break;
 
 		case PRIORITY:
-			filter.setValue(Priority.getFromString((String) cboxEqualTo
-					.getSelectedItem()));
+
+			if (cboxEqualTo.getSelectedIndex() != -1) {
+				filter.setValue(Priority.getFromString((String) cboxEqualTo
+						.getSelectedItem()));
+			}
 			break;
 		case STATUS:
-			filter.setValue(Status.getFromString((String) cboxEqualTo
-					.getSelectedItem()));
+			if (cboxEqualTo.getSelectedIndex() != -1) {
+				filter.setValue(Status.getFromString((String) cboxEqualTo
+						.getSelectedItem()));
+			}
 			break;
 		case TYPE:
-			filter.setValue(Type.getFromString((String) cboxEqualTo
-					.getSelectedItem()));
+			if (cboxEqualTo.getSelectedIndex() != -1) {
+				filter.setValue(Type.getFromString((String) cboxEqualTo
+						.getSelectedItem()));
+			}
 			break;
 		}
 
@@ -691,13 +696,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 * FilterOperation.getFromString((String)
 		 * cboxOperation.getSelectedItem());
 		 */
+
 		
-		if (!error && isFilterDuplicate(checkFilter)) {
+		if (!error && checkFilter.getValue() != null && isFilterDuplicate(checkFilter)) {
 			error = true;
 			errorString = "Similar filter already exists";
 		}
 
-		if (!error) {			
+		if (!error) {
 			labSaveError.setText("  ");
 			butSave.setEnabled(true);
 			txtEqualTo.setBackground(Color.WHITE);
