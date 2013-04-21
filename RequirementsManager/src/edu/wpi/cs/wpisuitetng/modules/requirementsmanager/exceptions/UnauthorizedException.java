@@ -12,12 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 
 public class UnauthorizedException extends Exception {
 
-	public UserPermissionLevels required;
-	public UserPermissionLevels have;
+	public UserPermissionLevel required;
+	public UserPermissionLevel have;
 
 	/**
 	 * Creates an exception with the current permissions and the necessary
@@ -28,8 +28,8 @@ public class UnauthorizedException extends Exception {
 	 * @param have
 	 *            the possessed permission
 	 */
-	public UnauthorizedException(UserPermissionLevels required,
-			UserPermissionLevels have) {
+	public UnauthorizedException(UserPermissionLevel required,
+			UserPermissionLevel have) {
 		this.required = required;
 		this.have = have;
 	}
@@ -37,28 +37,28 @@ public class UnauthorizedException extends Exception {
 	/**
 	 * @return the required
 	 */
-	public UserPermissionLevels getRequired() {
+	public UserPermissionLevel getRequired() {
 		return required;
 	}
 
 	/**
 	 * @param required the required to set
 	 */
-	public void setRequired(UserPermissionLevels required) {
+	public void setRequired(UserPermissionLevel required) {
 		this.required = required;
 	}
 
 	/**
 	 * @return the have
 	 */
-	public UserPermissionLevels getHave() {
+	public UserPermissionLevel getHave() {
 		return have;
 	}
 
 	/**
 	 * @param have the have to set
 	 */
-	public void setHave(UserPermissionLevels have) {
+	public void setHave(UserPermissionLevel have) {
 		this.have = have;
 	}
 	

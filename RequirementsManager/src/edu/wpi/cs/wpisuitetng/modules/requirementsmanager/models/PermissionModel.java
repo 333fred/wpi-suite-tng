@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 
 /**
  * Contains the permission for the current user
@@ -26,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
 public class PermissionModel extends AbstractModel {
 
 	private User user;
-	private UserPermissionLevels permission;
+	private UserPermissionLevel permission;
 	private static PermissionModel model;
 	private static boolean initialized = false;
 
@@ -55,7 +55,7 @@ public class PermissionModel extends AbstractModel {
 	 */
 	public PermissionModel() {
 		this.user = null;
-		this.permission = UserPermissionLevels.NONE;
+		this.permission = UserPermissionLevel.NONE;
 	}
 
 	/**
@@ -145,8 +145,12 @@ public class PermissionModel extends AbstractModel {
 	/**
 	 * @return the permission
 	 */
-	public UserPermissionLevels getPermission() {
+	public UserPermissionLevel getPermission() {
 		return permission;
+	}
+	
+	public UserPermissions getUserPermissions() {
+		return new UserPermissions(permission);
 	}
 
 	/**
@@ -154,7 +158,7 @@ public class PermissionModel extends AbstractModel {
 	 * 
 	 * @return the permission level
 	 */
-	public static UserPermissionLevels getPermissionStatic() {
+	public static UserPermissionLevel getPermissionStatic() {
 		init();
 		return model.getPermission();
 	}
@@ -165,7 +169,7 @@ public class PermissionModel extends AbstractModel {
 	 * @param level
 	 *            the level to set
 	 */
-	public static void setUserPermissionLevelStatic(UserPermissionLevels level) {
+	public static void setUserPermissionLevelStatic(UserPermissionLevel level) {
 		init();
 		model.setPermission(level);
 	}
@@ -174,7 +178,7 @@ public class PermissionModel extends AbstractModel {
 	 * @param permission
 	 *            the permission to set
 	 */
-	public void setPermission(UserPermissionLevels permission) {
+	public void setPermission(UserPermissionLevel permission) {
 		this.permission = permission;
 	}
 
