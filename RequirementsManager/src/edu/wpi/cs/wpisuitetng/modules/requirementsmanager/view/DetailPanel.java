@@ -403,7 +403,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		comboBoxStatus.setBackground(Color.WHITE);
-		this.determineAvailableStatusOptions();
 		
 		//Priority ComboBox
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
@@ -595,7 +594,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
 		}
-
 		switch (getRequirement().getType()) {
 		case BLANK:
 			comboBoxType.setSelectedIndex(0);
@@ -615,6 +613,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		case SCENARIO:
 			comboBoxType.setSelectedIndex(5);
 		}
+		
 		switch (getRequirement().getPriority()) {
 		case BLANK:
 			comboBoxPriority.setSelectedIndex(0);
@@ -664,6 +663,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		
 		this.disableAllFieldsIfDeleted();
+		this.determineAvailableStatusOptions();
 	}
 
 	/**
