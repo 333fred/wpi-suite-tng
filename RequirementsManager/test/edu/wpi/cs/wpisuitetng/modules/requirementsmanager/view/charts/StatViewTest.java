@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.ChartType;
@@ -21,7 +22,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.D
 
 public class StatViewTest {
 
-	StatView stats = StatView.getInstance();
+	StatView stats;
+
+	@Before
+	public void setup() {
+		StatView.init();
+		stats = StatView.getInstance();
+	}
 
 	@Test
 	public void testDefaultEnums() {

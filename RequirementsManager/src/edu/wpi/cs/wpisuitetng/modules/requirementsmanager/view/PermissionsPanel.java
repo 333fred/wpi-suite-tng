@@ -19,10 +19,10 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 
@@ -39,11 +39,14 @@ public class PermissionsPanel extends Tab {
 	/** List of locally stored permissions */
 	private List<PermissionModel> localPermissions;
 
-	/** A list to display */
-	private JList userList;
+	/** A table to display users and their permission level */
+	private PermissionsTable userTable;
 
 	/** A list of users to display */
 	private String[] users;
+
+	/** A list of permissions to display */
+	private UserPermissionLevel[] permissions;
 
 	/** A button to select administrative permission level */
 	private JRadioButton adminButton;
@@ -68,20 +71,42 @@ public class PermissionsPanel extends Tab {
 
 		radioPanel.setLayout(radioLayout);
 		setLayout(layout);
+		
 		/** Initialize the list of local permissions */
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		System.out.println(localPermissions.size());
 		users = new String[localPermissions.size()];
-
 		for (int i = 0; i < users.length; i++) {
 			users[i] = localPermissions.get(i).getUser().getName();
 		}
 
-		// construct the list of users
-		userList = new JList(users);
-		//userList.setSelectedIndex(0); //default to the 
-		userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		userList.addListSelectionListener(new PermissionSelectionChangedListener(this));
+		permissions = new UserPermissionLevel[localPermissions.size()];
+		for (int i = 0; i < permissions.length; i++) {
+			permissions[i] = localPermissions.get(i).getPermLevel();
+		}
+		// construct the table of users and their permissions
+		String[] columnNames = new String[2];
+		columnNames[0] = "User name";
+		columnNames[1] = "Permission Level";
+
+		String[][] rowData = new String[permissions.length][2];
+		for (int i = 0; i < users.length; i++) {
+			rowData[i][0] = localPermissions.get(i).getUser().getName();
+			rowData[i][1] = localPermissions.get(i).getPermLevel().toString();
+		}
+
+		userTable = new PermissionsTable(rowData, columnNames);
+		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		userTable.addMouseListener(new PermissionSelectionChangedListener(this));
+		for (int i = 0; i < userTable.getRowCount(); i++) {
+			if (userTable.isRowSelected(i)) {
+				setSelectedButtons((UserPermissionLevel) userTable.getValueAt(
+						i, 1));
+			}
+		}
+
+		// userTable.addListSelectionListener(new
+		// PermissionSelectionChangedListener(this));
 
 		/** Construct the admin button */
 		adminButton = new JRadioButton("Admin", false);
@@ -94,21 +119,13 @@ public class PermissionsPanel extends Tab {
 
 		JScrollPane userScroll = new JScrollPane();
 		userScroll.setBorder(null);
-		userScroll.getViewport().add(userList);
+		userScroll.getViewport().add(userTable);
 
 		// Create a group for all the buttons
 		ButtonGroup group = new ButtonGroup();
 		group.add(adminButton);
 		group.add(updateButton);
 		group.add(noPermissionButton);
-		if (!userList.isSelectionEmpty()) {
-			String name = (String) userList.getSelectedValue();
-			for (PermissionModel mod : localPermissions) {
-				if (name.equals(mod.getUser().getName())) {
-					setSelectedButtons(mod.getPermission());
-				}
-			}
-		}
 
 		// set constraints for the overall panel
 		layout.putConstraint(SpringLayout.WEST, userScroll, 0,
@@ -146,15 +163,11 @@ public class PermissionsPanel extends Tab {
 		radioLayout.putConstraint(SpringLayout.EAST, saveButton,
 				(int) saveButton.getPreferredSize().getWidth(),
 				SpringLayout.WEST, radioPanel);
-		
+
 		radioLayout.putConstraint(SpringLayout.SOUTH, saveButton,
 				(int) saveButton.getPreferredSize().getHeight(),
 				SpringLayout.NORTH, saveButton);
 
-		// assign an action to the save button
-		if (!userList.isSelectionEmpty())
-			saveButton.setAction(new SavePermissionsAction(this,
-					localPermissions.get(userList.getSelectedIndex())));
 
 		// add the buttons to the panel
 		radioPanel.add(adminButton);
@@ -171,31 +184,42 @@ public class PermissionsPanel extends Tab {
 
 	}
 
+	/**
+	 * 
+	 * @param level The level to set the radio buttons to reflect
+	 */
 	public void setSelectedButtons(UserPermissionLevel level) {
 		switch (level) {
 		case ADMIN:
 			adminButton.setSelected(true);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(false);
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
 			break;
 		case UPDATE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(true);
 			noPermissionButton.setSelected(false);
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
 			break;
 		case NONE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(true);
+			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
 			break;
 		default:
 			adminButton.setSelected(false);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(false);
+			saveButton.setEnabled(false);
 		}
-
 	}
 
+	/**
+	 * 
+	 * @return The permission level selected on the radio buttons 
+	 */
 	public UserPermissionLevel getPermission() {
 		if (adminButton.isSelected())
 			return UserPermissionLevel.ADMIN;
@@ -205,11 +229,18 @@ public class PermissionsPanel extends Tab {
 			return UserPermissionLevel.NONE;
 		return null;
 	}
-	
-	public JList getUserList(){
-		return userList;
+/**
+ * 
+ * @return The table of users and their permissions.
+ */
+	public JTable getUserList() {
+		return userTable;
 	}
 
+	/**
+	 * 
+	 * @return The local copy of the database
+	 */
 	public List<PermissionModel> getLocalDatabase() {
 		return localPermissions;
 	}

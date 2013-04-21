@@ -539,6 +539,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		this.determineAvailableStatusOptions();
 
 		comboBoxPriority = new JComboBox();
+
 		comboBoxPriority.setBackground(Color.WHITE);
 
 		for (Priority t : Priority.values()) {
@@ -722,8 +723,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	 * @param requirement
 	 */
 	private void loadFields() {
+
 		if (mode == Mode.CREATE) {
 			setSaveButtonAction();
+
 			comboBoxStatus.setEnabled(false);
 			comboBoxStatus.setSelectedItem("NEW");
 			textEstimate.setEnabled(false);
