@@ -300,10 +300,7 @@ public class AssigneePanel extends JPanel {
 	 * Class used as the Action Listener for the Unassigned Uuser button
 	 * 
 	 * Moves users from the assigned list to the unassigned list when the
-	 * unassign button is pressed
-	 * 
-	 * 
-	 * 
+	 * unassign button is pressed 
 	 */
 	private class UnassignUserAction implements ActionListener {
 		@Override

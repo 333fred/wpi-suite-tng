@@ -23,12 +23,14 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.PermissionSelectionChangedListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SavePermissionsAction;
 
 @SuppressWarnings("serial")
@@ -55,6 +57,7 @@ public class PermissionsPanel extends Tab {
 	/** A button to save changes in permissions */
 	private JButton saveButton;
 
+	@SuppressWarnings("unchecked")
 	public PermissionsPanel() {
 		PermissionModel model = PermissionModel.getInstance();
 		SpringLayout layout = new SpringLayout();
@@ -76,7 +79,9 @@ public class PermissionsPanel extends Tab {
 
 		// construct the list of users
 		userList = new JList(users);
-		userList.setSelectedIndex(0);
+		//userList.setSelectedIndex(0); //default to the 
+		userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		userList.addListSelectionListener(new PermissionSelectionChangedListener(this));
 
 		/** Construct the admin button */
 		adminButton = new JRadioButton("Admin", false);
@@ -199,5 +204,13 @@ public class PermissionsPanel extends Tab {
 		else if (noPermissionButton.isSelected())
 			return UserPermissionLevels.NONE;
 		return null;
+	}
+	
+	public JList getUserList(){
+		return userList;
+	}
+
+	public List<PermissionModel> getLocalDatabase() {
+		return localPermissions;
 	}
 }
