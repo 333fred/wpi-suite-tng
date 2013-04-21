@@ -13,7 +13,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -21,8 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
-public class PermissionSelectionChangedListener implements
-		ListSelectionListener {
+public class PermissionSelectionChangedListener implements MouseListener {
 
 	PermissionsPanel panel;
 
@@ -37,12 +39,52 @@ public class PermissionSelectionChangedListener implements
 	 * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event
 	 * .ListSelectionEvent)
 	 */
-	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		for (PermissionModel m : panel.getLocalDatabase()) {
-			if (panel.getUserList().getSelectedValue()
-					.equals(m.getUser().getName()))
-				panel.setSelectedButtons(m.getPermission());
+		// iterate through the local database, check the name being equal as the
+		// name selected in the table, set the radio buttons appropriately
+		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
+			if (panel
+					.getUserList()
+					.getValueAt(i, 0)
+					.equals(panel.getLocalDatabase().get(i).getUser().getName()))
+				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
+						.getPermission());
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//unsued
+		return;
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// unsued
+		return;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		JTable target = (JTable) e.getSource();
+		int row = target.getSelectedRow();
+		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
+			if (panel.getUserList().getValueAt(row, 0)
+					.equals(panel.getLocalDatabase().get(i).getUser().getName()))
+				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
+						.getPermission());
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// unsued
+		return;
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// unsued
+		return;
 	}
 }
