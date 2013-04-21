@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 
@@ -65,8 +65,8 @@ public class PermissionModelEntityManager implements
 		// default
 		PermissionModel model = new PermissionModel();
 		model.setUser(s.getUser());
-		model.setPermission(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevels.ADMIN
-				: UserPermissionLevels.NONE);
+		model.setPermission(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevel.ADMIN
+				: UserPermissionLevel.NONE);
 
 		// Save the permission to the database
 		if (!db.save(model, s.getProject())) {

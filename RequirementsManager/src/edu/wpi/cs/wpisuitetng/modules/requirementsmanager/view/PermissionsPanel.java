@@ -26,7 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
@@ -171,7 +171,7 @@ public class PermissionsPanel extends Tab {
 
 	}
 
-	public void setSelectedButtons(UserPermissionLevels level) {
+	public void setSelectedButtons(UserPermissionLevel level) {
 		switch (level) {
 		case ADMIN:
 			adminButton.setSelected(true);
@@ -196,13 +196,13 @@ public class PermissionsPanel extends Tab {
 
 	}
 
-	public UserPermissionLevels getPermission() {
+	public UserPermissionLevel getPermission() {
 		if (adminButton.isSelected())
-			return UserPermissionLevels.ADMIN;
+			return UserPermissionLevel.ADMIN;
 		else if (updateButton.isSelected())
-			return UserPermissionLevels.UPDATE;
+			return UserPermissionLevel.UPDATE;
 		else if (noPermissionButton.isSelected())
-			return UserPermissionLevels.NONE;
+			return UserPermissionLevel.NONE;
 		return null;
 	}
 	

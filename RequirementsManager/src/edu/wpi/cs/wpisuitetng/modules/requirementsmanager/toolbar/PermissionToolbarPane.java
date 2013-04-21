@@ -19,7 +19,7 @@ import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
@@ -69,7 +69,7 @@ public class PermissionToolbarPane extends JPanel {
 		createPermissions = new JButton("Show Permissions");
 		createPermissions.setAction(new CreatePermissionPanelAction(
 				tabController));
-		if (PermissionModel.getInstance().getPermission() == UserPermissionLevels.ADMIN) {
+		if (PermissionModel.getInstance().getPermission() == UserPermissionLevel.ADMIN) {
 			createPermissions.setEnabled(true);
 			PermissionsDatabase.getInstance().start();
 		} else {
@@ -130,7 +130,7 @@ public class PermissionToolbarPane extends JPanel {
 	public void refreshPermission() {
 		userLevel.setText(PermissionModel.getInstance().getPermission()
 				.toString());
-		if (PermissionModel.getInstance().getPermission() == UserPermissionLevels.ADMIN) {
+		if (PermissionModel.getInstance().getPermission() == UserPermissionLevel.ADMIN) {
 			createPermissions.setEnabled(true);
 			RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
 			PermissionModelController controller = new PermissionModelController();
