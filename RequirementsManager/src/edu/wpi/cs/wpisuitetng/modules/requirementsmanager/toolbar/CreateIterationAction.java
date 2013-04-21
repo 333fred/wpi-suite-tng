@@ -16,7 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -47,7 +49,13 @@ public class CreateIterationAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.addCreateIterationTab();
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canCreateIteration()) {
+			controller.addCreateIterationTab();
+		} else {
+			JOptionPane.showMessageDialog(controller.getTabView(),
+					"You do not have permission to create an iteration");
+		}
 	}
 
 }

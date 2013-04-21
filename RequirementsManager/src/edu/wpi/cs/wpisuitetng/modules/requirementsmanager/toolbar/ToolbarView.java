@@ -18,6 +18,7 @@ import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -27,6 +28,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
+	/** The singleton instance of this class */
+	private static ToolbarView _instance;
+	
 	private JButton createHelp;
 
 	/** Button for creating a requirement */
@@ -38,20 +42,43 @@ public class ToolbarView extends DefaultToolbarView {
 	/** Button for creating statistics panel */
 	private JButton createStatistics;
 
+	/** Returns the instance of this toolbar view, and sets the tab controller
+	 * 
+	 * @param tabController
+	 * @return
+	 */
+	
+	public static ToolbarView getInstance(MainTabController tabController) {
+		if (_instance == null) {
+			_instance = new ToolbarView(tabController);
+		}
+		return _instance;
+	}
+	
+	/** Returns the instance of the toolbar view, if tab controller was not set, returns null
+	 * 
+	 * @return
+	 */
+	
+	public static ToolbarView getInstance() {		
+		return _instance;
+	}
+	
 	/**
 	 * Create a ToolbarView.
 	 * 
 	 * @param tabController
 	 *            The MainTabController this view should open tabs with
 	 */
-	public ToolbarView(MainTabController tabController) {
+	private ToolbarView(MainTabController tabController) {
 
 		// Note: User Manual button is being deprecated in favor of it's own
 		// toolbar
 		// Construct the content panel
 		JPanel content = new JPanel();
 		JPanel resourcePanel = new JPanel();
-		PermissionToolbarPane permissionPanel = PermissionToolbarPane.createSingleton(tabController);
+		PermissionToolbarPane permissionPanel = PermissionToolbarPane
+				.createSingleton(tabController);
 		SpringLayout layout = new SpringLayout();
 		SpringLayout resourceLayout = new SpringLayout();
 		content.setLayout(layout);
@@ -62,9 +89,13 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the create Requirement button
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
+		createRequirement.setEnabled(PermissionModel.getInstance()
+				.getUserPermissions().canCreateRequirement());
 
 		createIteration = new JButton("Create Iteration");
 		createIteration.setAction(new CreateIterationAction(tabController));
+		createIteration.setEnabled(PermissionModel.getInstance()
+				.getUserPermissions().canCreateIteration());
 
 		// Construct the User Manual button
 		createHelp = new JButton("User Manual");
@@ -73,8 +104,6 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the Stat button
 		createStatistics = new JButton("Show Statistics");
 		createStatistics.setAction(new CreateStatPanelAction(tabController));
-
-
 
 		// Construct the search field
 		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -159,5 +188,16 @@ public class ToolbarView extends DefaultToolbarView {
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 		// addGroup(toolbarView);
 
+	}
+
+	/** Refreshes the user permissions
+	 * 
+	 */
+	
+	public void refreshPermissions() {
+		createRequirement.setEnabled(PermissionModel.getInstance()
+				.getUserPermissions().canCreateRequirement());
+		createIteration.setEnabled(PermissionModel.getInstance()
+				.getUserPermissions().canCreateIteration());
 	}
 }
