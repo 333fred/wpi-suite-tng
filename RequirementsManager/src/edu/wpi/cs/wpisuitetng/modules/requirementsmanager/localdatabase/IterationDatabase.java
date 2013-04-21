@@ -20,7 +20,9 @@ import java.util.Map;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SimpleRetrieveAllIterationsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IRetreivedAllIterationsNotifier;
 
 /**
  * Maintains a local database of iterations
@@ -29,14 +31,27 @@ public class IterationDatabase extends AbstractDatabase<Iteration> {
 
 	private Map<Integer, Iteration> iterations;
 	private IterationController controller;
-	private SimpleRetrieveAllIterationsRequestObserver observer;
+	private RetrieveAllIterationsRequestObserver observer;
 	private static IterationDatabase db;
 
 	private IterationDatabase() {
 		super(300000);
 		this.iterations = new HashMap<Integer, Iteration>();
 		this.controller = new IterationController();
-		this.observer = new SimpleRetrieveAllIterationsRequestObserver();
+		this.observer = new RetrieveAllIterationsRequestObserver(
+				new IRetreivedAllIterationsNotifier() {
+
+					@Override
+					public void receivedData(Iteration[] iterations) {
+						// Nothing needs to happen
+					}
+
+					@Override
+					public void errorReceivingData(
+							String RetrieveAllRequirementsRequestObserver) {
+						// Nothing needs to happen
+					}
+				});
 	}
 
 	/**
