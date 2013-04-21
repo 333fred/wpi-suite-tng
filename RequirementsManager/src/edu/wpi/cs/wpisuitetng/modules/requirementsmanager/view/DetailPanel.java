@@ -44,6 +44,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
@@ -946,10 +947,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	}
 
-	DefaultListModel listModel = new DefaultListModel();
 
-	public DefaultListModel getNoteList() {
-		return noteView.getNoteList();
+	public List<Note> getNoteList() {
+		return noteView.getNotesList();
 	}
 
 	public MainTabController getMainTabController() {

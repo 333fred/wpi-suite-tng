@@ -355,9 +355,5 @@ public class DetailTaskView extends JPanel {
 	public MakeTaskPanel getTaskPanel() {
 		return makeTaskPanel;
 	}
-	
-	public void paint(Graphics g) {
-		this.cellRenderer.setWrapWidth(this.taskScrollPane.getViewport().getWidth());
-		super.paint(g);
-	}
+
 }

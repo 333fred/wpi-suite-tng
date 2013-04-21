@@ -53,7 +53,7 @@ public class SaveNoteController {
 			this.model.addNote(new Note(noteText, ConfigManager.getConfig()
 					.getUserName()));
 			parentView.getNoteList()
-					.addElement(
+					.add(
 							this.model.getNotes().get(
 									this.model.getNotes().size() - 1));
 			view.getnoteField().setText("");
