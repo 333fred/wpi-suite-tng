@@ -13,16 +13,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -75,6 +71,7 @@ public class PermissionsPanel extends Tab {
 
 		radioPanel.setLayout(radioLayout);
 		setLayout(layout);
+		
 		/** Initialize the list of local permissions */
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		System.out.println(localPermissions.size());
@@ -100,8 +97,6 @@ public class PermissionsPanel extends Tab {
 
 		userTable = new PermissionsTable(rowData, columnNames);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		userTable.getSelectionModel().addListSelectionListener(
-//				new PermissionSelectionChangedListener(this));
 		userTable.addMouseListener(new PermissionSelectionChangedListener(this));
 		for (int i = 0; i < userTable.getRowCount(); i++) {
 			if (userTable.isRowSelected(i)) {
@@ -131,15 +126,7 @@ public class PermissionsPanel extends Tab {
 		group.add(adminButton);
 		group.add(updateButton);
 		group.add(noPermissionButton);
-		// if (!userTable.isSelectionEmpty()) {
-		// String name = (String) userTable.getSelectedValue();
-		// for (PermissionModel mod : localPermissions) {
-		// if (name.equals(mod.getUser().getName())) {
-		// setSelectedButtons(mod.getPermission());
-		// }
-		// }
-		// }
-
+		
 		// set constraints for the overall panel
 		layout.putConstraint(SpringLayout.WEST, userScroll, 0,
 				SpringLayout.WEST, this);
@@ -197,6 +184,10 @@ public class PermissionsPanel extends Tab {
 
 	}
 
+	/**
+	 * 
+	 * @param level The level to set the radio buttons to reflect
+	 */
 	public void setSelectedButtons(UserPermissionLevel level) {
 		switch (level) {
 		case ADMIN:
@@ -225,6 +216,10 @@ public class PermissionsPanel extends Tab {
 		}
 	}
 
+	/**
+	 * 
+	 * @return The permission level selected on the radio buttons 
+	 */
 	public UserPermissionLevel getPermission() {
 		if (adminButton.isSelected())
 			return UserPermissionLevel.ADMIN;
@@ -234,11 +229,18 @@ public class PermissionsPanel extends Tab {
 			return UserPermissionLevel.NONE;
 		return null;
 	}
-
+/**
+ * 
+ * @return The table of users and their permissions.
+ */
 	public JTable getUserList() {
 		return userTable;
 	}
 
+	/**
+	 * 
+	 * @return The local copy of the database
+	 */
 	public List<PermissionModel> getLocalDatabase() {
 		return localPermissions;
 	}
