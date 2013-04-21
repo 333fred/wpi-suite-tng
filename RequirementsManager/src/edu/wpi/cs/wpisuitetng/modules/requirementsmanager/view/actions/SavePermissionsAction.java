@@ -47,6 +47,7 @@ public class SavePermissionsAction extends AbstractAction {
 		model.setPermLevel(panel.getPermission());
 		
 		controller.save(model, observer);
+		
 	}
 
 }

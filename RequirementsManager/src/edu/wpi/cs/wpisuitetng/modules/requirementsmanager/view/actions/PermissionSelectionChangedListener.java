@@ -31,13 +31,10 @@ public class PermissionSelectionChangedListener implements MouseListener {
 		this.panel = panel;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event
-	 * .ListSelectionEvent)
+	/**
+	 * Unused method
 	 */
+
 	public void valueChanged(ListSelectionEvent e) {
 		// iterate through the local database, check the name being equal as the
 		// name selected in the table, set the radio buttons appropriately
@@ -51,36 +48,51 @@ public class PermissionSelectionChangedListener implements MouseListener {
 		}
 	}
 
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//unsued
+		// unsued
 		return;
 	}
 
+	/**
+	 * Unused method
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// unsued
 		return;
 	}
 
+	/**
+	 * Update the radio buttons when the mouse button is released
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		JTable target = (JTable) e.getSource();
 		int row = target.getSelectedRow();
 		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
-			if (panel.getUserList().getValueAt(row, 0)
+			if (panel
+					.getUserList()
+					.getValueAt(row, 0)
 					.equals(panel.getLocalDatabase().get(i).getUser().getName()))
 				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
 						.getPermLevel());
 		}
 	}
 
+	/**
+	 * Unused method
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// unsued
 		return;
 	}
 
+	/**
+	 * Unused method
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// unsued

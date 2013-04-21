@@ -268,6 +268,7 @@ public class MakeTaskPanel extends JPanel {
 	 *            disabled.
 	 */
 	public void setInputEnabled(boolean value) {
+		taskName.setEnabled(false);
 		taskDescription.setEnabled(value);
 		addTask.setEnabled(value);
 		if (value) {
