@@ -478,7 +478,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							.substring(0, 1)
 							.concat(requirements[i].getType().toString()
 									.substring(1).toLowerCase())
-							.replaceAll(" s", " S").replaceAll(" f", " F"));
+							.replaceAll(" s", " S").replaceAll(" f", "-F"));
 			row.addElement(requirements[i].getPriority().equals(Priority.BLANK) ? ""
 					: requirements[i]
 							.getPriority()

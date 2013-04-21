@@ -36,7 +36,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.text.AbstractDocument;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
@@ -576,7 +578,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	/**
-	 * @param requirement
+	 *
 	 */
 	private void loadFields() {
 		textName.setText(getRequirement().getName());
@@ -585,50 +587,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActual.setText(Integer.toString(getRequirement().getEffort()));
 		textRelease.setText(getRequirement().getReleaseNum());
 		lblTotEstDisplay.setText(getTotalEstimate().toString());
-
 		try {
-			getComboBoxIteration().setSelectedItem(
-					IterationDatabase.getInstance()
-							.get(getRequirement().getIteration())
-							.getName());
+			getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().get(getRequirement().getIteration()).getName());
 		} catch (IterationNotFoundException e) {
 			System.out.println("Exception Caught: Iteration Not Found.");
-		}
-		switch (getRequirement().getType()) {
-		case BLANK:
-			comboBoxType.setSelectedIndex(0);
-			break;
-		case EPIC:
-			comboBoxType.setSelectedIndex(1);
-			break;
-		case THEME:
-			comboBoxType.setSelectedIndex(2);
-			break;
-		case USER_STORY:
-			comboBoxType.setSelectedIndex(3);
-			break;
-		case NON_FUNCTIONAL:
-			comboBoxType.setSelectedIndex(4);
-			break;
-		case SCENARIO:
-			comboBoxType.setSelectedIndex(5);
-		}
-		
-		switch (getRequirement().getPriority()) {
-		case BLANK:
-			comboBoxPriority.setSelectedIndex(0);
-			break;
-		case HIGH:
-			comboBoxPriority.setSelectedIndex(1);
-			break;
-		case MEDIUM:
-			comboBoxPriority.setSelectedIndex(2);
-			break;
-		case LOW:
-			comboBoxPriority.setSelectedIndex(3);
-			break;
-		}
-		
+		}		
+		comboBoxType.setSelectedItem(getRequirement().getType().equals(Type.BLANK) ? "": getRequirement().getType().toString().substring(0, 1).concat(getRequirement().getType().toString().substring(1).toLowerCase()).replaceAll(" s", " S").replaceAll(" f", "-f"));
+		comboBoxPriority.setSelectedItem(getRequirement().getPriority().equals(Priority.BLANK) ? "" : getRequirement().getPriority().toString().substring(0, 1).concat(getRequirement().getPriority().toString().substring(1).toLowerCase()));
 		// check if name field is blank
 		if (requirement.getName().trim().equals("")) {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
@@ -640,26 +605,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			getComboBoxIteration().setBackground(defaultColor);
 		} else {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
-			switch (requirement.getStatus()) {
-			case NEW:
-				comboBoxStatus.setSelectedIndex(0);
-				break;
-			case IN_PROGRESS:
-				comboBoxStatus.setSelectedIndex(1);
-				break;
-			case OPEN:
-				comboBoxStatus.setSelectedIndex(2);
-				break;
-			case COMPLETE:
-				comboBoxStatus.setSelectedIndex(3);
-				break;
-			case DELETED:
-				comboBoxStatus.setSelectedIndex(4);
-				break;
-			case BLANK:
-				comboBoxStatus.setSelectedIndex(5);
-				break;
-			}
+			comboBoxStatus.setSelectedItem(getRequirement().getStatus().equals(Status.BLANK) ? "": getRequirement().getStatus().toString().substring(0, 1).concat(getRequirement().getStatus().toString().substring(1).toLowerCase()).replaceAll(" p", " P"));
 		}
 		
 		this.disableAllFieldsIfDeleted();

@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ChangesetCallback;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.RequirementActionMode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.IdManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -209,7 +210,22 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		// Save the iteration values
 		int oldIteration = oldReq.getIteration();
 		int newIteration = updatedRequirement.getIteration();
-
+		
+//		if (updatedRequirement.getStatus() == Status.DELETED){
+//			Integer parentID = updatedRequirement.getpUID().get(0);
+//			Integer reqID = updatedRequirement.getrUID();
+//			try {
+//				Requirement parent;
+//				parent = getRequirement(parentID,s);
+//				parent.removeSubRequirement(reqID);
+//				update(s,parent.toJSON());
+//				updatedRequirement.removePUID(parentID);
+//			} catch (RequirementNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
 		// Copy values from the new requirement to the old requirement
 		updateMapper.map(updatedRequirement, oldReq, callback);
 
@@ -220,7 +236,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			// Save the requirement, and throw an exception if if fails
 			if (!db.save(oldReq, s.getProject()) || !db.save(oldReq.getLogs())) {
 				throw new WPISuiteException();
-			}/*
+			}
+			
+			/*
 			 * else if (oldIteration != newIteration){ //update iterations if
 			 * they were changed //remove this requirement from the old
 			 * iteration //add this requirement to the new iteration
