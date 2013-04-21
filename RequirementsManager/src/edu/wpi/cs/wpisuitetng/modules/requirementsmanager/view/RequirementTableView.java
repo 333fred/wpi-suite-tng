@@ -722,6 +722,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void receivedData(Requirement[] requirements) {
+
+		RowFilter rf = sorter.getRowFilter();
+		sorter.setRowFilter(null);
 		
 		System.out.println("We received new requirements from the database");
 		
@@ -733,7 +736,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			textFilterInfo.setText("");
 		}
 		updateListView();
-
+		sorter.setRowFilter(rf);
+		if (this.getTable().getRowCount() == 0) {
+			textFilterInfo.setText("No Requirements Found");
+		}
 	}
 
 	@Override
@@ -847,7 +853,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 
 	public void filtersUpdated() {
-		refresh();		
+		refresh();
 	}
 
 }
