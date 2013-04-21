@@ -71,7 +71,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JTextArea textDescription;
 	private JTextArea textNameValid;
 	private JTextArea textDescriptionValid;
-	private JTextArea saveError;
+	private JTextArea textSaveError;
 	private JTextField textEstimate;
 	private JTextField textActual;
 	private JTextField textRelease;
@@ -103,6 +103,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	//layouts
 	private GridLayout mainLayout;
 	private SpringLayout layout;
+	private SpringLayout buttonPanelLayout;
 
 	//OnChange Action Listeners
 	private TextUpdateListener textTitleListener;
@@ -111,9 +112,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private ItemStateListener comboBoxStatusListener;
 	private ItemStateListener comboBoxPriorityListener;
 	private ItemStateListener comboBoxIterationListener;
-	private final TextUpdateListener textEstimateListener;
-	private final TextUpdateListener textActualListener;
-	private final TextUpdateListener textReleaseListener;
+	private TextUpdateListener textEstimateListener;
+	private TextUpdateListener textActualListener;
+	private TextUpdateListener textReleaseListener;
 
 	//swing spacing constants
 	private static final int VERTICAL_PADDING = 10;
@@ -134,11 +135,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblTotEstDisplay;
 
 	//Sub-panels
-	private JScrollPane scrollDescription;
 	private JPanel mainPanel;
-	private DetailEventPane eventPane;
-	private JPanel staticPanel;
+	private JPanel buttonPanel;
 	private JPanel leftPanel;
+	private JScrollPane scrollDescription;
+	private JScrollPane mainScrollPane;
+	private DetailEventPane eventPane;
+	private JSplitPane splitPane;
 
 	//Boolean to indicate whether the tab should be closed upon saving 
 	private boolean closeTab;
@@ -162,38 +165,61 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		this.requirement = requirement;
 		this.mainTabController = mainTabController;
 
-		
+		createPanels();
+		createComponents();	
+		setPanelSizes();
+		createComponentListeners();
+		addComponents();
+		addComponentConstraints();
+		loadFields();
+		createEventSidePanel();
+		addSplitPane();
+	}
+	
+	
+	
+
+	private void addSplitPane() {
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftPanel, eventPane);
+		add(splitPane);
+		splitPane.setResizeWeight(0.5);
+	}
+
+	private void setPanelSizes() {
+		buttonPanel.setPreferredSize(new Dimension(textSaveError.getPreferredSize().width+ textSaveError.getPreferredSize().width, btnSave.getPreferredSize().height + 10));
+		int preferredHeight = 515;
+		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
+		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));		
+	}
+
+	private void createPanels() {
 		this.mainPanel = new JPanel();
 		this.defaultColor = mainPanel.getBackground();
 		this.mainLayout = new GridLayout(0, 1);
 		this.setLayout(mainLayout);
 		layout = new SpringLayout();
-		mainPanel.setLayout(layout);
+		mainPanel.setLayout(layout);	
+		mainScrollPane = new JScrollPane();
+		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		mainScrollPane.getViewport().add(mainPanel);
+		mainScrollPane.setBorder(null);
+		
+		buttonPanelLayout = new SpringLayout();
+		buttonPanel = new JPanel(buttonPanelLayout);
+		leftPanel = new JPanel(new BorderLayout());
+	}
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		createComponents();
-		createComponentListeners();
-		addComponents();
-		
-		
-		
-		
-		
-		
-		
-		
+	private void createComponentListeners() {
+		addTextNameAreaListener();
+		addTextDescriptionAreaListener();
+		addComboBoxListeners();
+		addTextEstimateListener();
+		addTextActualListener();
+		addTextReleaseListener();
+	}
+
+	private void createComponents() {
+		createJLabels();
 		createTextNameArea();
 		createTextNameValidArea();
 		createTextDescriptionArea();
@@ -204,14 +230,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		createTextActualArea();
 		createTextReleaseArea();
 		createButtons();
-		
-		addTextNameAreaListener();
-		addTextDescriptionAreaListener();
-		addComboBoxListeners();
-		addTextEstimateListener();
-		addTextActualListener();
-		addTextReleaseListener();
-		
+	}
+
+	private void addComponents() {
 		addJLabels();	
 		mainPanel.add(textName);
 		mainPanel.add(textNameValid);
@@ -225,119 +246,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.add(textActual);
 		mainPanel.add(textRelease);
 		
+		buttonPanel.add(btnSave);
+		buttonPanel.add(btnCancel);
+		buttonPanel.add(textSaveError);
 		
-		
-
-		
-		// Add TextUpdateListeners,
-		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
-		textEstimate.addKeyListener(textEstimateListener);
-
-		// Add TextUpdateListeners,
-		textActualListener = new TextUpdateListener(this, textActual, null);
-		textActual.addKeyListener(textActualListener);
-		
-		
-		textReleaseListener = new TextUpdateListener(this, textRelease, null);
-		textRelease.addKeyListener(textReleaseListener);
-		
-		
-
-		addComponentConstraints();
-		loadFields();
-
-		createEventSidePanel();
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		scrollPane.getViewport().add(mainPanel);
-		scrollPane.setBorder(null);
-
-		// set the preferred size of mainPanel
-		int preferredHeight = 515;
-		int preferredWidth = (int) (textDescription.getPreferredSize().getWidth() + HORIZONTAL_PADDING * 2);
-
-		// set the preferred size
-		mainPanel.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-
-		SpringLayout staticPanelLayout = new SpringLayout();
-		staticPanel = new JPanel(staticPanelLayout);
-		leftPanel = new JPanel(new BorderLayout());
-
-		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,SpringLayout.NORTH, staticPanel);
-		staticPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,SpringLayout.WEST, staticPanel);
-
-		staticPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,SpringLayout.NORTH, staticPanel);
-		staticPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,SpringLayout.EAST, btnSave);
-		staticPanelLayout.putConstraint(SpringLayout.WEST, saveError, 10,SpringLayout.EAST, btnCancel);
-		staticPanelLayout.putConstraint(SpringLayout.NORTH, saveError, 5,SpringLayout.SOUTH, staticPanel);
-
-		staticPanel.setPreferredSize(new Dimension(saveError.getPreferredSize().width+ saveError.getPreferredSize().width, btnSave.getPreferredSize().height + 10));
-
-		staticPanel.add(btnSave);
-		staticPanel.add(btnCancel);
-		staticPanel.add(saveError);
-
-		leftPanel.add(scrollPane, BorderLayout.CENTER);
-		leftPanel.add(staticPanel, BorderLayout.SOUTH);
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,leftPanel, eventPane);
-		add(splitPane);
-
-		splitPane.setResizeWeight(0.5);
-
-		this.determineAvailableStatusOptions();
-		this.disableSaveButton();
-		this.disableAllFieldsIfDeleted();
-
-		// prevent in-progress or complete requirements from having their
-		// estimates changed
-		if (requirement.getStatus() == Status.IN_PROGRESS || requirement.getStatus() == Status.COMPLETE) {
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-
-		// actual field is editable when requirement is complete
-		if (requirement.getStatus() == Status.COMPLETE) {
-			textActual.setEnabled(true);
-			textActual.setBackground(Color.WHITE);
-		}
-
-	}
-
-	private void createComponentListeners() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void createComponents() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void addComponents() {
-		// TODO Auto-generated method stub
-		
+		leftPanel.add(mainScrollPane, BorderLayout.CENTER);
+		leftPanel.add(buttonPanel, BorderLayout.SOUTH);
 	}
 
 	private void createEventSidePanel() {
@@ -355,9 +269,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 	private void createButtons() {
 		btnSave = new JButton("Save Requirement");
-	
 		btnCancel = new JButton("Cancel");
-		btnCancel.setAction(new CancelAction(this));
+		btnCancel.setAction(new CancelAction(this));		
+		this.disableSaveButton();
 	}
 
 	private void addTextReleaseListener() {
@@ -378,6 +292,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				}
 			}
 		});	
+		textReleaseListener = new TextUpdateListener(this, textRelease, null);
+		textRelease.addKeyListener(textReleaseListener);
 	}
 
 	private void createTextReleaseArea() {
@@ -405,7 +321,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					event.consume();
 				}
 			}
-		});		
+		});	
+		textActualListener = new TextUpdateListener(this, textActual, null);
+		textActual.addKeyListener(textActualListener);
 	}
 
 	private void createTextActualArea() {
@@ -419,6 +337,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		AbstractDocument textActualDoc = (AbstractDocument) textActual.getDocument();
 		//box allows 12 numbers (around max int)
 		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); 
+		
+		// actual field is editable when requirement is complete
+		if (requirement.getStatus() == Status.COMPLETE) {
+			textActual.setEnabled(true);
+			textActual.setBackground(Color.WHITE);
+		}
 	}
 
 	private void addTextEstimateListener() {
@@ -435,6 +359,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				}
 			}
 		});
+		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
+		textEstimate.addKeyListener(textEstimateListener);
 	}
 
 	private void createTextEstimateArea() {
@@ -445,6 +371,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimate.setDisabledTextColor(Color.GRAY);
 		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12)); 
+		
+		// prevent in-progress or complete requirements from having their
+		// estimates changed
+		if (requirement.getStatus() == Status.IN_PROGRESS || requirement.getStatus() == Status.COMPLETE) {
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
 	}
 
 	private void addComboBoxListeners() {
@@ -470,6 +403,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		comboBoxStatus = new JComboBox(availableStatuses);
 		comboBoxStatus.setPrototypeDisplayValue("Non-functional");
 		comboBoxStatus.setBackground(Color.WHITE);
+		this.determineAvailableStatusOptions();
 		
 		//Priority ComboBox
 		String[] availablePriorities = { "", "High", "Medium", "Low" };
@@ -518,13 +452,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	private void createSaveErrorArea() {
-		saveError = new JTextArea(1, 40);
-		saveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		saveError.setOpaque(false);
-		saveError.setEnabled(false);
-		saveError.setDisabledTextColor(Color.BLACK);
-		saveError.setLineWrap(true);
-		saveError.setWrapStyleWord(true);
+		textSaveError = new JTextArea(1, 40);
+		textSaveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textSaveError.setOpaque(false);
+		textSaveError.setEnabled(false);
+		textSaveError.setDisabledTextColor(Color.BLACK);
+		textSaveError.setLineWrap(true);
+		textSaveError.setWrapStyleWord(true);
 	}
 
 	private void createTextDescriptionValidArea() {
@@ -611,11 +545,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textName.setDisabledTextColor(Color.GRAY);
 	}
 
-	/**
-	 * 
-	 */
-	private void addJLabels() {
-		// add labels to the overall panel
+	public void createJLabels() {
 		lblName = new JLabel("*Name:");
 		lblDescription = new JLabel("*Description:");
 		lblType = new JLabel("Type:");
@@ -627,7 +557,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblRelease = new JLabel("Release Number:");
 		lblTotalEstimate = new JLabel("Total Estimate:");
 		lblTotEstDisplay = new JLabel("");
-
+	}
+	
+	/**
+	 * 
+	 */
+	private void addJLabels() {
 		mainPanel.add(lblName);
 		mainPanel.add(lblDescription);
 		mainPanel.add(lblType);
@@ -727,6 +662,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				break;
 			}
 		}
+		
+		this.disableAllFieldsIfDeleted();
 	}
 
 	/**
@@ -756,11 +693,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textNameValid,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		// layout.putConstraint(SpringLayout.WEST, btnSave, HORIZONTAL_PADDING,
-		// SpringLayout.WEST, this);
-		// layout.putConstraint(SpringLayout.WEST, btnCancel,
-		// HORIZONTAL_PADDING,
-		// SpringLayout.EAST, btnSave);
 		layout.putConstraint(SpringLayout.WEST, scrollDescription, HORIZONTAL_PADDING,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
@@ -793,9 +725,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
 				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		// layout.putConstraint(SpringLayout.WEST, saveError,
-		// HORIZONTAL_PADDING,
-		// SpringLayout.WEST, this);
+
 
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
@@ -846,12 +776,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				SpringLayout.SOUTH, textEstimate);
 		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay, VERTICAL_PADDING
 				+ CLOSE, SpringLayout.SOUTH, lblTotalEstimate);
-		// layout.putConstraint(SpringLayout.NORTH, btnSave, VERTICAL_PADDING,
-		// SpringLayout.SOUTH, textRelease);
-		// layout.putConstraint(SpringLayout.NORTH, btnCancel, VERTICAL_PADDING,
-		// SpringLayout.SOUTH, textRelease);
-		// layout.putConstraint(SpringLayout.NORTH, saveError, VERTICAL_PADDING
-		// + VERTICAL_CLOSE2, SpringLayout.SOUTH, btnSave);
+
+		//Align Buttons
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,SpringLayout.NORTH, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,SpringLayout.WEST, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,SpringLayout.NORTH, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,SpringLayout.EAST, btnSave);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, textSaveError, 10,SpringLayout.EAST, btnCancel);
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, textSaveError, 5,SpringLayout.SOUTH, buttonPanel);	
 	}
 
 	/**
@@ -929,7 +861,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	public void displaySaveError(String error) {
-		this.saveError.setText(error);
+		this.textSaveError.setText(error);
 	}
 
 	/**
