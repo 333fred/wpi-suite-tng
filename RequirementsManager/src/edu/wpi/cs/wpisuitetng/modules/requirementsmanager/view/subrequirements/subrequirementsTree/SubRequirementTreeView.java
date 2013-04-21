@@ -60,7 +60,7 @@ public class SubRequirementTreeView extends JPanel implements
 
 		firstPaint = true;
 
-		this.top = new DefaultMutableTreeNode("Hierarchy");
+		this.top = new DefaultMutableTreeNode("Requirements");
 		this.tree = new JTree(top);
 		this.tree.setEditable(false);
 		this.tree.setDragEnabled(true);
