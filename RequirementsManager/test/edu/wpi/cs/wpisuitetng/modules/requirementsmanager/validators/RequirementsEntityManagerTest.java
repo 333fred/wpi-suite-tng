@@ -85,36 +85,6 @@ public class RequirementsEntityManagerTest {
 		db.save(otherRequirement, otherProject);
 		db.save(admin);
 		manager = new RequirementsEntityManager(db);
-
-		/*
-		 * User admin = new User("admin", "admin", "1234", 27);
-		 * admin.setRole(Role.ADMIN);
-		 * 
-		 * testUser = new User(null, "testUser", null, -1); existingUser = new
-		 * User("newUser", "newUser", "1234", 2); testProject = new
-		 * Project("test", "1"); otherProject = new Project("other", "2");
-		 * mockSsid = "abc123"; defaultSession = new Session(existingUser,
-		 * testProject, mockSsid); adminSession = new Session(admin,
-		 * testProject, mockSsid);
-		 * 
-		 * manager = new RequirementsEntityManager(db);
-		 * 
-		 * goodRequirement = new Requirement(); goodRequirement.setName("Name");
-		 * goodRequirement.setDescription("A quality description");
-		 * 
-		 * oldRequirement = new Requirement(); oldRequirement.setrUID(1);
-		 * oldRequirement.setName("Old Requirement");
-		 * oldRequirement.setDescription("So Old...");
-		 * 
-		 * otherRequirement = new Requirement(); oldRequirement.setrUID(2);
-		 * oldRequirement.setName("In other project");
-		 * oldRequirement.setDescription("This is in another project");
-		 * 
-		 * db = new MockData(new HashSet<Object>()); db.save(oldRequirement,
-		 * testProject); db.save(existingUser); db.save(otherRequirement,
-		 * otherProject); db.save(admin); db.save(testUser);
-		 */
-
 	}
 
 	@Test
@@ -122,7 +92,8 @@ public class RequirementsEntityManagerTest {
 		Requirement created = manager.makeEntity(defaultSession,
 				goodRequirement.toJSON());
 		assertEquals("Name", created.getName());
-		assertSame(db.retrieve(Requirement.class, "rUID", created.getrUID()).get(0), created);
+		assertSame(db.retrieve(Requirement.class, "rUID", created.getrUID())
+				.get(0), created);
 	}
 
 	@Test(expected = BadRequestException.class)
