@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.Permission
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.PermissionsNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllPermissionsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 
 /**
  * Maintains a local database of user permissions.
@@ -60,6 +61,7 @@ public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 		for (PermissionModel i : permissions) {
 			this.permissions.put(i.getUser(), i);
 		}
+		ToolbarView.getInstance().refreshPermissions();
 		updateListeners();
 	}
 

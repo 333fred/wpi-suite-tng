@@ -13,6 +13,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.KeyboardShortcut;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
@@ -107,7 +109,7 @@ public class JanewayModule implements IJanewayModule {
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 
 		// initialize the toolbarView
-		toolbarView = new ToolbarView(tabController);
+		toolbarView = ToolbarView.getInstance(tabController);
 
 		// initialize the toolbar Controller
 		toolbarController = new ToolbarController(toolbarView, tabController);
@@ -127,6 +129,9 @@ public class JanewayModule implements IJanewayModule {
 		tabs.add(tab1);
 
 		registerKeyboardShortcuts(tab1);
+		
+		//set the color of disabled combo boxes
+		UIManager.put("ComboBox.disabledForeground", Color.BLACK);
 	}
 
 	/*

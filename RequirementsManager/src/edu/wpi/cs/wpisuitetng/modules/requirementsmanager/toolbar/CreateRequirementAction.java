@@ -16,7 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -48,8 +50,13 @@ public class CreateRequirementAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.addCreateRequirementTab();
-		// controller.addHelpPanelTab();
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canCreateRequirement()) {
+			controller.addCreateRequirementTab();
+		} else {
+			JOptionPane.showMessageDialog(controller.getTabView(),
+					"You do not have permission to create a requirement");
+		}
 	}
 
 }
