@@ -94,6 +94,9 @@ public class PermissionsPanel extends Tab {
 			if (userTable.isRowSelected(i)) {
 				setSelectedButtons((UserPermissionLevel) userTable.getValueAt(
 						i, 1));
+				if(localPermissions.get(i).getUser().getUsername().equals("admin") || localPermissions.get(i).getUser().getUsername().equals(model.getUser().getUsername())) {
+					saveButton.setEnabled(false);
+				}
 			}
 		}
 
@@ -213,6 +216,7 @@ public class PermissionsPanel extends Tab {
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(false);
 			saveButton.setEnabled(false);
+			break;
 		}
 	}
 
