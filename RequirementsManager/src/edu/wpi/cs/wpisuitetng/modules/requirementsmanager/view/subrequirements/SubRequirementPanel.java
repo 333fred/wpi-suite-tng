@@ -95,11 +95,14 @@ public class SubRequirementPanel extends JPanel {
 		validParentList = new DefaultListModel();
 		//addValidParents();
 
-		JPanel subreqPane = new JPanel();
-		subreqPane.setLayout(new BorderLayout());
+		editSubReqPanel = new JPanel();
+		editSubReqPanel.setBorder(BorderFactory.createTitledBorder("Add to SubRequirement Heirarchy"));
+		
 
 		SpringLayout layout = new SpringLayout();
-
+		SpringLayout subreqPanelLayout = new SpringLayout();
+		
+		
 		addReq = new JButton("Add");
 		removeChild = new JButton("Remove Children");
 
@@ -173,45 +176,56 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, removeParent, 5,
 				SpringLayout.EAST, removeChild);
 
-		layout.putConstraint(SpringLayout.NORTH, radioChild, 5,
-				SpringLayout.SOUTH, removeChild);
-		layout.putConstraint(SpringLayout.WEST, radioChild, 16,
-				SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, editSubReqPanel, 10, SpringLayout.SOUTH, removeChild);
+		layout.putConstraint(SpringLayout.SOUTH, editSubReqPanel, -1, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.WIDTH, editSubReqPanel, -1,
+				SpringLayout.WIDTH, this);
+		
+		subreqPanelLayout.putConstraint(SpringLayout.NORTH, radioChild, 5,
+				SpringLayout.NORTH, editSubReqPanel);
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, radioChild, 16,
+				SpringLayout.WEST, editSubReqPanel);
 
-		layout.putConstraint(SpringLayout.NORTH, radioParent, 5,
-				SpringLayout.SOUTH, removeChild);
-		layout.putConstraint(SpringLayout.WEST, radioParent, 5,
+		subreqPanelLayout.putConstraint(SpringLayout.NORTH, radioParent, 5,
+				SpringLayout.NORTH, editSubReqPanel);
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, radioParent, 5,
 				SpringLayout.EAST, radioChild);
 
-		layout.putConstraint(SpringLayout.NORTH, bottomScrollPane, 5,
+		subreqPanelLayout.putConstraint(SpringLayout.NORTH, bottomScrollPane, 5,
 				SpringLayout.SOUTH, radioParent);
-		layout.putConstraint(SpringLayout.WEST, bottomScrollPane, 5,
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, bottomScrollPane, 5,
 				SpringLayout.EAST, childLabel);
-		layout.putConstraint(SpringLayout.EAST, bottomScrollPane, -64,
-				SpringLayout.EAST, this);
+		subreqPanelLayout.putConstraint(SpringLayout.EAST, bottomScrollPane, -64,
+				SpringLayout.EAST, editSubReqPanel);
 
-		layout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH,
+		subreqPanelLayout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH,
 				bottomScrollPane);
-		layout.putConstraint(SpringLayout.WEST, addReq, 16, SpringLayout.WEST,
-				this);
-		layout.putConstraint(SpringLayout.EAST, addReq, 0, SpringLayout.EAST,
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, addReq, 16, SpringLayout.WEST,
+				editSubReqPanel);
+		subreqPanelLayout.putConstraint(SpringLayout.EAST, addReq, 0, SpringLayout.EAST,
 				removeChild);
 
-		layout.putConstraint(SpringLayout.WIDTH, subreqPane, 5,
-				SpringLayout.WIDTH, this);
+		
+		
+		
 
 		this.setLayout(layout);
-		this.add(topScrollPane);
-		this.add(bottomScrollPane);
+		editSubReqPanel.setLayout(subreqPanelLayout);
+		
 		this.add(parentLabel);
+		this.add(parentReq);
+		this.add(childLabel);
+		this.add(topScrollPane);
 		this.add(removeParent);
 		this.add(removeChild);
-		this.add(childLabel);
-		this.add(parentReq);
-		this.add(radioChild);
-		this.add(radioParent);
-		this.add(subreqPane);
-		this.add(addReq);
+		
+		editSubReqPanel.add(radioChild);
+		editSubReqPanel.add(radioParent);
+		editSubReqPanel.add(bottomScrollPane);
+		editSubReqPanel.add(addReq);
+		
+		this.add(editSubReqPanel);
+		
 
 		// Do other things here
 		if(requirement.getStatus()!=Status.DELETED&&requirement.getStatus()!=Status.COMPLETE){
