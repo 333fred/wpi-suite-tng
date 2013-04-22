@@ -952,6 +952,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public List<Note> getNoteList() {
 		return noteView.getNotesList();
 	}
+	
+	public void setNoteList(List<Note> notes) {
+		noteView.setNotesList(notes);
+	}
 
 	public MainTabController getMainTabController() {
 		return mainTabController;

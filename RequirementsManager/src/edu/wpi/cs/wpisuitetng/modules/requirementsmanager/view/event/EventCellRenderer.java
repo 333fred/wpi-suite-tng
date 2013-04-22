@@ -67,8 +67,6 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		
-		System.out.println("WE RENDER?!!!!!!!!!!!!!!!!!!!!!++");
-		
 		final JPanel panel;
 		panel = new EventPanel((Event) value);
 		

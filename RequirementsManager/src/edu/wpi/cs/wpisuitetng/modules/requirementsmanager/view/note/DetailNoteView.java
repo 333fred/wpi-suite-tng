@@ -12,6 +12,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,20 +29,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteViewListener;
 
-
 /**
  * Panel containing a note for a requirement
  * 
  * @author Zac Chupka, Maddie Burris
  */
 public class DetailNoteView extends JPanel {
-	
+
 	private JScrollPane noteScrollPane;
-		
+
 	protected EventTable notesTable;
-	
+
 	private EventTableModel tableModel;
-	
+
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeNotePanel makeNotePanel;
@@ -67,7 +68,11 @@ public class DetailNoteView extends JPanel {
 
 		tableModel = new EventTableModel(new ArrayList<Event>());
 		notesTable = new EventTable(tableModel);
-		cellRenderer = new EventCellRenderer();		
+		cellRenderer = new EventCellRenderer();
+
+		notesTable.setShowGrid(false);
+		notesTable.setIntercellSpacing(new Dimension(0, 0));
+		notesTable.getTableHeader().setVisible(false);
 
 		// Add the list to the scroll pane
 		this.noteScrollPane = new JScrollPane();
@@ -78,6 +83,7 @@ public class DetailNoteView extends JPanel {
 		notePane.setLayout(new BorderLayout());
 		notePane.add(noteScrollPane, BorderLayout.CENTER);
 		notePane.add(makeNotePanel, BorderLayout.SOUTH);
+		notePane.remove(notesTable.getTableHeader());
 
 		add(notePane, BorderLayout.CENTER);
 
@@ -93,21 +99,21 @@ public class DetailNoteView extends JPanel {
 		addNotesToList();
 	}
 
-	
 	/**
 	 * Method to populate this object's list of notes from the current
 	 * requirement's list of notes
 	 */
-	private void addNotesToList() {	
+	private void addNotesToList() {
 		List<Note> notes = requirement.getNotes();
 		List<Event> events = new ArrayList<Event>();
 		for (Note note : notes) {
 			events.add(note);
-		}		
+		}
 		tableModel.setRowData(events);
-		
-	}
 
+		updateRowHeights();
+
+	}
 
 	/**
 	 * Updates the local display of the current requirement's notes
@@ -140,12 +146,49 @@ public class DetailNoteView extends JPanel {
 	public MakeNotePanel getNotePanel() {
 		return makeNotePanel;
 	}
-	
+
 	public List<Note> getNotesList() {
 		List<Note> notes = new ArrayList<Note>();
-		for (Event e: tableModel.getRowData()) {
+		for (Event e : tableModel.getRowData()) {
 			notes.add((Note) e);
 		}
 		return notes;
+	}
+
+	public void setNotesList(List<Note> notes) {
+		List<Event> events = new ArrayList<Event>();
+		for (Note note : notes) {
+			events.add(note);
+		}
+		tableModel.setRowData(events);
+
+		updateRowHeights();
+
+		// scrollToBottom();
+	}
+
+	public void scrollToBottom() {
+		noteScrollPane.getVerticalScrollBar().setValue(
+				noteScrollPane.getVerticalScrollBar().getMaximum());
+	}
+
+	private void updateRowHeights() {
+		System.out.println("Updating row heights");
+
+		try {
+			for (int row = 0; row < notesTable.getRowCount(); row++) {
+				int rowHeight = notesTable.getRowHeight();
+				for (int column = 0; column < notesTable.getColumnCount(); column++) {
+					Component comp = notesTable.prepareRenderer(
+							notesTable.getCellRenderer(row, column), row,
+							column);
+					rowHeight = Math.max(rowHeight,
+							comp.getPreferredSize().height);
+				}
+
+				notesTable.setRowHeight(row, rowHeight);
+			}
+		} catch (ClassCastException e) {
+		}
 	}
 }
