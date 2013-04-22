@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.Requiremen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
@@ -79,6 +80,7 @@ public class SubRequirementTreeView extends JPanel implements
 		MouseListener ml = new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				if (e.getButton() == MouseEvent.BUTTON1) {
 					int selRow = tree.getRowForLocation(e.getX(), e.getY());
 					TreePath selPath = tree.getPathForLocation(e.getX(),
@@ -102,6 +104,8 @@ public class SubRequirementTreeView extends JPanel implements
 	}
 
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
+				if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
+					return;
 				// add a menu offset
 				x += 10;
 
