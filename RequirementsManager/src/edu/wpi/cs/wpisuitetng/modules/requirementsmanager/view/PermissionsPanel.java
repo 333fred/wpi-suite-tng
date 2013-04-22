@@ -123,20 +123,22 @@ public class PermissionsPanel extends Tab {
 		layout.putConstraint(SpringLayout.NORTH, userScroll, 0,
 				SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.EAST, userScroll, 10,
-				SpringLayout.HORIZONTAL_CENTER, this);
+				SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, userScroll, 0,
 				SpringLayout.SOUTH, this);
-		layout.putConstraint(SpringLayout.NORTH, radioPanel, 0,
+		
+		//TODO: What do we do with this layout now that the panel isn't needed?
+		/*layout.putConstraint(SpringLayout.NORTH, radioPanel, 0,
 				SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.EAST, radioPanel, 0,
 				SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.WEST, radioPanel, 10,
 				SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.SOUTH, radioPanel, 0,
-				SpringLayout.SOUTH, this);
+				SpringLayout.SOUTH, this);*/
 
 		// set constraints for the radio panel
-		radioLayout.putConstraint(SpringLayout.WEST, adminButton, 0,
+		/*radioLayout.putConstraint(SpringLayout.WEST, adminButton, 0,
 				SpringLayout.WEST, radioPanel);
 		radioLayout.putConstraint(SpringLayout.WEST, updateButton, 0,
 				SpringLayout.WEST, radioPanel);
@@ -156,7 +158,7 @@ public class PermissionsPanel extends Tab {
 
 		radioLayout.putConstraint(SpringLayout.SOUTH, saveButton,
 				(int) saveButton.getPreferredSize().getHeight(),
-				SpringLayout.NORTH, saveButton);
+				SpringLayout.NORTH, saveButton);*/
 
 
 		// add the buttons to the panel
@@ -170,7 +172,7 @@ public class PermissionsPanel extends Tab {
 		JPanel test = new JPanel();
 		test.add(new JLabel("Test"));
 		this.add(userScroll);
-		this.add(radioPanel);
+		//this.add(radioPanel);
 
 	}
 

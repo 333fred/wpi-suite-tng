@@ -71,7 +71,8 @@ public class PermissionsTable extends JTable {
     }
     
     /**
-     * Sets the updated value into the table, and also updates the permission
+     * Sets the updated value into the table, and also updates the permission on
+     * the server. This will occur whenever a change is completed
      */
     @Override
 	public void setValueAt(Object value, int row, int col) {
@@ -82,6 +83,7 @@ public class PermissionsTable extends JTable {
 			
 			PermissionModel model;
 			System.out.println("Permissions changed in table at:" + row);
+			//we get the model from our local list, set its permissions, and save it
 			model = localPermissions.get(row);
 			model.setPermLevel(UserPermissionLevel.valueOf((String) value));
 			controller.save(model, observer);
