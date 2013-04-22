@@ -13,23 +13,22 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
  * Panel containing a aTest for a requirement
@@ -38,9 +37,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelec
  */
 @SuppressWarnings("serial")
 public class DetailATestView extends JPanel {
-	/** For aTests */
-	protected DefaultListModel testList;
-	protected JList tests;
+	/** For aTests */	
+	protected EventTableModel testModel;
+	protected EventTable testTable;
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeATestPanel makeATestPanel;
@@ -67,15 +66,12 @@ public class DetailATestView extends JPanel {
 
 		// Create the aTest list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
-		testList = new DefaultListModel();
-		tests = new JList(testList);
-		cellRenderer = new EventCellRenderer();
-		tests.setCellRenderer(cellRenderer);
-		tests.setSelectionModel(new ToggleSelectionModel());
+		testModel = new EventTableModel(new ArrayList<Event>());
+		testTable = new EventTable(testModel);
 
 		// Add the list to the scroll pane
 		aTestScrollPane = new JScrollPane();
-		aTestScrollPane.getViewport().add(tests);
+		aTestScrollPane.getViewport().add(testTable);
 
 		// Set up the frame
 		JPanel aTestPane = new JPanel();
@@ -94,9 +90,10 @@ public class DetailATestView extends JPanel {
 			// aTest)
 			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
-							requirement, parentView, tests)));
+							requirement, parentView, testModel)));
 
 			//Listen for user clicking on acceptance tests
+			/*
 			tests.addListSelectionListener(new ListSelectionListener() {
 
 				@Override
@@ -104,6 +101,7 @@ public class DetailATestView extends JPanel {
 					updateaTestView();
 				} 
 			});
+			*/
 
 			makeATestPanel.getAddATest().setEnabled(false);
 			// Make sure save button is unavailable if name field is empty
@@ -113,7 +111,7 @@ public class DetailATestView extends JPanel {
 				public void keyReleased(KeyEvent e) {
 					if (makeATestPanel.getaTestField().getText().trim()
 							.equals("")
-							&& tests.getSelectedValues().length == 0)
+							&& testTable.getSelectedRowCount() == 0)
 						makeATestPanel.getAddaTest().setEnabled(false);
 					else if (!makeATestPanel.getaTestName().getText().trim()
 							.equals(""))
@@ -128,7 +126,7 @@ public class DetailATestView extends JPanel {
 				public void keyReleased(KeyEvent e) {
 					if (makeATestPanel.getaTestName().getText().trim()
 							.equals("")
-							&& tests.getSelectedValues().length == 0)
+							&& testTable.getSelectedRowCount() == 0)
 						makeATestPanel.getAddaTest().setEnabled(false);
 					else if (!makeATestPanel.getaTestField().getText().trim()
 							.equals(""))
@@ -162,10 +160,9 @@ public class DetailATestView extends JPanel {
 		if (requirement.getStatus() != Status.DELETED) {
 			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
-							requirement, parentView, tests), tests
-							.getSelectedValues()));
+							requirement, parentView, testModel), testTable.getSelectedRows()));
 
-			if (tests.getSelectedValues().length == 0) {
+			if (testTable.getSelectedRowCount() == 0) {
 				makeATestPanel
 						.getaTestStatus()
 						.setText(
@@ -182,7 +179,7 @@ public class DetailATestView extends JPanel {
 					makeATestPanel.getAddaTest().setEnabled(false);
 			} else {
 				makeATestPanel.getaTestStatusBox().setEnabled(true);
-				if (tests.getSelectedValues().length > 1) {
+				if (testTable.getSelectedRowCount() > 1) {
 					makeATestPanel
 							.getaTestStatus()
 							.setText(
@@ -219,72 +216,20 @@ public class DetailATestView extends JPanel {
 	}
 
 	/**
-	 * updateaTestViewTime
-	 * 
-	 * currently not used. Would be called by the timer to update the view aTest
-	 * and populate the fields
-	 * 
-	 */
-	private void updateaTestViewTime() {
-		if (requirement.getStatus() != Status.DELETED) {
-			makeATestPanel.getAddaTest().setAction(
-					new SaveATestAction(new SaveATestController(makeATestPanel,
-							requirement, parentView, tests), tests
-							.getSelectedValues()));
-
-			if (tests.getSelectedValues().length == 0) {
-				makeATestPanel
-						.getaTestStatus()
-						.setText(
-								"No acceptance test selected. Fill name and description to create a new one.");
-				makeATestPanel.getaTestStatusBox().setEnabled(false);
-				makeATestPanel.getaTestField().setBackground(Color.white);
-				makeATestPanel.getaTestName().setBackground(Color.white);
-				if (makeATestPanel.getaTestName().getText().trim().equals("")
-						|| makeATestPanel.getaTestField().getText().trim()
-								.equals(""))
-					makeATestPanel.getAddaTest().setEnabled(false);
-			} else {
-				makeATestPanel.getaTestStatusBox().setEnabled(true);
-				if (tests.getSelectedValues().length > 1) {
-					makeATestPanel
-							.getaTestStatus()
-							.setText(
-									"Multiple acceptance tests selected. Can only change status.");
-					makeATestPanel.getaTestFieldPane().setEnabled(false);
-					makeATestPanel.getaTestField().setEnabled(false);
-					makeATestPanel.getaTestName().setEnabled(false);
-					makeATestPanel.getaTestField().setBackground(
-							makeATestPanel.getBackground());
-					makeATestPanel.getaTestName().setBackground(
-							makeATestPanel.getBackground());
-				} else {
-					makeATestPanel
-							.getaTestStatus()
-							.setText(
-									"One acceptance test selected. Fill name AND description to edit. Leave blank to just change status/user.");
-					makeATestPanel.getaTestFieldPane().setEnabled(true);
-					makeATestPanel.getaTestField().setEnabled(true);
-					makeATestPanel.getaTestName().setEnabled(true);
-					makeATestPanel.getaTestField().setBackground(Color.white);
-					makeATestPanel.getaTestName().setBackground(Color.white);
-				}
-			}
-		}
-	}
-
-	/**
 	 * 
 	 * Method to populate this object's list of aTests from the current
 	 * requirement's list of aTests
 	 */
 	private void addaTestsToList() {
-		testList.clear();
+		ArrayList<Event> tests = new ArrayList<Event>();
 
 		// add the aTests to the list model.
-		for (ATest aaTest : requirement.getTests()) {
-			this.testList.addElement(aaTest);
+		for (ATest aTest : requirement.getTests()) {
+			tests.add(aTest);
 		}
+		
+		testModel.setRowData(tests);
+		
 	}
 
 	/**
@@ -293,8 +238,14 @@ public class DetailATestView extends JPanel {
 	 * 
 	 * @return the list of aTests
 	 */
-	public DefaultListModel getaTestList() {
-		return testList;
+	public List<ATest> getaTestList() {
+		List<ATest> tests = new ArrayList<ATest>();
+		
+		for (Event e: testModel.getRowData()) {
+			tests.add((ATest) e);
+		}
+		
+		return tests;
 	}
 
 	/**
@@ -315,7 +266,7 @@ public class DetailATestView extends JPanel {
 	 * @return the selected aTest
 	 */
 	public ATest getSingleSelectedaTest() {
-		return (ATest) tests.getSelectedValue();
+		return (ATest) testModel.getValueAt(testTable.getSelectedRow(), 0);
 	}
 
 	/**

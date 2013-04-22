@@ -38,7 +38,6 @@ public class DetailNoteView extends JPanel {
 	private JScrollPane noteScrollPane;
 
 	protected EventTable notesTable;
-
 	private EventTableModel tableModel;
 
 	private Requirement requirement;

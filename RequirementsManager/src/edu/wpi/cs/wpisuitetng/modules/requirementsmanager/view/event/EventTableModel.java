@@ -15,6 +15,9 @@ public class EventTableModel implements TableModel {
 	/** listeners */
 	private List<TableModelListener> listeners;
 
+	public EventTableModel() {
+		this(new ArrayList<Event>());
+	}	
 	
 	public EventTableModel(List<Event> events) {
 		this.events = events;
@@ -74,6 +77,10 @@ public class EventTableModel implements TableModel {
 	public void setRowData(List<Event> events) {
 		this.events = events;		
 		notifyListeners();
+	}
+	
+	public void addEvent(Event e) {
+		events.add(e);
 	}
 	
 	public List<Event> getRowData() {

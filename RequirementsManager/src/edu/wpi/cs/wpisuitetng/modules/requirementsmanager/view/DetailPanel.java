@@ -22,7 +22,6 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -1233,14 +1232,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	 */
 	public JComboBox getComboBoxIteration() {
 		return comboBoxIteration;
-	}
-
-	public DefaultListModel getTaskList() {
-		return taskView.getTaskList();
-	}
-
-	public DefaultListModel getTestList() {
-		return aTestView.getaTestList();
 	}
 
 	public DetailTaskView getTaskView() {

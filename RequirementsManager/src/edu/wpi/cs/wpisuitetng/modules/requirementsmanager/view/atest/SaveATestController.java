@@ -12,14 +12,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.Color;
-
-import javax.swing.JList;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
  * This controller handles saving requirement aTests to the server
@@ -31,7 +32,7 @@ public class SaveATestController {
 	private final MakeATestPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
-	private final JList tests;
+	private final EventTableModel testModel;
 
 	/**
 	 * Construct the controller
@@ -44,28 +45,28 @@ public class SaveATestController {
 	 *            the DetailPanel displaying the current requirement
 	 */
 	public SaveATestController(MakeATestPanel view, Requirement model,
-			DetailPanel parentView, JList tests) {
+			DetailPanel parentView, EventTableModel testModel) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
-		this.tests = tests;
+		this.testModel = testModel;
 	}
 
 	/**
 	 * Save a aTest to the server
 	 */
-	public void saveaTest(Object[] tests) {
+	public void saveaTest(int[] selectedRows) {
 		final String testText = view.getaTestField().getText();
 		final String testName = view.getaTestName().getText();
-		if (tests == null) { // Creating a aTest!
+		if (selectedRows == null) { // Creating a aTest!
 			System.out.println("aTestS WAS NULL, ISSUE");
-		} else if (tests.length < 1) {
+		} else if (selectedRows.length < 1) {
 			// aTest must have a name and description of at least one character
 			if (testText.length() > 0 && testName.length() > 0) {
 				ATest tempTest = new ATest(testName, testText);
 				tempTest.setId(this.model.getTests().size() + 1);
 				this.model.addTest(tempTest);
-				parentView.getTestList().addElement(tempTest);
+				testModel.addEvent(tempTest);
 				view.getaTestName().setText("");
 				view.getaTestField().setText("");
 				view.getaTestField().requestFocusInWindow();
@@ -82,8 +83,15 @@ public class SaveATestController {
 		} else {
 
 			// Modifying aTests
-			for (Object aTest : tests) {
-				if (tests.length == 1) {
+			
+			List<ATest> selectedATests = new ArrayList<ATest>();
+			
+			for (int i : selectedRows) {
+				selectedATests.add((ATest) testModel.getValueAt(i, 0));
+			}
+			
+			for (Object aTest : selectedATests) {
+				if (selectedATests.size() == 1) {
 					// If only one is selected, edit the fields
 					if (testText.length() > 0 && testName.length() > 0) {
 						((ATest) aTest).setName(view.getaTestName().getText());
@@ -111,7 +119,7 @@ public class SaveATestController {
 			view.getaTestField().requestFocusInWindow();
 		}
 
-		this.tests.clearSelection();
+		//this.tests.clearSelection();
 		view.getaTestStatus()
 				.setText(
 						"No aTests selected. Fill name and description to create a new one.");

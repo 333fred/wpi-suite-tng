@@ -12,14 +12,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.Color;
-
-import javax.swing.JList;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
  * This controller handles saving requirement tasks to the server
@@ -31,7 +32,7 @@ public class SaveTaskController {
 	private final MakeTaskPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
-	private final JList tasks;
+	private final EventTableModel taskModel;
 
 	/**
 	 * Construct the controller
@@ -44,17 +45,17 @@ public class SaveTaskController {
 	 *            the DetailPanel displaying the current requirement
 	 */
 	public SaveTaskController(MakeTaskPanel view, Requirement model,
-			DetailPanel parentView, JList tasks) {
+			DetailPanel parentView, EventTableModel taskModel) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
-		this.tasks = tasks;
+		this.taskModel = taskModel;
 	}
 
 	/**
 	 * Save a task to the server
 	 */
-	public void saveTask(Object[] tasks) {
+	public void saveTask(int[] selectedRows) {
 		final String taskText = view.getTaskField().getText();
 		final String taskName = view.getTaskName().getText();
 		int taskEstimate;
@@ -69,9 +70,9 @@ public class SaveTaskController {
 		for (Task altTask : model.getTasks())
 			estimateSum = estimateSum + altTask.getEstimate();
 
-		if (tasks == null) { // Creating a task!
+		if (selectedRows == null) { // Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
-		} else if (tasks.length < 1) {
+		} else if (selectedRows.length < 1) {
 			// Task must have a name and description of at least one character
 			if (taskText.length() > 0 && taskName.length() > 0) {
 				Task tempTask = new Task(taskName, taskText);
@@ -88,7 +89,8 @@ public class SaveTaskController {
 
 				tempTask.setId(this.model.getTasks().size() + 1);
 				this.model.addTask(tempTask);
-				parentView.getTaskList().addElement(tempTask);
+				//parentView.getTaskList().addElement(tempTask);
+				taskModel.addEvent(tempTask);
 				view.getTaskName().setText("");
 				view.getTaskField().setText("");
 				view.getTaskField().requestFocusInWindow();
@@ -106,7 +108,13 @@ public class SaveTaskController {
 		} else {
 
 			// Modifying tasks
-			for (Object aTask : tasks) {
+			List<Task> selectedTasks = new ArrayList<Task>();
+			
+			for (int i : selectedRows) {
+				selectedTasks.add((Task)taskModel.getValueAt(i,0));
+			}
+			
+			for (Task task : selectedTasks) {
 				if (tasks.length == 1) {
 					// If only one is selected, edit the fields
 					if (taskText.length() > 0 && taskName.length() > 0) {
@@ -151,7 +159,7 @@ public class SaveTaskController {
 				parentView.getComboBoxStatus().removeItem("Complete");
 		}
 
-		this.tasks.clearSelection();
+		//this.tasks.clearSelection();
 		view.getTaskStatus()
 				.setText(
 						"No tasks selected. Fill name and description to create a new one.");
