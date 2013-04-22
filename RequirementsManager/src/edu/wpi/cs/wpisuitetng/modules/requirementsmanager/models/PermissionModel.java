@@ -13,8 +13,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import java.util.Comparator;
+
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
@@ -23,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
  * Contains the permLevel for the current user
  */
 
-public class PermissionModel extends AbstractModel {
+public class PermissionModel extends AbstractModel implements Comparable {
 
 	private int id;
 	private User user;
@@ -233,6 +236,17 @@ public class PermissionModel extends AbstractModel {
 	 */
 	@Override
 	public void delete() {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(Object o){
+		if(o instanceof PermissionModel){
+			return(this.getUser().getName().compareTo(((PermissionModel) o).getUser().getName()));
+		}
+		return 999;
 	}
 
 }

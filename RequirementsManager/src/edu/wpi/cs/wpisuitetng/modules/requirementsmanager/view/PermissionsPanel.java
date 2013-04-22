@@ -13,6 +13,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -68,6 +69,7 @@ public class PermissionsPanel extends Tab {
 
 		/** Initialize the list of local permissions */
 		localPermissions = PermissionsDatabase.getInstance().getAll();
+		Collections.sort(localPermissions);
 		System.out.println(localPermissions.size());
 
 		// construct the table of users and their permissions
