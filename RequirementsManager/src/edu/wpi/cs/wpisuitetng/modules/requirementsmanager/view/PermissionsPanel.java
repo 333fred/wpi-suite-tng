@@ -42,10 +42,6 @@ public class PermissionsPanel extends Tab {
 	/** A table to display users and their permission level */
 	private PermissionsTable userTable;
 
-	/** A list of users to display */
-
-	/** A list of permissions to display */
-
 	/** A button to select administrative permission level */
 	private JRadioButton adminButton;
 
@@ -69,7 +65,7 @@ public class PermissionsPanel extends Tab {
 
 		radioPanel.setLayout(radioLayout);
 		setLayout(layout);
-		
+
 		/** Initialize the list of local permissions */
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		System.out.println(localPermissions.size());
@@ -82,14 +78,16 @@ public class PermissionsPanel extends Tab {
 		String[][] rowData = new String[localPermissions.size()][2];
 		for (int i = 0; i < localPermissions.size(); i++) {
 			rowData[i][0] = localPermissions.get(i).getUser().getName();
-			//Handle correct casing of options
+			// Handle correct casing of options
 			String perm = localPermissions.get(i).getPermLevel().toString();
-			rowData[i][1] = perm.substring(0, 1).concat(perm.substring(1).toLowerCase());
+			rowData[i][1] = perm.substring(0, 1).concat(
+					perm.substring(1).toLowerCase());
 		}
 
 		userTable = new PermissionsTable(rowData, columnNames, localPermissions);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		userTable.addMouseListener(new PermissionSelectionChangedListener(this));
+		userTable
+				.addMouseListener(new PermissionSelectionChangedListener(this));
 		for (int i = 0; i < userTable.getRowCount(); i++) {
 			if (userTable.isRowSelected(i)) {
 				setSelectedButtons((UserPermissionLevel) userTable.getValueAt(
@@ -128,40 +126,42 @@ public class PermissionsPanel extends Tab {
 				SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, userScroll, 0,
 				SpringLayout.SOUTH, this);
-		
-		//TODO: What do we do with this layout now that the panel isn't needed?
-		/*layout.putConstraint(SpringLayout.NORTH, radioPanel, 0,
-				SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.EAST, radioPanel, 0,
-				SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.WEST, radioPanel, 10,
-				SpringLayout.HORIZONTAL_CENTER, this);
-		layout.putConstraint(SpringLayout.SOUTH, radioPanel, 0,
-				SpringLayout.SOUTH, this);*/
+
+		// TODO: What do we do with this layout now that the panel isn't needed?
+		/*
+		 * layout.putConstraint(SpringLayout.NORTH, radioPanel, 0,
+		 * SpringLayout.NORTH, this); layout.putConstraint(SpringLayout.EAST,
+		 * radioPanel, 0, SpringLayout.EAST, this);
+		 * layout.putConstraint(SpringLayout.WEST, radioPanel, 10,
+		 * SpringLayout.HORIZONTAL_CENTER, this);
+		 * layout.putConstraint(SpringLayout.SOUTH, radioPanel, 0,
+		 * SpringLayout.SOUTH, this);
+		 */
 
 		// set constraints for the radio panel
-		/*radioLayout.putConstraint(SpringLayout.WEST, adminButton, 0,
-				SpringLayout.WEST, radioPanel);
-		radioLayout.putConstraint(SpringLayout.WEST, updateButton, 0,
-				SpringLayout.WEST, radioPanel);
-		radioLayout.putConstraint(SpringLayout.NORTH, adminButton, 15,
-				SpringLayout.NORTH, radioPanel);
-		radioLayout.putConstraint(SpringLayout.NORTH, updateButton, 15,
-				SpringLayout.SOUTH, adminButton);
-		radioLayout.putConstraint(SpringLayout.NORTH, noPermissionButton, 15,
-				SpringLayout.SOUTH, updateButton);
-		radioLayout.putConstraint(SpringLayout.NORTH, saveButton, 10,
-				SpringLayout.SOUTH, noPermissionButton);
-		radioLayout.putConstraint(SpringLayout.WEST, radioPanel, 0,
-				SpringLayout.WEST, saveButton);
-		radioLayout.putConstraint(SpringLayout.EAST, saveButton,
-				(int) saveButton.getPreferredSize().getWidth(),
-				SpringLayout.WEST, radioPanel);
-
-		radioLayout.putConstraint(SpringLayout.SOUTH, saveButton,
-				(int) saveButton.getPreferredSize().getHeight(),
-				SpringLayout.NORTH, saveButton);*/
-
+		/*
+		 * radioLayout.putConstraint(SpringLayout.WEST, adminButton, 0,
+		 * SpringLayout.WEST, radioPanel);
+		 * radioLayout.putConstraint(SpringLayout.WEST, updateButton, 0,
+		 * SpringLayout.WEST, radioPanel);
+		 * radioLayout.putConstraint(SpringLayout.NORTH, adminButton, 15,
+		 * SpringLayout.NORTH, radioPanel);
+		 * radioLayout.putConstraint(SpringLayout.NORTH, updateButton, 15,
+		 * SpringLayout.SOUTH, adminButton);
+		 * radioLayout.putConstraint(SpringLayout.NORTH, noPermissionButton, 15,
+		 * SpringLayout.SOUTH, updateButton);
+		 * radioLayout.putConstraint(SpringLayout.NORTH, saveButton, 10,
+		 * SpringLayout.SOUTH, noPermissionButton);
+		 * radioLayout.putConstraint(SpringLayout.WEST, radioPanel, 0,
+		 * SpringLayout.WEST, saveButton);
+		 * radioLayout.putConstraint(SpringLayout.EAST, saveButton, (int)
+		 * saveButton.getPreferredSize().getWidth(), SpringLayout.WEST,
+		 * radioPanel);
+		 * 
+		 * radioLayout.putConstraint(SpringLayout.SOUTH, saveButton, (int)
+		 * saveButton.getPreferredSize().getHeight(), SpringLayout.NORTH,
+		 * saveButton);
+		 */
 
 		// add the buttons to the panel
 		radioPanel.add(adminButton);
@@ -174,13 +174,14 @@ public class PermissionsPanel extends Tab {
 		JPanel test = new JPanel();
 		test.add(new JLabel("Test"));
 		this.add(userScroll);
-		//this.add(radioPanel);
+		// this.add(radioPanel);
 
 	}
 
 	/**
 	 * 
-	 * @param level The level to set the radio buttons to reflect
+	 * @param level
+	 *            The level to set the radio buttons to reflect
 	 */
 	public void setSelectedButtons(UserPermissionLevel level) {
 		switch (level) {
@@ -188,19 +189,22 @@ public class PermissionsPanel extends Tab {
 			adminButton.setSelected(true);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(false);
-			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
+			saveButton.setAction(new SavePermissionsAction(this,
+					localPermissions.get(userTable.getSelectedRow())));
 			break;
 		case UPDATE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(true);
 			noPermissionButton.setSelected(false);
-			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
+			saveButton.setAction(new SavePermissionsAction(this,
+					localPermissions.get(userTable.getSelectedRow())));
 			break;
 		case NONE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(true);
-			saveButton.setAction(new SavePermissionsAction(this, localPermissions.get(userTable.getSelectedRow())));
+			saveButton.setAction(new SavePermissionsAction(this,
+					localPermissions.get(userTable.getSelectedRow())));
 			break;
 		default:
 			adminButton.setSelected(false);
@@ -212,7 +216,7 @@ public class PermissionsPanel extends Tab {
 
 	/**
 	 * 
-	 * @return The permission level selected on the radio buttons 
+	 * @return The permission level selected on the radio buttons
 	 */
 	public UserPermissionLevel getPermission() {
 		if (adminButton.isSelected())
@@ -223,10 +227,11 @@ public class PermissionsPanel extends Tab {
 			return UserPermissionLevel.NONE;
 		return null;
 	}
-/**
- * 
- * @return The table of users and their permissions.
- */
+
+	/**
+	 * 
+	 * @return The table of users and their permissions.
+	 */
 	public JTable getUserList() {
 		return userTable;
 	}
@@ -238,7 +243,7 @@ public class PermissionsPanel extends Tab {
 	public List<PermissionModel> getLocalDatabase() {
 		return localPermissions;
 	}
-	
+
 	public void refresh() {
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		String[][] rowData = new String[localPermissions.size()][2];
