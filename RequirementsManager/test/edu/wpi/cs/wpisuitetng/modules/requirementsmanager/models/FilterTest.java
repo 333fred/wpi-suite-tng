@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Kyle
+ * Contributors: Kyle Burns and Maddie Burris
  *  
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -95,7 +95,7 @@ public class FilterTest {
 	Type type;
 	Status status;
 	Priority priority;
-	Iteration iteration1;
+	Iteration i5;
 	String Iname;
 	Date startDate;
 	Date endDate;
@@ -121,51 +121,58 @@ public class FilterTest {
 		i2 = new Iteration("Iteration 2", new Date(2013, 4, 11), new Date(2013, 4, 17), 2);
 		i3 = new Iteration("Iteration 3", new Date(2013, 5, 1), new Date(2013, 5, 10), 3);
 		i4 = new Iteration("Iteration 4", new Date(2013, 4, 21), new Date(2013, 4, 28), 4);
-		iteration1 = new Iteration(Iname, startDate, endDate, iterationID1,
+		i5 = new Iteration(Iname, startDate, endDate, iterationID1,
 				reqs);
-		IterationDatabase.getInstance().add(iteration1);
+		IterationDatabase.getInstance().add(i5);
 		IterationDatabase.getInstance().add(i1);
 		IterationDatabase.getInstance().add(i2);
 		IterationDatabase.getInstance().add(i3);
 		IterationDatabase.getInstance().add(i4);
-		f1 = new Filter(u1);
-		f2 = new Filter(u2);	
+		f1 = new Filter(u1); 
 		f2 = new Filter(u2);
+		/**Name Filters**/
 		f3 = new Filter(u1, FilterField.NAME, FilterOperation.EQUAL, "name");
 		f4 = new Filter(u1, FilterField.NAME, FilterOperation.NOT_EQUAL, "name2");
 		f5 = new Filter(u1, FilterField.NAME, FilterOperation.CONTAINS, "2");
 		f6 = new Filter(u1, FilterField.NAME, FilterOperation.STARTS_WITH, "e");
+		/**Release Number Filters**/
 		f7 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.EQUAL, "v1");
 		f8 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.NOT_EQUAL, "v1");
 		f9 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.CONTAINS, "v");
 		f10 = new Filter(u1, FilterField.RELEASE_NUMBER, FilterOperation.STARTS_WITH, "v");
+		/**Type Filters**/
 		f11 = new Filter(u1, FilterField.TYPE, FilterOperation.EQUAL, Type.USER_STORY);
 		f12 = new Filter(u1, FilterField.TYPE, FilterOperation.NOT_EQUAL, Type.USER_STORY);
+		/**Priority Filters**/
 		f13 = new Filter(u1, FilterField.PRIORITY, FilterOperation.EQUAL, Priority.HIGH);
 		f14 = new Filter(u1, FilterField.PRIORITY, FilterOperation.NOT_EQUAL, Priority.HIGH);
+		/**Status Filters**/
 		f15 = new Filter(u1, FilterField.STATUS, FilterOperation.EQUAL, Status.NEW);
 		f16 = new Filter(u1, FilterField.STATUS, FilterOperation.NOT_EQUAL, Status.IN_PROGRESS);
-		//f17 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, 0);
+		/**Iteration Filters**/
+		f17 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, 2);
 		//f18 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BEFORE, startDate);
 		//f19 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BETWEEN, 2);
 		//f20 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_AFTER, endDate);
-		//f21= new Filter(u1, FilterField.ITERATION, FilterOperation.NOT_EQUAL, 0);
+		f21= new Filter(u1, FilterField.ITERATION, FilterOperation.NOT_EQUAL, 0);
+		/**Filters free for use**/
 		//f22 free
 		//f23 free
-		f24 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 0);
+		/**Estimate Filters**/
+		f24 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 2);
 		f25 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.EQUAL, 1);
 		f26 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.NOT_EQUAL, 1);
 		f27 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN, 2);
 		f28 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN_EQUAL, 2);
 		f29 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN_EQUAL, 2);
-		
+		/**Effort Filters**/
 		f30 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN, 1);
 		f31 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN_EQUAL, 2);
 		f32 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN, 2);
 		f33 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN_EQUAL, 2);
 		f34 = new Filter(u1, FilterField.EFFORT, FilterOperation.EQUAL, 1);
 		f35 = new Filter(u1, FilterField.EFFORT, FilterOperation.NOT_EQUAL, 1);
-		
+		/**Incorrect Filters for "Break" testing**/
 		f36 = new Filter(u1, FilterField.NAME, FilterOperation.GREATER_THAN, 1);
 		f37 = new Filter(u1, FilterField.TYPE, FilterOperation.CONTAINS, 1);
 		f38 = new Filter(u1, FilterField.ITERATION, FilterOperation.CONTAINS, 1);
@@ -184,12 +191,64 @@ public class FilterTest {
 		r1.setPriority(Priority.HIGH);
 		r2.setPriority(Priority.MEDIUM);
 		r3.setPriority(Priority.LOW);
+		
 		r1.setStatus(Status.NEW);
 		r2.setStatus(Status.BLANK);
 		r3.setStatus(Status.IN_PROGRESS);
+	}
+	
+	@Test
+	public void testShouldFilterActive() {
+		assertFalse(f1.shouldFilter(r1));
+	}
+	
+	@Test
+	public void testShouldFilterNonActive() {
+		f1.setActive(false);
+		assertFalse(f1.shouldFilter(r1));
+	}	
 
+	@Test
+	public void shouldFilterNameEqual(){
+		assertTrue(f3.shouldFilter(r1));
+		assertFalse(f3.shouldFilter(r2));		
+	}
+	
+	@Test
+	public void shouldFilterNameNotEqual(){
+		assertTrue(f4.shouldFilter(r1));
+		assertFalse(f4.shouldFilter(r2));		
+	}
+
+	@Test
+	public void shouldFilterNameContains(){
+		assertTrue(f5.shouldFilter(r2));
+		assertFalse(f5.shouldFilter(r1));		
+	}
+	
+	@Test
+	public void shouldFilterNameStartsWith(){
+		assertTrue(f6.shouldFilter(r3));
+		assertFalse(f6.shouldFilter(r1));
 	}
 		
+	@Test
+	public void shouldFilterReleaseEqual(){
+		assertTrue(f7.shouldFilter(r1));
+		assertFalse(f7.shouldFilter(r2));		
+	}
+	
+	@Test
+	public void shouldFilterReleaseNotEqual(){
+		assertTrue(f8.shouldFilter(r2));
+		assertFalse(f8.shouldFilter(r1));		
+	}
+	
+	@Test
+	public void shouldFilterReleaseContains(){
+		assertTrue(f9.shouldFilter(r1));
+		assertFalse(f9.shouldFilter(r3));
+	}
 	
 	@Test
 	public void shouldFilterReleaseStartsWith() {		
@@ -234,131 +293,101 @@ public class FilterTest {
 	}
 	
 	@Test
-	public void shouldFilterEstimateEqual() {
-//		f24 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 0);
-//		f25 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.EQUAL, 1);
-//		f26 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.NOT_EQUAL, 1);
-//		f27 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN, 2);
-//		f28 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN_EQUAL, 2);
-//		f29 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN_EQUAL, 2);
-
-		assertTrue(f24.shouldFilter(r1));
-		assertTrue(f25.shouldFilter(r1));
-		assertTrue(f26.shouldFilter(r2));
-		assertTrue(f27.shouldFilter(r1));
-		assertTrue(f28.shouldFilter(r1));
-		assertTrue(f28.shouldFilter(r2));
-		assertTrue(f29.shouldFilter(r2));
-		assertTrue(f29.shouldFilter(r3));
+	public void shouldFilterEstimateGreater() {
+		assertTrue(f24.shouldFilter(r3));
+		assertFalse(f24.shouldFilter(r1));	
 	}
-	/*
+		
 	@Test
-	public void shouldFilterEstimateNotEqual() {
-		f18 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.NOT_EQUAL, 1);
-		assertTrue(f18.shouldFilter(r3));
-		assertFalse(f18.shouldFilter(r1));
+	public void shouldFilterEstimateEqual() {
+		assertTrue(f25.shouldFilter(r1));
+		assertFalse(f25.shouldFilter(r2));	
 	}
 	
 	@Test
-	public void shouldFilterEstimateGreater() {
-		f19 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN, 3);
-		assertTrue(f19.shouldFilter(r3));
-		assertFalse(f19.shouldFilter(r1));
+	public void shouldFilterEstimateNotEqual() {
+		assertTrue(f26.shouldFilter(r2));
+		assertFalse(f26.shouldFilter(r1));
 	}
 	
 	@Test
 	public void shouldFilterEstimateLess() {
-		f20 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN, 3);
-		assertTrue(f20.shouldFilter(r1));
-		assertFalse(f20.shouldFilter(r3));
-	}
-	
-	@Test
-	public void shouldFilterEstimateGreaterEqual() {
-		f21 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.GREATER_THAN_EQUAL, 3);
-		assertTrue(f21.shouldFilter(r3));
-		assertFalse(f21.shouldFilter(r1));
+		assertTrue(f27.shouldFilter(r1));
+		assertFalse(f27.shouldFilter(r3));
 	}
 	
 	@Test
 	public void shouldFilterEstimateLessEqual() {
-		f22 = new Filter(u1, FilterField.ESTIMATE, FilterOperation.LESS_THAN_EQUAL, 3);
-		assertTrue(f22.shouldFilter(r1));
-		assertFalse(f22.shouldFilter(r3));
-	}*/
-	
-	@Test
-	public void shouldFilterEffortEqual() {
-//		f30 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN, 1);
-//		f31 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN_EQUAL, 2);
-//		f32 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN, 2);
-//		f33 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN_EQUAL, 2);
-//		f34 = new Filter(u1, FilterField.EFFORT, FilterOperation.EQUAL, 1);
-//		f35 = new Filter(u1, FilterField.EFFORT, FilterOperation.NOT_EQUAL, 1);
-		assertTrue(f30.shouldFilter(r2));
-		assertTrue(f31.shouldFilter(r2));
-		assertTrue(f31.shouldFilter(r3));
-		assertTrue(f32.shouldFilter(r1));
-		assertTrue(f33.shouldFilter(r1));
-		assertTrue(f33.shouldFilter(r2));
-		assertTrue(f34.shouldFilter(r1));
-		assertTrue(f35.shouldFilter(r2));
-	}
-	/*
-	@Test
-	public void shouldFilterEffortNotEqual() {
-		f24 = new Filter(u1, FilterField.EFFORT, FilterOperation.NOT_EQUAL, 1);
-		assertTrue(f24.shouldFilter(r3));
-		assertFalse(f24.shouldFilter(r1));
-	}
-	
-	@Test
-	public void shouldFilterEffortGreater() {
-		f25 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN, 3);
-		assertTrue(f25.shouldFilter(r3));
-		assertFalse(f25.shouldFilter(r1));
-	}
-	
-	@Test
-	public void shouldFilterEffortLess() {
-		f26 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN, 3);
-		assertTrue(f26.shouldFilter(r1));
-		assertFalse(f26.shouldFilter(r3));
-	}
-	
-	@Test
-	public void shouldFilterEffortGreaterEqual() {
-		f27 = new Filter(u1, FilterField.EFFORT, FilterOperation.GREATER_THAN_EQUAL, 3);
-		assertTrue(f27.shouldFilter(r3));
-		assertFalse(f27.shouldFilter(r1));
-	}
-	
-	@Test
-	public void shouldFilterEffortLessEqual() {
-		f28 = new Filter(u1, FilterField.EFFORT, FilterOperation.LESS_THAN_EQUAL, 3);
 		assertTrue(f28.shouldFilter(r1));
+		assertTrue(f28.shouldFilter(r2));
 		assertFalse(f28.shouldFilter(r3));
-	}*/
-	
-	
-/******* Iteration tests below.... Iteration testing is confusing and will be worked on later**********/
-	
-	/*@Test
-	public void shouldFilterIterationEqual() {
-		f29 = new Filter(u1, FilterField.ITERATION, FilterOperation.EQUAL, 1);
-		assertTrue(f29.shouldFilter(r1));
-		assertFalse(f29.shouldFilter(r3));
 	}
 	
-	
 	@Test
-	public void shouldFilterIterationNotEqual() {
-		f30 = new Filter(u1, FilterField.ITERATION, FilterOperation.NOT_EQUAL, 1);
+	public void shouldFilterEstimateGreaterEqual() {
+		assertTrue(f29.shouldFilter(r2));
 		assertTrue(f29.shouldFilter(r3));
 		assertFalse(f29.shouldFilter(r1));
 	}
 	
 	@Test
+	public void shouldFilterEffortEqual() {
+		assertTrue(f34.shouldFilter(r1));
+	}
+	
+	@Test
+	public void shouldFilterEffortGreater() {
+		assertTrue(f30.shouldFilter(r2));
+		assertFalse(f30.shouldFilter(r1));
+	}
+	
+	@Test
+	public void shouldFilterEffortGreaterEqual() {
+		assertTrue(f31.shouldFilter(r2));
+		assertTrue(f31.shouldFilter(r3));
+		assertFalse(f31.shouldFilter(r1));
+	}
+	
+	@Test
+	public void shouldFilterEffortLess() {
+		assertTrue(f32.shouldFilter(r1));
+		assertFalse(f32.shouldFilter(r3));
+	}
+	
+	@Test
+	public void shouldFilterEffortLessEqual() {
+		assertTrue(f33.shouldFilter(r1));
+		assertTrue(f33.shouldFilter(r2));
+		assertFalse(f33.shouldFilter(r3));
+	}
+	
+	@Test
+	public void shouldFilterEffortNotEqual() {
+		assertTrue(f35.shouldFilter(r2));
+		assertFalse(f35.shouldFilter(r1));
+	}
+	
+/******* Iteration tests below .... Iteration testing is confusing and will be worked on later**********/
+	
+//	assertTrue(f16.shouldFilter(r1));		
+//	assertTrue(f17.shouldFilter(r1));
+//	assertTrue(f18.shouldFilter(r1));
+//	assertTrue(f19.shouldFilter(r1));
+	
+	@Test
+	public void shouldFilterIterationEqual() {		
+		assertTrue(f17.shouldFilter(r3));
+		assertFalse(f17.shouldFilter(r2));
+	}
+	
+	
+	@Test
+	public void shouldFilterIterationNotEqual() {		
+		assertTrue(f21.shouldFilter(r3));
+		assertFalse(f21.shouldFilter(r1));
+	}
+	
+	/*@Test
 	public void shouldFilterIterationOccursBefore() {
 		f31 = new Filter(u1, FilterField.ITERATION, FilterOperation.OCCURS_BEFORE, 1);
 		assertTrue(f31.shouldFilter(r2));
@@ -380,36 +409,7 @@ public class FilterTest {
 	}
 	*/
 /*****************************End Iteration Tests***************************************/	
-	@Test
-	public void testShouldFilterActive() {
-		assertTrue(f3.shouldFilter(r1));
-		assertFalse(f3.shouldFilter(r2));
-		assertTrue(f4.shouldFilter(r1));
-		assertFalse(f4.shouldFilter(r2));
-		assertTrue(f5.shouldFilter(r2));
-		assertFalse(f5.shouldFilter(r1));
-		assertTrue(f6.shouldFilter(r3));
-		assertFalse(f6.shouldFilter(r1));
-		assertTrue(f7.shouldFilter(r1));
-		assertFalse(f7.shouldFilter(r2));
-		assertTrue(f8.shouldFilter(r2));
-		assertFalse(f8.shouldFilter(r1));
-		assertTrue(f9.shouldFilter(r1));
-		assertFalse(f9.shouldFilter(r3));
 		
-		assertFalse(f14.shouldFilter(r1));		
-		assertTrue(f15.shouldFilter(r1));
-		
-//		assertTrue(f16.shouldFilter(r1));		
-//		assertTrue(f17.shouldFilter(r1));
-//		assertTrue(f18.shouldFilter(r1));
-//		assertTrue(f19.shouldFilter(r1));
-				
-		f1.setActive(false);
-		assertFalse(f1.shouldFilter(r1));
-		
-	}
-	
 	@Test
 	public void breakCheckString(){
 		//fieldOperation = something other than equal, not equal, contains, starts with
