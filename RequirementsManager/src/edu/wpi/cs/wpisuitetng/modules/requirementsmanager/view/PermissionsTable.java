@@ -48,7 +48,10 @@ public class PermissionsTable extends JTable {
 	 */
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return super.convertColumnIndexToModel(column) == 1;
+		if(!localPermissions.get(row).getUser().getUsername().equals(PermissionModel.getInstance().getUser().getUsername()) && !localPermissions.get(row).getUser().getUsername().equals("admin"))
+			return super.convertColumnIndexToModel(column) == 1;
+		else
+			return false;
 	}
 
 	/**
