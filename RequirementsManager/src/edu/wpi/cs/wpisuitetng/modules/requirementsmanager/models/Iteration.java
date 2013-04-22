@@ -21,6 +21,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
@@ -352,4 +353,33 @@ public class Iteration extends AbstractModel {
 		}
 	}
 
+	public boolean isInProgress() {
+		 Date currentDate = new Date();
+		 return currentDate.after(startDate) && currentDate.before(endDate);
+	}
+
+	public float getProgress() {
+		float total = 0;
+		float done = 0;
+				
+		for (Integer req : this.requirements) {
+			Requirement requirement;
+			try {
+				requirement = RequirementDatabase.getInstance().get(req);
+				total += requirement.getEstimate();
+				if (requirement.getStatus() == Status.COMPLETE) {
+					done += requirement.getEstimate();
+				}
+			} catch (RequirementNotFoundException e) {
+				e.printStackTrace();
+			}
+			System.out.println(done + "/" + total);
+		}
+		if (total == 0) {
+			return 0;
+		} else {
+			System.out.println((done/total) * 100);
+			return (done/total) * 100; 
+		}
+	}
 }

@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
@@ -103,7 +104,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 	public IterationView(Iteration iteration, Status status,
 			MainTabController mainTabController) {
 		System.out.println("IterationVIew Mode: " + status);
-		
 		this.iteration = iteration;
 		this.status = status;
 		this.mainTabController = mainTabController;
@@ -150,6 +150,9 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 		calStartDate = new JCalendar();
 		calEndDate = new JCalendar();
+		
+		JProgressBar progressBar = new JProgressBar(0, 100);
+		progressBar.setValue((int) this.iteration.getProgress());
 
 		// populate fields, if editing
 		if (status == Status.EDIT || status == Status.VIEW) {
@@ -257,6 +260,14 @@ public class IterationView extends Tab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.NORTH, labErrorMessage, 0,
 				SpringLayout.NORTH, butCancel);
 
+		
+		
+		layout.putConstraint(SpringLayout.VERTICAL_CENTER, progressBar, 0,
+				SpringLayout.VERTICAL_CENTER, txtEstimate);
+		
+		layout.putConstraint(SpringLayout.WEST, progressBar, HORIZONTAL_PADDING,
+				SpringLayout.EAST, txtEstimate);
+		
 		setLayout(layout);
 
 		// add all the components
@@ -281,7 +292,8 @@ public class IterationView extends Tab implements ISaveNotifier {
 		add(labErrorMessage);
 		add(labNameError);
 		add(labCalendarError);
-
+		
+		add(progressBar);
 	}
 
 	/**

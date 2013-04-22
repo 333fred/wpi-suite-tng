@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.text.JTextComponent;
 
@@ -108,33 +109,72 @@ public class TextUpdateListener implements KeyListener {
 	 * accordingly.
 	 */
 	public void checkIfUpdated() {
-		String base = ""; // base of empty string to compare to
+		String empty = ""; // empty string to compare to
+		String base = ""; // the base of the string in the component already
+
+		// Get the base String to compare to the text of the JTextComponent
+		try {
+			// Get the field from the Requirement model that corresponds with the name of component.
+			Object field = panel.getModel().getClass().getDeclaredMethod("get" + component.getName()).invoke(panel.getModel());
+
+			// If field is null, set base to an empty String.
+			if (field == null) {
+				base = "";
+			}
+			// If field is an instance of String, set base to that String.
+			else if (field instanceof String) {
+				base = (String) field;
+			}
+			// If field is an instance of an Integer, set base to that Integer as a String
+			// occurs for the estimate field
+			else if (field instanceof Integer) {
+				base = Integer.toString((Integer) field);
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
 
 		// add to this list the names of components if the component can be
 		// blank
 		// backend may assign default values if saved as blank
-		String canBeEmpty = "Estimate|Actual|Release";
+		String canBeEmpty = "Estimate|Effort|ReleaseNum";
 		
-		// Compare base to the component's text to determine whether or not to
-		// highlight the field.
-		// Certain fields can be empty
-		if (base.equals(component.getText().trim())) {
+		// if the component has is emptye
+		if (empty.equals(component.getText().trim())) { 
 			// if there's an error panel to write to
-			if (errorComponent != null) { 
+			if (errorComponent != null) {
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
-			}
+			} 
+			// if this component cannot be empty
 			if (!component.getName().matches(canBeEmpty)) {
 				panel.disableSaveButton();
+			} else {
+				panel.enableSaveButton();
 			}
-		} else {
+		} else if (base.equals(component.getText().trim())) {
 			component.setBackground(Color.WHITE);
-			if (errorComponent != null) { // if there's an error panel to write
-											// to
+			// if there's an error panel to write to
+			if (errorComponent != null) { 
 				errorComponent.setText("");
 			}
-			if (base.equals(panel.getTextName().getText().trim())
-					|| base.equals(panel.getTextDescription().getText().trim())) {
+			panel.disableSaveButton();
+		} else {
+			component.setBackground(Color.WHITE);
+			// if there's an error panel to write to
+			if (errorComponent != null) { 
+				errorComponent.setText("");
+			}
+			if (empty.equals(panel.getTextName().getText().trim())
+					|| empty.equals(panel.getTextDescription().getText().trim())) {
 				panel.disableSaveButton();
 			} else
 				panel.enableSaveButton();

@@ -182,7 +182,89 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		disableFieldsMode();
 		disableSaveButton();
 	}
+	
+	private void createPanels() {
+		this.mainPanel = new JPanel();
+		this.defaultColor = mainPanel.getBackground();
+		this.mainLayout = new GridLayout(0, 1);
+		this.setLayout(mainLayout);
+		layout = new SpringLayout();
+		mainPanel.setLayout(layout);
+		mainScrollPane = new JScrollPane();
+		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		mainScrollPane.getViewport().add(mainPanel);
+		mainScrollPane.setBorder(null);
 
+		buttonPanelLayout = new SpringLayout();
+		buttonPanel = new JPanel(buttonPanelLayout);
+		leftPanel = new JPanel(new BorderLayout());
+	}
+	
+	private void createComponents() {
+		createJLabels();
+		createTextNameArea();
+		createTextNameValidArea();
+		createTextDescriptionArea();
+		createTextDescriptionValidArea();
+		createSaveErrorArea();
+		createComboBoxes();
+		createTextEstimateArea();
+		createTextActualArea();
+		createTextReleaseArea();
+		createButtons();
+	}
+
+	private void setPanelSizes() {
+		buttonPanel.setPreferredSize(new Dimension(textSaveError
+				.getPreferredSize().width
+				+ textSaveError.getPreferredSize().width, btnSave
+				.getPreferredSize().height + 10));
+		int preferredHeight = 515;
+		int preferredWidth = (int) (textDescription.getPreferredSize()
+				.getWidth() + HORIZONTAL_PADDING * 2);
+		mainPanel.setPreferredSize(new Dimension(preferredWidth,
+				preferredHeight));
+	}
+	
+	private void createComponentListeners() {
+		if (mode == Mode.VIEW) {
+		
+		}
+		else if (mode == Mode.UPDATE) {
+			addTextActualListener();	
+		}
+		else {
+			addTextNameAreaListener();
+			addTextDescriptionAreaListener();
+			addComboBoxListeners();
+			addTextEstimateListener();
+			addTextActualListener();
+			addTextReleaseListener();
+		}
+	}
+	
+	private void addComponents() {
+		addJLabels();
+		mainPanel.add(textName);
+		mainPanel.add(textNameValid);
+		mainPanel.add(scrollDescription);
+		mainPanel.add(textDescriptionValid);
+		mainPanel.add(comboBoxStatus);
+		mainPanel.add(comboBoxType);
+		mainPanel.add(comboBoxPriority);
+		mainPanel.add(comboBoxIteration);
+		mainPanel.add(textEstimate);
+		mainPanel.add(textActual);
+		mainPanel.add(textRelease);
+
+		buttonPanel.add(btnSave);
+		buttonPanel.add(btnCancel);
+		buttonPanel.add(textSaveError);
+
+		leftPanel.add(mainScrollPane, BorderLayout.CENTER);
+		leftPanel.add(buttonPanel, BorderLayout.SOUTH);
+	}
+	
 	private void addSplitPane() {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel,
 				eventPane);
@@ -275,88 +357,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActual.setDisabledTextColor(Color.BLACK);
 	}
 
-	private void setPanelSizes() {
-		buttonPanel.setPreferredSize(new Dimension(textSaveError
-				.getPreferredSize().width
-				+ textSaveError.getPreferredSize().width, btnSave
-				.getPreferredSize().height + 10));
-		int preferredHeight = 515;
-		int preferredWidth = (int) (textDescription.getPreferredSize()
-				.getWidth() + HORIZONTAL_PADDING * 2);
-		mainPanel.setPreferredSize(new Dimension(preferredWidth,
-				preferredHeight));
-	}
-
-	private void createPanels() {
-		this.mainPanel = new JPanel();
-		this.defaultColor = mainPanel.getBackground();
-		this.mainLayout = new GridLayout(0, 1);
-		this.setLayout(mainLayout);
-		layout = new SpringLayout();
-		mainPanel.setLayout(layout);
-		mainScrollPane = new JScrollPane();
-		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		mainScrollPane.getViewport().add(mainPanel);
-		mainScrollPane.setBorder(null);
-
-		buttonPanelLayout = new SpringLayout();
-		buttonPanel = new JPanel(buttonPanelLayout);
-		leftPanel = new JPanel(new BorderLayout());
-	}
-
-	private void createComponentListeners() {
-		if (mode == Mode.VIEW) {
-		
-		}
-		else if (mode == Mode.UPDATE) {
-			addTextActualListener();	
-		}
-		else {
-			addTextNameAreaListener();
-			addTextDescriptionAreaListener();
-			addComboBoxListeners();
-			addTextEstimateListener();
-			addTextActualListener();
-			addTextReleaseListener();
-		}
-	}
-
-	private void createComponents() {
-		createJLabels();
-		createTextNameArea();
-		createTextNameValidArea();
-		createTextDescriptionArea();
-		createTextDescriptionValidArea();
-		createSaveErrorArea();
-		createComboBoxes();
-		createTextEstimateArea();
-		createTextActualArea();
-		createTextReleaseArea();
-		createButtons();
-	}
-
-	private void addComponents() {
-		addJLabels();
-		mainPanel.add(textName);
-		mainPanel.add(textNameValid);
-		mainPanel.add(scrollDescription);
-		mainPanel.add(textDescriptionValid);
-		mainPanel.add(comboBoxStatus);
-		mainPanel.add(comboBoxType);
-		mainPanel.add(comboBoxPriority);
-		mainPanel.add(comboBoxIteration);
-		mainPanel.add(textEstimate);
-		mainPanel.add(textActual);
-		mainPanel.add(textRelease);
-
-		buttonPanel.add(btnSave);
-		buttonPanel.add(btnCancel);
-		buttonPanel.add(textSaveError);
-
-		leftPanel.add(mainScrollPane, BorderLayout.CENTER);
-		leftPanel.add(buttonPanel, BorderLayout.SOUTH);
-	}
-
 	private void createEventSidePanel() {
 		logView = new DetailLogView(this.getRequirement(), this);
 		noteView = new DetailNoteView(this.getRequirement(), this);
@@ -419,7 +419,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private void createTextReleaseArea() {
 		textRelease = new JTextField(9);
 		textRelease.setBorder((new JTextField()).getBorder());
-		textRelease.setName("Release");
+		textRelease.setName("ReleaseNum");
 		textRelease.setMaximumSize(textRelease.getPreferredSize());
 		textRelease.setDisabledTextColor(Color.GRAY);
 	}
@@ -452,7 +452,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActual.setEnabled(false); // disabled until complete
 		textActual.setBackground(defaultColor);
 		textActual.setMaximumSize(textActual.getPreferredSize());
-		textActual.setName("Actual");
+		textActual.setName("Effort");
 		textActual.setDisabledTextColor(Color.GRAY);
 		AbstractDocument textActualDoc = (AbstractDocument) textActual
 				.getDocument();
@@ -1128,7 +1128,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	public void enableSaveButton() {
-		System.out.println("Enable save button called, " + mode);
 		if (mode == Mode.VIEW) {
 			return; // we can not enable save in view mode
 		}

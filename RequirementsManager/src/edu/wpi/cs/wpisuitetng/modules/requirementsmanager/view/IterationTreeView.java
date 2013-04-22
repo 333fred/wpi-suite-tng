@@ -33,6 +33,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -356,7 +357,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 		// sort the iterations
 		iterations = Iteration.sortIterations(iterations);
-		Date acurrentDate = new Date();
 
 		for (Iteration anIteration : iterations) {
 			// iterationNode = new
@@ -372,17 +372,14 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					// requirementNode.setUserObject(requirement);
 					iterationNode.add(requirementNode);
 				} catch (RequirementNotFoundException e) {
-					System.out
-							.println("Requirement Not Found: IterationTreeView:369");
+					System.out.println("Requirement Not Found: IterationTreeView:369");
 				}
 			}
 			this.top.add(iterationNode);
 		}
 
-		((DefaultTreeModel) this.tree.getModel())
-				.nodeStructureChanged(this.top);
-		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree
-				.getCellRenderer();
+		((DefaultTreeModel) this.tree.getModel()).nodeStructureChanged(this.top);
+		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) this.tree.getCellRenderer();
 		renderer.setLeafIcon(null);
 		this.tree.setCellRenderer(renderer);
 		restoreExpanstionState(this.tree, 0, eState);

@@ -12,7 +12,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +91,8 @@ public class DetailNoteView extends JPanel {
 				this.makeNotePanel.getnoteField());
 		this.makeNotePanel.getnoteField().addKeyListener(noteFieldListener);
 
+		setMinimumSize(new Dimension(300, 50));
+		
 		// note will be disabled on start, nothing to add
 		disableAddNote();
 
@@ -111,7 +112,7 @@ public class DetailNoteView extends JPanel {
 		}
 		tableModel.setRowData(events);
 
-		updateRowHeights();
+		notesTable.updateRowHeights();
 
 	}
 
@@ -162,7 +163,7 @@ public class DetailNoteView extends JPanel {
 		}
 		tableModel.setRowData(events);
 
-		updateRowHeights();
+		notesTable.updateRowHeights();
 
 		// scrollToBottom();
 	}
@@ -170,25 +171,5 @@ public class DetailNoteView extends JPanel {
 	public void scrollToBottom() {
 		noteScrollPane.getVerticalScrollBar().setValue(
 				noteScrollPane.getVerticalScrollBar().getMaximum());
-	}
-
-	private void updateRowHeights() {
-		System.out.println("Updating row heights");
-
-		try {
-			for (int row = 0; row < notesTable.getRowCount(); row++) {
-				int rowHeight = notesTable.getRowHeight();
-				for (int column = 0; column < notesTable.getColumnCount(); column++) {
-					Component comp = notesTable.prepareRenderer(
-							notesTable.getCellRenderer(row, column), row,
-							column);
-					rowHeight = Math.max(rowHeight,
-							comp.getPreferredSize().height);
-				}
-
-				notesTable.setRowHeight(row, rowHeight);
-			}
-		} catch (ClassCastException e) {
-		}
-	}
+	}	
 }

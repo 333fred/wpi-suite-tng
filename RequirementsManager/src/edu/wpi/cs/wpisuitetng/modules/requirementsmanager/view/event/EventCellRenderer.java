@@ -13,6 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JList;
@@ -68,7 +69,9 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		
 		final JPanel panel;
-		panel = new EventPanel((Event) value);
+		panel = new EventPanel((Event) value, table.getSize().width);
+		
+		System.out.println("Table is being rendered: " + table.getSize().width);
 		
 		if (isSelected) {
 			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
@@ -83,7 +86,8 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 							BorderFactory.createLineBorder(Color.black, 1)),
 					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 		}
-
+		
+		
 		return panel;
 	}
 }
