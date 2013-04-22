@@ -88,12 +88,18 @@ var data = [
 						label: 'Creating Users',
 						folder: false,
 						id: 10
-					},  {label: 'Adding Users',
-						folder: false,
-						id: 11
 					},  {label: 'Deleting Users',
 						folder: false,
+						id: 11
+					},  {label: 'Create Project',
+						folder: false,
 						id: 12
+					},  {label: 'Deleting Projects',
+						folder: false,
+						id: 13
+					},  {label: 'Adding Users',
+						folder: false,
+						id: 14
 				}]
 			},
 		
