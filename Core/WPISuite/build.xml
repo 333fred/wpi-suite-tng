@@ -57,7 +57,7 @@
 	</target>
 
 	<target name="dist" depends="war">
-		<copy file="build/WPISuite.war" todir="${dist}/core" overwrite="true"/>
+		<copy file="build/WPISuite-team3.war" todir="${dist}/core" overwrite="true"/>
 	</target>
 
 </project>
