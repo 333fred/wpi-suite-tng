@@ -43,19 +43,22 @@ public class PermissionsTable extends JTable {
 	/**
 	 * Override superclass to make permission cell editor be a combobox
 	 */
-//  Determine editor to be used by row
     public TableCellEditor getCellEditor(int row, int column)
     {
-		int modelColumn = convertColumnIndexToModel(column);
-
-		if (modelColumn == 1) {
-			String[] items1 = { "Admin", "Update", "None" };
+		if (convertColumnIndexToModel(column) == 1) {
+			//Create the combo box
+			String[] items1 = { "ADMIN", "UPDATE", "NONE" };
 			JComboBox comboBox1 = new JComboBox(items1);
+			//select the correct value
+			comboBox1.setSelectedItem(getValueAt(row, column));
 			DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else {
 			return super.getCellEditor(row, column);
 		}
     }
+    
+   // @Override
+	//public void setValueAt(Object value, int row, int col) {
 
 }
