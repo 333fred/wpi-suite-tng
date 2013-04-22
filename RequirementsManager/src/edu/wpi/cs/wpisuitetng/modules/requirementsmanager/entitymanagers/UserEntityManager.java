@@ -77,7 +77,14 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 */
 	@Override
 	public StringListModel[] getAll(Session s) throws WPISuiteException {
-		StringListModel[] array = { new StringListModel() };
+		List<User> userList = Arrays.asList(s.getProject().getTeam());
+		StringListModel model = new StringListModel();
+		List<String> names = new ArrayList<String>();
+		for (User u:userList) {
+			names.add(u.getUsername());
+		}
+		model.setUsers(names);
+		StringListModel[] array = { model };
 		return array;
 	}
 

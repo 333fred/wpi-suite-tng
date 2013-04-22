@@ -31,6 +31,7 @@ public class QueryUserRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseSuccess(IRequest iReq) {
+		System.out.println("Users Query response Success");
 		// If the network hasn't been initialized, then this will fail, so
 		// return
 		if (Network.getInstance().isInitialized()) {
@@ -53,14 +54,13 @@ public class QueryUserRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
+		System.out.println("User Query Response Error");
 
 	}
 
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// TODO Auto-generated method stub
-
+		System.out.println("User Query response Failure");
 	}
 
 }
