@@ -37,7 +37,7 @@ public class FilterValidator {
 		// Ensure the user is set correctly. If it isn't, then add an issue
 		
 		System.out.println("Filter: " + f + " Session: " + s);
-		System.out.println(" Creator: " + f.getCreator() + " SUser: " + s.getUser());
+		System.out.println(" Creator: " + f.getCreator() + " User: " + s.getUser());
 		
 		if ( !(f.getCreator().equals(s.getUser())) ) {
 			issues.add(new ValidationIssue(
