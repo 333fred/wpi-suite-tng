@@ -59,7 +59,7 @@ public class PermissionsTable extends JTable {
     {
 		if (convertColumnIndexToModel(column) == 1) {
 			//Create the combo box
-			String[] items1 = { "ADMIN", "UPDATE", "NONE" };
+			String[] items1 = { "Admin", "Update", "None" };
 			JComboBox comboBox1 = new JComboBox(items1);
 			//select the correct value
 			comboBox1.setSelectedItem(getValueAt(row, column));
@@ -85,7 +85,7 @@ public class PermissionsTable extends JTable {
 			System.out.println("Permissions changed in table at:" + row);
 			//we get the model from our local list, set its permissions, and save it
 			model = localPermissions.get(row);
-			model.setPermLevel(UserPermissionLevel.valueOf((String) value));
+			model.setPermLevel(UserPermissionLevel.valueOf(((String) value).toUpperCase()));
 			controller.save(model, observer);
 		}
     }

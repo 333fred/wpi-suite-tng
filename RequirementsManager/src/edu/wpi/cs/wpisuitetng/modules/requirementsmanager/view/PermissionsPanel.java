@@ -82,7 +82,9 @@ public class PermissionsPanel extends Tab {
 		String[][] rowData = new String[localPermissions.size()][2];
 		for (int i = 0; i < localPermissions.size(); i++) {
 			rowData[i][0] = localPermissions.get(i).getUser().getName();
-			rowData[i][1] = localPermissions.get(i).getPermLevel().toString();
+			//Handle correct casing of options
+			String perm = localPermissions.get(i).getPermLevel().toString();
+			rowData[i][1] = perm.substring(0, 1).concat(perm.substring(1).toLowerCase());
 		}
 
 		userTable = new PermissionsTable(rowData, columnNames, localPermissions);
