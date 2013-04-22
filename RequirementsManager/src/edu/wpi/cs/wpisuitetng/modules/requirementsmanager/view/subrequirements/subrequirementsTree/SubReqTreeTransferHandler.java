@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
@@ -60,6 +61,8 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
+		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
+			return false;
 		/*
 		 * if (!support.isDrop()) { return false; }
 		 * support.setShowDropLocation(true); if

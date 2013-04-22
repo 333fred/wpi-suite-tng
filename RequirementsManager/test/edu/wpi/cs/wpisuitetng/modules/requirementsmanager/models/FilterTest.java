@@ -6,8 +6,8 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Kyle Burns and Maddie Burris
- *  
+ * Contributors:
+ * 				Kyle Burns and Maddie Burris
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
