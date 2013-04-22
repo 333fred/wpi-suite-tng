@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    @author Fredric
+ *    @author Conor
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
@@ -20,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.ModelMapper;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
@@ -82,6 +84,7 @@ public class PermissionModelEntityManager implements
 	@Override
 	public PermissionModel[] getEntity(Session s, String id)
 			throws NotFoundException, WPISuiteException {
+		System.out.println("Get permissions called");
 		try {
 			// Attempt to make permissions for the user
 			PermissionModel[] perms = { makeEntity(s, "") };
@@ -99,8 +102,23 @@ public class PermissionModelEntityManager implements
 	 */
 	@Override
 	public PermissionModel[] getAll(Session s) throws WPISuiteException {
+		System.out.println("Get all permissions called");
+		System.out.println(s.getProject().getTeam().length);
+		PermissionModel model;
+		for(User u: s.getProject().getTeam()) {
+			System.out.println(u.getIdNum());
+			if(modelExists(s, u.getIdNum())) {
+				System.out.println("User Perm Exists");
+			}
+			else {
+				model = new PermissionModel();
+				model.setUser(u);
+				model.setId(u.getIdNum());
+				db.save(model, s.getProject());
+			}
+		}
 		return db.retrieveAll(new PermissionModel(), s.getProject()).toArray(
-				new PermissionModel[0]);
+			new PermissionModel[0]);
 	}
 
 	/**
@@ -190,6 +208,32 @@ public class PermissionModelEntityManager implements
 			throws WPISuiteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * Helper for populating permissions db for all users
+	 * 
+	 * @param s Current session
+	 * @param id User id integer
+	 * @return True if user already has permissions on database
+	 * 		   False if permissions for user don't exist
+	 */
+	private boolean modelExists(Session s, int id) {
+		try {
+			if (db.retrieve(PermissionModel.class, "id", id,
+					s.getProject()).toArray(new PermissionModel[0]).length != 0) {
+				throw new BadRequestException();
+			}
+			return false;
+		}
+		catch (BadRequestException e) {
+			return true;
+		} catch (WPISuiteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		}
+			
 	}
 
 }
