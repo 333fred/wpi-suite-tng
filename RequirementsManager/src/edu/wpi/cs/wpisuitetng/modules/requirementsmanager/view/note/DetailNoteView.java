@@ -12,7 +12,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +91,8 @@ public class DetailNoteView extends JPanel {
 				this.makeNotePanel.getnoteField());
 		this.makeNotePanel.getnoteField().addKeyListener(noteFieldListener);
 
+		setMinimumSize(new Dimension(300, 50));
+		
 		// note will be disabled on start, nothing to add
 		disableAddNote();
 

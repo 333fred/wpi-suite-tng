@@ -15,10 +15,8 @@ import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.text.html.HTMLEditorKit;
 
 /**
  * The EventPanel class displays the individual event panels
@@ -29,8 +27,8 @@ import javax.swing.text.html.HTMLEditorKit;
 public class EventPanel extends JPanel {
 
 	protected JLabel title;
-	//protected JLabel content;
-	protected JEditorPane content;
+	protected JLabel content;
+	//protected JEditorPane content;
 
 	private Event event;
 
@@ -46,7 +44,7 @@ public class EventPanel extends JPanel {
 		title = new JLabel(event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
-		content = new JEditorPane();
+		content = new JLabel();
 		content.setText("<html><BODY>" + event.getContent()
 				+ "</BODY></HTML>");
 		content.setFont(content.getFont().deriveFont(9));
@@ -67,11 +65,8 @@ public class EventPanel extends JPanel {
 		title = new JLabel(event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
-		//content = new JLabel("<html><BODY><TABLE WIDTH="+(maxWidth-30)+"><TR><TD>" + event.getContent() +"</TD></TR></TABLE></BODY></HTML>");
-		content = new JEditorPane();
-		//content.setMaximumSize(new Dimension(maxWidth, 500));
-		content.setEditorKit(new HTMLEditorKit());
-		content.setText("<html><body>" + event.getContent() + "</body></html>");
+		content = new JLabel();
+        content.setText("<html><BODY><TABLE WIDTH="+(maxWidth-30)+"><TR><TD>" + event.getContent() +"</TD></TR></TABLE></BODY></HTML>");
 		content.setFont(content.getFont().deriveFont(9));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory

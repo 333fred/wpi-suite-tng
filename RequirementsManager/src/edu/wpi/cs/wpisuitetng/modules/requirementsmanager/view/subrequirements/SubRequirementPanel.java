@@ -96,7 +96,7 @@ public class SubRequirementPanel extends JPanel {
 		//addValidParents();
 
 		editSubReqPanel = new JPanel();
-		editSubReqPanel.setBorder(BorderFactory.createTitledBorder("Add to SubRequirement Heirarchy"));
+		editSubReqPanel.setBorder(BorderFactory.createTitledBorder("Add to SubRequirement Hierarchy"));
 
 
 		SpringLayout layout = new SpringLayout();
@@ -193,9 +193,9 @@ public class SubRequirementPanel extends JPanel {
 
 		subreqPanelLayout.putConstraint(SpringLayout.NORTH, bottomScrollPane, 5,
 				SpringLayout.SOUTH, radioParent);
-		subreqPanelLayout.putConstraint(SpringLayout.WEST, bottomScrollPane, 5,
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, bottomScrollPane, 13,
 				SpringLayout.EAST, childLabel);
-		subreqPanelLayout.putConstraint(SpringLayout.EAST, bottomScrollPane, -64,
+		subreqPanelLayout.putConstraint(SpringLayout.EAST, bottomScrollPane, -56,
 				SpringLayout.EAST, editSubReqPanel);
 
 		subreqPanelLayout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH,

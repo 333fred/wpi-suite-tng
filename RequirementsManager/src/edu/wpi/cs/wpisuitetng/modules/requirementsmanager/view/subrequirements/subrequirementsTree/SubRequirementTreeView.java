@@ -58,7 +58,7 @@ public class SubRequirementTreeView extends JPanel implements
 
 		firstPaint = true;
 
-		this.top = new DefaultMutableTreeNode("Requirements");
+		this.top = new DefaultMutableTreeNode("<html><b>Requirements</b></html>");
 		this.tree = new JTree(top);
 		this.tree.setEditable(false);
 		this.tree.setDragEnabled(true);
@@ -124,7 +124,7 @@ public class SubRequirementTreeView extends JPanel implements
 					List<Requirement> selectedRequirements = new ArrayList<Requirement>();
 					TreePath path = tree.getPathForRow(selRow);
 					DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-					if(firstNode.getUserObject().equals("Deleted"))
+					if(firstNode.getUserObject().equals("<html><b><i>Deleted</i></b></html>"))
 						return;
 					Requirement tempReq = (Requirement) firstNode.getUserObject();
 					selectedRequirements.add(tempReq);
@@ -239,7 +239,7 @@ public class SubRequirementTreeView extends JPanel implements
 					this.top.add(requirementNode);
 			}
 			
-			DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode("Deleted");
+			DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode("<html><b><i>Deleted</i></b></html>");
 			for (Requirement anReq : deletedReqs) {
 				requirementNode = new DefaultMutableTreeNode(anReq);
 				deletedNode.add(requirementNode);
