@@ -29,7 +29,7 @@ public class Note implements Event {
 	private Date date;
 	private String creator;
 
-	/**
+	/** 
 	 * Create a new Note with everything specified
 	 * 
 	 * @param note

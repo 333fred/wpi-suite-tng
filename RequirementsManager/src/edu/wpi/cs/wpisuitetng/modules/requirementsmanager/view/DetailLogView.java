@@ -13,7 +13,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -78,11 +77,6 @@ public class DetailLogView extends JPanel {
 		for (RequirementChangeset aLog : requirement.getLogs()) {
 			this.logList.addElement(aLog);
 		}
-	}
-	
-	public void paint(Graphics g) {
-		this.cellRenderer.setWrapWidth(this.logScrollPane.getViewport().getWidth());
-		super.paint(g);
 	}
 	
 }

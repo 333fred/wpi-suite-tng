@@ -329,10 +329,4 @@ public class DetailATestView extends JPanel {
 		// TODO Auto-generated method stub
 		return makeATestPanel;
 	}
-
-	public void paint(Graphics g) {
-		this.cellRenderer.setWrapWidth(this.aTestScrollPane.getViewport()
-				.getWidth());
-		super.paint(g);
-	}
 }

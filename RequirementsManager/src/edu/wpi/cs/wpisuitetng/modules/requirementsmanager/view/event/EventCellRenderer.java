@@ -13,18 +13,21 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * Class with a single method to generate, add, and render a panel for a given
  * Event.
  * 
  */
-public class EventCellRenderer implements ListCellRenderer {
+public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 
 	private int wrapWidth;
 
@@ -37,13 +40,13 @@ public class EventCellRenderer implements ListCellRenderer {
 	 * @isSelected currently of no use here
 	 * @cellHasFocus currently of no use here
 	 */
+	
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
 		final JPanel panel;
 		panel = new EventPanel((Event) value);
-		((EventPanel) panel).setWrapWidth(wrapWidth);
-
+		
 		if (isSelected) {
 			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
 					.createCompoundBorder(
@@ -61,7 +64,30 @@ public class EventCellRenderer implements ListCellRenderer {
 		return panel;
 	}
 
-	public void setWrapWidth(int wrapWidth) {
-		this.wrapWidth = wrapWidth;
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		
+		final JPanel panel;
+		panel = new EventPanel((Event) value, table.getSize().width);
+		
+		System.out.println("Table is being rendered: " + table.getSize().width);
+		
+		if (isSelected) {
+			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+					.createCompoundBorder(
+							BorderFactory.createEmptyBorder(5, 0, 5, 0),
+							BorderFactory.createLineBorder(Color.black, 3)),
+					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+		} else {
+			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+					.createCompoundBorder(
+							BorderFactory.createEmptyBorder(5, 0, 5, 0),
+							BorderFactory.createLineBorder(Color.black, 1)),
+					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+		}
+		
+		
+		return panel;
 	}
 }

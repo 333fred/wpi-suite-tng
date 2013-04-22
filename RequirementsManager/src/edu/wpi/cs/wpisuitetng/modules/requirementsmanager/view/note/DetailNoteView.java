@@ -12,20 +12,22 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteViewListener;
-
 
 /**
  * Panel containing a note for a requirement
@@ -33,12 +35,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteVie
  * @author Zac Chupka, Maddie Burris
  */
 public class DetailNoteView extends JPanel {
-	
+
 	private JScrollPane noteScrollPane;
-	
-	/** For Notes */
-	protected DefaultListModel noteList;
-	protected JList notes;
+
+	protected EventTable notesTable;
+
+	private EventTableModel tableModel;
+
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeNotePanel makeNotePanel;
@@ -62,21 +65,25 @@ public class DetailNoteView extends JPanel {
 		makeNotePanel = new MakeNotePanel(requirement, parentView);
 
 		// Create the note list
-		noteList = new DefaultListModel();
-		notes = new JList(noteList);
+
+		tableModel = new EventTableModel(new ArrayList<Event>());
+		notesTable = new EventTable(tableModel);
 		cellRenderer = new EventCellRenderer();
-		notes.setCellRenderer(cellRenderer);
-		notes.setSelectionModel(new ToggleSelectionModel());
+
+		notesTable.setShowGrid(false);
+		notesTable.setIntercellSpacing(new Dimension(0, 0));
+		notesTable.getTableHeader().setVisible(false);
 
 		// Add the list to the scroll pane
 		this.noteScrollPane = new JScrollPane();
-		noteScrollPane.getViewport().add(notes);
+		noteScrollPane.getViewport().add(notesTable);
 
 		// Set up the frame
 		JPanel notePane = new JPanel();
 		notePane.setLayout(new BorderLayout());
 		notePane.add(noteScrollPane, BorderLayout.CENTER);
 		notePane.add(makeNotePanel, BorderLayout.SOUTH);
+		notePane.remove(notesTable.getTableHeader());
 
 		add(notePane, BorderLayout.CENTER);
 
@@ -92,31 +99,20 @@ public class DetailNoteView extends JPanel {
 		addNotesToList();
 	}
 
-	public void paint(Graphics g) {
-		this.cellRenderer.setWrapWidth(this.noteScrollPane.getViewport().getWidth());
-		super.paint(g);
-	}
-	
 	/**
 	 * Method to populate this object's list of notes from the current
 	 * requirement's list of notes
 	 */
 	private void addNotesToList() {
-		noteList.clear();
-
-		// add the notes to the list model.
-		for (Note aNote : requirement.getNotes()) {
-			this.noteList.addElement(aNote);
+		List<Note> notes = requirement.getNotes();
+		List<Event> events = new ArrayList<Event>();
+		for (Note note : notes) {
+			events.add(note);
 		}
-	}
+		tableModel.setRowData(events);
 
-	/**
-	 * simple getter for the list of notes of which this view is currently aware
-	 * 
-	 * @return the list of notes
-	 */
-	public DefaultListModel getNoteList() {
-		return noteList;
+		notesTable.updateRowHeights();
+
 	}
 
 	/**
@@ -150,4 +146,29 @@ public class DetailNoteView extends JPanel {
 	public MakeNotePanel getNotePanel() {
 		return makeNotePanel;
 	}
+
+	public List<Note> getNotesList() {
+		List<Note> notes = new ArrayList<Note>();
+		for (Event e : tableModel.getRowData()) {
+			notes.add((Note) e);
+		}
+		return notes;
+	}
+
+	public void setNotesList(List<Note> notes) {
+		List<Event> events = new ArrayList<Event>();
+		for (Note note : notes) {
+			events.add(note);
+		}
+		tableModel.setRowData(events);
+
+		notesTable.updateRowHeights();
+
+		// scrollToBottom();
+	}
+
+	public void scrollToBottom() {
+		noteScrollPane.getVerticalScrollBar().setValue(
+				noteScrollPane.getVerticalScrollBar().getMaximum());
+	}	
 }

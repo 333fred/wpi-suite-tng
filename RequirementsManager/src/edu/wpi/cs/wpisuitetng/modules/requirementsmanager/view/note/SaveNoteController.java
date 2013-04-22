@@ -11,6 +11,8 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note;
 
+import java.util.List;
+
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
@@ -52,10 +54,10 @@ public class SaveNoteController {
 		if (noteText.length() > 0) {
 			this.model.addNote(new Note(noteText, ConfigManager.getConfig()
 					.getUserName()));
-			parentView.getNoteList()
-					.addElement(
-							this.model.getNotes().get(
-									this.model.getNotes().size() - 1));
+			List<Note> notes = parentView.getNoteList();
+			notes.add(this.model.getNotes().get(
+					this.model.getNotes().size() - 1));
+			parentView.setNoteList(notes);
 			view.getnoteField().setText("");
 			view.getnoteField().requestFocusInWindow();
 
