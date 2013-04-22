@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.Requiremen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
@@ -58,7 +59,7 @@ public class SubRequirementTreeView extends JPanel implements
 
 		firstPaint = true;
 
-		this.top = new DefaultMutableTreeNode("Requirements");
+		this.top = new DefaultMutableTreeNode("<html><b>Requirements</b></html>");
 		this.tree = new JTree(top);
 		this.tree.setEditable(false);
 		this.tree.setDragEnabled(true);
@@ -79,6 +80,7 @@ public class SubRequirementTreeView extends JPanel implements
 		MouseListener ml = new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				if (e.getButton() == MouseEvent.BUTTON1) {
 					int selRow = tree.getRowForLocation(e.getX(), e.getY());
 					TreePath selPath = tree.getPathForLocation(e.getX(),
@@ -102,6 +104,8 @@ public class SubRequirementTreeView extends JPanel implements
 	}
 
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
+				if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
+					return;
 				// add a menu offset
 				x += 10;
 
@@ -124,7 +128,7 @@ public class SubRequirementTreeView extends JPanel implements
 					List<Requirement> selectedRequirements = new ArrayList<Requirement>();
 					TreePath path = tree.getPathForRow(selRow);
 					DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-					if(firstNode.getUserObject().equals("Deleted"))
+					if(firstNode.getUserObject().equals("<html><b><i>Deleted</i></b></html>"))
 						return;
 					Requirement tempReq = (Requirement) firstNode.getUserObject();
 					selectedRequirements.add(tempReq);
@@ -239,7 +243,7 @@ public class SubRequirementTreeView extends JPanel implements
 					this.top.add(requirementNode);
 			}
 			
-			DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode("Deleted");
+			DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode("<html><b><i>Deleted</i></b></html>");
 			for (Requirement anReq : deletedReqs) {
 				requirementNode = new DefaultMutableTreeNode(anReq);
 				deletedNode.add(requirementNode);
