@@ -85,7 +85,7 @@ public class PermissionsPanel extends Tab {
 			rowData[i][1] = localPermissions.get(i).getPermLevel().toString();
 		}
 
-		userTable = new PermissionsTable(rowData, columnNames);
+		userTable = new PermissionsTable(rowData, columnNames, localPermissions);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userTable.addMouseListener(new PermissionSelectionChangedListener(this));
 		for (int i = 0; i < userTable.getRowCount(); i++) {
@@ -245,6 +245,6 @@ public class PermissionsPanel extends Tab {
 			rowData[i][0] = localPermissions.get(i).getUser().getName();
 			rowData[i][1] = localPermissions.get(i).getPermLevel().toString();
 		}
-		userTable = new PermissionsTable(rowData, columnNames);
+		userTable = new PermissionsTable(rowData, columnNames, localPermissions);
 	}
 }

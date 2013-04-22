@@ -12,14 +12,25 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.util.List;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.PermissionsNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
 
 public class PermissionsTable extends JTable {
+	
+	/** List of locally stored permissions */
+	private List<PermissionModel> localPermissions;
+	
 	/**
 	 * 
 	 * @param rowData
@@ -27,8 +38,9 @@ public class PermissionsTable extends JTable {
 	 * @param columnNames
 	 *            The column headers
 	 */
-	public PermissionsTable(String[][] rowData, String[] columnNames) {
+	public PermissionsTable(String[][] rowData, String[] columnNames, List<PermissionModel> localPermissions) {
 		super(rowData, columnNames);
+		this.localPermissions = localPermissions;
 	}
 
 	/**
@@ -58,7 +70,22 @@ public class PermissionsTable extends JTable {
 		}
     }
     
-   // @Override
-	//public void setValueAt(Object value, int row, int col) {
+    /**
+     * Sets the updated value into the table, and also updates the permission
+     */
+    @Override
+	public void setValueAt(Object value, int row, int col) {
+    	super.setValueAt(value, row, col);
+		if (convertColumnIndexToModel(col) == 1) {
+			PermissionModelController controller = new PermissionModelController();
+			SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
+			
+			PermissionModel model;
+			System.out.println("Permissions changed in table at:" + row);
+			model = localPermissions.get(row);
+			model.setPermLevel(UserPermissionLevel.valueOf((String) value));
+			controller.save(model, observer);
+		}
+    }
 
 }
