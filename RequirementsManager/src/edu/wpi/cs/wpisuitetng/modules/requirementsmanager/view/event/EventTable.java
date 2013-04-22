@@ -1,12 +1,13 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import java.awt.Component;
-import java.awt.Graphics;
 
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.TableCellRenderer;
 
-public class EventTable extends JTable {
+public class EventTable extends JTable implements TableColumnModelListener {
 
 	/** the table model for this */
 	private EventTableModel tableModel;
@@ -38,5 +39,10 @@ public class EventTable extends JTable {
 			}
 		} catch (ClassCastException e) {
 		}
+	}
+	
+	@Override
+	public void columnMarginChanged(ChangeEvent e) {
+		updateRowHeights();
 	}
 }
