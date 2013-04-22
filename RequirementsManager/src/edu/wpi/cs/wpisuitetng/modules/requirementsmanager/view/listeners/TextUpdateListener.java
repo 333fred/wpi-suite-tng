@@ -146,10 +146,8 @@ public class TextUpdateListener implements KeyListener {
 		// blank
 		// backend may assign default values if saved as blank
 		String canBeEmpty = "Estimate|Effort|ReleaseNum";
-		System.out.println("base " + base + "component" + component.getText().trim());
 		
-		// if the component has no changes, no need to enable save
- 
+		// if the component has is emptye
 		if (empty.equals(component.getText().trim())) { 
 			// if there's an error panel to write to
 			if (errorComponent != null) {
