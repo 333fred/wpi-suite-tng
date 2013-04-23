@@ -120,21 +120,6 @@ public class IterationValidator {
 
 	public static boolean overlapExists(Iteration alpha, Iteration beta) {
 
-		/*
-		 * System.out.println("COMPARING: "+alpha+", "+beta);
-		 * System.out.println(alpha.getName() +
-		 * ":  "+alpha.getStartDate().toString() +"  "+
-		 * alpha.getEndDate().toString()); System.out.println(beta.getName() +
-		 * ":  "+beta.getStartDate().toString() +"  "+
-		 * beta.getEndDate().toString());
-		 * System.out.println(compareDatesWithoutTime(alpha.getStartDate(),
-		 * beta.getStartDate()) + "\n" +
-		 * compareDatesWithoutTime(alpha.getEndDate(), beta.getStartDate()));
-		 * System.out.println(compareDatesWithoutTime(alpha.getStartDate(),
-		 * beta.getEndDate()) + "\n" +
-		 * compareDatesWithoutTime(alpha.getEndDate(), beta.getEndDate()));
-		 */
-
 		// check if alpha starts before beta starts and ends on or before it
 		// starts
 		if (compareDatesWithoutTime(alpha.getStartDate(), beta.getStartDate()) == -1
@@ -149,7 +134,6 @@ public class IterationValidator {
 						beta.getEndDate()) == 1) {
 			return false;
 		}
-		// System.out.println("OVERLAP!");
 		return true;
 	}
 

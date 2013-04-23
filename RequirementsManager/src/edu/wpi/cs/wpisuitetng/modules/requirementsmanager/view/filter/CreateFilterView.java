@@ -878,8 +878,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				calEqualToBetween.setDate(fib.getEndDate());
 				break;
 			default:
-				System.out
-						.println("BLACK MAGIC!!!!!!!!!, CreateFilterView ln 749");
 			}
 
 			break;

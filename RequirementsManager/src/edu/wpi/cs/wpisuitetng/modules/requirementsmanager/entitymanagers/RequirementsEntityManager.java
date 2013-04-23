@@ -236,23 +236,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			if (!db.save(oldReq, s.getProject()) || !db.save(oldReq.getLogs())) {
 				throw new WPISuiteException();
 			}
-			
-			/*
-			 * else if (oldIteration != newIteration){ //update iterations if
-			 * they were changed //remove this requirement from the old
-			 * iteration //add this requirement to the new iteration
-			 * IterationEntityManager itEn = new IterationEntityManager(db);
-			 * System.out.println("\n\n\n\n\n" + oldIteration + ", " +
-			 * newIteration + "\n\n\n\n\n"); if(oldIteration >= 0){ Iteration
-			 * old = itEn.getEntity(s, Integer.toString(oldIteration))[0];
-			 * old.removeRequirement(updatedRequirement.getrUID());
-			 * itEn.update(s, old.toJSON()); }
-			 * 
-			 * if(newIteration >= 0){ Iteration newIt = itEn.getEntity(s,
-			 * Integer.toString(newIteration))[0];
-			 * newIt.addRequirement(updatedRequirement.getrUID());
-			 * itEn.update(s, newIt.toJSON()); } }
-			 */
 		}
 
 		return oldReq;

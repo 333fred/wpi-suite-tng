@@ -62,7 +62,6 @@ public class SaveATestController {
 		final String testText = view.getaTestField().getText();
 		final String testName = view.getaTestName().getText();
 		if (selectedRows == null) { // Creating a aTest!
-			System.out.println("aTestS WAS NULL, ISSUE");
 		} else if (selectedRows.length < 1) {
 			// aTest must have a name and description of at least one character
 			if (testText.length() > 0 && testName.length() > 0) {
