@@ -17,7 +17,6 @@ import java.util.Date;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterValueType;
@@ -88,6 +87,18 @@ public class Filter extends AbstractModel {
 		setValue(value); // set the value and valu type
 		active = true;
 		setDeleted(false);
+	}
+
+	private Filter(String user, int id, FilterField field, FilterOperation operation,
+			Object value, String stringValue, boolean active, boolean deleted) {
+		this.creator = user;
+		this.id = id;
+		this.field = field;
+		this.operation = operation;
+		this.stringValue = stringValue;
+		setValue(value);
+		this.active = active;
+		this.deleted = deleted;
 	}
 
 	/**
@@ -491,6 +502,10 @@ public class Filter extends AbstractModel {
 	 */
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	
+	public Filter clone() {
+		return new Filter(getCreator(), getId(),getField(), getOperation(), getValue(), getStringValue(), getActive(), isDeleted());
 	}
 
 }

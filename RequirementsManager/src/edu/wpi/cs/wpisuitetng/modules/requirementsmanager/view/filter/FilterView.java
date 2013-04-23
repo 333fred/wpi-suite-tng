@@ -109,7 +109,7 @@ public class FilterView extends JPanel {
 	 */
 	
 	public void editFilter(Filter toEdit) {
-		createFilterView.editFilter(toEdit);
+		createFilterView.editFilter(toEdit.clone());
 	}
 	
 	/** Cancels the editing of the filter 
