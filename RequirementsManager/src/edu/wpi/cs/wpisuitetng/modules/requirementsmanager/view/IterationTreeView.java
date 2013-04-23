@@ -161,7 +161,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			JPopupMenu menuToShow;
 			int levelClickedOn = ((DefaultMutableTreeNode) selPath
 					.getLastPathComponent()).getLevel();
-			System.out.println("LevelClickedOn: " + levelClickedOn);
 
 			if (tree.getSelectionModel().getSelectionMode() == TreeSelectionModel.SINGLE_TREE_SELECTION) {
 				// we are in single selection mode
@@ -202,13 +201,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 				switch (levelClickedOn) {
 
 				case ROOT_LEVEL:
-					System.out.println("Root Level");
 					menuToShow = new RootPopupMenu(tabController);
 					menuToShow.show(this, x, y);
 					break;
 
 				case ITERATION_LEVEL:
-					System.out.println("Iteration Level");
 					List<Iteration> selectedIterations = getSelectedIterations();
 					if (selectedIterations.size() == 0) {
 						// there were no selected iterations, WUT ARE WE DOIN
@@ -221,7 +218,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					break;
 
 				case REQUIREMENT_LEVEL:
-					System.out.println("Requirement Level");
 					List<Requirement> selectedRequirements = getSelectedRequirements();
 					if (selectedRequirements.size() == 0) {
 						// there were no selected requirements,
@@ -263,13 +259,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					switch (curSelectionLevel) {
 
 					case ROOT_LEVEL:
-						System.out.println("Root Level");
 						menuToShow = new RootPopupMenu(tabController);
 						menuToShow.show(this, x, y);
 						break;
 
 					case ITERATION_LEVEL:
-						System.out.println("Iteration Level");
 						List<Iteration> selectedIterations = getSelectedIterations();
 						if (selectedIterations.size() == 0) {
 							// there were no selected iterations, WUT ARE WE
@@ -282,7 +276,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 						break;
 
 					case REQUIREMENT_LEVEL:
-						System.out.println("Requirement Level");
 						List<Requirement> selectedRequirements = getSelectedRequirements();
 						if (selectedRequirements.size() == 0) {
 							// there were no selected requirements,
@@ -347,8 +340,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 	}
 
 	public void updateTreeView() {
-		System.out.println("[" + new Date().toString()
-				+ "] We are refreshing the tree view");
 
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
@@ -518,7 +509,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			}
 			String iterationName = path.getLastPathComponent().toString();
 			iterationName = iterationName.replace(" (Closed)", "");
-			System.out.println(iterationName);
 
 			Iteration toAdd = getIterationFromName(iterationName);
 			if (iterationName.equals("Backlog")

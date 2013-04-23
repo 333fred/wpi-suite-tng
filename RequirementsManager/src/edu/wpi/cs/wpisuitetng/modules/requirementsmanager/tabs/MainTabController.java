@@ -88,7 +88,6 @@ public class MainTabController {
 		refreshIterationTree();
 		refreshSubReqView();
 
-		System.out.println("Change Tab Controller");
 		Component selectedComponent = tabView.getSelectedComponent();
 		Tab selectedTab = (Tab) selectedComponent;
 		selectedTab.onGainedFocus();
@@ -184,10 +183,7 @@ public class MainTabController {
 			}
 		}
 
-		// iteration was not open, add it
-		
-		System.out.println("We are adding an iteration tab");
-		
+		// iteration was not open, add it		
 		IterationView iterationView = new IterationView(iteration, status, this);
 		return addTab(iteration.getName(), new ImageIcon(), iterationView,
 				iteration.getName());

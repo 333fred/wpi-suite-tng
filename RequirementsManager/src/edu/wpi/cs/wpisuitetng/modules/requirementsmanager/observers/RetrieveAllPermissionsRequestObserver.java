@@ -36,7 +36,6 @@ public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
 		// parse the response
 		final PermissionModel[] permissions = PermissionModel.fromJSONArray(response
 				.getBody());
-		System.out.println("Permissions Array Size: " + permissions.length);
 
 		ToolbarView.getInstance().refreshPermissions();
 		

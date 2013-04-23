@@ -373,12 +373,10 @@ public class Iteration extends AbstractModel {
 			} catch (RequirementNotFoundException e) {
 				e.printStackTrace();
 			}
-			System.out.println(done + "/" + total);
 		}
 		if (total == 0) {
 			return 0;
 		} else {
-			System.out.println((done/total) * 100);
 			return (done/total) * 100; 
 		}
 	}

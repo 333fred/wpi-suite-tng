@@ -572,7 +572,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	public void refresh() {
 		// retreive a new copy of requirements, and update the list view
-		System.out.println("We are refreshing the table view");		
 		if (isEditable) {
 			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
@@ -727,8 +726,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		RowFilter rf = sorter.getRowFilter();
 		sorter.setRowFilter(null);
-		
-		System.out.println("We received new requirements from the database");
 		
 		this.requirements = RequirementDatabase.getInstance().getFilteredRequirements().toArray(new Requirement[0]);
 		//this.requirements = requirements;

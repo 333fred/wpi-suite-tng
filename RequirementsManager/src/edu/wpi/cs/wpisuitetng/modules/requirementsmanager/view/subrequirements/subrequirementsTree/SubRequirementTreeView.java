@@ -114,7 +114,6 @@ public class SubRequirementTreeView extends JPanel implements
 				if (selRow != -1) {					
 					int levelClickedOn = ((DefaultMutableTreeNode) selPath
 							.getLastPathComponent()).getLevel();
-					System.out.println("LevelClickedOn: " + levelClickedOn);
 
 					if (tree.getSelectionModel().getSelectionMode() == TreeSelectionModel.SINGLE_TREE_SELECTION) {
 						// we are in single selection mode
