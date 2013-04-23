@@ -24,7 +24,7 @@ import javax.swing.AbstractAction;
 @SuppressWarnings("serial")
 public class SaveTaskAction extends AbstractAction {
 	public final SaveTaskController controller;
-	public Object[] tasks;
+	private int[] selectedRows;
 
 	/**
 	 * Construct the action
@@ -34,7 +34,7 @@ public class SaveTaskAction extends AbstractAction {
 	public SaveTaskAction(SaveTaskController controller) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = new Object[0]; // Placeholder list
+		selectedRows = new int[0];
 	}
 
 	/**
@@ -43,10 +43,10 @@ public class SaveTaskAction extends AbstractAction {
 	 * @param controller the controller to trigger
 	 * @param objects object array of all of the tasks
 	 */
-	public SaveTaskAction(SaveTaskController controller, Object[] objects) {
+	public SaveTaskAction(SaveTaskController controller, int[] selectedRows) {
 		super("Save");
 		this.controller = controller;
-		this.tasks = objects;
+		this.selectedRows = selectedRows;
 	}
 
 	/*
@@ -55,7 +55,7 @@ public class SaveTaskAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.saveTask(tasks);
+		controller.saveTask(selectedRows);
 	}
 
 }

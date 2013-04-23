@@ -13,16 +13,13 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -30,8 +27,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
  * Panel containing a task for a requirement
@@ -40,14 +39,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelec
  */
 public class DetailTaskView extends JPanel {
 	/** For Tasks */
-	protected DefaultListModel taskList;
-	protected JList tasks;
+
+	private EventTableModel taskModel;
+	private EventTable taskTable;
+
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private MakeTaskPanel makeTaskPanel;
 	private EventCellRenderer cellRenderer;
 	private JScrollPane taskScrollPane;
-	
+
 	/**
 	 * Construct the panel and add layout components
 	 * 
@@ -65,20 +66,16 @@ public class DetailTaskView extends JPanel {
 		// Set up the task panel
 		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
 
-
-
 		// Create the task list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
-		taskList = new DefaultListModel();
-		tasks = new JList(taskList);
+		taskModel = new EventTableModel();
+		taskTable = new EventTable(taskModel);
 		cellRenderer = new EventCellRenderer();
-		tasks.setCellRenderer(cellRenderer);
-		tasks.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		tasks.setSelectionModel(new ToggleSelectionModel());
 
+		taskTable.getTableHeader().setVisible(false);
 		// Add the list to the scroll pane
 		taskScrollPane = new JScrollPane();
-		taskScrollPane.getViewport().add(tasks);
+		taskScrollPane.getViewport().add(taskTable);
 
 		// Set up the frame
 		JPanel taskPane = new JPanel();
@@ -87,7 +84,6 @@ public class DetailTaskView extends JPanel {
 		taskPane.add(makeTaskPanel, BorderLayout.SOUTH);
 
 		add(taskPane, BorderLayout.CENTER);
-
 		// adds the tasks to the list model
 		addTasksToList();
 
@@ -98,42 +94,47 @@ public class DetailTaskView extends JPanel {
 			makeTaskPanel.getUserAssigned().addItem(user);
 		}
 
-		if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE) {
-			//Set the action of the save button to the default (create new task)
-			makeTaskPanel.getAddTask().setAction(new SaveTaskAction(new SaveTaskController(makeTaskPanel, requirement, parentView, tasks)));
+		if (requirement.getStatus() != Status.DELETED
+				&& requirement.getStatus() != Status.COMPLETE) {
+			// Set the action of the save button to the default (create new
+			// task)
+			makeTaskPanel.getAddTask().setAction(
+					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
+							requirement, parentView, taskTable)));
 
+			// Listen for user clicking on tasks
 
-			//Listen for user clicking on tasks
-			tasks.addListSelectionListener(new ListSelectionListener() {
-
+			taskTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				//
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					updateTaskView();
-				} 
+				}
 			});
 
 			makeTaskPanel.getAddTask().setEnabled(false);
-			//Make sure save button is unavailable if name field is empty
-			makeTaskPanel.getTaskField().addKeyListener(new KeyAdapter() { 
-				//For creating a new task
+			// Make sure save button is unavailable if name field is empty
+			makeTaskPanel.getTaskField().addKeyListener(new KeyAdapter() {
+				// For creating a new task
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if (makeTaskPanel.getTaskField().getText().trim().equals("")
-							&& tasks.getSelectedValues().length == 0)
+					if (makeTaskPanel.getTaskField().getText().trim()
+							.equals("")
+							&& taskTable.getSelectedRowCount() == 0)
 						makeTaskPanel.getAddTask().setEnabled(false);
 					else if (!makeTaskPanel.getTaskName().getText().trim()
 							.equals(""))
 						makeTaskPanel.getAddTask().setEnabled(true);
 				}
 			});
-			
-			//Make sure save button is unavailable if desc field is empty
-			//for creating a new task
-			makeTaskPanel.getTaskName().addKeyListener(new KeyAdapter() { 
-				@Override                                                 
+
+			// Make sure save button is unavailable if desc field is empty
+			// for creating a new task
+			makeTaskPanel.getTaskName().addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyReleased(KeyEvent e) {
 					if (makeTaskPanel.getTaskName().getText().trim().equals("")
-							&& tasks.getSelectedValues().length == 0)
+							&& taskTable.getSelectedRowCount() == 0)
 						makeTaskPanel.getAddTask().setEnabled(false);
 					else if (!makeTaskPanel.getTaskField().getText().trim()
 							.equals(""))
@@ -141,8 +142,8 @@ public class DetailTaskView extends JPanel {
 				}
 			});
 
-		}else{
-			//Requirement is set to deleted, so disable all of the fields
+		} else {
+			// Requirement is set to deleted, so disable all of the fields
 			makeTaskPanel.getTaskFieldPane().setEnabled(false);
 			makeTaskPanel.getTaskField().setEnabled(false);
 			makeTaskPanel.getTaskName().setEnabled(false);
@@ -150,9 +151,12 @@ public class DetailTaskView extends JPanel {
 			makeTaskPanel.getAddTask().setEnabled(false);
 			makeTaskPanel.getEstimate().setEnabled(false);
 			makeTaskPanel.getTaskStatus().setText("");
-			makeTaskPanel.getEstimate().setBackground(makeTaskPanel.getBackground());
-			makeTaskPanel.getTaskField().setBackground(makeTaskPanel.getBackground());
-			makeTaskPanel.getTaskName().setBackground(makeTaskPanel.getBackground());
+			makeTaskPanel.getEstimate().setBackground(
+					makeTaskPanel.getBackground());
+			makeTaskPanel.getTaskField().setBackground(
+					makeTaskPanel.getBackground());
+			makeTaskPanel.getTaskName().setBackground(
+					makeTaskPanel.getBackground());
 		}
 
 	}
@@ -163,18 +167,19 @@ public class DetailTaskView extends JPanel {
 	 * currently not used. Would be called by the timer to update the view task
 	 * 
 	 */
-	private void updateTaskView(){
-		if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE){
+	private void updateTaskView() {
+		if (requirement.getStatus() != Status.DELETED
+				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(
-					new SaveTaskAction(new SaveTaskController(
-							makeTaskPanel, requirement, parentView, tasks), tasks
-							.getSelectedValues()));
+					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
+							requirement, parentView, taskTable), taskTable
+							.getSelectedRows()));
 
-			if (tasks.getSelectedValues().length == 0) {
+			if (taskTable.getSelectedRowCount() == 0) {
 				makeTaskPanel
-				.getTaskStatus()
-				.setText(
-						"No tasks selected. Fill name and description to create a new one.");
+						.getTaskStatus()
+						.setText(
+								"No tasks selected. Fill name and description to create a new one.");
 				makeTaskPanel.getTaskComplete().setEnabled(false);
 				makeTaskPanel.getTaskComplete().setSelected(false);
 				makeTaskPanel.getUserAssigned().setEnabled(true);
@@ -186,14 +191,12 @@ public class DetailTaskView extends JPanel {
 				makeTaskPanel.getTaskName().setBackground(Color.white);
 				if (makeTaskPanel.getTaskName().getText().trim().equals("")
 						|| makeTaskPanel.getTaskField().getText().trim()
-						.equals(""))
+								.equals(""))
 					makeTaskPanel.getAddTask().setEnabled(false);
 			} else {
 				makeTaskPanel.getTaskComplete().setEnabled(true);
-				if (tasks.getSelectedValues().length > 1) {
-					makeTaskPanel
-					.getTaskStatus()
-					.setText(
+				if (taskTable.getSelectedRowCount() > 1) {
+					makeTaskPanel.getTaskStatus().setText(
 							"Multiple tasks selected. Can only change status.");
 					makeTaskPanel.getTaskFieldPane().setEnabled(false);
 					makeTaskPanel.getTaskField().setEnabled(false);
@@ -213,16 +216,16 @@ public class DetailTaskView extends JPanel {
 							makeTaskPanel.getBackground());
 				} else {
 					makeTaskPanel
-					.getTaskStatus()
-					.setText(
-							"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
+							.getTaskStatus()
+							.setText(
+									"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
 					makeTaskPanel.getTaskFieldPane().setEnabled(true);
 					makeTaskPanel.getTaskField().setEnabled(true);
 					makeTaskPanel.getTaskName().setEnabled(true);
 					if (getSingleSelectedTask().isCompleted()) {
 						makeTaskPanel.getUserAssigned().setEnabled(false);
 					} else {
-						makeTaskPanel.getUserAssigned().setEnabled(true);				
+						makeTaskPanel.getUserAssigned().setEnabled(true);
 					}
 					makeTaskPanel.getEstimate().setEnabled(true);
 					makeTaskPanel.getTaskField().setText(
@@ -230,13 +233,15 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getTaskName().setText(
 							getSingleSelectedTask().getName());
 					makeTaskPanel.getTaskComplete().setSelected(
-							getSingleSelectedTask().isCompleted());					
-					makeTaskPanel.getEstimate().setText(Integer.toString(
-							getSingleSelectedTask().getEstimate()));
+							getSingleSelectedTask().isCompleted());
+					makeTaskPanel.getEstimate().setText(
+							Integer.toString(getSingleSelectedTask()
+									.getEstimate()));
 					makeTaskPanel.getTaskField().setBackground(Color.white);
 					makeTaskPanel.getTaskName().setBackground(Color.white);
-					makeTaskPanel.getEstimate().setBackground(Color.white);	
-					makeTaskPanel.getUserAssigned().setSelectedItem(getSingleSelectedTask().getAssignedUser());
+					makeTaskPanel.getEstimate().setBackground(Color.white);
+					makeTaskPanel.getUserAssigned().setSelectedItem(
+							getSingleSelectedTask().getAssignedUser());
 				}
 			}
 		}
@@ -245,36 +250,35 @@ public class DetailTaskView extends JPanel {
 	/**
 	 * updateTaskViewTime
 	 * 
-	 * currently not used. Would be called by the timer to update the view task 
+	 * currently not used. Would be called by the timer to update the view task
 	 * and populate the fields
 	 * 
 	 */
-	private void updateTaskViewTime(){
-		if(requirement.getStatus() != Status.DELETED && requirement.getStatus() != Status.COMPLETE){
+	private void updateTaskViewTime() {
+		if (requirement.getStatus() != Status.DELETED
+				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(
-					new SaveTaskAction(new SaveTaskController(
-							makeTaskPanel, requirement, parentView, tasks), tasks
-							.getSelectedValues()));
+					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
+							requirement, parentView, taskTable), taskTable
+							.getSelectedRows()));
 
-			if (tasks.getSelectedValues().length == 0) {
+			if (taskTable.getSelectedRowCount() == 0) {
 				makeTaskPanel
-				.getTaskStatus()
-				.setText(
-						"No tasks selected. Fill name and description to create a new one.");
+						.getTaskStatus()
+						.setText(
+								"No tasks selected. Fill name and description to create a new one.");
 				makeTaskPanel.getTaskComplete().setEnabled(false);
 				makeTaskPanel.getUserAssigned().setEnabled(true);
 				makeTaskPanel.getTaskField().setBackground(Color.white);
 				makeTaskPanel.getTaskName().setBackground(Color.white);
 				if (makeTaskPanel.getTaskName().getText().trim().equals("")
 						|| makeTaskPanel.getTaskField().getText().trim()
-						.equals(""))
+								.equals(""))
 					makeTaskPanel.getAddTask().setEnabled(false);
 			} else {
 				makeTaskPanel.getTaskComplete().setEnabled(true);
-				if (tasks.getSelectedValues().length > 1) {
-					makeTaskPanel
-					.getTaskStatus()
-					.setText(
+				if (taskTable.getSelectedRowCount() > 1) {
+					makeTaskPanel.getTaskStatus().setText(
 							"Multiple tasks selected. Can only change status.");
 					makeTaskPanel.getTaskFieldPane().setEnabled(false);
 					makeTaskPanel.getTaskField().setEnabled(false);
@@ -286,9 +290,9 @@ public class DetailTaskView extends JPanel {
 							makeTaskPanel.getBackground());
 				} else {
 					makeTaskPanel
-					.getTaskStatus()
-					.setText(
-							"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
+							.getTaskStatus()
+							.setText(
+									"One task selected. Fill name AND description to edit. Leave blank to just change status/user.");
 					makeTaskPanel.getTaskFieldPane().setEnabled(true);
 					makeTaskPanel.getTaskField().setEnabled(true);
 					makeTaskPanel.getTaskName().setEnabled(true);
@@ -299,28 +303,18 @@ public class DetailTaskView extends JPanel {
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Method to populate this object's list of tasks from the current
 	 * requirement's list of tasks
 	 */
 	private void addTasksToList() {
-		taskList.clear();
-
-		// add the tasks to the list model.
+		List<Event> taskList = new ArrayList<Event>();
 		for (Task aTask : requirement.getTasks()) {
-			this.taskList.addElement(aTask);
+			taskList.add(aTask);
 		}
-	}
-
-	/**
-	 * simple getter for the list of tasks of which this view is currently aware
-	 * 
-	 * @return the list of tasks
-	 */
-	public DefaultListModel getTaskList() {
-		return taskList;
+		taskModel.setRowData(taskList);
 	}
 
 	/**
@@ -342,7 +336,7 @@ public class DetailTaskView extends JPanel {
 	 * @return the selected task
 	 */
 	public Task getSingleSelectedTask() {
-		return (Task) tasks.getSelectedValue();
+		return (Task) taskModel.getValueAt(taskTable.getSelectedRow(), 0);
 	}
 
 	/**

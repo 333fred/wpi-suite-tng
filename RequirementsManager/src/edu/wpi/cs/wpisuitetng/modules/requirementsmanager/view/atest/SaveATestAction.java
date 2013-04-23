@@ -24,7 +24,7 @@ import javax.swing.AbstractAction;
 @SuppressWarnings("serial")
 public class SaveATestAction extends AbstractAction {
 	public final SaveATestController controller;
-	public Object[] aTests;
+	private int[] selectedRows;
 
 	/**
 	 * Construct the action
@@ -34,7 +34,7 @@ public class SaveATestAction extends AbstractAction {
 	public SaveATestAction(SaveATestController controller) {
 		super("Save");
 		this.controller = controller;
-		this.aTests = new Object[0]; // Placeholder list
+		selectedRows = new int[0];
 	}
 
 	/**
@@ -43,10 +43,10 @@ public class SaveATestAction extends AbstractAction {
 	 * @param controller the controller to trigger
 	 * @param objects object array of all of the aTests
 	 */
-	public SaveATestAction(SaveATestController controller, Object[] objects) {
+	public SaveATestAction(SaveATestController controller, int[] selectedRows) {
 		super("Save");
 		this.controller = controller;
-		this.aTests = objects;
+		this.selectedRows = selectedRows;
 	}
 
 	/*
@@ -55,7 +55,7 @@ public class SaveATestAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		controller.saveaTest(aTests);
+		controller.saveaTest(selectedRows);
 	}
 
 }
