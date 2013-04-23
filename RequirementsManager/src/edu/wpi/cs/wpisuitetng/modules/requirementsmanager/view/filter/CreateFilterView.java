@@ -724,11 +724,11 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 * cboxOperation.getSelectedItem());
 		 */
 
-		if (!error && checkFilter.getValue() != null
+		/*if (!error && checkFilter.getValue() != null
 				&& isFilterDuplicate(checkFilter)) {
 			error = true;
 			errorString = "Similar filter already exists";
-		}
+		}*/
 
 		if (!error) {
 			labSaveError.setText("  ");
