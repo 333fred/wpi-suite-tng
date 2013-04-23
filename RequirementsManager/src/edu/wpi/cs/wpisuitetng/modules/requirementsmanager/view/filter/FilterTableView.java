@@ -160,6 +160,7 @@ public class FilterTableView extends JPanel implements
 	@Override
 	public void responseSuccess() {
 		updateFilters();
+		filterView.notifyListeners();
 		tableView.repaint();
 	}
 
