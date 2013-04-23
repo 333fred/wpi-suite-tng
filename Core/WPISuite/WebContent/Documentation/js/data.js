@@ -33,8 +33,25 @@ var data = [
 				    	label: 'Acceptance Tests',
 				    	folder: false,
 				    	id: 35
-			    }
-		]},
+			    }]
+			},
+		{label: 'Subrequirements',
+		folder: true,
+		id: 100,
+		children: [{
+					label: 'Add or Remove Children',
+					folder: false,
+					id: 101
+				}, {
+					label: 'Add or Remove Parent',
+					folder: false,
+					id: 102
+				}, {
+					label: 'Hierarchy Tab',
+					folder: false,
+					id: 103
+				}]
+			},
 		{label: 'Iterations',
     	folder: true,
     	id: 4,
@@ -63,6 +80,10 @@ var data = [
     				label : 'Using Filters',
     				folders : false,
     				id : 51
+    			}, {
+    				label: 'Tree Filters',
+    				folder: false,
+    				id: 52
     			}]
     		},   
         {label: 'Viewing Statistics',
