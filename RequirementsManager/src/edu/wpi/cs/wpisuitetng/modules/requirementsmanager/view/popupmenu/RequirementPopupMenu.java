@@ -44,16 +44,21 @@ public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
 
 	public RequirementPopupMenu(MainTabController tabController,
 			List<Requirement> selectedRequirements) {
-		if(!PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
-			return;
-		}
 		this.tabController = tabController;
 		this.selectedRequirements = selectedRequirements;
 
-		if (selectedRequirements.size() == 1) {
-			menuViewRequirement = new JMenuItem("Edit Requirement");
+		if (PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+			if (selectedRequirements.size() == 1) {
+				menuViewRequirement = new JMenuItem("Edit Requirement");
+			} else {
+				menuViewRequirement = new JMenuItem("Edit Requirements");
+			}
 		} else {
-			menuViewRequirement = new JMenuItem("Edit Requirements");
+			if (selectedRequirements.size() == 1) {
+				menuViewRequirement = new JMenuItem("View Requirement");
+			} else {
+				menuViewRequirement = new JMenuItem("View Requirements");
+			}
 		}
 
 		menuViewRequirement.addActionListener(this);
