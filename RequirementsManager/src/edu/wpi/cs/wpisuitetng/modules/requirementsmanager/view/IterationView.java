@@ -152,6 +152,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		
 		JProgressBar progressBar = new JProgressBar(0, 100);
 		progressBar.setValue((int) this.iteration.getProgress());
+		JLabel labProgress = new JLabel("Progress:");
 
 		// populate fields, if editing
 		if (status == Status.EDIT || status == Status.VIEW) {
@@ -205,7 +206,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 				VERTICAL_PADDING, SpringLayout.SOUTH, labNameError);
 
 		layout.putConstraint(SpringLayout.NORTH, labEndDate, 0,
-				SpringLayout.NORTH, labStartDate); // allign them, no padding
+				SpringLayout.NORTH, labStartDate); // align them, no padding
 
 		layout.putConstraint(SpringLayout.NORTH, calStartDate,
 				VERTICAL_PADDING, SpringLayout.SOUTH, labStartDate);
@@ -241,6 +242,8 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 			layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
 					SpringLayout.SOUTH, labEstimate);
+			
+			
 		} else {
 			layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
 					SpringLayout.SOUTH, labCalendarError);
@@ -258,14 +261,19 @@ public class IterationView extends Tab implements ISaveNotifier {
 				HORIZONTAL_PADDING, SpringLayout.EAST, butCancel);
 		layout.putConstraint(SpringLayout.NORTH, labErrorMessage, 0,
 				SpringLayout.NORTH, butCancel);
-
 		
-		
-		layout.putConstraint(SpringLayout.VERTICAL_CENTER, progressBar, 0,
+		layout.putConstraint(SpringLayout.VERTICAL_CENTER, labProgress, 0,
 				SpringLayout.VERTICAL_CENTER, txtEstimate);
 		
-		layout.putConstraint(SpringLayout.WEST, progressBar, HORIZONTAL_PADDING,
+		layout.putConstraint(SpringLayout.WEST, labProgress, HORIZONTAL_PADDING,
 				SpringLayout.EAST, txtEstimate);
+		
+		layout.putConstraint(SpringLayout.VERTICAL_CENTER, progressBar, 0,
+				SpringLayout.VERTICAL_CENTER, labProgress);
+		
+		layout.putConstraint(SpringLayout.WEST, progressBar, HORIZONTAL_PADDING,
+				SpringLayout.EAST, labProgress);
+
 		
 		setLayout(layout);
 
@@ -280,6 +288,8 @@ public class IterationView extends Tab implements ISaveNotifier {
 		if (status == Status.EDIT || status == Status.VIEW) {
 			add(labEstimate);
 			add(txtEstimate);
+			add(labProgress);
+			add(progressBar);
 		}
 
 		add(calStartDate);
@@ -292,7 +302,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 		add(labNameError);
 		add(labCalendarError);
 		
-		add(progressBar);
 	}
 
 	/**

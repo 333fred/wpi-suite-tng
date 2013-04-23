@@ -102,13 +102,22 @@ public class PermissionModelEntityManager implements
 	@Override
 	public PermissionModel[] getAll(Session s) throws WPISuiteException {
 		PermissionModel model;
-		for (User u : s.getProject().getTeam()) {
-			if (!modelExists(s, u.getIdNum())) {
-				model = new PermissionModel();
-				model.setUser(u);
-				model.setId(u.getIdNum());
-				db.save(model, s.getProject());
+		for(User u: s.getProject().getTeam()) {
+			if(u != null) {
+				System.out.println(u);
+				if(!modelExists(s, u.getIdNum())) {
+					model = new PermissionModel();
+					model.setUser(u);
+					model.setId(u.getIdNum());
+					db.save(model, s.getProject());
+				}
 			}
+		}
+		if(!modelExists(s, s.getProject().getOwner().getIdNum())) {
+			model = new PermissionModel();
+			model.setUser(s.getProject().getOwner());
+			model.setId(s.getProject().getOwner().getIdNum());
+			db.save(model, s.getProject());
 		}
 		return db.retrieveAll(new PermissionModel(), s.getProject()).toArray(
 				new PermissionModel[0]);
@@ -215,15 +224,14 @@ public class PermissionModelEntityManager implements
 	 */
 	private boolean modelExists(Session s, int id) {
 		try {
-			if (db.retrieve(PermissionModel.class, "id", id, s.getProject())
-					.toArray(new PermissionModel[0]).length != 0) {
-				throw new BadRequestException();
+			if (db.retrieve(PermissionModel.class, "id", id,
+					s.getProject()).toArray(new PermissionModel[0]).length != 0) {
+				return true;
 			}
 			return false;
 		} catch (BadRequestException e) {
 			return true;
 		} catch (WPISuiteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return true;
 		}
