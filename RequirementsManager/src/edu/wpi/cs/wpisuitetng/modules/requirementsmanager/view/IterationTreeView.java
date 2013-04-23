@@ -44,6 +44,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabas
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
@@ -172,6 +173,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			}
 
 			boolean backLogSingleSel = false;
+			//Does the current user have admin permissions?
 
 			// check if the user has selected only the backlog
 			if (tree.getSelectionPaths().length == 1

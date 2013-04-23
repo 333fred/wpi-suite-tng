@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
@@ -50,7 +51,9 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 		menuCreateRequirement.addActionListener(this);
 		menuFilterBacklog.addActionListener(this);
 	
-		add(menuCreateRequirement);
+		if(PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+			add(menuCreateRequirement);
+		}
 		add(menuFilterBacklog);
 
 	}

@@ -63,8 +63,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 
 		// we only have on selected iteration
 		if (selectedIterations.size() == 1) {
-			if (PermissionModel.getInstance().getUserPermissions()
-					.canEditIteration()) {
+			if (PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
 				menuEditIteration = new JMenuItem("Edit Iteration");
 			} else {
 				menuEditIteration = new JMenuItem("View Iteration");
@@ -82,8 +81,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 
 		} else {
 
-			if (PermissionModel.getInstance().getUserPermissions()
-					.canEditIteration()) {
+			if (PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
 				menuEditIteration = new JMenuItem("Edit Iterations");
 			} else {
 				menuEditIteration = new JMenuItem("View Iterations");

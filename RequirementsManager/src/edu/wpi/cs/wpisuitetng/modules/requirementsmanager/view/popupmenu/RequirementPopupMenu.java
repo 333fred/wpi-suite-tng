@@ -19,6 +19,7 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
@@ -43,6 +44,9 @@ public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
 
 	public RequirementPopupMenu(MainTabController tabController,
 			List<Requirement> selectedRequirements) {
+		if(!PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+			return;
+		}
 		this.tabController = tabController;
 		this.selectedRequirements = selectedRequirements;
 
