@@ -110,9 +110,6 @@ public class DetailNoteView extends JPanel {
 			events.add(note);
 		}
 		tableModel.setRowData(events);
-
-		notesTable.updateRowHeights();
-
 	}
 
 	/**
@@ -161,10 +158,6 @@ public class DetailNoteView extends JPanel {
 			events.add(note);
 		}
 		tableModel.setRowData(events);
-
-		notesTable.updateRowHeights();
-
-		// scrollToBottom();
 	}
 
 	public void scrollToBottom() {

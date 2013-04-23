@@ -13,24 +13,27 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.ToggleSelectionModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
  * A panel containing a form for adding a new log to a requirement
  */
 public class DetailLogView extends JPanel {
 	/** For Notes */
-	protected DefaultListModel logList;
-	protected JList log;
+
+	private EventTableModel logModel;
+	private EventTable logTable;
 	private Requirement requirement;
 	private DetailPanel parentView;
 	private EventCellRenderer cellRenderer;
@@ -51,15 +54,13 @@ public class DetailLogView extends JPanel {
 		setLayout(new BorderLayout());
 
 		// Create the log list
-		logList = new DefaultListModel();
-		log = new JList(logList);
+		logModel = new EventTableModel();
+		logTable = new EventTable(logModel);
 		cellRenderer = new EventCellRenderer();
-		log.setCellRenderer(cellRenderer);
-		log.setSelectionModel(new ToggleSelectionModel());
-
+		
 		// Add the list to the scroll pane
 		logScrollPane = new JScrollPane();
-		logScrollPane.getViewport().add(log);
+		logScrollPane.getViewport().add(logTable);
 
 		// Set up the frame
 		JPanel logPane = new JPanel();
@@ -72,11 +73,12 @@ public class DetailLogView extends JPanel {
 	}
 
 	public void refresh(Requirement requirement) {
-		this.logList.clear();
+		List<Event> logs = new ArrayList<Event>();
 		this.requirement = requirement;
 		for (RequirementChangeset aLog : requirement.getLogs()) {
-			this.logList.addElement(aLog);
-		}
+			logs.add(aLog);
+		}		
+		logModel.setRowData(logs);
 	}
 	
 }

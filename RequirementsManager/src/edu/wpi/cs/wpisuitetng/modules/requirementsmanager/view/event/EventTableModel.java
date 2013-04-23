@@ -81,6 +81,7 @@ public class EventTableModel implements TableModel {
 	
 	public void addEvent(Event e) {
 		events.add(e);
+		notifyListeners();
 	}
 	
 	public List<Event> getRowData() {

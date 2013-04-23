@@ -59,7 +59,6 @@ public class EventPanel extends JPanel {
 	}
 	
 	public EventPanel(Event event, int maxWidth) {
-		System.out.println("Creating event Panel");
 		this.event = event;
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		title = new JLabel(event.getTitle());

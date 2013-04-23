@@ -69,10 +69,7 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		
 		final JPanel panel;
-		panel = new EventPanel((Event) value, table.getSize().width);
-		
-		System.out.println("Table is being rendered: " + table.getSize().width);
-		
+		panel = new EventPanel((Event) value, table.getSize().width);		
 		if (isSelected) {
 			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
 					.createCompoundBorder(

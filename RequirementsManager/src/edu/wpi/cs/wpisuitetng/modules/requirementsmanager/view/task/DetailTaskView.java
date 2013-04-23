@@ -304,13 +304,11 @@ public class DetailTaskView extends JPanel {
 	 * requirement's list of tasks
 	 */
 	private void addTasksToList() {
-		// add the tasks to the list model.
-		taskModel.setRowData(new ArrayList<Event>());
+		List<Event> taskList = new ArrayList<Event>();
 		for (Task aTask : requirement.getTasks()) {
-			taskModel.addEvent(aTask);
+			taskList.add(aTask);
 		}
-		
-	
+		taskModel.setRowData(taskList);
 	}
 
 
