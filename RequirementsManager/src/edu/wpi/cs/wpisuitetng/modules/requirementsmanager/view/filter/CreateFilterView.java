@@ -552,7 +552,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 			if (isFilterDuplicate(filter)) {
 				labSaveError.setText("Identical Filter already exists");
-				System.out.println("Duplicate filter? " + filter.toString());
 
 			} else {
 				if (mode == Mode.CREATE) {
@@ -726,11 +725,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 * cboxOperation.getSelectedItem());
 		 */
 
-		System.out.println("On save checking for dup filters");
-
 		if (!error && checkFilter.getValue() != null
-
-		&& isFilterDuplicate(checkFilter)) {
+				&& isFilterDuplicate(checkFilter)) {
 			error = true;
 			errorString = "Similar filter already exists";
 		}
@@ -909,11 +905,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	public static boolean isFilterDuplicate(Filter toCheck) {
 		List<Filter> filters = FilterDatabase.getInstance().getAll();
-
 		for (Filter filter : filters) {
 			if (filter.equalToWithoutId(toCheck)) {
-				System.out.println("isFilterDuplicate: toCheck: " + toCheck);
-				System.out.println("isFilterDuplicate: filterL: " + filter);
 				return true;
 			}
 		}
