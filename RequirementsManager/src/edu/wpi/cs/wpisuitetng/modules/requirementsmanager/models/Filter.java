@@ -45,6 +45,7 @@ public class Filter extends AbstractModel {
 	private String jsonValue;
 	private String stringValue;
 	private boolean active;
+	private boolean deleted;
 
 	/** Enum representing the type of value in this filter */
 	private FilterValueType valueType;
@@ -86,6 +87,7 @@ public class Filter extends AbstractModel {
 		this.operation = operation;
 		setValue(value); // set the value and valu type
 		active = true;
+		setDeleted(false);
 	}
 
 	/**
@@ -473,6 +475,22 @@ public class Filter extends AbstractModel {
 		return getField().equals(other.getField())
 				&& getOperation().equals(other.getOperation())
 				&& getValue().equals(other.getValue());
+	}
+
+	/**
+	 * @return the whether or not this filter has been permanently deleted
+	 */
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * @param deleted
+	 *            set that this filter has been deleted. Once it has been
+	 *            deleted, it will not be returned from the server
+	 */
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

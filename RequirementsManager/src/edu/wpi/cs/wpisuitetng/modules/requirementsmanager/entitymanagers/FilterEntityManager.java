@@ -121,19 +121,16 @@ public class FilterEntityManager implements EntityManager<Filter> {
 					.toArray(new Filter[0]);
 		} catch (WPISuiteException e) {
 			e.printStackTrace();
-			System.out.println("GetFilter retreive exception");
 		}
 
 		// Check for filter existence
 		if (filter.length < 1 || filter[0] == null) {
-			System.out.println("GetFilter existance exception");
 			throw new NotFoundException();
 		}
 
-		// Make sure the filter belongs to this user
+		// Make sure the filter belongs to this user and is not deleted
 		Filter f = filter[0];
-		if (!f.getCreator().equals(s.getUsername())) {
-			System.out.println("GetFilter user check exception");
+		if (!f.isDeleted() && !f.getCreator().equals(s.getUsername())) {
 			throw new NotFoundException();
 		}
 
@@ -148,12 +145,13 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		List<Model> models = db.retrieveAll(new Filter(), s.getProject());
 		List<Filter> filters = new ArrayList<Filter>();
 
-		// Make sure that we only return filters that belong to current user
+		// Make sure that we only return non-deleted filters that belong to
+		// current user
 		for (Model m : models) {
 			Filter f = (Filter) m;
 			System.out.println("Filter Get all, user: " + s.getUsername());
 			System.out.println("Filter Get All, Current filter: " + f);
-			if (s.getUsername() != null
+			if (s.getUsername() != null && !f.isDeleted()
 					&& f.getCreator().equals(s.getUsername())) {
 				filters.add(f);
 			}
@@ -211,18 +209,22 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Deletes the filter from the database.
+	 * 
+	 * Currently, the delete method seems to be bugged and throws illegal state
+	 * exceptions when users are added to the project. As such, we are using the
+	 * deleted flag to determine if the filter should be returned or not. The
+	 * database will only return filters that don't have this flag set. If it
+	 * does have this flag set, then the entity manager will ignore the filter.
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
 		Filter del = getEntity(s, id)[0];
-		if (del == null) {
-			System.out.println("Tried to delete null filter");
+		del.setDeleted(true);
+		if (!db.save(del, s.getProject())) {
+			throw new WPISuiteException();
 		}
-		System.out.println("Delete: " + del);
-		Filter ret = db.delete(del);
-		System.out.println("Returned Filter: " + ret);
-		return ret != null;
+		return true;
 	}
 
 	/**
