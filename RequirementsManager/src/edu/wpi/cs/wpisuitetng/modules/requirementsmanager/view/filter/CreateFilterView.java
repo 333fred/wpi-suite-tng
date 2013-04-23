@@ -552,6 +552,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 			if (isFilterDuplicate(filter)) {
 				labSaveError.setText("Identical Filter already exists");
+				System.out.println("Duplicate filter? " + filter.toString());
+				
 
 			} else {
 				if (mode == Mode.CREATE) {
@@ -566,13 +568,14 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				}
 				txtEqualTo.setBackground(Color.WHITE);
 				calEqualTo.setBackground(Color.WHITE);
+				calEqualToBetween.setBackground(Color.WHITE);
 			}
 
 		} else {
-			// there was an error set text bot
+			// there was an error set text box
 			labSaveError.setText(errorString);
 			txtEqualTo.setBackground(new Color(243, 243, 209));
-			calEqualTo.setBackground(new Color(243, 243, 209));
+			//calEqualTo.setBackground(new Color(243, 243, 209));
 
 		}
 	}
@@ -724,6 +727,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 * cboxOperation.getSelectedItem());
 		 */
 
+		System.out.println("On save checking for dup filters");
+		
 		if (!error && checkFilter.getValue() != null
 				&& isFilterDuplicate(checkFilter)) {
 			error = true;
@@ -749,12 +754,17 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		if (source.equals(cboxField)) {
 			populateOperationComboBox();
 			updateEqualsField();
+			updateSave();
 		} else if (source.equals(cboxOperation)) {
 			if (cboxOperation.getItemCount() != 0
 					&& cboxField.getSelectedItem().equals("Iteration")) {
 				updateEqualsField();
+				updateSave();
 			}
-		} else if (source.equals(butSave)) {
+		} else if (source.equals(cboxEqualTo)) {
+			updateSave();
+		}
+		else if (source.equals(butSave)) {
 			onSavePressed();
 
 		} else if (source.equals(butCancel)) {
@@ -764,8 +774,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cancelEdit();
 			}
 		}
-
-		updateSave();
+		
 
 	}
 
@@ -900,11 +909,13 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		}
 	}
 
-	public boolean isFilterDuplicate(Filter toCheck) {
+	public static boolean isFilterDuplicate(Filter toCheck) {
 		List<Filter> filters = FilterDatabase.getInstance().getAll();
 
 		for (Filter filter : filters) {
 			if (filter.equalToWithoutId(toCheck)) {
+				System.out.println("isFilterDuplicate: toCheck: " + toCheck);
+				System.out.println("isFilterDuplicate: filterL: " + filter);
 				return true;
 			}
 		}
