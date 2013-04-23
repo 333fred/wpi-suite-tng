@@ -79,6 +79,8 @@ public class FilterTest {
 	Filter f38;
 	Filter f39;
 	Filter f40;
+	FilterField name;	
+	
 	User u1 = new User("user", "user1", "password", 0);
 	User u2 = new User("user", "user2", "password", 1);
 	Requirement r1;
@@ -87,7 +89,7 @@ public class FilterTest {
 	Requirement r4;
 	Iteration i1, i2, i3, i4, i5;
 
-	String name = "name";
+	String name1 = "name1";
 	String name2 = "name2";
 	String releaseNum = "v1";
 	String description;
@@ -132,12 +134,13 @@ public class FilterTest {
 
 		f1 = new Filter(u1.getUsername());
 		f2 = new Filter(u2.getUsername());
+		
 
 		/** Filters free for use **/
 		// f22 free
 		// f23 free
 
-		r1 = new Requirement(name, description, releaseNum, type.USER_STORY,
+		r1 = new Requirement(name1, description, releaseNum, type.USER_STORY,
 				subRequirements, notes, iterationID1, estimate1, effort1,
 				assignees, pUID, tasks);
 		r2 = new Requirement(name2, description, "v2", type.THEME,
@@ -155,7 +158,7 @@ public class FilterTest {
 		r2.setStatus(Status.BLANK);
 		r3.setStatus(Status.IN_PROGRESS);
 	}
-
+	
 	@Test
 	public void testShouldFilterNonActive() {
 		f2.setActive(false);
@@ -166,7 +169,7 @@ public class FilterTest {
 	@Test
 	public void shouldFilterNameEqual() {
 		f3 = new Filter(u1.getUsername(), FilterField.NAME,
-				FilterOperation.EQUAL, "name");
+				FilterOperation.EQUAL, "name1");
 		assertTrue(f3.shouldFilter(r1));
 		assertFalse(f3.shouldFilter(r2));
 	}
@@ -400,11 +403,17 @@ public class FilterTest {
 		assertFalse(f17.shouldFilter(r2));
 	}
 
+	@Test
 	public void shouldFilterIterationNotEqual2() {
 		f21 = new Filter(u1.getUsername(), FilterField.ITERATION,
 				FilterOperation.NOT_EQUAL, 0);
 		assertTrue(f21.shouldFilter(r3));
 		assertFalse(f21.shouldFilter(r1));
+	}
+	
+	@Test
+	public void testGetStringValue(){
+		//System.out.println(f17.getStringValue());
 	}
 
 	/*
@@ -477,6 +486,12 @@ public class FilterTest {
 		f39 = new Filter(u1.getUsername(), FilterField.ESTIMATE,
 				FilterOperation.CONTAINS, 1);
 		assertFalse(f39.shouldFilter(r1));
+	}
+	
+	@Test
+	public void FilterFieldtest(){
+		assertEquals(name, name.getFromString("name"));
+		
 	}
 
 	@Test

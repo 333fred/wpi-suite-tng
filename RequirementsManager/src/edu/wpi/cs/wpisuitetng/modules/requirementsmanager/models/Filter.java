@@ -454,7 +454,7 @@ public class Filter extends AbstractModel {
 				// TODO: we should delete this filter, doesnt seem like a good
 				// idea to delete it here
 				return "Not Found";
-			}
+			} 
 
 			return iteration.getName();
 			// we must get the operation, otherwise we return to string
