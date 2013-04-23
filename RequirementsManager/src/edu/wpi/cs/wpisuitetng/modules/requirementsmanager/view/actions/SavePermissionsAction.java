@@ -40,7 +40,6 @@ public class SavePermissionsAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e1) {
 		PermissionModelController controller = new PermissionModelController();
 		SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
-		System.out.println("Save Perm Button Pressed");
 		
 		model.setPermLevel(panel.getPermission());
 		

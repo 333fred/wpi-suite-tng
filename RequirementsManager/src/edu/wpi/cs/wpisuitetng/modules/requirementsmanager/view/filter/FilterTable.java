@@ -25,25 +25,17 @@ public class FilterTable extends JTable {
 			if (!tableModel.getFilterAt(row).isActive()) {
 				c.setBackground(new Color(184, 207, 229));
 				c.setFont(c.getFont().deriveFont(Font.ITALIC));
-				// System.out.println("NOT ACTIVE:" +
-				// tableModel.getFilterAt(row));
 			} else {
 				c.setBackground(new Color(184, 207, 229));
 				c.setFont(c.getFont().deriveFont(Font.BOLD));
-				// System.out.println("ACTIVE!!! :" +
-				// tableModel.getFilterAt(row));
 			}
 		} else {
 			if (!tableModel.getFilterAt(row).isActive()) {
 				c.setBackground(Color.LIGHT_GRAY);
 				c.setFont(c.getFont().deriveFont(Font.ITALIC));
-				// System.out.println("NOT ACTIVE:" +
-				// tableModel.getFilterAt(row));
 			} else {
 				c.setBackground(Color.WHITE);
 				c.setFont(c.getFont().deriveFont(Font.BOLD));
-				// System.out.println("ACTIVE!!! :" +
-				// tableModel.getFilterAt(row));
 			}
 		}
 

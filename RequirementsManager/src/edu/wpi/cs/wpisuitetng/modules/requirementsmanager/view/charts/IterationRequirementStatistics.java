@@ -60,7 +60,6 @@ public class IterationRequirementStatistics extends
 				Iteration iteration = IterationDatabase.getInstance()
 						.get(requirement.getIteration());
 				Integer oldValue = this.data.get(iteration.getName());
-				// System.out.println(oldValue);
 				this.data.put(iteration.getName(),
 						new Integer(oldValue.intValue() + 1)); // increment the
 																// number of

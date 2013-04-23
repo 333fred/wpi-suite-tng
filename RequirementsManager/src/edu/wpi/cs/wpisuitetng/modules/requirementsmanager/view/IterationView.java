@@ -103,7 +103,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	public IterationView(Iteration iteration, Status status,
 			MainTabController mainTabController) {
-		System.out.println("IterationVIew Mode: " + status);
 		this.iteration = iteration;
 		this.status = status;
 		this.mainTabController = mainTabController;

@@ -39,10 +39,6 @@ public class EditIterationAction extends AbstractAction {
 	/** Opens the currently selected iterations in the IterationTreeView */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// Iteration[] iterationsToOpen =
-		// iterationTreeView.getSelectedIterations();
-
-		System.out.println("WE ARE IN HERE");
 		
 		List<Iteration> iterationsToOpen = iterationTreeView
 				.getSelectedIterations();
@@ -57,7 +53,6 @@ public class EditIterationAction extends AbstractAction {
 				for (int k = 0; k < numIterations; k++) {
 					Component tabComponent = this.tabController.getTabView()
 							.getComponentAt(j);
-					System.out.println("Component: " + tabComponent);
 					if (tabComponent instanceof IterationView
 							&& this.tabController.getTabView().getTitleAt(j)
 									.equals(iterationsToOpen.get(k).getName())) {

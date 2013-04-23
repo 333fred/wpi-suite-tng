@@ -37,7 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 public class Filter extends AbstractModel {
 
 	private int id;
-	private User creator;
+	private String creator;
 	private FilterField field;
 	private FilterOperation operation;
 
@@ -62,7 +62,7 @@ public class Filter extends AbstractModel {
 	 * @param u
 	 *            the creator of the filter
 	 */
-	public Filter(User u) {
+	public Filter(String u) {
 		this(u, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
 
@@ -78,7 +78,7 @@ public class Filter extends AbstractModel {
 	 * @param value
 	 *            The value the filter looks for
 	 */
-	public Filter(User user, FilterField field, FilterOperation operation,
+	public Filter(String user, FilterField field, FilterOperation operation,
 			Object value) {
 		this.id = -1;
 		this.creator = user;
@@ -144,7 +144,6 @@ public class Filter extends AbstractModel {
 			return value.startsWith((String) getValue());
 		default:
 			// we shold not get to default, what type of magic is this
-			System.out.println("MAGIC!!!!!!!");
 			return false;
 		}
 	}
@@ -165,7 +164,6 @@ public class Filter extends AbstractModel {
 		case NOT_EQUAL:
 			return !value.equals(getValue());
 		default:
-			System.out.println("MAGIC!!!!!!!");
 			return false;
 		}
 	}
@@ -193,7 +191,6 @@ public class Filter extends AbstractModel {
 		case GREATER_THAN:
 			return value > (Integer) getValue();
 		default:
-			System.out.println("MAGIC!!!!!!!");
 			return false;
 
 		}
@@ -242,7 +239,6 @@ public class Filter extends AbstractModel {
 			return ((FilterIterationBetween) getValue())
 					.isIterationBetween(reqIteration);
 		default:
-			System.out.println("MAGIC!!!!!!!");
 			return false;
 		}
 	}
@@ -345,7 +341,7 @@ public class Filter extends AbstractModel {
 	/**
 	 * @return the creator
 	 */
-	public User getCreator() {
+	public String getCreator() {
 		return creator;
 	}
 
@@ -353,7 +349,7 @@ public class Filter extends AbstractModel {
 	 * @param creator
 	 *            the creator to set
 	 */
-	public void setCreator(User creator) {
+	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 

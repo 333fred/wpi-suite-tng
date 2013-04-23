@@ -35,7 +35,7 @@ public class PermissionModel extends AbstractModel implements Comparable {
 	private static boolean initialized = false;
 
 	/**
-	 * Private function to initialize the model;
+	 * Private function to initialize the model;	
 	 */
 	private static void init() {
 		if (!initialized) {
@@ -82,13 +82,10 @@ public class PermissionModel extends AbstractModel implements Comparable {
 	public static PermissionModel fromJSONSingleton(String content) {
 		init();
 		final Gson parser = new Gson();
-		System.out.println("Json Received " + content);
 		PermissionModel json = parser
 				.fromJson(content, PermissionModel[].class)[0];
 		setUserPermissionLevelStatic(json.getPermLevel());
 		setUserStatic(json.getUser());
-		System.out.println(json.getUser());
-		System.out.println(getInstance().getUser());
 		return getInstance();
 	}
 

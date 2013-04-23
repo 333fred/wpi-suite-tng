@@ -60,9 +60,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		Filter newFilter = Filter.fromJSON(content);
 
 		newFilter.setId(getId(s));
-
-		// Set the user of the filter
-		newFilter.setCreator(s.getUser());
+		newFilter.setCreator(s.getUsername());
 
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
@@ -134,7 +132,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 
 		// Make sure the filter belongs to this user
 		Filter f = filter[0];
-		if (!f.getCreator().equals(s.getUser())) {
+		if (!f.getCreator().equals(s.getUsername())) {
 			System.out.println("GetFilter user check exception");
 			throw new NotFoundException();
 		}
@@ -153,7 +151,10 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// Make sure that we only return filters that belong to current user
 		for (Model m : models) {
 			Filter f = (Filter) m;
-			if (f.getCreator().equals(s.getUser())) {
+			System.out.println("Filter Get all, user: " + s.getUsername());
+			System.out.println("Filter Get All, Current filter: " + f);
+			if (s.getUsername() != null
+					&& f.getCreator().equals(s.getUsername())) {
 				filters.add(f);
 			}
 		}
@@ -170,8 +171,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// Get updated filter
 		Filter updatedFilter = Filter.fromJSON(content);
 		Filter oldFilter;
-
-		System.out.println("Update Filter: " + updatedFilter);
 
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
@@ -195,9 +194,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// Coppy values from the old filter to the new filter
 		updateMapper.map(updatedFilter, oldFilter);
 
-		System.out.println("Update Filter2: " + updatedFilter);
-		System.out.println("Old Filter2: " + oldFilter);
-
 		// Save the filter and return
 		if (!db.save(oldFilter, s.getProject())) {
 			throw new WPISuiteException();
@@ -219,7 +215,14 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;
+		Filter del = getEntity(s, id)[0];
+		if (del == null) {
+			System.out.println("Tried to delete null filter");
+		}
+		System.out.println("Delete: " + del);
+		Filter ret = db.delete(del);
+		System.out.println("Returned Filter: " + ret);
+		return ret != null;
 	}
 
 	/**

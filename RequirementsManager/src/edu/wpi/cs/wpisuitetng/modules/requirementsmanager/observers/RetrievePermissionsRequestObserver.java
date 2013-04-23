@@ -38,7 +38,7 @@ public class RetrievePermissionsRequestObserver implements RequestObserver {
 					PermissionModel.fromJSONSingleton(response.getBody());
 					PermissionToolbarPane.getInstance().refreshPermission();
 				} catch (IllegalThreadStateException ex) {
-					System.out.println("Thread State");
+					ex.printStackTrace();
 				}
 			}
 		});
