@@ -89,14 +89,16 @@ public class Filter extends AbstractModel {
 		setDeleted(false);
 	}
 
-	public Filter(String user, int id, FilterField field, FilterOperation operation,
-			Object value, String stringValue) {
+	private Filter(String user, int id, FilterField field, FilterOperation operation,
+			Object value, String stringValue, boolean active, boolean deleted) {
 		this.creator = user;
 		this.id = id;
 		this.field = field;
 		this.operation = operation;
 		this.stringValue = stringValue;
 		setValue(value);
+		this.active = active;
+		this.deleted = deleted;
 	}
 
 	/**
@@ -503,7 +505,7 @@ public class Filter extends AbstractModel {
 	}
 	
 	public Filter clone() {
-		return new Filter(getCreator(), getId(),getField(), getOperation(), getValue(), getStringValue());
+		return new Filter(getCreator(), getId(),getField(), getOperation(), getValue(), getStringValue(), getActive(), isDeleted());
 	}
 
 }
