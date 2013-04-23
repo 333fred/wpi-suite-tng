@@ -204,7 +204,7 @@ public class PermissionsPanel extends Tab {
 			saveButton.setAction(new SavePermissionsAction(this,
 					localPermissions.get(userTable.getSelectedRow())));
 			break;
-		case NONE:
+		case OBSERVE:
 			adminButton.setSelected(false);
 			updateButton.setSelected(false);
 			noPermissionButton.setSelected(true);
@@ -230,7 +230,7 @@ public class PermissionsPanel extends Tab {
 		else if (updateButton.isSelected())
 			return UserPermissionLevel.UPDATE;
 		else if (noPermissionButton.isSelected())
-			return UserPermissionLevel.NONE;
+			return UserPermissionLevel.OBSERVE;
 		return null;
 	}
 

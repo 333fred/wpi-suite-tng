@@ -68,7 +68,7 @@ public class PermissionModelEntityManager implements
 		model.setUser(s.getUser());
 		model.setId(s.getUser().getIdNum());
 		model.setPermLevel(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevel.ADMIN
-				: UserPermissionLevel.NONE);
+				: UserPermissionLevel.OBSERVE);
 
 		// Save the permission to the database
 		if (!db.save(model, s.getProject())) {
