@@ -44,7 +44,7 @@ public class Requirement extends AbstractModel {
 	private Status status;
 	private Priority priority;
 	// Date and scheduling attributes
-	private String releaseNum; 
+	private String releaseNum;
 	private int iteration;
 	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
@@ -106,12 +106,16 @@ public class Requirement extends AbstractModel {
 	 *            A list of all notes
 	 * @param iteration
 	 *            The specified iteration
+	 * @param estimate
+	 *            the initial estimate for this class
 	 * @param effort
 	 *            The specified effort
 	 * @param assignees
 	 *            A list of all users assigned to this project
 	 * @param pUID
 	 *            A list of parent requirements
+	 * @param tasks
+	 *            the list of tasks to start off with
 	 */
 	public Requirement(String name, String description, String releaseNum,
 			Type type, List<Integer> subRequirements, List<Note> notes,
@@ -120,8 +124,7 @@ public class Requirement extends AbstractModel {
 		// Get the next UID for this requirement
 
 		// Assign all inputs
-		this.name = name; // TODO: Support length checking, should throw an
-							// exception
+		this.name = name;
 		this.description = description;
 		this.releaseNum = releaseNum;
 		this.type = type;
@@ -208,10 +211,8 @@ public class Requirement extends AbstractModel {
 	/**
 	 * OldLog events contained in a list
 	 * 
-	 * @param events
+	 * @param changes
 	 *            the events to log
-	 * @param s
-	 *            the session containing the current user
 	 */
 	public void logEvents(RequirementChangeset changes) {
 		logs.add(0, changes);
@@ -299,8 +300,6 @@ public class Requirement extends AbstractModel {
 	/**
 	 * Gets the priority of the Requirement
 	 * 
-	 * @return
-	 * 
 	 * @return the priority
 	 */
 	public Priority getPriority() {
@@ -311,7 +310,7 @@ public class Requirement extends AbstractModel {
 	 * Sets the priority of the requirement TODO: Determine if we can do this,
 	 * or if the type is final
 	 * 
-	 * @param type
+	 * @param priority
 	 *            the type to set
 	 */
 	public void setPriority(Priority priority) {
@@ -536,7 +535,7 @@ public class Requirement extends AbstractModel {
 	 * will erase any logs stored in the manager. If you just want to add a log,
 	 * then use addLog
 	 * 
-	 * @param log
+	 * @param linkedList
 	 *            the log to set
 	 */
 	public void setLog(List<RequirementChangeset> linkedList) {
@@ -649,6 +648,12 @@ public class Requirement extends AbstractModel {
 		return true;
 	}
 
+	/**
+	 * Adds the given test to the list of tests
+	 * 
+	 * @param aTest
+	 *            the new test
+	 */
 	public void addTest(ATest aTest) {
 		this.aTests.add(aTest);
 	}
@@ -661,8 +666,8 @@ public class Requirement extends AbstractModel {
 	}
 
 	/**
-	 * @param tasks
-	 *            the tasks to set
+	 * @param aTests
+	 *            the tests to set
 	 */
 	public void setTests(List<ATest> aTests) {
 		this.aTests = aTests;
@@ -681,20 +686,30 @@ public class Requirement extends AbstractModel {
 		return true;
 	}
 
+	/**
+	 * Gets whether all subrequirements of this requirement have been deleted.
+	 * If they have been, then this can be closed. Otherwise, it cannot be
+	 * 
+	 * @return whether all subreqirements have been completed
+	 */
 	public boolean subReqsCompleted() {
 		for (Integer R : this.subRequirements) {
 			try {
-				if (RequirementDatabase.getInstance().get(R).getStatus() != status.COMPLETE) {
+				if (RequirementDatabase.getInstance().get(R).getStatus() != Status.COMPLETE) {
 					return false;
 				}
 			} catch (RequirementNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return true;
 	}
 
+	/**
+	 * Adds a given task to the list of tasks
+	 * 
+	 * @param task
+	 */
 	public void addTask(Task task) {
 		this.tasks.add(task);
 	}
@@ -703,6 +718,13 @@ public class Requirement extends AbstractModel {
 		return this.getName();
 	}
 
+	/**
+	 * Sorts the given list of requirements by creation date
+	 * 
+	 * @param requirements
+	 *            the requirements to sort
+	 * @return the sorted list of requirements
+	 */
 	public static List<Requirement> sortRequirements(
 			List<Requirement> requirements) {
 		Collections.sort(requirements, new RequirementComparator());
