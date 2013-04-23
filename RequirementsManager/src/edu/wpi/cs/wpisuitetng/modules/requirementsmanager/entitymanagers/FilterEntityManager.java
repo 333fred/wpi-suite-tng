@@ -60,9 +60,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		Filter newFilter = Filter.fromJSON(content);
 
 		newFilter.setId(getId(s));
-
-		// Set the user of the filter
-		newFilter.setCreator(s.getUser());
+		newFilter.setCreator(s.getUsername());
 
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
@@ -123,19 +121,16 @@ public class FilterEntityManager implements EntityManager<Filter> {
 					.toArray(new Filter[0]);
 		} catch (WPISuiteException e) {
 			e.printStackTrace();
-			System.out.println("GetFilter retreive exception");
 		}
 
 		// Check for filter existence
 		if (filter.length < 1 || filter[0] == null) {
-			System.out.println("GetFilter existance exception");
 			throw new NotFoundException();
 		}
 
-		// Make sure the filter belongs to this user
+		// Make sure the filter belongs to this user and is not deleted
 		Filter f = filter[0];
-		if (!f.getCreator().equals(s.getUser())) {
-			System.out.println("GetFilter user check exception");
+		if (!f.isDeleted() && !f.getCreator().equals(s.getUsername())) {
 			throw new NotFoundException();
 		}
 
@@ -150,10 +145,14 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		List<Model> models = db.retrieveAll(new Filter(), s.getProject());
 		List<Filter> filters = new ArrayList<Filter>();
 
-		// Make sure that we only return filters that belong to current user
+		// Make sure that we only return non-deleted filters that belong to
+		// current user
 		for (Model m : models) {
 			Filter f = (Filter) m;
-			if (f.getCreator().equals(s.getUser())) {
+			System.out.println("Filter Get all, user: " + s.getUsername());
+			System.out.println("Filter Get All, Current filter: " + f);
+			if (s.getUsername() != null && !f.isDeleted()
+					&& f.getCreator().equals(s.getUsername())) {
 				filters.add(f);
 			}
 		}
@@ -170,8 +169,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// Get updated filter
 		Filter updatedFilter = Filter.fromJSON(content);
 		Filter oldFilter;
-
-		System.out.println("Update Filter: " + updatedFilter);
 
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
@@ -195,9 +192,6 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// Coppy values from the old filter to the new filter
 		updateMapper.map(updatedFilter, oldFilter);
 
-		System.out.println("Update Filter2: " + updatedFilter);
-		System.out.println("Old Filter2: " + oldFilter);
-
 		// Save the filter and return
 		if (!db.save(oldFilter, s.getProject())) {
 			throw new WPISuiteException();
@@ -215,11 +209,22 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Deletes the filter from the database.
+	 * 
+	 * Currently, the delete method seems to be bugged and throws illegal state
+	 * exceptions when users are added to the project. As such, we are using the
+	 * deleted flag to determine if the filter should be returned or not. The
+	 * database will only return filters that don't have this flag set. If it
+	 * does have this flag set, then the entity manager will ignore the filter.
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;
+		Filter del = getEntity(s, id)[0];
+		del.setDeleted(true);
+		if (!db.save(del, s.getProject())) {
+			throw new WPISuiteException();
+		}
+		return true;
 	}
 
 	/**

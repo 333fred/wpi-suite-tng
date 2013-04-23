@@ -31,7 +31,6 @@ public class QueryUserRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		System.out.println("Users Query response Success");
 		// If the network hasn't been initialized, then this will fail, so
 		// return
 		if (Network.getInstance().isInitialized()) {

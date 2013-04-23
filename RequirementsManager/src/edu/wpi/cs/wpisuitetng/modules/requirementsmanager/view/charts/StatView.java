@@ -205,8 +205,6 @@ public class StatView extends Tab implements ActionListener,
 	 * based on those new preferences
 	 */
 	public void actionPerformed(ActionEvent e) {
-		// System.out.println(e.getActionCommand());
-		// JRadioButton source = (JRadioButton)e.getSource();
 
 		String source = e.getActionCommand();
 
@@ -298,11 +296,6 @@ public class StatView extends Tab implements ActionListener,
 		comboBoxStatisticType.setSelectedItem(this.chartDataType.toString()
 				.substring(0, 1)
 				.concat(this.chartDataType.toString().toLowerCase()));
-		System.out.println(this.chartDataType
-				.toString()
-				.substring(0, 1)
-				.concat(this.chartDataType.toString().substring(1)
-						.toLowerCase()));
 	}
 
 	/**
@@ -381,9 +374,7 @@ public class StatView extends Tab implements ActionListener,
 			// little method
 
 		}
-
-		System.out.println(this.chartDataType.toString());
-
+		
 		// build the chart based on the type of chart the user has selected
 		switch (chartType) {
 

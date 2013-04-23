@@ -186,12 +186,12 @@ public class ProjectManager implements EntityManager<Project>{
 		/*User theUser = s.getUser();
 		if(Role.ADMIN.equals(theUser.getRole()) || 
 				Permission.WRITE.equals(model.getPermission(theUser))){*/
-		if(data.save(model))
+		if(data.save(model) && data.save(model.getProject()))
 		{
 			logger.log(Level.FINE, "Project Saved :" + model);
 			return ;
 		}
-		/*else
+		else
 		{
 			logger.log(Level.WARNING, "Project Save Failure!");
 			throw new DatabaseException("Save failure for Project."); // Session User: " + s.getUsername() + " Project: " + model.getName());

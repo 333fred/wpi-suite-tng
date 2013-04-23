@@ -246,6 +246,11 @@ public class ManagerLayer {
 	{
 		Session s = getSessionFromCookies(cook);
 
+		System.out.println("Called Update: ");
+		System.out.println(args[0]);
+		System.out.println(args[1]);
+		System.out.println(args[2]);
+		
 		Model m;
 		m = (Model) map.get(args[0]+args[1]).update(s, content);
 		

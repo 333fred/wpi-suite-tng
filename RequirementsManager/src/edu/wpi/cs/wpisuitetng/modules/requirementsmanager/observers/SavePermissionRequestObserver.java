@@ -30,7 +30,6 @@ public class SavePermissionRequestObserver implements RequestObserver {
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		ResponseModel response = iReq.getResponse();
-		System.out.println("Saved Perm Recieved: " + response.getBody());
 		PermissionModel perm = PermissionModel.fromJSON(response.getBody());
 		PermissionsDatabase.getInstance().add(perm);
 		

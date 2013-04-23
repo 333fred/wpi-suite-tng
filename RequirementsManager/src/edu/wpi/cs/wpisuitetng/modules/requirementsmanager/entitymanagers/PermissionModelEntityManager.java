@@ -84,7 +84,6 @@ public class PermissionModelEntityManager implements
 	@Override
 	public PermissionModel[] getEntity(Session s, String id)
 			throws NotFoundException, WPISuiteException {
-		System.out.println("Get permissions called");
 		try {
 			// Attempt to make permissions for the user
 			PermissionModel[] perms = { makeEntity(s, "") };
@@ -102,24 +101,16 @@ public class PermissionModelEntityManager implements
 	 */
 	@Override
 	public PermissionModel[] getAll(Session s) throws WPISuiteException {
-		System.out.println("Get all permissions called");
-		System.out.println(s.getProject().getTeam().length);
 		PermissionModel model;
 		for(User u: s.getProject().getTeam()) {
 			if(u != null) {
 				System.out.println(u);
-				if(modelExists(s, u.getIdNum())) {
-					System.out.println("User Perm Exists");
-				}
-				else {
+				if(!modelExists(s, u.getIdNum())) {
 					model = new PermissionModel();
 					model.setUser(u);
 					model.setId(u.getIdNum());
 					db.save(model, s.getProject());
 				}
-			}
-			else {
-				System.out.println("Project Team is Empty");
 			}
 		}
 		if(!modelExists(s, s.getProject().getOwner().getIdNum())) {
@@ -129,7 +120,7 @@ public class PermissionModelEntityManager implements
 			db.save(model, s.getProject());
 		}
 		return db.retrieveAll(new PermissionModel(), s.getProject()).toArray(
-			new PermissionModel[0]);
+				new PermissionModel[0]);
 	}
 
 	/**
@@ -220,14 +211,16 @@ public class PermissionModelEntityManager implements
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * Helper for populating permissions db for all users
 	 * 
-	 * @param s Current session
-	 * @param id User id integer
-	 * @return True if user already has permissions on database
-	 * 		   False if permissions for user don't exist
+	 * @param s
+	 *            Current session
+	 * @param id
+	 *            User id integer
+	 * @return True if user already has permissions on database False if
+	 *         permissions for user don't exist
 	 */
 	private boolean modelExists(Session s, int id) {
 		try {
@@ -236,14 +229,13 @@ public class PermissionModelEntityManager implements
 				return true;
 			}
 			return false;
-		}
-		catch (BadRequestException e) {
+		} catch (BadRequestException e) {
 			return true;
 		} catch (WPISuiteException e) {
 			e.printStackTrace();
 			return true;
 		}
-			
+
 	}
 
 }
