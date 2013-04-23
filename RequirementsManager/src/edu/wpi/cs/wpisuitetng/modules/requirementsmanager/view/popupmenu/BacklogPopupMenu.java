@@ -51,7 +51,7 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 		menuCreateRequirement.addActionListener(this);
 		menuFilterBacklog.addActionListener(this);
 	
-		if(PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+		if(PermissionModel.getInstance().getUserPermissions().canCreateRequirement()) {
 			add(menuCreateRequirement);
 		}
 		add(menuFilterBacklog);
