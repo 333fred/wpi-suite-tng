@@ -553,7 +553,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			if (isFilterDuplicate(filter)) {
 				labSaveError.setText("Identical Filter already exists");
 				System.out.println("Duplicate filter? " + filter.toString());
-				
 
 			} else {
 				if (mode == Mode.CREATE) {
@@ -575,7 +574,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			// there was an error set text box
 			labSaveError.setText(errorString);
 			txtEqualTo.setBackground(new Color(243, 243, 209));
-			//calEqualTo.setBackground(new Color(243, 243, 209));
+			// calEqualTo.setBackground(new Color(243, 243, 209));
 
 		}
 	}
@@ -728,9 +727,10 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 */
 
 		System.out.println("On save checking for dup filters");
-		
+
 		if (!error && checkFilter.getValue() != null
-				&& isFilterDuplicate(checkFilter)) {
+
+		&& isFilterDuplicate(checkFilter)) {
 			error = true;
 			errorString = "Similar filter already exists";
 		}
@@ -763,8 +763,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			}
 		} else if (source.equals(cboxEqualTo)) {
 			updateSave();
-		}
-		else if (source.equals(butSave)) {
+		} else if (source.equals(butSave)) {
 			onSavePressed();
 
 		} else if (source.equals(butCancel)) {
@@ -774,7 +773,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cancelEdit();
 			}
 		}
-		
 
 	}
 
