@@ -592,10 +592,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	/** Updates the status of the save button */
 
 	public void updateSave() {
-		if (cboxOperation.getItemCount() == 0
-				|| cboxEqualTo.getItemCount() == 0
-				|| calEqualTo.getDate() == null
-				|| calEqualToBetween.getDate() == null) {
+		if (cboxOperation.getItemCount() == 0) {
 			labSaveError.setText("");
 			return;
 		}
@@ -659,37 +656,62 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			} else if (operation == FilterOperation.EQUAL
 					|| operation == FilterOperation.NOT_EQUAL) {
 
-				int iterationIndex = cboxEqualTo.getSelectedIndex();
+				if (cboxEqualTo.getItemCount() == 0) {
+					// no items in the equal to box
+					error = true;
+					errorString = "Equal To combobox not populatd yet";
+				} else {
 
-				// save the ID of the iteration
-				filter.setValue(iterations.get(iterationIndex).getId());
+					int iterationIndex = cboxEqualTo.getSelectedIndex();
+					// save the ID of the iteration
+					filter.setValue(iterations.get(iterationIndex).getId());
+				}
 
 			} else {
 				if (calEqualTo.getDate() == null) {
 					error = true;
 					errorString = "Date cannot be blank";
+				} else {
+					filter.setValue(calEqualTo.getDate());
 				}
-				filter.setValue(calEqualTo.getDate());
 			}
 			break;
 
 		case PRIORITY:
 
 			if (cboxEqualTo.getSelectedIndex() != -1) {
-				filter.setValue(Priority.getFromString((String) cboxEqualTo
-						.getSelectedItem()));
+				Priority p = Priority.getFromString((String) cboxEqualTo
+						.getSelectedItem());
+				if (p == null) {
+					error = true;
+					errorString = "EqualTo combobox has not updated yet";
+				} else {
+					filter.setValue(p);
+				}
 			}
 			break;
 		case STATUS:
 			if (cboxEqualTo.getSelectedIndex() != -1) {
-				filter.setValue(Status.getFromString((String) cboxEqualTo
-						.getSelectedItem()));
+				Status s = Status.getFromString((String) cboxEqualTo
+						.getSelectedItem());
+				if (s == null) {
+					error = true;
+					errorString = "EqualTo combobox has not updated yet";
+				} else {
+					filter.setValue(s);
+				}
 			}
 			break;
 		case TYPE:
 			if (cboxEqualTo.getSelectedIndex() != -1) {
-				filter.setValue(Type.getFromString((String) cboxEqualTo
-						.getSelectedItem()));
+				Type t = Type.getFromString((String) cboxEqualTo
+						.getSelectedItem());
+				if (t == null) {
+					error = true;
+					errorString = "EqualTo combobox has not updated yet";
+				} else {
+					filter.setValue(t);
+				}
 			}
 			break;
 		}
@@ -732,10 +754,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					&& cboxField.getSelectedItem().equals("Iteration")) {
 				updateEqualsField();
 			}
-		} else if (source.equals(cboxEqualTo)) {
-			if (cboxEqualTo.getSelectedIndex() >= 0) {
-				updateSave();
-			}
 		} else if (source.equals(butSave)) {
 			onSavePressed();
 
@@ -746,6 +764,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cancelEdit();
 			}
 		}
+
+		updateSave();
 
 	}
 
