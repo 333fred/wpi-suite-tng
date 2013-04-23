@@ -4,8 +4,9 @@ body {
 	padding: 0;
 	height: 100%;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-   font-weight: 300;
-   margin-bottom : 20px;
+	font-weight: 300;
+	margin-bottom : 20px;
+   	min-width:800px;
 }
 
 #Centerer {
