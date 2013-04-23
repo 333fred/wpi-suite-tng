@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
@@ -92,16 +94,18 @@ public class DetailATestView extends JPanel {
 					new SaveATestAction(new SaveATestController(makeATestPanel,
 							requirement, parentView, testModel)));
 
+			//testTable.add
+			
 			//Listen for user clicking on acceptance tests
-			/*
-			tests.addListSelectionListener(new ListSelectionListener() {
+			
+			testTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					updateaTestView();
 				} 
 			});
-			*/
+			
 
 			makeATestPanel.getAddATest().setEnabled(false);
 			// Make sure save button is unavailable if name field is empty

@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -101,12 +103,14 @@ public class DetailTaskView extends JPanel {
 							requirement, parentView, taskModel)));
 
 			// Listen for user clicking on tasks
-			/*
-			 * tasks.addListSelectionListener(new ListSelectionListener() {
-			 * 
-			 * @Override public void valueChanged(ListSelectionEvent e) {
-			 * updateTaskView(); } });
-			 */
+
+			taskTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				//
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					updateTaskView();
+				}
+			});
 
 			makeTaskPanel.getAddTask().setEnabled(false);
 			// Make sure save button is unavailable if name field is empty
@@ -168,7 +172,8 @@ public class DetailTaskView extends JPanel {
 				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
-							requirement, parentView, taskModel), taskTable.getSelectedRows()));
+							requirement, parentView, taskModel), taskTable
+							.getSelectedRows()));
 
 			if (taskTable.getSelectedRowCount() == 0) {
 				makeTaskPanel
@@ -254,7 +259,8 @@ public class DetailTaskView extends JPanel {
 				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
-							requirement, parentView,taskModel), taskTable.getSelectedRows()));
+							requirement, parentView, taskModel), taskTable
+							.getSelectedRows()));
 
 			if (taskTable.getSelectedRowCount() == 0) {
 				makeTaskPanel
@@ -310,7 +316,6 @@ public class DetailTaskView extends JPanel {
 		}
 		taskModel.setRowData(taskList);
 	}
-
 
 	/**
 	 * Updates the local display of the current requirement's tasks
