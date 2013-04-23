@@ -72,6 +72,7 @@ public class DetailTaskView extends JPanel {
 		taskTable = new EventTable(taskModel);
 		cellRenderer = new EventCellRenderer();
 
+		taskTable.getTableHeader().setVisible(false);
 		// Add the list to the scroll pane
 		taskScrollPane = new JScrollPane();
 		taskScrollPane.getViewport().add(taskTable);
@@ -83,7 +84,6 @@ public class DetailTaskView extends JPanel {
 		taskPane.add(makeTaskPanel, BorderLayout.SOUTH);
 
 		add(taskPane, BorderLayout.CENTER);
-
 		// adds the tasks to the list model
 		addTasksToList();
 
@@ -100,7 +100,7 @@ public class DetailTaskView extends JPanel {
 			// task)
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
-							requirement, parentView, taskModel)));
+							requirement, parentView, taskTable)));
 
 			// Listen for user clicking on tasks
 
@@ -172,7 +172,7 @@ public class DetailTaskView extends JPanel {
 				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
-							requirement, parentView, taskModel), taskTable
+							requirement, parentView, taskTable), taskTable
 							.getSelectedRows()));
 
 			if (taskTable.getSelectedRowCount() == 0) {
@@ -259,7 +259,7 @@ public class DetailTaskView extends JPanel {
 				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(
 					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
-							requirement, parentView, taskModel), taskTable
+							requirement, parentView, taskTable), taskTable
 							.getSelectedRows()));
 
 			if (taskTable.getSelectedRowCount() == 0) {

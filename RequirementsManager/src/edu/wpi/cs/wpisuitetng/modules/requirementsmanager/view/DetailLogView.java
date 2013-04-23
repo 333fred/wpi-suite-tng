@@ -58,6 +58,8 @@ public class DetailLogView extends JPanel {
 		logTable = new EventTable(logModel);
 		cellRenderer = new EventCellRenderer();
 		
+		
+		logTable.getTableHeader().setVisible(false);
 		// Add the list to the scroll pane
 		logScrollPane = new JScrollPane();
 		logScrollPane.getViewport().add(logTable);
@@ -66,8 +68,8 @@ public class DetailLogView extends JPanel {
 		JPanel logPane = new JPanel();
 		logPane.setLayout(new BorderLayout());
 		logPane.add(logScrollPane, BorderLayout.CENTER);
-
 		add(logPane, BorderLayout.CENTER);
+		
 
 		this.refresh(this.requirement);
 	}

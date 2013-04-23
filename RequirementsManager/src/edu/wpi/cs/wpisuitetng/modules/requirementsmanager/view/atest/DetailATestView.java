@@ -71,6 +71,8 @@ public class DetailATestView extends JPanel {
 		testModel = new EventTableModel(new ArrayList<Event>());
 		testTable = new EventTable(testModel);
 
+		
+		testTable.getTableHeader().setVisible(false);
 		// Add the list to the scroll pane
 		aTestScrollPane = new JScrollPane();
 		aTestScrollPane.getViewport().add(testTable);
@@ -82,7 +84,7 @@ public class DetailATestView extends JPanel {
 		aTestPane.add(makeATestPanel, BorderLayout.SOUTH);
 
 		add(aTestPane, BorderLayout.CENTER);
-
+		
 		// adds the aTests to the list model
 		addaTestsToList();
 		// ,aTests.getSelectedValues()
@@ -92,7 +94,7 @@ public class DetailATestView extends JPanel {
 			// aTest)
 			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
-							requirement, parentView, testModel)));
+							requirement, parentView, testTable)));
 
 			//testTable.add
 			
@@ -164,7 +166,7 @@ public class DetailATestView extends JPanel {
 		if (requirement.getStatus() != Status.DELETED) {
 			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
-							requirement, parentView, testModel), testTable.getSelectedRows()));
+							requirement, parentView, testTable), testTable.getSelectedRows()));
 
 			if (testTable.getSelectedRowCount() == 0) {
 				makeATestPanel

@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
@@ -33,6 +34,7 @@ public class SaveATestController {
 	private final Requirement model;
 	private final DetailPanel parentView;
 	private final EventTableModel testModel;
+	private final EventTable testTable;
 
 	/**
 	 * Construct the controller
@@ -45,11 +47,12 @@ public class SaveATestController {
 	 *            the DetailPanel displaying the current requirement
 	 */
 	public SaveATestController(MakeATestPanel view, Requirement model,
-			DetailPanel parentView, EventTableModel testModel) {
+			DetailPanel parentView, EventTable testTable) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
-		this.testModel = testModel;
+		this.testTable = testTable;
+		this.testModel = (EventTableModel) testTable.getModel();
 	}
 
 	/**
@@ -119,7 +122,7 @@ public class SaveATestController {
 			view.getaTestField().requestFocusInWindow();
 		}
 
-		//this.tests.clearSelection();
+		testTable.clearSelection();
 		view.getaTestStatus()
 				.setText(
 						"No aTests selected. Fill name and description to create a new one.");

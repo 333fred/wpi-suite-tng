@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
 /**
@@ -33,6 +34,7 @@ public class SaveTaskController {
 	private final Requirement model;
 	private final DetailPanel parentView;
 	private final EventTableModel taskModel;
+	private final EventTable taskTable;
 
 	/**
 	 * Construct the controller
@@ -45,11 +47,12 @@ public class SaveTaskController {
 	 *            the DetailPanel displaying the current requirement
 	 */
 	public SaveTaskController(MakeTaskPanel view, Requirement model,
-			DetailPanel parentView, EventTableModel taskModel) {
+			DetailPanel parentView, EventTable taskTable) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
-		this.taskModel = taskModel;
+		this.taskTable = taskTable;
+		this.taskModel = (EventTableModel) taskTable.getModel();
 	}
 
 	/**
@@ -165,7 +168,7 @@ public class SaveTaskController {
 				parentView.getComboBoxStatus().removeItem("Complete");
 		}
 
-		// this.tasks.clearSelection();
+		taskTable.clearSelection();
 		view.getTaskStatus()
 				.setText(
 						"No tasks selected. Fill name and description to create a new one.");
