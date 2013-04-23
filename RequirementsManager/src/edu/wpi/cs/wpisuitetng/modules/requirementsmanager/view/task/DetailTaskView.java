@@ -170,7 +170,7 @@ public class DetailTaskView extends JPanel {
 					new SaveTaskAction(new SaveTaskController(makeTaskPanel,
 							requirement, parentView, taskModel), taskTable.getSelectedRows()));
 
-			if (tasks.getSelectedValues().length == 0) {
+			if (taskTable.getSelectedRowCount() == 0) {
 				makeTaskPanel
 						.getTaskStatus()
 						.setText(

@@ -89,7 +89,7 @@ public class SaveTaskController {
 
 				tempTask.setId(this.model.getTasks().size() + 1);
 				this.model.addTask(tempTask);
-				//parentView.getTaskList().addElement(tempTask);
+				// parentView.getTaskList().addElement(tempTask);
 				taskModel.addEvent(tempTask);
 				view.getTaskName().setText("");
 				view.getTaskField().setText("");
@@ -109,36 +109,36 @@ public class SaveTaskController {
 
 			// Modifying tasks
 			List<Task> selectedTasks = new ArrayList<Task>();
-			
+
 			for (int i : selectedRows) {
-				selectedTasks.add((Task)taskModel.getValueAt(i,0));
+				selectedTasks.add((Task) taskModel.getValueAt(i, 0));
 			}
-			
+
 			for (Task task : selectedTasks) {
-				if (tasks.length == 1) {
+				if (selectedTasks.size() == 1) {
 					// If only one is selected, edit the fields
 					if (taskText.length() > 0 && taskName.length() > 0) {
-						((Task) aTask).setName(view.getTaskName().getText());
-						((Task) aTask).setDescription(view.getTaskField()
+						((Task) task).setName(view.getTaskName().getText());
+						((Task) task).setDescription(view.getTaskField()
 								.getText());
 					}
 
 					if ((view.getUserAssigned().getSelectedItem() == ""))
-						((Task) aTask).setAssignedUser(null);
+						((Task) task).setAssignedUser(null);
 					else
-						((Task) aTask).setAssignedUser((String) view
+						((Task) task).setAssignedUser((String) view
 								.getUserAssigned().getSelectedItem());
 
 					if (taskEstimate != -1) {
 						if (taskEstimate + estimateSum
-								- ((Task) aTask).getEstimate() <= model
+								- ((Task) task).getEstimate() <= model
 									.getEstimate())
-							((Task) aTask).setEstimate(taskEstimate);
+							((Task) task).setEstimate(taskEstimate);
 					}
 
 				}
 				// Check the completion status on the tasks
-				((Task) aTask)
+				((Task) task)
 						.setCompleted(view.getTaskComplete().isSelected());
 			}
 
@@ -153,13 +153,19 @@ public class SaveTaskController {
 			view.getTaskField().setText("");
 			view.getTaskField().requestFocusInWindow();
 		}
+		
+		List<Task> selectedTasks = new ArrayList<Task>();
 
-		for (Object aTask : tasks) {
-			if (!((Task) aTask).isCompleted())
+		for (int i : selectedRows) {
+			selectedTasks.add((Task) taskModel.getValueAt(i, 0));
+		}
+
+		for (Task task : selectedTasks) {
+			if (!((Task) task).isCompleted())
 				parentView.getComboBoxStatus().removeItem("Complete");
 		}
 
-		//this.tasks.clearSelection();
+		// this.tasks.clearSelection();
 		view.getTaskStatus()
 				.setText(
 						"No tasks selected. Fill name and description to create a new one.");
