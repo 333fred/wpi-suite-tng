@@ -592,7 +592,11 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	/** Updates the status of the save button */
 
 	public void updateSave() {
-		if (cboxOperation.getItemCount() == 0) {
+		if (cboxOperation.getItemCount() == 0
+				|| cboxEqualTo.getItemCount() == 0
+				|| calEqualTo.getDate() == null
+				|| calEqualToBetween.getDate() == null) {
+			labSaveError.setText("");
 			return;
 		}
 
@@ -656,6 +660,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 					|| operation == FilterOperation.NOT_EQUAL) {
 
 				int iterationIndex = cboxEqualTo.getSelectedIndex();
+
 				// save the ID of the iteration
 				filter.setValue(iterations.get(iterationIndex).getId());
 
@@ -697,8 +702,8 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		 * cboxOperation.getSelectedItem());
 		 */
 
-		
-		if (!error && checkFilter.getValue() != null && isFilterDuplicate(checkFilter)) {
+		if (!error && checkFilter.getValue() != null
+				&& isFilterDuplicate(checkFilter)) {
 			error = true;
 			errorString = "Similar filter already exists";
 		}
@@ -719,7 +724,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		updateSave();
 		if (source.equals(cboxField)) {
 			populateOperationComboBox();
 			updateEqualsField();
@@ -727,6 +731,10 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			if (cboxOperation.getItemCount() != 0
 					&& cboxField.getSelectedItem().equals("Iteration")) {
 				updateEqualsField();
+			}
+		} else if (source.equals(cboxEqualTo)) {
+			if (cboxEqualTo.getSelectedIndex() >= 0) {
+				updateSave();
 			}
 		} else if (source.equals(butSave)) {
 			onSavePressed();
@@ -738,6 +746,7 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				cancelEdit();
 			}
 		}
+
 	}
 
 	private void updateIterations() {

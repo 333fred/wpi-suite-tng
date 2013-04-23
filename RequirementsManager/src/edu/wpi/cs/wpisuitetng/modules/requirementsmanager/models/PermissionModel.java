@@ -59,7 +59,7 @@ public class PermissionModel extends AbstractModel implements Comparable {
 	 */
 	public PermissionModel() {
 		this.user = null;
-		this.permLevel = UserPermissionLevel.NONE;
+		this.permLevel = UserPermissionLevel.OBSERVE;
 		this.setId(-1);
 	}
 

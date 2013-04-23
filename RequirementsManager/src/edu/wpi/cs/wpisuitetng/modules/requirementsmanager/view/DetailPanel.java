@@ -268,7 +268,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel,
 				eventPane);
 		add(splitPane);
-		splitPane.setResizeWeight(0.5);
+		splitPane.setResizeWeight(0.75);
 	}
 
 	/**
