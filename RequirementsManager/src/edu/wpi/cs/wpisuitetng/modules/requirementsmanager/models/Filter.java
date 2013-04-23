@@ -89,8 +89,9 @@ public class Filter extends AbstractModel {
 		setDeleted(false);
 	}
 
-	public Filter(int id, FilterField field, FilterOperation operation,
+	public Filter(String user, int id, FilterField field, FilterOperation operation,
 			Object value, String stringValue) {
+		this.creator = user;
 		this.id = id;
 		this.field = field;
 		this.operation = operation;
@@ -502,7 +503,7 @@ public class Filter extends AbstractModel {
 	}
 	
 	public Filter clone() {
-		return new Filter(getId(),getField(), getOperation(), getValue(), getStringValue());
+		return new Filter(getCreator(), getId(),getField(), getOperation(), getValue(), getStringValue());
 	}
 
 }
