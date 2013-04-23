@@ -79,8 +79,8 @@ public class FilterTest {
 	Filter f38;
 	Filter f39;
 	Filter f40;
-	User u1;
-	User u2;
+	User u1 = new User("user", "user1", "password", 0);
+	User u2 = new User("user", "user2", "password", 1);
 	Requirement r1;
 	Requirement r2;
 	Requirement r3;
@@ -484,7 +484,7 @@ public class FilterTest {
 		String json = f1.toJSON();
 		Filter newFilter = Filter.fromJSON(json);
 		newFilter.setCreator(u2.getUsername());
-		assertEquals(u2, newFilter.getCreator());
+		assertEquals("user2", newFilter.getCreator());
 		newFilter.setField(FilterField.ITERATION);
 		assertEquals(FilterField.ITERATION, newFilter.getField());
 		newFilter.setOperation(FilterOperation.OCCURS_AFTER);
