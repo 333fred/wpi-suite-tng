@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.Requiremen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
@@ -62,6 +63,8 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
+		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
+			return false;
 		if (!support.isDrop()) {
 			return false;
 		}		
