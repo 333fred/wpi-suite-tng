@@ -18,10 +18,6 @@ import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
-import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
-import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
-import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
-import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
@@ -43,8 +39,7 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * of the StringListModel
 	 */
 	@Override
-	public StringListModel makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
+	public StringListModel makeEntity(Session s, String content) {
 		// Get all users, loop through the array and add all their names to the
 		// list, then return a new model with the list
 		List<String> users = new ArrayList<String>();
@@ -65,8 +60,7 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * save anything for this in the db
 	 */
 	@Override
-	public StringListModel[] getEntity(Session s, String id)
-			throws NotFoundException, WPISuiteException {
+	public StringListModel[] getEntity(Session s, String id) {
 		StringListModel[] array = { new StringListModel() };
 		return array;
 	}
@@ -76,11 +70,11 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * array with a blank model
 	 */
 	@Override
-	public StringListModel[] getAll(Session s) throws WPISuiteException {
+	public StringListModel[] getAll(Session s) {
 		List<User> userList = Arrays.asList(s.getProject().getTeam());
 		StringListModel model = new StringListModel();
 		List<String> names = new ArrayList<String>();
-		for (User u:userList) {
+		for (User u : userList) {
 			names.add(u.getUsername());
 		}
 		model.setUsers(names);
@@ -93,8 +87,7 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * of the StringListModel
 	 */
 	@Override
-	public StringListModel update(Session s, String content)
-			throws WPISuiteException {
+	public StringListModel update(Session s, String content) {
 		List<String> users = new ArrayList<String>();
 		List<User> userList = Arrays.asList(s.getProject().getTeam());
 		if (userList.get(0) == null) {
@@ -112,7 +105,7 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * We don't store anything in the database, so we don't do anything here
 	 */
 	@Override
-	public void save(Session s, StringListModel model) throws WPISuiteException {
+	public void save(Session s, StringListModel model) {
 
 	}
 
@@ -120,19 +113,18 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * We don't store anything in the database, so we don't do anything here
 	 */
 	@Override
-	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
+	public boolean deleteEntity(Session s, String id) {
 		return true;
 	}
 
 	@Override
-	public String advancedGet(Session s, String[] args)
-			throws WPISuiteException {
+	public String advancedGet(Session s, String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteAll(Session s) throws WPISuiteException {
+	public void deleteAll(Session s) {
 		// TODO Auto-generated method stub
 
 	}
@@ -141,20 +133,18 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	 * We don't store anything in the database, so return 0
 	 */
 	@Override
-	public int Count() throws WPISuiteException {
+	public int Count() {
 		return 0;
 	}
 
 	@Override
-	public String advancedPut(Session s, String[] args, String content)
-			throws WPISuiteException {
+	public String advancedPut(Session s, String[] args, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String advancedPost(Session s, String string, String content)
-			throws WPISuiteException {
+	public String advancedPost(Session s, String string, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}

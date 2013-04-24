@@ -174,8 +174,9 @@ public class Iteration extends AbstractModel {
 
 		// first check if the requirement is already on here
 		for (Integer id : this.requirements) {
-			if (id == rUID)
+			if (id == rUID) {
 				return; // if it is we are already done
+			}
 		}
 		this.requirements.add(rUID);
 	}
@@ -190,8 +191,9 @@ public class Iteration extends AbstractModel {
 
 		Iterator<Integer> iter = this.requirements.iterator();
 		while (iter.hasNext()) {
-			if (iter.next() == rUID)
+			if (iter.next() == rUID) {
 				iter.remove();
+			}
 		}
 	}
 

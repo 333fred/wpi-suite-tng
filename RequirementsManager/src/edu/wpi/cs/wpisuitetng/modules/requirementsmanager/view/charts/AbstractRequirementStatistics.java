@@ -1,15 +1,15 @@
 /*******************************************************************************
-* Copyright (c) 2013 -- WPI Suite: Team Swagasarus
-*
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-*	Alex Gorowara
-*	Steven Kordell
-*******************************************************************************/
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *	Alex Gorowara
+ *	Steven Kordell
+ *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
@@ -28,57 +28,63 @@ import org.jfree.data.general.PieDataset;
 
 public abstract class AbstractRequirementStatistics {
 
-Map<String, Integer> data;
+	Map<String, Integer> data;
 
-public AbstractRequirementStatistics(){
-	this.data = new HashMap<String, Integer>();
-	this.update();
-}
+	protected AbstractRequirementStatistics() {
+		this.data = new HashMap<String, Integer>();
+		this.update();
+	}
 
-/**
-* method to force reacquisition of data
-*/
+	/**
+	 * method to force reacquisition of data
+	 */
 	public abstract void update();
 
-	public PieDataset toPieDataset(){
+	public PieDataset toPieDataset() {
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
-		for(String key : data.keySet()){
-			if (this.data.get(key) != 0) {//remove zero elements		
+		for (String key : data.keySet()) {
+			if (this.data.get(key) != 0) {// remove zero elements
 				pieDataset.setValue(key, data.get(key));
 			}
 		}
 		return pieDataset;
 	}
 
-	public CategoryDataset toCategoryDataset(String category){
+	public CategoryDataset toCategoryDataset(String category) {
 		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
-		for(String key : data.keySet()){
+		for (String key : data.keySet()) {
 			categoryDataset.setValue(data.get(key), category, key);
 		}
-		return categoryDataset;		
+		return categoryDataset;
 	}
-	
+
 	public abstract JFreeChart buildPieChart();
 
 	public abstract JFreeChart buildBarChart();
-	
-	public abstract JFreeChart buildLineChart();
-	
 
-	protected JFreeChart buildPieChart(String title){
-		return ChartFactory.createPieChart3D(title, this.toPieDataset(), true, false, false);
+	public abstract JFreeChart buildLineChart();
+
+	protected JFreeChart buildPieChart(String title) {
+		return ChartFactory.createPieChart3D(title, this.toPieDataset(), true,
+				false, false);
 	}
 
-	protected JFreeChart buildBarChart(String title, String category,String axisLabel){
-		JFreeChart chart = ChartFactory.createBarChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, true, false, false);		
+	protected JFreeChart buildBarChart(String title, String category,
+			String axisLabel) {
+		JFreeChart chart = ChartFactory.createBarChart(title, category,
+				axisLabel, this.toCategoryDataset(category),
+				PlotOrientation.VERTICAL, true, false, false);
 		CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
 		NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());		
+		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		return chart;
 	}
-	
-	protected JFreeChart buildLineChart(String title, String category, String axisLabel){
-		JFreeChart chart = ChartFactory.createLineChart(title, category, axisLabel, this.toCategoryDataset(category), PlotOrientation.VERTICAL, false, false, false);
+
+	protected JFreeChart buildLineChart(String title, String category,
+			String axisLabel) {
+		JFreeChart chart = ChartFactory.createLineChart(title, category,
+				axisLabel, this.toCategoryDataset(category),
+				PlotOrientation.VERTICAL, false, false, false);
 		CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
 		NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
 		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

@@ -642,8 +642,9 @@ public class Requirement extends AbstractModel {
 	public boolean testsPassed() {
 		for (ATest t : this.aTests) {
 			if (t.getStatus() == ATest.ATestStatus.FAILED
-					|| t.getStatus() == ATest.ATestStatus.BLANK)
+					|| t.getStatus() == ATest.ATestStatus.BLANK) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -680,8 +681,9 @@ public class Requirement extends AbstractModel {
 	 */
 	public boolean tasksCompleted() {
 		for (Task t : this.tasks) {
-			if (!t.isCompleted())
+			if (!t.isCompleted()) {
 				return false;
+			}
 		}
 		return true;
 	}

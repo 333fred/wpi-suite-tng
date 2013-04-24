@@ -320,7 +320,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		 * 
 		 * @param view
 		 */
-		public SaveAction(IterationView view) {
+		private SaveAction(IterationView view) {
 			this.view = view;
 		}
 

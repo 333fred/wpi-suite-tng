@@ -59,7 +59,7 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 */
 	@Override
 	public Requirement makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
+			throws BadRequestException, WPISuiteException {
 
 		final Requirement newRequirement = Requirement.fromJSON(content);
 
@@ -209,22 +209,22 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		// Save the iteration values
 		int oldIteration = oldReq.getIteration();
 		int newIteration = updatedRequirement.getIteration();
-		
-//		if (updatedRequirement.getStatus() == Status.DELETED){
-//			Integer parentID = updatedRequirement.getpUID().get(0);
-//			Integer reqID = updatedRequirement.getrUID();
-//			try {
-//				Requirement parent;
-//				parent = getRequirement(parentID,s);
-//				parent.removeSubRequirement(reqID);
-//				update(s,parent.toJSON());
-//				updatedRequirement.removePUID(parentID);
-//			} catch (RequirementNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		
+
+		// if (updatedRequirement.getStatus() == Status.DELETED){
+		// Integer parentID = updatedRequirement.getpUID().get(0);
+		// Integer reqID = updatedRequirement.getrUID();
+		// try {
+		// Requirement parent;
+		// parent = getRequirement(parentID,s);
+		// parent.removeSubRequirement(reqID);
+		// update(s,parent.toJSON());
+		// updatedRequirement.removePUID(parentID);
+		// } catch (RequirementNotFoundException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+
 		// Copy values from the new requirement to the old requirement
 		updateMapper.map(updatedRequirement, oldReq, callback);
 
@@ -289,40 +289,36 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	 *             if there was a lookup error
 	 */
 	private int getId(Session s) throws WPISuiteException {
-		try {
-			IdManager idManager;
-			if (db.retrieve(IdManager.class, "type", "requirement",
-					s.getProject()).size() != 0) {
-				idManager = db.retrieve(IdManager.class, "type", "requirement",
-						s.getProject()).toArray(new IdManager[0])[0];
-			} else {
-				idManager = new IdManager("requirement");
-			}
-			int id = idManager.getNextId();
-			if (!db.save(idManager, s.getProject())) {
-				throw new WPISuiteException();
-			}
-			return id;
-		} catch (WPISuiteException ex) {
-			throw ex;
+		IdManager idManager;
+		if (db.retrieve(IdManager.class, "type", "requirement", s.getProject())
+				.size() != 0) {
+			idManager = db.retrieve(IdManager.class, "type", "requirement",
+					s.getProject()).toArray(new IdManager[0])[0];
+		} else {
+			idManager = new IdManager("requirement");
 		}
+		int id = idManager.getNextId();
+		if (!db.save(idManager, s.getProject())) {
+			throw new WPISuiteException();
+		}
+		return id;
 	}
 
 	@Override
 	public String advancedGet(Session s, String[] args)
-			throws WPISuiteException {
+			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
-			throws WPISuiteException {
+			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
 	@Override
 	public String advancedPost(Session s, String string, String content)
-			throws WPISuiteException {
+			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 

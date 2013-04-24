@@ -21,7 +21,7 @@ import javax.swing.AbstractAction;
  */
 @SuppressWarnings("serial")
 public class SaveNoteAction extends AbstractAction {
-	public final SaveNoteController controller;
+	private final SaveNoteController controller;
 
 	/**
 	 * Construct the action

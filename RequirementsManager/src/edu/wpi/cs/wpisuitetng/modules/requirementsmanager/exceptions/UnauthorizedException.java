@@ -16,8 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
 
 public class UnauthorizedException extends Exception {
 
-	public UserPermissionLevel required;
-	public UserPermissionLevel have;
+	private UserPermissionLevel required;
+	private UserPermissionLevel have;
 
 	/**
 	 * Creates an exception with the current permissions and the necessary

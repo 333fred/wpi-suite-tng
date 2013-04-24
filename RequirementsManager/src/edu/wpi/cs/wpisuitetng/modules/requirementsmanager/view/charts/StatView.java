@@ -129,7 +129,7 @@ public class StatView extends Tab implements ActionListener,
 		group.add(makePieRadio);
 		group.add(makeBarRadio);
 		group.add(makeLineRadio);
-		setSelectedItems();
+		updateSelectedItems();
 
 		JPanel radioPanel = new JPanel(new GridLayout(3, 1));
 		radioPanel.add(makePieRadio);
@@ -275,7 +275,7 @@ public class StatView extends Tab implements ActionListener,
 	}
 
 	// public for testing purposes
-	public void setSelectedItems() {
+	public void updateSelectedItems() {
 		// set the chart type radio buttons
 		switch (chartType) {
 		case PIE:

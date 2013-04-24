@@ -129,8 +129,8 @@ public class JanewayModule implements IJanewayModule {
 		tabs.add(tab1);
 
 		registerKeyboardShortcuts(tab1);
-		
-		//set the color of disabled combo boxes
+
+		// set the color of disabled combo boxes
 		UIManager.put("ComboBox.disabledForeground", Color.BLACK);
 	}
 

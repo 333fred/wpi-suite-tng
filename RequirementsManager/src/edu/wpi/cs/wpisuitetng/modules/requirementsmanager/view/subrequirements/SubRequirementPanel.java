@@ -74,8 +74,8 @@ public class SubRequirementPanel extends JPanel {
 	private JButton removeChild; // Buttons to remove child or parent
 	private JButton removeParent;
 
-	public Boolean parentSelected; // Boolean for which radio button is selected
-	public Boolean panelDisabled;
+	private boolean parentSelected; // Boolean for which radio button is selected
+	private boolean panelDisabled;
 
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {
 
@@ -575,4 +575,34 @@ if(!panelDisabled){ //Enable the button if the panel is not disabled
 			topReqNames.setEnabled(false);
 		}
 	}
+
+	/**
+	 * @return the parentSelected
+	 */
+	public boolean isParentSelected() {
+		return parentSelected;
+	}
+
+	/**
+	 * @param parentSelected the parentSelected to set
+	 */
+	public void setParentSelected(boolean parentSelected) {
+		this.parentSelected = parentSelected;
+	}
+
+	/**
+	 * @return the panelDisabled
+	 */
+	public boolean isPanelDisabled() {
+		return panelDisabled;
+	}
+
+	/**
+	 * @param panelDisabled the panelDisabled to set
+	 */
+	public void setPanelDisabled(boolean panelDisabled) {
+		this.panelDisabled = panelDisabled;
+	}
+	
+	
 }

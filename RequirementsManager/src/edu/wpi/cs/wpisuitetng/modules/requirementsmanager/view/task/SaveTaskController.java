@@ -139,7 +139,7 @@ public class SaveTaskController {
 
 				}
 				// Check the completion status on the tasks
-				((Task) task).setCompleted(view.getTaskComplete().isSelected());
+				task.setCompleted(view.getTaskComplete().isSelected());
 			}
 
 			// Save to requirement!
@@ -161,7 +161,7 @@ public class SaveTaskController {
 		}
 
 		for (Task task : selectedTasks) {
-			if (!((Task) task).isCompleted())
+			if (!task.isCompleted())
 				parentView.getComboBoxStatus().removeItem("Complete");
 		}
 

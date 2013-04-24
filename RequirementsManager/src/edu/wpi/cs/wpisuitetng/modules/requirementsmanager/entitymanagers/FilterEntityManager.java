@@ -18,7 +18,6 @@ import java.util.List;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
-import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
@@ -55,7 +54,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	@Override
 	public Filter makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
+			throws BadRequestException, WPISuiteException {
 
 		Filter newFilter = Filter.fromJSON(content);
 
@@ -87,8 +86,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Filter[] getEntity(Session s, String id) throws NotFoundException,
-			WPISuiteException {
+	public Filter[] getEntity(Session s, String id) throws NotFoundException {
 
 		// Attempt to get the filter id
 		final int filterId = Integer.parseInt(id);
@@ -141,7 +139,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Filter[] getAll(Session s) throws WPISuiteException {
+	public Filter[] getAll(Session s) {
 		List<Model> models = db.retrieveAll(new Filter(), s.getProject());
 		List<Filter> filters = new ArrayList<Filter>();
 
@@ -204,7 +202,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Session s, Filter model) throws WPISuiteException {
+	public void save(Session s, Filter model) {
 		db.save(model, s.getProject());
 	}
 
@@ -265,31 +263,28 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 *             if there was a lookup error
 	 */
 	private int getId(Session s) throws WPISuiteException {
-		try {
-			IdManager idManager;
-			if (db.retrieve(IdManager.class, "type", "filter", s.getProject())
-					.size() != 0) {
-				idManager = db.retrieve(IdManager.class, "type", "filter",
-						s.getProject()).toArray(new IdManager[0])[0];
-			} else {
-				idManager = new IdManager("filter");
-			}
-			int id = idManager.getNextId();
-			if (!db.save(idManager, s.getProject())) {
-				throw new WPISuiteException();
-			}
-			return id;
-		} catch (WPISuiteException ex) {
-			throw ex;
+
+		IdManager idManager;
+		if (db.retrieve(IdManager.class, "type", "filter", s.getProject())
+				.size() != 0) {
+			idManager = db.retrieve(IdManager.class, "type", "filter",
+					s.getProject()).toArray(new IdManager[0])[0];
+		} else {
+			idManager = new IdManager("filter");
 		}
+		int id = idManager.getNextId();
+		if (!db.save(idManager, s.getProject())) {
+			throw new WPISuiteException();
+		}
+		return id;
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String advancedGet(Session s, String[] args)
-			throws WPISuiteException {
+	public String advancedGet(Session s, String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -298,7 +293,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int Count() throws WPISuiteException {
+	public int Count() {
 		return db.retrieveAll(new Filter()).size();
 	}
 
@@ -306,8 +301,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String advancedPut(Session s, String[] args, String content)
-			throws WPISuiteException {
+	public String advancedPut(Session s, String[] args, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -316,8 +310,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String advancedPost(Session s, String string, String content)
-			throws WPISuiteException {
+	public String advancedPost(Session s, String string, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}

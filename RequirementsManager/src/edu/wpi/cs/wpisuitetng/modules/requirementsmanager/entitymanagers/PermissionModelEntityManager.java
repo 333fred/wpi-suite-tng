@@ -52,7 +52,7 @@ public class PermissionModelEntityManager implements
 	 */
 	@Override
 	public PermissionModel makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
+			throws BadRequestException, WPISuiteException {
 
 		// The user already has permissions assigned to them, so there's been a
 		// problem. Throw a bad request
@@ -83,7 +83,7 @@ public class PermissionModelEntityManager implements
 	 */
 	@Override
 	public PermissionModel[] getEntity(Session s, String id)
-			throws NotFoundException, WPISuiteException {
+			throws WPISuiteException {
 		try {
 			// Attempt to make permissions for the user
 			PermissionModel[] perms = { makeEntity(s, "") };
@@ -100,12 +100,12 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PermissionModel[] getAll(Session s) throws WPISuiteException {
+	public PermissionModel[] getAll(Session s) {
 		PermissionModel model;
-		for(User u: s.getProject().getTeam()) {
-			if(u != null) {
+		for (User u : s.getProject().getTeam()) {
+			if (u != null) {
 				System.out.println(u);
-				if(!modelExists(s, u.getIdNum())) {
+				if (!modelExists(s, u.getIdNum())) {
 					model = new PermissionModel();
 					model.setUser(u);
 					model.setId(u.getIdNum());
@@ -113,7 +113,7 @@ public class PermissionModelEntityManager implements
 				}
 			}
 		}
-		if(!modelExists(s, s.getProject().getOwner().getIdNum())) {
+		if (!modelExists(s, s.getProject().getOwner().getIdNum())) {
 			model = new PermissionModel();
 			model.setUser(s.getProject().getOwner());
 			model.setId(s.getProject().getOwner().getIdNum());
@@ -150,7 +150,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Session s, PermissionModel model) throws WPISuiteException {
+	public void save(Session s, PermissionModel model) {
 		// TODO Auto-generated method stub
 
 	}
@@ -159,7 +159,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
+	public boolean deleteEntity(Session s, String id) {
 		// Cannot delete permissions, that would be insecure
 		return false;
 	}
@@ -168,8 +168,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String advancedGet(Session s, String[] args)
-			throws WPISuiteException {
+	public String advancedGet(Session s, String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -178,7 +177,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void deleteAll(Session s) throws WPISuiteException {
+	public void deleteAll(Session s) {
 		// Cannot delete permissions, that would be insecure
 
 	}
@@ -187,7 +186,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int Count() throws WPISuiteException {
+	public int Count() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -196,8 +195,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String advancedPut(Session s, String[] args, String content)
-			throws WPISuiteException {
+	public String advancedPut(Session s, String[] args, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -206,8 +204,7 @@ public class PermissionModelEntityManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String advancedPost(Session s, String string, String content)
-			throws WPISuiteException {
+	public String advancedPost(Session s, String string, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -224,8 +221,8 @@ public class PermissionModelEntityManager implements
 	 */
 	private boolean modelExists(Session s, int id) {
 		try {
-			if (db.retrieve(PermissionModel.class, "id", id,
-					s.getProject()).toArray(new PermissionModel[0]).length != 0) {
+			if (db.retrieve(PermissionModel.class, "id", id, s.getProject())
+					.toArray(new PermissionModel[0]).length != 0) {
 				return true;
 			}
 			return false;

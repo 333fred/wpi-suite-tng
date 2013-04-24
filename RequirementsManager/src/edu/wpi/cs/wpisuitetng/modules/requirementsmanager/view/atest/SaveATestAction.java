@@ -23,7 +23,7 @@ import javax.swing.AbstractAction;
  */
 @SuppressWarnings("serial")
 public class SaveATestAction extends AbstractAction {
-	public final SaveATestController controller;
+	private final SaveATestController controller;
 	private int[] selectedRows;
 
 	/**

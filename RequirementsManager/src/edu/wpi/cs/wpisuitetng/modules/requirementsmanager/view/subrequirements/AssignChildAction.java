@@ -21,7 +21,7 @@ import javax.swing.AbstractAction;
  */
 @SuppressWarnings("serial")
 public class AssignChildAction extends AbstractAction {
-	public final AssignChildController controller;
+	private final AssignChildController controller;
 
 	/**
 	 * Construct the action

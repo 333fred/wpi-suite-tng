@@ -53,7 +53,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 */
 	@Override
 	public Iteration makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
+			throws BadRequestException, WPISuiteException {
 
 		// Get the iteration from JSON
 		final Iteration newIteration = Iteration.fromJSON(content);
@@ -85,8 +85,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Iteration[] getEntity(Session s, String id)
-			throws NotFoundException, WPISuiteException {
+	public Iteration[] getEntity(Session s, String id) throws NotFoundException {
 
 		final int intId = Integer.parseInt(id);
 		if (intId < 1) {
@@ -271,7 +270,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Session s, Iteration model) throws WPISuiteException {
+	public void save(Session s, Iteration model) {
 		db.save(model, s.getProject());
 	}
 
@@ -297,7 +296,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int Count() throws WPISuiteException {
+	public int Count() {
 		// Retrieve all from this project
 		return db.retrieveAll(new Iteration()).size();
 	}
@@ -331,42 +330,37 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *             if there was a lookup error
 	 */
 	private int getId(Session s) throws WPISuiteException {
-		try {
-			IdManager idManager;
-			if (db.retrieve(IdManager.class, "type", "iteration",
-					s.getProject()).size() != 0) {
-				idManager = db.retrieve(IdManager.class, "type", "iteration",
-						s.getProject()).toArray(new IdManager[0])[0];
-			} else {
-				idManager = new IdManager("iteration");
-			}
-			int id = idManager.getNextId();
-			if (!db.save(idManager, s.getProject())) {
-				throw new WPISuiteException();
-			}
-			return id;
-		} catch (WPISuiteException ex) {
-			throw ex;
+
+		IdManager idManager;
+		if (db.retrieve(IdManager.class, "type", "iteration", s.getProject())
+				.size() != 0) {
+			idManager = db.retrieve(IdManager.class, "type", "iteration",
+					s.getProject()).toArray(new IdManager[0])[0];
+		} else {
+			idManager = new IdManager("iteration");
 		}
+		int id = idManager.getNextId();
+		if (!db.save(idManager, s.getProject())) {
+			throw new WPISuiteException();
+		}
+		return id;
+
 	}
 
 	@Override
-	public String advancedPut(Session s, String[] args, String content)
-			throws WPISuiteException {
+	public String advancedPut(Session s, String[] args, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String advancedPost(Session s, String string, String content)
-			throws WPISuiteException {
+	public String advancedPost(Session s, String string, String content) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String advancedGet(Session s, String[] args)
-			throws WPISuiteException {
+	public String advancedGet(Session s, String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}

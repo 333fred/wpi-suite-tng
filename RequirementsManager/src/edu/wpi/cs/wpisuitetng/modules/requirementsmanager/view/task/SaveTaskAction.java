@@ -23,7 +23,7 @@ import javax.swing.AbstractAction;
  */
 @SuppressWarnings("serial")
 public class SaveTaskAction extends AbstractAction {
-	public final SaveTaskController controller;
+	private final SaveTaskController controller;
 	private int[] selectedRows;
 
 	/**

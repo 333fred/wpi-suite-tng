@@ -81,8 +81,9 @@ public class PermissionToolbarPane extends JPanel {
 			if (!(usr.getName() == null)) {
 				userName.setText(usr.getName());
 			}
-		} else
+		} else {
 			userName.setText("User is NULL");
+		}
 		permissionLabel.setText("your current permission is: ");
 		userLevel.setText(PermissionModel.getInstance().getPermLevel()
 				.toString());
@@ -134,7 +135,7 @@ public class PermissionToolbarPane extends JPanel {
 			RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
 			PermissionModelController controller = new PermissionModelController();
 			controller.getAll(observer);
-			
+
 		} else {
 			createPermissions.setEnabled(false);
 		}
@@ -154,8 +155,11 @@ public class PermissionToolbarPane extends JPanel {
 	 * @return The width of the widest label
 	 */
 	public double getLabelWidth() {
-		return Math.max((permissionLabel.getPreferredSize().getWidth() + userLevel.getPreferredSize().getWidth()),
-				(nameLabel.getPreferredSize().getWidth() + userName.getPreferredSize().getWidth()));
+		return Math.max(
+				(permissionLabel.getPreferredSize().getWidth() + userLevel
+						.getPreferredSize().getWidth()), (nameLabel
+						.getPreferredSize().getWidth() + userName
+						.getPreferredSize().getWidth()));
 	}
 
 }

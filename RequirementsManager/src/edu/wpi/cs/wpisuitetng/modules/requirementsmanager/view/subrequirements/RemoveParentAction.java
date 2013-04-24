@@ -21,7 +21,7 @@ import javax.swing.AbstractAction;
  */
 @SuppressWarnings("serial")
 public class RemoveParentAction extends AbstractAction {
-	public final RemoveParentController controller;
+	private final RemoveParentController controller;
 
 	/**
 	 * Construct the action
