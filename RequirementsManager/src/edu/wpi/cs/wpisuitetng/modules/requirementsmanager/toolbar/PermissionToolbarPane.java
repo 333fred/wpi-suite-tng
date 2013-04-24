@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric, Alex Woodyard, Conor Geary
+ *    @author Alex Woodyard
+ *    @author Jason Whitehouse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
@@ -25,6 +26,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllPermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
+/**
+ * Toolbar panel used to edit permissions
+ */
 public class PermissionToolbarPane extends JPanel {
 
 	private static PermissionToolbarPane singleton;

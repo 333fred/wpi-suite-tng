@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		@author Alex Gorowara, Alex Woodyard
+ *		@author Alex Gorowara
+ *		@author Alex Woodyard
  ********************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
