@@ -57,6 +57,9 @@ public class MakeATestPanel extends JPanel {
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane aTestFieldPane;
+	
+	//The view of the associated requirement
+	private DetailPanel parentView;
 
 	/**
 	 * Construct the panel, add and layout components.
@@ -69,6 +72,7 @@ public class MakeATestPanel extends JPanel {
 	 */
 	public MakeATestPanel(Requirement model, DetailPanel parentView) {
 
+		this.parentView = parentView;
 		//setup the aTest name field
 		aTestName = new JTextArea(1, 40);
 		aTestName.setLineWrap(true);
@@ -219,8 +223,9 @@ public class MakeATestPanel extends JPanel {
 	public void setInputEnabled(boolean value) {
 		aTestDescription.setEnabled(value);
 		addaTest.setEnabled(value);
+		aTestName.setEnabled(value);
 		if (value) {
-			addaTestLabel.setForeground(Color.black);
+			addaTestLabel.setForeground(Color.black);			
 		} else {
 			addaTestLabel.setForeground(Color.gray);
 		}

@@ -74,34 +74,34 @@ public class SubRequirementPanel extends JPanel {
 	private JButton removeParent;
 
 	public Boolean parentSelected;
+	private boolean panelDisabled;
 
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {
 
-		this.requirement = requirement;		
+		this.requirement = requirement;
 		this.panel = panel;
 
 		parentSelected = false;
 
 		validChildList = new DefaultListModel();
 		// initializeList();
-		//addValidChildren();
+		// addValidChildren();
 		bottomReqNames = new JList();
 
 		childrenList = new DefaultListModel();
-		//initializeTopList(requirement);
-		//topReqNames = new JList(childrenList);
+		// initializeTopList(requirement);
+		// topReqNames = new JList(childrenList);
 		topReqNames = new JList();
 
 		validParentList = new DefaultListModel();
-		//addValidParents();
+		// addValidParents();
 
 		editSubReqPanel = new JPanel();
-		editSubReqPanel.setBorder(BorderFactory.createTitledBorder("Add to SubRequirement Hierarchy"));
-
+		editSubReqPanel.setBorder(BorderFactory
+				.createTitledBorder("Add to SubRequirement Hierarchy"));
 
 		SpringLayout layout = new SpringLayout();
 		SpringLayout subreqPanelLayout = new SpringLayout();
-
 
 		addReq = new JButton("Add");
 		removeChild = new JButton("Remove Children");
@@ -135,13 +135,13 @@ public class SubRequirementPanel extends JPanel {
 		topScrollPane = new JScrollPane();
 		topScrollPane.setViewportView(topReqNames);
 		topScrollPane
-		.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		topScrollPane.setBorder(BorderFactory.createEtchedBorder());
 
 		bottomScrollPane = new JScrollPane();
 		bottomScrollPane.setViewportView(bottomReqNames);
 		bottomScrollPane
-		.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		bottomScrollPane.setBorder(BorderFactory.createEtchedBorder());
 
 		layout.putConstraint(SpringLayout.NORTH, parentLabel, 5,
@@ -176,8 +176,10 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, removeParent, 5,
 				SpringLayout.EAST, removeChild);
 
-		layout.putConstraint(SpringLayout.NORTH, editSubReqPanel, 10, SpringLayout.SOUTH, removeChild);
-		layout.putConstraint(SpringLayout.SOUTH, editSubReqPanel, -1, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.NORTH, editSubReqPanel, 10,
+				SpringLayout.SOUTH, removeChild);
+		layout.putConstraint(SpringLayout.SOUTH, editSubReqPanel, -1,
+				SpringLayout.SOUTH, this);
 		layout.putConstraint(SpringLayout.WIDTH, editSubReqPanel, -1,
 				SpringLayout.WIDTH, this);
 
@@ -191,23 +193,19 @@ public class SubRequirementPanel extends JPanel {
 		subreqPanelLayout.putConstraint(SpringLayout.WEST, radioParent, 5,
 				SpringLayout.EAST, radioChild);
 
-		subreqPanelLayout.putConstraint(SpringLayout.NORTH, bottomScrollPane, 5,
-				SpringLayout.SOUTH, radioParent);
-		subreqPanelLayout.putConstraint(SpringLayout.WEST, bottomScrollPane, 13,
-				SpringLayout.EAST, childLabel);
-		subreqPanelLayout.putConstraint(SpringLayout.EAST, bottomScrollPane, -56,
-				SpringLayout.EAST, editSubReqPanel);
+		subreqPanelLayout.putConstraint(SpringLayout.NORTH, bottomScrollPane,
+				5, SpringLayout.SOUTH, radioParent);
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, bottomScrollPane,
+				13, SpringLayout.EAST, childLabel);
+		subreqPanelLayout.putConstraint(SpringLayout.EAST, bottomScrollPane,
+				-56, SpringLayout.EAST, editSubReqPanel);
 
-		subreqPanelLayout.putConstraint(SpringLayout.NORTH, addReq, 5, SpringLayout.SOUTH,
-				bottomScrollPane);
-		subreqPanelLayout.putConstraint(SpringLayout.WEST, addReq, 16, SpringLayout.WEST,
-				editSubReqPanel);
-		subreqPanelLayout.putConstraint(SpringLayout.EAST, addReq, 0, SpringLayout.EAST,
-				removeChild);
-
-
-
-
+		subreqPanelLayout.putConstraint(SpringLayout.NORTH, addReq, 5,
+				SpringLayout.SOUTH, bottomScrollPane);
+		subreqPanelLayout.putConstraint(SpringLayout.WEST, addReq, 16,
+				SpringLayout.WEST, editSubReqPanel);
+		subreqPanelLayout.putConstraint(SpringLayout.EAST, addReq, 0,
+				SpringLayout.EAST, removeChild);
 
 		this.setLayout(layout);
 		editSubReqPanel.setLayout(subreqPanelLayout);
@@ -226,13 +224,13 @@ public class SubRequirementPanel extends JPanel {
 
 		this.add(editSubReqPanel);
 
-
 		// Do other things here
-		if(requirement.getStatus()!=Status.DELETED&&requirement.getStatus()!=Status.COMPLETE){
-			removeChild.setAction(new RemoveChildAction(new RemoveChildController(
+		if (requirement.getStatus() != Status.DELETED
+				&& requirement.getStatus() != Status.COMPLETE) {
+			removeChild.setAction(new RemoveChildAction(
+					new RemoveChildController(this, requirement, panel)));
+			addReq.setAction(new AssignChildAction(new AssignChildController(
 					this, requirement, panel)));
-			addReq.setAction(new AssignChildAction(new AssignChildController(this,
-					requirement, panel)));
 			removeParent.setAction(new RemoveParentAction(
 					new RemoveParentController(this, requirement, panel)));
 
@@ -291,7 +289,8 @@ public class SubRequirementPanel extends JPanel {
 		rootID = checkParentRoot(this.requirement);
 		for (Requirement req : requirements) {
 			if (req.getpUID().size() == 0) {
-				if (req.getStatus() != Status.DELETED && req.getStatus() != Status.COMPLETE) {
+				if (req.getStatus() != Status.DELETED
+						&& req.getStatus() != Status.COMPLETE) {
 					if (req.getrUID() != rootID) {
 						validChildList.addElement(req.getName());
 					}
@@ -314,7 +313,8 @@ public class SubRequirementPanel extends JPanel {
 			}
 		}
 		for (Requirement req : requirements) {
-			if (req.getStatus() != Status.DELETED && req.getStatus()!=Status.COMPLETE) {
+			if (req.getStatus() != Status.DELETED
+					&& req.getStatus() != Status.COMPLETE) {
 				if (!containsCurrentRequirement(requirement, req)) {
 					if (!req.equals(parentReq))
 						validParentList.addElement(req.getName());
@@ -366,15 +366,18 @@ public class SubRequirementPanel extends JPanel {
 		topReqNames = new JList(childrenList);
 		topScrollPane.setViewportView(topReqNames);
 		removeChild.setEnabled(false);
-
+		
 		topReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(topReqNames.getSelectedValues().length==0)
+				if(panelDisabled){
+					return;
+				}
+				if (topReqNames.getSelectedValues().length == 0)
 					removeChild.setEnabled(false);
-				else
+				else 
 					removeChild.setEnabled(true);
-			} 
+			}
 		});
 	}
 
@@ -388,11 +391,14 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(bottomReqNames.getSelectedValues().length==0)
+				if(panelDisabled){
+					return;
+				}
+				if (bottomReqNames.getSelectedValues().length == 0)
 					addReq.setEnabled(false);
 				else
 					addReq.setEnabled(true);
-			} 
+			}
 		});
 	}
 
@@ -406,11 +412,14 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if(bottomReqNames.getSelectedValues().length==0)
+				if(panelDisabled){
+					return;
+				}
+				if (bottomReqNames.getSelectedValues().length == 0)
 					addReq.setEnabled(false);
 				else
 					addReq.setEnabled(true);
-			} 
+			}
 		});
 	}
 
@@ -421,7 +430,9 @@ public class SubRequirementPanel extends JPanel {
 			parentReq.setText("");
 			removeParent.setEnabled(false);
 		} else {
+			if(!panelDisabled){
 			removeParent.setEnabled(true);
+			}
 			for (int ID : requirement.getpUID()) {
 				try {
 					tempReq = RequirementDatabase.getInstance().get(ID);
@@ -465,15 +476,15 @@ public class SubRequirementPanel extends JPanel {
 
 	public void refreshAll() {
 		try {
-			Requirement tempReq = RequirementDatabase.getInstance().get(requirement.getrUID());
-			if(tempReq!=null){
+			Requirement tempReq = RequirementDatabase.getInstance().get(
+					requirement.getrUID());
+			if (tempReq != null) {
 				requirement = tempReq;
-				removeChild.setAction(new RemoveChildAction(new RemoveChildController(
-						this, requirement, panel)));
-				if (parentSelected){
+				removeChild.setAction(new RemoveChildAction(
+						new RemoveChildController(this, requirement, panel)));
+				if (parentSelected) {
 					setActionToParent();
-				}
-				else{
+				} else {
 					setActionToChild();
 				}
 				removeParent.setAction(new RemoveParentAction(
@@ -492,10 +503,13 @@ public class SubRequirementPanel extends JPanel {
 	}
 
 	public void disableUserButtons() {
+		panelDisabled = true;
 		removeParent.setEnabled(false);
 		removeChild.setEnabled(false);
 		addReq.setEnabled(false);
 		bottomReqNames.setEnabled(false);
-		topReqNames.setEnabled(false);		
+		topReqNames.setEnabled(false);
+//		radioChild.setEnabled(false);
+//		radioParent.setEnabled(false);
 	}
 }

@@ -271,6 +271,8 @@ public class MakeTaskPanel extends JPanel {
 		taskName.setEnabled(false);
 		taskDescription.setEnabled(value);
 		addTask.setEnabled(value);
+		userAssigned.setEnabled(value);
+		taskEstimate.setEnabled(value);
 		if (value) {
 			addTaskLabel.setForeground(Color.black);
 		} else {
