@@ -891,7 +891,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		this.comboBoxStatus.removeAllItems();
 		for (Status t : Status.values()) {
 			this.comboBoxStatus.addItem(t.toString());
-			System.out.println("Adding to the status combo box: " + t.toString());
 		}
 		comboBoxStatus.removeItem("None");
 		boolean hasComplete = true;
