@@ -333,7 +333,7 @@ public class SubRequirementTreeView extends JPanel implements
 				else
 					topReqsWOChildren.add(tempReq);
 			} catch (RequirementNotFoundException e) {
-
+				System.out.println("GRRR Requirement not found: SubRequirementTreeView:372"); //TODO: remove this?
 			}
 
 		}

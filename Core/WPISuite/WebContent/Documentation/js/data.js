@@ -121,6 +121,9 @@ var data = [
 					},  {label: 'Adding Users',
 						folder: false,
 						id: 14
+					},  {label: 'Editing User Permissions',
+					folder: false,
+					id: 15
 				}]
 			},
 		
