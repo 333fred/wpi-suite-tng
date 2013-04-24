@@ -616,10 +616,15 @@ public class CreateFilterView extends JPanel implements ActionListener,
 		case EFFORT:
 		case ESTIMATE:
 			equalToStr = txtEqualTo.getText().trim();
-			// check to make sure this is an int
+			// check to make sure this is a positive int
 			try {
 				int value = Integer.parseInt(equalToStr);
-				checkFilter.setValue(value);
+				if(value < 0){
+					error = true;
+					errorString = "Value must be non-negative";
+				} else {
+					checkFilter.setValue(value);
+				}
 			} catch (NumberFormatException e) {
 				error = true;
 				errorString = "Value must be a number";
