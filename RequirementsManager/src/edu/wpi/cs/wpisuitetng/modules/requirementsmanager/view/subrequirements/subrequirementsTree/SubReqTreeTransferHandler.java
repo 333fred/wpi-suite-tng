@@ -45,6 +45,15 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 	private MainTabController tabController;
 	private Requirement draggedRequirement;
 
+	/**
+	 * Handler for dragging and dropping in the sub-requirement tree
+	 * Determines what can and can't be dragged, what it can be dragged to,
+	 * and processes the action
+	 * Can drag a requirement into another to make the second the parent
+	 * Can drag a requirement to the Requirement folder to remove the parent
+	 * 
+	 * @param tabController Maintabcontroller this is contained inside of
+	 */
 	public SubReqTreeTransferHandler(MainTabController tabController) {
 		this.tabController = tabController;
 		try {
@@ -112,6 +121,11 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		return true;
 	}
 
+	/**
+	 * Make sure a given tree is complete
+	 * @param tree The tree to check
+	 * @return Whether the tree has complete nodes
+	 */
 	protected boolean haveCompleteNode(JTree tree) {
 		int[] selRows = tree.getSelectionRows();
 		TreePath path = tree.getPathForRow(selRows[0]);
@@ -385,6 +399,9 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		return tabController;
 	}
 
+	/**
+	 * @return the dragged requirement
+	 */
 	public Requirement getDraggedRequirement() {
 		return draggedRequirement;
 	}
