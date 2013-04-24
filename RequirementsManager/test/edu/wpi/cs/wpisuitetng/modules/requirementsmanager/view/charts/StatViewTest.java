@@ -40,7 +40,7 @@ public class StatViewTest {
 	public void setSelectedValuesTest() {
 		stats.updateChartDataType(DataType.ITERATION);
 		stats.updateChartType(ChartType.BAR);
-		stats.setSelectedItems();
+		stats.updateSelectedItems();
 		assertEquals(stats.getChartType(), ChartType.BAR);
 		assertEquals(stats.getChartDataType(), DataType.ITERATION);
 	}
