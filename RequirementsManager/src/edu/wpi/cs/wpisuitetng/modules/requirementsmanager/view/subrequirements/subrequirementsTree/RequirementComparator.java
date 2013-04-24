@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,15 +18,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 public class RequirementComparator implements Comparator<Requirement> {
 
 	/**
-	 * Compares two iterations based upon their starting dates
+	 * Compares two requirements based upon their IDs
 	 * 
 	 * Compares its two arguments for order. Returns a negative integer, zero,
 	 * or a positive integer as the first argument is less than, equal to, or
 	 * greater than the second.
 	 * 
 	 * first argument is less than second return negative int first argument is
-	 * equal to seccond return 0 first argument is greater than second return
-	 * postive int
+	 * equal to second return 0 first argument is greater than second return
+	 * positive int
 	 * 
 	 */
 

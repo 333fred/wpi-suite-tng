@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Steven Kordell, Matt Costi
+ *    Steven Kordell, Nick Massa
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree;
 
@@ -61,55 +61,54 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
+		//Don't drag and drop if we don't have permission
 		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
 			return false;
-		/*
-		 * if (!support.isDrop()) { return false; }
-		 * support.setShowDropLocation(true); if
-		 * (!support.isDataFlavorSupported(nodesFlavor)) { return false; }
-		 */
-		// Do not allow a drop on the drag source selections.
+		
 		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
 		JTree tree = (JTree) support.getComponent();
-
-		int[] selRows = tree.getSelectionRows();
-
-		// Do not allow a non-leaf node to be copied to a level
-		// which is less than its source level.
+		int[] selRows = tree.getSelectionRows(); //Grab our source indexes (implemented as 1)
 		
-		TreePath dest = dl.getPath();
+		TreePath dest = dl.getPath(); //Grab our destination
+		
+		//Don't allow dragging off the tree
 		if(dest==null)
 			return false;
 		
 		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
-				.getLastPathComponent();
-		TreePath path = tree.getPathForRow(selRows[0]);
+				.getLastPathComponent(); //Grab the object we dragged to as node
+		TreePath path = tree.getPathForRow(selRows[0]); //Grab the object we dragged from as node
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
+		
+		//If the destination is the deleted folder, don't do anything
 		if(target.getUserObject().equals("Deleted")||firstNode.getUserObject().equals("Deleted"))
 			return false;
 		
 		if (firstNode.getLevel() != 0 && target.getLevel() != 0) {
 			Requirement requirement = (Requirement) firstNode.getUserObject();
-			Requirement anRequirement = (Requirement) target.getUserObject();
+			Requirement anRequirement = (Requirement) target.getUserObject(); //Grab the objects as requirements
 			if(requirement.getStatus()==Status.DELETED || anRequirement.getStatus()==Status.DELETED)
-				return false;
+				return false; //If the requirements are deleted or completed, don't allow changes
 			if(requirement.getStatus()==Status.COMPLETE || anRequirement.getStatus()==Status.COMPLETE)
 				return false;
 			if (containsCurrentRequirement(requirement, anRequirement))
-				return false;
+				return false; //If the destination is within the source, don't allow a cycle!
 		}
+		//Don't allow dragging of the Requirement folder
 		if (firstNode.getLevel() == 0)
 			return false;
+		//Don't allow dragging to itself or the parent
 		if (firstNode == target || target == firstNode.getParent())
 			return false;
 		
-		if(firstNode.getLevel()!=0){
+		if(firstNode.getLevel()!=0){//Make sure if we're dragging one requirement, it is not deleted or completed
 			Requirement anRequirement = (Requirement) firstNode.getUserObject();
 			if(anRequirement.getStatus()==Status.DELETED || anRequirement.getStatus()==Status.COMPLETE)
 				return false;
 		}
-
+		
+		//Can transfer!
 		return true;
 	}
 
@@ -181,6 +180,12 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		return new DefaultMutableTreeNode(node);
 	}
 	
+	/**
+	 * Check if a requirement is in the sub-req tree of the other
+	 * @param req The requirement we want to see if it is a member
+	 * @param current The requirement whose tree we want to check
+	 * @return Whether or not req was contained inside current
+	 */
 	public boolean containsCurrentRequirement(Requirement req,
 			Requirement current) {
 		Requirement child = null;
@@ -248,23 +253,21 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 			index = parent.getChildCount();
 		}
 		// Add data to model
-		// for (int i = 0; i < nodes.length; i++) {
-		// model.insertNodeInto(nodes[i], parent, index++);
 		int[] selRows = tree.getSelectionRows();
 		dest = dl.getPath();
 		TreePath path = tree.getPathForRow(selRows[0]);
-
+		//Grab the target destination and dragged source
 		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
 				.getLastPathComponent();
 		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
 
+		//Initialize the controllers and observers
 		RequirementsController RequirementsController = new RequirementsController();
 		UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(
 				this);
 
-		if (target.getLevel() != 0) {
-
+		if (target.getLevel() != 0) {//If we dragged a requirement to another requirement			
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement anRequirement = (Requirement) target.getUserObject();
 			Requirement parentRequirement = null;
@@ -272,6 +275,7 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 			Integer anReqID = new Integer(anRequirement.getrUID());
 			Integer reqID = new Integer(requirement.getrUID());
 
+			//If the source has a parent, remove it
 			if (requirement.getpUID().size() > 0) {
 				try {
 					parentRequirement = RequirementDatabase.getInstance().get(
@@ -284,13 +288,14 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 				}
 			}
 
+			//Set the source as child of target, and target as parent of child, and save
 			anRequirement.addSubRequirement(reqID);
 			requirement.addPUID(anReqID);
 			RequirementsController.save(anRequirement, reqObserver);
 			RequirementsController.save(requirement, reqObserver);
 			this.draggedRequirement = requirement;
 		} else {
-
+			//We dragged a requirement to the top Requirement folder. Remove the parent and save
 			Requirement requirement = (Requirement) firstNode.getUserObject();
 			Requirement parentRequirement = null;
 			Integer reqID = new Integer(requirement.getrUID());
@@ -309,7 +314,7 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 			}
 		}
 
-		return true;
+		return true; //Success
 	}
 
 	@Override
@@ -345,7 +350,7 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 
 	@Override
 	public void responseSuccess() {
-		
+		//Update all tabs of their total estimates and sub requirement panel
 			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
 					DetailPanel detailPanel = (((DetailPanel) getTabController().getTabView().getComponentAt(i)));

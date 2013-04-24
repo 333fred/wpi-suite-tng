@@ -19,9 +19,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class AssignChildController {
+	
+	//The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
+	
+	//the detail view that the subReqPanel is in
+	private final DetailPanel detailView;
+	
+	//the requirement to assign children to
 	private final Requirement model;
-	private final DetailPanel ChildView;
+	
 
 	/**
 	 * Construct the controller
@@ -37,11 +44,14 @@ public class AssignChildController {
 			Requirement model, DetailPanel ChildView) {
 		this.view = subRequirementPanel;
 		this.model = model;
-		this.ChildView = ChildView;
+		this.detailView = ChildView;
 	}
 
 	/**
-	 * Save a child requirement to the server
+	 * Save a child requirement to the server. It gets the selected requirement from the subreq panel
+	 * and makes the selected requirement a child of the passed requirement. It then makes the 
+	 * passed requirement linked to the selected requirement, to make sure there is a complete link
+	 * from a parent to the child and vice versa
 	 */
 	public void saveChild() {
 
@@ -57,10 +67,8 @@ public class AssignChildController {
 		anReq.addPUID(modelID);
 		RequirementsController controller = new RequirementsController();
 		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-				this.ChildView);
+				this.detailView);
 		controller.save(model, observer);
-		//observer = new UpdateRequirementRequestObserver(
-		//		new SaveOtherRequirement());
 		controller.save(anReq, observer);
 
 		view.refreshTopPanel();

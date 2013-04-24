@@ -7,13 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 
+/**
+ * Exception for attempting to edit a file without the appropriate permission level
+ */
 public class UnauthorizedException extends Exception {
 
 	private UserPermissionLevel required;

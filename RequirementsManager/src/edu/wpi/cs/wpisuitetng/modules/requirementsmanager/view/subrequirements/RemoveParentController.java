@@ -20,9 +20,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class RemoveParentController {
+	
+	//The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
+	
+	//the requirement to assign a parent to
 	private final Requirement model;
-	private final DetailPanel parentView;
+	
+	//the detail view that the subReqPanel is in
+	private final DetailPanel detailView;
+		
 
 	/**
 	 * Construct the controller
@@ -38,11 +45,12 @@ public class RemoveParentController {
 			Requirement model, DetailPanel parentView) {
 		this.view = subRequirementPanel;
 		this.model = model;
-		this.parentView = parentView;
+		this.detailView = parentView;
 	}
 
 	/**
-	 * Save a note to the server
+	 * Save a parent subRequirement to the server. It removes the selected requirement as a parent
+	 * of the passed requirement by removing all links between the two requirements.
 	 */
 	public void saveParent() {
 
@@ -64,10 +72,8 @@ public class RemoveParentController {
 
 			RequirementsController controller = new RequirementsController();
 			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-					this.parentView);
+					this.detailView);
 			controller.save(model, observer);
-			// observer = new UpdateRequirementRequestObserver(
-			// new SaveOtherRequirement());
 			controller.save(anReq, observer);
 
 			view.refreshParentLabel();

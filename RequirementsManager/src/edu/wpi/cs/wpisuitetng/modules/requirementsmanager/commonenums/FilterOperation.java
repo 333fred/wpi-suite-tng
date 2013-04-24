@@ -12,6 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
 
+/**
+ * Enum for the filters that can be applied
+ * 
+ */
+
 public enum FilterOperation {
 
 	LESS_THAN("<"), LESS_THAN_EQUAL("<="), EQUAL("Equal"), NOT_EQUAL(
