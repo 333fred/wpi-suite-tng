@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
@@ -16,13 +16,10 @@ import java.awt.Component;
 import javax.swing.Icon;
 
 /**
- * Wrapper class around MainTabView that allows tabs to easily change thier
+ * Wrapper class around MainTabView that allows tabs to easily change their
  * title and icons
  * 
  * Adapted from Tab from DefectTracker module.
- * 
- * @author Mitchell
- * 
  */
 
 public class TabWrap {
@@ -97,7 +94,7 @@ public class TabWrap {
 	}
 
 	/**
-	 * Returns thsi tabs tooltip text
+	 * Returns this tabs tooltip text
 	 * 
 	 * @return Tooltip text
 	 */
