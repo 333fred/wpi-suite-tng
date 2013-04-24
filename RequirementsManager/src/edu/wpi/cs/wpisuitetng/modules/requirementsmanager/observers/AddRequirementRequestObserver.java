@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
+ *    @author Jason Whitehouse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
@@ -27,8 +27,8 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * @author Jason Whitehouse Request Observer for [@link
- *         AddRequirementController]
+ * Request Observer responsible for handling success or failure of the
+ * AddRequirementController
  */
 
 public class AddRequirementRequestObserver implements RequestObserver {

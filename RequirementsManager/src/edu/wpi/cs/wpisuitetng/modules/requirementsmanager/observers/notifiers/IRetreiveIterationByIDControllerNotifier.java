@@ -14,6 +14,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
+/**
+ * Interface used for RetreiveIterationByIDController, and possibly elsewhere
+ * Will be notified when data has been returned, or an error was returned
+ */
 public interface IRetreiveIterationByIDControllerNotifier {
 
 	/**

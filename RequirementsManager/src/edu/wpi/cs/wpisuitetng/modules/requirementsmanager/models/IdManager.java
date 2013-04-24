@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -16,6 +16,10 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
+
+/**
+ * Model to track the last assigned ID and provides the next ID to be assigned
+ */
 public class IdManager extends AbstractModel {
 
 	String type;

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -19,7 +19,6 @@ import java.util.Date;
 /**
  * Value object for filtering iterations between a specified dates 
  */
-
 public class FilterIterationBetween implements Serializable {
 
 	private static final long serialVersionUID = 490510282591238771L;

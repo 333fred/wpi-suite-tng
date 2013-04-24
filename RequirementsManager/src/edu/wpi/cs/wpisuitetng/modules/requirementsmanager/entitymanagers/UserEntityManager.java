@@ -82,7 +82,9 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 		StringListModel model = new StringListModel();
 		List<String> names = new ArrayList<String>();
 		for (User u : userList) {
-			names.add(u.getUsername());
+			if(u != null) {
+				names.add(u.getUsername());
+			}
 		}
 		model.setUsers(names);
 		StringListModel[] array = { model };

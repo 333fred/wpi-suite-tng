@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
  * display on the screen. We and reload them on the database so that the user
  * doesn't loose filters upon restarting Janeway
  * 
- * The value of the fitler is stored in a JSON String to make it correctly load
+ * The value of the filter is stored in a JSON String to make it correctly load
  * and save to the server, The FilterValueType enum assists with this as well
  * 
  */

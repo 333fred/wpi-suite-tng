@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -19,10 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
  * Simple class to hold a note and any associated metadata
- * 
- * @author Fredric
  */
-
 public class Note implements Event {
 
 	private String note;
