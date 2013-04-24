@@ -7,8 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
- *    @author Conor
+ *    @author Fredric Silberberg
+ *    @author Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
@@ -21,6 +21,9 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
+/**
+ * Observer for the request to get a single user's permissions from the server
+ */
 public class RetrievePermissionsRequestObserver implements RequestObserver {
 
 	/**
