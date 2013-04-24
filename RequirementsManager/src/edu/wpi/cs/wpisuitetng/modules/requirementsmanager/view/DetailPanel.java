@@ -373,6 +373,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		if (mode == Mode.UPDATE) {
 			eventPane.disableUsersAndSubReqs();
 		}
+		else if (mode ==Mode.CREATE){
+			eventPane.disableSubReqs();
+		}
 		
 	}
 
