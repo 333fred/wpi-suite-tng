@@ -160,7 +160,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private Color defaultColor;
 
 	/** The edit mode of this requirement view */
-	private Mode mode;
+	public Mode mode;
 
 	public DetailPanel(Requirement requirement, Mode mode,
 			MainTabController mainTabController) {
@@ -180,6 +180,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		setDisabledTextColor();
 		disableFieldsMode();
 		disableSaveButton();
+		
 	}
 	
 	private void createPanels() {
@@ -366,7 +367,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		eventPane = new DetailEventPane(noteView, logView, userView, taskView,
 				aTestView, subRequirementView);
 		if (requirement.getStatus() == Status.DELETED
-				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW) {
+				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW || mode == Mode.CREATE) {
 			eventPane.disableUserButtons();
 		}
 		if (mode == Mode.UPDATE) {

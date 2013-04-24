@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel.Mode;
 
 /**
  * @author Kyle, Matt, Chris
@@ -227,7 +228,8 @@ public class SubRequirementPanel extends JPanel {
 
 		// If the requirement is not deleted or complete, set actions and enabling
 		if (requirement.getStatus() != Status.DELETED
-				&& requirement.getStatus() != Status.COMPLETE) {
+				&& requirement.getStatus() != Status.COMPLETE
+				&& panel.mode != Mode.CREATE) {
 			removeChild.setAction(new RemoveChildAction(
 					new RemoveChildController(this, requirement, panel)));
 			addReq.setAction(new AssignChildAction(new AssignChildController(
