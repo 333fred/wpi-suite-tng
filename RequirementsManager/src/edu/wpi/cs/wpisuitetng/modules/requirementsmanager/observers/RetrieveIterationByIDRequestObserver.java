@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
+ *    @author Jason Whitehouse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
@@ -22,10 +22,8 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * @author Jason Whitehouse
- * 
- *         Request observer for retrieving a single requirement from the server
- *         by id
+ * Request observer for retrieving a single requirement from the server
+ * by id
  */
 public class RetrieveIterationByIDRequestObserver implements RequestObserver {
 

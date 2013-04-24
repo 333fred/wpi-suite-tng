@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author
+ *    @author Team Swagasaurus
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
@@ -21,6 +21,10 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
+/**
+ * Request Observer responsible for handling success or failure of the
+ * QueryUserRequestController
+ */
 public class QueryUserRequestObserver implements RequestObserver {
 
 	private final AssigneePanel parentView;

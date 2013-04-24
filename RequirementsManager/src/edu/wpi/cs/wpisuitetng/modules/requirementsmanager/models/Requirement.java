@@ -1,4 +1,5 @@
 /*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -6,7 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Fredric, Jason Whitehouse, Conor Geary
+ *    @author Fredric Silberberg
+ *    @author Jason Whitehouse
+ *    @author Conor Geary
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
@@ -30,9 +33,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.s
 /**
  * This is the basic requirement model. It contains all the fields that can be
  * assigned to a single requirement.
- * 
- * @author Fredric, jason, Conor
- * 
  */
 public class Requirement extends AbstractModel {
 

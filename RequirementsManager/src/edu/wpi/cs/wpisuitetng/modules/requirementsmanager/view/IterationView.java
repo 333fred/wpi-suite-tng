@@ -31,6 +31,8 @@ import javax.swing.SpringLayout;
 import com.toedter.calendar.JCalendar;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddIterationRequestObserver;
@@ -44,7 +46,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Iterati
 /**
  * View for creating or editing a iteration
  */
-public class IterationView extends Tab implements ISaveNotifier {
+public class IterationView extends Tab implements ISaveNotifier, IDatabaseListener {
 
 	/** Status enum, whether created or edited */
 	public enum Status {
@@ -86,10 +88,16 @@ public class IterationView extends Tab implements ISaveNotifier {
 	/** The JCalendars for selecting dates */
 	private JCalendar calStartDate;
 	private JCalendar calEndDate;
+	
+	/** The progress bar for the estimate of the requirements attached to this iteration */
+	private JProgressBar iterationProgressBar;
 
 	/** Booleans indicating if there is an error with name, or calendar field */
 	private boolean nameError;
 	private boolean calendarError;
+	
+	/** Boolean for the database listener, to determine when this view has died */
+	private boolean alive; 
 
 	/** Padding constants */
 
@@ -105,7 +113,8 @@ public class IterationView extends Tab implements ISaveNotifier {
 		this.iteration = iteration;
 		this.status = status;
 		this.mainTabController = mainTabController;
-
+		alive = true;
+		
 		nameError = false;
 		calendarError = false;
 
@@ -149,8 +158,10 @@ public class IterationView extends Tab implements ISaveNotifier {
 		calStartDate = new JCalendar();
 		calEndDate = new JCalendar();
 
-		JProgressBar progressBar = new JProgressBar(0, 100);
-		progressBar.setValue((int) this.iteration.getProgress());
+		iterationProgressBar = new JProgressBar(0, 100);
+		iterationProgressBar.setValue((int) this.iteration.getProgress());
+		iterationProgressBar.setStringPainted(true);
+		
 		JLabel labProgress = new JLabel("Progress:");
 
 		// populate fields, if editing
@@ -265,10 +276,10 @@ public class IterationView extends Tab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.WEST, labProgress,
 				HORIZONTAL_PADDING, SpringLayout.EAST, txtEstimate);
 
-		layout.putConstraint(SpringLayout.VERTICAL_CENTER, progressBar, 0,
+		layout.putConstraint(SpringLayout.VERTICAL_CENTER, iterationProgressBar, 0,
 				SpringLayout.VERTICAL_CENTER, labProgress);
 
-		layout.putConstraint(SpringLayout.WEST, progressBar,
+		layout.putConstraint(SpringLayout.WEST, iterationProgressBar,
 				HORIZONTAL_PADDING, SpringLayout.EAST, labProgress);
 
 		setLayout(layout);
@@ -285,7 +296,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 			add(labEstimate);
 			add(txtEstimate);
 			add(labProgress);
-			add(progressBar);
+			add(iterationProgressBar);
 		}
 
 		add(calStartDate);
@@ -297,6 +308,9 @@ public class IterationView extends Tab implements ISaveNotifier {
 		add(labErrorMessage);
 		add(labNameError);
 		add(labCalendarError);
+		
+		//register the iteration database listener
+		IterationDatabase.getInstance().registerListener(this);
 
 	}
 
@@ -566,6 +580,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	@Override
 	public boolean onTabClosed() {
+		alive = false;
 		if (butSave.isEnabled()) {
 			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
 			int res = JOptionPane
@@ -587,11 +602,39 @@ public class IterationView extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
+
 	/**
 	 * Getter for the status of the iteration
 	 * @return The status of the iteration
 	 */
 	public Status getStatus(){
 		return status;
+	}
+
+
+	/** Used to update the progress bar when the given iteration has been updated
+	 * 
+	 */
+	
+	@Override
+	public void update() {
+		if (status == Status.EDIT || status == Status.VIEW) {
+			try {
+				Iteration updateItr = IterationDatabase.getInstance().get(iteration.getId());
+				iteration.setRequirements(updateItr.getRequirements());
+				//update the progress bar
+				iterationProgressBar.setValue((int) updateItr.getProgress());
+			} catch (IterationNotFoundException e) {
+				//Iteration not found, we could close th tba, or prompt user.. TODO
+			}
+		}
+	
+		
+	}
+
+	@Override
+	public boolean shouldRemove() {
+		return !alive;
+
 	}
 }

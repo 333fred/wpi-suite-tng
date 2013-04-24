@@ -891,7 +891,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		this.comboBoxStatus.removeAllItems();
 		for (Status t : Status.values()) {
 			this.comboBoxStatus.addItem(t.toString());
-			System.out.println("Adding to the status combo box: " + t.toString());
 		}
 		comboBoxStatus.removeItem("None");
 		boolean hasComplete = true;
@@ -1130,6 +1129,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			return; // we can not enable save in view mode
 		}
 		this.btnSave.setEnabled(true);
+	}
+	
+	public JTextArea getTextSaveError() {
+		return textSaveError;
 	}
 
 	public List<String> getAssignedUsers() {

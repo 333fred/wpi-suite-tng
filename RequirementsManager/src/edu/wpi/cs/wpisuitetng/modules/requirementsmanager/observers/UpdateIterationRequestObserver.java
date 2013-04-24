@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Steven Kordell, Mitchell Caisse
+ *    @author Steven Kordell
+ *    @author Mitchell Caisse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
@@ -21,9 +22,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * @author Steven Kordell, Mitchell Caisse
- * 
- *         Controller for updating an existing Iteration
+ * Controller for updating an existing Iteration
  */
 public class UpdateIterationRequestObserver implements RequestObserver {
 

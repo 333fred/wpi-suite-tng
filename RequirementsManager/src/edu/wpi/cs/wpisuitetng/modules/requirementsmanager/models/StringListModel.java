@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -24,10 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 /**
  * Model class to hold a list of user names, only for querying the server
- * 
- * @author Fredric
  */
-
 public class StringListModel extends AbstractModel {
 
 	List<String> users;
