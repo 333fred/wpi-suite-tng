@@ -18,7 +18,9 @@ import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
@@ -49,19 +51,33 @@ public class PermissionsTable extends JTable {
 	 */
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		if (!localPermissions.get(row).getUser().getUsername()
+		if (!localPermissions.get(convertRowIndexToModel(row)).getUser().getUsername()
 				.equals(PermissionModel.getInstance().getUser().getUsername())
-				&& !localPermissions.get(row).getUser().getUsername()
+				&& !localPermissions.get(convertRowIndexToModel(row)).getUser().getUsername()
 						.equals("admin")) {
-			// super.set
-			return super.convertColumnIndexToModel(column) == 1;
+			return convertColumnIndexToModel(column) == 1;
 		} else
 			return false;
+	}
+	
+	/**
+	 * Non-editable rows should be gray
+	 */
+	@Override
+	public TableCellRenderer getCellRenderer(int row, int column){
+		if (!isCellEditable(row, convertColumnIndexToView(1))) {
+            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+            renderer.setBackground(Color.lightGray);
+            return renderer;
+        } else {
+            return super.getCellRenderer(row, column);
+        }
 	}
 
 	/**
 	 * Override superclass to make permission cell editor be a combobox
 	 */
+	@Override
 	public TableCellEditor getCellEditor(int row, int column) {
 		if (convertColumnIndexToModel(column) == 1) {
 			// Create the combo box
