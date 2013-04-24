@@ -571,7 +571,8 @@ if(!panelDisabled){ //Enable the button if the panel is not disabled
 		removeChild.setEnabled(false);
 		addReq.setEnabled(false);
 		bottomReqNames.setEnabled(false);
-		topReqNames.setEnabled(false);
-
+		if(topReqNames != null){
+			topReqNames.setEnabled(false);
+		}
 	}
 }
