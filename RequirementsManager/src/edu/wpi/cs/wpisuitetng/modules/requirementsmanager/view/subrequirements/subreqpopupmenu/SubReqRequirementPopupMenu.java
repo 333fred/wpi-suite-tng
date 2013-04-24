@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,18 +59,14 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 		this.tabController = tabController;
 		this.selectedRequirements = selectedRequirements;
 
-		if (!PermissionModel.getInstance().getUserPermissions()
+		if (!PermissionModel.getInstance().getUserPermissions() //If we can't edit a requirement, say we view it
 				.canEditRequirement()) {
 			menuViewRequirement = new JMenuItem("View Requirement");
 			menuViewRequirement.addActionListener(this);
 			add(menuViewRequirement);
-		} else {
-			if (selectedRequirements.size() == 1) {
-				menuViewRequirement = new JMenuItem("Edit Requirement");
-			} else {
-				menuViewRequirement = new JMenuItem("Edit Requirements");
-			}
-
+		} else {//Otherwise, say edit requirement
+			
+			menuViewRequirement = new JMenuItem("Edit Requirement");
 			menuViewRequirement.addActionListener(this);
 			add(menuViewRequirement);
 
@@ -78,23 +74,23 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 			Requirement tempSubReq = null;
 
 			if (tempReq.getStatus() != Status.DELETED
-					&& tempReq.getStatus() != Status.COMPLETE) {
-				if (tempReq.getpUID().size() > 0) {
+					&& tempReq.getStatus() != Status.COMPLETE) { //If the requirement is editable,
+				if (tempReq.getpUID().size() > 0) {//If it has a parent, suggest a remove parent option
 					menuRemoveParent = new JMenuItem("Remove Parent");
 					menuRemoveParent.addActionListener(this);
 					add(menuRemoveParent);
 				}
 
-				if (tempReq.getSubRequirements().size() > 0) {
+				if (tempReq.getSubRequirements().size() > 0) { //If it has children, create a remove child menu
 					menuRemoveChildren = new JMenu("Remove Children");
 					JMenuItem menuChild = null;
 
 					for (int reqID : tempReq.getSubRequirements()) {
-						try {
+						try { //For all the subrequirements, try to add it to the remove child menu
 							tempSubReq = RequirementDatabase.getInstance().get(
 									reqID);
 							menuChild = new JMenuItem(tempSubReq.getName(),
-									tempSubReq.getrUID());
+									tempSubReq.getrUID()); //Send in name and ID (ID is stored as out-dated mnemonic)
 							menuChild.addActionListener(this);
 							menuRemoveChildren.add(menuChild);
 						} catch (RequirementNotFoundException e) {
@@ -102,7 +98,7 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 						}
 					}
 					menuRemoveChildren.addActionListener(this);
-					addSeparator();
+					addSeparator(); //Add a separator before the menu
 					add(menuRemoveChildren);
 				}
 			}
@@ -118,30 +114,30 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 		RequirementsController controller = new RequirementsController();
 		
 		if(e.getSource().equals(menuViewRequirement)){
-			for (Requirement r : selectedRequirements) {
+			for (Requirement r : selectedRequirements) { //View the requirements that have been selected
 				tabController.addViewRequirementTab(r);
 			}
 		}else if(e.getSource().equals(menuRemoveParent)){
 			try {
-				otherReq = RequirementDatabase.getInstance().get(tempReq.getpUID().get(0));
+				otherReq = RequirementDatabase.getInstance().get(tempReq.getpUID().get(0));//Grab the parent req
 			} catch (RequirementNotFoundException e1) {
 				e1.printStackTrace();
 			}
-			otherReq.removeSubRequirement(tempReq.getrUID());
-			tempReq.removePUID(otherReq.getrUID());
-			controller.save(otherReq, reqObserver);
+			otherReq.removeSubRequirement(tempReq.getrUID()); //Remove parent's child
+			tempReq.removePUID(otherReq.getrUID()); //Remove child's parent
+			controller.save(otherReq, reqObserver); //Save the requirements
 			controller.save(tempReq, reqObserver);
 				
 		}else if(!e.getSource().equals(menuRemoveChildren)){
 			//otherReq = RequirementDatabase.getInstance().getRequirement(((JMenuItem) e.getSource()).getText());
 			try {
-				otherReq = RequirementDatabase.getInstance().get(((JMenuItem) e.getSource()).getMnemonic());
+				otherReq = RequirementDatabase.getInstance().get(((JMenuItem) e.getSource()).getMnemonic());//Grab the parent req
 			} catch (RequirementNotFoundException e1) {
 				e1.printStackTrace();
 			}
-			otherReq.removePUID(tempReq.getrUID());
-			tempReq.removeSubRequirement(otherReq.getrUID());
-			controller.save(otherReq, reqObserver);
+			otherReq.removePUID(tempReq.getrUID());//Remove the child's parent
+			tempReq.removeSubRequirement(otherReq.getrUID());//Remove the parent's child
+			controller.save(otherReq, reqObserver);//Save teh requirements
 			controller.save(tempReq, reqObserver);
 			}
 		
@@ -150,7 +146,7 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 	@Override
 	public void responseSuccess() {
 		
-			for (int i = 0; i < tabController.getTabView().getTabCount(); i++) {
+			for (int i = 0; i < tabController.getTabView().getTabCount(); i++) { //On success, update sub-reqs and total estimates				
 				if (tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
 					(((DetailPanel) tabController.getTabView()
 							.getComponentAt(i))).updateTotalEstimate();
