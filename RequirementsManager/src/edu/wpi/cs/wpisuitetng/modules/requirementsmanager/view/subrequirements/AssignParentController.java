@@ -20,9 +20,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class AssignParentController {
+	
+	//The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
+	
+	//the detail view that the subReqPanel is in
+	private final DetailPanel detailView;
+	
+	//the requirement to assign a parent to
 	private final Requirement model;
-	private final DetailPanel parentView;
+	
 
 	/**
 	 * Construct the controller
@@ -38,11 +45,14 @@ public class AssignParentController {
 			Requirement model, DetailPanel parentView) {
 		this.view = subRequirementPanel;
 		this.model = model;
-		this.parentView = parentView;
+		this.detailView = parentView;
 	}
 
 	/**
-	 * Save a note to the server
+	 * Save a parent requirement to the server. It gets the selected requirement from the subreq panel
+	 * and makes the selected requirement a parent of the passed requirement. It then makes the 
+	 * passed requirement linked to the selected requirement, to make sure there is a complete link
+	 * from a parent to the child and vice versa
 	 */
 	public void saveParent() {
 		String selectedIndex = (String) view.getList().getSelectedValue();
@@ -55,7 +65,7 @@ public class AssignParentController {
 
 		RequirementsController controller = null;
 		
-		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this.parentView);
+		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this.detailView);
 
 		if (model.getpUID().size() > 0) {
 			try {
