@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Nick Massa
+ *    Steven Kordell, Nick Massa
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree;
 
@@ -353,13 +353,20 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		//Update all tabs of their total estimates and sub requirement panel
 			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
-					(((DetailPanel) getTabController().getTabView()
-							.getComponentAt(i))).updateTotalEstimate();
-					(((DetailPanel) getTabController().getTabView()
-							.getComponentAt(i))).updateSubReqTab();
+					DetailPanel detailPanel = (((DetailPanel) getTabController().getTabView().getComponentAt(i)));
+					detailPanel.updateTotalEstimate();
+					detailPanel.updateSubReqTab();
+					
+					
+					try {
+						detailPanel.determineAvailableStatusOptions(RequirementDatabase.getInstance().get(detailPanel.getRequirement().getrUID()));
+					} catch (RequirementNotFoundException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 	}
+
 
 	@Override
 	public void responseError(int statusCode, String statusMessage) {
