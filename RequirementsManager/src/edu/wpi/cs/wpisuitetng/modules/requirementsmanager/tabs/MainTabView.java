@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
@@ -20,10 +20,6 @@ import javax.swing.JTabbedPane;
  * The JTabbedPane that will be shown in the RequirementsManager Module.
  * 
  * Adapted on the MainTabView from DefectTracker module
- * 
- * 
- * @author Mitchell
- * 
  */
 
 public class MainTabView extends JTabbedPane {
@@ -39,14 +35,14 @@ public class MainTabView extends JTabbedPane {
 		firstTab = true;
 		setTabPlacement(TOP); // set the tabs to be placed at the top
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT); // allow the tabs to be
-												// scrollable whne there are too
+												// scrollable when there are too
 												// many to fit on the screen
 
 		// TabView starts off empty.
 	}
 
 	/**
-	 * Adds an unclosable tab to this JTabbedPane
+	 * Adds an un-closable tab to this JTabbedPane
 	 * 
 	 * * @param title The title of tab
 	 * 
@@ -57,7 +53,7 @@ public class MainTabView extends JTabbedPane {
 	 * @param tip
 	 *            The tooltip to be displayed for the tab
 	 * @param index
-	 *            The position to inster the tab
+	 *            The position to insert the tab
 	 * 
 	 */
 
@@ -82,7 +78,7 @@ public class MainTabView extends JTabbedPane {
 	/**
 	 * Removes the component at the specified index.
 	 * 
-	 * TODO: Implement this method, Override to stop tabs that are unclosable
+	 * TODO: Implement this method, Override to stop tabs that are un-closable
 	 * from being closed.
 	 * 
 	 * @param index

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,18 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  */
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 /**
  * Class to invoke the updating of the tab later, calling setTabComponent at in
- * a different thread than the swing thread can cause wierd issues, this should
- * solve them
- * 
- * @author Mitchell
- * 
+ * a different thread than the swing thread can cause weird issues, this should
+ * solve them.
  */
 
 public class CreateClosableTabInvokable implements Runnable {
@@ -38,9 +35,9 @@ public class CreateClosableTabInvokable implements Runnable {
 	 * @param tabView
 	 *            The tab view
 	 * @param index
-	 *            The index of hte tab to change
+	 *            The index of the tab to change
 	 * @param tabToUpdate
-	 *            Tab object represeting the tab to change
+	 *            Tab object representing the tab to change
 	 */
 
 	public CreateClosableTabInvokable(MainTabController tabController, int index,
