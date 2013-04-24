@@ -19,10 +19,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
 
 public class DefaultSaveNotifier implements ISaveNotifier {
 
-	public DefaultSaveNotifier() {
-
-	}
-
 	@Override
 	public void responseSuccess() {
 

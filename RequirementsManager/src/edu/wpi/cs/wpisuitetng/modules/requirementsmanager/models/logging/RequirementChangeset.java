@@ -41,7 +41,6 @@ public class RequirementChangeset extends Changeset implements Event {
 	 * Create a requirement changeset with null user and the current time
 	 */
 	public RequirementChangeset() {
-		super();
 	}
 
 	/**
