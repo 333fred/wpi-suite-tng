@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Steven Kordell, Alex Chen, Mitchel Caise
+ *    Steven Kordell, Alex Chen, Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
@@ -1261,13 +1261,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, options,
 							options[2]);
-
+			System.out.println("Detail Panel RES: " + res);
 			if (res == 0) {
 				closeTabAfterSave();
 				btnSave.getAction().actionPerformed(null);
 			} else if (res == 1) {
 				return true;
-			} else if (res == 2) {
+			} else {
 				return false;
 			}
 
