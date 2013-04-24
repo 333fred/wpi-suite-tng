@@ -7,8 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
- *    @contributor Conor
+ *    @author Fredric Silberberg
+ *    @contributor Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
@@ -25,7 +25,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
 /**
  * Contains the permLevel for the current user
  */
-
 public class PermissionModel extends AbstractModel implements Comparable {
 
 	private int id;
