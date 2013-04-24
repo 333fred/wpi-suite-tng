@@ -543,6 +543,8 @@ public class SubRequirementPanel extends JPanel {
 		removeChild.setEnabled(false);
 		addReq.setEnabled(false);
 		bottomReqNames.setEnabled(false);
-		topReqNames.setEnabled(false);
+		if(topReqNames != null){
+			topReqNames.setEnabled(false);
+		}
 	}
 }
