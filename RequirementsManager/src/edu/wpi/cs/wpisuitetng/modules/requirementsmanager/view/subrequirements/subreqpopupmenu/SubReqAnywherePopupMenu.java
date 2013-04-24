@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -43,6 +44,8 @@ public class SubReqAnywherePopupMenu extends JPopupMenu implements ActionListene
 	 */
 
 	public SubReqAnywherePopupMenu(MainTabController tabController) {
+		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
+			return;
 		this.tabController = tabController;
 
 		itemCreateRequirement = new JMenuItem("New Requirement");

@@ -116,8 +116,6 @@ public class SubRequirementTreeView extends JPanel implements
 	}
 
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
-				if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
-					return;
 				// add a menu offset
 				x += 10;
 
@@ -218,8 +216,9 @@ public class SubRequirementTreeView extends JPanel implements
 			for (Requirement anReq : topReqsWithChildren) {
 
 					requirementNode = new DefaultMutableTreeNode(anReq);
-
-					for (Integer aReq : anReq.getSubRequirements()) {
+					
+					updateTreeNodes(anReq,requirementNode);
+					/*for (Integer aReq : anReq.getSubRequirements()) {
 						try {
 							tempReq = RequirementDatabase.getInstance().get(
 									aReq);
@@ -231,14 +230,14 @@ public class SubRequirementTreeView extends JPanel implements
 							System.out
 									.println("Requirement not found: SubRequirementTreeView:372");
 						}
-					}
+					}*/
 					this.top.add(requirementNode);
 			}
 			
 			for (Requirement anReq : topReqsWOChildren) {
 					requirementNode = new DefaultMutableTreeNode(anReq);
-
-					for (Integer aReq : anReq.getSubRequirements()) {
+					updateTreeNodes(anReq,requirementNode);
+					/*for (Integer aReq : anReq.getSubRequirements()) {
 						try {
 							tempReq = RequirementDatabase.getInstance().get(
 									aReq);
@@ -250,7 +249,7 @@ public class SubRequirementTreeView extends JPanel implements
 							System.out
 									.println("Requirement not found: SubRequirementTreeView:372");
 						}
-					}
+					}*/
 					this.top.add(requirementNode);
 			}
 			
@@ -260,28 +259,6 @@ public class SubRequirementTreeView extends JPanel implements
 				deletedNode.add(requirementNode);
 				}
 			this.top.add(deletedNode);
-				
-//			for (Requirement anReq : requirements) {
-//
-//				if (anReq.getpUID().size() == 0) {
-//					requirementNode = new DefaultMutableTreeNode(anReq);
-//
-//					for (Integer aReq : anReq.getSubRequirements()) {
-//						try {
-//							tempReq = RequirementDatabase.getInstance().get(
-//									aReq);
-//							subRequirementNode = new DefaultMutableTreeNode(
-//									tempReq);
-//							requirementNode.add(subRequirementNode);
-//							updateTreeNodes(tempReq, subRequirementNode);
-//						} catch (RequirementNotFoundException e) {
-//							System.out
-//									.println("Requirement not found: SubRequirementTreeView:372");
-//						}
-//					}
-//					this.top.add(requirementNode);
-//				}
-//			}
 
 			((DefaultTreeModel) this.tree.getModel())
 					.nodeStructureChanged(this.top);
@@ -332,21 +309,46 @@ public class SubRequirementTreeView extends JPanel implements
 
 	public void updateTreeNodes(Requirement anReq, DefaultMutableTreeNode node) {
 		DefaultMutableTreeNode subRequirementNode = null;
-		Requirement tempReq = null;
 
-		for (Integer aReq : anReq.getSubRequirements()) {
-			try {
-				tempReq = RequirementDatabase.getInstance().get(aReq);
-				subRequirementNode = new DefaultMutableTreeNode(tempReq);
-				node.add(subRequirementNode);
-				updateTreeNodes(tempReq, subRequirementNode);
-			} catch (RequirementNotFoundException e) {
-				System.out
-						.println("GRRR Requirement not found: SubRequirementTreeView:372");
-			}
+		ArrayList<Requirement> subReqs = sortSubRequirements(anReq
+				.getSubRequirements());
+
+		for (Requirement aReq : subReqs) {
+			subRequirementNode = new DefaultMutableTreeNode(aReq);
+			node.add(subRequirementNode);
+			updateTreeNodes(aReq, subRequirementNode);
 		}
+
 	}
 
+	public ArrayList<Requirement> sortSubRequirements(List<Integer> subreqs) {
+		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
+		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();
+		Requirement tempReq = null;
+
+		for (Integer anReq : subreqs) {
+			try {
+				tempReq = RequirementDatabase.getInstance().get(anReq);
+				if (tempReq.getSubRequirements().size() > 0)
+					topReqsWithChildren.add(tempReq);
+				else
+					topReqsWOChildren.add(tempReq);
+			} catch (RequirementNotFoundException e) {
+
+			}
+
+		}
+
+		topReqsWOChildren = Requirement.sortRequirements(topReqsWOChildren);
+		topReqsWithChildren = Requirement.sortRequirements(topReqsWithChildren);
+
+		ArrayList<Requirement> allSubReqs = new ArrayList<Requirement>();
+		allSubReqs.addAll(topReqsWithChildren);
+		allSubReqs.addAll(topReqsWOChildren);
+
+		return allSubReqs;
+
+	}
 	@Override
 	public void receivedData(Requirement[] requirements) {
 		// this.requirements = Arrays.asList(requirements);
