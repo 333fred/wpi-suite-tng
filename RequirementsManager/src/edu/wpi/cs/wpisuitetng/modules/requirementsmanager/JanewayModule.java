@@ -33,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrievePermissionsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.DraggableTabbedPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
@@ -63,7 +64,7 @@ public class JanewayModule implements IJanewayModule {
 	private SubRequirementTreeView subRequirementTreeView;
 
 	/** The tabbed pane on the left for filters and iterations */
-	private JTabbedPane leftTabbedPane;
+	private DraggableTabbedPane leftTabbedPane;
 
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
@@ -103,7 +104,7 @@ public class JanewayModule implements IJanewayModule {
 
 		subRequirementTreeView = tabController.getSubReqView();
 
-		leftTabbedPane = new JTabbedPane();
+		leftTabbedPane = new DraggableTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 		leftTabbedPane.addTab("Filters", filterView);

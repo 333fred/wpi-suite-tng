@@ -1130,6 +1130,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		this.btnSave.setEnabled(true);
 	}
+	
+	public JTextArea getTextSaveError() {
+		return textSaveError;
+	}
 
 	public List<String> getAssignedUsers() {
 		return this.userView.getAssignedUsersList();
