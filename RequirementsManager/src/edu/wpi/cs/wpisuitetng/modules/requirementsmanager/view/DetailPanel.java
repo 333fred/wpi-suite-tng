@@ -44,6 +44,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
@@ -342,6 +343,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			
 
 		} else if (mode == Mode.EDIT) {
+			
 			// edit, everything can be edited
 		}
 	}
@@ -462,7 +464,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
 
 		// actual field is editable when requirement is complete
-		if (requirement.getStatus() == Status.COMPLETE) {
+		if (requirement.getStatus() == Status.COMPLETE && (requirement.getUsers().contains(PermissionModel.getInstance().getUser().getUsername()) || mode == Mode.EDIT)) {
 			textActual.setEnabled(true);
 			textActual.setBackground(Color.WHITE);
 		}

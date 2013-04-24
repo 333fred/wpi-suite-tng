@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
@@ -38,11 +39,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * 
  */
 
-public class SubReqRequirementPopupMenu extends JPopupMenu implements ActionListener, ISaveNotifier {
+public class SubReqRequirementPopupMenu extends JPopupMenu implements
+		ActionListener, ISaveNotifier {
 
 	/** Menu options for the PopupMenu */
 	private JMenuItem menuViewRequirement;
-	
+
 	private JMenuItem menuRemoveParent;
 	private JMenu menuRemoveChildren;
 
@@ -57,48 +59,54 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements ActionList
 		this.tabController = tabController;
 		this.selectedRequirements = selectedRequirements;
 
-		if (selectedRequirements.size() == 1) {
-			menuViewRequirement = new JMenuItem("Edit Requirement");
+		if (!PermissionModel.getInstance().getUserPermissions()
+				.canEditRequirement()) {
+			menuViewRequirement = new JMenuItem("View Requirement");
+			menuViewRequirement.addActionListener(this);
+			add(menuViewRequirement);
 		} else {
-			menuViewRequirement = new JMenuItem("Edit Requirements");
-		}		
-
-		menuViewRequirement.addActionListener(this);
-		add(menuViewRequirement);
-		
-		Requirement tempReq = selectedRequirements.get(0);
-		Requirement tempSubReq = null;
-		
-		if (tempReq.getStatus() != Status.DELETED
-				&& tempReq.getStatus() != Status.COMPLETE) {
-			if (tempReq.getpUID().size() > 0) {
-				menuRemoveParent = new JMenuItem("Remove Parent");
-				menuRemoveParent.addActionListener(this);
-				add(menuRemoveParent);
+			if (selectedRequirements.size() == 1) {
+				menuViewRequirement = new JMenuItem("Edit Requirement");
+			} else {
+				menuViewRequirement = new JMenuItem("Edit Requirements");
 			}
 
-			if (tempReq.getSubRequirements().size() > 0) {
-				menuRemoveChildren = new JMenu("Remove Children");
-				JMenuItem menuChild = null;
+			menuViewRequirement.addActionListener(this);
+			add(menuViewRequirement);
 
-				for (int reqID : tempReq.getSubRequirements()) {
-					try {
-						tempSubReq = RequirementDatabase.getInstance().get(
-								reqID);
-						menuChild = new JMenuItem(tempSubReq.getName(),
-								tempSubReq.getrUID());
-						menuChild.addActionListener(this);
-						menuRemoveChildren.add(menuChild);
-					} catch (RequirementNotFoundException e) {
-						e.printStackTrace();
-					}
+			Requirement tempReq = selectedRequirements.get(0);
+			Requirement tempSubReq = null;
+
+			if (tempReq.getStatus() != Status.DELETED
+					&& tempReq.getStatus() != Status.COMPLETE) {
+				if (tempReq.getpUID().size() > 0) {
+					menuRemoveParent = new JMenuItem("Remove Parent");
+					menuRemoveParent.addActionListener(this);
+					add(menuRemoveParent);
 				}
-				menuRemoveChildren.addActionListener(this);
-				addSeparator();
-				add(menuRemoveChildren);
+
+				if (tempReq.getSubRequirements().size() > 0) {
+					menuRemoveChildren = new JMenu("Remove Children");
+					JMenuItem menuChild = null;
+
+					for (int reqID : tempReq.getSubRequirements()) {
+						try {
+							tempSubReq = RequirementDatabase.getInstance().get(
+									reqID);
+							menuChild = new JMenuItem(tempSubReq.getName(),
+									tempSubReq.getrUID());
+							menuChild.addActionListener(this);
+							menuRemoveChildren.add(menuChild);
+						} catch (RequirementNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+					menuRemoveChildren.addActionListener(this);
+					addSeparator();
+					add(menuRemoveChildren);
+				}
 			}
 		}
-			
 
 	}
 

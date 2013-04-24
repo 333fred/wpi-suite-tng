@@ -76,7 +76,7 @@ public class PermissionToolbarPane extends JPanel {
 		}
 		User usr = PermissionModel.getInstance().getUser();
 
-		nameLabel.setText("The current user is: ");
+		nameLabel.setText("Current User: ");
 		if (!(usr == null)) {
 			if (!(usr.getName() == null)) {
 				userName.setText(usr.getName());
@@ -84,9 +84,10 @@ public class PermissionToolbarPane extends JPanel {
 		} else {
 			userName.setText("User is NULL");
 		}
-		permissionLabel.setText("your current permission is: ");
-		userLevel.setText(PermissionModel.getInstance().getPermLevel()
-				.toString());
+		permissionLabel.setText("Permission: ");
+		String permLevel = PermissionModel.getInstance().getPermLevel().toString();
+		userLevel.setText(permLevel.substring(0, 1).concat(
+				permLevel.substring(1).toLowerCase()));
 
 		// stack all the labels on top of each other
 		permissionLayout.putConstraint(SpringLayout.NORTH, nameLabel, 3,
@@ -104,17 +105,17 @@ public class PermissionToolbarPane extends JPanel {
 		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
 				createPermissions, 0, SpringLayout.HORIZONTAL_CENTER, this);
 
-		permissionLayout.putConstraint(SpringLayout.WEST, nameLabel, 0,
+		permissionLayout.putConstraint(SpringLayout.WEST, nameLabel, 8,
 				SpringLayout.WEST, this);
 		permissionLayout.putConstraint(SpringLayout.EAST, nameLabel, 0,
 				SpringLayout.WEST, userName);
-		permissionLayout.putConstraint(SpringLayout.EAST, userName, 0,
+		permissionLayout.putConstraint(SpringLayout.EAST, userName, -8,
 				SpringLayout.EAST, this);
-		permissionLayout.putConstraint(SpringLayout.WEST, permissionLabel, 0,
+		permissionLayout.putConstraint(SpringLayout.WEST, permissionLabel, 8,
 				SpringLayout.WEST, this);
 		permissionLayout.putConstraint(SpringLayout.EAST, permissionLabel, 0,
 				SpringLayout.WEST, userLevel);
-		permissionLayout.putConstraint(SpringLayout.EAST, userLevel, 0,
+		permissionLayout.putConstraint(SpringLayout.EAST, userLevel, -8,
 				SpringLayout.EAST, this);
 
 		this.add(nameLabel);
@@ -146,8 +147,9 @@ public class PermissionToolbarPane extends JPanel {
 			}
 		} else
 			userName.setText("NULL");
-		userLevel.setText(PermissionModel.getInstance().getPermLevel()
-				.toString());
+		String permLevel = PermissionModel.getInstance().getPermLevel().toString();
+		userLevel.setText(permLevel.substring(0, 1).concat(
+				permLevel.substring(1).toLowerCase()));
 	}
 
 	/**
