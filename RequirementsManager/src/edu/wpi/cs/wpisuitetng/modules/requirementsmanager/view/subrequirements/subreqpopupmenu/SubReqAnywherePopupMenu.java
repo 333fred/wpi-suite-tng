@@ -22,7 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
- * Popup menu when a user doesnt click on a list item, and only one lsit item is
+ * Pop-up menu when a user doesn't click on a list item, and only one list item is
  * selected
  * 
  * @author Nick
@@ -44,8 +44,10 @@ public class SubReqAnywherePopupMenu extends JPopupMenu implements ActionListene
 	 */
 
 	public SubReqAnywherePopupMenu(MainTabController tabController) {
+		//Return if we don't have permission to create a requirement
 		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
 			return;
+		
 		this.tabController = tabController;
 
 		itemCreateRequirement = new JMenuItem("New Requirement");
