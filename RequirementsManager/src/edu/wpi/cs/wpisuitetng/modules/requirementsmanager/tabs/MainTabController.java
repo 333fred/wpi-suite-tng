@@ -341,13 +341,13 @@ public class MainTabController {
 	 */
 
 	public void closeOtherTabs(int currentIndex) {
-		Tab[] openTabs = getOpenTabs();
+		Component[] openTabs = getOpenTabs();
 		for (int i = 0; i < openTabs.length; i++) {
 			if (i == currentIndex) {
 				continue;
 			}
 			if (openTabs[i] instanceof Tab) {
-				closeTab(openTabs[i]);
+				closeTab((Tab)openTabs[i]);
 			}
 		}
 	}
@@ -355,10 +355,10 @@ public class MainTabController {
 	/** Closes all open tabs, that can be closed */
 
 	public void closeAllTabs() {
-		Tab[] openTabs = getOpenTabs();
+		Component[] openTabs = getOpenTabs();
 		for (int i = 0; i < openTabs.length; i++) {
 			if (openTabs[i] instanceof Tab) {
-				closeTab(openTabs[i]);
+				closeTab((Tab)openTabs[i]);
 			}
 
 		}
@@ -372,10 +372,10 @@ public class MainTabController {
 
 	/** Returns a list of all the open tabs */
 
-	public Tab[] getOpenTabs() {
-		Tab[] openTabs = new Tab[getNumberOfOpenTabs()];
+	public Component[] getOpenTabs() {
+		Component[] openTabs = new Component[getNumberOfOpenTabs()];
 		for (int i = 1; i < openTabs.length; i++) {
-			openTabs[i] = (Tab) tabView.getComponentAt(i);
+			openTabs[i] = tabView.getComponentAt(i);
 		}
 		return openTabs;
 	}
