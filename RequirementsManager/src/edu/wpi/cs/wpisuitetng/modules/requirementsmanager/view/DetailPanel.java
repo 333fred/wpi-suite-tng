@@ -464,7 +464,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
 
 		// actual field is editable when requirement is complete
-		if (requirement.getStatus() == Status.COMPLETE && (requirement.getUsers().contains(PermissionModel.getInstance().getUser().getUsername()) || mode == Mode.EDIT)) {
+		if (requirement.getStatus() == Status.COMPLETE && (mode == Mode.EDIT || requirement.getUsers().contains(PermissionModel.getInstance().getUser().getUsername()))) {
 			textActual.setEnabled(true);
 			textActual.setBackground(Color.WHITE);
 		}
