@@ -341,8 +341,7 @@ public class SubRequirementTreeView extends JPanel implements
 				node.add(subRequirementNode);
 				updateTreeNodes(tempReq, subRequirementNode);
 			} catch (RequirementNotFoundException e) {
-				System.out
-						.println("GRRR Requirement not found: SubRequirementTreeView:372");
+				System.out.println("GRRR Requirement not found: SubRequirementTreeView:372");
 			}
 		}
 	}

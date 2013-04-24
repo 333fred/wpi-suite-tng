@@ -533,25 +533,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 
 		comboBoxStatus = new JComboBox();
 		comboBoxStatus.setBackground(Color.WHITE);
-
-		for (Status t : Status.values()) {
-			comboBoxStatus.addItem(t.toString());
-		}
-		comboBoxStatus.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
-		comboBoxStatus.setSelectedIndex(0);
-
-		this.determineAvailableStatusOptions();
+		comboBoxStatus.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());	
+		this.determineAvailableStatusOptions(this.getRequirement());
 
 		comboBoxPriority = new JComboBox();
-
 		comboBoxPriority.setBackground(Color.WHITE);
-
 		for (Priority t : Priority.values()) {
 			comboBoxPriority.addItem(t.toString());
 		}
 		comboBoxPriority.setSelectedIndex(0);
-		comboBoxPriority.setPrototypeDisplayValue(Type.NON_FUNCTIONAL
-				.toString());
+		comboBoxPriority.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
 
 		createIterationComboBox();
 	}
@@ -896,60 +887,63 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	 * stakeholders' specs; also sets the combo box to the appropriate set of
 	 * statuses
 	 */
-	private void determineAvailableStatusOptions() {
-		// String[] availableStatuses = { "New", "In Progress",
-		// "Open","Complete", "Deleted"};
-
+	public void determineAvailableStatusOptions(Requirement req) {
+		this.comboBoxStatus.removeAllItems();
+		for (Status t : Status.values()) {
+			this.comboBoxStatus.addItem(t.toString());
+			System.out.println("Adding to the status combo box: " + t.toString());
+		}
+		comboBoxStatus.removeItem("None");
 		boolean hasComplete = true;
-		for (Task aTask : requirement.getTasks()) {
+		for (Task aTask : req.getTasks()) {
 			if (!aTask.isCompleted())
 				hasComplete = false;
 		}
 		if (!hasComplete)
 			this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 
-		if (getRequirement().getStatus() == Status.IN_PROGRESS) {
+		if (req.getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			this.comboBoxStatus.removeItem(Status.NEW.toString());
-			if (!getRequirement().subReqsCompleted()) {
+			if (!req.subReqsCompleted()) {
 				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
 
-			if (getRequirement().getSubRequirements().size() > 0
-					|| !getRequirement().tasksCompleted()) {
+			if (req.getSubRequirements().size() > 0
+					|| !req.tasksCompleted()) {
 				this.comboBoxStatus.removeItem(Status.DELETED.toString());
 			}
-		} else if (getRequirement().getSubRequirements().size() > 0
-				|| !getRequirement().tasksCompleted()) {
+		} else if (req.getSubRequirements().size() > 0
+				|| !req.tasksCompleted()) {
 			this.comboBoxStatus.removeItem(Status.DELETED.toString());
 		}
-		if (getRequirement().getStatus() == Status.NEW) {
+		if (req.getStatus() == Status.NEW) {
 			// New: New, Deleted
 			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 			this.comboBoxStatus.removeItem(Status.OPEN.toString());
 			if (hasComplete)
 				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
-		if (getRequirement().getStatus() == Status.OPEN) {
+		if (req.getStatus() == Status.OPEN) {
 			// Open: Open, Deleted
 			this.comboBoxStatus.removeItem(Status.NEW.toString());
 			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 			if (hasComplete)
 				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
-		if (getRequirement().getStatus() == Status.COMPLETE) {
+		if (req.getStatus() == Status.COMPLETE) {
 			// Complete: Open, Complete, Deleted
 			this.comboBoxStatus.removeItem(Status.NEW.toString());
 			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 		}
-		if (getRequirement().getStatus() == Status.DELETED) {
+		if (req.getStatus() == Status.DELETED) {
 			// Deleted: Open, Deleted, Complete
 			this.comboBoxStatus.removeItem(Status.NEW.toString());
 			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
 			if (hasComplete)
 				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
-
+		comboBoxStatus.setSelectedItem(req.getStatus().toString());
 	}
 
 
