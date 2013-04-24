@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    @author Frederic Silberberg
+ *    @author Jason Whitehouse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
@@ -36,6 +37,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.Require
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.RequirementValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationIssue;
 
+/**
+ * Entity manager for requirements 
+ */
 public class RequirementsEntityManager implements EntityManager<Requirement> {
 
 	Data db;

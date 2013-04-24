@@ -7,11 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
+/**
+ * Entity manager for users
+ */
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
