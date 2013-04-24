@@ -272,7 +272,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	}
 
 	/**
-	 * Disables the editing feilds based upon the edit mode
+	 * Disables the editing fields based upon the edit mode
 	 * 
 	 */
 
@@ -1157,9 +1157,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textRelease.setBackground(defaultColor);
 		textEstimate.setEnabled(false);
 		textEstimate.setBackground(defaultColor);
-		textActual.setEnabled(false);
-		textActual.setBackground(defaultColor);
-
+		if(getRequirement().getStatus() != Status.COMPLETE){
+			textActual.setEnabled(false);
+			textActual.setBackground(defaultColor);
+		}
 		comboBoxType.setEnabled(false);
 		comboBoxPriority.setEnabled(false);
 
