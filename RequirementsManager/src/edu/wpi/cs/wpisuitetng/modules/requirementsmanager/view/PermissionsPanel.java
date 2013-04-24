@@ -99,8 +99,6 @@ public class PermissionsPanel extends Tab {
 						|| localPermissions.get(i).getUser().getUsername()
 								.equals(model.getUser().getUsername())) {
 					saveButton.setEnabled(false);
-					userTable.getColumnModel().getColumn(1)
-							.setCellRenderer(new PermissionsCellRenderer());
 				}
 			}
 		}
