@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -41,6 +42,13 @@ public class IterationViewTest {
 	public void constructTest(){
 		IterationView view = new IterationView(iteration, Status.CREATE, controller);
 		assertNotNull(view);
-		
+		assertEquals(Status.CREATE, view.getStatus());
+	}
+	
+	@Test
+	public void editIteration(){
+		IterationView edit = new IterationView(iteration, Status.EDIT, controller);
+		assertNotNull(edit);
+		assertEquals(Status.EDIT, edit.getStatus());
 	}
 }

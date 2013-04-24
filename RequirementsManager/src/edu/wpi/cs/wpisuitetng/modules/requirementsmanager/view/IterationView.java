@@ -587,4 +587,11 @@ public class IterationView extends Tab implements ISaveNotifier {
 		}
 		return true;
 	}
+	/**
+	 * Getter for the status of the iteration
+	 * @return The status of the iteration
+	 */
+	public Status getStatus(){
+		return status;
+	}
 }
