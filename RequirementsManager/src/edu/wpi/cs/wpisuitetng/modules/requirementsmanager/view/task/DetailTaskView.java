@@ -254,7 +254,7 @@ public class DetailTaskView extends JPanel {
 	 * and populate the fields
 	 * 
 	 */
-	private void updateTaskViewTime() {
+	protected void updateTaskViewTime() {
 		if (requirement.getStatus() != Status.DELETED
 				&& requirement.getStatus() != Status.COMPLETE) {
 			makeTaskPanel.getAddTask().setAction(

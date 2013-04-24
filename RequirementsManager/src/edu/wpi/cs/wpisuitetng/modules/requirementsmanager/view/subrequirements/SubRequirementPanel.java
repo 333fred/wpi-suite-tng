@@ -11,7 +11,6 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -558,6 +557,7 @@ if(!panelDisabled){ //Enable the button if the panel is not disabled
 					refreshValidChildren();
 			}
 		} catch (RequirementNotFoundException e) {
+			//if reuirement wasnt found, not much we can do.
 		}
 
 	}

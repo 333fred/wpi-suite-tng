@@ -121,28 +121,25 @@ public class SaveTaskController {
 				if (selectedTasks.size() == 1) {
 					// If only one is selected, edit the fields
 					if (taskText.length() > 0 && taskName.length() > 0) {
-						((Task) task).setName(view.getTaskName().getText());
-						((Task) task).setDescription(view.getTaskField()
-								.getText());
+						task.setName(view.getTaskName().getText());
+						task.setDescription(view.getTaskField().getText());
 					}
 
 					if ((view.getUserAssigned().getSelectedItem() == ""))
-						((Task) task).setAssignedUser(null);
+						task.setAssignedUser(null);
 					else
-						((Task) task).setAssignedUser((String) view
-								.getUserAssigned().getSelectedItem());
+						task.setAssignedUser((String) view.getUserAssigned()
+								.getSelectedItem());
 
 					if (taskEstimate != -1) {
-						if (taskEstimate + estimateSum
-								- ((Task) task).getEstimate() <= model
-									.getEstimate())
-							((Task) task).setEstimate(taskEstimate);
+						if (taskEstimate + estimateSum - task.getEstimate() <= model
+								.getEstimate())
+							task.setEstimate(taskEstimate);
 					}
 
 				}
 				// Check the completion status on the tasks
-				((Task) task)
-						.setCompleted(view.getTaskComplete().isSelected());
+				((Task) task).setCompleted(view.getTaskComplete().isSelected());
 			}
 
 			// Save to requirement!
@@ -156,7 +153,7 @@ public class SaveTaskController {
 			view.getTaskField().setText("");
 			view.getTaskField().requestFocusInWindow();
 		}
-		
+
 		List<Task> selectedTasks = new ArrayList<Task>();
 
 		for (int i : selectedRows) {

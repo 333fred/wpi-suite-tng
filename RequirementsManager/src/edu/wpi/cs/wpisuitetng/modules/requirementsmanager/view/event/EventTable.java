@@ -50,6 +50,7 @@ public class EventTable extends JTable implements TableColumnModelListener, Tabl
 				setRowHeight(row, rowHeight);
 			}
 		} catch (ClassCastException e) {
+			System.out.println("class cast exception in event table");
 		}
 	}
 	

@@ -154,7 +154,7 @@ public class RequirementTest {
 		task1.setCompleted(true);
 		Task task2 = new Task("Task 2", "This is another task");
 		task2.setCompleted(true);
-		ArrayList<Task> taskList = new ArrayList<Task>();
+		List<Task> taskList = new ArrayList<Task>();
 		taskList.add(task1);
 		taskList.add(task2);
 		r1.setTasks(taskList);
@@ -168,7 +168,7 @@ public class RequirementTest {
 		Task task1 = new Task("Task 1", "This is a task!");
 		task1.setCompleted(true);
 		Task task2 = new Task("Task 2", "This is another task");
-		ArrayList<Task> taskList = new ArrayList<Task>();
+		List<Task> taskList = new ArrayList<Task>();
 		taskList.add(task1);
 		taskList.add(task2);
 		r1.setTasks(taskList);

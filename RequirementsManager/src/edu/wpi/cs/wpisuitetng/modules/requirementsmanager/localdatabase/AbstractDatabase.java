@@ -46,7 +46,7 @@ public abstract class AbstractDatabase<T extends AbstractModel> implements
 	protected AbstractDatabase(int secs) {
 		this.secs = secs;
 		listeners = new ArrayList<IDatabaseListener>();
-		thread = new Thread(this);
+		thread = new Thread(this, this.getClass().getName() + "-Thread" );
 	}
 
 	/**
@@ -86,7 +86,7 @@ public abstract class AbstractDatabase<T extends AbstractModel> implements
 	 */
 	public void start() {
 		if (thread == null) {
-			thread = new Thread(this);
+			thread = new Thread(this, this.getClass().getName() + "-Thread" );
 		}
 		thread.setDaemon(true);
 		if (thread.isAlive()) {

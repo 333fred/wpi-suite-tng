@@ -13,7 +13,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JList;

@@ -11,12 +11,6 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Date;
-
-import org.junit.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

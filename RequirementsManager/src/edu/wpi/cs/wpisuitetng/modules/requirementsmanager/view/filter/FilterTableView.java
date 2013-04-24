@@ -69,7 +69,7 @@ public class FilterTableView extends JPanel implements
 
 	public FilterTableView(FilterView filterView) {
 		this.filterView = filterView;
-		ArrayList<Filter> filters = new ArrayList<Filter>();
+		List<Filter> filters = new ArrayList<Filter>();
 		filterController = new FilterController();
 
 		butPanel = new JPanel();

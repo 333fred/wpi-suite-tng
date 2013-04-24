@@ -113,7 +113,7 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		return true;
 	}
 
-	private boolean haveCompleteNode(JTree tree) {
+	protected boolean haveCompleteNode(JTree tree) {
 		int[] selRows = tree.getSelectionRows();
 		TreePath path = tree.getPathForRow(selRows[0]);
 		DefaultMutableTreeNode first = (DefaultMutableTreeNode) path

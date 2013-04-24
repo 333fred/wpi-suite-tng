@@ -89,8 +89,9 @@ public class Filter extends AbstractModel {
 		setDeleted(false);
 	}
 
-	private Filter(String user, int id, FilterField field, FilterOperation operation,
-			Object value, String stringValue, boolean active, boolean deleted) {
+	private Filter(String user, int id, FilterField field,
+			FilterOperation operation, Object value, String stringValue,
+			boolean active, boolean deleted) {
 		this.creator = user;
 		this.id = id;
 		this.field = field;
@@ -465,7 +466,7 @@ public class Filter extends AbstractModel {
 				// TODO: we should delete this filter, doesnt seem like a good
 				// idea to delete it here
 				return "Not Found";
-			} 
+			}
 
 			return iteration.getName();
 			// we must get the operation, otherwise we return to string
@@ -503,9 +504,12 @@ public class Filter extends AbstractModel {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	public Filter clone() {
-		return new Filter(getCreator(), getId(),getField(), getOperation(), getValue(), getStringValue(), getActive(), isDeleted());
+
+	public static Filter cloneFilter(Filter toClone) {
+		return new Filter(toClone.getCreator(), toClone.getId(),
+				toClone.getField(), toClone.getOperation(), toClone.getValue(),
+				toClone.getStringValue(), toClone.getActive(),
+				toClone.isDeleted());
 	}
 
 }

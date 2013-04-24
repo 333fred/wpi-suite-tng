@@ -42,7 +42,7 @@ public class FilterView extends JPanel {
 	/** List of the filter update listeners */
 	private List<FilterUpdateListener> filterUpdateListeners;
 	
-	public FilterView() {
+	private FilterView() {
 		
 		filterTableView = new FilterTableView(this);
 		createFilterView = new CreateFilterView(this);	
@@ -109,7 +109,7 @@ public class FilterView extends JPanel {
 	 */
 	
 	public void editFilter(Filter toEdit) {
-		createFilterView.editFilter(toEdit.clone());
+		createFilterView.editFilter(Filter.cloneFilter(toEdit));
 	}
 	
 	/** Cancels the editing of the filter 

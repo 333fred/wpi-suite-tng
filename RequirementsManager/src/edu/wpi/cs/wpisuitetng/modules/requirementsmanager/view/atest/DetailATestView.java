@@ -24,9 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
@@ -236,7 +234,7 @@ public class DetailATestView extends JPanel {
 	 * requirement's list of aTests
 	 */
 	private void addaTestsToList() {
-		ArrayList<Event> tests = new ArrayList<Event>();
+		List<Event> tests = new ArrayList<Event>();
 
 		// add the aTests to the list model.
 		for (ATest aTest : requirement.getTests()) {
