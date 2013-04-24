@@ -96,7 +96,6 @@ public class IterationView extends Tab implements ISaveNotifier {
 	private final int VERTICAL_PADDING = 10;
 	private final int HORIZONTAL_PADDING = 20;
 
-
 	public IterationView(MainTabController mainTabController) {
 		this(new Iteration(), Status.CREATE, mainTabController);
 	}
@@ -133,7 +132,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 			butSave.setText("Create");
 		} else {
 			butSave.setText("Save");
-		}		
+		}
 
 		butCancel = new JButton("Cancel");
 		butCancel.setAction(new CancelAction());
@@ -149,7 +148,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 		calStartDate = new JCalendar();
 		calEndDate = new JCalendar();
-		
+
 		JProgressBar progressBar = new JProgressBar(0, 100);
 		progressBar.setValue((int) this.iteration.getProgress());
 		JLabel labProgress = new JLabel("Progress:");
@@ -170,15 +169,14 @@ public class IterationView extends Tab implements ISaveNotifier {
 			calEndDate.setEnabled(false);
 			butCancel.setText("Close");
 			butSave.setEnabled(false);
-		}
-		else {
+		} else {
 			txtName.addKeyListener(new IterationViewListener(this, txtName));
-			
+
 			IterationViewListener startDateListener = new IterationViewListener(
 					this, calStartDate);
-			IterationViewListener endDateListener = new IterationViewListener(this,
-					calEndDate);
-	
+			IterationViewListener endDateListener = new IterationViewListener(
+					this, calEndDate);
+
 			calStartDate.addPropertyChangeListener(startDateListener);
 			calEndDate.addPropertyChangeListener(endDateListener);
 		}
@@ -242,8 +240,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 			layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
 					SpringLayout.SOUTH, labEstimate);
-			
-			
+
 		} else {
 			layout.putConstraint(SpringLayout.NORTH, butSave, VERTICAL_PADDING,
 					SpringLayout.SOUTH, labCalendarError);
@@ -261,20 +258,19 @@ public class IterationView extends Tab implements ISaveNotifier {
 				HORIZONTAL_PADDING, SpringLayout.EAST, butCancel);
 		layout.putConstraint(SpringLayout.NORTH, labErrorMessage, 0,
 				SpringLayout.NORTH, butCancel);
-		
+
 		layout.putConstraint(SpringLayout.VERTICAL_CENTER, labProgress, 0,
 				SpringLayout.VERTICAL_CENTER, txtEstimate);
-		
-		layout.putConstraint(SpringLayout.WEST, labProgress, HORIZONTAL_PADDING,
-				SpringLayout.EAST, txtEstimate);
-		
+
+		layout.putConstraint(SpringLayout.WEST, labProgress,
+				HORIZONTAL_PADDING, SpringLayout.EAST, txtEstimate);
+
 		layout.putConstraint(SpringLayout.VERTICAL_CENTER, progressBar, 0,
 				SpringLayout.VERTICAL_CENTER, labProgress);
-		
-		layout.putConstraint(SpringLayout.WEST, progressBar, HORIZONTAL_PADDING,
-				SpringLayout.EAST, labProgress);
 
-		
+		layout.putConstraint(SpringLayout.WEST, progressBar,
+				HORIZONTAL_PADDING, SpringLayout.EAST, labProgress);
+
 		setLayout(layout);
 
 		// add all the components
@@ -301,7 +297,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		add(labErrorMessage);
 		add(labNameError);
 		add(labCalendarError);
-		
+
 	}
 
 	/**
@@ -495,8 +491,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 
 	private boolean doIterationsOverlapWithCurrent() {
 		// get all iterations from the local database
-		List<Iteration> iterations = IterationDatabase.getInstance()
-				.getAll();
+		List<Iteration> iterations = IterationDatabase.getInstance().getAll();
 
 		Date origStart = iteration.getStartDate();
 		Date origEnd = iteration.getEndDate();
@@ -530,8 +525,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 		String name = txtName.getText().trim();
 
 		// get all iterations from the local database
-		List<Iteration> iterations = IterationDatabase.getInstance()
-				.getAll();
+		List<Iteration> iterations = IterationDatabase.getInstance().getAll();
 
 		for (Iteration i : iterations) {
 			if (i.getId() == iteration.getId()) {
@@ -586,7 +580,7 @@ public class IterationView extends Tab implements ISaveNotifier {
 				butSave.getAction().actionPerformed(null);
 			} else if (res == 1) {
 				return true;
-			} else if (res == 2) {
+			} else {
 				return false;
 			}
 

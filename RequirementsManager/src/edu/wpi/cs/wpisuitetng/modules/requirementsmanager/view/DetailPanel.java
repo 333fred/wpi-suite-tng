@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Steven Kordell, Alex Chen, Mitchel Caise
+ *    Steven Kordell, Alex Chen, Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
@@ -161,7 +161,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private Color defaultColor;
 
 	/** The edit mode of this requirement view */
-	private Mode mode;
+	public Mode mode;
 
 	public DetailPanel(Requirement requirement, Mode mode,
 			MainTabController mainTabController) {
@@ -181,6 +181,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		setDisabledTextColor();
 		disableFieldsMode();
 		disableSaveButton();
+		
 	}
 	
 	private void createPanels() {
@@ -368,11 +369,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		eventPane = new DetailEventPane(noteView, logView, userView, taskView,
 				aTestView, subRequirementView);
 		if (requirement.getStatus() == Status.DELETED
-				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW) {
+				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW ) {//|| mode == Mode.CREATE
 			eventPane.disableUserButtons();
 		}
 		if (mode == Mode.UPDATE) {
 			eventPane.disableUsersAndSubReqs();
+		}
+		else if (mode ==Mode.CREATE){
+			eventPane.disableSubReqs();
 		}
 		
 	}
@@ -1262,13 +1266,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, options,
 							options[2]);
-
+			System.out.println("Detail Panel RES: " + res);
 			if (res == 0) {
 				closeTabAfterSave();
 				btnSave.getAction().actionPerformed(null);
 			} else if (res == 1) {
 				return true;
-			} else if (res == 2) {
+			} else {
 				return false;
 			}
 

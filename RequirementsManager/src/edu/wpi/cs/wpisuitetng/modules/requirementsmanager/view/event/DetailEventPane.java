@@ -88,4 +88,8 @@ public class DetailEventPane extends JTabbedPane {
 		((DetailATestView) atestListPane).disableUserButtons();
 		((SubRequirementPanel) subreqListPane).disableUserButtons();
 	}
+
+	public void disableSubReqs() {
+		((SubRequirementPanel) subreqListPane).disableUserButtons();		
+	}
 }
