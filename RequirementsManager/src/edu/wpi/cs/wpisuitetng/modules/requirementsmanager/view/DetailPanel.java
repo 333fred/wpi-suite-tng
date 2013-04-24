@@ -367,7 +367,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		eventPane = new DetailEventPane(noteView, logView, userView, taskView,
 				aTestView, subRequirementView);
 		if (requirement.getStatus() == Status.DELETED
-				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW || mode == Mode.CREATE) {
+				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW ) {//|| mode == Mode.CREATE
 			eventPane.disableUserButtons();
 		}
 		if (mode == Mode.UPDATE) {
