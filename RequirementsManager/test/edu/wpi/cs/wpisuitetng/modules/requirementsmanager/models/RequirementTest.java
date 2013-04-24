@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest.ATestStatus;
 
 public class RequirementTest {
 
@@ -39,7 +40,7 @@ public class RequirementTest {
 	Project project;
 	Note n1;
 	Note n2;
-	ATest a1;
+	ATest a1, a2, a3;
 
 	String name = "name";
 	String name2 = "name2";
@@ -56,6 +57,7 @@ public class RequirementTest {
 	private List<Integer> pUID = new ArrayList<Integer>();
 	private List<Note> notes = new ArrayList<Note>();
 	private List<Task> tasks = new ArrayList<Task>();
+	private List<ATest> tests = new ArrayList<ATest>();
 
 	@Before
 	public void setUp() {
@@ -71,6 +73,9 @@ public class RequirementTest {
 		project = new Project("test", "1");
 		n1 = new Note("note1", new Date(), "creator1");
 		n2 = new Note("note2", new Date(), "creator2");
+		a1 = new ATest("test1", "test1");
+		a2 = new ATest("test2", "test2");
+		a3 = new ATest("test3", "test3");
 	}
 
 	@Test
@@ -209,5 +214,32 @@ public class RequirementTest {
 	@Test
 	public void testAddTask() {
 		r1.addTask(new Task("Task 1", "Desc 1"));
+	}
+	
+	@Test
+	public void testTestsPassed() {
+		r1.setTests(tests);
+		r1.addTest(a1);
+		a1.setStatus(ATestStatus.PASSED);
+		assertTrue(r1.testsPassed());
+		r1.addTest(a2);
+		a2.setStatus(ATestStatus.FAILED);
+		assertFalse(r1.testsPassed());
+	}
+	
+	@Test
+	public void testTestsPassed2() {
+		r1.setTests(tests);
+		r1.addTest(a1);
+		a1.setStatus(ATestStatus.PASSED);
+		assertTrue(r1.testsPassed());
+		r1.addTest(a3);
+		a2.setStatus(ATestStatus.BLANK);
+		assertFalse(r1.testsPassed());
+	}
+	
+	@Test
+	public void testToString() {
+		assertEquals(r1.toString(), "name");
 	}
 }
