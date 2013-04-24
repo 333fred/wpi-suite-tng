@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
+ *    @author Jason Whitehouse
+ *    @author Frederic Silberberg
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
@@ -24,10 +25,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * @author Fredric Silberberg
- * 
- *         Observer for the request to get all iterations from the server.
- * 
+ * Observer for the request to get all iterations from the server.
  */
 public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 
