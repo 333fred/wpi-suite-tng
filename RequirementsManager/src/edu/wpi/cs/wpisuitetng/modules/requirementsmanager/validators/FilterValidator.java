@@ -36,10 +36,7 @@ public class FilterValidator {
 
 		// Ensure the user is set correctly. If it isn't, then add an issue
 		
-		System.out.println("Filter: " + f + " Session: " + s);
-		System.out.println(" Creator: " + f.getCreator() + " User: " + s.getUser());
-		
-		if ( !(f.getCreator().equals(s.getUser())) ) {
+		if ( !(f.getCreator().equals(s.getUsername())) ) {
 			issues.add(new ValidationIssue(
 					"Filter's user must be the current user!"));
 		}

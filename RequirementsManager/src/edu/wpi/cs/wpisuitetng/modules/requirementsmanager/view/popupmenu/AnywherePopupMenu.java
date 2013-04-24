@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
 /**
@@ -52,8 +53,12 @@ public class AnywherePopupMenu extends JPopupMenu implements ActionListener {
 		itemCreateIteration.addActionListener(this);
 		itemCreateRequirement.addActionListener(this);
 
-		add(itemCreateRequirement);
-		add(itemCreateIteration);
+		if(PermissionModel.getInstance().getUserPermissions().canCreateRequirement()) {
+			add(itemCreateRequirement);
+		}
+		if(PermissionModel.getInstance().getUserPermissions().canCreateIteration()) {
+			add(itemCreateIteration);
+		}
 	}
 
 	@Override

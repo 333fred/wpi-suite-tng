@@ -88,7 +88,6 @@ public class PermissionsTable extends JTable {
 			SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
 
 			PermissionModel model;
-			System.out.println("Permissions changed in table at:" + row);
 			// we get the model from our local list, set its permissions, and
 			// save it
 			model = localPermissions.get(row);

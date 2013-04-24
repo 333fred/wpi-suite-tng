@@ -30,30 +30,31 @@ public class FilterValidatorTest {
 	Session otherSession;
 	User userOne;
 	User userTwo;
-	
+
 	@Before
-	public void setup(){
+	public void setup() {
 		this.userOne = new User("User's Name", "username", "password", 1);
 		this.userTwo = new User("Other Name", "notuser", "swordfish", 2);
 		this.session = new Session(this.userOne, "Session ID");
 		this.otherSession = new Session(this.userTwo, "Session Identification");
 	}
-	
+
 	@Test
-	public void testWithProperUser(){
-		Filter f = new Filter(userOne);
+	public void testWithProperUser() {
+		Filter f = new Filter(userOne.getUsername());
 		FilterValidator validator = new FilterValidator();
 		List<ValidationIssue> issueList = validator.validate(this.session, f);
 		assertEquals(issueList.size(), 0);
 	}
-	
+
 	@Test
-	public void testWithImproperUser(){
-		Filter f = new Filter(userOne);
+	public void testWithImproperUser() {
+		Filter f = new Filter(userOne.getUsername());
 		FilterValidator validator = new FilterValidator();
-		List<ValidationIssue> issueList = validator.validate(this.otherSession, f);
+		List<ValidationIssue> issueList = validator.validate(this.otherSession,
+				f);
 		assertEquals(issueList.size(), 1);
 		assertFalse(issueList.get(0).hasFieldName());
 	}
-	
+
 }

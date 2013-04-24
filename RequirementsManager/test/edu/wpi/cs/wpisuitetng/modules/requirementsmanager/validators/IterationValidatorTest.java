@@ -22,8 +22,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import EDU.purdue.cs.bloat.tree.SRStmt;
-
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;

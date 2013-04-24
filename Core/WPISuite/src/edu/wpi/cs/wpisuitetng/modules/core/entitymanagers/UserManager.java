@@ -168,7 +168,7 @@ public class UserManager implements EntityManager<User> {
 
 	@Override
 	public void save(Session s,User model) throws WPISuiteException {
-		if(data.save(model))
+		if(data.save(model) && data.save(model.getProject()))
 		{
 			logger.log(Level.FINE, "User Saved :" + model);
 

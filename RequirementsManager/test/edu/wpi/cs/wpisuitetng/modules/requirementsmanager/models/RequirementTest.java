@@ -39,6 +39,7 @@ public class RequirementTest {
 	Project project;
 	Note n1;
 	Note n2;
+	ATest a1;
 
 	String name = "name";
 	String name2 = "name2";

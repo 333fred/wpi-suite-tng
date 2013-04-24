@@ -70,7 +70,6 @@ public class PermissionsPanel extends Tab {
 		/** Initialize the list of local permissions */
 		localPermissions = PermissionsDatabase.getInstance().getAll();
 		Collections.sort(localPermissions);
-		System.out.println(localPermissions.size());
 
 		// construct the table of users and their permissions
 		String[] columnNames = new String[2];

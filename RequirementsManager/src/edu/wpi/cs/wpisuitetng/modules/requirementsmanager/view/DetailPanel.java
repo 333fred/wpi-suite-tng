@@ -268,7 +268,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel,
 				eventPane);
 		add(splitPane);
-		splitPane.setResizeWeight(0.5);
+		splitPane.setResizeWeight(0.75);
 	}
 
 	/**
@@ -277,7 +277,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	 */
 
 	private void disableFieldsMode() {
-		System.out.println("Wat? : " + mode);
 		if (mode == Mode.VIEW) {
 			textName.setEnabled(false);
 			textName.setBackground(defaultColor);
@@ -1182,7 +1181,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 						.getComponentAt(i))).updateTotalEstimate();
 				(((DetailPanel) mainTabController.getTabView()
 						.getComponentAt(i))).updateSubReqTab();
-				System.out.println("DETAILPANEL PLEASE REFRESH\n\n\n\n");
 			}
 		}
 
