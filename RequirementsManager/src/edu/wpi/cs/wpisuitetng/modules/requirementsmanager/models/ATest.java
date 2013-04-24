@@ -7,13 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    @ Steve Kordell
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
+/**
+ * An acceptance test 
+ */
 public class ATest implements Event {
 	private String name;
 	private String description;

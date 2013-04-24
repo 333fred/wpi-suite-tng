@@ -54,6 +54,12 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 	/** List of the selected requirements to possibly open */
 	private List<Requirement> selectedRequirements;
 
+	/**
+	 * Constructor for the pop-up menu, determining what should be displayed
+	 * Based on permissions and the requirement's status, parent, and children
+	 * @param tabController The Maintabcontroller we are inside of
+	 * @param selectedRequirements The indexes of the selected requirements
+	 */
 	public SubReqRequirementPopupMenu(MainTabController tabController,
 			List<Requirement> selectedRequirements) {
 		this.tabController = tabController;

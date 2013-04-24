@@ -1,0 +1,11 @@
+<h3>Editing User Permissions</h3>
+<hr />
+<p>
+In order to edit permissions, you must be assigned as the administrator on the current project.<br>
+The permission of the current user, as well as the 'admin' user can not be edited.<br>
+<ul>
+	<li>To edit permissions, select the &quote;Edit Permissions&quote; from the main Requirments Manager view.</li>
+	<li>Next to the user whose permission you desire to change, select the row that contains the name of the desired user.</li>
+	<li>After selecting the row, click on the right side of the table to open a drop down menu of the available</li>
+	<li>Select the new permission for the user.  Changes are saved automatically.</li>
+	</ul>

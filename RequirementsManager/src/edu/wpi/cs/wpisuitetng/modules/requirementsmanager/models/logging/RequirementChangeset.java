@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging;
@@ -29,10 +29,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
- * Implementation of the abstract Changeset type, that can be displayed as an
- * Event
- * 
- * @author Fredric
+ * Implementation of the abstract Changeset type, that can be
+ *  displayed as an Event
  */
 
 public class RequirementChangeset extends Changeset implements Event {

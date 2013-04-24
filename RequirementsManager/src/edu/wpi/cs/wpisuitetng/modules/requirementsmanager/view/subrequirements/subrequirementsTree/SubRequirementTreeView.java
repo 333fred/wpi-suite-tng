@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,6 +47,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subreqpopupmenu.SubReqAnywherePopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subreqpopupmenu.SubReqRequirementPopupMenu;
 
+
 public class SubRequirementTreeView extends JPanel implements
 		IDatabaseListener, IReceivedAllRequirementNotifier {
 	private JTree tree;
@@ -61,6 +62,13 @@ public class SubRequirementTreeView extends JPanel implements
 
 	private boolean firstPaint;
 
+	/**
+	 * The subrequirement tree of all requirements of a project
+	 * It displays requirements by whether it has children or not, and then
+	 * by ID
+	 * Deleted requirements are placed in a separate folder
+	 * @param tabController The maintabcontroller this is inside of
+	 */
 	public SubRequirementTreeView(MainTabController tabController) {
 		super(new BorderLayout());
 		this.tabController = tabController;
@@ -90,30 +98,37 @@ public class SubRequirementTreeView extends JPanel implements
 		updateTreeView();
 		MouseListener ml = new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) { //Listener for when we click on the tree view
 				
 				if (e.getButton() == MouseEvent.BUTTON1) {
 					int selRow = tree.getRowForLocation(e.getX(), e.getY());
 					TreePath selPath = tree.getPathForLocation(e.getX(),
 							e.getY());
-					if (selRow != -1) {
+					if (selRow != -1) { //If we double click, call function to handle double click on that spot
 						if (e.getClickCount() == 2) {
 							onDoubleClick(selRow, selPath);
 						}
 					}
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
-					// this was a right click
+					// This was a right click
 
 					int selRow = tree.getRowForLocation(e.getX(), e.getY());
 					TreePath selPath = tree.getPathForLocation(e.getX(),
 							e.getY());
-					onRightClick(e.getX(), e.getY(), selRow, selPath);
+					onRightClick(e.getX(), e.getY(), selRow, selPath); //Call function to handle the right click
 				}
 			}
 		};
 		this.tree.addMouseListener(ml);
 	}
 
+	/**
+	 * Function to display the popupmenu when we right click on the subreq tree
+	 * @param x The x-coordinates of the click
+	 * @param y The y-coordinates of the click
+	 * @param selRow The int array of locations on the tree we clicked
+	 * @param selPath The treepath of where we clicked
+	 */
 	protected void onRightClick(int x, int y, int selRow, TreePath selPath) {
 				// add a menu offset
 				x += 10;
@@ -151,12 +166,17 @@ public class SubRequirementTreeView extends JPanel implements
 		
 	}
 
+	/**
+	 * Method called when we double click in the tree view
+	 * @param selRow The int of the index where we clicked
+	 * @param selPath The treepath where we clicked
+	 */
 	protected void onDoubleClick(int selRow, TreePath selPath) {
 		if (((DefaultMutableTreeNode) selPath.getLastPathComponent()).getLevel() == 0) {
 			return;
 		}
 		boolean requirementIsOpen = false;
-		// TODO Auto-generated method stub
+
 		Requirement requirement = RequirementDatabase.getInstance()
 				.getRequirement(
 						((DefaultMutableTreeNode) selPath
@@ -187,6 +207,11 @@ public class SubRequirementTreeView extends JPanel implements
 		
 	}
 
+	/**
+	 * Function to update the tree view
+	 * It creates a Requirement root, and adds requirements without parents,
+	 * first by requirements with children, then by ID (= creation date)
+	 */
 	public void updateTreeView() {
 		String eState = getExpansionState(this.tree, 0);
 		DefaultMutableTreeNode requirementNode = null;
@@ -270,6 +295,12 @@ public class SubRequirementTreeView extends JPanel implements
 		}
 	}
 
+	/**
+	 * Restore the visual state of the tree
+	 * @param tree The tree we are restoring
+	 * @param row The row we need to update
+	 * @param expansionState The way the tree is expanded
+	 */
 	public static void restoreExpanstionState(JTree tree, int row,
 			String expansionState) {
 		StringTokenizer stok = new StringTokenizer(expansionState, ",");
@@ -279,6 +310,12 @@ public class SubRequirementTreeView extends JPanel implements
 		}
 	}
 
+	/**
+	 * Grabs the state of the tree as a string
+	 * @param tree Tree whose state we want
+	 * @param row The row we are visiting
+	 * @return The expansion state in the form of a string
+	 */
 	public static String getExpansionState(JTree tree, int row) {
 		TreePath rowPath = tree.getPathForRow(row);
 		StringBuffer buf = new StringBuffer();
@@ -294,6 +331,12 @@ public class SubRequirementTreeView extends JPanel implements
 		return buf.toString();
 	}
 
+	/**
+	 * Check if path2 contains path1
+	 * @param path1 First path we check if is contained
+	 * @param path2 Second path we check if it contains the first
+	 * @return Whether or not path1 was in path2
+	 */
 	public static boolean isDescendant(TreePath path1, TreePath path2) {
 		int count1 = path1.getPathCount();
 		int count2 = path2.getPathCount();
@@ -306,6 +349,11 @@ public class SubRequirementTreeView extends JPanel implements
 		return path1.equals(path2);
 	}
 
+	/**
+	 * Add subrequirements to a node
+	 * @param anReq The requirement we need to add it's subrequirements to
+	 * @param node The node that the requirement is at, for the subnodes to be added to
+	 */
 	public void updateTreeNodes(Requirement anReq, DefaultMutableTreeNode node) {
 		DefaultMutableTreeNode subRequirementNode = null;
 
@@ -320,6 +368,12 @@ public class SubRequirementTreeView extends JPanel implements
 
 	}
 
+	/**
+	 * Sort a list of subrequirements
+	 * First by whether each subreq has children, then by ID
+	 * @param subreqs The integer list of subrequirements
+	 * @return The arraylist of all requirements
+	 */
 	public ArrayList<Requirement> sortSubRequirements(List<Integer> subreqs) {
 		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
 		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();

@@ -7,13 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    @author Conor Geary
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
+/**
+ * Model for a task
+ */
 public class Task implements Event {
 	private String name;
 	private String description;
