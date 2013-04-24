@@ -76,6 +76,7 @@ public class SubRequirementPanel extends JPanel {
 	private JButton removeParent;
 
 	public Boolean parentSelected; // Boolean for which radio button is selected
+	public Boolean panelDisabled;
 
 	public SubRequirementPanel(Requirement requirement, DetailPanel panel) {
 
@@ -85,13 +86,22 @@ public class SubRequirementPanel extends JPanel {
 
 		parentSelected = false;
 
-		validChildList = new DefaultListModel(); // Initialize lists
+
+		validChildList = new DefaultListModel();
+		// initializeList();
+		// addValidChildren();
 		bottomReqNames = new JList();
 
 		childrenList = new DefaultListModel();
-		validParentList = new DefaultListModel();
+		// initializeTopList(requirement);
+		// topReqNames = new JList(childrenList);
+		topReqNames = new JList();
 
-		editSubReqPanel = new JPanel(); // Initialize lower panel
+		validParentList = new DefaultListModel();
+		// addValidParents();
+
+		editSubReqPanel = new JPanel();
+
 		editSubReqPanel.setBorder(BorderFactory
 				.createTitledBorder("Add to SubRequirement Hierarchy"));
 
@@ -99,6 +109,7 @@ public class SubRequirementPanel extends JPanel {
 		SpringLayout subreqPanelLayout = new SpringLayout();
 
 		addReq = new JButton("Add"); // Add the buttons and labels
+
 		removeChild = new JButton("Remove Children");
 
 		removeParent = new JButton("Remove Parent");
@@ -190,7 +201,9 @@ public class SubRequirementPanel extends JPanel {
 				SpringLayout.SOUTH, bottomScrollPane);
 		subreqPanelLayout.putConstraint(SpringLayout.WEST, addReq, 16,
 				SpringLayout.WEST, editSubReqPanel);
+
 		subreqPanelLayout.putConstraint(SpringLayout.EAST, addReq, 16,
+
 				SpringLayout.EAST, removeChild);
 
 		//Set the layout of this panel and the lower panel
@@ -208,6 +221,8 @@ public class SubRequirementPanel extends JPanel {
 		editSubReqPanel.add(radioParent);
 		editSubReqPanel.add(bottomScrollPane);
 		editSubReqPanel.add(addReq);
+
+		// Do other things here
 
 		this.add(editSubReqPanel); //Add the lower panel
 
@@ -312,6 +327,7 @@ public class SubRequirementPanel extends JPanel {
 				e.printStackTrace();
 			}
 		}
+
 		for (Requirement req : requirements) { //For all the requirements in the project
 			if (req.getStatus() != Status.DELETED //If it is not deleted
 					&& req.getStatus() != Status.COMPLETE) {//or complete
@@ -381,14 +397,16 @@ public class SubRequirementPanel extends JPanel {
 		initializeTopList(requirement);
 		topReqNames = new JList(childrenList); //Create list of children and put it in a JList
 		topScrollPane.setViewportView(topReqNames);
-		removeChild.setEnabled(false); //Set the viewport and initialize the button as disabled
-
 		topReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) { //If children are selected, enable the button
+				if(panelDisabled){//dont do things if the panel is disabled
+					return;
+				}
 				if (topReqNames.getSelectedValues().length == 0) //Otherwise, disable it
-					removeChild.setEnabled(false);
-				else
+
+					removeChild.setEnabled(false); 
+				else 
 					removeChild.setEnabled(true);
 			}
 		});
@@ -407,6 +425,9 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) { //If children are selected, enable the button
+					if(panelDisabled){// If the panel is disabled, do nothing
+						return;
+					}
 				if (bottomReqNames.getSelectedValues().length == 0) //Otherwise, disable it
 					addReq.setEnabled(false);
 				else
@@ -428,6 +449,9 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+if(panelDisabled){//If the panel is disabled, do nothing
+	return;
+}
 				if (bottomReqNames.getSelectedValues().length == 0)//If parents are selected, enable the button
 					addReq.setEnabled(false);	//Otherwise, disable it
 				else
@@ -446,6 +470,9 @@ public class SubRequirementPanel extends JPanel {
 			parentReq.setText(""); //Display a blank, and disable the reove parent button
 			removeParent.setEnabled(false);
 		} else {
+if(!panelDisabled){ //Enable the button if the panel is not disabled
+	removeParent.setEnabled(true);
+	}
 			removeParent.setEnabled(true);//Otherwise, enable the button, get the requirement
 			for (int ID : requirement.getpUID()) {// And display it's name
 				try {
@@ -539,6 +566,7 @@ public class SubRequirementPanel extends JPanel {
 	 * Disable button input (for deleted and completed requirements)
 	 */
 	public void disableUserButtons() {
+		panelDisabled = true;
 		removeParent.setEnabled(false); //Disable all buttons
 		removeChild.setEnabled(false);
 		addReq.setEnabled(false);

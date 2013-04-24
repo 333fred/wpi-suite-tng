@@ -24,7 +24,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
@@ -65,7 +67,6 @@ public class DetailATestView extends JPanel {
 		setLayout(new BorderLayout());
 		// Set up the aTest panel
 		makeATestPanel = new MakeATestPanel(requirement, parentView);
-
 		// Create the aTest list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
 		testModel = new EventTableModel(new ArrayList<Event>());
@@ -89,6 +90,14 @@ public class DetailATestView extends JPanel {
 		addaTestsToList();
 		// ,aTests.getSelectedValues()
 
+//		//permission of current user.  if not Observer, the user can add/edit acceptance tests
+//		UserPermissionLevel userPerm = PermissionModel.getInstance().getPermLevel();
+//		if(userPerm != UserPermissionLevel.OBSERVE){
+//			makeATestPanel.setInputEnabled(true);
+//		}	else{
+//			makeATestPanel.setInputEnabled(false);
+//		}
+		
 		if (requirement.getStatus() != Status.DELETED) {
 			// Set the action of the save button to the default (create new
 			// aTest)

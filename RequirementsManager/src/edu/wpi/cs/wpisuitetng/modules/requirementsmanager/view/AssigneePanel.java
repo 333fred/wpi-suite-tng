@@ -32,8 +32,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.QueryUserRequestObserver;
 
-//import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.AssignUserAction;
-//import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.UnassignUserAction;
 
 @SuppressWarnings("serial")
 public class AssigneePanel extends JPanel {

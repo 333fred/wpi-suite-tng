@@ -89,12 +89,18 @@ public class PermissionsPanel extends Tab {
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userTable
 				.addMouseListener(new PermissionSelectionChangedListener(this));
+
 		for (int i = 0; i < userTable.getRowCount(); i++) {
 			if (userTable.isRowSelected(i)) {
 				setSelectedButtons((UserPermissionLevel) userTable.getValueAt(
 						i, 1));
-				if(localPermissions.get(i).getUser().getUsername().equals("admin") || localPermissions.get(i).getUser().getUsername().equals(model.getUser().getUsername())) {
+				if (localPermissions.get(i).getUser().getUsername()
+						.equals("admin")
+						|| localPermissions.get(i).getUser().getUsername()
+								.equals(model.getUser().getUsername())) {
 					saveButton.setEnabled(false);
+					userTable.getColumnModel().getColumn(1)
+							.setCellRenderer(new PermissionsCellRenderer());
 				}
 			}
 		}
@@ -175,11 +181,8 @@ public class PermissionsPanel extends Tab {
 		radioPanel.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEtchedBorder(), "Permission Level"));
 
-		JPanel test = new JPanel();
-		test.add(new JLabel("Test"));
 		this.add(userScroll);
 		// this.add(radioPanel);
-
 	}
 
 	/**

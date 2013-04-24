@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
+import java.awt.Color;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -48,9 +49,13 @@ public class PermissionsTable extends JTable {
 	 */
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		if(!localPermissions.get(row).getUser().getUsername().equals(PermissionModel.getInstance().getUser().getUsername()) && !localPermissions.get(row).getUser().getUsername().equals("admin"))
+		if (!localPermissions.get(row).getUser().getUsername()
+				.equals(PermissionModel.getInstance().getUser().getUsername())
+				&& !localPermissions.get(row).getUser().getUsername()
+						.equals("admin")) {
+			// super.set
 			return super.convertColumnIndexToModel(column) == 1;
-		else
+		} else
 			return false;
 	}
 
@@ -60,7 +65,7 @@ public class PermissionsTable extends JTable {
 	public TableCellEditor getCellEditor(int row, int column) {
 		if (convertColumnIndexToModel(column) == 1) {
 			// Create the combo box
-			String[] items1 = { "Admin", "Update", "None" };
+			String[] items1 = { "Admin", "Update", "Observe" };
 			JComboBox comboBox1 = new JComboBox(items1);
 			// select the correct value
 			comboBox1.setSelectedItem(getValueAt(row, column));
@@ -91,5 +96,4 @@ public class PermissionsTable extends JTable {
 			controller.save(model, observer);
 		}
 	}
-
 }
