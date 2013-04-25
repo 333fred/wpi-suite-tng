@@ -68,11 +68,14 @@ public class SaveEditingTableAction extends AbstractAction implements
 			if (changedRows[i]) {
 				final int id = Integer.parseInt((String) tableView.getTable()
 						.getModel().getValueAt(i, 0));
+				final String newName = (String) tableView.getTable()
+						.getModel().getValueAt(i, 1);			
 				final int newEstimate = Integer.parseInt((String) tableView
 						.getTable().getModel().getValueAt(i, 6));
 				try {
 					final Requirement reqToChange = rdb.get(id);
 					reqToChange.setEstimate(newEstimate);
+					reqToChange.setName(newName);
 					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this);
 					saveController.save(reqToChange, observer);

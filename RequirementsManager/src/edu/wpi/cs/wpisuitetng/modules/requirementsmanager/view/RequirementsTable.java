@@ -19,6 +19,7 @@ public class RequirementsTable extends JTable {
 	private static final long serialVersionUID = 1L;
 	// TODO: How to get the actual number for this?
 	private boolean[] editedRows;
+	private boolean[] editedColumns;
 	private final RequirementTableView view;
 	
 	/**
@@ -33,6 +34,7 @@ public class RequirementsTable extends JTable {
 	
 	public void clearUpdated() {
 		editedRows = new boolean[super.getRowCount()];
+		editedColumns = new boolean[super.getColumnCount()];
 	};
 	
 	@Override
@@ -44,8 +46,15 @@ public class RequirementsTable extends JTable {
 			editedRows = temp;
 		}
 		
-		if (editedRows[super.convertRowIndexToModel(row)]
-				&& (super.convertColumnIndexToModel(column) == 6)) {
+		if (editedColumns == null) {
+			editedColumns = new boolean[super.getColumnCount()];
+		} else if (editedColumns.length < super.getColumnCount()) {
+			final boolean[] temp2 = new boolean[super.getColumnCount()];
+			editedColumns = temp2;
+		}
+		
+		if (editedRows[super.convertRowIndexToModel(row)] && editedColumns[super.convertColumnIndexToModel(column)]
+				&& ((super.convertColumnIndexToModel(column) == 6) || super.convertColumnIndexToModel(column) == 1)) {
 			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 			renderer.setBackground(Color.yellow);
 			return renderer;
@@ -61,13 +70,18 @@ public class RequirementsTable extends JTable {
 	@Override
 	public boolean isCellEditable(final int row, final int column) {
 		// Only the "Estimate" column is currently editable
+		boolean statusEditable = false;
 		final String status = (String) super.getModel().getValueAt(
 				convertRowIndexToModel(row), 4);
-		final boolean statusEditable = !status.equals("In Progress")
+		if (super.convertColumnIndexToModel(column) == 6) {
+		statusEditable = !status.equals("In Progress")
 				&& !status.equals("Deleted") && !status.equals("Complete");
+		} else if (super.convertColumnIndexToModel(column) == 1) {
+			statusEditable = !status.equals("Deleted") && !status.equals("Complete");			
+		}
 		
 		return (view.isEditable()
-				&& (super.convertColumnIndexToModel(column) == 6) && statusEditable);
+				&& (super.convertColumnIndexToModel(column) == 6 || super.convertColumnIndexToModel(column) == 1) && statusEditable);
 	}
 	
 	@Override
@@ -93,12 +107,31 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
+					editedColumns[convertColumnIndexToModel(col)] = true;
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(Integer.toString(i), row, col);
 				}
-			} else {
+			} else if (super.convertColumnIndexToModel(col) == 1) {
+			
+				final String i = (String) value;
+				if ((i.length() < 0) || (i.length() > 100) 
+						|| (i.equals((String) super.getValueAt(
+								row, col)))) {
+					return;
+				} else {
+					// we save the parsed int to removed leading 0s
+					editedRows[convertRowIndexToModel(row)] = true;
+					editedColumns[convertColumnIndexToModel(col)] = true;
+					selectionModel.removeSelectionInterval(
+							convertRowIndexToModel(row),
+							convertRowIndexToModel(row));
+					super.setValueAt(i, row, col);
+				}			
+			
+			
+		} else {
 				selectionModel.removeSelectionInterval(
 						convertRowIndexToModel(row),
 						convertRowIndexToModel(row));
