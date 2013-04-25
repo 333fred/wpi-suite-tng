@@ -16,8 +16,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 /**
- * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.aTest.SaveATestController.aTests.SaveaTestController#saveaTest()}
+ * Action that calls the saveTest method in the SaveATestController
  * 
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
@@ -44,7 +43,7 @@ public class SaveATestAction extends AbstractAction {
 	 * 
 	 * @param controller
 	 *            the controller to trigger
-	 * @param objects
+	 * @param selectedRows
 	 *            object array of all of the aTests
 	 */
 	public SaveATestAction(final SaveATestController controller,

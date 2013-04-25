@@ -46,6 +46,8 @@ public class SaveATestController {
 	 *            the requirement to which aTests are being added
 	 * @param parentView
 	 *            the DetailPanel displaying the current requirement
+	 * @param testTable
+	 *            The table that contains all of the tests
 	 */
 	public SaveATestController(final MakeATestPanel view,
 			final Requirement model, final DetailPanel parentView,
@@ -59,6 +61,9 @@ public class SaveATestController {
 	
 	/**
 	 * Save a aTest to the server
+	 * 
+	 * @param selectedRows
+	 *            The selected rows to save
 	 */
 	public void saveaTest(final int[] selectedRows) {
 		final String testText = view.getaTestField().getText();
@@ -135,7 +140,7 @@ public class SaveATestController {
 		view.getaTestName().setText("");
 		view.getaTestField().setBackground(Color.white);
 		view.getaTestName().setBackground(Color.white);
-		view.getAddaTest().setEnabled(false);
+		view.getAddATest().setEnabled(false);
 		
 	}
 }

@@ -30,7 +30,6 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
@@ -39,7 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
  * 
  * @author Nick M, Matt C, Steve Kordell
  */
-@SuppressWarnings ("serial")
+@SuppressWarnings ({ "serial", "rawtypes" })
 public class MakeATestPanel extends JPanel {
 	
 	// The fields to make a aTest
@@ -58,21 +57,15 @@ public class MakeATestPanel extends JPanel {
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane aTestFieldPane;
 	
-	// The view of the associated requirement
-	private final DetailPanel parentView;
-	
 	/**
 	 * Construct the panel, add and layout components.
 	 * 
 	 * @param model
 	 *            the requirement to which a notes made with this class will be
 	 *            saved
-	 * @param parentView
-	 *            the view of the requirement in question
 	 */
-	public MakeATestPanel(final Requirement model, final DetailPanel parentView) {
+	public MakeATestPanel(final Requirement model) {
 		
-		this.parentView = parentView;
 		// setup the aTest name field
 		aTestName = new JTextArea(1, 40);
 		aTestName.setLineWrap(true);
@@ -213,10 +206,11 @@ public class MakeATestPanel extends JPanel {
 		
 	}
 	
-	public JButton getAddaTest() {
-		return addaTest;
-	}
-	
+	/**
+	 * Returns the add ATest button
+	 * 
+	 * @return the button
+	 */
 	public JButton getAddATest() {
 		return addaTest;
 	}
@@ -230,18 +224,30 @@ public class MakeATestPanel extends JPanel {
 		return aTestDescription;
 	}
 	
+	/**
+	 * @return the ATest field scroll pane
+	 */
 	public JScrollPane getaTestFieldPane() {
 		return aTestFieldPane;
 	}
 	
+	/**
+	 * @return the ATest name text component
+	 */
 	public JTextComponent getaTestName() {
 		return aTestName;
 	}
 	
+	/**
+	 * @return the status label
+	 */
 	public JLabel getaTestStatus() {
 		return aTestStatus;
 	}
 	
+	/**
+	 * @return the status combobox
+	 */
 	public JComboBox getaTestStatusBox() {
 		return aTestStatusBox;
 	}
