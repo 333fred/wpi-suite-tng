@@ -7,8 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Frederic Silberberg
- *    Mitchell Caisse
+ *    @author Frederic Silberberg
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager;
@@ -40,6 +40,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
+/**
+ * Implementation of IJaneway that allows the other modules to interact with the Janeway client
+ */
 public class JanewayModule implements IJanewayModule {
 
 	/** List of tabs that this module will display */
