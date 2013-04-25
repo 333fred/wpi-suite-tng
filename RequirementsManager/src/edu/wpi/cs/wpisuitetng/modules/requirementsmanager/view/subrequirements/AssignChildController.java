@@ -57,9 +57,7 @@ public class AssignChildController {
 	 */
 	public void saveChild() {
 		
-		final String selectedIndex = (String) view.getList().getSelectedValue();
-		final Requirement anReq = RequirementDatabase.getInstance()
-				.getRequirement(selectedIndex);
+		final Requirement anReq = (Requirement) view.getList().getSelectedValue();
 		
 		final Integer modelID = new Integer(model.getrUID());
 		final Integer anReqID = new Integer(anReq.getrUID());
