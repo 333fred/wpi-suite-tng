@@ -15,12 +15,16 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 
 /**
- * Exception for attempting to edit a file without the appropriate permission
- * level
+ * Exception for attempting to edit a requirement without the appropriate
+ * permission level
  */
 public class UnauthorizedException extends Exception {
 	
+	/** The auto-generated serial version id */
+	private static final long serialVersionUID = 2320704893118735331L;
+	/** The necessary permission level to edit */
 	private UserPermissionLevel required;
+	/** The permissions the user has */
 	private UserPermissionLevel have;
 	
 	/**

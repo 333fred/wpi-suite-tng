@@ -20,6 +20,9 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class PermissionsNotFoundException extends NotFoundException {
 	
+	/** The auto-generated serial version id */
+	private static final long serialVersionUID = 5792135152007298020L;
+	
 	/**
 	 * Creates a new exception for a not found permission
 	 * 

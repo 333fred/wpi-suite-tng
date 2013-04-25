@@ -18,6 +18,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
 public class FilterNotFoundException extends NotFoundException {
 	
+	/** The auto-generated serial version id */
+	private static final long serialVersionUID = 5872486148218801532L;
+	
 	/**
 	 * Creates a new not found exception with the given id
 	 * 

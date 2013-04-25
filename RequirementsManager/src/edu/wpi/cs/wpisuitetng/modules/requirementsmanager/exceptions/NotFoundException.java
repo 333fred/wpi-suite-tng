@@ -18,6 +18,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
 public class NotFoundException extends Exception {
 	
+	/** The auto-generated serial version id */
+	private static final long serialVersionUID = 1L;
+	/** The not found object */
 	protected Object notFound;
 	
 	/**

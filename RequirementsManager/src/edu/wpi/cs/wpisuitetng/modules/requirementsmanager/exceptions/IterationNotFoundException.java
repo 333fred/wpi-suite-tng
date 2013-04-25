@@ -18,6 +18,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
 public class IterationNotFoundException extends NotFoundException {
 	
+	/** The auto-generated serial version id */
+	private static final long serialVersionUID = 1660484672547645673L;
+	
 	/**
 	 * Creates a new not found exception for an iteration
 	 * 
