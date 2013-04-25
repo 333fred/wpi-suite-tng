@@ -22,6 +22,9 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Controller to handle all server communication with Model objects. Each model
  * must implement an concrete class of this type that provides the correct
  * fields to the server methods
+ * 
+ * @param <T>
+ *            The abstract model that this controller with handle requests for
  */
 
 public abstract class AbstractController<T extends AbstractModel> implements
@@ -60,14 +63,15 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	@Override
 	public void create(final T model, final RequestObserver observer) {
 		if (AbstractController.isSafeToSend()) {
-			return;
+			// Do not send, network hasn't been initialized
+		} else {
+			final Request request;
+			request = Network.getInstance().makeRequest(
+					"requirementsmanager/" + type, HttpMethod.PUT);
+			request.setBody(model.toJSON());
+			request.addObserver(observer);
+			request.send();
 		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type, HttpMethod.PUT);
-		request.setBody(model.toJSON());
-		request.addObserver(observer);
-		request.send();
 		
 	}
 	
@@ -82,13 +86,14 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	@Override
 	public void get(final int id, final RequestObserver observer) {
 		if (AbstractController.isSafeToSend()) {
-			return;
+			// Do not send, network hasn't been initialized
+		} else {
+			final Request request;
+			request = Network.getInstance().makeRequest(
+					"requirementsmanager/" + type + "/" + id, HttpMethod.GET);
+			request.addObserver(observer);
+			request.send();
 		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type + "/" + id, HttpMethod.GET);
-		request.addObserver(observer);
-		request.send();
 	}
 	
 	/**
@@ -100,13 +105,14 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	@Override
 	public void getAll(final RequestObserver observer) {
 		if (AbstractController.isSafeToSend()) {
-			return;
+			// Do not send, network hasn't been initialized
+		} else {
+			final Request request;
+			request = Network.getInstance().makeRequest(
+					"requirementsmanager/" + type, HttpMethod.GET);
+			request.addObserver(observer);
+			request.send();
 		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type, HttpMethod.GET);
-		request.addObserver(observer);
-		request.send();
 	}
 	
 	/**
@@ -120,13 +126,14 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	@Override
 	public void save(final T model, final RequestObserver observer) {
 		if (AbstractController.isSafeToSend()) {
-			return;
+			// Do not send, network hasn't been initialized
+		} else {
+			final Request request;
+			request = Network.getInstance().makeRequest(
+					"requirementsmanager/" + type, HttpMethod.POST);
+			request.setBody(model.toJSON());
+			request.addObserver(observer);
+			request.send();
 		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type, HttpMethod.POST);
-		request.setBody(model.toJSON());
-		request.addObserver(observer);
-		request.send();
 	}
 }

@@ -18,6 +18,9 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 /**
  * Interface for a controller for a given model. It provides methods for
  * retrieving one, retrieving all, creating, and saving a model
+ * 
+ * @param <T>
+ *            The type of abstract model this implementation will handle
  */
 
 public interface IModelController<T extends AbstractModel> {
