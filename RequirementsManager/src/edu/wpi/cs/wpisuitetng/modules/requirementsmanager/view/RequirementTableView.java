@@ -51,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.Permission
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
@@ -155,7 +156,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		FilterView.getInstance().addFilterUpdateListener(this);
 		firstPaint = false;
 		// register this listener to the Database
-		RequirementDatabase.getInstance().registerListener(this);
 		
 		iterationController = new IterationController();
 		requirementsController = new RequirementsController();
@@ -417,6 +417,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				event.consume();
 			}
 		});
+		
+		FilterDatabase.getInstance().registerListener(this);
+		IterationDatabase.getInstance().registerListener(this);
+		RequirementDatabase.getInstance().registerListener(this);
 		
 	}
 	
@@ -782,6 +786,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	
 	@Override
 	public void update() {
+		requirements = RequirementDatabase.getInstance().getFilteredRequirements().toArray(new Requirement[0]);
+		updateListView();
 	}
 	
 	/**
