@@ -91,7 +91,6 @@ public class AssignParentController {
 		controller.save(anReq, observer);
 		controller.save(model, observer);
 		
-		view.refreshTopPanel();
 		view.refreshValidParents();
 		view.refreshParentLabel();
 	}

@@ -28,41 +28,42 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
  */
 
 public class VelocityIterationStatistics extends AbstractRequirementStatistics {
-	
+
 	@Override
 	public JFreeChart buildBarChart() {
 		final JFreeChart barChart = this.buildBarChart(
 				"Iterations by Actual Effort", "Iteration", "Effort");
 		return barChart;
 	}
-	
+
 	@Override
 	public JFreeChart buildLineChart() {
 		update();
 		return this.buildLineChart("Iterations by Actual Effort", "Iteration",
 				"Effort");
 	}
-	
+
 	@Override
 	public JFreeChart buildPieChart() {
 		return this.buildPieChart("Iterations by Actual Effort");
 	}
-	
+
 	/**
 	 * {@inheritdoc}
 	 */
 	@Override
 	public void update() {
-		
+
 		final List<Iteration> iterations = IterationDatabase.getInstance()
-				.getAll();	// refresh list of iterations
-		
+				.getAll(); // refresh list of iterations
+
 		for (final Iteration anIteration : iterations) {
-			
-			data.put(anIteration.getName(), anIteration.getEstimate());
-			
+
+			if (anIteration.getId() != -1 && anIteration.getId() != -2) {
+				data.put(anIteration.getName(), anIteration.getEstimate());
+			}
 		}
-		
+
 	}
-	
+
 }

@@ -240,9 +240,6 @@ public class SubRequirementPanel extends JPanel {
 			removeParent.setAction(new RemoveParentAction(
 					new RemoveParentController(this, requirement, panel)));
 			
-			removeChild.setEnabled(false); // List starts with no selection,
-											// initialize to disabled
-			
 			radioChild.addActionListener(new ActionListener() { // Have the
 					
 						// radio child
@@ -277,6 +274,7 @@ public class SubRequirementPanel extends JPanel {
 					});
 			
 			refreshAll(); // Refresh all fields
+			removeChild.setEnabled(false);
 			
 		}
 	}
@@ -499,13 +497,7 @@ public class SubRequirementPanel extends JPanel {
 			if (tempReq != null) {
 				requirement = tempReq; // Set the requirement field to it
 				removeChild.setAction(new RemoveChildAction(
-						new RemoveChildController(this, requirement, panel))); // Reset
-																				// the
-																				// actions
-																				// with
-																				// the
-																				// new
-																				// requirement
+						new RemoveChildController(this, requirement, panel))); // Reset the actions with the new requirement
 				if (parentSelected) {
 					setActionToParent();
 				} else {
@@ -513,8 +505,7 @@ public class SubRequirementPanel extends JPanel {
 				}
 				removeParent.setAction(new RemoveParentAction(
 						new RemoveParentController(this, requirement, panel)));
-				refreshTopPanel(); // Refresh the parent label, subrequirements,
-									// and lower pane
+				refreshTopPanel(); // Refresh the parent label, subrequirements, and lower pane
 				refreshParentLabel();
 				if (parentSelected) {
 					refreshValidParents();
@@ -523,7 +514,7 @@ public class SubRequirementPanel extends JPanel {
 				}
 			}
 		} catch (final RequirementNotFoundException e) {
-			// if reuirement wasnt found, not much we can do.
+			// if requirement wasn't found, not much we can do.
 		}
 		
 	}
@@ -564,9 +555,9 @@ public class SubRequirementPanel extends JPanel {
 	public void refreshTopPanel() {
 		childrenList = new DefaultListModel();
 		initializeTopList(requirement);
-		topReqNames = new JList(childrenList); // Create list of children and
-												// put it in a JList
+		topReqNames = new JList(childrenList); // Create list of children and put it in a JList
 		topScrollPane.setViewportView(topReqNames);
+		removeChild.setEnabled(false); //Nothing on the new list will be selected
 		topReqNames.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
