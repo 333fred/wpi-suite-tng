@@ -105,7 +105,7 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	@Override
 	public StringListModel[] getEntity(final Session s, final String id) {
 		final StringListModel uList = new StringListModel();
-		final ArrayList<String> user = new ArrayList<String>();
+		final List<String> user = new ArrayList<String>();
 		user.add(s.getUser().getUsername());
 		uList.setUsers(user);
 		final StringListModel[] array = { uList };

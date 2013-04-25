@@ -345,7 +345,7 @@ public class SubRequirementTreeView extends JPanel implements
 	 *            The integer list of subrequirements
 	 * @return The arraylist of all requirements
 	 */
-	public ArrayList<Requirement> sortSubRequirements(
+	public List<Requirement> sortSubRequirements(
 			final List<Integer> subreqs) {
 		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
 		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();
@@ -371,7 +371,7 @@ public class SubRequirementTreeView extends JPanel implements
 		topReqsWOChildren = Requirement.sortRequirements(topReqsWOChildren);
 		topReqsWithChildren = Requirement.sortRequirements(topReqsWithChildren);
 		
-		final ArrayList<Requirement> allSubReqs = new ArrayList<Requirement>();
+		final List<Requirement> allSubReqs = new ArrayList<Requirement>();
 		allSubReqs.addAll(topReqsWithChildren);
 		allSubReqs.addAll(topReqsWOChildren);
 		
@@ -396,7 +396,7 @@ public class SubRequirementTreeView extends JPanel implements
 			final DefaultMutableTreeNode node) {
 		DefaultMutableTreeNode subRequirementNode = null;
 		
-		final ArrayList<Requirement> subReqs = sortSubRequirements(anReq
+		final List<Requirement> subReqs = sortSubRequirements(anReq
 				.getSubRequirements());
 		
 		for (final Requirement aReq : subReqs) {
