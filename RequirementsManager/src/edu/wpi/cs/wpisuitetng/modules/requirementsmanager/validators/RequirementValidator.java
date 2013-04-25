@@ -121,11 +121,11 @@ public class RequirementValidator {
 	 *            The session to validate against
 	 * @param requirement
 	 *            The requirement model to validate
+	 * @param mode
+	 *            The mode of this validation, create or edit
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException
 	 */
-	
-	// TODO: @param mode The mode to validate for
 	public List<ValidationIssue> validate(final Session session,
 			final Requirement requirement, final RequirementActionMode mode)
 			throws WPISuiteException {

@@ -63,6 +63,15 @@ public class IterationValidator {
 		return calendar1.getTime().compareTo(calendar2.getTime());
 	}
 	
+	/**
+	 * Returns whether two given Iterations overlap
+	 * 
+	 * @param alpha
+	 *            the first Iteration to check
+	 * @param beta
+	 *            the second Iteration to check
+	 * @return True if they overlap, false otherwise
+	 */
 	public static boolean overlapExists(final Iteration alpha,
 			final Iteration beta) {
 		
@@ -85,6 +94,20 @@ public class IterationValidator {
 		return true;
 	}
 	
+	/**
+	 * Validates the given iteration to ensure it is able to be stored in the
+	 * database
+	 * 
+	 * @param s
+	 *            the current session
+	 * @param i
+	 *            the iteration to validate
+	 * @param mode
+	 *            the mode, creator or edit
+	 * @param db
+	 *            the database to check for overlap
+	 * @return a list of issues, the empty list if there are none
+	 */
 	public List<ValidationIssue> validate(final Session s, final Iteration i,
 			final IterationActionMode mode, final Data db) {
 		final List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
