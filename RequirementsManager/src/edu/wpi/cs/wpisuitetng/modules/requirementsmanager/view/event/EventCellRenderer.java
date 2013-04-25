@@ -26,20 +26,13 @@ import javax.swing.table.TableCellRenderer;
  * Event.
  * 
  */
+@SuppressWarnings ("rawtypes")
 public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
-	
-	private int wrapWidth;
 	
 	/**
 	 * Method to create and add a panel to display and paint a specified value.
-	 * 
-	 * @list currently of no use here
-	 * @value the object of display, must be of type Event
-	 * @index currently of no use here
-	 * @isSelected currently of no use here
-	 * @cellHasFocus currently of no use here
+	 * {@inheritdoc}
 	 */
-	
 	@Override
 	public Component getListCellRendererComponent(final JList list,
 			final Object value, final int index, final boolean isSelected,

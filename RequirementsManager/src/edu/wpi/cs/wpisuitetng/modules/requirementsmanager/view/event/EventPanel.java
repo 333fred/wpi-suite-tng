@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    spkordell
+ *    Steve Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
@@ -20,8 +20,6 @@ import javax.swing.JPanel;
 
 /**
  * The EventPanel class displays the individual event panels
- * 
- * @author spkordell
  */
 @SuppressWarnings ("serial")
 public class EventPanel extends JPanel {
@@ -34,17 +32,18 @@ public class EventPanel extends JPanel {
 	/**
 	 * The note panel is the panel that is used to create and display notes
 	 * 
-	 * @param note
+	 * @param event
 	 *            the note that is displayed
 	 */
 	public EventPanel(final Event event) {
 		this.event = event;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		title = new JLabel(event.getTitle());
+		title = new JLabel(this.event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
 		content = new JLabel();
-		content.setText("<html><BODY>" + event.getContent() + "</BODY></HTML>");
+		content.setText("<html><BODY>" + this.event.getContent()
+				+ "</BODY></HTML>");
 		content.setFont(content.getFont().deriveFont(9));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		setBorder(BorderFactory.createCompoundBorder(BorderFactory
@@ -56,15 +55,23 @@ public class EventPanel extends JPanel {
 		this.add(content);
 	}
 	
+	/**
+	 * Creates a new EventPanel with the given event and max width of the panel
+	 * 
+	 * @param event
+	 *            the event to handle
+	 * @param maxWidth
+	 *            the max with of the Panel
+	 */
 	public EventPanel(final Event event, final int maxWidth) {
 		this.event = event;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		title = new JLabel(event.getTitle());
+		title = new JLabel(this.event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
 		content = new JLabel();
 		content.setText("<html><BODY><TABLE WIDTH=" + (maxWidth - 30)
-				+ "><TR><TD>" + event.getContent()
+				+ "><TR><TD>" + this.event.getContent()
 				+ "</TD></TR></TABLE></BODY></HTML>");
 		content.setFont(content.getFont().deriveFont(9));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
