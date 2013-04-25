@@ -149,7 +149,7 @@ public class MakeTaskPanel extends JPanel {
 		addTaskLabel = new JLabel("Task:");
 		nameTaskLabel = new JLabel("Name:");
 		descTaskLabel = new JLabel("Description:");
-		userAssignedLabel = new JLabel("Users:");
+		userAssignedLabel = new JLabel("User:");
 		taskComplete = new JCheckBox("Completed");
 		userAssigned = new JComboBox();
 		userAssigned.setBackground(Color.white);
