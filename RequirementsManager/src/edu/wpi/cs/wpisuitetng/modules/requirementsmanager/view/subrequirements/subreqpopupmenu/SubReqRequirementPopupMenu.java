@@ -112,11 +112,8 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 								// the remove child menu
 							tempSubReq = RequirementDatabase.getInstance().get(
 									reqID);
-							menuChild = new JMenuItem(tempSubReq.getName(),
-									tempSubReq.getrUID()); // Send in name and
-															// ID (ID is stored
-															// as out-dated
-															// mnemonic)
+							menuChild = new JMenuItem(tempSubReq.getName()); // Send in name and ID
+							menuChild.putClientProperty(0, reqID);
 							menuChild.addActionListener(this);
 							menuRemoveChildren.add(menuChild);
 						} catch (final RequirementNotFoundException e) {
@@ -163,7 +160,7 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 		} else if (!e.getSource().equals(menuRemoveChildren)) {
 			try {
 				otherReq = RequirementDatabase.getInstance().get(
-						((JMenuItem) e.getSource()).getMnemonic());// Grab the
+						((int)((JMenuItem) e.getSource()).getClientProperty(0)));// Grab the
 																	// parent
 																	// req
 			} catch (final RequirementNotFoundException e1) {
