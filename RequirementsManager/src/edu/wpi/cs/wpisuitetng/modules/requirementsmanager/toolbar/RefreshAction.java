@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  * Action invoked upon use of the Refresh key Heavily adapted from
  * CreateDefectAction in the DefectTracker module
  * 
- * Action that calls {@link MainTabController#addCreateDefectTab()},
+ * Action that calls {@link MainTabController},
  * default mnemonic key is C.
  */
 @SuppressWarnings ("serial")
@@ -36,7 +36,7 @@ public class RefreshAction extends AbstractAction {
 	/**
 	 * Create a CreateDefectAction
 	 * 
-	 * @param controller
+	 * @param requirementList
 	 *            When the action is performed, controller.addCreateDefectTab()
 	 *            is called
 	 */

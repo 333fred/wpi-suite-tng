@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 /**
  * Opens panel to edit permissions
  */
+@SuppressWarnings ("serial")
 public class CreatePermissionPanelAction extends AbstractAction {
 	
 	private final MainTabController controller;
@@ -41,7 +42,8 @@ public class CreatePermissionPanelAction extends AbstractAction {
 	
 	@Override
 	/**
-	 * Method to check if a permissions tab is already open, or create a new tab if there is no tab already open.
+	 * Method to check if a permissions tab is already open, 
+	 * or create a new tab if there is no tab already open.
 	 */
 	public void actionPerformed(final ActionEvent e) {
 		for (int i = 0; i < controller.getNumberOfOpenTabs(); i++) {

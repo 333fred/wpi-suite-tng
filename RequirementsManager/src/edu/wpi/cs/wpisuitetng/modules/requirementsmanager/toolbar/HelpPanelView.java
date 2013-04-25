@@ -43,7 +43,7 @@ public class HelpPanelView extends Tab implements IToolbarGroupProvider {
 		toolbarView = new ToolbarGroupView("Help");
 		butHelp = new JButton("User Manual");
 		
-		butHelp.setAction(new CreateHelpPanelAction(tabController));
+		butHelp.setAction(new CreateHelpPanelAction());
 		// create and add the buttons that will be displayed
 		toolbarView.getContent().add(butHelp);
 		// set the width of the group so it is not too long

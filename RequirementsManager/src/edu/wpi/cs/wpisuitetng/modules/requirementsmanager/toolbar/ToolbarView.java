@@ -36,7 +36,7 @@ public class ToolbarView extends DefaultToolbarView {
 	 * Returns the instance of the toolbar view, if tab controller was not set,
 	 * returns null
 	 * 
-	 * @return
+	 * @return the ToolbarView instance
 	 */
 	
 	public static ToolbarView getInstance() {
@@ -47,7 +47,7 @@ public class ToolbarView extends DefaultToolbarView {
 	 * Returns the instance of this toolbar view, and sets the tab controller
 	 * 
 	 * @param tabController
-	 * @return
+	 * @return the ToolbarView instance
 	 */
 	
 	public static ToolbarView getInstance(final MainTabController tabController) {
@@ -103,7 +103,7 @@ public class ToolbarView extends DefaultToolbarView {
 		
 		// Construct the User Manual button
 		createHelp = new JButton("User Manual");
-		createHelp.setAction(new CreateHelpPanelAction(tabController));
+		createHelp.setAction(new CreateHelpPanelAction());
 		
 		// Construct the Stat button
 		createStatistics = new JButton("Show Statistics");
@@ -169,7 +169,7 @@ public class ToolbarView extends DefaultToolbarView {
 		// This is the help toolbar
 		final ToolbarGroupView toolbarView = new ToolbarGroupView("Help");
 		final JButton butHelp = new JButton("User Manual");
-		butHelp.setAction(new CreateHelpPanelAction(tabController));
+		butHelp.setAction(new CreateHelpPanelAction());
 		// Create and add the buttons that will be displayed in the help
 		toolbarView.getContent().add(butHelp);
 		// Set the width of the group so it is not too long
