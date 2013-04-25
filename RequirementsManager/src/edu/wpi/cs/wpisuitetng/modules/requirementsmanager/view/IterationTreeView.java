@@ -87,7 +87,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 		firstPaint = true;
 
-		this.top = new DefaultMutableTreeNode("Iterations");
+		this.top = new DefaultMutableTreeNode("<HTML><B>Iterations</B></HTML>");
 		this.tree = new JTree(top);
 		this.tree.setEditable(false);
 		this.tree.setDragEnabled(true);

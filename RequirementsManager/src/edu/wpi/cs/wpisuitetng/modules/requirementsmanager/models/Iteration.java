@@ -349,9 +349,9 @@ public class Iteration extends AbstractModel {
 
 	public String toString() {
 		if ((new Date()).compareTo(this.getEndDate()) > 0 && this.getId() != -1) {
-			return this.getName() + " (Closed)";
+			return "<HTML><B>"+this.getName() + " (Closed)" + "</B></HTML>";
 		} else {
-			return this.getName();
+			return "<HTML><B>" + this.getName()+ "</B></HTML>";
 		}
 	}
 

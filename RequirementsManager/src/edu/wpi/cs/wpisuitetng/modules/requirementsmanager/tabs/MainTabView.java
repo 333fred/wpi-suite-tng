@@ -156,13 +156,4 @@ public class MainTabView extends JTabbedPane {
 			super.setSelectedComponent(component);
 		}
 	}
-	
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		// Are we dragging?
-	    if(dragging && currentMouseLocation != null && tabImage != null) {
-	      // Draw the dragged tab
-	      g.drawImage(tabImage, currentMouseLocation.x, currentMouseLocation.y, this);
-	    }
-	  }
 }
