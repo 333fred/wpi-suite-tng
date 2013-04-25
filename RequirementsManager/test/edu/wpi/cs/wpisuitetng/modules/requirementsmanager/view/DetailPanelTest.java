@@ -1,23 +1,24 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import junit.extensions.abbot.ComponentTestFixture;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import abbot.tester.JTextComponentTester;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel.Mode;
 
-public class DetailPanelTest {
+public class DetailPanelTest extends ComponentTestFixture {
 	
 	MainTabController mainTabController = null;
 	
@@ -27,6 +28,9 @@ public class DetailPanelTest {
 			this.mainTabController = new MainTabController();
 		}
 	}
+
+	
+	
 	
 	@Test
 	public void testCreationForEachModeNew(){
@@ -203,5 +207,24 @@ public class DetailPanelTest {
 		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
 		
 		assertTrue(detailPanel.onTabClosed());
+	}
+	
+	@Test	
+	public void testSaveButtonEnables() {
+		Requirement r = new Requirement();		
+		DetailPanel panel = new DetailPanel(r, DetailPanel.Mode.CREATE, mainTabController);
+		
+		JTextComponentTester tester = new JTextComponentTester();
+		
+		showFrame(panel);
+		
+		assertFalse(panel.getBtnSave().isEnabled());
+		
+		tester.actionEnterText(panel.getTextName(), "Req Name");
+		assertFalse(panel.getBtnSave().isEnabled());
+		
+		tester.actionEnterText(panel.getTextDescription(), "Req Desc");
+		assertTrue(panel.getBtnSave().isEnabled());
+		
 	}
 }

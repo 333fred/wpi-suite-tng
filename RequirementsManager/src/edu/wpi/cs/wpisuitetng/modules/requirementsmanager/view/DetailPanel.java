@@ -1347,4 +1347,44 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 		}
 	}
+
+	/**
+	 * @return the btnSave
+	 */
+	public JButton getBtnSave() {
+		return btnSave;
+	}
+
+	/**
+	 * @param btnSave the btnSave to set
+	 */
+	public void setBtnSave(JButton btnSave) {
+		this.btnSave = btnSave;
+	}
+
+	/**
+	 * @return the btnCancel
+	 */
+	public JButton getBtnCancel() {
+		return btnCancel;
+	}
+
+	/**
+	 * @param btnCancel the btnCancel to set
+	 */
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
+	}
+
+	/**
+	 * @param comboBoxIteration the comboBoxIteration to set
+	 */
+	public void setComboBoxIteration(JComboBox comboBoxIteration) {
+		this.comboBoxIteration = comboBoxIteration;
+	}
+	
+	
+	
+	
+	
 }
