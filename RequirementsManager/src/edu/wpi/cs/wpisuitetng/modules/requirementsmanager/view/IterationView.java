@@ -637,4 +637,8 @@ public class IterationView extends Tab implements ISaveNotifier, IDatabaseListen
 		return !alive;
 
 	}
+	
+	public JButton getButSave() {
+		return butSave;
+	}
 }
