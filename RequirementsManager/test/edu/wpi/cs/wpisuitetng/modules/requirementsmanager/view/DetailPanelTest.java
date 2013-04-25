@@ -1,15 +1,12 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import junit.extensions.abbot.ComponentTestFixture;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel.Mode;
 
-public class DetailPanelTest {
+public class DetailPanelTest extends ComponentTestFixture {
 	
 	MainTabController mainTabController = null;
 	
@@ -31,6 +28,9 @@ public class DetailPanelTest {
 			this.mainTabController = new MainTabController();
 		}
 	}
+
+	
+	
 	
 	@Test
 	public void testCreationForEachModeNew(){
@@ -215,6 +215,8 @@ public class DetailPanelTest {
 		DetailPanel panel = new DetailPanel(r, DetailPanel.Mode.CREATE, mainTabController);
 		
 		JTextComponentTester tester = new JTextComponentTester();
+		
+		showFrame(panel);
 		
 		assertFalse(panel.getBtnSave().isEnabled());
 		
