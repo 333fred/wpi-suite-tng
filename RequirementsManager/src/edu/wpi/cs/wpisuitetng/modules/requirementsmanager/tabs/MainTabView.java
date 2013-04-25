@@ -7,11 +7,21 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    Mitchell Caisse, Steven Kordell
+ *    
+ *    Source for draggable tab portion of this class: Tom Martin @ http://stackoverflow.com/questions/60269/how-to-implement-draggable-tab-using-java-swing
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
@@ -153,5 +163,12 @@ public class MainTabView extends JTabbedPane {
 		}
 	}
 	
-
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// Are we dragging?
+	    if(dragging && currentMouseLocation != null && tabImage != null) {
+	      // Draw the dragged tab
+	      g.drawImage(tabImage, currentMouseLocation.x, currentMouseLocation.y, this);
+	    }
+	  }
 }

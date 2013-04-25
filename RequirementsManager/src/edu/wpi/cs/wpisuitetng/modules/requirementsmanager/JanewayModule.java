@@ -64,7 +64,7 @@ public class JanewayModule implements IJanewayModule {
 	private SubRequirementTreeView subRequirementTreeView;
 
 	/** The tabbed pane on the left for filters and iterations */
-	private DraggableTabbedPane leftTabbedPane;
+	private JTabbedPane leftTabbedPane;
 
 	/** The controller for the toolbarView */
 	private ToolbarController toolbarController;
@@ -99,12 +99,10 @@ public class JanewayModule implements IJanewayModule {
 
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
-
 		filterView = tabController.getFilterView();
-
 		subRequirementTreeView = tabController.getSubReqView();
 
-		leftTabbedPane = new DraggableTabbedPane();
+		leftTabbedPane = new JTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
