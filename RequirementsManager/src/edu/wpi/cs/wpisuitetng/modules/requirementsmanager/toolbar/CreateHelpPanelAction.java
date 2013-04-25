@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.network.Network;
 
 /**
@@ -33,19 +32,12 @@ import edu.wpi.cs.wpisuitetng.network.Network;
  */
 @SuppressWarnings ("serial")
 public class CreateHelpPanelAction extends AbstractAction {
-	
-	private final MainTabController controller;
-	
+		
 	/**
 	 * Create a CreateHelpPanelAction
-	 * 
-	 * @param controller
-	 *            When the action is performed, controller.addCreateDefectTab()
-	 *            is called
 	 */
-	public CreateHelpPanelAction(final MainTabController controller) {
+	public CreateHelpPanelAction() {
 		super("User Manual");
-		this.controller = controller;
 		putValue(Action.MNEMONIC_KEY, KeyEvent.VK_F1);
 	}
 	

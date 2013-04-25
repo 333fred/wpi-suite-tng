@@ -21,11 +21,24 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
+/**
+ * An action impementation to handle saving the permissions designated by an
+ * admin in the PermissionsPanel
+ */
+@SuppressWarnings ("serial")
 public class SavePermissionsAction extends AbstractAction {
 	
 	PermissionModel model;
 	PermissionsPanel panel;
 	
+	/**
+	 * Creates a new save permission action with the given panel and model
+	 * 
+	 * @param panel
+	 *            the permission panel for this action
+	 * @param model
+	 *            the model to save
+	 */
 	public SavePermissionsAction(final PermissionsPanel panel,
 			final PermissionModel model) {
 		super("Save Permission");
@@ -44,7 +57,6 @@ public class SavePermissionsAction extends AbstractAction {
 		model.setPermLevel(panel.getPermission());
 		
 		controller.save(model, observer);
-		
 	}
 	
 }

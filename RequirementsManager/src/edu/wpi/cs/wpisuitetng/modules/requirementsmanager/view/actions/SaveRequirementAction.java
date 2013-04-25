@@ -26,17 +26,24 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddRequireme
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
- * 
- * @author Swagasaurus
- * 
- *         Action to save a requirement
+ * Action to save a requirement.
  */
+@SuppressWarnings ("serial")
 public class SaveRequirementAction extends AbstractAction {
 	
 	private final Requirement requirement;
 	
 	private final DetailPanel parentView;
 	
+	/**
+	 * Creates a new SaveRequirement action with the given DetailPanel view and
+	 * requirement
+	 * 
+	 * @param requirement
+	 *            the requirement to save
+	 * @param parentView
+	 *            the DetailPanel view
+	 */
 	public SaveRequirementAction(final Requirement requirement,
 			final DetailPanel parentView) {
 		super("Save Requirement");
@@ -118,6 +125,11 @@ public class SaveRequirementAction extends AbstractAction {
 		}
 	}
 	
+	/**
+	 * Gets the requirement that this action saves
+	 * 
+	 * @return the requirement
+	 */
 	public Requirement getRequirement() {
 		return requirement;
 	}

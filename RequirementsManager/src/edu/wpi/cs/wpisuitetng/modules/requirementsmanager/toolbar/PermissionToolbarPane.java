@@ -29,10 +29,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 /**
  * Toolbar panel used to edit permissions
  */
+@SuppressWarnings ("serial")
 public class PermissionToolbarPane extends JPanel {
 	
 	private static PermissionToolbarPane singleton;
 	
+	/**
+	 * Creates a new PermissionToolbarPane instance with the given controller
+	 * 
+	 * @param tabController
+	 *            the controller for the instance
+	 * @return the PermissionToolbarPane instance
+	 */
 	public static PermissionToolbarPane createSingleton(
 			final MainTabController tabController) {
 		if (PermissionToolbarPane.singleton == null) {
@@ -42,6 +50,11 @@ public class PermissionToolbarPane extends JPanel {
 		return PermissionToolbarPane.singleton;
 	}
 	
+	/**
+	 * Gets the instance of the PermissionToolbarPane
+	 * 
+	 * @return the singleton PermissionToolbarPane
+	 */
 	public static PermissionToolbarPane getInstance() {
 		return PermissionToolbarPane.singleton;
 	}
@@ -56,6 +69,9 @@ public class PermissionToolbarPane extends JPanel {
 	
 	/**
 	 * Default constructor that creates the pane for the toolbar
+	 * 
+	 * @param tabController
+	 *            The controller for this pane
 	 */
 	public PermissionToolbarPane(final MainTabController tabController) {
 		

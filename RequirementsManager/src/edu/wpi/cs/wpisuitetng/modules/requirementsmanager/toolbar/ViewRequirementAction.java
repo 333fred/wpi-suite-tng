@@ -24,20 +24,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  * Action invoked upon use of the View Requirement key Heavily adapted from
  * CreateDefectAction in the DefectTracker module
  * 
- * Action that calls {@link MainTabController#addCreateDefectTab()},
+ * Action that calls {@link MainTabController},
  * default mnemonic key is C.
  */
 @SuppressWarnings ("serial")
 public class ViewRequirementAction extends AbstractAction {
 	
-	// TODO: Rename all of these to edit requirement
 	/** The requirement list view that this action is operating on */
 	private final RequirementTableView requirementList;
 	
 	/**
 	 * Create a CreateDefectAction
 	 * 
-	 * @param controller
+	 * @param requirementList
 	 *            When the action is performed, controller.addCreateDefectTab()
 	 *            is called
 	 */

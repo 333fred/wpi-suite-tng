@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 /**
  * Action which concerns editing of an iteration
  */
+@SuppressWarnings ("serial")
 public class EditIterationAction extends AbstractAction {
 	
 	/** The iteration view to receive the iteration from */
@@ -33,6 +34,11 @@ public class EditIterationAction extends AbstractAction {
 	/** The tab controller to open the new tab in */
 	private final MainTabController tabController;
 	
+	/**
+	 * 
+	 * @param iterationTreeView
+	 * @param tabController
+	 */
 	public EditIterationAction(final IterationTreeView iterationTreeView,
 			final MainTabController tabController) {
 		this.iterationTreeView = iterationTreeView;

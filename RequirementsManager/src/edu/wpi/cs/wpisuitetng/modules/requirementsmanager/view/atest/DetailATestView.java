@@ -28,7 +28,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableModel;
 
@@ -46,7 +45,6 @@ public class DetailATestView extends JPanel {
 	private Requirement requirement;
 	private final DetailPanel parentView;
 	private final MakeATestPanel makeATestPanel;
-	private EventCellRenderer cellRenderer;
 	private final JScrollPane aTestScrollPane;
 	
 	/**
@@ -65,7 +63,7 @@ public class DetailATestView extends JPanel {
 		
 		setLayout(new BorderLayout());
 		// Set up the aTest panel
-		makeATestPanel = new MakeATestPanel(requirement, parentView);
+		makeATestPanel = new MakeATestPanel(requirement);
 		// Create the aTest list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
 		testModel = new EventTableModel(new ArrayList<Event>());
@@ -90,7 +88,7 @@ public class DetailATestView extends JPanel {
 		if (requirement.getStatus() != Status.DELETED) {
 			// Set the action of the save button to the default (create new
 			// aTest)
-			makeATestPanel.getAddaTest().setAction(
+			makeATestPanel.getAddATest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
 							requirement, parentView, testTable)));
 			
@@ -115,10 +113,10 @@ public class DetailATestView extends JPanel {
 					if (makeATestPanel.getaTestField().getText().trim()
 							.equals("")
 							&& (testTable.getSelectedRowCount() == 0)) {
-						makeATestPanel.getAddaTest().setEnabled(false);
+						makeATestPanel.getAddATest().setEnabled(false);
 					} else if (!makeATestPanel.getaTestName().getText().trim()
 							.equals("")) {
-						makeATestPanel.getAddaTest().setEnabled(true);
+						makeATestPanel.getAddATest().setEnabled(true);
 					}
 				}
 			});
@@ -132,10 +130,10 @@ public class DetailATestView extends JPanel {
 					if (makeATestPanel.getaTestName().getText().trim()
 							.equals("")
 							&& (testTable.getSelectedRowCount() == 0)) {
-						makeATestPanel.getAddaTest().setEnabled(false);
+						makeATestPanel.getAddATest().setEnabled(false);
 					} else if (!makeATestPanel.getaTestField().getText().trim()
 							.equals("")) {
-						makeATestPanel.getAddaTest().setEnabled(true);
+						makeATestPanel.getAddATest().setEnabled(true);
 					}
 				}
 			});
@@ -145,7 +143,7 @@ public class DetailATestView extends JPanel {
 			makeATestPanel.getaTestFieldPane().setEnabled(false);
 			makeATestPanel.getaTestField().setEnabled(false);
 			makeATestPanel.getaTestName().setEnabled(false);
-			makeATestPanel.getAddaTest().setEnabled(false);
+			makeATestPanel.getAddATest().setEnabled(false);
 			makeATestPanel.getaTestStatus().setText("");
 			
 			makeATestPanel.getaTestField().setBackground(
@@ -205,8 +203,12 @@ public class DetailATestView extends JPanel {
 		return (ATest) testModel.getValueAt(testTable.getSelectedRow(), 0);
 	}
 	
+	/**
+	 * Gets the test panel for this view
+	 * 
+	 * @return the panel
+	 */
 	public MakeATestPanel getTestPanel() {
-		// TODO Auto-generated method stub
 		return makeATestPanel;
 	}
 	
@@ -218,7 +220,7 @@ public class DetailATestView extends JPanel {
 	 */
 	private void updateaTestView() {
 		if (requirement.getStatus() != Status.DELETED) {
-			makeATestPanel.getAddaTest().setAction(
+			makeATestPanel.getAddATest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
 							requirement, parentView, testTable), testTable
 							.getSelectedRows()));
@@ -237,7 +239,7 @@ public class DetailATestView extends JPanel {
 				if (makeATestPanel.getaTestName().getText().trim().equals("")
 						|| makeATestPanel.getaTestField().getText().trim()
 								.equals("")) {
-					makeATestPanel.getAddaTest().setEnabled(false);
+					makeATestPanel.getAddATest().setEnabled(false);
 				}
 			} else {
 				makeATestPanel.getaTestStatusBox().setEnabled(true);

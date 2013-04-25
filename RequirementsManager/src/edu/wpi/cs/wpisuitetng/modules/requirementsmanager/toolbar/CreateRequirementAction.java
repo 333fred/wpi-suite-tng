@@ -25,7 +25,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 /**
  * Action invoked upon use of the Create Requirement key Heavily adapted from
  * CreateDefectAction in the DefectTracker module
- * Action that calls {@link MainTabController#addCreateDefectTab()},
  * default mnemonic key is C.
  */
 @SuppressWarnings ("serial")

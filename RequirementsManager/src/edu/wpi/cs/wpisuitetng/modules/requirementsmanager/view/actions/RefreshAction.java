@@ -38,7 +38,7 @@ public class RefreshAction extends AbstractAction {
 	 * Create a RefreshAction object which operates on a specific
 	 * RequirementListView
 	 * 
-	 * @param RequirementTableView
+	 * @param requirementList
 	 *            the current view, which is to be refreshed
 	 * 
 	 */

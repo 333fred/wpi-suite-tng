@@ -27,6 +27,12 @@ public class PermissionSelectionChangedListener implements MouseListener {
 	
 	PermissionsPanel panel;
 	
+	/**
+	 * Creates a new listener for PermissionSelections.
+	 * 
+	 * @param panel
+	 *            the permission panel to listen on
+	 */
 	public PermissionSelectionChangedListener(final PermissionsPanel panel) {
 		this.panel = panel;
 	}
@@ -79,9 +85,12 @@ public class PermissionSelectionChangedListener implements MouseListener {
 	}
 	
 	/**
-	 * Unused method
+	 * Called when the value of a permission is changed, sets up the the button
+	 * values
+	 * 
+	 * @param e
+	 *            the event that triggered this event
 	 */
-	
 	public void valueChanged(final ListSelectionEvent e) {
 		// iterate through the local database, check the name being equal as the
 		// name selected in the table, set the radio buttons appropriately
