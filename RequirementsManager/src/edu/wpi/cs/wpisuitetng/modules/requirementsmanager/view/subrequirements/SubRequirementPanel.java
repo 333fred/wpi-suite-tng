@@ -300,7 +300,7 @@ public class SubRequirementPanel extends JPanel {
 																	// complete
 					if (req.getrUID() != rootID) { // and is not this
 													// requirement's root
-						validChildList.addElement(req.getName()); // add the
+						validChildList.addElement(req); // add the
 																	// requirement
 																	// to the
 																	// list
@@ -341,7 +341,7 @@ public class SubRequirementPanel extends JPanel {
 																	// in it's
 																	// tree
 					if (!req.equals(parentReq)) {
-						validParentList.addElement(req.getName());// add to list
+						validParentList.addElement(req);// add to list
 					}
 				}
 			}
@@ -462,7 +462,7 @@ public class SubRequirementPanel extends JPanel {
 			try {
 				tempReq = RequirementDatabase.getInstance().get(req);// Grab the
 																		// requirement
-				childrenList.addElement(tempReq.getName());// Place it in the
+				childrenList.addElement(tempReq);// Place it in the
 															// list
 			} catch (final RequirementNotFoundException e) {
 				// TODO Auto-generated catch block

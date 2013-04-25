@@ -24,11 +24,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 /**
  * Class for displaying the note view and the log view on the right side of the
  * Detail View
- * 
- * @author Mitchell
- * 
  */
-
+@SuppressWarnings ("serial")
 public class DetailEventPane extends JTabbedPane {
 	
 	JPanel notesListPane;
@@ -46,8 +43,15 @@ public class DetailEventPane extends JTabbedPane {
 	 *            The JPanel that represents the list of notes to represent
 	 * @param logListPane
 	 *            TheJPanel that represents the list of logs to represent
+	 * @param userListPane
+	 *            the ListPane that has all the users
+	 * @param taskListPane
+	 *            the ListPane that has all the tasks
+	 * @param atestListPane
+	 *            the ListPane that has all the tests
+	 * @param subreqListPane
+	 *            the ListPane that all all the subrequirement
 	 */
-	
 	public DetailEventPane(final JPanel notesListPane,
 			final JPanel logListPane, final JPanel userListPane,
 			final JPanel taskListPane, final JPanel atestListPane,
@@ -75,10 +79,16 @@ public class DetailEventPane extends JTabbedPane {
 		
 	}
 	
+	/**
+	 * Disables the subrequirements fields
+	 */
 	public void disableSubReqs() {
 		((SubRequirementPanel) subreqListPane).disableUserButtons();
 	}
 	
+	/**
+	 * Disables the user buttons
+	 */
 	public void disableUserButtons() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((DetailNoteView) notesListPane).disableUserButtons();
@@ -87,7 +97,9 @@ public class DetailEventPane extends JTabbedPane {
 		((DetailTaskView) taskListPane).disableUserButtons();
 	}
 	
-	// Notes, Tests, Tasks
+	/**
+	 * Disables users and subrequirements
+	 */
 	public void disableUsersAndSubReqs() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((DetailATestView) atestListPane).disableUserButtons();

@@ -14,6 +14,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import javax.swing.DefaultListSelectionModel;
 
+/**
+ * The toggleselectionmodel is responsible for 
+ */
+
 public class ToggleSelectionModel extends DefaultListSelectionModel {
 	
 	private static final long serialVersionUID = 1L;

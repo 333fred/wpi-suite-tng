@@ -46,15 +46,18 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
@@ -158,7 +161,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		FilterView.getInstance().addFilterUpdateListener(this);
 		firstPaint = false;
 		// register this listener to the Database
-		RequirementDatabase.getInstance().registerListener(this);
 		
 		iterationController = new IterationController();
 		requirementsController = new RequirementsController();
@@ -422,6 +424,17 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				event.consume();
 			}
 		});
+		
+
+		FilterDatabase.getInstance().registerListener(this);
+		IterationDatabase.getInstance().registerListener(this);
+		RequirementDatabase.getInstance().registerListener(this);
+
+		//don't allow table editing without permissions
+		if (PermissionModel.getInstance().getPermLevel() != UserPermissionLevel.ADMIN) {
+			btnEdit.setEnabled(false);
+		}
+
 		
 	}
 	
@@ -808,6 +821,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	
 	@Override
 	public void update() {
+		requirements = RequirementDatabase.getInstance().getFilteredRequirements().toArray(new Requirement[0]);
+		updateListView();
 	}
 	
 	/**

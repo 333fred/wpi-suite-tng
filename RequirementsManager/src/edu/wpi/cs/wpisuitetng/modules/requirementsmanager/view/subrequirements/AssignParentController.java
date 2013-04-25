@@ -58,9 +58,7 @@ public class AssignParentController {
 	 * from a parent to the child and vice versa
 	 */
 	public void saveParent() {
-		final String selectedIndex = (String) view.getList().getSelectedValue();
-		final Requirement anReq = RequirementDatabase.getInstance()
-				.getRequirement(selectedIndex);
+		final Requirement anReq = (Requirement) view.getList().getSelectedValue();
 		Requirement anParReq = null;
 		
 		final Integer modelID = new Integer(model.getrUID());

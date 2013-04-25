@@ -40,18 +40,43 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
-@SuppressWarnings ("serial")
+/**
+ * 
+ */
+@SuppressWarnings ({ "serial", "unchecked", "rawtypes" })
 public class StatView extends Tab implements ActionListener,
 		FilterUpdateListener {
 	
-	// public only for testing
+	/**
+	 * Enum to hold the type of chart for this view
+	 */
 	public enum ChartType {
-		BAR, PIE, LINE
+		/** Bar Chart */
+		BAR,
+		/** Pie Chart */
+		PIE,
+		/** Line Chart */
+		LINE
 	}
 	
-	// public only for testing
+	/**
+	 * Enum to hold the datatype for this view
+	 */
 	public enum DataType {
-		STATUS, ITERATION, ASSIGNEE, ESTIMATES, EFFORT, TASK, VELOCITY
+		/** Status type */
+		STATUS,
+		/** Iteration type */
+		ITERATION,
+		/** Assignee type */
+		ASSIGNEE,
+		/** Estimate type */
+		ESTIMATES,
+		/** Effort type */
+		EFFORT,
+		/** Task type */
+		TASK,
+		/** Velocity type */
+		VELOCITY
 	}
 	
 	private static StatView sv;
@@ -75,6 +100,11 @@ public class StatView extends Tab implements ActionListener,
 		return chart;
 	}
 	
+	/**
+	 * Gets the singleton instance of the statview
+	 * 
+	 * @return the StatView
+	 */
 	public static StatView getInstance() {
 		if (StatView.sv == null) {
 			StatView.sv = new StatView();
@@ -193,6 +223,11 @@ public class StatView extends Tab implements ActionListener,
 		
 	}
 	
+	/**
+	 * Builds the side panel with all the options for this StatViw
+	 * 
+	 * @return the formatted side panel
+	 */
 	public JPanel buildSidePanel() {
 		final int VERTICAL_PADDING = 5;
 		final int HORIZONTAL_PADDING = 5;
@@ -267,6 +302,11 @@ public class StatView extends Tab implements ActionListener,
 		updateChart();
 	}
 	
+	/**
+	 * Gets the current datatype of the chart
+	 * 
+	 * @return the data type of the chart
+	 */
 	public DataType getChartDataType() {
 		return chartDataType;
 	}
@@ -360,12 +400,8 @@ public class StatView extends Tab implements ActionListener,
 				
 			default:
 				// if you encounter this default statement, it means that new
-				// values
-				// have been
-				// added to the ChartType enum, but nobody has modified this
-				// poor
-				// little method
-				
+				// values have been added to the ChartType enum, but nobody has
+				// modified this poor little method
 		}
 		
 		// add the newly generated chart to the panel
@@ -383,7 +419,6 @@ public class StatView extends Tab implements ActionListener,
 	 * @param type
 	 *            The new chart data type
 	 */
-	// public for testing purposes
 	public void updateChartDataType(final DataType type) {
 		chartDataType = type;
 	}
@@ -399,7 +434,9 @@ public class StatView extends Tab implements ActionListener,
 		chartType = type;
 	}
 	
-	// public for testing purposes
+	/**
+	 * Updates the selected items
+	 */
 	public void updateSelectedItems() {
 		// set the chart type radio buttons
 		switch (chartType) {
@@ -417,6 +454,8 @@ public class StatView extends Tab implements ActionListener,
 				makeBarRadio.setSelected(false);
 				makePieRadio.setSelected(false);
 				makeLineRadio.setSelected(true);
+			default:
+				break;
 		}
 		comboBoxStatisticType
 				.setSelectedItem(chartDataType.toString().substring(0, 1)
