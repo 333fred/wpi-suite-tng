@@ -13,12 +13,15 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView.Status;
@@ -34,6 +37,11 @@ public class IterationViewTest {
 	public void setup(){
 		startCalendar = Calendar.getInstance();
 		endCalendar = Calendar.getInstance();
+		startCalendar.set(0, 0, 13);
+		endCalendar.set(0, 0, 14);
+		Iteration existingIteration = new Iteration ("Existing Iteration", startCalendar.getTime(), endCalendar.getTime());
+		IterationDatabase.getInstance().set(new ArrayList<Iteration>());
+		IterationDatabase.getInstance().add(existingIteration);
 		startCalendar.set(0, 0, 10);
 		endCalendar.set(0, 0, 12);
 		if(this.mainTabController == null){
