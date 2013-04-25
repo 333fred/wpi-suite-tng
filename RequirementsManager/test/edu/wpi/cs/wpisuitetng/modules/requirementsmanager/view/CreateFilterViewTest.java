@@ -172,13 +172,13 @@ public class CreateFilterViewTest extends ComponentTestFixture {
 		FilterView filterView = FilterView.getInstance();
 		CreateFilterView createFilterView = new CreateFilterView(filterView);
 		
-		JComboBoxTester tester = new JComboBoxTester();
+		JComboBoxTester cboxTester = new JComboBoxTester();
 		createFilterView.getCboxField().setSelectedItem(FilterField.ESTIMATE);
 		createFilterView.getCboxOperation().setSelectedItem(FilterOperation.EQUAL);
 		showFrame(createFilterView);
 		
-		JTextComponentTester tester = new JTextComponentTester();		
-		tester.actionEnterText(createFilterView.getTxtEqualTo(), "Yeaaah");	
+		JTextComponentTester textTester = new JTextComponentTester();		
+		textTester.actionEnterText(createFilterView.getTxtEqualTo(), "Yeaaah");	
 		
 		assertFalse(createFilterView.getButSave().isEnabled());	
 		assertEquals(createFilterView.getLabSaveError().getText(), "Value must be a number");
