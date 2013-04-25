@@ -42,6 +42,7 @@ import javax.swing.table.TableRowSorter;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
@@ -137,8 +138,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	
 	private JTextArea textFilterInfo;
 	
-	// TODO: get search user story
-	private JTextArea textSearchBox;
+	private JPlaceholderTextField textSearchBox;
 	
 	private boolean isEditable;
 	
@@ -218,31 +218,31 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		textEditInfo.setLineWrap(true);
 		textEditInfo.setWrapStyleWord(true);
 		
-		// TODO: get search user story
-		textSearchBox = new JTextArea(1, 15);
+		textSearchBox = new JPlaceholderTextField("Search for a Requirement", 15);
 		textSearchBox.setOpaque(true);
 		textSearchBox.setEnabled(true);
 		textSearchBox.setBorder((new JTextField()).getBorder());
 		textSearchBox.setDisabledTextColor(Color.BLACK);
-		textSearchBox.setLineWrap(true);
-		textSearchBox.setWrapStyleWord(true);
+	//	textSearchBox.setLineWrap(true);
+	//	textSearchBox.setWrapStyleWord(true);
 		
 		textSearchBox.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
-				newFilter();
+			//	newFilter();
 			}
 			
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
-				newFilter();
+			//	newFilter();
 			}
 			
 			@Override
 			public void removeUpdate(final DocumentEvent e) {
-				newFilter();
+			//	newFilter();
 			}
+
 		});
 		
 		textTreeFilterInfo = new JTextArea(1, 20);
@@ -267,6 +267,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		editPanel.add(textEditInfo);
 		editPanel.add(btnClearTreeFilter);
 		editPanel.add(textTreeFilterInfo);
+		editPanel.add(textSearchBox);
 		editPanel
 				.setPreferredSize(new Dimension(
 						btnEdit.getPreferredSize().width,
@@ -299,14 +300,16 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				SpringLayout.WEST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textTreeFilterInfo,
 				0, SpringLayout.SOUTH, btnClearTreeFilter);
-		editPanelLayout.putConstraint(SpringLayout.WEST, textSearchBox, 5,
-				SpringLayout.EAST, btnClearTreeFilter);
+		editPanelLayout.putConstraint(SpringLayout.EAST, textSearchBox, -5,
+				SpringLayout.EAST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER,
 				textSearchBox, 0, SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.EAST, textFilterInfo, 0,
 				SpringLayout.EAST, editPanel);
-		editPanelLayout.putConstraint(SpringLayout.SOUTH, textFilterInfo, 0,
-				SpringLayout.SOUTH, editPanel);
+		editPanelLayout.putConstraint(SpringLayout.NORTH, textFilterInfo, 0,
+				SpringLayout.SOUTH, textSearchBox);
+		editPanelLayout.putConstraint(SpringLayout.WEST, textFilterInfo, 0,
+				SpringLayout.WEST, textSearchBox);
 		
 		final JScrollPane scrollPane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
