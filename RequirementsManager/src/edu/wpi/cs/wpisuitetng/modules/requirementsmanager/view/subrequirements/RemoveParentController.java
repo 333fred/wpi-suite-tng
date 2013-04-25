@@ -79,7 +79,6 @@ public class RemoveParentController {
 			controller.save(anReq, observer);
 			
 			view.refreshParentLabel();
-			view.refreshTopPanel();
 			if (view.isParentSelected()) {
 				view.refreshValidParents();
 			} else {
