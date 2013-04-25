@@ -172,10 +172,12 @@ public class CreateFilterViewTest extends ComponentTestFixture {
 		FilterView filterView = FilterView.getInstance();
 		CreateFilterView createFilterView = new CreateFilterView(filterView);
 		
-		JComboBoxTester cboxTester = new JComboBoxTester();
-		createFilterView.getCboxField().setSelectedItem(FilterField.ESTIMATE);
-		createFilterView.getCboxOperation().setSelectedItem(FilterOperation.EQUAL);
 		showFrame(createFilterView);
+		
+		JComboBoxTester cboxTester = new JComboBoxTester();
+		
+		cboxTester.actionSelectItem(createFilterView.getCboxField(), FilterField.ESTIMATE.toString());
+		cboxTester.actionSelectItem(createFilterView.getCboxOperation(), FilterOperation.EQUAL.toString());
 		
 		JTextComponentTester textTester = new JTextComponentTester();		
 		textTester.actionEnterText(createFilterView.getTxtEqualTo(), "Yeaaah");	
