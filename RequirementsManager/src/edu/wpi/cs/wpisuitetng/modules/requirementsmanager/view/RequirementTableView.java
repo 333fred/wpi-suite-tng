@@ -73,6 +73,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAc
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveEditingTableAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.TextSearchListener;
 
 /**
  * RequirementListView is the basic GUI that will display a list of the current
@@ -139,11 +140,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	private JTextArea textFilterInfo;
 	
 	private JPlaceholderTextField textSearchBox;
-	
+
+	private TextSearchListener textSearchListener;
+
 	private boolean isEditable;
 	
 	private TableRowSorter<TableModel> sorter;
-	
+
 	/**
 	 * Constructor for a RequirementTableView
 	 * 
@@ -223,6 +226,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		textSearchBox.setEnabled(true);
 		textSearchBox.setBorder((new JTextField()).getBorder());
 		textSearchBox.setDisabledTextColor(Color.BLACK);
+		textSearchListener = new TextSearchListener(this, textSearchBox);
+		textSearchBox.addKeyListener(textSearchListener);
 	//	textSearchBox.setLineWrap(true);
 	//	textSearchBox.setWrapStyleWord(true);
 		
@@ -570,11 +575,32 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		btnClearTreeFilter.setEnabled(true);
 	}
 	
-	private void newFilter() {
+	/**
+	 * @return the textSearchBox
+	 */
+	public JPlaceholderTextField getTextSearchBox() {
+		return textSearchBox;
+	}
+	
+	/**
+	 * @return the textFilterInfo
+	 */
+	public JTextArea getTextFilterInfo() {
+		return textFilterInfo;
+	}
+	
+	/**
+	 * @return the sorter
+	 */
+	public TableRowSorter<TableModel> getSorter() {
+		return sorter;
+	}
+	
+	public void newFilter(String filterText) {
 		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter(textSearchBox.getText());
+			rf = RowFilter.regexFilter(filterText);
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}
