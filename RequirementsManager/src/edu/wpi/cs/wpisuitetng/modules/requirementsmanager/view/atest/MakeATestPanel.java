@@ -64,6 +64,7 @@ public class MakeATestPanel extends JPanel {
 	 *            the requirement to which a notes made with this class will be
 	 *            saved
 	 */
+	@SuppressWarnings ("unchecked")
 	public MakeATestPanel(final Requirement model) {
 		
 		// setup the aTest name field
