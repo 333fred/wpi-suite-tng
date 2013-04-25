@@ -21,15 +21,21 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
 
+/**
+ * A table that handles holding all of the events
+ */
+@SuppressWarnings ("serial")
 public class EventTable extends JTable implements TableColumnModelListener,
 		TableModelListener {
 	
-	/** the table model for this */
-	private final EventTableModel tableModel;
-	
+	/**
+	 * Creates a new table with the given model
+	 * 
+	 * @param tableModel
+	 *            the model to hold
+	 */
 	public EventTable(final EventTableModel tableModel) {
 		super(tableModel);
-		this.tableModel = tableModel;
 	}
 	
 	@Override
@@ -51,15 +57,15 @@ public class EventTable extends JTable implements TableColumnModelListener,
 	private void updateRowHeights() {
 		try {
 			for (int row = 0; row < getRowCount(); row++) {
-				int rowHeight = getRowHeight();
+				int finalRowHeight = getRowHeight();
 				for (int column = 0; column < getColumnCount(); column++) {
 					final Component comp = prepareRenderer(
 							getCellRenderer(row, column), row, column);
-					rowHeight = Math.max(rowHeight,
+					finalRowHeight = Math.max(finalRowHeight,
 							comp.getPreferredSize().height);
 				}
 				
-				setRowHeight(row, rowHeight);
+				setRowHeight(row, finalRowHeight);
 			}
 		} catch (final ClassCastException e) {
 			System.out.println("class cast exception in event table");

@@ -19,6 +19,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+/**
+ * The table model for holding all the events
+ */
+
 public class EventTableModel implements TableModel {
 	
 	/** List of events this table will show */
@@ -27,15 +31,30 @@ public class EventTableModel implements TableModel {
 	/** listeners */
 	private final List<TableModelListener> listeners;
 	
+	/**
+	 * Creates a new table model with an empty list
+	 */
 	public EventTableModel() {
 		this(new ArrayList<Event>());
 	}
 	
+	/**
+	 * Creates a new table model with the given list of eventF
+	 * 
+	 * @param events
+	 *            the events for the table model to hold
+	 */
 	public EventTableModel(final List<Event> events) {
 		this.events = events;
 		listeners = new ArrayList<TableModelListener>();
 	}
 	
+	/**
+	 * Adds the given event to the model
+	 * 
+	 * @param e
+	 *            event to add
+	 */
 	public void addEvent(final Event e) {
 		events.add(e);
 		notifyListeners();
@@ -66,6 +85,11 @@ public class EventTableModel implements TableModel {
 		return events.size();
 	}
 	
+	/**
+	 * Gets the all the row data
+	 * 
+	 * @return the list of events
+	 */
 	public List<Event> getRowData() {
 		return events;
 	}
@@ -91,6 +115,12 @@ public class EventTableModel implements TableModel {
 		listeners.remove(l);
 	}
 	
+	/**
+	 * Sets the row data to the given list of events
+	 * 
+	 * @param events
+	 *            the new list
+	 */
 	public void setRowData(final List<Event> events) {
 		this.events = events;
 		notifyListeners();
