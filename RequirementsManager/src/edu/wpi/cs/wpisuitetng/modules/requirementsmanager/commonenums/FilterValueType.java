@@ -19,21 +19,31 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIteration
 
 /**
  * Enum representing the value for this FilterValue
- * 
  */
-
+@SuppressWarnings ("rawtypes")
 public enum FilterValueType {
-	INTEGER(Integer.class), STRING(String.class), DATE(Date.class), FIB(
-			FilterIterationBetween.class), PRIORITY(Priority.class), TYPE(
-			Type.class), STATUS(Status.class);
+	/** If this filter value is an integer */
+	INTEGER(Integer.class),
+	/** If this filter value is a string */
+	STRING(String.class),
+	/** If this filter value is a date */
+	DATE(Date.class),
+	/** If this filter value is a FilterIterationBetween */
+	FIB(FilterIterationBetween.class),
+	/** If this filter value is a priority */
+	PRIORITY(Priority.class),
+	/** If this filter value is a type */
+	TYPE(Type.class),
+	/** If this filter value is a status */
+	STATUS(Status.class);
 	
 	/**
 	 * gets the value for the given class type
 	 * 
 	 * @param type
-	 * @return
+	 *            the type to find the value for
+	 * @return the value of the type
 	 */
-	
 	public static FilterValueType getFromClassType(final Class type) {
 		for (final FilterValueType value : FilterValueType.values()) {
 			if (value.type.equals(type)) {
@@ -58,7 +68,7 @@ public enum FilterValueType {
 	/**
 	 * Gets the class type for this value
 	 * 
-	 * @return
+	 * @return the class type
 	 */
 	
 	public Class getClassType() {

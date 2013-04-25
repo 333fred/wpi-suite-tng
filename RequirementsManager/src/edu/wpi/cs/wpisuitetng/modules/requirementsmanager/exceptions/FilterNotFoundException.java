@@ -21,7 +21,7 @@ public class FilterNotFoundException extends NotFoundException {
 	/**
 	 * Creates a new not found exception with the given id
 	 * 
-	 * @param filter
+	 * @param id
 	 *            The not found filter
 	 */
 	public FilterNotFoundException(final Integer id) {

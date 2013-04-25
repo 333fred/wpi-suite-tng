@@ -236,7 +236,7 @@ public class SubRequirementPanel extends JPanel {
 		// enabling
 		if ((requirement.getStatus() != Status.DELETED)
 				&& (requirement.getStatus() != Status.COMPLETE)
-				&& (panel.mode != Mode.CREATE)) {
+				&& (panel.getMode() != Mode.CREATE)) {
 			removeChild.setAction(new RemoveChildAction(
 					new RemoveChildController(this, requirement, panel)));
 			addReq.setAction(new AssignChildAction(new AssignChildController(

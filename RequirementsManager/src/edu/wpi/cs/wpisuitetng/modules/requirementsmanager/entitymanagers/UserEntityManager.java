@@ -33,6 +33,12 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	
 	Data db;
 	
+	/**
+	 * Creates a new entity manager for retrieving users from the team
+	 * 
+	 * @param db
+	 *            the database to interact with
+	 */
 	public UserEntityManager(final Data db) {
 		this.db = db;
 	}

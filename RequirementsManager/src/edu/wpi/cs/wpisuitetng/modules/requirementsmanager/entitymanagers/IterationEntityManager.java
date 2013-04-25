@@ -44,6 +44,13 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	IterationValidator validator;
 	ModelMapper updateMapper;
 	
+	/**
+	 * Creates a new iteration entity manager to interact with the given
+	 * database
+	 * 
+	 * @param db
+	 *            the database to operate on
+	 */
 	public IterationEntityManager(final Data db) {
 		this.db = db;
 		validator = new IterationValidator();

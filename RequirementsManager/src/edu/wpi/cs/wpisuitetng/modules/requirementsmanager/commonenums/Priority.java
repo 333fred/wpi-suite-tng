@@ -15,7 +15,14 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  * Enum to set the requirement's priority
  */
 public enum Priority {
-	BLANK("None"), LOW("Low"), MEDIUM("Medium"), HIGH("High");
+	/** No/unassigned priority */
+	BLANK("None"),
+	/** Low priority */
+	LOW("Low"),
+	/** Medium priority */
+	MEDIUM("Medium"),
+	/** High priority */
+	HIGH("High");
 	
 	/**
 	 * Return the enum that the given string represents
@@ -24,7 +31,6 @@ public enum Priority {
 	 *            String to parse
 	 * @return The enum value, or null if it doesnt exist
 	 */
-	
 	public static Priority getFromString(final String str) {
 		for (final Priority priority : Priority.values()) {
 			if (str.equals(priority.toString())) {
@@ -34,14 +40,11 @@ public enum Priority {
 		return null;
 	}
 	
-	private String name;
+	/** Nicely formatted string for toString */
+	private final String name;
 	
 	private Priority(final String name) {
 		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
 	}
 	
 	@Override

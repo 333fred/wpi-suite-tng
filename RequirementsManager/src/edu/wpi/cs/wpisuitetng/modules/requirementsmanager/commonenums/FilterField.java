@@ -17,9 +17,22 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  * 
  */
 public enum FilterField {
-	NAME("Name"), TYPE("Type"), PRIORITY("Priority"), STATUS("Status"), ITERATION(
-			"Iteration"), ESTIMATE("Estimate"), EFFORT("Effort"), RELEASE_NUMBER(
-			"Release Number");
+	/** If this filter is a name field */
+	NAME("Name"),
+	/** If this filter is a type field */
+	TYPE("Type"),
+	/** If this filter is a priority field */
+	PRIORITY("Priority"),
+	/** If this filter is a status field */
+	STATUS("Status"),
+	/** If this filter is an iteration field */
+	ITERATION("Iteration"),
+	/** If this filter is an estimate field */
+	ESTIMATE("Estimate"),
+	/** If this filter is an effort field */
+	EFFORT("Effort"),
+	/** If this filter is a release number field */
+	RELEASE_NUMBER("Release Number");
 	
 	/**
 	 * Return the enum that the given string represents
@@ -28,7 +41,6 @@ public enum FilterField {
 	 *            String to parse
 	 * @return The enum value, or null if it doesnt exist
 	 */
-	
 	public static FilterField getFromString(final String str) {
 		for (final FilterField field : FilterField.values()) {
 			if (str.equals(field.toString())) {
@@ -39,7 +51,8 @@ public enum FilterField {
 		return null;
 	}
 	
-	private String name;
+	/** The nicely formatted field of this enum for toString */
+	private final String name;
 	
 	private FilterField(final String name) {
 		this.name = name;

@@ -16,8 +16,18 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  * Enum that specifies a requirement's type.
  */
 public enum Type {
-	BLANK("None"), EPIC("Epic"), THEME("Theme"), USER_STORY("User Story"), NON_FUNCTIONAL(
-			"Non Functional"), SCENARIO("Scenario");
+	/** No/Unassigned type for a requirement */
+	BLANK("None"),
+	/** Requirement is an epic */
+	EPIC("Epic"),
+	/** Requirement is a theme */
+	THEME("Theme"),
+	/** Requirement is a user */
+	USER_STORY("User Story"),
+	/** Requirement is a non-functional requirement */
+	NON_FUNCTIONAL("Non Functional"),
+	/** Requirement is a scenario */
+	SCENARIO("Scenario");
 	
 	/**
 	 * Return the enum that the given string represents
@@ -37,14 +47,11 @@ public enum Type {
 		return null;
 	}
 	
-	private String name;
+	/** The nicely formatted name for toString */
+	private final String name;
 	
 	private Type(final String name) {
 		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
 	}
 	
 	@Override

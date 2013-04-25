@@ -162,7 +162,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private Color defaultColor;
 	
 	/** The edit mode of this requirement view */
-	public Mode mode;
+	private Mode mode;
 	
 	public DetailPanel(final Requirement requirement, final Mode mode,
 			final MainTabController mainTabController) {
@@ -1105,6 +1105,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		return userView;
 	}
 	
+	
+	/**
+	 * @return the mode
+	 */
+	public Mode getMode() {
+		return mode;
+	}
+
 	/**
 	 *
 	 */

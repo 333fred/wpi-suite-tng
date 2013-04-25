@@ -17,5 +17,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  */
 
 public enum IterationActionMode {
-	EDIT, CREATE
+	/** If this iteration is being edited */
+	EDIT,
+	/** If this iteration is being created */
+	CREATE
 }

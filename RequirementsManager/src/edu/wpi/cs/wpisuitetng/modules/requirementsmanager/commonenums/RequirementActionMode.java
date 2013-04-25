@@ -17,5 +17,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  */
 
 public enum RequirementActionMode {
-	EDIT, CREATE,
+	/** If this requirement is being edited */
+	EDIT,
+	/** If this requirement is being created */
+	CREATE,
 }

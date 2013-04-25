@@ -17,8 +17,18 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  */
 
 public enum Status {
-	BLANK("None"), NEW("New"), IN_PROGRESS("In Progress"), OPEN("Open"), COMPLETE(
-			"Complete"), DELETED("Deleted");
+	/** No/Unassigned status */
+	BLANK("None"),
+	/** A new requirement */
+	NEW("New"),
+	/** Requirement has been assigned to an iteration */
+	IN_PROGRESS("In Progress"),
+	/** The requirement is on the backlog */
+	OPEN("Open"),
+	/** The requirement is complete */
+	COMPLETE("Complete"),
+	/** The requirement has been deleted */
+	DELETED("Deleted");
 	
 	/**
 	 * Return the enum that the given string represents
@@ -38,14 +48,11 @@ public enum Status {
 		return null;
 	}
 	
-	private String name;
+	/** The nicely formated string represeting the name for toSring */
+	private final String name;
 	
 	private Status(final String name) {
 		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
 	}
 	
 	@Override
