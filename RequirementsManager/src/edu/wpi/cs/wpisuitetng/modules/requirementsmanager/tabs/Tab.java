@@ -19,8 +19,16 @@ import javax.swing.JPanel;
  * Interface for listening to when a tab has gained focus
  */
 
+@SuppressWarnings ("serial")
 public class Tab extends JPanel {
 	
+	/**
+	 * Gets a new tab with the given tab controller as the controller
+	 * 
+	 * @param tabController
+	 *            the controller to control the new tab
+	 * @return the new tab
+	 */
 	public Component getTabComponent(final MainTabController tabController) {
 		return new ClosableTabComponent(tabController);
 	}
@@ -43,7 +51,6 @@ public class Tab extends JPanel {
 	
 	public boolean onLostFocus() {
 		return true;
-		
 	}
 	
 	/**
@@ -63,7 +70,6 @@ public class Tab extends JPanel {
 	 */
 	
 	public void refresh() {
-		
 	}
 	
 }

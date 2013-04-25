@@ -21,8 +21,12 @@ import javax.swing.JTabbedPane;
 /**
  * Allows user to close other tabs but disallows closing the active tab
  */
+@SuppressWarnings ("serial")
 public class UnclosableTabComponent extends JLabel {
 	
+	/**
+	 * A custom mouse listener for UnclosableTabs
+	 */
 	private class MouseListener extends MouseAdapter {
 		
 		private final UnclosableTabComponent component;
@@ -61,6 +65,14 @@ public class UnclosableTabComponent extends JLabel {
 	/** The tabbed pane */
 	private final JTabbedPane tabbedPane;
 	
+	/**
+	 * Creates a new Unclosable component with the given controller and text
+	 * 
+	 * @param tabController
+	 *            the controller for this tab
+	 * @param text
+	 *            the text for this tab
+	 */
 	public UnclosableTabComponent(final MainTabController tabController,
 			final String text) {
 		super(text);

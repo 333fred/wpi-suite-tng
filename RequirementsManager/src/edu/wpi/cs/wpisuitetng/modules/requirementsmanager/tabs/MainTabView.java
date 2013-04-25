@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
  * Adapted on the MainTabView from DefectTracker module
  */
 
+@SuppressWarnings ("serial")
 public class MainTabView extends JTabbedPane {
 	
 	/** boolean indicating whether the first tab has been added */
@@ -31,65 +32,69 @@ public class MainTabView extends JTabbedPane {
 	/** The tab controller for this tab view */
 	private final MainTabController tabController;
 	
+	/**
+	 * Creates a new MainTabView with the given controller
+	 * 
+	 * @param tabController
+	 *            the controller for this view
+	 */
 	public MainTabView(final MainTabController tabController) {
 		this.tabController = tabController;
 		firstTab = true;
-		setTabPlacement(SwingConstants.TOP); // set the tabs to be placed at the
-												// top
-		setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT); // allow the tabs to
-															// be
-		// scrollable when there are too
-		// many to fit on the screen
+		// set the tabs to be placed at the top
+		setTabPlacement(SwingConstants.TOP);
+		// allow the tabs to be scrollable when there are too many to fit on the
+		// screen
+		setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		// TabView starts off empty.
 	}
 	
+	/**
+	 * Adds a tab with the given title, icon, and tooltip
+	 * 
+	 * @param title
+	 *            the title of the tabe
+	 * @param icon
+	 *            the icon for the tab
+	 * @param tab
+	 *            the content of the tab
+	 * @param tip
+	 *            the tooltip of the tab
+	 */
 	public void addTab(final String title, final Icon icon, final Tab tab,
 			final String tip) {
 		super.addTab(title, icon, tab, tip);
-		final int index = getTabCount() - 1; // the tab was just added, so we
-												// assume
-		// that it was at the end
-		// add the tab with the given tab component
-		
-		// invoke this later to solve issues
-		
+		// the tab was just added, so we assume that it was at the end add the
+		// tab with the given tab component
+		final int index = getTabCount() - 1;
 		setTabComponentAt(index, tab.getTabComponent(tabController));
 	}
 	
 	/**
 	 * Adds an un-closable tab to this JTabbedPane
 	 * 
-	 * * @param title The title of tab
-	 * 
+	 * @param title
+	 *            The title of tab
 	 * @param icon
 	 *            The icon that will be displayed in this tab
 	 * @param component
 	 *            The component that the tab will display
 	 * @param tip
 	 *            The tooltip to be displayed for the tab
-	 * @param index
-	 *            The position to insert the tab
 	 * 
 	 */
-	
 	public void addUnclosableTab(final String title, final Icon icon,
 			final Component component, final String tip) {
 		super.addTab(title, icon, component, tip);
-		final int index = getTabCount() - 1; // the tab was just added, so we
-												// assume
-		// that it was at the end
 	}
 	
 	/**
 	 * Removes the component at the specified index.
 	 * 
-	 * TODO: Implement this method, Override to stop tabs that are un-closable
-	 * from being closed.
-	 * 
 	 * @param index
+	 *            the index to remove at
 	 */
-	
 	@Override
 	public void removeTabAt(final int index) {
 		if (getTabComponentAt(index) instanceof ClosableTabComponent) {

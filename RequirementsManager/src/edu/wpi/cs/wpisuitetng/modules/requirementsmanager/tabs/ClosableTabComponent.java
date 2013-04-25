@@ -84,8 +84,8 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 	 * Create a closable tab component belonging to the given tabbedPane. The
 	 * title is extracted with {@link JTabbedPane#getTitleAt(int)}.
 	 * 
-	 * @param tabbedPane
-	 *            The JTabbedPane this tab component belongs to
+	 * @param tabController
+	 *            the controller that this tab belongs to
 	 */
 	public ClosableTabComponent(final MainTabController tabController) {
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -98,10 +98,10 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 			// display the title according to what's set on our JTabbedPane
 			@Override
 			public String getText() {
-				final JTabbedPane tabbedPane = ClosableTabComponent.this.tabbedPane;
-				final int index = tabbedPane
+				final JTabbedPane labelTabbedPane1 = ClosableTabComponent.this.tabbedPane;
+				final int index = labelTabbedPane1
 						.indexOfTabComponent(ClosableTabComponent.this);
-				return index > -1 ? tabbedPane.getTitleAt(index) : "";
+				return index > -1 ? labelTabbedPane1.getTitleAt(index) : "";
 			}
 		};
 		

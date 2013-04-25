@@ -21,12 +21,19 @@ import javax.swing.JPopupMenu;
 /**
  * Creates right-click menu when right-clicking (or control-clicking) a tab.
  */
+@SuppressWarnings ("serial")
 public class TabPopupMenu extends JPopupMenu implements ActionListener {
 	
+	/**
+	 * Enum for all the states of closing a tab
+	 */
 	public enum CloseMode {
-		CLOSE_ONLY_OTHERS, // status to use on unclosable tabs
-		CLOSE_ONLY_THIS, // status to use when only one closable tab is open
-		CLOSE_ALL // status to use when multiple closable tabs are open
+		/** status to use on unclosable tabs */
+		CLOSE_ONLY_OTHERS,
+		/** status to use when only one closable tab is open */
+		CLOSE_ONLY_THIS,
+		/** status to use when multiple closable tabs are open */
+		CLOSE_ALL
 	}
 	
 	/** Popup menu item to close this tab */
@@ -47,6 +54,13 @@ public class TabPopupMenu extends JPopupMenu implements ActionListener {
 	/** The index of the tab that this was opened on */
 	private final int tabIndex;
 	
+	/**
+	 * Creates a new popup menu for the given tab and controller
+	 * 
+	 * @param tabIndex the index for the popup
+	 * @param tabController the controller for the tabs
+	 * @param closeMode the mode for the popup
+	 */
 	public TabPopupMenu(final int tabIndex,
 			final MainTabController tabController, final CloseMode closeMode) {
 		this.tabIndex = tabIndex;
@@ -61,11 +75,11 @@ public class TabPopupMenu extends JPopupMenu implements ActionListener {
 		menuCloseOther.addActionListener(this);
 		menuCloseAll.addActionListener(this);
 		
-		if (closeMode == CloseMode.CLOSE_ONLY_OTHERS) {
+		if (this.closeMode == CloseMode.CLOSE_ONLY_OTHERS) {
 			add(menuCloseOther);
-		} else if (closeMode == CloseMode.CLOSE_ONLY_THIS) {
+		} else if (this.closeMode == CloseMode.CLOSE_ONLY_THIS) {
 			add(menuCloseThis);
-		} else if (closeMode == CloseMode.CLOSE_ALL) {
+		} else if (this.closeMode == CloseMode.CLOSE_ALL) {
 			add(menuCloseThis);
 			add(menuCloseOther);
 			add(menuCloseAll);

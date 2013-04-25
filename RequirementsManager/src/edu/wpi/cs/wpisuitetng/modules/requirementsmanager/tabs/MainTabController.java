@@ -54,9 +54,6 @@ public class MainTabController {
 	
 	/**
 	 * Creates a new instance of TabController to manage the specified view
-	 * 
-	 * @param tabView
-	 *            The view to manage
 	 */
 	
 	public MainTabController() {
@@ -84,6 +81,11 @@ public class MainTabController {
 		tabView.addChangeListener(listener);
 	}
 	
+	/**
+	 * Adds a new create iteration tab, and return a reference
+	 * 
+	 * @return the newly added create iteration tab
+	 */
 	public TabWrap addCreateIterationTab() {
 		final IterationView iterationView = new IterationView(this);
 		return addTab("New Iteration", new ImageIcon(), iterationView,
@@ -103,6 +105,13 @@ public class MainTabController {
 				"New Requirement");
 	}
 	
+	/**
+	 * Creates an iteration tab for the given iteration
+	 * 
+	 * @param iteration
+	 *            the iteration to modify
+	 * @return the iteration tab
+	 */
 	public TabWrap addIterationTab(final Iteration iteration) {
 		
 		IterationView.Status status;
@@ -112,9 +121,6 @@ public class MainTabController {
 		} else {
 			status = IterationView.Status.VIEW;
 		}
-		
-		// check if this iteration is open already
-		final boolean iterationOpen = false;
 		
 		for (int j = 0; j < getTabView().getTabCount(); j++) {
 			final Component tabComponent = getTabView().getComponentAt(j);
@@ -159,7 +165,11 @@ public class MainTabController {
 				"The list of requirements");
 	}
 	
-	// TODO Document
+	/**
+	 * Adds a tab for statistics
+	 * 
+	 * @return the statistics tab
+	 */
 	public TabWrap addStatTab() {
 		return addTab("Statistics", new ImageIcon(), StatView.getInstance(),
 				"Statistics");
@@ -173,7 +183,7 @@ public class MainTabController {
 	 *            The title of the tab
 	 * @param icon
 	 *            The tabs icon
-	 * @param component
+	 * @param tab
 	 *            The component that the tab will display
 	 * @param tip
 	 *            The tooltip that the tab will display
@@ -227,8 +237,9 @@ public class MainTabController {
 				requirmentDetailView, requirement.getName());
 	}
 	
-	/** Closes all open tabs, that can be closed */
-	
+	/**
+	 * Closes all open tabs, that can be closed
+	 */
 	public void closeAllTabs() {
 		final Component[] openTabs = getOpenTabs();
 		for (final Component openTab : openTabs) {
@@ -257,7 +268,6 @@ public class MainTabController {
 	 * @param currentIndex
 	 *            Index of the tab not to close
 	 */
-	
 	public void closeOtherTabs(final int currentIndex) {
 		final Component[] openTabs = getOpenTabs();
 		for (int i = 0; i < openTabs.length; i++) {
@@ -270,6 +280,12 @@ public class MainTabController {
 		}
 	}
 	
+	/**
+	 * Closes the given tab
+	 * 
+	 * @param tab
+	 *            the tab to close
+	 */
 	public void closeTab(final Tab tab) {
 		final int index = tabView.indexOfComponent(tab);
 		if ((tabView.getTabComponentAt(index) instanceof ClosableTabComponent)
@@ -278,6 +294,12 @@ public class MainTabController {
 		}
 	}
 	
+	/**
+	 * Closes the tab at the given index
+	 * 
+	 * @param index
+	 *            the tab index to close
+	 */
 	public void closeTabAt(final int index) {
 		try {
 			final Tab tab = (Tab) tabView.getComponentAt(index);
@@ -290,23 +312,37 @@ public class MainTabController {
 		}
 	}
 	
+	/**
+	 * @return the filter view of the tab controller
+	 */
 	public FilterView getFilterView() {
 		return filterView;
 	}
 	
+	/**
+	 * @return the iteration tree view of the tab controller
+	 */
 	public IterationTreeView getIterationTreeView() {
 		return iterationTreeView;
 	}
 	
-	/** Returns the number of tabs currently open */
-	
+	/**
+	 * Returns the number of tabs currently open
+	 * 
+	 * @return the number of open tabs
+	 */
 	public int getNumberOfOpenTabs() {
 		return tabView.getTabCount();
 	}
 	
-	/** Returns a list of all the open tabs */
-	
+	/**
+	 * Returns a list of all the open tabs
+	 * 
+	 * @return a component array of open tabs
+	 */
 	public Component[] getOpenTabs() {
+		// We can't use tabView.getComponents because it would grab the first
+		// tab, which should be unclosable
 		final Component[] openTabs = new Component[getNumberOfOpenTabs()];
 		for (int i = 1; i < openTabs.length; i++) {
 			openTabs[i] = tabView.getComponentAt(i);
@@ -314,10 +350,16 @@ public class MainTabController {
 		return openTabs;
 	}
 	
+	/**
+	 * @return the subrequirements tree view of this controller
+	 */
 	public SubRequirementTreeView getSubReqView() {
 		return subRequirementTreeView;
 	}
 	
+	/**
+	 * @return the main tab view of this controller
+	 */
 	public MainTabView getTabView() {
 		return tabView;
 	}
@@ -325,10 +367,7 @@ public class MainTabController {
 	/**
 	 * Called when the selected tab has been changed, notifies the tab that is
 	 * is being displayed
-	 * 
-	 * TODO: Remove the instanceof checking
 	 */
-	
 	private void onChangeTab() {
 		refreshIterationTree();
 		refreshSubReqView();
@@ -338,14 +377,23 @@ public class MainTabController {
 		selectedTab.onGainedFocus();
 	}
 	
+	/**
+	 * Updates the filter view from the local cache
+	 */
 	public void refreshFilterView() {
 		filterView.refreshTableView();
 	}
 	
+	/**
+	 * Updates the iteration view from the local cache
+	 */
 	public void refreshIterationTree() {
 		iterationTreeView.refresh();
 	}
 	
+	/**
+	 * Updates the subrequirement view from the local cache
+	 */
 	public void refreshSubReqView() {
 		subRequirementTreeView.refresh();
 	}
@@ -366,6 +414,12 @@ public class MainTabController {
 		}
 	}
 	
+	/**
+	 * Switches the view to a given tab
+	 * 
+	 * @param tab
+	 *            the tab to switch to
+	 */
 	public void switchToTab(final Tab tab) {
 		final int index = tabView.indexOfComponent(tab);
 		switchToTab(index);

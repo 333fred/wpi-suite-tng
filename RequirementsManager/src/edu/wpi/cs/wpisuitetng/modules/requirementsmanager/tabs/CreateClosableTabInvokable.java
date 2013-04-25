@@ -32,7 +32,7 @@ public class CreateClosableTabInvokable implements Runnable {
 	/**
 	 * Creates a new Closable tab class
 	 * 
-	 * @param tabView
+	 * @param tabController
 	 *            The tab view
 	 * @param index
 	 *            The index of the tab to change
