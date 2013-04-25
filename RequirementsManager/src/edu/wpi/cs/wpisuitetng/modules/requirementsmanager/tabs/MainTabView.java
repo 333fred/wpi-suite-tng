@@ -31,7 +31,7 @@ import javax.swing.JTabbedPane;
  */
 
 public class MainTabView extends JTabbedPane {
-
+	
 	/** boolean indicating whether the first tab has been added */
 	private boolean firstTab;
 	
@@ -45,10 +45,10 @@ public class MainTabView extends JTabbedPane {
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT); // allow the tabs to be
 												// scrollable when there are too
 												// many to fit on the screen
-
+		
 		// TabView starts off empty.
 	}
-
+	
 	/**
 	 * Adds an un-closable tab to this JTabbedPane
 	 * 
@@ -64,25 +64,27 @@ public class MainTabView extends JTabbedPane {
 	 *            The position to insert the tab
 	 * 
 	 */
-
+	
 	public void addUnclosableTab(String title, Icon icon, Component component,
 			String tip) {
 		super.addTab(title, icon, component, tip);
 		int index = getTabCount() - 1; // the tab was just added, so we assume
 										// that it was at the end
 	}
-
+	
 	public void addTab(String title, Icon icon, Tab tab, String tip) {
-		super.addTab(title,icon, tab, tip);		
-		int index = getTabCount() - 1; // the tab was just added, so we assume that it was at the end
-		//add the tab with the given tab component
+		super.addTab(title, icon, tab, tip);
+		int index = getTabCount() - 1; // the tab was just added, so we assume
+										// that it was at the end
+		// add the tab with the given tab component
 		
-		//invoke this later to solve issues
-		//SwingUtilities.invokeLater(new CreateClosableTabInvokable(this, index, tab));
+		// invoke this later to solve issues
+		// SwingUtilities.invokeLater(new CreateClosableTabInvokable(this,
+		// index, tab));
 		
 		setTabComponentAt(index, tab.getTabComponent(tabController));
 	}
-
+	
 	/**
 	 * Removes the component at the specified index.
 	 * 
@@ -91,14 +93,14 @@ public class MainTabView extends JTabbedPane {
 	 * 
 	 * @param index
 	 */
-
+	
 	@Override
 	public void removeTabAt(int index) {
 		if (getTabComponentAt(index) instanceof ClosableTabComponent) {
 			super.removeTabAt(index);
 		}
 	}
-
+	
 	/**
 	 * Sets the component at the given index, with the given component Also
 	 * notified the toolbar that the component of the tab has changed, and it
@@ -111,16 +113,17 @@ public class MainTabView extends JTabbedPane {
 	 * @param component
 	 *            The new component
 	 */
-/*
- *  Not needed anymore, should have removed previously
-	@Override
-	public void setComponentAt(int index, Component component) {
-		super.setComponentAt(index, component);
-	}
-	*/
+	/*
+	 * Not needed anymore, should have removed previously
+	 * @Override
+	 * public void setComponentAt(int index, Component component) {
+	 * super.setComponentAt(index, component);
+	 * }
+	 */
 	
-	
-	/** Override setSelctedIndex to stop tabs from being selected, if the current tab doesn't allow
+	/**
+	 * Override setSelctedIndex to stop tabs from being selected, if the current
+	 * tab doesn't allow
 	 * loss of focus
 	 * 
 	 * {@inheritDoc}
@@ -133,12 +136,14 @@ public class MainTabView extends JTabbedPane {
 		}
 		int oldIndex = getSelectedIndex();
 		Tab tab = (Tab) getComponentAt(oldIndex);
-		if (tab.onLostFocus()) {				
+		if (tab.onLostFocus()) {
 			super.setSelectedIndex(index);
 		}
 	}
 	
-	/** Override setSelctedIndex to stop tabs from being selected, if the current tab doesn't allow
+	/**
+	 * Override setSelctedIndex to stop tabs from being selected, if the current
+	 * tab doesn't allow
 	 * loss of focus
 	 * 
 	 * {@inheritDoc}
@@ -152,17 +157,8 @@ public class MainTabView extends JTabbedPane {
 		}
 		int oldIndex = getSelectedIndex();
 		Tab tab = (Tab) getComponentAt(oldIndex);
-		if (tab.onLostFocus()) {				
+		if (tab.onLostFocus()) {
 			super.setSelectedComponent(component);
 		}
 	}
-	
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		// Are we dragging?
-	    if(dragging && currentMouseLocation != null && tabImage != null) {
-	      // Draw the dragged tab
-	      g.drawImage(tabImage, currentMouseLocation.x, currentMouseLocation.y, this);
-	    }
-	  }
 }
