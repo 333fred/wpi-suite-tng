@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		Chirs Keane
+ *		@author Chris Keane
  ********************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
@@ -18,9 +18,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
- * @author Chris
- * 
- *         Action which concerns canceling the creation/editing of a requirement
+ * Action which concerns canceling the creation/editing of a requirement
  */
 public class CancelAction extends AbstractAction {
 
