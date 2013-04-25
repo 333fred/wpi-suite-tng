@@ -23,7 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView.Status;
 
-public class IterationViewtest {
+public class IterationViewTest {
 
 	MainTabController mainTabController = null;
 	Calendar startCalendar;
