@@ -26,6 +26,10 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
+/**
+ * Abstract superclass for all requirement statistics
+ */
+
 public abstract class AbstractRequirementStatistics {
 	
 	Map<String, Integer> data;
@@ -35,6 +39,11 @@ public abstract class AbstractRequirementStatistics {
 		update();
 	}
 	
+	/**
+	 * Builds the bar chart associated with this view
+	 * 
+	 * @return the constructed bar chart
+	 */
 	public abstract JFreeChart buildBarChart();
 	
 	protected JFreeChart buildBarChart(final String title,
@@ -48,6 +57,11 @@ public abstract class AbstractRequirementStatistics {
 		return chart;
 	}
 	
+	/**
+	 * Builds the line chart associated with this view
+	 * 
+	 * @return the constructed line chart
+	 */
 	public abstract JFreeChart buildLineChart();
 	
 	protected JFreeChart buildLineChart(final String title,
@@ -61,6 +75,11 @@ public abstract class AbstractRequirementStatistics {
 		return chart;
 	}
 	
+	/**
+	 * Builds the pie chart associated with this view
+	 * 
+	 * @return the constructed pie chart
+	 */
 	public abstract JFreeChart buildPieChart();
 	
 	protected JFreeChart buildPieChart(final String title) {
@@ -68,6 +87,13 @@ public abstract class AbstractRequirementStatistics {
 				false, false);
 	}
 	
+	/**
+	 * Returns the dataset associated with a given category
+	 * 
+	 * @param category
+	 *            the category to look for
+	 * @return the dataset
+	 */
 	public CategoryDataset toCategoryDataset(final String category) {
 		final DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
 		for (final String key : data.keySet()) {
@@ -76,6 +102,11 @@ public abstract class AbstractRequirementStatistics {
 		return categoryDataset;
 	}
 	
+	/**
+	 * Gets the pie dataset associated with this statistic
+	 * 
+	 * @return the dataset
+	 */
 	public PieDataset toPieDataset() {
 		final DefaultPieDataset pieDataset = new DefaultPieDataset();
 		for (final String key : data.keySet()) {
