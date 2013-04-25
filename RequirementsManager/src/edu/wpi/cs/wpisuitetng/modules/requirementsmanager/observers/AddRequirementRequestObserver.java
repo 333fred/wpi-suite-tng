@@ -35,6 +35,13 @@ public class AddRequirementRequestObserver implements RequestObserver {
 	
 	DetailPanel detailPanel;
 	
+	/**
+	 * Creates a new AddRequirementRequestObserver with the given detail panel
+	 * to call back to
+	 * 
+	 * @param detailPanel
+	 *            the detail panel to callback on success
+	 */
 	public AddRequirementRequestObserver(final DetailPanel detailPanel) {
 		this.detailPanel = detailPanel;
 	}

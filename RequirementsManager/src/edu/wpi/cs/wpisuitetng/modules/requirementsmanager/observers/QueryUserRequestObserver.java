@@ -29,6 +29,13 @@ public class QueryUserRequestObserver implements RequestObserver {
 	
 	private final AssigneePanel parentView;
 	
+	/**
+	 * Creates a new QueryUserRequestObserver with the given AssigneePanel to
+	 * callback to
+	 * 
+	 * @param parentView
+	 *            the AssigneePanel to callback to on success
+	 */
 	public QueryUserRequestObserver(final AssigneePanel parentView) {
 		this.parentView = parentView;
 	}

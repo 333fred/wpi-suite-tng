@@ -33,7 +33,7 @@ public class AddFilterRequestObserver implements RequestObserver {
 	/**
 	 * Creates a request observer with the given controller as a callback
 	 * 
-	 * @param controller
+	 * @param notifier
 	 *            the controller to callback
 	 */
 	public AddFilterRequestObserver(final ISaveNotifier notifier) {
@@ -68,9 +68,7 @@ public class AddFilterRequestObserver implements RequestObserver {
 		final Filter filter = Filter.fromJSON(response.getBody());
 		FilterDatabase.getInstance().add(filter);
 		
-		// TODO: Determine what to do with the response
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				notifier.responseSuccess();

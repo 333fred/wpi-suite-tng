@@ -14,10 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
-import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
-import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
  * Request Observer responsible for handling success or failure of the
@@ -28,6 +26,13 @@ public class AddIterationRequestObserver implements RequestObserver {
 	
 	private final IterationView iterationView;
 	
+	/**
+	 * Creates a new AddIterationRequestObserver with the given iteration view
+	 * as the callback
+	 * 
+	 * @param iterationView
+	 *            the view to callback upon success or failure
+	 */
 	public AddIterationRequestObserver(final IterationView iterationView) {
 		this.iterationView = iterationView;
 	}
@@ -57,19 +62,12 @@ public class AddIterationRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(final IRequest iReq) {
-		// cast observable to a Request
-		final Request request = (Request) iReq;
-		
-		// get the response from the request
-		final ResponseModel response = request.getResponse();
-		
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				iterationView.getMainTabController().closeCurrentTab();
 			}
-		});		
+		});
 	}
 	
 }

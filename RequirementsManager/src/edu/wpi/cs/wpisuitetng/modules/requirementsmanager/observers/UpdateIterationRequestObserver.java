@@ -28,6 +28,13 @@ public class UpdateIterationRequestObserver implements RequestObserver {
 	
 	private final ISaveNotifier notifier;
 	
+	/**
+	 * Creates a new UpdateIterationRequestObserver with the given notifier as a
+	 * callback
+	 * 
+	 * @param notifier
+	 *            the notifier to callback on success or failure
+	 */
 	public UpdateIterationRequestObserver(final ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}

@@ -31,7 +31,7 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 	/**
 	 * Construct the observer
 	 * 
-	 * @param controller
+	 * @param notifier
 	 */
 	public RetrieveRequirementByIDRequestObserver(
 			final IRetreiveRequirementByIDControllerNotifier notifier) {

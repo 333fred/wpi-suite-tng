@@ -31,6 +31,13 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 	
 	private final IRetreivedAllIterationsNotifier notifier;
 	
+	/**
+	 * Creates a new RetrieveAllIterationsRequestObserver with the given
+	 * notifier as a callback
+	 * 
+	 * @param notifier
+	 *            the notifier to notify upon success
+	 */
 	public RetrieveAllIterationsRequestObserver(
 			final IRetreivedAllIterationsNotifier notifier) {
 		this.notifier = notifier;

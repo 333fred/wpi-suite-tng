@@ -82,7 +82,7 @@ public class Note implements Event {
 		if (!compNote.date.equals(date)) {
 			return false;
 		}
-		if (!compNote.note.equals(this.note)) {
+		if (!compNote.note.equals(note)) {
 			return false;
 		}
 		return true;

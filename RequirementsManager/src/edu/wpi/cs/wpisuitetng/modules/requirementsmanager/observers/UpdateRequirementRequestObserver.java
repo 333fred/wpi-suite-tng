@@ -32,6 +32,13 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 	 */
 	private final ISaveNotifier notifier;
 	
+	/**
+	 * Creates a new UpdateRequirementRequestObserver with the given notifier to
+	 * callback to
+	 * 
+	 * @param notifier
+	 *            the notifier callback for success or failure
+	 */
 	public UpdateRequirementRequestObserver(final ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}

@@ -35,7 +35,7 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	/**
 	 * Creates a Request Observer with the given controller to call back to
 	 * 
-	 * @param controller
+	 * @param notifier
 	 *            the controller to callback to
 	 */
 	public RetrieveAllFiltersRequestObserver(

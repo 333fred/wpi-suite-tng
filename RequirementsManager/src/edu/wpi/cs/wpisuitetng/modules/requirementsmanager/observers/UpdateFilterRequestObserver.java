@@ -31,7 +31,7 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 	/**
 	 * Creates a request observer with the given controller as a callback
 	 * 
-	 * @param controller
+	 * @param notifier
 	 *            the controller to callback
 	 */
 	public UpdateFilterRequestObserver(final ISaveNotifier notifier) {

@@ -33,7 +33,8 @@ public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 	/**
 	 * Construct the observer
 	 * 
-	 * @param controller
+	 * @param notifier
+	 *            the notifier to callback to on success or failure
 	 */
 	public RetrieveAllRequirementsRequestObserver(
 			final IReceivedAllRequirementNotifier notifier) {

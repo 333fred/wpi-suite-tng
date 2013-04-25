@@ -34,8 +34,10 @@ public class DeleteFilterRequestObserver implements RequestObserver {
 	/**
 	 * Creates a request observer with the given controller as a callback
 	 * 
-	 * @param controller
+	 * @param notifier
 	 *            the controller to callback
+	 * @param toDelete
+	 *            the filter that is being deleted
 	 */
 	public DeleteFilterRequestObserver(final ISaveNotifier notifier,
 			final Filter toDelete) {
