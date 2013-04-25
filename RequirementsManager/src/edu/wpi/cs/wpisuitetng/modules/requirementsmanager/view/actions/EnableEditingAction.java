@@ -56,7 +56,7 @@ public class EnableEditingAction extends AbstractAction {
 			tableView.setEditable(false);
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
-			tableView.getTable().setRowSorter(sorter);
+			//tableView.getTable().setRowSorter(sorter);
 			tableView.getTable().clearUpdated();
 			tableView.refresh();
 		} else {
