@@ -933,4 +933,71 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			calEqualTo.setBackground(new Color(243, 243, 209));
 		}
 	}
+
+	/**
+	 * @return the cboxField
+	 */
+	public JComboBox getCboxField() {
+		return cboxField;
+	}
+
+	/**
+	 * @return the cboxOperation
+	 */
+	public JComboBox getCboxOperation() {
+		return cboxOperation;
+	}
+
+	/**
+	 * @return the cboxEqualTo
+	 */
+	public JComboBox getCboxEqualTo() {
+		return cboxEqualTo;
+	}
+
+	/**
+	 * @return the txtEqualTo
+	 */
+	public JTextField getTxtEqualTo() {
+		return txtEqualTo;
+	}
+
+	/**
+	 * @return the calEqualTo
+	 */
+	public JDateChooser getCalEqualTo() {
+		return calEqualTo;
+	}
+
+	/**
+	 * @return the calEqualToBetween
+	 */
+	public JDateChooser getCalEqualToBetween() {
+		return calEqualToBetween;
+	}
+
+	/**
+	 * @return the butSave
+	 */
+	public JButton getButSave() {
+		return butSave;
+	}
+
+	/**
+	 * @return the butCancel
+	 */
+	public JButton getButCancel() {
+		return butCancel;
+	}
+
+	/**
+	 * @return the labSaveError
+	 */
+	public JLabel getLabSaveError() {
+		return labSaveError;
+	}
+	
+	
+	
+	
 }

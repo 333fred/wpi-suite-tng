@@ -14,10 +14,14 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 import java.util.ArrayList;
 import java.util.Date;
 
+import junit.extensions.abbot.ComponentTestFixture;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import abbot.tester.JComboBoxTester;
+import abbot.tester.JTextComponentTester;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
@@ -28,7 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.CreateFilterView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
-public class CreateFilterViewTest {
+public class CreateFilterViewTest extends ComponentTestFixture {
 	
 	User u1 = new User("user", "user1", "password", 0);
 	
@@ -109,4 +113,89 @@ public class CreateFilterViewTest {
 		view.onSavePressed();
 		Assert.assertNotNull(view);
 	}	
+	
+	@Test 
+	public void testIsDuplicateFilter() {
+		/*
+		 * 	public Filter(final String user, final FilterField field,
+			final FilterOperation operation, final Object value) {*/
+		
+		Filter f = new Filter("User", FilterField.ESTIMATE, FilterOperation.EQUAL, 5);
+		Filter f2 = new Filter("User", FilterField.ITERATION, FilterOperation.EQUAL, 5);
+		Filter f3 = new Filter("User", FilterField.ESTIMATE, FilterOperation.LESS_THAN, 5);
+		Filter f4 = new Filter("User", FilterField.ESTIMATE, FilterOperation.EQUAL, 7);
+		
+		FilterDatabase.getInstance().add(f);
+		
+		assertTrue(CreateFilterView.isFilterDuplicate(Filter.cloneFilter(f)));
+		assertFalse(CreateFilterView.isFilterDuplicate(f2));
+		assertFalse(CreateFilterView.isFilterDuplicate(f3));
+		assertFalse(CreateFilterView.isFilterDuplicate(f4));		
+	}
+	
+	@Test
+	public void testSaveButton() {
+		FilterView filterView = FilterView.getInstance();
+		CreateFilterView createFilterView = new CreateFilterView(filterView);
+		
+		assertFalse(createFilterView.getButSave().isEnabled());		
+		assertEquals(createFilterView.getLabSaveError().getText(), "Value cannot be blank");
+	}
+	
+	/*
+	 * final JTextComponentTester tester = new JTextComponentTester();
+		
+		showFrame(panel);
+		
+		Assert.assertFalse(panel.getBtnSave().isEnabled());
+		
+		tester.actionEnterText(panel.getTextName(), "Req Name");
+	 */
+	
+	@Test
+	public void testSaveButton2() {
+		FilterView filterView = FilterView.getInstance();
+		CreateFilterView createFilterView = new CreateFilterView(filterView);
+		
+		createFilterView.getCboxField().setSelectedItem(FilterField.NAME);
+		createFilterView.getCboxOperation().setSelectedItem(FilterOperation.EQUAL);
+		showFrame(createFilterView);
+		
+		JTextComponentTester tester = new JTextComponentTester();		
+		tester.actionEnterText(createFilterView.getTxtEqualTo(), "Yeaaah");	
+		
+		assertTrue(createFilterView.getButSave().isEnabled());			
+	}
+	
+	@Test
+	public void testSaveButton3() {
+		FilterView filterView = FilterView.getInstance();
+		CreateFilterView createFilterView = new CreateFilterView(filterView);
+		
+		JComboBoxTester tester = new JComboBoxTester();
+		createFilterView.getCboxField().setSelectedItem(FilterField.ESTIMATE);
+		createFilterView.getCboxOperation().setSelectedItem(FilterOperation.EQUAL);
+		showFrame(createFilterView);
+		
+		JTextComponentTester tester = new JTextComponentTester();		
+		tester.actionEnterText(createFilterView.getTxtEqualTo(), "Yeaaah");	
+		
+		assertFalse(createFilterView.getButSave().isEnabled());	
+		assertEquals(createFilterView.getLabSaveError().getText(), "Value must be a number");
+	}
+	
+	@Test
+	public void testSaveButton4() {
+		FilterView filterView = FilterView.getInstance();
+		CreateFilterView createFilterView = new CreateFilterView(filterView);
+		
+		createFilterView.getCboxField().setSelectedItem(FilterField.ESTIMATE);
+		createFilterView.getCboxOperation().setSelectedItem(FilterOperation.EQUAL);
+		showFrame(createFilterView);
+		
+		JTextComponentTester tester = new JTextComponentTester();		
+		tester.actionEnterText(createFilterView.getTxtEqualTo(), "5");	
+		
+		assertTrue(createFilterView.getButSave().isEnabled());	
+	}
 }

@@ -46,6 +46,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
@@ -56,6 +57,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabas
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
@@ -418,9 +420,16 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			}
 		});
 		
+
 		FilterDatabase.getInstance().registerListener(this);
 		IterationDatabase.getInstance().registerListener(this);
 		RequirementDatabase.getInstance().registerListener(this);
+
+		//don't allow table editing without permissions
+		if (PermissionModel.getInstance().getPermLevel() != UserPermissionLevel.ADMIN) {
+			btnEdit.setEnabled(false);
+		}
+
 		
 	}
 	
