@@ -70,7 +70,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 			tableView.setEditable(false);
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
-			tableView.getTable().setRowSorter(sorter);
+			//tableView.getTable().setRowSorter(sorter);
 			// tableView.refresh();
 			tableView.getTable().clearUpdated();
 		}
