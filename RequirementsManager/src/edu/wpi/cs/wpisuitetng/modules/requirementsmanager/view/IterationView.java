@@ -603,6 +603,15 @@ public class IterationView extends Tab implements ISaveNotifier, IDatabaseListen
 		return true;
 	}
 
+	/**
+	 * Getter for the status of the iteration
+	 * @return The status of the iteration
+	 */
+	public Status getStatus(){
+		return status;
+	}
+
+
 	/** Used to update the progress bar when the given iteration has been updated
 	 * 
 	 */
@@ -626,5 +635,10 @@ public class IterationView extends Tab implements ISaveNotifier, IDatabaseListen
 	@Override
 	public boolean shouldRemove() {
 		return !alive;
+
+	}
+	
+	public JButton getButSave() {
+		return butSave;
 	}
 }

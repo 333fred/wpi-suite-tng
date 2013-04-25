@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
+ * 					  -- Edits by Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,8 +8,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Andrew Hurle
- ******************************************************************************/
+ *    @author Mitchell Caisse
+ *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 

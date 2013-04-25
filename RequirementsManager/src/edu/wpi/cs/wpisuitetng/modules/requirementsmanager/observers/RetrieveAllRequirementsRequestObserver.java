@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Jason Whitehouse
+ *    @author Jason Whitehouse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers;
 
@@ -24,8 +24,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * @author Jason Whitehouse
- * 
+ * Observer for the request to get all requirements from the server.
  */
 public class RetrieveAllRequirementsRequestObserver implements RequestObserver {
 	private IReceivedAllRequirementNotifier notifier;

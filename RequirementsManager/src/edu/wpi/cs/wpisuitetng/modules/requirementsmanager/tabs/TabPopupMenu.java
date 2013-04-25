@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
@@ -18,6 +18,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+/**
+ * Creates right-click menu when right-clicking (or control-clicking) a tab.
+ */
 public class TabPopupMenu extends JPopupMenu implements ActionListener {
 
 	/** Popup menu item to close this tab */

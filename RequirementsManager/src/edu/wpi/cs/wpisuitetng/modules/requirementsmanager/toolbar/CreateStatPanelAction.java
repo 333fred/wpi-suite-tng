@@ -23,9 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  * Action invoked upon use of the Create Iteration key Heavily adapted from
  * CreateDefectAction in the DefectTracker module
  * 
- * @author Alex Gorowara
- * 
- *         Action that creates a new Iteration
+ * Action that creates a new Iteration
  */
 @SuppressWarnings("serial")
 public class CreateStatPanelAction extends AbstractAction {

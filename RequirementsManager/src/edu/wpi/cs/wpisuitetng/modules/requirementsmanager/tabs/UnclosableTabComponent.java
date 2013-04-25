@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Steve Kordell, Mitchell Caisse
+ *    @author Steve Kordell
+ *    @author Mitchell Caisse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
@@ -17,6 +18,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
+/**
+ * Allows user to close other tabs but disallows closing the active tab
+ */
 public class UnclosableTabComponent extends JLabel {
 
 	/** The tabcontroller */

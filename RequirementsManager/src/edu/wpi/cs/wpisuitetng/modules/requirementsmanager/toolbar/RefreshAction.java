@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		Alex Gorowara
+ *		@author Alex Gorowara
  ********************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar;
@@ -24,10 +24,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  * Action invoked upon use of the Refresh key Heavily adapted from
  * CreateDefectAction in the DefectTracker module
  * 
- * @author Alex Gorowara
- * 
- *         Action that calls {@link MainTabController#addCreateDefectTab()},
- *         default mnemonic key is C.
+ * Action that calls {@link MainTabController#addCreateDefectTab()},
+ * default mnemonic key is C.
  */
 @SuppressWarnings("serial")
 public class RefreshAction extends AbstractAction {

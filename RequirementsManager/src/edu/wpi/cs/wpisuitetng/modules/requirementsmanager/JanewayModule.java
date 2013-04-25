@@ -98,9 +98,7 @@ public class JanewayModule implements IJanewayModule {
 
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
-
 		filterView = tabController.getFilterView();
-
 		subRequirementTreeView = tabController.getSubReqView();
 
 		leftTabbedPane = new JTabbedPane();

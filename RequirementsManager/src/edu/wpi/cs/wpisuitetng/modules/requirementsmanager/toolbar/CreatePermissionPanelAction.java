@@ -19,6 +19,9 @@ import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
+/**
+ * Opens panel to edit permissions
+ */
 public class CreatePermissionPanelAction extends AbstractAction {
 
 	private final MainTabController controller;
