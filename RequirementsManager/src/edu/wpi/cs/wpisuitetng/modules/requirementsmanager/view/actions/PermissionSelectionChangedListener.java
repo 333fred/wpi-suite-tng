@@ -20,6 +20,9 @@ import javax.swing.event.ListSelectionEvent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
+/**
+ * Need to comment! 
+ */
 public class PermissionSelectionChangedListener implements MouseListener {
 
 	PermissionsPanel panel;

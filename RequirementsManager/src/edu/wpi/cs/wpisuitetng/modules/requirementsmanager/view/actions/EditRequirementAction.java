@@ -1,12 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Chris Keane
+ * Contributors: 
+ * 	@author Chris Keane
  *    
  *******************************************************************************/
 
@@ -35,10 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * The action for saving an edited requirement, used when "Save Requirement"
- * button is pressed
- * 
- * @author Chris
- * 
+ * button is pressed 
  */
 public class EditRequirementAction extends AbstractAction {
 

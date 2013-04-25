@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		
+ *		@author Team Swagasaurus
  ********************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
 
@@ -22,6 +22,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 
+/**
+ * Action which concerns editing of an iteration
+ */
 public class EditIterationAction extends AbstractAction {
 
 	/** The iteration view to receive the iteration from */
