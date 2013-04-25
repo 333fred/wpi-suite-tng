@@ -86,17 +86,6 @@ public class DetailATestView extends JPanel {
 		
 		// adds the aTests to the list model
 		addaTestsToList();
-		// ,aTests.getSelectedValues()
-		
-		// //permission of current user. if not Observer, the user can add/edit
-		// acceptance tests
-		// UserPermissionLevel userPerm =
-		// PermissionModel.getInstance().getPermLevel();
-		// if(userPerm != UserPermissionLevel.OBSERVE){
-		// makeATestPanel.setInputEnabled(true);
-		// } else{
-		// makeATestPanel.setInputEnabled(false);
-		// }
 		
 		if (requirement.getStatus() != Status.DELETED) {
 			// Set the action of the save button to the default (create new
@@ -104,8 +93,6 @@ public class DetailATestView extends JPanel {
 			makeATestPanel.getAddaTest().setAction(
 					new SaveATestAction(new SaveATestController(makeATestPanel,
 							requirement, parentView, testTable)));
-			
-			// testTable.add
 			
 			// Listen for user clicking on acceptance tests
 			

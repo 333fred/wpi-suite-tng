@@ -23,7 +23,7 @@ import java.awt.FocusTraversalPolicy;
  */
 public class FocusTraversalOnArray extends FocusTraversalPolicy {
 	
-	private final Component m_Components[];
+	private final Component[] m_Components;
 	
 	// //////////////////////////////////////////////////////////////////////////
 	//

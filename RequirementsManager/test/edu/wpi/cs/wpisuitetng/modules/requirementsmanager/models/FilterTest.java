@@ -409,40 +409,6 @@ public class FilterTest {
 		Assert.assertTrue(f15.shouldFilter(r1));
 		Assert.assertFalse(f15.shouldFilter(r3));
 	}
-	
-	/*
-	 * @Test public void shouldFilterIterationNotEqual() { f40 = new
-	 * Filter(u1.getUsername(), FilterField.ITERATION,
-	 * FilterOperation.NOT_EQUAL, 1); assertTrue(f40.shouldFilter(r3));
-	 * assertFalse(f40.shouldFilter(r2)); }
-	 */
-	
-	/*
-	 * @Test public void shouldFilterIterationOccursBefore() { Date d1 = new
-	 * Date(2013, 4, 18); f18 = new Filter(u1.getUsername(),
-	 * FilterField.ITERATION, FilterOperation.OCCURS_BEFORE, d1);
-	 * assertTrue(f18.shouldFilter(r2)); assertFalse(f18.shouldFilter(r1)); }
-	 * @Test public void shouldFilterIterationOccursAfter() { Date d1 = new
-	 * Date(2013, 4, 18); f20 = new Filter(u1.getUsername(),
-	 * FilterField.ITERATION, FilterOperation.OCCURS_AFTER, d1);
-	 * assertTrue(f20.shouldFilter(r3)); assertFalse(f20.shouldFilter(r1)); }
-	 * @Test public void shouldFilterIterationOccursBetween() { f19 = new
-	 * Filter(u1.getUsername(), FilterField.ITERATION,
-	 * FilterOperation.OCCURS_BETWEEN, 1); assertTrue(f19.shouldFilter(r4));
-	 * assertFalse(f19.shouldFilter(r1)); }
-	 * @Test public void testShouldFilterActive() { f14 = new
-	 * Filter(u1.getUsername(), FilterField.PRIORITY, FilterOperation.NOT_EQUAL,
-	 * Priority.HIGH); f15 = new Filter(u1.getUsername(), FilterField.STATUS,
-	 * FilterOperation.EQUAL, Status.NEW); f18 = new Filter(u1.getUsername(),
-	 * FilterField.ESTIMATE, FilterOperation.NOT_EQUAL, 1);
-	 * assertFalse(f14.shouldFilter(r1)); assertTrue(f15.shouldFilter(r1));
-	 * //assertEquals(f16.shouldFilter(r1), 0); Maddie is working on these
-	 * //assertEquals(f17.shouldFilter(r1), 1); Not sure these tests are
-	 * necessary since the method must confirm that
-	 * assertFalse(f18.shouldFilter(r1)); the filter is active before checking
-	 * anything else - Kyle f1.setActive(false);
-	 * assertFalse(f1.shouldFilter(r1));
-	 */
 	/***************************** End Iteration Tests ***************************************/
 	
 	@Test
@@ -531,12 +497,5 @@ public class FilterTest {
 		Assert.assertEquals(f1.toString(), "[Filter ID:" + -1 + " Field:"
 				+ FilterField.NAME + " Operation:" + FilterOperation.EQUAL
 				+ " Value: " + JsonVal + " Active: " + true + "]");
-	}
-	
-	// TODO: Change this test once getStringValue() is finalized
-	/*
-	 * @Test public void testStringValue() { f1.setStringValue("test");
-	 * assertEquals(f1.getStringValue(), "test"); }
-	 */
-	
+	}	
 }

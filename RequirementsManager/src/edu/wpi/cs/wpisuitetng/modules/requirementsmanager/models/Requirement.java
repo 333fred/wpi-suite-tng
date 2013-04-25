@@ -122,7 +122,6 @@ public class Requirement extends AbstractModel {
 		pUID = new ArrayList<Integer>();
 		notes = new ArrayList<Note>();
 		logs = new ArrayList<RequirementChangeset>();
-		// logger = new Logger();
 		tasks = new ArrayList<Task>();
 		aTests = new ArrayList<ATest>();
 	}
@@ -294,7 +293,6 @@ public class Requirement extends AbstractModel {
 	 * @return the log
 	 */
 	public List<RequirementChangeset> getLogs() {
-		// return logger.getLogs();
 		return logs;
 	}
 	

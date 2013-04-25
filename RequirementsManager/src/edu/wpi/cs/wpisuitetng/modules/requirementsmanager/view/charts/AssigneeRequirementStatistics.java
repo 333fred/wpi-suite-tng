@@ -48,10 +48,8 @@ public class AssigneeRequirementStatistics extends
 		return this.buildPieChart("Requirements by User");
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
-	 * IRequirementStatistics#update()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void update() {

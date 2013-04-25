@@ -103,9 +103,6 @@ public class PermissionsPanel extends Tab {
 			}
 		}
 		
-		// userTable.addListSelectionListener(new
-		// PermissionSelectionChangedListener(this));
-		
 		/** Construct the admin button */
 		adminButton = new JRadioButton("Admin", false);
 		
@@ -135,41 +132,6 @@ public class PermissionsPanel extends Tab {
 		layout.putConstraint(SpringLayout.SOUTH, userScroll, 0,
 				SpringLayout.SOUTH, this);
 		
-		// TODO: What do we do with this layout now that the panel isn't needed?
-		/*
-		 * layout.putConstraint(SpringLayout.NORTH, radioPanel, 0,
-		 * SpringLayout.NORTH, this); layout.putConstraint(SpringLayout.EAST,
-		 * radioPanel, 0, SpringLayout.EAST, this);
-		 * layout.putConstraint(SpringLayout.WEST, radioPanel, 10,
-		 * SpringLayout.HORIZONTAL_CENTER, this);
-		 * layout.putConstraint(SpringLayout.SOUTH, radioPanel, 0,
-		 * SpringLayout.SOUTH, this);
-		 */
-		
-		// set constraints for the radio panel
-		/*
-		 * radioLayout.putConstraint(SpringLayout.WEST, adminButton, 0,
-		 * SpringLayout.WEST, radioPanel);
-		 * radioLayout.putConstraint(SpringLayout.WEST, updateButton, 0,
-		 * SpringLayout.WEST, radioPanel);
-		 * radioLayout.putConstraint(SpringLayout.NORTH, adminButton, 15,
-		 * SpringLayout.NORTH, radioPanel);
-		 * radioLayout.putConstraint(SpringLayout.NORTH, updateButton, 15,
-		 * SpringLayout.SOUTH, adminButton);
-		 * radioLayout.putConstraint(SpringLayout.NORTH, noPermissionButton, 15,
-		 * SpringLayout.SOUTH, updateButton);
-		 * radioLayout.putConstraint(SpringLayout.NORTH, saveButton, 10,
-		 * SpringLayout.SOUTH, noPermissionButton);
-		 * radioLayout.putConstraint(SpringLayout.WEST, radioPanel, 0,
-		 * SpringLayout.WEST, saveButton);
-		 * radioLayout.putConstraint(SpringLayout.EAST, saveButton, (int)
-		 * saveButton.getPreferredSize().getWidth(), SpringLayout.WEST,
-		 * radioPanel);
-		 * radioLayout.putConstraint(SpringLayout.SOUTH, saveButton, (int)
-		 * saveButton.getPreferredSize().getHeight(), SpringLayout.NORTH,
-		 * saveButton);
-		 */
-		
 		// add the buttons to the panel
 		radioPanel.add(adminButton);
 		radioPanel.add(updateButton);
@@ -179,7 +141,6 @@ public class PermissionsPanel extends Tab {
 				BorderFactory.createEtchedBorder(), "Permission Level"));
 		
 		this.add(userScroll);
-		// this.add(radioPanel);
 	}
 	
 	/**

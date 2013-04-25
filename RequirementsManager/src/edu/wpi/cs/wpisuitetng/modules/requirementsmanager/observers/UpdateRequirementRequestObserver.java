@@ -36,45 +36,25 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 		this.notifier = notifier;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
-	 * .network.models.IRequest, java.lang.Exception)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void fail(final IRequest iReq, final Exception exception) {
-		/*
-		 * if (this.detailPanel != null) {
-		 * this.detailPanel.displaySaveError("Unable to complete request: " +
-		 * exception.getMessage()); }
-		 */
 		notifier.fail(exception);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
-	 * cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseError(final IRequest iReq) {
-		/*
-		 * if (this.detailPanel != null) {
-		 * this.detailPanel.displaySaveError("Received " +
-		 * iReq.getResponse().getStatusCode() + " error from server: " +
-		 * iReq.getResponse().getStatusMessage()); }
-		 */
 		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
 				.getResponse().getStatusMessage());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
-	 * .cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseSuccess(final IRequest iReq) {
@@ -88,21 +68,6 @@ public class UpdateRequirementRequestObserver implements RequestObserver {
 		RequirementDatabase.getInstance().add(req);
 		
 		notifier.responseSuccess();
-		/*
-		 * if (this.closeTab) {
-		 * this.detailPanel.getMainTabController().closeCurrentTab(); }
-		 * if (this.detailPanel != null) { detailPanel.logView.refresh(req);
-		 * if (this.closeTab) {
-		 * this.detailPanel.getMainTabController().closeCurrentTab(); } }
-		 */
-		
-		/*
-		 * if (response.getStatusCode() == 200) { // parse the requirement from
-		 * the body final Requirement requirement =
-		 * Requirement.fromJSON(response.getBody());
-		 * // make sure the requirement isn't null if (requirement != null) {
-		 * //success here! } else { //Display error } } else { //Display Error }
-		 */
 		
 		RequirementTableView.getInstance().refresh();
 	}

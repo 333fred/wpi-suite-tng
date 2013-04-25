@@ -70,7 +70,6 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 								TabPopupMenu.CloseMode.CLOSE_ALL);
 					}
 					popupMenu.show(component, 5, 5); // off set of 5,5
-					// tabbedPane.setSelectedIndex(index);
 				}
 			}
 		}

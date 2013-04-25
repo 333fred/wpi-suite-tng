@@ -54,11 +54,4 @@ public class FilterTable extends JTable {
 		
 		return c;
 	}
-	/*
-	 * @Override
-	 * public void changeSelection(int rowIndex, int columnIndex, boolean
-	 * toggle, boolean extend) {
-	 * super.changeSelection(rowIndex,columnIndex, true, false);
-	 * }
-	 */
 }

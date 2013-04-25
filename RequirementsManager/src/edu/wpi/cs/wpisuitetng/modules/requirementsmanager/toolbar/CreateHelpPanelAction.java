@@ -51,8 +51,6 @@ public class CreateHelpPanelAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		// File input = new
-		// File("http://dastardlybanana.com/Docs/RequirementsManager/"); // Html
 		// file is our input
 		// go to current url + Documentation/
 		String docURI = Network.getInstance().getDefaultNetworkConfiguration()
@@ -62,22 +60,14 @@ public class CreateHelpPanelAction extends AbstractAction {
 		try {
 			input = new URI(docURI);
 		} catch (final URISyntaxException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
 		// Create a desktop type in order to launch the user's default browser
 		final Desktop desktop = Desktop.isDesktopSupported() ? Desktop
 				.getDesktop() : null;
-		if ((desktop != null) && desktop.isSupported(Desktop.Action.BROWSE)) { // If
-																				// desktop
-																				// was
-																				// created
-																				// and
-																				// a
-																				// browser
-																				// is
-																				// supported
+		// If desktop was created and a browser is supported
+		if ((desktop != null) && desktop.isSupported(Desktop.Action.BROWSE)) {
 			try {
 				desktop.browse(input); // Convert link to identifier and launch
 										// default browser

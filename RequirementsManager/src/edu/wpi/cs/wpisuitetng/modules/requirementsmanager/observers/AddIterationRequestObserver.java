@@ -32,11 +32,8 @@ public class AddIterationRequestObserver implements RequestObserver {
 		this.iterationView = iterationView;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
-	 * .network.models.IRequest, java.lang.Exception)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void fail(final IRequest iReq, final Exception exception) {
@@ -44,11 +41,8 @@ public class AddIterationRequestObserver implements RequestObserver {
 				+ exception.getMessage());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
-	 * cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseError(final IRequest iReq) {
@@ -58,11 +52,8 @@ public class AddIterationRequestObserver implements RequestObserver {
 				+ iReq.getResponse().getStatusMessage());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
-	 * .cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseSuccess(final IRequest iReq) {
@@ -78,30 +69,7 @@ public class AddIterationRequestObserver implements RequestObserver {
 			public void run() {
 				iterationView.getMainTabController().closeCurrentTab();
 			}
-		});
-		/*
-		 * if (response.getStatusCode() == 201) { // parse the Requirement from
-		 * the body final Requirement requirement =
-		 * Requirement.fromJSON(response .getBody());
-		 * // make sure the requirement isn't null if (requirement != null) {
-		 * /omething with the requirement if wanted
-		 * singUtilities.invokeLater(new Runnable() {
-		 * @Override public void run() { ((DefectPanel) view.getDefectPanel())
-		 * .updateModel(defect); view.setEditModeDescriptors(defect); } });
-		 * // JOptionPane.showMessageDialog(detailPanel, "SUCCESS","SUCCESS",
-		 * JOptionPane.OK_OPTION); } else {
-		 * //Display error in view... here's how defecttracker does it:
-		 * JOptionPane.showMessageDialog(detailPanel,
-		 * "Unable to parse defect received from server.", "Save Defect Error",
-		 * JOptionPane.ERROR_MESSAGE);
-		 * } } else { /* Display error in view... here's how defecttracker does
-		 * it: JOptionPane.showMessageDialog(view, "Received " +
-		 * iReq.getResponse().getStatusCode() + " status from server: " +
-		 * iReq.getResponse().getStatusMessage(), "Save Defect Error",
-		 * JOptionPane.ERROR_MESSAGE);
-		 * }
-		 */
-		
+		});		
 	}
 	
 }

@@ -45,11 +45,6 @@ public class UserEntityManagerTest {
 			WPISuiteException {
 		// dummy test: maybe figure this out in the future?
 		Assert.assertEquals(1, 1);
-		// StringListModel created = manager.makeEntity(adminSession,
-		// user1.toJSON());
-		// assertEquals(created.getPermission(user1), Permission.READ);
-		// assertEquals(created.getPermission(user2), Permission.WRITE);
-		// assertEquals(created.getPermission(user3), null);
 	}
 	
 	@Before

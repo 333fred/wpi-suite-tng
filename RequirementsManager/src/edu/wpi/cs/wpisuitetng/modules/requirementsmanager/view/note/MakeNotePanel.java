@@ -40,7 +40,6 @@ public class MakeNotePanel extends JPanel {
 	private final JTextArea noteField;
 	private final JButton addnote;
 	
-	// private final JButton deleteNote;
 	private final JLabel addnoteLabel;
 	
 	private static final int VERTICAL_PADDING = 5;
@@ -82,8 +81,6 @@ public class MakeNotePanel extends JPanel {
 		
 		addnote = new JButton("Add note");
 		addnoteLabel = new JLabel("Add a new note:");
-		
-		// deleteNote = new JButton("Delete note");
 		
 		addnote.setAction(new SaveNoteAction(new SaveNoteController(this,
 				model, parentView)));

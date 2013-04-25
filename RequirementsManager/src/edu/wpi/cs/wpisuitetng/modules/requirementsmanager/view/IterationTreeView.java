@@ -135,7 +135,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		tree.setEditable(false);
 		tree.setDragEnabled(true);
 		tree.setDropMode(DropMode.ON);
-		// final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		
 		tree.setTransferHandler(new TreeTransferHandler(tabController));
 		tree.getSelectionModel().setSelectionMode(
@@ -263,8 +262,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			return new ArrayList<Requirement>();
 		}
 		
-		// Iteration[] selectedIterations = new
-		// Iteration[selectedIndexes.length];
 		final List<Requirement> selectedRequirements = new ArrayList<Requirement>();
 		
 		for (final TreePath path : paths) {
@@ -531,7 +528,6 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 	
 	@Override
 	public void update() {
-		// refresh();
 	}
 	
 	public void updateTreeView() {
@@ -541,23 +537,16 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		DefaultMutableTreeNode requirementNode = null;
 		Requirement requirement = null;
 		top.removeAllChildren();
-		// iterations = IterationDatabase.getInstance().getAllIterations();
 		
 		// sort the iterations
 		iterations = Iteration.sortIterations(iterations);
 		
 		for (final Iteration anIteration : iterations) {
-			// iterationNode = new
-			// DefaultMutableTreeNode((acurrentDate.compareTo(anIteration.getEndDate())
-			// > 0 && anIteration.getId() != -1) ? anIteration.getName()+
-			// " (Closed)" : anIteration.getName());
 			iterationNode = new DefaultMutableTreeNode(anIteration);
-			// iterationNode.setUserObject(anIteration);
 			for (final Integer aReq : anIteration.getRequirements()) {
 				try {
 					requirement = RequirementDatabase.getInstance().get(aReq);
 					requirementNode = new DefaultMutableTreeNode(requirement);
-					// requirementNode.setUserObject(requirement);
 					iterationNode.add(requirementNode);
 				} catch (final RequirementNotFoundException e) {
 					System.out

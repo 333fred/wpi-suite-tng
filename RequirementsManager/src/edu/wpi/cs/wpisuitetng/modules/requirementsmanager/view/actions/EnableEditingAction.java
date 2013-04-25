@@ -56,7 +56,6 @@ public class EnableEditingAction extends AbstractAction {
 			tableView.setEditable(false);
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
-			// tableView.getTable().setRowSorter(sorter);
 			tableView.getTable().clearUpdated();
 			tableView.refresh();
 		} else {
@@ -123,14 +122,9 @@ public class EnableEditingAction extends AbstractAction {
 			
 			final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
 					tableView.getTable().getModel());
-			/*
-			 * for (int i = 0; i < this.table.getColumnCount(); i++) { if
-			 * (this.table.getColumnName(i).equals("Priority")) {
-			 * sorter.setComparator(i, comparator); } }
-			 */
+			
 			// TODO: find a better way to get the the appropriate columns (for
-			// loop
-			// was failing for me for no reason)
+			// loop was failing for me for no reason)
 			sorter.setComparator(3, PriorityComparator);
 			sorter.setComparator(5, IterationStringComparator);
 			sorter.setComparator(6, numberComparator);

@@ -35,7 +35,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
 public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 	
 	/** Menu options for the PopupMenu */
-	// private JMenuItem menuCreateRequirement;
 	private JMenuItem menuEditIteration;
 	private JMenuItem menuFilterIteration;
 	
@@ -69,15 +68,12 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 				menuEditIteration = new JMenuItem("View Iteration");
 			}
 			menuFilterIteration = new JMenuItem("Filter By Iteration");
-			// menuCreateRequirement = new JMenuItem("New Requirement");
 			
 			menuEditIteration.addActionListener(this);
 			menuFilterIteration.addActionListener(this);
-			// menuCreateRequirement.addActionListener(this);
 			
 			add(menuEditIteration);
 			add(menuFilterIteration);
-			// add(menuCreateRequirement);
 			
 		} else {
 			

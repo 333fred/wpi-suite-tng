@@ -24,33 +24,15 @@ public class JanewayTabModuleTest {
 	JComponent toolbar;
 	JComponent mainComponent;
 	
-	/*
-	 * KeyboardShortcut k;
-	 * KeyStroke j;
-	 * List<KeyboardShortcut> l;
-	 */
-	
 	@Before
 	public void setUp() {
 		module = new JanewayTabModel(name, icon, toolbar, mainComponent);
-		// k = new KeyboardShortcut(j);
-		// module.addKeyboardShortcut(k);
 	}
 	
 	@Test
 	public void testGetComponent() {
 		Assert.assertEquals(mainComponent, module.getMainComponent());
 	}
-	
-	// TODO:need to test getKeyboardShortcuts. tests apparently don't like
-	// lists...
-	/*
-	 * @Test
-	 * public void testShortcut(){
-	 * l = module.getKeyboardShortcuts();
-	 * assertEquals(j,l);
-	 * }
-	 */
 	
 	@Test
 	public void testGetIcon() {

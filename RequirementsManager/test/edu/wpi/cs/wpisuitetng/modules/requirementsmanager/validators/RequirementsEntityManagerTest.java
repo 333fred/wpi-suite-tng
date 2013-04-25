@@ -203,25 +203,6 @@ public class RequirementsEntityManagerTest {
 						defaultSession.getProject()).get(0), created);
 	}
 	
-	/*
-	 * @Test(expected=BadRequestException.class) public void testBadUpdate()
-	 * throws WPISuiteException { goodUpdatedDefect.setTitle("");
-	 * manager.update(defaultSession, goodUpdatedDefect.toJSON()); }
-	 * @Test public void testNoUpdate() throws WPISuiteException { Date
-	 * origLastModified = existingDefect.getLastModifiedDate(); Defect updated =
-	 * manager.update(defaultSession, existingDefect.toJSON());
-	 * assertSame(existingDefect, updated); // there were no changes - make sure
-	 * lastModifiedDate is same, no new events assertEquals(origLastModified,
-	 * updated.getLastModifiedDate()); assertEquals(0,
-	 * updated.getEvents().size()); }
-	 * @Test public void testProjectChangeIgnored() throws WPISuiteException {
-	 * Defect existingDefectCopy = new Defect(1, "An existing defect", "",
-	 * existingUser); existingDefectCopy.setProject(otherProject); Defect
-	 * updated = manager.update(defaultSession, existingDefectCopy.toJSON());
-	 * assertEquals(0, updated.getEvents().size()); assertSame(testProject,
-	 * updated.getProject()); }
-	 */
-	
 	@Test
 	// Tests updating a requirement without changes
 	public void testNoUpdate() throws WPISuiteException {

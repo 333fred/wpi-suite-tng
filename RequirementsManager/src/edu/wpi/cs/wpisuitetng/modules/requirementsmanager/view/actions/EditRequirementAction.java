@@ -127,10 +127,7 @@ public class EditRequirementAction extends AbstractAction {
 					iterationController.save(anIteration, iterationObserver);
 				} catch (final IterationNotFoundException e1) {
 					e1.printStackTrace();
-				}/*
-				 * catch (RequirementNotFoundException ex){
-				 * ex.printStackTrace(); }
-				 */
+				}
 				
 				String newIteration;
 				if (toBacklog) {

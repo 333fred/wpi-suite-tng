@@ -49,10 +49,8 @@ public class IterationRequirementStatistics extends
 		return this.buildPieChart("Requirements by Iteration");
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
-	 * IRequirementStatistics#update()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void update() {

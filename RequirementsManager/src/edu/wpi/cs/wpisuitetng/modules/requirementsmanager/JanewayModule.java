@@ -94,9 +94,6 @@ public class JanewayModule implements IJanewayModule {
 		// initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();
 		
-		// initialize the tab view public void insertTab(String title, Icon
-		// icon, Component component, String tip, int index) {
-		
 		// initialize TabController
 		tabController = new MainTabController();
 		
@@ -137,18 +134,16 @@ public class JanewayModule implements IJanewayModule {
 		UIManager.put("ComboBox.disabledForeground", Color.BLACK);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public String getName() {
 		return "Requirements Manager";
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {

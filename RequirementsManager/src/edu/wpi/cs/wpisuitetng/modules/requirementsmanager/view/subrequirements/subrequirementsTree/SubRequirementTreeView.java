@@ -317,13 +317,11 @@ public class SubRequirementTreeView extends JPanel implements
 			firstPaint = false;
 			
 			refresh();
-			// getRequirementsFromServer();
 		}
 	}
 	
 	@Override
 	public void receivedData(final Requirement[] requirements) {
-		// this.requirements = Arrays.asList(requirements);
 		refresh();
 	}
 	
@@ -443,42 +441,12 @@ public class SubRequirementTreeView extends JPanel implements
 				requirementNode = new DefaultMutableTreeNode(anReq);
 				
 				updateTreeNodes(anReq, requirementNode);
-				/*
-				 * for (Integer aReq : anReq.getSubRequirements()) {
-				 * try {
-				 * tempReq = RequirementDatabase.getInstance().get(
-				 * aReq);
-				 * subRequirementNode = new DefaultMutableTreeNode(
-				 * tempReq);
-				 * requirementNode.add(subRequirementNode);
-				 * updateTreeNodes(tempReq, subRequirementNode);
-				 * } catch (RequirementNotFoundException e) {
-				 * System.out
-				 * .println("Requirement not found: SubRequirementTreeView:372");
-				 * }
-				 * }
-				 */
 				top.add(requirementNode);
 			}
 			
 			for (final Requirement anReq : topReqsWOChildren) {
 				requirementNode = new DefaultMutableTreeNode(anReq);
 				updateTreeNodes(anReq, requirementNode);
-				/*
-				 * for (Integer aReq : anReq.getSubRequirements()) {
-				 * try {
-				 * tempReq = RequirementDatabase.getInstance().get(
-				 * aReq);
-				 * subRequirementNode = new DefaultMutableTreeNode(
-				 * tempReq);
-				 * requirementNode.add(subRequirementNode);
-				 * updateTreeNodes(tempReq, subRequirementNode);
-				 * } catch (RequirementNotFoundException e) {
-				 * System.out
-				 * .println("Requirement not found: SubRequirementTreeView:372");
-				 * }
-				 * }
-				 */
 				top.add(requirementNode);
 			}
 			

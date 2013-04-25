@@ -161,9 +161,6 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 			controller.save(tempReq, reqObserver);
 			
 		} else if (!e.getSource().equals(menuRemoveChildren)) {
-			// otherReq =
-			// RequirementDatabase.getInstance().getRequirement(((JMenuItem)
-			// e.getSource()).getText());
 			try {
 				otherReq = RequirementDatabase.getInstance().get(
 						((JMenuItem) e.getSource()).getMnemonic());// Grab the
@@ -176,7 +173,7 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 			tempReq.removeSubRequirement(otherReq.getrUID());// Remove the
 																// parent's
 																// child
-			controller.save(otherReq, reqObserver);// Save teh requirements
+			controller.save(otherReq, reqObserver);// Save the requirements
 			controller.save(tempReq, reqObserver);
 		}
 		
@@ -192,14 +189,8 @@ public class SubReqRequirementPopupMenu extends JPopupMenu implements
 	
 	@Override
 	public void responseSuccess() {
-		
-		for (int i = 0; i < tabController.getTabView().getTabCount(); i++) { // On
-																				// success,
-																				// update
-																				// sub-reqs
-																				// and
-																				// total
-																				// estimates
+		 // On success, update sub-reqs and total estimates
+		for (int i = 0; i < tabController.getTabView().getTabCount(); i++) {
 			if (tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
 				(((DetailPanel) tabController.getTabView().getComponentAt(i)))
 						.updateTotalEstimate();

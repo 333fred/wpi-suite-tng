@@ -109,11 +109,6 @@ public class ToolbarView extends DefaultToolbarView {
 		createStatistics = new JButton("Show Statistics");
 		createStatistics.setAction(new CreateStatPanelAction(tabController));
 		
-		// Construct the search field
-		// searchField = new JPlaceholderTextField("Lookup by ID", 15);
-		// searchField.addActionListener(new
-		// LookupRequirementController(tabController, searchField, this));
-		
 		// Configure the layout of the buttons on the content panel
 		layout.putConstraint(SpringLayout.NORTH, createRequirement, 5,
 				SpringLayout.NORTH, content);
@@ -142,22 +137,13 @@ public class ToolbarView extends DefaultToolbarView {
 				SpringLayout.WEST, createStatistics);
 		resourceLayout.putConstraint(SpringLayout.EAST, createHelp, 0,
 				SpringLayout.EAST, createStatistics);
-		/*
-		 * layout.putConstraint(SpringLayout.WEST, createHelpPanel, 8,
-		 * SpringLayout.WEST, content); layout.putConstraint(SpringLayout.SOUTH,
-		 * createHelpPanel, 17, SpringLayout.SOUTH, createIteration);
-		 */
 		
 		// Add buttons to the content panel
-		// content.add(createIteration);
 		content.add(createRequirement);
-		// content.add(createHelpPanel);
 		content.add(createIteration);
 		
 		resourcePanel.add(createHelp);
 		resourcePanel.add(createStatistics);
-		
-		// content.add(searchField);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		final ToolbarGroupView toolbarGroup = new ToolbarGroupView("Home",
@@ -191,7 +177,6 @@ public class ToolbarView extends DefaultToolbarView {
 				.getWidth() + 40));
 		// Calculate the width of the toolbar
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
-		// addGroup(toolbarView);
 		
 	}
 	

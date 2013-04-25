@@ -7,14 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * 	Steve
+ * 	@author Steve Kordell
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import javax.swing.DefaultListSelectionModel;
-
-/*@author Steve*/
 
 public class ToggleSelectionModel extends DefaultListSelectionModel {
 	

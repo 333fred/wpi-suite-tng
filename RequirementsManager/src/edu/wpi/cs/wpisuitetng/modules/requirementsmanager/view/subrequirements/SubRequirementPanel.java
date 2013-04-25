@@ -67,9 +67,10 @@ public class SubRequirementPanel extends JPanel {
 	private final JLabel parentLabel; // Parent and child labels
 	private final JLabel childLabel;
 	
-	private JRadioButton radioParent; // Radio buttons to choose between adding
-										// children/parents
+	// Radio buttons to choose between adding children/parents
+	private JRadioButton radioParent;
 	private JRadioButton radioChild;
+	
 	private final ButtonGroup btnGroup;
 	
 	private final JButton addReq; // Button to add child or parent
@@ -90,17 +91,12 @@ public class SubRequirementPanel extends JPanel {
 		parentSelected = false;
 		
 		validChildList = new DefaultListModel();
-		// initializeList();
-		// addValidChildren();
 		bottomReqNames = new JList();
 		
 		childrenList = new DefaultListModel();
-		// initializeTopList(requirement);
-		// topReqNames = new JList(childrenList);
 		topReqNames = new JList();
 		
 		validParentList = new DefaultListModel();
-		// addValidParents();
 		
 		editSubReqPanel = new JPanel();
 		
@@ -248,11 +244,11 @@ public class SubRequirementPanel extends JPanel {
 											// initialize to disabled
 			
 			radioChild.addActionListener(new ActionListener() { // Have the
-						
-																// radio child
-																// listen for
-																// when it's
-																// clicked
+					
+						// radio child
+						// listen for
+						// when it's
+						// clicked
 						
 						@Override
 						public void actionPerformed(final ActionEvent e) {
@@ -263,13 +259,13 @@ public class SubRequirementPanel extends JPanel {
 					});
 			
 			radioParent.addActionListener(new ActionListener() { // Have the
-						
-																	// radio
-																	// parent
-																	// listen
-																	// for when
-																	// it's
-																	// clicked
+					
+						// radio
+						// parent
+						// listen
+						// for when
+						// it's
+						// clicked
 						
 						@Override
 						public void actionPerformed(final ActionEvent e) {
@@ -284,16 +280,6 @@ public class SubRequirementPanel extends JPanel {
 			
 		}
 	}
-	
-	/*
-	 * private void initializeBottomListToValidChildren() {
-	 * List<Requirement> requirements = RequirementDatabase.getInstance()
-	 * .getAll();
-	 * for (Requirement req : requirements) {
-	 * validChildList.addElement(req.getName());
-	 * }
-	 * }
-	 */
 	
 	/**
 	 * Find the requirements that can be added as a subrequirement
@@ -706,13 +692,11 @@ public class SubRequirementPanel extends JPanel {
 	public void updateAddButtontext() {
 		if (parentSelected) {
 			if (requirement.getpUID().size() > 0) {
-				addReq.setText("Change Parent"); // If it has a parent, display
-													// that the action will
-													// change it
+				// If it has a parent, display that the action will change it
+				addReq.setText("Change Parent");
 			} else {
-				addReq.setText("Assign Parent"); // If it does not have a
-													// parent, display the
-													// action will add one
+				// If it does not have a parent, display the action will add one
+				addReq.setText("Assign Parent");
 			}
 		}
 	}

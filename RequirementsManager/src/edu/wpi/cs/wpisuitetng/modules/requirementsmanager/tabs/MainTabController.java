@@ -134,13 +134,6 @@ public class MainTabController {
 				iteration.getName());
 	}
 	
-	// TEST
-	/*
-	 * public TabWrap addHelpPanelTab() { HelpPanel emptyDetailView = new
-	 * HelpPanel(); return addTab("User Manual", new ImageIcon(),
-	 * emptyDetailView, "User Manual"); }
-	 */
-	
 	/**
 	 * Adds a tab to modify permissions
 	 * 
@@ -343,10 +336,6 @@ public class MainTabController {
 		final Component selectedComponent = tabView.getSelectedComponent();
 		final Tab selectedTab = (Tab) selectedComponent;
 		selectedTab.onGainedFocus();
-		
-		// tabView.setTabComponentAt(tabView.getSelectedIndex(),
-		// selectedTab.getTabComponent(tabView));
-		
 	}
 	
 	public void refreshFilterView() {

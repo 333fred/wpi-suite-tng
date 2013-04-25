@@ -263,8 +263,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		final JPanel editPanel = new JPanel(editPanelLayout);
 		editPanel.add(btnEdit);
 		editPanel.add(btnSave);
-		// TODO: get search box
-		// editPanel.add(textSearchBox);
 		editPanel.add(textFilterInfo);
 		editPanel.add(textEditInfo);
 		editPanel.add(btnClearTreeFilter);
@@ -525,7 +523,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		butRefresh = new JButton("Refresh");
 		
 		butRefresh.setAction(new RefreshAction(this));
-		// butView.setAction(new ViewRequirementAction(this));
 		
 		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5,
 				SpringLayout.NORTH, content);
@@ -542,7 +539,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				butRefresh);
 		
 		// create and add the buttons that will be displayed
-		// content.add(butView);
 		content.add(butRefresh);
 		
 		toolbarGroupView = new ToolbarGroupView("Refresh", content);
@@ -713,7 +709,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		
 		this.requirements = RequirementDatabase.getInstance()
 				.getFilteredRequirements().toArray(new Requirement[0]);
-		// this.requirements = requirements;
 		if (this.requirements.length == 0) {
 			textFilterInfo.setText("No Requirements Found");
 		} else {
@@ -784,9 +779,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	
 	@Override
 	public void update() {
-		// this.requirements =
-		// RequirementDatabase.getInstance().getAllRequirements().toArray(requirements);
-		// updateListView();
 	}
 	
 	/**

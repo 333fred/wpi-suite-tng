@@ -98,7 +98,6 @@ public class FilterTableView extends JPanel implements
 		scrollPane = new JScrollPane(tableView,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		// scrollPane.getViewport().add(tableView);
 		
 		setLayout(new BorderLayout());
 		

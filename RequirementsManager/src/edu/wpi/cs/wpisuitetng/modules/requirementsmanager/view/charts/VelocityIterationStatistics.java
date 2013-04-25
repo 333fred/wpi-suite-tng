@@ -48,10 +48,8 @@ public class VelocityIterationStatistics extends AbstractRequirementStatistics {
 		return this.buildPieChart("Iterations by Actual Effort");
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
-	 * IRequirementStatistics#update()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void update() {

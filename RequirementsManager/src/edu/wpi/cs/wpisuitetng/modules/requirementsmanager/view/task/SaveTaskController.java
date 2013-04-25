@@ -97,7 +97,6 @@ public class SaveTaskController {
 				
 				tempTask.setId(model.getTasks().size() + 1);
 				model.addTask(tempTask);
-				// parentView.getTaskList().addElement(tempTask);
 				taskModel.addEvent(tempTask);
 				view.getTaskName().setText("");
 				view.getTaskField().setText("");

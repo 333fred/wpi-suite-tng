@@ -108,38 +108,5 @@ public class CreateFilterViewTest {
 		view.editFilter(theFilter);
 		view.onSavePressed();
 		Assert.assertNotNull(view);
-	}
-	
-	/*
-	 * @Test
-	 * public void testInitializeWithFilterIterationAfter() {
-	 * Calendar cal = Calendar.getInstance();
-	 * cal.set(0, 0, 1);
-	 * Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
-	 * FilterOperation.OCCURS_AFTER, new Date());
-	 * CreateFilterView view = new CreateFilterView(FilterView.getInstance(),
-	 * theFilter);
-	 * view.editFilter(theFilter);
-	 * assertNotNull(view);
-	 * }
-	 */
-	
-	/*
-	 * @Test
-	 * public void testInitializeWithFilterIterationBetween() {
-	 * Calendar cal = Calendar.getInstance();
-	 * cal.set(0, 0, 1);
-	 * Calendar cal2 = Calendar.getInstance();
-	 * cal2.set(0, 0, 10);
-	 * Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
-	 * FilterOperation.OCCURS_BETWEEN, new FilterIterationBetween(cal.getTime(),
-	 * cal2.getTime()));
-	 * CreateFilterView view = new CreateFilterView(FilterView.getInstance(),
-	 * theFilter);
-	 * view.editFilter(theFilter);
-	 * view.onSavePressed();
-	 * assertNotNull(view);
-	 * }
-	 */
-	
+	}	
 }

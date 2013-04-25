@@ -65,10 +65,8 @@ public class UpdateFilterRequestObserver implements RequestObserver {
 		// put the saved filter into the database
 		final ResponseModel response = iReq.getResponse();
 		
-		// if (response.getStatusCode() == 200) {
 		final Filter filter = Filter.fromJSON(response.getBody());
 		FilterDatabase.getInstance().add(filter);
-		// }
 		
 		notifier.responseSuccess();
 		

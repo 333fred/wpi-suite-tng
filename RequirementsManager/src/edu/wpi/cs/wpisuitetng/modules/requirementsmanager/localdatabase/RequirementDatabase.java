@@ -136,10 +136,6 @@ public class RequirementDatabase extends AbstractDatabase<Requirement> {
 			}
 		}
 		
-		/*
-		 * for (Requirement r : allReqs) {
-		 * }
-		 */
 		return filteredReqs;
 	}
 	

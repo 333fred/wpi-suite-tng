@@ -39,11 +39,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 		this.detailPanel = detailPanel;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
-	 * .network.models.IRequest, java.lang.Exception)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void fail(final IRequest iReq, final Exception exception) {
@@ -51,11 +48,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 				+ exception.getMessage());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
-	 * cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseError(final IRequest iReq) {
@@ -65,11 +59,8 @@ public class AddRequirementRequestObserver implements RequestObserver {
 				+ iReq.getResponse().getStatusMessage());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
-	 * .cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseSuccess(final IRequest iReq) {

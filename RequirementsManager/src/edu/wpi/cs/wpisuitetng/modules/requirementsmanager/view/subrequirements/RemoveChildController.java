@@ -69,8 +69,6 @@ public class RemoveChildController {
 		final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 				detailView);
 		controller.save(model, observer);
-		// observer = new UpdateRequirementRequestObserver(
-		// new SaveOtherRequirement());
 		controller.save(anReq, observer);
 		
 		view.refreshTopPanel();

@@ -109,12 +109,8 @@ public class TreeTransferHandler extends TransferHandler implements
 		final JTree.DropLocation dl = (JTree.DropLocation) support
 				.getDropLocation();
 		final JTree tree = (JTree) support.getComponent();
-		// int dropRow = tree.getRowForPath(dl.getPath());
 		final int[] selRows = tree.getSelectionRows();
-		/*
-		 * for (int i = 0; i < selRows.length; i++) { if (selRows[i] == dropRow)
-		 * { return false; } }
-		 */
+
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
 		final TreePath dest = dl.getPath();
@@ -301,8 +297,8 @@ public class TreeTransferHandler extends TransferHandler implements
 		final JTree tree = (JTree) support.getComponent();
 		final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		// Configure for drop mode.
-		int index = childIndex; // DropMode.INSERT
-		if (childIndex == -1) { // DropMode.ON
+		int index = childIndex;
+		if (childIndex == -1) {
 			index = parent.getChildCount();
 		}
 		// Add data to model.

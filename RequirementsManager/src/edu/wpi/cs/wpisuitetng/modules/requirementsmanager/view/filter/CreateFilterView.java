@@ -527,7 +527,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			// there was an error set text box
 			labSaveError.setText(errorString);
 			txtEqualTo.setBackground(new Color(243, 243, 209));
-			// calEqualTo.setBackground(new Color(243, 243, 209));
 			
 		}
 	}
@@ -914,14 +913,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				}
 				break;
 		}
-		
-		/*
-		 * //check to see if editing. boolean fieldsEqual = filter.getField() ==
-		 * FilterField.getFromString((String)cboxField.getSelectedItem());
-		 * boolean operationEqual = filter.getOperation() ==
-		 * FilterOperation.getFromString((String)
-		 * cboxOperation.getSelectedItem());
-		 */
 		
 		if (!error && (checkFilter.getValue() != null)
 				&& CreateFilterView.isFilterDuplicate(checkFilter)) {

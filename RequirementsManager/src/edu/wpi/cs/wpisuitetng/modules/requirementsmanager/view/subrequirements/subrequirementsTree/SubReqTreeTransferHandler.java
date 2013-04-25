@@ -110,23 +110,22 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		final JTree.DropLocation dl = (JTree.DropLocation) support
 				.getDropLocation();
 		final JTree tree = (JTree) support.getComponent();
-		final int[] selRows = tree.getSelectionRows(); // Grab our source
-														// indexes (implemented
-														// as 1)
+		// Grab our source indexes (implemented as 1)
+		final int[] selRows = tree.getSelectionRows(); 
 		
-		final TreePath dest = dl.getPath(); // Grab our destination
+		// Grab our destination
+		final TreePath dest = dl.getPath(); 
 		
 		// Don't allow dragging off the tree
 		if (dest == null) {
 			return false;
 		}
 		
+		// Grab the object we dragged to as node
 		final DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
-				.getLastPathComponent(); // Grab the object we dragged to as
-											// node
-		final TreePath path = tree.getPathForRow(selRows[0]); // Grab the object
-																// we dragged
-																// from as node
+				.getLastPathComponent(); 
+		// Grab the object we dragged from as node
+		final TreePath path = tree.getPathForRow(selRows[0]); 
 		final DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
 		
@@ -348,8 +347,8 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		final JTree tree = (JTree) support.getComponent();
 		final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		// Configure for drop mode.
-		int index = childIndex; // DropMode.INSERT
-		if (childIndex == -1) { // DropMode.ON
+		int index = childIndex;
+		if (childIndex == -1) {
 			index = parent.getChildCount();
 		}
 		// Add data to model

@@ -43,7 +43,6 @@ public class CreateFilterViewListener implements KeyListener,
 	
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		// update();
 	}
 	
 	/**
@@ -59,7 +58,6 @@ public class CreateFilterViewListener implements KeyListener,
 	
 	@Override
 	public void keyTyped(final KeyEvent e) {
-		// update();
 	}
 	
 	/**

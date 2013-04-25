@@ -36,13 +36,8 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 		this.notifier = notifier;
 	}
 	
-	// TODO: implement server connection once required
-	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
-	 * .network.models.IRequest, java.lang.Exception)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void fail(final IRequest iReq, final Exception exception) {
@@ -51,11 +46,8 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 				+ exception.getMessage());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
-	 * cs.wpisuitetng.network.models.IRequest)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void responseError(final IRequest iReq) {

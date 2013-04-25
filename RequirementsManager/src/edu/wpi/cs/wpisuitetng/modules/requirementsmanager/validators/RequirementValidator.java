@@ -109,35 +109,9 @@ public class RequirementValidator {
 			return false;
 		}
 		
-		/*
-		 * //iterate through characters in string for (int i = 0; i <
-		 * toCheck.length(); i++){ //if we find a character which is not
-		 * whitespace, then we know it must be valid char c = toCheck.charAt(i);
-		 * if (!Character.isWhitespace(c)) return true; }
-		 */
-		
 		// if we fail to find a an issue return true
 		return true;
 	}
-	
-	/*
-	 * /** Return the Requirement with the given id if it already exists in the
-	 * database.
-	 * @param id the id of the Requirement
-	 * @param project the project this requirement belongs to
-	 * @param issues list of errors to add to if requirement doesn't exist
-	 * @param fieldName name of field to use in error if necessary
-	 * @return The Requirement with the given id, or null if it doesn't exist
-	 * @throws WPISuiteException / Requirement getExistingRequirement(int id,
-	 * Project project, List<ValidationIssue> issues, String fieldName) throws
-	 * WPISuiteException { List<Model> oldRequirements =
-	 * data.retrieve(Requirement.class, "rUID", id, project);
-	 * if(oldRequirements.size() < 1 || oldRequirements.get(0) == null) {
-	 * issues.add(new
-	 * ValidationIssue("Requirement with id does not exist in project",
-	 * fieldName)); return null; } else { return (Requirement)
-	 * oldRequirements.get(0); } }
-	 */
 	
 	/**
 	 * Validate the given model such that any nested models point to appropriate

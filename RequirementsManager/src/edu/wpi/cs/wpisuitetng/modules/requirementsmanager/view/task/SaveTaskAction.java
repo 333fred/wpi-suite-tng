@@ -54,9 +54,8 @@ public class SaveTaskAction extends AbstractAction {
 		this.selectedRows = selectedRows;
 	}
 	
-	/*
-	 * @see
-	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {

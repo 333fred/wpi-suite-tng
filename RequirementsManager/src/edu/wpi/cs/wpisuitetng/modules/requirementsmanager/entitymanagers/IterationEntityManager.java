@@ -354,22 +354,8 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			throw new WPISuiteException();
 		}
 		
-		/*
-		 * TODO: Determine if we want to actually log changes // Set up the
-		 * changeset callback IterationChangeset changeset = new
-		 * IterationChangeset(s.getUser()); ChangesetCallback callback = new
-		 * ChangesetCallback(changeset);
-		 */
 		// Copy values from the new iteration to the old iteration
 		updateMapper.map(updatedIteration, oldIteration);
-		/*
-		 * // If the user actually changed something, add the changeset to the
-		 * // iteration and save the iteration. Otherwise, do nothing if
-		 * (changeset.getChanges().size() > 0) {
-		 * oldIteration.logEvents(changeset); // Save the iteration, and throw
-		 * an exception if if fails if (!db.save(oldIteration, s.getProject()))
-		 * { throw new WPISuiteException(); } }
-		 */
 		
 		// Save the iteration, and throw an exception if if fails
 		if (!db.save(oldIteration, s.getProject())) {

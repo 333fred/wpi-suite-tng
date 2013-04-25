@@ -127,7 +127,6 @@ public class RequirementChangeset extends Changeset implements Event {
 		}
 		if (changes.get("iteration") != null) {
 			// Get the default string for an old and new value
-			// content += oldToNew("Iteration", changes.get("iteration"));
 			final int oldIteration = ((Double) changes.get("iteration")
 					.getOldValue()).intValue();
 			final int newIteration = ((Double) changes.get("iteration")

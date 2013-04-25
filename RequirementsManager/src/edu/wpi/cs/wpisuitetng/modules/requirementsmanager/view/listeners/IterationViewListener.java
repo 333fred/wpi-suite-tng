@@ -58,7 +58,6 @@ public class IterationViewListener implements KeyListener,
 	
 	@Override
 	public void keyPressed(final KeyEvent e) {
-		// update();
 	}
 	
 	/**
@@ -74,7 +73,6 @@ public class IterationViewListener implements KeyListener,
 	
 	@Override
 	public void keyTyped(final KeyEvent e) {
-		// update();
 	}
 	
 	/**

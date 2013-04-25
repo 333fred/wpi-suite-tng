@@ -53,8 +53,6 @@ public class MainTabView extends JTabbedPane {
 		// add the tab with the given tab component
 		
 		// invoke this later to solve issues
-		// SwingUtilities.invokeLater(new CreateClosableTabInvokable(this,
-		// index, tab));
 		
 		setTabComponentAt(index, tab.getTabComponent(tabController));
 	}
@@ -100,33 +98,12 @@ public class MainTabView extends JTabbedPane {
 	}
 	
 	/**
-	 * Sets the component at the given index, with the given component Also
-	 * notified the toolbar that the component of the tab has changed, and it
-	 * should update
-	 * 
-	 * TODO: Implement this method.
-	 * 
-	 * @param index
-	 *            The index of the component to set
-	 * @param component
-	 *            The new component
-	 */
-	/*
-	 * Not needed anymore, should have removed previously
-	 * @Override
-	 * public void setComponentAt(int index, Component component) {
-	 * super.setComponentAt(index, component);
-	 * }
-	 */
-	
-	/**
 	 * Override setSelctedIndex to stop tabs from being selected, if the current
 	 * tab doesn't allow
 	 * loss of focus
 	 * 
 	 * {@inheritDoc}
 	 */
-	
 	@Override
 	public void setSelectedComponent(final Component component) {
 		if (firstTab) {

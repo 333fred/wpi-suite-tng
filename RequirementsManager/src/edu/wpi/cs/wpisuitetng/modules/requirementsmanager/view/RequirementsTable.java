@@ -29,7 +29,6 @@ public class RequirementsTable extends JTable {
 			final RequirementTableView view) {
 		super(rowData, columnNames);
 		this.view = view;
-		// editedRows = new boolean[super.getRowCount()];
 	}
 	
 	public void clearUpdated() {

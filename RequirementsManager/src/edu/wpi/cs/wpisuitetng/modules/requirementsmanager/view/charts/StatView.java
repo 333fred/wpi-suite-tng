@@ -96,9 +96,6 @@ public class StatView extends Tab implements ActionListener,
 	private JRadioButton makeBarRadio;
 	
 	private JRadioButton makeLineRadio;
-	/*
-	 * private JButton generateChart;
-	 */
 	
 	/** Enums representing the type of chart and type of data */
 	private ChartType chartType;
@@ -228,13 +225,6 @@ public class StatView extends Tab implements ActionListener,
 		makeLineRadio.addActionListener(this);
 		makeLineRadio.setEnabled(false);
 		
-		/*
-		 * generateChart = new JButton("Generate Chart");
-		 * generateChart.setMnemonic(KeyEvent.VK_ENTER);
-		 * generateChart.setActionCommand("Generate Chart");
-		 * generateChart.addActionListener(this);
-		 */
-		
 		final ButtonGroup group = new ButtonGroup();
 		group.add(makePieRadio);
 		group.add(makeBarRadio);
@@ -252,10 +242,6 @@ public class StatView extends Tab implements ActionListener,
 		sidePanel.add(comboBoxStatisticType);
 		sidePanel.add(radioPanel);
 		
-		/*
-		 * sidePanel.add(generateChart);
-		 */
-		
 		sidePanelLayout.putConstraint(SpringLayout.NORTH, lblStatisticType,
 				VERTICAL_PADDING, SpringLayout.NORTH, sidePanel);
 		sidePanelLayout.putConstraint(SpringLayout.WEST, lblStatisticType,
@@ -272,19 +258,6 @@ public class StatView extends Tab implements ActionListener,
 				comboBoxStatisticType);
 		sidePanelLayout.putConstraint(SpringLayout.WEST, radioPanel,
 				HORIZONTAL_PADDING, SpringLayout.WEST, sidePanel);
-		
-		/*
-		 * sidePanelLayout.putConstraint(SpringLayout.NORTH,makeBarRadio,
-		 * VERTICAL_PADDING,SpringLayout.SOUTH,makePieRadio);
-		 * sidePanelLayout.putConstraint
-		 * (SpringLayout.WEST,makeBarRadio,HORIZONTAL_PADDING
-		 * ,SpringLayout.WEST,sidePanel);
-		 * sidePanelLayout.putConstraint(SpringLayout.NORTH,makeLineRadio,
-		 * VERTICAL_PADDING,SpringLayout.SOUTH,makeBarRadio);
-		 * sidePanelLayout.putConstraint
-		 * (SpringLayout.WEST,makeLineRadio,HORIZONTAL_PADDING
-		 * ,SpringLayout.WEST,sidePanel);
-		 */
 		
 		return sidePanel;
 	}

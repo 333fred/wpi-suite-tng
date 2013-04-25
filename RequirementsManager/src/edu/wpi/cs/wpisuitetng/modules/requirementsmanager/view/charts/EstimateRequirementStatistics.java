@@ -46,10 +46,8 @@ public class EstimateRequirementStatistics extends
 		return this.buildPieChart("Requirements by Estimate");
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
-	 * IRequirementStatistics#update()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void update() {

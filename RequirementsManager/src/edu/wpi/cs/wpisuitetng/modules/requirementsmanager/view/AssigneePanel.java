@@ -189,13 +189,9 @@ public class AssigneePanel extends JPanel {
 		
 		layout.putConstraint(SpringLayout.WEST, unassignedScroll, 0,
 				SpringLayout.WEST, this);
-		// layout.putConstraint(SpringLayout.EAST, unassignedUsers, 0,
-		// SpringLayout.WEST, buttonsPanel);
 		layout.putConstraint(SpringLayout.NORTH, unassignedScroll, 0,
 				SpringLayout.SOUTH, unassignedLabel);
 		
-		// layout.putConstraint(SpringLayout.EAST, buttonsPanel, 0,
-		// SpringLayout.WEST, assignedUsers);
 		layout.putConstraint(SpringLayout.EAST, unassignedScroll, -halfButton,
 				SpringLayout.HORIZONTAL_CENTER, this);
 		
@@ -317,11 +313,6 @@ public class AssigneePanel extends JPanel {
 	}
 	
 	public void setUnassignedUsersList(final StringListModel list) {
-		/*
-		 * unassignedUsersList.clear(); for (int i = 0; i <
-		 * list.getUsers().size(); i++) {
-		 * unassignedUsersList.addElement(list.getUsers().get(i)); }
-		 */
 		initializeLists(list.getUsers());
 	}
 	
@@ -334,9 +325,5 @@ public class AssigneePanel extends JPanel {
 	
 	public void updateRequirement(final Requirement newRequirement) {
 		requirement = newRequirement;
-		
-		// initialize the user lists
-		// TODO: uncomment this when requirements can be fetched from the server
-		// initializeLists();
 	}
 }

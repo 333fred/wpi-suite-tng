@@ -28,7 +28,6 @@ public class EventPanel extends JPanel {
 	
 	protected JLabel title;
 	protected JLabel content;
-	// protected JEditorPane content;
 	
 	private final Event event;
 	

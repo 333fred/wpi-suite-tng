@@ -275,7 +275,6 @@ public class RequirementValidatorTest {
 		r.setDescription("Description");
 		checkNumIssues(0, r, defaultSession, RequirementActionMode.EDIT);
 		
-		// assertEquals(r.getLog(), new LinkedList<String>());
 		Assert.assertEquals(r.getNotes(), new LinkedList<String>());
 		Assert.assertEquals(r.getpUID(), new LinkedList<Integer>());
 		Assert.assertEquals(r.getSubRequirements(), new LinkedList<Integer>());

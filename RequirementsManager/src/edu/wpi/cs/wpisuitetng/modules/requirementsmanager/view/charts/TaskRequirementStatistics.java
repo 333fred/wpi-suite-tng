@@ -46,10 +46,8 @@ public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 		return this.buildPieChart("Requirements by Task");
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
-	 * IRequirementStatistics#update()
+	/**
+	 * {@inheritdoc}
 	 */
 	@Override
 	public void update() {
