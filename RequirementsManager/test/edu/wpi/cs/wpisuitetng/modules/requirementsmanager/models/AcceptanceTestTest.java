@@ -16,7 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest.ATestStatus;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.ATestStatus;
 
 public class AcceptanceTestTest {
 	

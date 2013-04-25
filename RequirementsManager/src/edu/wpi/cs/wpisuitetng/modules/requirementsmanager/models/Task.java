@@ -26,6 +26,16 @@ public class Task implements Event {
 	private int estimate;
 	private int id;
 	
+	/**
+	 * Creates a new task with the given name and description. Completed is set
+	 * to false, the id is -1 until it is properly assigned, and the estimate is
+	 * set to 0
+	 * 
+	 * @param name
+	 *            the name of the task
+	 * @param description
+	 *            the description of the task
+	 */
 	public Task(final String name, final String description) {
 		completed = false;
 		this.name = name;
@@ -118,8 +128,8 @@ public class Task implements Event {
 	 * tags (<br>
 	 * )
 	 * 
-	 * @param The
-	 *            string to parse
+	 * @param text
+	 *            The string to parse
 	 * @return The new string with <br>
 	 *         's
 	 */

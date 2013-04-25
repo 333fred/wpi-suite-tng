@@ -7,11 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @ Steve Kordell
+ *    @author Steve Kordell
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.ATestStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
@@ -19,16 +20,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
  */
 public class ATest implements Event {
 	
-	public enum ATestStatus {
-		BLANK, PASSED, FAILED
-	}
-	
 	private String name;
 	private String description;
 	private ATestStatus status;
 	
 	private int id;
 	
+	/**
+	 * Creates an new acceptance test with the given name and description. The
+	 * status is set to blank, and the id is set to -1 until it is properly
+	 * assigned
+	 * 
+	 * @param name
+	 *            the name of the ATest
+	 * @param description
+	 *            the description of the ATest
+	 */
 	public ATest(final String name, final String description) {
 		status = ATestStatus.BLANK;
 		this.name = name;
@@ -91,6 +98,9 @@ public class ATest implements Event {
 		return "<html><font size=4><b>" + getName() + "</b></html>";
 	}
 	
+	/**
+	 * @return Whether the ATest is has passed
+	 */
 	public boolean isPassed() {
 		return getStatus() == ATestStatus.PASSED;
 	}
@@ -100,7 +110,7 @@ public class ATest implements Event {
 	 * tags (<br>
 	 * )
 	 * 
-	 * @param The
+	 * @param text
 	 *            string to parse
 	 * @return The new string with <br>
 	 *         's
@@ -137,8 +147,8 @@ public class ATest implements Event {
 	}
 	
 	/**
-	 * @param completed
-	 *            the completed to set
+	 * @param status
+	 *            the new status
 	 */
 	public void setStatus(final ATestStatus status) {
 		this.status = status;

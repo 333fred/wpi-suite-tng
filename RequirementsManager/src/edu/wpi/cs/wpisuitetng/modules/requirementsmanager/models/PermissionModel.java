@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
 /**
  * Contains the permLevel for the current user
  */
+@SuppressWarnings ("rawtypes")
 public class PermissionModel extends AbstractModel implements Comparable {
 	
 	/**
@@ -223,7 +224,7 @@ public class PermissionModel extends AbstractModel implements Comparable {
 	}
 	
 	/**
-	 * @param permLevel
+	 * @param permission
 	 *            the permLevel to set
 	 */
 	public void setPermLevel(final UserPermissionLevel permission) {

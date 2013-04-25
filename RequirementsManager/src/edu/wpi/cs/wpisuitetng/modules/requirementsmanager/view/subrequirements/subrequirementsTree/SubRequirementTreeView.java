@@ -174,7 +174,7 @@ public class SubRequirementTreeView extends JPanel implements
 			public void mousePressed(final MouseEvent e) { // Listener for when
 															// we click on the
 															// tree view
-			
+				
 				if (e.getButton() == MouseEvent.BUTTON1) {
 					final int selRow = tree.getRowForLocation(e.getX(),
 							e.getY());
@@ -345,8 +345,7 @@ public class SubRequirementTreeView extends JPanel implements
 	 *            The integer list of subrequirements
 	 * @return The arraylist of all requirements
 	 */
-	public List<Requirement> sortSubRequirements(
-			final List<Integer> subreqs) {
+	public List<Requirement> sortSubRequirements(final List<Integer> subreqs) {
 		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
 		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();
 		Requirement tempReq = null;

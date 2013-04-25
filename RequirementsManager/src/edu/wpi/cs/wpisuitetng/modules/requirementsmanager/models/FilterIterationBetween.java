@@ -22,22 +22,46 @@ import java.util.Date;
 public class FilterIterationBetween implements Serializable {
 	
 	private static final long serialVersionUID = 490510282591238771L;
+	
+	/**
+	 * Returns the string representation of the given data, disregarding the the
+	 * time of day
+	 * 
+	 * @param date
+	 *            the date to turn into a string
+	 * @return the string version of the date, without the time
+	 */
+	public static String dateToStringNoTime(final Date date) {
+		return new SimpleDateFormat("MM/dd/yyyy").format(date);
+	}
+	
 	private final Date startDate;
+	
 	private final Date endDate;
 	
+	/**
+	 * Creates a new FilterIterationBetween with the given start and end dates
+	 * 
+	 * @param startDate
+	 *            the start date of the filter
+	 * @param endDate
+	 *            the end date of the filter
+	 */
 	public FilterIterationBetween(final Date startDate, final Date endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 	
-	public String dateToStringNoTime(final Date date) {
-		return new SimpleDateFormat("MM/dd/yyyy").format(date);
-	}
-	
+	/**
+	 * @return the end date of the filter
+	 */
 	public Date getEndDate() {
 		return endDate;
 	}
 	
+	/**
+	 * @return the start date of the filter
+	 */
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -60,7 +84,7 @@ public class FilterIterationBetween implements Serializable {
 	
 	@Override
 	public String toString() {
-		return dateToStringNoTime(startDate) + " and "
-				+ dateToStringNoTime(endDate);
+		return FilterIterationBetween.dateToStringNoTime(startDate) + " and "
+				+ FilterIterationBetween.dateToStringNoTime(endDate);
 	}
 }

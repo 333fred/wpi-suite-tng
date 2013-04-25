@@ -148,7 +148,8 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			requirements = db.retrieve(Requirement.class, "rUID", intId,
 					s.getProject()).toArray(new Requirement[0]);
 		} catch (final WPISuiteException e) {
-			System.out.println("Requirements Entity Manager, getEntity, Line 151");
+			System.out
+					.println("Requirements Entity Manager, getEntity, Line 151");
 			System.out.println("Status: " + e.getStatus());
 			System.out.println("Message: " + e.getMessage());
 		}

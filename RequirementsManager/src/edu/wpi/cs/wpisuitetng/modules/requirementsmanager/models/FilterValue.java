@@ -107,7 +107,7 @@ public class FilterValue {
 	/**
 	 * Returns the filter value of this object
 	 * 
-	 * @return
+	 * @return the filter value
 	 */
 	
 	public Object getFilterValue() {
@@ -185,12 +185,5 @@ public class FilterValue {
 	 */
 	public void setValueType(final FilterValueType valueType) {
 		this.valueType = valueType;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public String toJSON() {
-		return new Gson().toJson(this, FilterValue.class);
 	}
 }

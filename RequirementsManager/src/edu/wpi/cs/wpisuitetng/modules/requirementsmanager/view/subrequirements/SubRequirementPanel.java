@@ -248,6 +248,7 @@ public class SubRequirementPanel extends JPanel {
 											// initialize to disabled
 			
 			radioChild.addActionListener(new ActionListener() { // Have the
+						
 																// radio child
 																// listen for
 																// when it's
@@ -262,6 +263,7 @@ public class SubRequirementPanel extends JPanel {
 					});
 			
 			radioParent.addActionListener(new ActionListener() { // Have the
+						
 																	// radio
 																	// parent
 																	// listen

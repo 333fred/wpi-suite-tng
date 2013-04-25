@@ -28,8 +28,9 @@ public class UserPermissions {
 	/**
 	 * Creates a User Permission with the given level
 	 * 
+	 * @param permissionLevel
+	 *            The permission level
 	 */
-	
 	public UserPermissions(final UserPermissionLevel permissionLevel) {
 		this.permissionLevel = permissionLevel;
 	}
@@ -37,9 +38,8 @@ public class UserPermissions {
 	/**
 	 * Determines if a user can create an iteration
 	 * 
-	 * @return
+	 * @return true if the user can create an iteration, false otherwise
 	 */
-	
 	public boolean canCreateIteration() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
@@ -47,9 +47,8 @@ public class UserPermissions {
 	/**
 	 * Determines if a user can create a requirement
 	 * 
-	 * @return
+	 * @return true if the user can create a requirement, false otherwise
 	 */
-	
 	public boolean canCreateRequirement() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
@@ -57,9 +56,8 @@ public class UserPermissions {
 	/**
 	 * Determines if a user can edit an iteration
 	 * 
-	 * @return
+	 * @return true if the user can edit an iteration, false otherwise
 	 */
-	
 	public boolean canEditIteration() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
@@ -67,13 +65,17 @@ public class UserPermissions {
 	/**
 	 * Determines if a user can edit a requirement
 	 * 
-	 * @return
+	 * @return true if the user can edit a requirement, false otherwise
 	 */
-	
 	public boolean canEditRequirement() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
 	
+	/**
+	 * Determines if a use can update a requirement
+	 * 
+	 * @return true if the user can update a requirement, false otherwise
+	 */
 	public boolean canUpdateRequirement() {
 		return permissionLevel == UserPermissionLevel.UPDATE;
 	}
@@ -81,9 +83,8 @@ public class UserPermissions {
 	/**
 	 * Returns the permission level enum of the user
 	 * 
-	 * @return
+	 * @return the permission level of the user
 	 */
-	
 	public UserPermissionLevel getPermissionLevel() {
 		return permissionLevel;
 	}

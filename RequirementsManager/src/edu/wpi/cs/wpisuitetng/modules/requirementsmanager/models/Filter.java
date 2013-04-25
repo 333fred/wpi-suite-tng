@@ -35,6 +35,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 
 public class Filter extends AbstractModel {
 	
+	/**
+	 * Creates a clone of the given filter
+	 * TODO: Shouldn't we be using the clone() method inherited from Object?
+	 * 
+	 * @param toClone
+	 *            the filter to clone
+	 * @return the new, cloned filter
+	 */
 	public static Filter cloneFilter(final Filter toClone) {
 		return new Filter(toClone.getCreator(), toClone.getId(),
 				toClone.getField(), toClone.getOperation(), toClone.getValue(),
@@ -75,6 +83,8 @@ public class Filter extends AbstractModel {
 	/** String of the value, will store the JSON for the object */
 	private String jsonValue;
 	
+	// TODO: Do we use stringValue?
+	@SuppressWarnings ("unused")
 	private String stringValue;
 	
 	private boolean active;
@@ -145,7 +155,7 @@ public class Filter extends AbstractModel {
 	 *            enum value to check
 	 * @return whether to filter or not
 	 */
-	
+	@SuppressWarnings ("rawtypes")
 	private boolean checkEnum(final Enum value) {
 		switch (getOperation()) {
 			case EQUAL:
@@ -193,15 +203,6 @@ public class Filter extends AbstractModel {
 	 *            The id of the iteration to check
 	 * @return whether to filter or not
 	 */
-	
-	/*
-	 * LESS_THAN("<"), LESS_THAN_EQUAL("<="), EQUAL("Equal"), NOT_EQUAL(
-	 * "Not equal"), GREATER_THAN_EQUAL(">="), GREATER_THAN(">"),
-	 * OCCURS_BETWEEN( "Occurs between"), OCCURS_AFTER("Occurs after"),
-	 * OCCURS_BEFORE( "Occurs before"), CONTAINS("Contains"),
-	 * STARTS_WITH("Starts with"); // lets check which field we need to
-	 */
-	
 	private boolean checkIteration(final int value) {
 		Iteration reqIteration;
 		Date valueDate;
@@ -266,6 +267,13 @@ public class Filter extends AbstractModel {
 		
 	}
 	
+	/**
+	 * Checks if two filters are the same, without considering the filter id's
+	 * 
+	 * @param other
+	 *            the filter to check against
+	 * @return whether filters are the same except for the id
+	 */
 	public boolean equalToWithoutId(final Filter other) {
 		return getField().equals(other.getField())
 				&& getOperation().equals(other.getOperation())
@@ -341,9 +349,9 @@ public class Filter extends AbstractModel {
 	/**
 	 * Returns a properly casted type of the Value Object
 	 * 
-	 * @return
+	 * @return the instance of the json-encoded value
 	 */
-	
+	@SuppressWarnings ("unchecked")
 	public Object getValue() {
 		final Gson gson = new Gson();
 		final Object o = gson.fromJson(jsonValue, valueType.getClassType());
@@ -382,7 +390,6 @@ public class Filter extends AbstractModel {
 	 */
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
 	}
 	
 	/**
@@ -493,6 +500,9 @@ public class Filter extends AbstractModel {
 				return checkInteger(toFilter.getEstimate());
 			case EFFORT:
 				return checkInteger(toFilter.getEffort());
+			default:
+				// There was nothing, so return false
+				break;
 		}
 		
 		return false;

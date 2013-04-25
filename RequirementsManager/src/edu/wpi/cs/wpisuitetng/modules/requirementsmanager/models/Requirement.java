@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.ATestStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
@@ -701,8 +702,8 @@ public class Requirement extends AbstractModel {
 	 */
 	public boolean testsPassed() {
 		for (final ATest t : aTests) {
-			if ((t.getStatus() == ATest.ATestStatus.FAILED)
-					|| (t.getStatus() == ATest.ATestStatus.BLANK)) {
+			if ((t.getStatus() == ATestStatus.FAILED)
+					|| (t.getStatus() == ATestStatus.BLANK)) {
 				return false;
 			}
 		}

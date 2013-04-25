@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationComparator;
@@ -58,6 +57,13 @@ public class Iteration extends AbstractModel {
 		return parser.fromJson(content, Iteration[].class);
 	}
 	
+	/**
+	 * Sorts the given iterations by start date
+	 * 
+	 * @param iterations
+	 *            the iterations to sort
+	 * @return the list of sorted iterations
+	 */
 	public static List<Iteration> sortIterations(
 			final List<Iteration> iterations) {
 		Collections.sort(iterations, new IterationComparator());
@@ -84,8 +90,6 @@ public class Iteration extends AbstractModel {
 		id = -1;
 		requirements = new ArrayList<Integer>();
 	}
-	
-	// TODO implement model methods
 	
 	/**
 	 * Constructor for an iteration with the given start, and end It has a blank
@@ -157,8 +161,8 @@ public class Iteration extends AbstractModel {
 	public void addRequirement(final int rUID) {
 		
 		// first check if the requirement is already on here
-		for (final Integer id : requirements) {
-			if (id == rUID) {
+		for (final Integer rid : requirements) {
+			if (rid == rUID) {
 				return; // if it is we are already done
 			}
 		}
@@ -219,6 +223,9 @@ public class Iteration extends AbstractModel {
 		return name;
 	}
 	
+	/**
+	 * @return the current progress of the iteration
+	 */
 	public float getProgress() {
 		float total = 0;
 		float done = 0;
@@ -269,6 +276,11 @@ public class Iteration extends AbstractModel {
 		}
 	}
 	
+	/**
+	 * Returns whether the current status of the iteration is in progress
+	 * 
+	 * @return true if the iteration is in progress, false otherwise
+	 */
 	public boolean isInProgress() {
 		final Date currentDate = new Date();
 		return currentDate.after(startDate) && currentDate.before(endDate);
@@ -307,8 +319,6 @@ public class Iteration extends AbstractModel {
 	 */
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	/**
@@ -317,8 +327,6 @@ public class Iteration extends AbstractModel {
 	 * 
 	 * @param endDate
 	 *            the endDate to set
-	 * @throws InvalidDateException
-	 *             if the end date is before the start date
 	 */
 	public void setEndDate(final Date endDate) {
 		this.endDate = endDate;
@@ -354,8 +362,6 @@ public class Iteration extends AbstractModel {
 	 * 
 	 * @param startDate
 	 *            the startDate to set
-	 * @throws InvalidDateException
-	 *             if the start date is after the end date
 	 */
 	public void setStartDate(final Date startDate) {
 		this.startDate = startDate;

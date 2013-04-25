@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.ATestStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -103,7 +104,7 @@ public class SaveATestController {
 					}
 				}
 				// Check the completion status on the aTests
-				((ATest) aTest).setStatus(ATest.ATestStatus
+				((ATest) aTest).setStatus(ATestStatus
 						.valueOf(view.getaTestStatusBox().getSelectedItem()
 								.equals("") ? "BLANK" : view
 								.getaTestStatusBox().getSelectedItem()

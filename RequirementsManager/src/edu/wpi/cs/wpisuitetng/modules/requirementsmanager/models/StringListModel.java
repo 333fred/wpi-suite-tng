@@ -39,6 +39,14 @@ public class StringListModel extends AbstractModel {
 		return parser.fromJson(content, StringListModel.class);
 	}
 	
+	/**
+	 * Takes a JSON encoded array of stringlistmodels and returns them
+	 * instantiated
+	 * 
+	 * @param content
+	 *            the JSON-encoded array
+	 * @return the real values
+	 */
 	public static StringListModel[] fromJSONArray(final String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, StringListModel[].class);

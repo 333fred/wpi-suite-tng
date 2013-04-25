@@ -70,19 +70,19 @@ public class Note implements Event {
 		if (o == this) {
 			return true;
 		}
-		Note note;
+		Note compNote;
 		if (o instanceof Note) {
-			note = (Note) o;
+			compNote = (Note) o;
 		} else {
 			return false;
 		}
-		if (!note.creator.equals(creator)) {
+		if (!compNote.creator.equals(creator)) {
 			return false;
 		}
-		if (!note.date.equals(date)) {
+		if (!compNote.date.equals(date)) {
 			return false;
 		}
-		if (!note.note.equals(this.note)) {
+		if (!compNote.note.equals(this.note)) {
 			return false;
 		}
 		return true;
@@ -153,7 +153,8 @@ public class Note implements Event {
 	 * tags (<br>
 	 * )
 	 * 
-	 * @param The
+	 * @param text
+	 *            The
 	 *            string to parse
 	 * @return The new string with <br>
 	 *         's

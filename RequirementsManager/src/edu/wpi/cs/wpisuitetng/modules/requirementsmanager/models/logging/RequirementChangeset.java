@@ -35,11 +35,25 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 public class RequirementChangeset extends Changeset implements Event {
 	
+	/**
+	 * Returns the RequirementChangset from the given JSON-encoded string
+	 * 
+	 * @param content
+	 *            the JSON-encoded requirementchangeset
+	 * @return the requirement changeset
+	 */
 	public static RequirementChangeset fromJSON(final String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, RequirementChangeset.class);
 	}
 	
+	/**
+	 * Returns the RequirementChangset array from the given JSON-encoded string
+	 * 
+	 * @param content
+	 *            the JSON-encoded requirementchangeset array
+	 * @return the requirement changeset array
+	 */
 	public static RequirementChangeset[] fromJSONArray(final String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, RequirementChangeset[].class);
@@ -329,6 +343,7 @@ public class RequirementChangeset extends Changeset implements Event {
 	 * @param change
 	 *            the FieldChange with the old and new Lists
 	 */
+	@SuppressWarnings ("unchecked")
 	private void oldToNewList(final List<Object> added,
 			final List<Object> removed, final FieldChange<?> change) {
 		final List<Object> oldList = (List<Object>) change.getOldValue();
@@ -338,33 +353,33 @@ public class RequirementChangeset extends Changeset implements Event {
 			for (final Object newObj : newList) {
 				if (oldObj.equals(newObj)) {
 					// In this case, we've confirmed that the new list
-					// of requirements has the given requirement from
+					// of object has the given object from
 					// the old list, so break and set the detected
 					// variable to true
 					detected = true;
 					break;
 				}
 			}
-			// If we didn't detect the old requirement in the new list,
+			// If we didn't detect the old object in the new list,
 			// increase the count
 			if (!detected) {
 				removed.add(oldObj);
 			}
 		}
-		// Now check for newly added requirements
+		// Now check for newly added objects
 		for (final Object newObj : newList) {
 			boolean detected = false;
 			for (final Object oldObj : oldList) {
 				if (newObj.equals(oldObj)) {
 					// In this case, we've confirmed that the old list
-					// of requirements has the given requirement from
+					// of objects has the given object from
 					// the old list, so break and set the detected
 					// variable to true
 					detected = true;
 					break;
 				}
 			}
-			// If we didn't detect the new requirement in the oldF list,
+			// If we didn't detect the new object in the old list,
 			// increase the count
 			if (!detected) {
 				added.add(newObj);
@@ -374,8 +389,6 @@ public class RequirementChangeset extends Changeset implements Event {
 	
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
