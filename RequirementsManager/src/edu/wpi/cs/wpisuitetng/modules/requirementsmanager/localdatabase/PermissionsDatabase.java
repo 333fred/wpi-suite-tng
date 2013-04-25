@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 /**
  * Maintains a local database of user permissions.
  */
+@SuppressWarnings ("hiding")
 public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 	
 	private Map<User, PermissionModel> permissions;
@@ -57,8 +58,8 @@ public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void add(final PermissionModel i) {
-		permissions.put(i.getUser(), i);
+	public synchronized void add(final PermissionModel model) {
+		permissions.put(model.getUser(), model);
 		updateListeners();
 	}
 	

@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IR
 /**
  * Local cache that holds all filters from the server
  */
-
+@SuppressWarnings ("hiding")
 public class FilterDatabase extends AbstractDatabase<Filter> implements
 		IRetrieveAllFiltersNotifier {
 	

@@ -12,6 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase;
 
+/**
+ * This is an interface for all database listeners that are registered in the
+ * database. The update method is run on the swing thread with
+ * SwingUtils.invokeLater, so any code in the update method is swing threadsafe
+ */
 public interface IDatabaseListener {
 	
 	/**

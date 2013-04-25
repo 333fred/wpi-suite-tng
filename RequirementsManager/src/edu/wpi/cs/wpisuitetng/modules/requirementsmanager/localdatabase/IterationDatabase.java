@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IR
 /**
  * Maintains a local database of iterations
  */
+@SuppressWarnings ("hiding")
 public class IterationDatabase extends AbstractDatabase<Iteration> {
 	
 	/**

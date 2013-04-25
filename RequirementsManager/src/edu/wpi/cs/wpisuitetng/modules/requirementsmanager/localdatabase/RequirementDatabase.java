@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IR
 /**
  * Maintains a local database of requirements
  */
+@SuppressWarnings ("hiding")
 public class RequirementDatabase extends AbstractDatabase<Requirement> {
 	
 	/**
