@@ -19,28 +19,29 @@ import javax.swing.AbstractAction;
  * Action that calls
  * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.notes.SaveNoteController#savenote()}
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class SaveNoteAction extends AbstractAction {
+	
 	private final SaveNoteController controller;
-
+	
 	/**
 	 * Construct the action
 	 * 
 	 * @param controller
 	 *            the controller to trigger
 	 */
-	public SaveNoteAction(SaveNoteController controller) {
+	public SaveNoteAction(final SaveNoteController controller) {
 		super("Save");
 		this.controller = controller;
 	}
-
+	
 	/*
 	 * @see
 	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		controller.savenote();
 	}
-
+	
 }

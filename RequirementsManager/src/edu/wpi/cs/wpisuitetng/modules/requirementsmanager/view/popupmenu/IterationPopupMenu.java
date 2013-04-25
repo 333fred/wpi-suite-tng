@@ -33,18 +33,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  */
 
 public class IterationPopupMenu extends JPopupMenu implements ActionListener {
-
+	
 	/** Menu options for the PopupMenu */
 	// private JMenuItem menuCreateRequirement;
 	private JMenuItem menuEditIteration;
 	private JMenuItem menuFilterIteration;
-
+	
 	/** The tab controller used to create new tabs */
-	private MainTabController tabController;
-
+	private final MainTabController tabController;
+	
 	/** The iterations that were selected when this was pressed */
-	private List<Iteration> selectedIterations;
-
+	private final List<Iteration> selectedIterations;
+	
 	/**
 	 * Creates an IterationPopupMenu with the given tab controller, and selected
 	 * iterations
@@ -54,33 +54,35 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 	 * @param selectedIterations
 	 *            The iterations that were selected when right click was pressed
 	 */
-
-	public IterationPopupMenu(MainTabController tabController,
-			List<Iteration> selectedIterations) {
+	
+	public IterationPopupMenu(final MainTabController tabController,
+			final List<Iteration> selectedIterations) {
 		this.tabController = tabController;
 		this.selectedIterations = selectedIterations;
-
+		
 		// we only have on selected iteration
 		if (selectedIterations.size() == 1) {
-			if (PermissionModel.getInstance().getUserPermissions().canEditIteration()) {
+			if (PermissionModel.getInstance().getUserPermissions()
+					.canEditIteration()) {
 				menuEditIteration = new JMenuItem("Edit Iteration");
 			} else {
 				menuEditIteration = new JMenuItem("View Iteration");
 			}
 			menuFilterIteration = new JMenuItem("Filter By Iteration");
 			// menuCreateRequirement = new JMenuItem("New Requirement");
-
+			
 			menuEditIteration.addActionListener(this);
 			menuFilterIteration.addActionListener(this);
 			// menuCreateRequirement.addActionListener(this);
-
+			
 			add(menuEditIteration);
 			add(menuFilterIteration);
 			// add(menuCreateRequirement);
-
+			
 		} else {
-
-			if (PermissionModel.getInstance().getUserPermissions().canEditIteration()) {
+			
+			if (PermissionModel.getInstance().getUserPermissions()
+					.canEditIteration()) {
 				menuEditIteration = new JMenuItem("Edit Iterations");
 			} else {
 				menuEditIteration = new JMenuItem("View Iterations");
@@ -91,28 +93,30 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			add(menuEditIteration);
 			add(menuFilterIteration);
 		}
-
+		
 	}
-
+	
 	/**
 	 * The action listener that is called when the user selects a menu option
 	 * 
 	 */
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource().equals(menuEditIteration)) {
 			// edit iteration was selected
-			// TODO: Add check that the iteration tab isn't already opened			
-			for (Iteration i : selectedIterations) {
+			// TODO: Add check that the iteration tab isn't already opened
+			for (final Iteration i : selectedIterations) {
 				tabController.addIterationTab(i);
 			}
 			
 		} else if (e.getSource().equals(menuFilterIteration)) {
-			Iteration iter = selectedIterations.get(0);
-			RequirementTableView tableView = RequirementTableView.getInstance();
+			final Iteration iter = selectedIterations.get(0);
+			final RequirementTableView tableView = RequirementTableView
+					.getInstance();
 			tableView.IterationFilter(iter.getName());
-			tableView.displayFilterInformation("Filtering by " + iter.getName());
-		} 
+			tableView
+					.displayFilterInformation("Filtering by " + iter.getName());
+		}
 	}
 }

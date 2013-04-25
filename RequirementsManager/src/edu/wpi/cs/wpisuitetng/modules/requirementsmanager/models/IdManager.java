@@ -16,26 +16,41 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
-
 /**
  * Model to track the last assigned ID and provides the next ID to be assigned
  */
 public class IdManager extends AbstractModel {
-
+	
 	String type;
 	int curId;
-
+	
 	/**
 	 * Creates a new id manager for the given type
 	 * 
 	 * @param type
 	 *            the type to manage
 	 */
-	public IdManager(String type) {
+	public IdManager(final String type) {
 		this.type = type;
-		this.curId = 0;
+		curId = 0;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * @return the curId
+	 */
+	public int getCurId() {
+		return curId;
+	}
+	
 	/**
 	 * Gets the next id for a model
 	 * 
@@ -44,55 +59,48 @@ public class IdManager extends AbstractModel {
 	public int getNextId() {
 		return ++curId;
 	}
-
+	
 	/**
 	 * @return the type
 	 */
 	public String getType() {
 		return type;
 	}
-
+	
 	/**
-	 * @param type
-	 *            the type to set
+	 * {@inheritDoc}
 	 */
-	public void setType(String type) {
-		this.type = type;
+	@Override
+	public Boolean identify(final Object o) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	/**
-	 * @return the curId
-	 */
-	public int getCurId() {
-		return curId;
-	}
-
-	/**
-	 * @param curId
-	 *            the curId to set
-	 */
-	public void setCurId(int curId) {
-		this.curId = curId;
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 	/**
-	 * {@inheritDoc}
+	 * @param curId
+	 *            the curId to set
 	 */
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-
+	public void setCurId(final int curId) {
+		this.curId = curId;
 	}
-
+	
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(final String type) {
+		this.type = type;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -100,14 +108,5 @@ public class IdManager extends AbstractModel {
 	public String toJSON() {
 		return new Gson().toJson(this, IdManager.class);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Boolean identify(Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

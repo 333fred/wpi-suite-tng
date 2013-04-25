@@ -25,45 +25,44 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * Observer for the request to get all user permissions from the server.
  */
 public class RetrieveAllPermissionsRequestObserver implements RequestObserver {
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void fail(final IRequest iReq, final Exception exception) {
+		System.out.println("Permission Request Failure");
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		System.out.println("Permission Request Error");
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
 		
 		// TODO Auto-generated method stub
 		// Get the response and call the singleton initializer
-		ResponseModel response = iReq.getResponse();
+		final ResponseModel response = iReq.getResponse();
 		if (response.getStatusCode() == 200) {
-		// parse the response
-		final PermissionModel[] permissions = PermissionModel.fromJSONArray(response
-				.getBody());
-
-		ToolbarView.getInstance().refreshPermissions();
-		
-		PermissionsDatabase.getInstance().set(
-				Arrays.asList(permissions));
+			// parse the response
+			final PermissionModel[] permissions = PermissionModel
+					.fromJSONArray(response.getBody());
+			
+			ToolbarView.getInstance().refreshPermissions();
+			
+			PermissionsDatabase.getInstance().set(Arrays.asList(permissions));
 		}
-
+		
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		System.out.println("Permission Request Error");
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		System.out.println("Permission Request Failure");
-
-	}
-
+	
 }

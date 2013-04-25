@@ -23,20 +23,20 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 
 public class IterationController extends AbstractController<Iteration> {
-
+	
 	/**
 	 * Creates a controller to send Iteration requests to the server
 	 */
 	public IterationController() {
 		super("iteration");
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(Iteration model, RequestObserver observer) {
-		if (isSafeToSend()) {
+	public void delete(final Iteration model, final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
 			return;
 		}
 		Request request;
@@ -46,5 +46,5 @@ public class IterationController extends AbstractController<Iteration> {
 		request.addObserver(observer);
 		request.send();
 	}
-
+	
 }

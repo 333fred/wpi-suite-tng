@@ -24,11 +24,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * This controller handles saving requirement notes to the server
  */
 public class SaveNoteController {
-
+	
 	private final MakeNotePanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
-
+	
 	/**
 	 * Construct the controller
 	 * 
@@ -39,37 +39,36 @@ public class SaveNoteController {
 	 * @param parentView
 	 *            the DetailPanel displaying the current requirement
 	 */
-	public SaveNoteController(MakeNotePanel view, Requirement model,
-			DetailPanel parentView) {
+	public SaveNoteController(final MakeNotePanel view,
+			final Requirement model, final DetailPanel parentView) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
 	}
-
+	
 	/**
 	 * Save a note to the server
 	 */
 	public void savenote() {
 		final String noteText = view.getnoteField().getText();
 		if (noteText.length() > 0) {
-			this.model.addNote(new Note(noteText, ConfigManager.getConfig()
+			model.addNote(new Note(noteText, ConfigManager.getConfig()
 					.getUserName()));
-			List<Note> notes = parentView.getNoteList();
-			notes.add(this.model.getNotes().get(
-					this.model.getNotes().size() - 1));
+			final List<Note> notes = parentView.getNoteList();
+			notes.add(model.getNotes().get(model.getNotes().size() - 1));
 			parentView.setNoteList(notes);
 			view.getnoteField().setText("");
 			view.getnoteField().requestFocusInWindow();
-
+			
 			// We want to save the note to the server immediately, but only if
 			// the requirement hasn't been just created
 			if (model.getName().length() > 0) {
-				RequirementsController controller = new RequirementsController();
-				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-						this.parentView);
+				final RequirementsController controller = new RequirementsController();
+				final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+						parentView);
 				controller.save(model, observer);
 			}
-
+			
 		}
 	}
 }

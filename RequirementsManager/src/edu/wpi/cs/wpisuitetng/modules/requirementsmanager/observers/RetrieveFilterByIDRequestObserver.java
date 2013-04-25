@@ -20,9 +20,9 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  * Observer for the request to get a single requirement from the server by ID.
  */
 public class RetrieveFilterByIDRequestObserver implements RequestObserver {
-
-	private IRetreiveRequirementByIDControllerNotifier notifier;
-
+	
+	private final IRetreiveRequirementByIDControllerNotifier notifier;
+	
 	/**
 	 * Creates a Request Observer with the given notifier to call back to
 	 * 
@@ -30,35 +30,35 @@ public class RetrieveFilterByIDRequestObserver implements RequestObserver {
 	 *            the notifier to callback to
 	 */
 	public RetrieveFilterByIDRequestObserver(
-			IRetreiveRequirementByIDControllerNotifier notifier) {
+			final IRetreiveRequirementByIDControllerNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void fail(final IRequest iReq, final Exception exception) {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseError(IRequest iReq) {
+	public void responseError(final IRequest iReq) {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void fail(IRequest iReq, Exception exception) {
+	public void responseSuccess(final IRequest iReq) {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 }

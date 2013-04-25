@@ -21,16 +21,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class RemoveParentController {
 	
-	//The the subrequirement panel calling this controller
+	// The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
 	
-	//the requirement to assign a parent to
+	// the requirement to assign a parent to
 	private final Requirement model;
 	
-	//the detail view that the subReqPanel is in
+	// the detail view that the subReqPanel is in
 	private final DetailPanel detailView;
-		
-
+	
 	/**
 	 * Construct the controller
 	 * 
@@ -41,41 +40,44 @@ public class RemoveParentController {
 	 * @param parentView
 	 *            the DetailPanel
 	 */
-	public RemoveParentController(SubRequirementPanel subRequirementPanel,
-			Requirement model, DetailPanel parentView) {
-		this.view = subRequirementPanel;
+	public RemoveParentController(
+			final SubRequirementPanel subRequirementPanel,
+			final Requirement model, final DetailPanel parentView) {
+		view = subRequirementPanel;
 		this.model = model;
-		this.detailView = parentView;
+		detailView = parentView;
 	}
-
+	
 	/**
-	 * Save a parent subRequirement to the server. It removes the selected requirement as a parent
-	 * of the passed requirement by removing all links between the two requirements.
+	 * Save a parent subRequirement to the server. It removes the selected
+	 * requirement as a parent
+	 * of the passed requirement by removing all links between the two
+	 * requirements.
 	 */
 	public void saveParent() {
-
+		
 		Requirement anReq = null;
 		if (model.getpUID().size() != 0) {
 			try {
 				anReq = RequirementDatabase.getInstance().get(
 						model.getpUID().get(0));
-			} catch (RequirementNotFoundException e) {
+			} catch (final RequirementNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			Integer modelID = new Integer(model.getrUID());
-			Integer anReqID = new Integer(anReq.getrUID());
-
+			
+			final Integer modelID = new Integer(model.getrUID());
+			final Integer anReqID = new Integer(anReq.getrUID());
+			
 			model.removePUID(anReqID);
 			anReq.removeSubRequirement(modelID);
-
-			RequirementsController controller = new RequirementsController();
-			UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-					this.detailView);
+			
+			final RequirementsController controller = new RequirementsController();
+			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+					detailView);
 			controller.save(model, observer);
 			controller.save(anReq, observer);
-
+			
 			view.refreshParentLabel();
 			view.refreshTopPanel();
 			if (view.isParentSelected()) {
@@ -83,8 +85,8 @@ public class RemoveParentController {
 			} else {
 				view.refreshValidChildren();
 			}
-
+			
 		}
 	}
-
+	
 }

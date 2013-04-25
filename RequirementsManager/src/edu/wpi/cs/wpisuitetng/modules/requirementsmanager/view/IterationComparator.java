@@ -16,7 +16,7 @@ import java.util.Comparator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
 public class IterationComparator implements Comparator<Iteration> {
-
+	
 	/**
 	 * Compares two iterations based upon their starting dates
 	 * 
@@ -29,10 +29,10 @@ public class IterationComparator implements Comparator<Iteration> {
 	 * postive int
 	 * 
 	 */
-
+	
 	@Override
-	public int compare(Iteration iteration1, Iteration iteration2) {
-
+	public int compare(final Iteration iteration1, final Iteration iteration2) {
+		
 		if (iteration1.getStartDate().before(iteration2.getStartDate())) {
 			return -1; // first argument is less, or before second
 		} else if (iteration1.getStartDate().after(iteration2.getStartDate())) {

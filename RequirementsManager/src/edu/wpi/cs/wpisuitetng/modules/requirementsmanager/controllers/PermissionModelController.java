@@ -24,20 +24,21 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class PermissionModelController extends
 		AbstractController<PermissionModel> {
-
+	
 	/**
 	 * Creates a controller to send Iteration requests to the server
 	 */
 	public PermissionModelController() {
 		super("permissionmodel");
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(PermissionModel model, RequestObserver observer) {
-		if (isSafeToSend()) {
+	public void delete(final PermissionModel model,
+			final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
 			return;
 		}
 		Request request;
@@ -48,5 +49,5 @@ public class PermissionModelController extends
 		request.addObserver(observer);
 		request.send();
 	}
-
+	
 }

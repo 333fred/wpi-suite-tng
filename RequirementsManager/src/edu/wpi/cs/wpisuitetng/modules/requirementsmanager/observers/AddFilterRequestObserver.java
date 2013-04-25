@@ -27,55 +27,56 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 
 public class AddFilterRequestObserver implements RequestObserver {
-
-	private ISaveNotifier notifier;
-
+	
+	private final ISaveNotifier notifier;
+	
 	/**
 	 * Creates a request observer with the given controller as a callback
 	 * 
 	 * @param controller
 	 *            the controller to callback
 	 */
-	public AddFilterRequestObserver(ISaveNotifier notifier) {
+	public AddFilterRequestObserver(final ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
-		ResponseModel response = iReq.getResponse();
-
-		Filter filter = Filter.fromJSON(response.getBody());
+	public void fail(final IRequest iReq, final Exception exception) {
+		notifier.fail(exception);
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
+				.getResponse().getStatusMessage());
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
+		final ResponseModel response = iReq.getResponse();
+		
+		final Filter filter = Filter.fromJSON(response.getBody());
 		FilterDatabase.getInstance().add(filter);
-
+		
 		// TODO: Determine what to do with the response
 		SwingUtilities.invokeLater(new Runnable() {
+			
 			@Override
 			public void run() {
 				notifier.responseSuccess();
 			}
 		});
-
+		
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
-				.getResponse().getStatusMessage());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		notifier.fail(exception);
-
-	}
-
+	
 }

@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
@@ -25,11 +26,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  * 
  * Action that creates a new Iteration
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class CreateStatPanelAction extends AbstractAction {
-
+	
 	private final MainTabController controller;
-
+	
 	/**
 	 * Create a CreateIterationAction
 	 * 
@@ -37,15 +38,15 @@ public class CreateStatPanelAction extends AbstractAction {
 	 *            When the action is performed, controller.addCreateDefectTab()
 	 *            is called
 	 */
-	public CreateStatPanelAction(MainTabController controller) {
+	public CreateStatPanelAction(final MainTabController controller) {
 		super("Show Statistics");
 		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
+		putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		controller.addStatTab();
 	}
-
+	
 }

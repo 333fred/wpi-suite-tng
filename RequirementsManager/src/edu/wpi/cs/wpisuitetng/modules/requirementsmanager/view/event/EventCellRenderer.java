@@ -27,9 +27,9 @@ import javax.swing.table.TableCellRenderer;
  * 
  */
 public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
-
+	
 	private int wrapWidth;
-
+	
 	/**
 	 * Method to create and add a panel to display and paint a specified value.
 	 * 
@@ -41,8 +41,9 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 	 */
 	
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
+	public Component getListCellRendererComponent(final JList list,
+			final Object value, final int index, final boolean isSelected,
+			final boolean cellHasFocus) {
 		final JPanel panel;
 		panel = new EventPanel((Event) value);
 		
@@ -59,16 +60,17 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 							BorderFactory.createLineBorder(Color.black, 1)),
 					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 		}
-
+		
 		return panel;
 	}
-
+	
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(final JTable table,
+			final Object value, final boolean isSelected,
+			final boolean hasFocus, final int row, final int column) {
 		
 		final JPanel panel;
-		panel = new EventPanel((Event) value, table.getSize().width);		
+		panel = new EventPanel((Event) value, table.getSize().width);
 		if (isSelected) {
 			panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory
 					.createCompoundBorder(
@@ -82,7 +84,6 @@ public class EventCellRenderer implements ListCellRenderer, TableCellRenderer {
 							BorderFactory.createLineBorder(Color.black, 1)),
 					BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 		}
-		
 		
 		return panel;
 	}

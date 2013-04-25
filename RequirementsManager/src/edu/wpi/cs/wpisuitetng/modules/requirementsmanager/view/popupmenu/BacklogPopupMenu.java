@@ -26,59 +26,61 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
-
-	/** Menu options for the PopupMenu */
-	private JMenuItem menuCreateRequirement;
-	private JMenuItem menuFilterBacklog;
-
-	/** The tab controller used to create new tabs */
-	private MainTabController tabController;
 	
-
+	/** Menu options for the PopupMenu */
+	private final JMenuItem menuCreateRequirement;
+	private final JMenuItem menuFilterBacklog;
+	
+	/** The tab controller used to create new tabs */
+	private final MainTabController tabController;
+	
 	/**
 	 * Creates an BacklogPopupMenu with the given tab controller
 	 * 
 	 * @param tabController
 	 *            The tab controller to open tabs in
 	 */
-
-	public BacklogPopupMenu(MainTabController tabController) {
+	
+	public BacklogPopupMenu(final MainTabController tabController) {
 		this.tabController = tabController;
-
+		
 		menuCreateRequirement = new JMenuItem("New Requirement");
 		menuFilterBacklog = new JMenuItem("Filter By Backlog");
 		
 		menuCreateRequirement.addActionListener(this);
 		menuFilterBacklog.addActionListener(this);
-	
-		if(PermissionModel.getInstance().getUserPermissions().canCreateRequirement()) {
+		
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canCreateRequirement()) {
 			add(menuCreateRequirement);
 		}
 		add(menuFilterBacklog);
-
+		
 	}
-
+	
 	/**
 	 * The action listener that is called when the user selects a menu option
 	 * 
 	 */
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource().equals(menuFilterBacklog)) {
 			Iteration iter;
 			try {
 				// backlog has ID -1
 				iter = IterationDatabase.getInstance().get(-1);
-				RequirementTableView tableView = RequirementTableView.getInstance();
+				final RequirementTableView tableView = RequirementTableView
+						.getInstance();
 				tableView.IterationFilter(iter.getName());
-				tableView.displayFilterInformation("Filtering by " + iter.getName());
-			} catch (IterationNotFoundException e1) {
+				tableView.displayFilterInformation("Filtering by "
+						+ iter.getName());
+			} catch (final IterationNotFoundException e1) {
 				e1.printStackTrace();
-			} 
+			}
 		} else {
 			tabController.addCreateRequirementTab();
 		}
 	}
-
+	
 }

@@ -24,52 +24,54 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  * DeleteFilterRequestController
  */
 public class DeleteFilterRequestObserver implements RequestObserver {
-
+	
 	/** the notifier to notify of the response received */
-	private ISaveNotifier notifier;
+	private final ISaveNotifier notifier;
 	
 	/** The filter to delete if this responds sucessfully */
-	private Filter toDelete;
-
+	private final Filter toDelete;
+	
 	/**
 	 * Creates a request observer with the given controller as a callback
 	 * 
 	 * @param controller
 	 *            the controller to callback
 	 */
-	public DeleteFilterRequestObserver(ISaveNotifier notifier, Filter toDelete) {
+	public DeleteFilterRequestObserver(final ISaveNotifier notifier,
+			final Filter toDelete) {
 		this.notifier = notifier;
 		this.toDelete = toDelete;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
-		//we cannot remove filter from the DB, it returns success. but makes sense		
+	public void fail(final IRequest iReq, final Exception exception) {
+		notifier.fail(exception);
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
+				.getResponse().getStatusMessage());
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
+		// we cannot remove filter from the DB, it returns success. but makes
+		// sense
 		
 		FilterDatabase.getInstance().remove(toDelete);
 		
 		notifier.responseSuccess();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
-				.getResponse().getStatusMessage());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		notifier.fail(exception);
-
-	}
-
+	
 }

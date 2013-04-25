@@ -19,22 +19,22 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  */
 
 public class PermissionsNotFoundException extends NotFoundException {
-
+	
 	/**
 	 * Creates a new exception for a not found permission
 	 * 
 	 * @param u
 	 *            the user for which there are no permissions
 	 */
-	public PermissionsNotFoundException(User u) {
+	public PermissionsNotFoundException(final User u) {
 		super(u);
 	}
-
+	
 	/**
 	 * @return the not found user
 	 */
 	public User getUser() {
-		return (User) this.notFound;
+		return (User) notFound;
 	}
-
+	
 }

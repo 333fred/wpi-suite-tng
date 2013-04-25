@@ -21,41 +21,46 @@ import javax.swing.AbstractAction;
  * 
  * @author Nick Massa, Matt Costi
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class SaveTaskAction extends AbstractAction {
+	
 	private final SaveTaskController controller;
-	private int[] selectedRows;
-
+	private final int[] selectedRows;
+	
 	/**
 	 * Construct the action
 	 * 
-	 * @param controller the controller to trigger
+	 * @param controller
+	 *            the controller to trigger
 	 */
-	public SaveTaskAction(SaveTaskController controller) {
+	public SaveTaskAction(final SaveTaskController controller) {
 		super("Save");
 		this.controller = controller;
 		selectedRows = new int[0];
 	}
-
+	
 	/**
 	 * Construct the action
 	 * 
-	 * @param controller the controller to trigger
-	 * @param objects object array of all of the tasks
+	 * @param controller
+	 *            the controller to trigger
+	 * @param objects
+	 *            object array of all of the tasks
 	 */
-	public SaveTaskAction(SaveTaskController controller, int[] selectedRows) {
+	public SaveTaskAction(final SaveTaskController controller,
+			final int[] selectedRows) {
 		super("Save");
 		this.controller = controller;
 		this.selectedRows = selectedRows;
 	}
-
+	
 	/*
 	 * @see
 	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		controller.saveTask(selectedRows);
 	}
-
+	
 }

@@ -13,13 +13,16 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter;
 
-/** Listener that will notify when a filter has been changed 
+/**
+ * Listener that will notify when a filter has been changed
  * 
  */
 
 public interface FilterUpdateListener {
-
-	/** Called when the active / inactive fitlers have been updated, or a new filter has been added 
+	
+	/**
+	 * Called when the active / inactive fitlers have been updated, or a new
+	 * filter has been added
 	 * 
 	 */
 	

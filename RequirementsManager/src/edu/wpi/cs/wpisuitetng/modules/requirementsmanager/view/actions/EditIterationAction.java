@@ -26,41 +26,42 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
  * Action which concerns editing of an iteration
  */
 public class EditIterationAction extends AbstractAction {
-
+	
 	/** The iteration view to receive the iteration from */
-	private IterationTreeView iterationTreeView;
-
+	private final IterationTreeView iterationTreeView;
+	
 	/** The tab controller to open the new tab in */
-	private MainTabController tabController;
-
-	public EditIterationAction(IterationTreeView iterationTreeView,
-			MainTabController tabController) {
+	private final MainTabController tabController;
+	
+	public EditIterationAction(final IterationTreeView iterationTreeView,
+			final MainTabController tabController) {
 		this.iterationTreeView = iterationTreeView;
 		this.tabController = tabController;
 	}
-
+	
 	/** Opens the currently selected iterations in the IterationTreeView */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		
-		List<Iteration> iterationsToOpen = iterationTreeView
+		final List<Iteration> iterationsToOpen = iterationTreeView
 				.getSelectedIterations();
-		int numIterations = iterationsToOpen.size();
-
-		for (Iteration i : iterationsToOpen) {
-			if (i == null || i.getName().equals("Backlog")
-					|| i.getName().equals("Deleted"))
+		final int numIterations = iterationsToOpen.size();
+		
+		for (final Iteration i : iterationsToOpen) {
+			if ((i == null) || i.getName().equals("Backlog")
+					|| i.getName().equals("Deleted")) {
 				continue;
+			}
 			boolean IterationIsOpen = false;
-			for (int j = 0; j < this.tabController.getTabView().getTabCount(); j++) {
+			for (int j = 0; j < tabController.getTabView().getTabCount(); j++) {
 				for (int k = 0; k < numIterations; k++) {
-					Component tabComponent = this.tabController.getTabView()
+					final Component tabComponent = tabController.getTabView()
 							.getComponentAt(j);
-					if (tabComponent instanceof IterationView
-							&& this.tabController.getTabView().getTitleAt(j)
+					if ((tabComponent instanceof IterationView)
+							&& tabController.getTabView().getTitleAt(j)
 									.equals(iterationsToOpen.get(k).getName())) {
-
-						this.tabController.switchToTab(j);
+						
+						tabController.switchToTab(j);
 						IterationIsOpen = true;
 					}
 				}
@@ -69,7 +70,7 @@ public class EditIterationAction extends AbstractAction {
 				tabController.addIterationTab(i);
 			}
 		}
-
+		
 	}
 	/*
 	 * @Override public void actionPerformed(ActionEvent e) { Iteration[]
@@ -85,5 +86,5 @@ public class EditIterationAction extends AbstractAction {
 	 * this.tabController.switchToTab(j); + IterationIsOpen = true; + } + } + }
 	 * + if (!IterationIsOpen) { + tabController.addEditIterationTab(i); + } }
 	 */
-
+	
 }

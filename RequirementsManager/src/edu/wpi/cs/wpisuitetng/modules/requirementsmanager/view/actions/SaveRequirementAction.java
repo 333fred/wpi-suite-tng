@@ -32,38 +32,39 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  *         Action to save a requirement
  */
 public class SaveRequirementAction extends AbstractAction {
-
-	private Requirement requirement;
-
-	private DetailPanel parentView;
-
-	public SaveRequirementAction(Requirement requirement, DetailPanel parentView) {
+	
+	private final Requirement requirement;
+	
+	private final DetailPanel parentView;
+	
+	public SaveRequirementAction(final Requirement requirement,
+			final DetailPanel parentView) {
 		super("Save Requirement");
 		this.requirement = requirement;
 		this.parentView = parentView;
 	}
-
+	
 	/**
 	 * Method to save a requirement if it is of acceptable format
 	 * 
 	 * @e any ActionEvent
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e1) {
-		AddRequirementRequestObserver observer = new AddRequirementRequestObserver(
-				this.parentView);
-		RequirementsController controller = new RequirementsController();
-
+	public void actionPerformed(final ActionEvent e1) {
+		final AddRequirementRequestObserver observer = new AddRequirementRequestObserver(
+				parentView);
+		final RequirementsController controller = new RequirementsController();
+		
 		if (!parentView.getTextName().getText().trim().equals("")) {
 			parentView.getTextName().setBackground(Color.WHITE);
 			parentView.getTextNameValid().setText("");
 		}
-
+		
 		if (!parentView.getTextDescription().getText().trim().equals("")) {
 			parentView.getTextDescription().setBackground(Color.WHITE);
 			parentView.getTextDescriptionValid().setText("");
 		}
-
+		
 		if (!parentView.getTextName().getText().trim().equals("")
 				&& !parentView.getTextDescription().getText().trim().equals("")) {
 			requirement.setName(parentView.getTextName().getText().trim());
@@ -71,33 +72,33 @@ public class SaveRequirementAction extends AbstractAction {
 					.getText());
 			requirement.setUsers(parentView.getAssignedUsers());
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
-
+			
 			try {
 				requirement.setIteration(-1);
-
+				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
 							.getComboBoxPriority().getSelectedItem().toString()
 							.toUpperCase().replaceAll(" ", "_")));
-				} catch (IllegalArgumentException except) {
+				} catch (final IllegalArgumentException except) {
 					requirement.setPriority(Priority.BLANK);
 				}
-
+				
 				try {
 					requirement.setType(Type.valueOf(parentView
 							.getComboBoxType().getSelectedItem().toString()
 							.toUpperCase().replaceAll(" ", "_")
 							.replaceAll("-", "_")));
-				} catch (IllegalArgumentException except) {
+				} catch (final IllegalArgumentException except) {
 					requirement.setType(Type.BLANK);
 				}
-
+				
 				requirement.setStatus(Status.valueOf(parentView
 						.getComboBoxStatus().getSelectedItem().toString()
 						.toUpperCase().replaceAll(" ", "_")));
-
+				
 				controller.create(requirement, observer);
-			} catch (NumberFormatException except) {
+			} catch (final NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");
 			}
@@ -116,7 +117,7 @@ public class SaveRequirementAction extends AbstractAction {
 			}
 		}
 	}
-
+	
 	public Requirement getRequirement() {
 		return requirement;
 	}

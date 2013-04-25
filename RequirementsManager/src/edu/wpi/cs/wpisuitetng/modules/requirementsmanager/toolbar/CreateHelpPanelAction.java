@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -30,11 +31,11 @@ import edu.wpi.cs.wpisuitetng.network.Network;
  * 
  * @author Nicholas Massa
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class CreateHelpPanelAction extends AbstractAction {
-
+	
 	private final MainTabController controller;
-
+	
 	/**
 	 * Create a CreateHelpPanelAction
 	 * 
@@ -42,30 +43,33 @@ public class CreateHelpPanelAction extends AbstractAction {
 	 *            When the action is performed, controller.addCreateDefectTab()
 	 *            is called
 	 */
-	public CreateHelpPanelAction(MainTabController controller) {
+	public CreateHelpPanelAction(final MainTabController controller) {
 		super("User Manual");
 		this.controller = controller;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_F1);
+		putValue(Action.MNEMONIC_KEY, KeyEvent.VK_F1);
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		//File input = new File("http://dastardlybanana.com/Docs/RequirementsManager/"); // Html file is our input
-		//go to current url + Documentation/
-		String docURI = Network.getInstance().getDefaultNetworkConfiguration().getApiUrl();
-		docURI = docURI.substring(0, docURI.length() - 3) +"Documentation/";
+	public void actionPerformed(final ActionEvent e) {
+		// File input = new
+		// File("http://dastardlybanana.com/Docs/RequirementsManager/"); // Html
+		// file is our input
+		// go to current url + Documentation/
+		String docURI = Network.getInstance().getDefaultNetworkConfiguration()
+				.getApiUrl();
+		docURI = docURI.substring(0, docURI.length() - 3) + "Documentation/";
 		URI input = null;
 		try {
 			input = new URI(docURI);
-		} catch (URISyntaxException e1) {
+		} catch (final URISyntaxException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		
 		// Create a desktop type in order to launch the user's default browser
-		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop()
-				: null;
-		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) { // If
+		final Desktop desktop = Desktop.isDesktopSupported() ? Desktop
+				.getDesktop() : null;
+		if ((desktop != null) && desktop.isSupported(Desktop.Action.BROWSE)) { // If
 																				// desktop
 																				// was
 																				// created
@@ -77,11 +81,11 @@ public class CreateHelpPanelAction extends AbstractAction {
 			try {
 				desktop.browse(input); // Convert link to identifier and launch
 										// default browser
-			} catch (Exception f) {
+			} catch (final Exception f) {
 				System.out.println("Error launching browser!");
 				f.printStackTrace();
 			}
 		}
 	}
-
+	
 }

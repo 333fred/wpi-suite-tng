@@ -34,11 +34,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * style is changed to be normal.
  */
 public class TextUpdateListener implements KeyListener {
+	
 	protected final DetailPanel panel;
 	protected final JTextComponent component;
 	protected final JTextComponent errorComponent;
 	protected boolean firstKeyPress;
-
+	
 	/**
 	 * Constructs a TextUpdateListener.
 	 * 
@@ -53,70 +54,38 @@ public class TextUpdateListener implements KeyListener {
 	 *            The error box to write an error message to if null, then no
 	 *            box exists for this component
 	 */
-	public TextUpdateListener(DetailPanel panel, JTextComponent component,
-			JTextComponent errorComponent) {
+	public TextUpdateListener(final DetailPanel panel,
+			final JTextComponent component, final JTextComponent errorComponent) {
 		this.panel = panel;
 		this.component = component;
 		this.errorComponent = errorComponent;
-
-		String empty = "";
+		
+		final String empty = "";
 		// if this component was empty to begin with,
 		// and it is not the estimate field (estimate can be empty)
 		if (empty.equals(component.getText().trim())) {
-			this.firstKeyPress = false;
+			firstKeyPress = false;
 		} else {
-			this.firstKeyPress = true;
+			firstKeyPress = true;
 		}
 	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		String empty = "";
-		// if this component was empty to begin with,
-		if (empty.equals(component.getText().trim())) {
-			this.firstKeyPress = false;
-		} else {
-			this.firstKeyPress = true;
-		}
-
-		if (arg0.getKeyCode() == KeyEvent.VK_TAB || firstKeyPress) {
-			checkIfUpdated();
-		}		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		String empty = "";
-		// if this component was empty to begin with,
-		if (empty.equals(component.getText().trim())) {
-			this.firstKeyPress = false;
-		} else {
-			this.firstKeyPress = true;
-		}		
-		
-		// as long as we're not reading the key release from tabbing, we can check
-		if (arg0.getKeyCode() != KeyEvent.VK_TAB || firstKeyPress) {
-			checkIfUpdated();
-		}		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-	}
-
+	
 	/**
 	 * Checks if the field is empty and changes the style of the field
 	 * accordingly.
 	 */
 	public void checkIfUpdated() {
-		String empty = ""; // empty string to compare to
+		final String empty = ""; // empty string to compare to
 		String base = ""; // the base of the string in the component already
-
+		
 		// Get the base String to compare to the text of the JTextComponent
 		try {
-			// Get the field from the Requirement model that corresponds with the name of component.
-			Object field = panel.getModel().getClass().getDeclaredMethod("get" + component.getName()).invoke(panel.getModel());
-
+			// Get the field from the Requirement model that corresponds with
+			// the name of component.
+			final Object field = panel.getModel().getClass()
+					.getDeclaredMethod("get" + component.getName())
+					.invoke(panel.getModel());
+			
 			// If field is null, set base to an empty String.
 			if (field == null) {
 				base = "";
@@ -125,35 +94,36 @@ public class TextUpdateListener implements KeyListener {
 			else if (field instanceof String) {
 				base = (String) field;
 			}
-			// If field is an instance of an Integer, set base to that Integer as a String
+			// If field is an instance of an Integer, set base to that Integer
+			// as a String
 			// occurs for the estimate field
 			else if (field instanceof Integer) {
 				base = Integer.toString((Integer) field);
 			}
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			e.printStackTrace();
 		}
-
+		
 		// add to this list the names of components if the component can be
 		// blank
 		// backend may assign default values if saved as blank
-		String canBeEmpty = "Estimate|Effort|ReleaseNum";
+		final String canBeEmpty = "Estimate|Effort|ReleaseNum";
 		
 		// if the component has is emptye
-		if (empty.equals(component.getText().trim())) { 
+		if (empty.equals(component.getText().trim())) {
 			// if there's an error panel to write to
 			if (errorComponent != null) {
 				component.setBackground(new Color(243, 243, 209));
 				errorComponent.setText("** Field must be non-blank **");
-			} 
+			}
 			// if this component cannot be empty
 			if (!component.getName().matches(canBeEmpty)) {
 				panel.disableSaveButton();
@@ -163,21 +133,58 @@ public class TextUpdateListener implements KeyListener {
 		} else if (base.equals(component.getText().trim())) {
 			component.setBackground(Color.WHITE);
 			// if there's an error panel to write to
-			if (errorComponent != null) { 
+			if (errorComponent != null) {
 				errorComponent.setText("");
 			}
 			panel.disableSaveButton();
 		} else {
 			component.setBackground(Color.WHITE);
 			// if there's an error panel to write to
-			if (errorComponent != null) { 
+			if (errorComponent != null) {
 				errorComponent.setText("");
 			}
 			if (empty.equals(panel.getTextName().getText().trim())
 					|| empty.equals(panel.getTextDescription().getText().trim())) {
 				panel.disableSaveButton();
-			} else
+			} else {
 				panel.enableSaveButton();
+			}
 		}
+	}
+	
+	@Override
+	public void keyPressed(final KeyEvent arg0) {
+		final String empty = "";
+		// if this component was empty to begin with,
+		if (empty.equals(component.getText().trim())) {
+			firstKeyPress = false;
+		} else {
+			firstKeyPress = true;
+		}
+		
+		if ((arg0.getKeyCode() == KeyEvent.VK_TAB) || firstKeyPress) {
+			checkIfUpdated();
+		}
+	}
+	
+	@Override
+	public void keyReleased(final KeyEvent arg0) {
+		final String empty = "";
+		// if this component was empty to begin with,
+		if (empty.equals(component.getText().trim())) {
+			firstKeyPress = false;
+		} else {
+			firstKeyPress = true;
+		}
+		
+		// as long as we're not reading the key release from tabbing, we can
+		// check
+		if ((arg0.getKeyCode() != KeyEvent.VK_TAB) || firstKeyPress) {
+			checkIfUpdated();
+		}
+	}
+	
+	@Override
+	public void keyTyped(final KeyEvent arg0) {
 	}
 }

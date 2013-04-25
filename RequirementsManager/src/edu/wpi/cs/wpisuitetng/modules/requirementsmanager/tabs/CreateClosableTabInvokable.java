@@ -19,16 +19,16 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
  */
 
 public class CreateClosableTabInvokable implements Runnable {
-
+	
 	/** The tabController to change the tab in */
-	private MainTabController tabController;
-
+	private final MainTabController tabController;
+	
 	/** the index of the tab to change */
-	private int index;
-
+	private final int index;
+	
 	/** the tab object that will be updated */
-	private Tab tabToUpdate;
-
+	private final Tab tabToUpdate;
+	
 	/**
 	 * Creates a new Closable tab class
 	 * 
@@ -39,17 +39,18 @@ public class CreateClosableTabInvokable implements Runnable {
 	 * @param tabToUpdate
 	 *            Tab object representing the tab to change
 	 */
-
-	public CreateClosableTabInvokable(MainTabController tabController, int index,
-			Tab tabToUpdate) {
+	
+	public CreateClosableTabInvokable(final MainTabController tabController,
+			final int index, final Tab tabToUpdate) {
 		this.tabController = tabController;
 		this.index = index;
 		this.tabToUpdate = tabToUpdate;
 	}
-
+	
 	@Override
 	public synchronized void run() {
-		tabController.getTabView().setTabComponentAt(index, tabToUpdate.getTabComponent(tabController));
+		tabController.getTabView().setTabComponentAt(index,
+				tabToUpdate.getTabComponent(tabController));
 		tabController.getTabView().invalidate();
 	}
 }

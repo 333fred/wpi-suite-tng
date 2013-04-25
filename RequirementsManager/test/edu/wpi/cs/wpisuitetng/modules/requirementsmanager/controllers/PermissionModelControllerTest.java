@@ -12,8 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +27,22 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public class PermissionModelControllerTest extends
 		AbstractControllerTest<PermissionModel> {
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Test
+	public void deleteGood() {
+		setupNetworkConfig();
+		controller.delete(model, observer);
+		final MockRequest request = network.getLastRequestMade();
+		Assert.assertEquals(request.getUrl().toString(), netConfig + modelPath
+				+ "/" + model.getUser().getName());
+		Assert.assertEquals(request.getBody(), null);
+		Assert.assertEquals(request.getHttpMethod(), HttpMethod.DELETE);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -38,25 +52,10 @@ public class PermissionModelControllerTest extends
 		setupNetwork();
 		controller = new PermissionModelController();
 		model = new PermissionModel();
-		User u = new User("Fred", "fred", "test", 1);
+		final User u = new User("Fred", "fred", "test", 1);
 		model.setUser(u);
 		id = 1; // Permission Models have no id
 		modelPath = "/requirementsmanager/permissionmodel";
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@Test
-	public void deleteGood() {
-		setupNetworkConfig();
-		controller.delete(model, observer);
-		MockRequest request = network.getLastRequestMade();
-		assertEquals(request.getUrl().toString(), netConfig + modelPath + "/"
-				+ model.getUser().getName());
-		assertEquals(request.getBody(), null);
-		assertEquals(request.getHttpMethod(), HttpMethod.DELETE);
-	}
-
+	
 }

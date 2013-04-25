@@ -11,49 +11,47 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
-import java.util.Date;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.RequirementComparator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.RequirementComparator;
 
 public class RequirementComparatorTest {
-
+	
 	RequirementComparator RequirementComparator;
 	Requirement middle;
 	Requirement middleDuplicate;
 	Requirement last;
 	Requirement first;
 	
+	@Test
+	public void testEarlierRequirement() {
+		Assert.assertEquals(-1, RequirementComparator.compare(first, middle));
+	}
+	
+	@Test
+	public void testLaterRequirement() {
+		Assert.assertEquals(1, RequirementComparator.compare(last, middle));
+	}
+	
 	@Before
-	public void testSameRequirement(){
+	public void testSameRequirement() {
 		
-		this.RequirementComparator = new RequirementComparator();
-		this.first = new Requirement();
+		RequirementComparator = new RequirementComparator();
+		first = new Requirement();
 		first.setrUID(0);
-		this.middle = new Requirement();
+		middle = new Requirement();
 		middle.setrUID(1);
-		this.last = new Requirement();
+		last = new Requirement();
 		last.setrUID(2);
 		
 	}
 	
 	@Test
-	public void testSelf(){
-		assertEquals(0, this.RequirementComparator.compare(this.middle, this.middle));
-	}
-	
-	@Test
-	public void testEarlierRequirement(){
-		assertEquals(-1, this.RequirementComparator.compare(this.first, this.middle));
-	}
-	
-	@Test
-	public void testLaterRequirement(){
-		assertEquals(1, this.RequirementComparator.compare(this.last, this.middle));
+	public void testSelf() {
+		Assert.assertEquals(0, RequirementComparator.compare(middle, middle));
 	}
 	
 }

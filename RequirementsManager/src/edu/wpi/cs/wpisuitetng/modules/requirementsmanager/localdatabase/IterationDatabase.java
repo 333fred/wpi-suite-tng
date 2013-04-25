@@ -27,93 +27,88 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IR
  * Maintains a local database of iterations
  */
 public class IterationDatabase extends AbstractDatabase<Iteration> {
-
-	private Map<Integer, Iteration> iterations;
-	private IterationController controller;
-	private RetrieveAllIterationsRequestObserver observer;
-	private static IterationDatabase db;
-
-	private IterationDatabase() {
-		super(300000);
-		this.iterations = new HashMap<Integer, Iteration>();
-		this.controller = new IterationController();
-		this.observer = new RetrieveAllIterationsRequestObserver(
-				new IRetreivedAllIterationsNotifier() {
-
-					@Override
-					public void receivedData(Iteration[] iterations) {
-						// Nothing needs to happen
-					}
-
-					@Override
-					public void errorReceivingData(
-							String RetrieveAllRequirementsRequestObserver) {
-						// Nothing needs to happen
-					}
-				});
-	}
-
+	
 	/**
 	 * Gets the singleton iterations database instance
 	 * 
 	 * @return the database instance
 	 */
 	public static IterationDatabase getInstance() {
-		if (db == null) {
-			db = new IterationDatabase();
+		if (IterationDatabase.db == null) {
+			IterationDatabase.db = new IterationDatabase();
 		}
-		return db;
+		return IterationDatabase.db;
 	}
-
+	
+	private Map<Integer, Iteration> iterations;
+	private final IterationController controller;
+	private final RetrieveAllIterationsRequestObserver observer;
+	
+	private static IterationDatabase db;
+	
+	private IterationDatabase() {
+		super(300000);
+		iterations = new HashMap<Integer, Iteration>();
+		controller = new IterationController();
+		observer = new RetrieveAllIterationsRequestObserver(
+				new IRetreivedAllIterationsNotifier() {
+					
+					@Override
+					public void errorReceivingData(
+							final String RetrieveAllRequirementsRequestObserver) {
+						// Nothing needs to happen
+					}
+					
+					@Override
+					public void receivedData(final Iteration[] iterations) {
+						// Nothing needs to happen
+					}
+				});
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized void set(List<Iteration> iterations) {
-		this.iterations = new HashMap<Integer, Iteration>();
-		for (Iteration i : iterations) {
-			this.iterations.put(i.getId(), i);
-		}
-		updateListeners();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized void addAll(List<Iteration> iterations) {
-		for (Iteration i : iterations) {
-			this.iterations.put(i.getId(), i);
-		}
-		updateListeners();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized void add(Iteration i) {
+	@Override
+	public synchronized void add(final Iteration i) {
 		iterations.put(i.getId(), i);
 		updateListeners();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized Iteration get(int id) throws IterationNotFoundException {
+	@Override
+	public synchronized void addAll(final List<Iteration> iterations) {
+		for (final Iteration i : iterations) {
+			this.iterations.put(i.getId(), i);
+		}
+		updateListeners();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized Iteration get(final int id)
+			throws IterationNotFoundException {
 		if (iterations.get(id) != null) {
 			return iterations.get(id);
 		} else {
 			throw new IterationNotFoundException(id);
 		}
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public synchronized List<Iteration> getAll() {
 		List<Iteration> list = new ArrayList<Iteration>();
 		list = new ArrayList<Iteration>(iterations.values());
 		return list;
 	}
-
+	
 	/**
 	 * Gets the given iteration, returning null if the iteration isn't found
 	 * 
@@ -121,8 +116,8 @@ public class IterationDatabase extends AbstractDatabase<Iteration> {
 	 *            the name of the iteration to retrieve
 	 * @return the iteration if it exists, null otherwise
 	 */
-	public synchronized Iteration getIteration(String name) {
-		for (Iteration anIteration : iterations.values()) {
+	public synchronized Iteration getIteration(final String name) {
+		for (final Iteration anIteration : iterations.values()) {
 			if (anIteration.getName().equals(name)) {
 				return anIteration;
 			}
@@ -130,7 +125,7 @@ public class IterationDatabase extends AbstractDatabase<Iteration> {
 		// TODO: This needs to be an exception, not null
 		return null;
 	}
-
+	
 	/**
 	 * Runs every 5 minutes and updates the local iterations database, which
 	 * will trigger an update of all listeners
@@ -143,10 +138,22 @@ public class IterationDatabase extends AbstractDatabase<Iteration> {
 			try {
 				// Sleep for five minutes
 				Thread.sleep(secs);
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				ex.printStackTrace();
 				return;
 			}
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized void set(final List<Iteration> iterations) {
+		this.iterations = new HashMap<Integer, Iteration>();
+		for (final Iteration i : iterations) {
+			this.iterations.put(i.getId(), i);
+		}
+		updateListeners();
 	}
 }

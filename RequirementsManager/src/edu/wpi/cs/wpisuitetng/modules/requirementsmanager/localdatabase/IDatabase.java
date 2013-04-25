@@ -25,12 +25,23 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.NotFoundExc
  */
 
 public interface IDatabase<T extends Model> extends Runnable {
-
+	
 	/**
-	 * @return all the data in this database
+	 * Adds or updates the given model
+	 * 
+	 * @param model
+	 *            the model to add or update
 	 */
-	public List<T> getAll();
-
+	public void add(T model);
+	
+	/**
+	 * Adds or updates the given models
+	 * 
+	 * @param models
+	 *            the models to add or updates
+	 */
+	public void addAll(List<T> models);
+	
 	/**
 	 * Gets the object from the database with the specified id
 	 * 
@@ -41,31 +52,12 @@ public interface IDatabase<T extends Model> extends Runnable {
 	 *             If the model wasn't found
 	 */
 	public T get(int id) throws NotFoundException;
-
+	
 	/**
-	 * Sets the database to the given list of models
-	 * 
-	 * @param models
-	 *            the models to be in the database
+	 * @return all the data in this database
 	 */
-	public void set(List<T> models);
-
-	/**
-	 * Adds or updates the given models
-	 * 
-	 * @param models
-	 *            the models to add or updates
-	 */
-	public void addAll(List<T> models);
-
-	/**
-	 * Adds or updates the given model
-	 * 
-	 * @param model
-	 *            the model to add or update
-	 */
-	public void add(T model);
-
+	public List<T> getAll();
+	
 	/**
 	 * Registers a database listener to this database for receiving database
 	 * updates
@@ -74,7 +66,7 @@ public interface IDatabase<T extends Model> extends Runnable {
 	 *            the listener to register
 	 */
 	public void registerListener(IDatabaseListener listener);
-
+	
 	/**
 	 * Removes a given database listener from this database
 	 * 
@@ -83,15 +75,23 @@ public interface IDatabase<T extends Model> extends Runnable {
 	 * @return true if successful, false otherwise
 	 */
 	public boolean removeListener(IDatabaseListener listener);
-
+	
 	/**
-	 * Updates all listeners in the class
+	 * Sets the database to the given list of models
+	 * 
+	 * @param models
+	 *            the models to be in the database
 	 */
-	public void updateListeners();
-
+	public void set(List<T> models);
+	
 	/**
 	 * Starts the database background thread
 	 */
 	public void start();
-
+	
+	/**
+	 * Updates all listeners in the class
+	 */
+	public void updateListeners();
+	
 }

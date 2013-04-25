@@ -12,17 +12,14 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class PermissionsPanelTest {
-
+	
 	/** the permissions panel to test */
 	private PermissionsPanel panel;
-	
-	
 	
 	@Before
 	public void setup() {
@@ -33,8 +30,7 @@ public class PermissionsPanelTest {
 	@Test
 	public void testConstructor() {
 		panel = new PermissionsPanel();
-		assertNotNull(panel);
+		Assert.assertNotNull(panel);
 	}
-	
 	
 }

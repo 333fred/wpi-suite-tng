@@ -35,7 +35,44 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.s
  * assigned to a single requirement.
  */
 public class Requirement extends AbstractModel {
-
+	
+	/**
+	 * Converts a given string encoded in JSON format to a Requirement Object.
+	 * 
+	 * @param content
+	 *            The JSON encoded string
+	 * @return The Requirement extracted from the string
+	 */
+	public static Requirement fromJSON(final String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, Requirement.class);
+	}
+	
+	/**
+	 * Generates an array of Requirements from a JSON encoded string.
+	 * 
+	 * @param content
+	 *            The array of Requirements encoded in JSON format
+	 * @return The array of requirements encoded in the string
+	 */
+	public static Requirement[] fromJSONArray(final String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, Requirement[].class);
+	}
+	
+	/**
+	 * Sorts the given list of requirements by creation date
+	 * 
+	 * @param requirements
+	 *            the requirements to sort
+	 * @return the sorted list of requirements
+	 */
+	public static List<Requirement> sortRequirements(
+			final List<Requirement> requirements) {
+		Collections.sort(requirements, new RequirementComparator());
+		return requirements;
+	}
+	
 	// Requirement Attributes
 	private String name;
 	private int rUID; // Requirement Unique ID
@@ -48,17 +85,20 @@ public class Requirement extends AbstractModel {
 	private int iteration;
 	private int estimate;
 	private int effort; // Initially zero, if subRequirements.length() > 0, then
-						// sum
+	// sum
 	// Assignees, Subrequirements, and Parents
 	private List<String> assignees; // Team Member usernames
 	private List<Integer> subRequirements;
 	private List<Integer> pUID; // Parent unique ID's
 	// Notes and the log, and tasks
 	private List<Note> notes;
+	
 	private List<RequirementChangeset> logs;
+	
 	private List<Task> tasks;
+	
 	private List<ATest> aTests;
-
+	
 	/**
 	 * Creates a new Requirement, with default values.
 	 */
@@ -85,7 +125,7 @@ public class Requirement extends AbstractModel {
 		tasks = new ArrayList<Task>();
 		aTests = new ArrayList<ATest>();
 	}
-
+	
 	/**
 	 * Creates a new Requirement, with every option except the log and the
 	 * status being set by input.
@@ -117,12 +157,14 @@ public class Requirement extends AbstractModel {
 	 * @param tasks
 	 *            the list of tasks to start off with
 	 */
-	public Requirement(String name, String description, String releaseNum,
-			Type type, List<Integer> subRequirements, List<Note> notes,
-			int iteration, int estimate, int effort, List<String> assignees,
-			List<Integer> pUID, List<Task> tasks) {
+	public Requirement(final String name, final String description,
+			final String releaseNum, final Type type,
+			final List<Integer> subRequirements, final List<Note> notes,
+			final int iteration, final int estimate, final int effort,
+			final List<String> assignees, final List<Integer> pUID,
+			final List<Task> tasks) {
 		// Get the next UID for this requirement
-
+		
 		// Assign all inputs
 		this.name = name;
 		this.description = description;
@@ -135,269 +177,106 @@ public class Requirement extends AbstractModel {
 		this.effort = effort;
 		this.assignees = assignees;
 		this.pUID = pUID;
-
+		
 		// Set the task to new, and create a new linked list for the log
-		this.status = Status.NEW;
-		this.logs = new ArrayList<RequirementChangeset>();
-
+		status = Status.NEW;
+		logs = new ArrayList<RequirementChangeset>();
+		
 		this.tasks = tasks;
 	}
-
-	/**
-	 * @return the estimate
-	 */
-	public int getEstimate() {
-		return estimate;
-	}
-
-	/**
-	 * @param estimate
-	 *            the estimate to set
-	 */
-	public void setEstimate(int estimate) {
-		this.estimate = estimate;
-	}
-
-	/**
-	 * Converts this Requirement to a JSON string.
-	 * 
-	 * @return The JSON string representing this object
-	 */
-	@Override
-	public String toJSON() {
-		return new Gson().toJson(this, Requirement.class);
-	}
-
-	/**
-	 * Converts a given string encoded in JSON format to a Requirement Object.
-	 * 
-	 * @param content
-	 *            The JSON encoded string
-	 * @return The Requirement extracted from the string
-	 */
-	public static Requirement fromJSON(String content) {
-		final Gson parser = new Gson();
-		return parser.fromJson(content, Requirement.class);
-	}
-
-	/**
-	 * Generates an array of Requirements from a JSON encoded string.
-	 * 
-	 * @param content
-	 *            The array of Requirements encoded in JSON format
-	 * @return The array of requirements encoded in the string
-	 */
-	public static Requirement[] fromJSONArray(String content) {
-		final Gson parser = new Gson();
-		return parser.fromJson(content, Requirement[].class);
-	}
-
-	/**
-	 * method to construct a short string describing this Requirement suitable
-	 * for use in a list view
-	 * 
-	 * @return a short summary of this Requirement
-	 */
-	public String toListString() {
-
-		// TODO: determine what else to add to this method, if anything
-		// Add the requirement UID and name
-		String listString = this.rUID + " " + this.name;
-
-		return listString;
-
-	}
-
-	/**
-	 * OldLog events contained in a list
-	 * 
-	 * @param changes
-	 *            the events to log
-	 */
-	public void logEvents(RequirementChangeset changes) {
-		logs.add(0, changes);
-	}
-
-	/**
-	 * Logs the creation of the requirement
-	 * 
-	 * @param s
-	 *            the session containing the current user
-	 */
-	public void logCreation(Session s) {
-		RequirementChangeset creation = new RequirementChangeset(s.getUser());
-		creation.getChanges().put("creation",
-				new FieldChange<String>("creation", "creation"));
-		logs = new ArrayList<RequirementChangeset>();
-		logs.add(creation);
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the releaseNum
-	 */
-	public String getReleaseNum() {
-		return releaseNum;
-	}
-
-	/**
-	 * @param releaseNum
-	 *            the releaseNum to set
-	 */
-	public void setReleaseNum(String releaseNum) {
-		this.releaseNum = releaseNum;
-	}
-
-	/**
-	 * Gets the type of Requirement
-	 * 
-	 * @return the type
-	 */
-	public Type getType() {
-		return type;
-	}
-
-	/**
-	 * Sets the type of the requirement TODO: Determine if we can do this, or if
-	 * the type is final
-	 * 
-	 * @param type
-	 *            the type to set
-	 */
-	public void setType(Type type) {
-		this.type = type;
-	}
-
-	/**
-	 * Gets the priority of the Requirement
-	 * 
-	 * @return the priority
-	 */
-	public Priority getPriority() {
-		return priority;
-	}
-
-	/**
-	 * Sets the priority of the requirement TODO: Determine if we can do this,
-	 * or if the type is final
-	 * 
-	 * @param priority
-	 *            the type to set
-	 */
-	public void setPriority(Priority priority) {
-		this.priority = priority;
-	}
-
-	/**
-	 * Return the list of subRequirement ID's
-	 * 
-	 * @return the subRequirements
-	 */
-	public List<Integer> getSubRequirements() {
-		return subRequirements;
-	}
-
-	/**
-	 * Sets the list of subrequirement ID's
-	 * 
-	 * @param subRequirements
-	 *            the subRequirements to set
-	 */
-	public void setSubRequirements(List<Integer> subRequirements) {
-		this.subRequirements = subRequirements;
-	}
-
-	/**
-	 * Add the given subrequirement to the list
-	 * 
-	 * @param id
-	 *            the id to add
-	 */
-	public void addSubRequirement(Integer id) {
-		this.subRequirements.add(id);
-	}
-
-	/**
-	 * Deletes a given ID from the list of subRequirements.
-	 * 
-	 * @param id
-	 *            The ID to delete
-	 * @return true if the id was present, false if not
-	 */
-	public boolean removeSubRequirement(Integer id) {
-		this.subRequirements.remove(id);
-		return true;
-	}
-
-	/**
-	 * Gets the current notes
-	 * 
-	 * @return the notes
-	 */
-	public List<Note> getNotes() {
-		return notes;
-	}
-
-	/**
-	 * Sets the current notes
-	 * 
-	 * @param notes
-	 *            the notes to set
-	 */
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
-
+	
 	/**
 	 * Adds a note to the list of notes.
 	 * 
 	 * @param note
 	 *            the note to add
 	 */
-	public void addNote(Note note) {
-		this.notes.add(note);
+	public void addNote(final Note note) {
+		notes.add(note);
 	}
-
+	
 	/**
-	 * Remove the given note from the list of notes
+	 * Adds the given parent UID to the list of pUID's
 	 * 
-	 * @param note
-	 *            the note to remove
-	 * @return True if the note in the list, false otherwise
+	 * @param id
+	 *            the id to add
 	 */
-	public boolean removeNote(String note) {
-		return this.notes.remove(note);
+	public void addPUID(final Integer id) {
+		pUID.add(id);
 	}
-
+	
+	/**
+	 * Add the given subrequirement to the list
+	 * 
+	 * @param id
+	 *            the id to add
+	 */
+	public void addSubRequirement(final Integer id) {
+		subRequirements.add(id);
+	}
+	
+	/**
+	 * Adds a given task to the list of tasks
+	 * 
+	 * @param task
+	 */
+	public void addTask(final Task task) {
+		tasks.add(task);
+	}
+	
+	/**
+	 * Adds the given test to the list of tests
+	 * 
+	 * @param aTest
+	 *            the new test
+	 */
+	public void addTest(final ATest aTest) {
+		aTests.add(aTest);
+	}
+	
+	/**
+	 * Adds a given user to the list of of assignees to this requirement
+	 * 
+	 * @param newUser
+	 *            the username of the user to be added
+	 */
+	public void addUser(final String newUser) {
+		assignees.add(newUser);
+	}
+	
+	/**
+	 * note that save and delete don't do anything at the moment, even in the
+	 * core's models
+	 */
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * Gets the total effort for the requirement
+	 * 
+	 * @return the effort
+	 */
+	public int getEffort() {
+		return effort;
+	}
+	
+	/**
+	 * @return the estimate
+	 */
+	public int getEstimate() {
+		return estimate;
+	}
+	
 	/**
 	 * Gets the iteration for this requirement. TODO: Is this actually going to
 	 * be an int?
@@ -407,119 +286,7 @@ public class Requirement extends AbstractModel {
 	public int getIteration() {
 		return iteration;
 	}
-
-	/**
-	 * Sets the current iteration TODO: change this to work on an Iteration
-	 * object
-	 * 
-	 * @param iteration
-	 *            the iteration to set
-	 */
-	public void setIteration(int iteration) {
-		this.iteration = iteration;
-	}
-
-	/**
-	 * Gets the total effort for the requirement
-	 * 
-	 * @return the effort
-	 */
-	public int getEffort() {
-		return effort;
-	}
-
-	/**
-	 * Sets the effort for the requirement
-	 * 
-	 * @param effort
-	 *            the effort to set
-	 */
-	public void setEffort(int effort) {
-		this.effort = effort;
-	}
-
-	/**
-	 * Gets a list of the current users assigned to this requirement
-	 * 
-	 * @return the list of usernames
-	 */
-	public List<String> getUsers() {
-		return assignees;
-	}
-
-	/**
-	 * Sets the list of users assigned to this requirement
-	 * 
-	 * @param assignees
-	 *            the list of usernames
-	 */
-	public void setUsers(List<String> assignees) {
-		this.assignees = assignees;
-	}
-
-	/**
-	 * Adds a given user to the list of of assignees to this requirement
-	 * 
-	 * @param newUser
-	 *            the username of the user to be added
-	 */
-	public void addUser(String newUser) {
-		this.assignees.add(newUser);
-	}
-
-	/**
-	 * Removes the given assignee from this requirement's list TODO: Need to
-	 * look at permission
-	 * 
-	 * @param user
-	 *            the username of the user to remove
-	 * @return True if the username was in the list, false otherwise
-	 */
-	public boolean removeUser(String user) {
-		return this.assignees.remove(user);
-	}
-
-	/**
-	 * Returns the list of parent requirements
-	 * 
-	 * @return the pUID
-	 */
-	public List<Integer> getpUID() {
-		return pUID;
-	}
-
-	/**
-	 * Sets the list of parent requirements
-	 * 
-	 * @param pUID
-	 *            the pUID to set
-	 */
-	public void setpUID(List<Integer> pUID) {
-		this.pUID = pUID;
-	}
-
-	/**
-	 * Adds the given parent UID to the list of pUID's
-	 * 
-	 * @param id
-	 *            the id to add
-	 */
-	public void addPUID(Integer id) {
-		this.pUID.add(id);
-	}
-
-	/**
-	 * Removes the given parent from the list of parents
-	 * 
-	 * @param id
-	 *            the ID to remove
-	 * @return if the ID was in the list or not
-	 */
-	public boolean removePUID(Integer id) {
-		this.pUID.remove(id);
-		return true;
-	}
-
+	
 	/**
 	 * Returns the list of log events
 	 * 
@@ -529,38 +296,48 @@ public class Requirement extends AbstractModel {
 		// return logger.getLogs();
 		return logs;
 	}
-
+	
 	/**
-	 * Sets the log. Make sure that you know what you're doing with this, as it
-	 * will erase any logs stored in the manager. If you just want to add a log,
-	 * then use addLog
-	 * 
-	 * @param linkedList
-	 *            the log to set
+	 * @return the name
 	 */
-	public void setLog(List<RequirementChangeset> linkedList) {
-		this.logs = linkedList;
+	public String getName() {
+		return name;
 	}
-
+	
 	/**
-	 * Gets the current status of the requirement
+	 * Gets the current notes
 	 * 
-	 * @return the status object of the requirement
+	 * @return the notes
 	 */
-	public Status getStatus() {
-		return status;
+	public List<Note> getNotes() {
+		return notes;
 	}
-
+	
 	/**
-	 * Sets the status of the requirement
+	 * Gets the priority of the Requirement
 	 * 
-	 * @param status
-	 *            the status to set
+	 * @return the priority
 	 */
-	public void setStatus(Status status) {
-		this.status = status;
+	public Priority getPriority() {
+		return priority;
 	}
-
+	
+	/**
+	 * Returns the list of parent requirements
+	 * 
+	 * @return the pUID
+	 */
+	public List<Integer> getpUID() {
+		return pUID;
+	}
+	
+	/**
+	 * @return the releaseNum
+	 */
+	public String getReleaseNum() {
+		return releaseNum;
+	}
+	
 	/**
 	 * Gets the rUID of the requirement
 	 * 
@@ -569,17 +346,148 @@ public class Requirement extends AbstractModel {
 	public int getrUID() {
 		return rUID;
 	}
-
+	
 	/**
-	 * Sets the rUID of the requirement
+	 * Gets the current status of the requirement
+	 * 
+	 * @return the status object of the requirement
+	 */
+	public Status getStatus() {
+		return status;
+	}
+	
+	/**
+	 * Return the list of subRequirement ID's
+	 * 
+	 * @return the subRequirements
+	 */
+	public List<Integer> getSubRequirements() {
+		return subRequirements;
+	}
+	
+	/**
+	 * @return the tasks
+	 */
+	public List<Task> getTasks() {
+		return tasks;
+	}
+	
+	/**
+	 * @return the tasks
+	 */
+	public List<ATest> getTests() {
+		return aTests;
+	}
+	
+	/**
+	 * Gets the type of Requirement
+	 * 
+	 * @return the type
+	 */
+	public Type getType() {
+		return type;
+	}
+	
+	/**
+	 * Gets a list of the current users assigned to this requirement
+	 * 
+	 * @return the list of usernames
+	 */
+	public List<String> getUsers() {
+		return assignees;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Boolean identify(final Object o) {
+		// Check to see if o is a requirement
+		if (!(o instanceof Requirement)) {
+			// If it isn't, check to see if it's an ID, and return true if it
+			// the correct rUID
+			if (o instanceof Integer) {
+				return ((Integer) o).equals(new Integer(rUID));
+			} else {
+				return false;
+			}
+		} else {
+			return rUID == ((Requirement) o).rUID;
+		}
+	}
+	
+	/**
+	 * Logs the creation of the requirement
+	 * 
+	 * @param s
+	 *            the session containing the current user
+	 */
+	public void logCreation(final Session s) {
+		final RequirementChangeset creation = new RequirementChangeset(
+				s.getUser());
+		creation.getChanges().put("creation",
+				new FieldChange<String>("creation", "creation"));
+		logs = new ArrayList<RequirementChangeset>();
+		logs.add(creation);
+	}
+	
+	/**
+	 * OldLog events contained in a list
+	 * 
+	 * @param changes
+	 *            the events to log
+	 */
+	public void logEvents(final RequirementChangeset changes) {
+		logs.add(0, changes);
+	}
+	
+	/**
+	 * Remove the given note from the list of notes
+	 * 
+	 * @param note
+	 *            the note to remove
+	 * @return True if the note in the list, false otherwise
+	 */
+	public boolean removeNote(final String note) {
+		return notes.remove(note);
+	}
+	
+	/**
+	 * Removes the given parent from the list of parents
 	 * 
 	 * @param id
-	 *            the id number to set rUID to
+	 *            the ID to remove
+	 * @return if the ID was in the list or not
 	 */
-	public void setrUID(int id) {
-		rUID = id;
+	public boolean removePUID(final Integer id) {
+		pUID.remove(id);
+		return true;
 	}
-
+	
+	/**
+	 * Deletes a given ID from the list of subRequirements.
+	 * 
+	 * @param id
+	 *            The ID to delete
+	 * @return true if the id was present, false if not
+	 */
+	public boolean removeSubRequirement(final Integer id) {
+		subRequirements.remove(id);
+		return true;
+	}
+	
+	/**
+	 * Removes the given assignee from this requirement's list TODO: Need to
+	 * look at permission
+	 * 
+	 * @param user
+	 *            the username of the user to remove
+	 * @return True if the username was in the list, false otherwise
+	 */
+	public boolean removeUser(final String user) {
+		return assignees.remove(user);
+	}
+	
 	/**
 	 * note that save and delete don't do anything at the moment, even in the
 	 * core's models
@@ -587,107 +495,172 @@ public class Requirement extends AbstractModel {
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
-
+		
 	}
-
+	
 	/**
-	 * note that save and delete don't do anything at the moment, even in the
-	 * core's models
+	 * @param description
+	 *            the description to set
 	 */
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-
+	public void setDescription(final String description) {
+		this.description = description;
 	}
-
+	
 	/**
-	 * {@inheritDoc}
+	 * Sets the effort for the requirement
+	 * 
+	 * @param effort
+	 *            the effort to set
 	 */
-	@Override
-	public Boolean identify(Object o) {
-		// Check to see if o is a requirement
-		if (!(o instanceof Requirement)) {
-			// If it isn't, check to see if it's an ID, and return true if it
-			// the correct rUID
-			if (o instanceof Integer) {
-				return ((Integer) o).equals(new Integer(this.rUID));
-			} else {
-				return false;
-			}
-		} else {
-			return this.rUID == ((Requirement) o).rUID;
-		}
+	public void setEffort(final int effort) {
+		this.effort = effort;
 	}
-
+	
 	/**
-	 * @return the tasks
+	 * @param estimate
+	 *            the estimate to set
 	 */
-	public List<Task> getTasks() {
-		return tasks;
+	public void setEstimate(final int estimate) {
+		this.estimate = estimate;
 	}
-
+	
+	/**
+	 * Sets the current iteration TODO: change this to work on an Iteration
+	 * object
+	 * 
+	 * @param iteration
+	 *            the iteration to set
+	 */
+	public void setIteration(final int iteration) {
+		this.iteration = iteration;
+	}
+	
+	/**
+	 * Sets the log. Make sure that you know what you're doing with this, as it
+	 * will erase any logs stored in the manager. If you just want to add a log,
+	 * then use addLog
+	 * 
+	 * @param linkedList
+	 *            the log to set
+	 */
+	public void setLog(final List<RequirementChangeset> linkedList) {
+		logs = linkedList;
+	}
+	
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(final String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * Sets the current notes
+	 * 
+	 * @param notes
+	 *            the notes to set
+	 */
+	public void setNotes(final List<Note> notes) {
+		this.notes = notes;
+	}
+	
+	/**
+	 * Sets the priority of the requirement TODO: Determine if we can do this,
+	 * or if the type is final
+	 * 
+	 * @param priority
+	 *            the type to set
+	 */
+	public void setPriority(final Priority priority) {
+		this.priority = priority;
+	}
+	
+	/**
+	 * Sets the list of parent requirements
+	 * 
+	 * @param pUID
+	 *            the pUID to set
+	 */
+	public void setpUID(final List<Integer> pUID) {
+		this.pUID = pUID;
+	}
+	
+	/**
+	 * @param releaseNum
+	 *            the releaseNum to set
+	 */
+	public void setReleaseNum(final String releaseNum) {
+		this.releaseNum = releaseNum;
+	}
+	
+	/**
+	 * Sets the rUID of the requirement
+	 * 
+	 * @param id
+	 *            the id number to set rUID to
+	 */
+	public void setrUID(final int id) {
+		rUID = id;
+	}
+	
+	/**
+	 * Sets the status of the requirement
+	 * 
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(final Status status) {
+		this.status = status;
+	}
+	
+	/**
+	 * Sets the list of subrequirement ID's
+	 * 
+	 * @param subRequirements
+	 *            the subRequirements to set
+	 */
+	public void setSubRequirements(final List<Integer> subRequirements) {
+		this.subRequirements = subRequirements;
+	}
+	
 	/**
 	 * @param tasks
 	 *            the tasks to set
 	 */
-	public void setTasks(List<Task> tasks) {
+	public void setTasks(final List<Task> tasks) {
 		this.tasks = tasks;
 	}
-
-	/**
-	 * Checks the task list for completed tasks
-	 * 
-	 * @return true if all tasks in the list are complete
-	 */
-	public boolean testsPassed() {
-		for (ATest t : this.aTests) {
-			if (t.getStatus() == ATest.ATestStatus.FAILED
-					|| t.getStatus() == ATest.ATestStatus.BLANK) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Adds the given test to the list of tests
-	 * 
-	 * @param aTest
-	 *            the new test
-	 */
-	public void addTest(ATest aTest) {
-		this.aTests.add(aTest);
-	}
-
-	/**
-	 * @return the tasks
-	 */
-	public List<ATest> getTests() {
-		return aTests;
-	}
-
+	
 	/**
 	 * @param aTests
 	 *            the tests to set
 	 */
-	public void setTests(List<ATest> aTests) {
+	public void setTests(final List<ATest> aTests) {
 		this.aTests = aTests;
 	}
-
+	
 	/**
-	 * Checks the task list for completed tasks
+	 * Sets the type of the requirement TODO: Determine if we can do this, or if
+	 * the type is final
 	 * 
-	 * @return true if all tasks in the list are complete
+	 * @param type
+	 *            the type to set
 	 */
-	public boolean tasksCompleted() {
-		for (Task t : this.tasks) {
-			if (!t.isCompleted()) {
-				return false;
-			}
-		}
-		return true;
+	public void setType(final Type type) {
+		this.type = type;
 	}
-
+	
+	/**
+	 * Sets the list of users assigned to this requirement
+	 * 
+	 * @param assignees
+	 *            the list of usernames
+	 */
+	public void setUsers(final List<String> assignees) {
+		this.assignees = assignees;
+	}
+	
 	/**
 	 * Gets whether all subrequirements of this requirement have been deleted.
 	 * If they have been, then this can be closed. Otherwise, it cannot be
@@ -695,42 +668,76 @@ public class Requirement extends AbstractModel {
 	 * @return whether all subreqirements have been completed
 	 */
 	public boolean subReqsCompleted() {
-		for (Integer R : this.subRequirements) {
+		for (final Integer R : subRequirements) {
 			try {
 				if (RequirementDatabase.getInstance().get(R).getStatus() != Status.COMPLETE) {
 					return false;
 				}
-			} catch (RequirementNotFoundException e) {
+			} catch (final RequirementNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
 		return true;
 	}
-
+	
 	/**
-	 * Adds a given task to the list of tasks
+	 * Checks the task list for completed tasks
 	 * 
-	 * @param task
+	 * @return true if all tasks in the list are complete
 	 */
-	public void addTask(Task task) {
-		this.tasks.add(task);
+	public boolean tasksCompleted() {
+		for (final Task t : tasks) {
+			if (!t.isCompleted()) {
+				return false;
+			}
+		}
+		return true;
 	}
-
+	
+	/**
+	 * Checks the task list for completed tasks
+	 * 
+	 * @return true if all tasks in the list are complete
+	 */
+	public boolean testsPassed() {
+		for (final ATest t : aTests) {
+			if ((t.getStatus() == ATest.ATestStatus.FAILED)
+					|| (t.getStatus() == ATest.ATestStatus.BLANK)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Converts this Requirement to a JSON string.
+	 * 
+	 * @return The JSON string representing this object
+	 */
+	@Override
+	public String toJSON() {
+		return new Gson().toJson(this, Requirement.class);
+	}
+	
+	/**
+	 * method to construct a short string describing this Requirement suitable
+	 * for use in a list view
+	 * 
+	 * @return a short summary of this Requirement
+	 */
+	public String toListString() {
+		
+		// TODO: determine what else to add to this method, if anything
+		// Add the requirement UID and name
+		final String listString = rUID + " " + name;
+		
+		return listString;
+		
+	}
+	
+	@Override
 	public String toString() {
-		return this.getName();
+		return getName();
 	}
-
-	/**
-	 * Sorts the given list of requirements by creation date
-	 * 
-	 * @param requirements
-	 *            the requirements to sort
-	 * @return the sorted list of requirements
-	 */
-	public static List<Requirement> sortRequirements(
-			List<Requirement> requirements) {
-		Collections.sort(requirements, new RequirementComparator());
-		return requirements;
-	}
-
+	
 }

@@ -33,34 +33,26 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.Require
  * implementation.
  */
 public class RequirementValidator {
-
+	
 	private Data data;
-
+	
 	/**
 	 * Create a Requirement Validator
 	 * 
 	 * @param data
 	 *            The Data implementation to use
 	 */
-	public RequirementValidator(Data data) {
+	public RequirementValidator(final Data data) {
 		this.data = data;
 	}
-
+	
 	/**
 	 * @return the data
 	 */
 	public Data getData() {
 		return data;
 	}
-
-	/**
-	 * @param data
-	 *            the data to set
-	 */
-	public void setData(Data data) {
-		this.data = data;
-	}
-
+	
 	/**
 	 * Return the User with the given username if they already exist in the
 	 * database.
@@ -74,18 +66,27 @@ public class RequirementValidator {
 	 * @return The User with the given username, or null if they don't exist
 	 * @throws WPISuiteException
 	 */
-	User getExistingUser(String username, List<ValidationIssue> issues,
-			String fieldName) throws WPISuiteException {
+	User getExistingUser(final String username,
+			final List<ValidationIssue> issues, final String fieldName)
+			throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username",
 				username);
-		if (existingUsers.size() > 0 && existingUsers.get(0) != null) {
+		if ((existingUsers.size() > 0) && (existingUsers.get(0) != null)) {
 			return (User) existingUsers.get(0);
 		} else {
 			issues.add(new ValidationIssue("User doesn't exist", fieldName));
 			return null;
 		}
 	}
-
+	
+	/**
+	 * @param data
+	 *            the data to set
+	 */
+	public void setData(final Data data) {
+		this.data = data;
+	}
+	
 	/**
 	 * Checks if the given string is valid. Valid means that it is not null, has
 	 * length greater than 0 but less than maxLength
@@ -97,39 +98,36 @@ public class RequirementValidator {
 	 *            is no max
 	 * @return whether or not the string is valid
 	 */
-	boolean stringValid(String toCheck, int maxLength) {
-		if (toCheck == null)
+	boolean stringValid(final String toCheck, final int maxLength) {
+		if (toCheck == null) {
 			return false;
-		if (toCheck.length() > maxLength && maxLength > 0)
+		}
+		if ((toCheck.length() > maxLength) && (maxLength > 0)) {
 			return false;
-		if (toCheck.length() == 0)
+		}
+		if (toCheck.length() == 0) {
 			return false;
-
+		}
+		
 		/*
 		 * //iterate through characters in string for (int i = 0; i <
 		 * toCheck.length(); i++){ //if we find a character which is not
 		 * whitespace, then we know it must be valid char c = toCheck.charAt(i);
 		 * if (!Character.isWhitespace(c)) return true; }
 		 */
-
+		
 		// if we fail to find a an issue return true
 		return true;
 	}
-
+	
 	/*
 	 * /** Return the Requirement with the given id if it already exists in the
 	 * database.
-	 * 
 	 * @param id the id of the Requirement
-	 * 
 	 * @param project the project this requirement belongs to
-	 * 
 	 * @param issues list of errors to add to if requirement doesn't exist
-	 * 
 	 * @param fieldName name of field to use in error if necessary
-	 * 
 	 * @return The Requirement with the given id, or null if it doesn't exist
-	 * 
 	 * @throws WPISuiteException / Requirement getExistingRequirement(int id,
 	 * Project project, List<ValidationIssue> issues, String fieldName) throws
 	 * WPISuiteException { List<Model> oldRequirements =
@@ -140,7 +138,7 @@ public class RequirementValidator {
 	 * fieldName)); return null; } else { return (Requirement)
 	 * oldRequirements.get(0); } }
 	 */
-
+	
 	/**
 	 * Validate the given model such that any nested models point to appropriate
 	 * existing models from the Data given in the constructor.
@@ -152,110 +150,117 @@ public class RequirementValidator {
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException
 	 */
-
+	
 	// TODO: @param mode The mode to validate for
-	public List<ValidationIssue> validate(Session session,
-			Requirement requirement, RequirementActionMode mode)
+	public List<ValidationIssue> validate(final Session session,
+			final Requirement requirement, final RequirementActionMode mode)
 			throws WPISuiteException {
-		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-
+		final List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
+		
 		// Null requirements are invalid
 		if (requirement == null) {
 			issues.add(new ValidationIssue("Requirement cannot be null"));
 			return issues;
 		}
-
+		
 		// new requirements should always have new status
 		if (mode == RequirementActionMode.CREATE) {
 			requirement.setStatus(Status.NEW);
 			// and no iteration
 			requirement.setIteration(-1);
-		} else if (requirement.getStatus() != Status.DELETED
-				&& requirement.getStatus() != Status.COMPLETE) {
+		} else if ((requirement.getStatus() != Status.DELETED)
+				&& (requirement.getStatus() != Status.COMPLETE)) {
 			// Automatic status changes
-
+			
 			// If a new or open requirement is assigned to an iteration then set
 			// it to in progress
-			if ((requirement.getStatus() == Status.NEW || requirement
-					.getStatus() == Status.OPEN)
-					&& requirement.getIteration() != -1
-					&& requirement.getIteration() != -2)
+			if (((requirement.getStatus() == Status.NEW) || (requirement
+					.getStatus() == Status.OPEN))
+					&& (requirement.getIteration() != -1)
+					&& (requirement.getIteration() != -2)) {
 				requirement.setStatus(Status.IN_PROGRESS);
-
+			}
+			
 			// if an in-progress requirement is removed from an iteration, it is
 			// set to open
-			if (requirement.getStatus() == Status.IN_PROGRESS
-					&& requirement.getIteration() == -1) {
+			if ((requirement.getStatus() == Status.IN_PROGRESS)
+					&& (requirement.getIteration() == -1)) {
 				requirement.setStatus(Status.OPEN);
 			}
-
+			
 		}
-
+		
 		// deleted requirements should be moved to the 'deleted'
 		if (requirement.getStatus() == Status.DELETED) {
 			requirement.setIteration(-2);
 		} else if (requirement.getIteration() == -2) {
 			requirement.setIteration(-1);
 		}
-
+		
 		// trim whitespace if possible
-		if (requirement.getName() != null)
+		if (requirement.getName() != null) {
 			requirement.setName(requirement.getName().trim());
-		if (requirement.getDescription() != null)
+		}
+		if (requirement.getDescription() != null) {
 			requirement.setDescription(requirement.getDescription().trim());
-
+		}
+		
 		// make sure title and description size are within constraints
-		if (!stringValid(requirement.getName(), 100))
+		if (!stringValid(requirement.getName(), 100)) {
 			issues.add(new ValidationIssue(
 					"Required, must be 1-100 characters", "name"));
-
-		if (!stringValid(requirement.getDescription(), 0))
+		}
+		
+		if (!stringValid(requirement.getDescription(), 0)) {
 			issues.add(new ValidationIssue(
 					"Required, must be 1 or more characters", "description"));
-
+		}
+		
 		// Initialize any null lists to be empty
 		if (requirement.getLogs() == null) {
 			requirement.setLog(new LinkedList<RequirementChangeset>());
 		}
-
+		
 		if (requirement.getNotes() == null) {
 			requirement.setNotes(new LinkedList<Note>());
 		}
-
+		
 		if (requirement.getpUID() == null) {
 			requirement.setpUID(new LinkedList<Integer>());
 		}
-
+		
 		if (requirement.getSubRequirements() == null) {
 			requirement.setSubRequirements(new LinkedList<Integer>());
 		}
-
+		
 		if (requirement.getUsers() == null) {
 			requirement.setUsers(new LinkedList<String>());
 		}
-
+		
 		if (requirement.getTasks() == null) {
 			requirement.setTasks(new LinkedList<Task>());
 		}
-
+		
 		// Ensure that estimate is non-negative
-		if (requirement.getEstimate() < 0)
+		if (requirement.getEstimate() < 0) {
 			issues.add(new ValidationIssue("Must be non-negative", "estimate"));
-
+		}
+		
 		// Ensure that effort is non-negative
-		if (requirement.getEffort() < 0)
+		if (requirement.getEffort() < 0) {
 			issues.add(new ValidationIssue("Must be non-negative", "effort"));
-
+		}
+		
 		// Give BLANK type if none is given
 		if (requirement.getType() == null) {
 			requirement.setType(Type.BLANK);
 		}
-
+		
 		// Make sure all assignees actually exist
-		for (String u : requirement.getUsers()) {
+		for (final String u : requirement.getUsers()) {
 			getExistingUser(u, issues, "Assignee");
 		}
-
+		
 		return issues;
 	}
 }

@@ -20,16 +20,16 @@ import javax.swing.Icon;
  */
 
 public class AddTabInvokable implements Runnable {
-
+	
 	/** The main tab view that the tab will be added in */
-	private MainTabView tabView;
-
+	private final MainTabView tabView;
+	
 	/** The tab's properties */
-	private String title;
-	private Icon icon;
-	private Tab tab;
-	private String toolTip;
-
+	private final String title;
+	private final Icon icon;
+	private final Tab tab;
+	private final String toolTip;
+	
 	/**
 	 * Creates a new instance of addTab invokable
 	 * 
@@ -44,20 +44,22 @@ public class AddTabInvokable implements Runnable {
 	 * @param toolTip
 	 *            The tooltip of the tab to add
 	 */
-
-	public AddTabInvokable(MainTabView tabView, String title, Icon icon,
-			Tab tab, String toolTip) {
+	
+	public AddTabInvokable(final MainTabView tabView, final String title,
+			final Icon icon, final Tab tab, final String toolTip) {
 		this.tabView = tabView;
 		this.title = title;
 		this.icon = icon;
 		this.tab = tab;
 		this.toolTip = toolTip;
 	}
-
+	
+	@Override
 	public void run() {
 		tabView.addTab(title, icon, tab, toolTip); // add the tab to the TabView
-		int index = tabView.getTabCount() - 1; // get the index of the newly
-												// added tab
+		final int index = tabView.getTabCount() - 1; // get the index of the
+														// newly
+		// added tab
 		tabView.setSelectedIndex(index); // set the current tab to the newly
 											// added tab
 	}

@@ -18,10 +18,20 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
  * Represents an error in model validation.
  */
 public class ValidationIssue {
-
-	private String message;
-	private String fieldName;
-
+	
+	private final String message;
+	private final String fieldName;
+	
+	/**
+	 * Create a generic ValidationIssue with no specific field at fault
+	 * 
+	 * @param message
+	 *            An error message ("You are not allowed to edit defects")
+	 */
+	public ValidationIssue(final String message) {
+		this(message, null);
+	}
+	
 	/**
 	 * Create a ValidationIssue caused by a particular field in the model.
 	 * 
@@ -30,40 +40,30 @@ public class ValidationIssue {
 	 * @param fieldName
 	 *            The relevant field name ("title")
 	 */
-	public ValidationIssue(String message, String fieldName) {
+	public ValidationIssue(final String message, final String fieldName) {
 		this.message = message;
 		this.fieldName = fieldName;
 	}
-
-	/**
-	 * Create a generic ValidationIssue with no specific field at fault
-	 * 
-	 * @param message
-	 *            An error message ("You are not allowed to edit defects")
-	 */
-	public ValidationIssue(String message) {
-		this(message, null);
-	}
-
-	/**
-	 * @return the message associated with this error
-	 */
-	public String getMessage() {
-		return message;
-	}
-
+	
 	/**
 	 * @return the fieldName causing this error
 	 */
 	public String getFieldName() {
 		return fieldName;
 	}
-
+	
+	/**
+	 * @return the message associated with this error
+	 */
+	public String getMessage() {
+		return message;
+	}
+	
 	/**
 	 * @return true if this error has a fieldName
 	 */
 	public boolean hasFieldName() {
 		return fieldName != null;
 	}
-
+	
 }

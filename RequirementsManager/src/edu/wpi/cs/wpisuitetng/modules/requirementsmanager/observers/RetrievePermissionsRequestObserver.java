@@ -25,42 +25,42 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * Observer for the request to get a single user's permissions from the server
  */
 public class RetrievePermissionsRequestObserver implements RequestObserver {
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void fail(final IRequest iReq, final Exception exception) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		// TODO Auto-generated method stub
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
 		// Get the response and call the singleton initializer
 		final ResponseModel response = iReq.getResponse();
 		SwingUtilities.invokeLater(new Runnable() {
-
+			
 			@Override
 			public void run() {
 				try {
 					PermissionModel.fromJSONSingleton(response.getBody());
 					PermissionToolbarPane.getInstance().refreshPermission();
-				} catch (IllegalThreadStateException ex) {
+				} catch (final IllegalThreadStateException ex) {
 					ex.printStackTrace();
 				}
 			}
 		});
-
+		
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-	}
-
+	
 }

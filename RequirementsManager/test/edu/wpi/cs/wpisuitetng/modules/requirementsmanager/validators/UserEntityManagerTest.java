@@ -12,8 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers.UserEntityManager;
 
 public class UserEntityManagerTest {
-
+	
 	Data db;
 	UserEntityManager manager;
 	Project testProject;
@@ -40,9 +39,21 @@ public class UserEntityManagerTest {
 	Session adminSession;
 	
 	User user1, user2, user3;
-
+	
+	@Test
+	public void makeEntityTest() throws BadRequestException, ConflictException,
+			WPISuiteException {
+		// dummy test: maybe figure this out in the future?
+		Assert.assertEquals(1, 1);
+		// StringListModel created = manager.makeEntity(adminSession,
+		// user1.toJSON());
+		// assertEquals(created.getPermission(user1), Permission.READ);
+		// assertEquals(created.getPermission(user2), Permission.WRITE);
+		// assertEquals(created.getPermission(user3), null);
+	}
+	
 	@Before
-	public void setup(){
+	public void setup() {
 		manager = new UserEntityManager(db);
 		user1 = new User("Fred", "fred", "pass", 1);
 		user1.setPermission(Permission.READ, user1);
@@ -50,16 +61,5 @@ public class UserEntityManagerTest {
 		user2.setPermission(Permission.WRITE, user2);
 		user3 = new User("Rob", "rob", "pass", 3);
 		
-		
-	}
-	
-	@Test
-	public void makeEntityTest() throws BadRequestException, ConflictException, WPISuiteException{
-		//dummy test: maybe figure this out in the future?
-		assertEquals(1,1);
-//		StringListModel created = manager.makeEntity(adminSession, user1.toJSON());
-//		assertEquals(created.getPermission(user1), Permission.READ);
-//		assertEquals(created.getPermission(user2), Permission.WRITE);
-//		assertEquals(created.getPermission(user3), null);
 	}
 }

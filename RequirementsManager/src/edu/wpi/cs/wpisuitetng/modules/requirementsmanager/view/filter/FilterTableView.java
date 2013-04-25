@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -39,96 +40,165 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 public class FilterTableView extends JPanel implements
 		IRetrieveAllFiltersNotifier, ListSelectionListener, ISaveNotifier,
 		ActionListener {
-
+	
 	/** List of all the filters this is displaying */
 	List<Filter> filters;
-
+	
 	/** the table view for the filters */
-	private JTable tableView;
-
+	private final JTable tableView;
+	
 	/** The table model for the table view */
-	private FilterTableModel tableModel;
-
+	private final FilterTableModel tableModel;
+	
 	/** The scroll pane for the filter table */
-	private JScrollPane scrollPane;
-
+	private final JScrollPane scrollPane;
+	
 	/** Button used to enable or disable a filter */
-	private JButton butEnable;
-
+	private final JButton butEnable;
+	
 	/** Button used to delete a filter */
-	private JButton butDelete;
-
+	private final JButton butDelete;
+	
 	/** Panel to hold stuff in the scrollPane */
-	private JPanel butPanel;
-
+	private final JPanel butPanel;
+	
 	/** The controller to retrieve filters */
-	private FilterController filterController;
-
+	private final FilterController filterController;
+	
 	/** The FilterView this view is contained in */
-	private FilterView filterView;
-
-	public FilterTableView(FilterView filterView) {
+	private final FilterView filterView;
+	
+	public FilterTableView(final FilterView filterView) {
 		this.filterView = filterView;
-		List<Filter> filters = new ArrayList<Filter>();
+		final List<Filter> filters = new ArrayList<Filter>();
 		filterController = new FilterController();
-
+		
 		butPanel = new JPanel();
-
+		
 		butEnable = new JButton("Disable");
 		butEnable.setEnabled(false);
 		butEnable.addActionListener(this);
-
+		
 		butDelete = new JButton("Delete");
 		butDelete.setEnabled(false);
 		butDelete.addActionListener(this);
-
+		
 		butPanel.add(butEnable);
 		butPanel.add(butDelete);
-
+		
 		tableModel = new FilterTableModel(filters);
-
+		
 		tableView = new FilterTable(tableModel);
 		tableView.setFillsViewportHeight(true);
 		tableView.getSelectionModel().addListSelectionListener(this);
-
+		
 		tableView.getColumnModel().removeColumn(
 				tableView.getColumnModel().getColumn(0));
-
+		
 		scrollPane = new JScrollPane(tableView,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		// scrollPane.getViewport().add(tableView);
-
+		
 		setLayout(new BorderLayout());
-
+		
 		add(scrollPane, BorderLayout.CENTER);
 		add(butPanel, BorderLayout.SOUTH);
-
+		
 		setPreferredSize(new Dimension(100, 500));
-
+		
 		refresh();
-
+		
 	}
-
+	
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		final Object source = e.getSource();
+		if (source.equals(butEnable)) {
+			boolean active;
+			if (butEnable.getText().equals("Enable")) {
+				active = true;
+			} else {
+				active = false;
+			}
+			
+			// change the active status of the filters
+			final int[] selRows = tableView.getSelectedRows();
+			for (final int row : selRows) {
+				final Filter filter = tableModel.getFilterAt(row);
+				filter.setActive(active);
+				final UpdateFilterRequestObserver observer = new UpdateFilterRequestObserver(
+						this);
+				filterController.save(filter, observer);
+			}
+			// notify the listeners that we made changes
+			filterView.notifyListeners();
+			
+		} else if (source.equals(butDelete)) {
+			final int[] selRows = tableView.getSelectedRows();
+			for (final int row : selRows) {
+				final Filter filter = tableModel.getFilterAt(row);
+				final DeleteFilterRequestObserver observer = new DeleteFilterRequestObserver(
+						this, filter);
+				filterController.delete(filter, observer);
+			}
+			// notify the listeners that we made changes
+			filterView.notifyListeners();
+		}
+	}
+	
+	@Override
+	public void fail(final Exception exception) {
+		System.out.println("Filter table View Exception!!");
+		exception.printStackTrace();
+	}
+	
+	public Requirement getDraggedRequirement() {
+		return null;
+	}
+	
+	public MainTabController getTabController() {
+		return null;
+	}
+	
+	@Override
+	public void receivedData(final Filter[] filters) {
+		updateFilters();
+	}
+	
 	/**
 	 * Refreshes the table view
 	 * 
 	 */
-
+	
 	public void refresh() {
 		// get the filters from the server
-		RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
+		final RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
 				this);
 		filterController.getAll(observer);
 		updateFilters();
 	}
-
+	
 	@Override
-	public void receivedData(Filter[] filters) {
-		updateFilters();
+	public void responseError(final int statusCode, final String statusMessage) {
+		System.out.println("Response error " + statusCode + " : "
+				+ statusMessage);
 	}
-
-	public void valueChanged(ListSelectionEvent e) {
+	
+	@Override
+	public void responseSuccess() {
+		updateFilters();
+		filterView.notifyListeners();
+		tableView.repaint();
+	}
+	
+	private void updateFilters() {
+		final List<Filter> filters = FilterDatabase.getInstance().getAll();
+		tableModel.updateFilters(filters);
+	}
+	
+	@Override
+	public void valueChanged(final ListSelectionEvent e) {
 		if (tableView.getSelectedRowCount() == 0) {
 			butEnable.setEnabled(false);
 			butDelete.setEnabled(true);
@@ -136,9 +206,9 @@ public class FilterTableView extends JPanel implements
 		} else if (tableView.getSelectedRowCount() == 1) {
 			butEnable.setEnabled(true);
 			butDelete.setEnabled(true);
-
-			int selRow = tableView.getSelectedRow();
-			Filter filter = tableModel.getFilterAt(selRow);
+			
+			final int selRow = tableView.getSelectedRow();
+			final Filter filter = tableModel.getFilterAt(selRow);
 			if (filter.isActive()) {
 				butEnable.setText("Disable");
 			} else {
@@ -147,78 +217,12 @@ public class FilterTableView extends JPanel implements
 			
 			filterView.editFilter(filter);
 			
-
 		} else {
 			// multiple filters are selected
 			butEnable.setEnabled(true);
 			butDelete.setEnabled(true);
 			filterView.cancelEdit();
 		}
-
-	}
-
-	@Override
-	public void responseSuccess() {
-		updateFilters();
-		filterView.notifyListeners();
-		tableView.repaint();
-	}
-
-	private void updateFilters() {
-		List<Filter> filters = FilterDatabase.getInstance().getAll();
-		tableModel.updateFilters(filters);
-	}
-
-	@Override
-	public void responseError(int statusCode, String statusMessage) {
-		System.out.println("Response error " + statusCode + " : "
-				+ statusMessage);
-	}
-
-	@Override
-	public void fail(Exception exception) {
-		System.out.println("Filter table View Exception!!");
-		exception.printStackTrace();
-	}
-
-	public MainTabController getTabController() {
-		return null;
-	}
-
-	public Requirement getDraggedRequirement() {
-		return null;
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
-		if (source.equals(butEnable)) {
-			boolean active;
-			if (butEnable.getText().equals("Enable")) {
-				active = true;
-			} else {
-				active = false;
-			}
-
-			// change the active status of the filters
-			int[] selRows = tableView.getSelectedRows();
-			for (int row : selRows) {
-				Filter filter = tableModel.getFilterAt(row);
-				filter.setActive(active);
-				UpdateFilterRequestObserver observer = new UpdateFilterRequestObserver(this);
-				filterController.save(filter, observer);
-			}
-			//notify the listeners that we made changes
-			filterView.notifyListeners();
-
-		} else if (source.equals(butDelete)) {			
-			int[] selRows = tableView.getSelectedRows();
-			for (int row : selRows) {
-				Filter filter = tableModel.getFilterAt(row);
-				DeleteFilterRequestObserver observer = new DeleteFilterRequestObserver(this, filter);
-				filterController.delete(filter, observer);
-			}
-			//notify the listeners that we made changes
-			filterView.notifyListeners();
-		}
+		
 	}
 }

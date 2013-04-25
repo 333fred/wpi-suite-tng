@@ -23,17 +23,17 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 
 public class FilterController extends AbstractController<Filter> {
-
+	
 	/**
 	 * Creates a controller to send Iteration requests to the server
 	 */
 	public FilterController() {
 		super("filter");
 	}
-
+	
 	@Override
-	public void delete(Filter f, RequestObserver observer) {
-		if (isSafeToSend()) {
+	public void delete(final Filter f, final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
 			return;
 		}
 		Request request;
@@ -43,5 +43,5 @@ public class FilterController extends AbstractController<Filter> {
 		request.addObserver(observer);
 		request.send();
 	}
-
+	
 }

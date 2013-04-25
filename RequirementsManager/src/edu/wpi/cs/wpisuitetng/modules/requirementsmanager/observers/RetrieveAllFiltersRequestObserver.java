@@ -39,54 +39,53 @@ public class RetrieveAllFiltersRequestObserver implements RequestObserver {
 	 *            the controller to callback to
 	 */
 	public RetrieveAllFiltersRequestObserver(
-			IRetrieveAllFiltersNotifier notifier) {
+			final IRetrieveAllFiltersNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
-		ResponseModel response = iReq.getResponse();
-		
-		if (response.getStatusCode() == 200) {
-			final Filter[] filters = Filter.fromJSONArray(response.getBody());			
-			
-
-			// notify the controller
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {	
-					FilterDatabase.getInstance().set(
-							Arrays.asList(filters));
-					notifier.receivedData(filters);
-				}
-			});
-		}
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
-		System.out.println("Error receiving filters from server: "
-				+ iReq.getResponse().getStatusCode() + " "
-				+ iReq.getResponse().getStatusMessage());
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
+	public void fail(final IRequest iReq, final Exception exception) {
 		// TODO Auto-generated method stub
 		System.out.println("Failed to get filters from server");
 		exception.printStackTrace();
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		// TODO Auto-generated method stub
+		System.out.println("Error receiving filters from server: "
+				+ iReq.getResponse().getStatusCode() + " "
+				+ iReq.getResponse().getStatusMessage());
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
+		final ResponseModel response = iReq.getResponse();
+		
+		if (response.getStatusCode() == 200) {
+			final Filter[] filters = Filter.fromJSONArray(response.getBody());
+			
+			// notify the controller
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					FilterDatabase.getInstance().set(Arrays.asList(filters));
+					notifier.receivedData(filters);
+				}
+			});
+		}
+		
+	}
+	
 }

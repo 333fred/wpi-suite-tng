@@ -26,65 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * Model class to hold a list of user names, only for querying the server
  */
 public class StringListModel extends AbstractModel {
-
-	List<String> users;
-
-	/**
-	 * @return the users
-	 */
-	public List<String> getUsers() {
-		return users;
-	}
-
-	/**
-	 * @param users
-	 *            the users to set
-	 */
-	public void setUsers(List<String> users) {
-		this.users = users;
-	}
-
-	/**
-	 * General constructor, given some list of users
-	 * 
-	 * @param users
-	 *            the users to hold
-	 */
-	public StringListModel(List<String> users) {
-		this.users = users;
-	}
-
-	/**
-	 * Standard constructor, initializes the list of users to an array list
-	 */
-	public StringListModel() {
-		this.users = new ArrayList<String>();
-	}
-
-	/**
-	 * Not implemented in this model, unnecessary for querying the database
-	 */
-	@Override
-	public void save() {
-		// Unnecessary function for this model
-	}
-
-	/**
-	 * Not implemented in this model, unnecessary for querying the database
-	 */
-	@Override
-	public void delete() {
-		// Unnecessary function for this model
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toJSON() {
-		return new Gson().toJson(this, StringListModel.class);
-	}
-
+	
 	/**
 	 * Converts a given StringListModel from JSON to an actual object
 	 * 
@@ -92,41 +34,51 @@ public class StringListModel extends AbstractModel {
 	 *            The JSON encoded object
 	 * @return the instance of the object
 	 */
-	public static StringListModel fromJson(String content) {
+	public static StringListModel fromJson(final String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, StringListModel.class);
 	}
-
-	public static StringListModel[] fromJSONArray(String content) {
+	
+	public static StringListModel[] fromJSONArray(final String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, StringListModel[].class);
 	}
-
+	
+	List<String> users;
+	
 	/**
-	 * {@inheritDoc}
+	 * Standard constructor, initializes the list of users to an array list
 	 */
-	@Override
-	public Boolean identify(Object o) {
-		return this.equals(o);
+	public StringListModel() {
+		users = new ArrayList<String>();
 	}
-
+	
+	/**
+	 * General constructor, given some list of users
+	 * 
+	 * @param users
+	 *            the users to hold
+	 */
+	public StringListModel(final List<String> users) {
+		this.users = users;
+	}
+	
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
 	@Override
-	public Permission getPermission(User u) {
+	public void delete() {
+		// Unnecessary function for this model
+	}
+	
+	/**
+	 * Not implemented in this model, unnecessary for querying the database
+	 */
+	@Override
+	public Permission getPermission(final User u) {
 		return null;
 	}
-
-	/**
-	 * Not implemented in this model, unnecessary for querying the database
-	 */
-	@Override
-	public void setPermission(Permission p, User u) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
@@ -135,14 +87,62 @@ public class StringListModel extends AbstractModel {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/**
+	 * @return the users
+	 */
+	public List<String> getUsers() {
+		return users;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Boolean identify(final Object o) {
+		return equals(o);
+	}
+	
 	/**
 	 * Not implemented in this model, unnecessary for querying the database
 	 */
 	@Override
-	public void setProject(Project p) {
-		// TODO Auto-generated method stub
-
+	public void save() {
+		// Unnecessary function for this model
 	}
-
+	
+	/**
+	 * Not implemented in this model, unnecessary for querying the database
+	 */
+	@Override
+	public void setPermission(final Permission p, final User u) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * Not implemented in this model, unnecessary for querying the database
+	 */
+	@Override
+	public void setProject(final Project p) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * @param users
+	 *            the users to set
+	 */
+	public void setUsers(final List<String> users) {
+		this.users = users;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toJSON() {
+		return new Gson().toJson(this, StringListModel.class);
+	}
+	
 }

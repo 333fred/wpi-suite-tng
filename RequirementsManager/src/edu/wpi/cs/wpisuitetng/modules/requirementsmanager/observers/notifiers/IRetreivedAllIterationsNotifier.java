@@ -19,20 +19,21 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
  * Will be notified when data has been returned, or an error was returned
  */
 public interface IRetreivedAllIterationsNotifier {
+	
+	/**
+	 * Called when a error was returned from the server, instead of data
+	 * 
+	 * @param RetrieveAllRequirementsRequestObserver
+	 */
+	
+	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver);
+	
 	/**
 	 * Called when the iteration data has been retrieved from the server
 	 * 
 	 * @param iterations
 	 *            The retrieved data
 	 */
-
+	
 	public void receivedData(Iteration[] iterations);
-
-	/**
-	 * Called when a error was returned from the server, instead of data
-	 * 
-	 * @param RetrieveAllRequirementsRequestObserver
-	 */
-
-	public void errorReceivingData(String RetrieveAllRequirementsRequestObserver);
 }

@@ -16,8 +16,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
-import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
-import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
@@ -32,77 +30,84 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel
 
 public class PermissionModelEntityManager implements
 		EntityManager<PermissionModel> {
-
+	
 	Data db;
 	ModelMapper updateMapper;
-
+	
 	/**
 	 * Creates a new entity manager with the given database backend
 	 * 
 	 * @param db
 	 *            the database backend
 	 */
-	public PermissionModelEntityManager(Data db) {
+	public PermissionModelEntityManager(final Data db) {
 		this.db = db;
-		this.updateMapper = new ModelMapper();
+		updateMapper = new ModelMapper();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PermissionModel makeEntity(Session s, String content)
-			throws BadRequestException, WPISuiteException {
-
-		// The user already has permissions assigned to them, so there's been a
-		// problem. Throw a bad request
-		if (db.retrieve(PermissionModel.class, "id", s.getUser().getIdNum(),
-				s.getProject()).toArray(new PermissionModel[0]).length != 0) {
-			throw new BadRequestException();
-		}
-
-		// Create a permission model for the user. If the user is an admin, then
-		// set them to be an admin. Otherwise, they have no permissions by
-		// default
-		PermissionModel model = new PermissionModel();
-		model.setUser(s.getUser());
-		model.setId(s.getUser().getIdNum());
-		model.setPermLevel(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevel.ADMIN
-				: UserPermissionLevel.OBSERVE);
-
-		// Save the permission to the database
-		if (!db.save(model, s.getProject())) {
-			throw new WPISuiteException();
-		}
-
-		return model;
+	public String advancedGet(final Session s, final String[] args) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PermissionModel[] getEntity(Session s, String id)
-			throws WPISuiteException {
-		try {
-			// Attempt to make permissions for the user
-			PermissionModel[] perms = { makeEntity(s, "") };
-			return perms;
-		} catch (BadRequestException e) {
-			// Get the pre-existing perms and return it
-			return db.retrieve(PermissionModel.class, "id",
-					s.getUser().getIdNum(), s.getProject()).toArray(
-					new PermissionModel[0]);
-		}
+	public String advancedPost(final Session s, final String string,
+			final String content) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PermissionModel[] getAll(Session s) {
+	public String advancedPut(final Session s, final String[] args,
+			final String content) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int Count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteAll(final Session s) {
+		// Cannot delete permissions, that would be insecure
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean deleteEntity(final Session s, final String id) {
+		// Cannot delete permissions, that would be insecure
+		return false;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public PermissionModel[] getAll(final Session s) {
 		PermissionModel model;
-		for (User u : s.getProject().getTeam()) {
+		for (final User u : s.getProject().getTeam()) {
 			if (u != null) {
 				System.out.println(u);
 				if (!modelExists(s, u.getIdNum())) {
@@ -122,93 +127,56 @@ public class PermissionModelEntityManager implements
 		return db.retrieveAll(new PermissionModel(), s.getProject()).toArray(
 				new PermissionModel[0]);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PermissionModel update(Session s, String content)
+	public PermissionModel[] getEntity(final Session s, final String id)
 			throws WPISuiteException {
-		PermissionModel updatedModel = PermissionModel.fromJSON(content);
-		PermissionModel oldModel;
-		// If the permission exists, then get it. Otherwise, create a new model
-		if ((oldModel = (PermissionModel) db.retrieve(PermissionModel.class,
-				"id", updatedModel.getUser().getIdNum(), s.getProject()).get(0)) == null) {
-			oldModel = new PermissionModel();
+		try {
+			// Attempt to make permissions for the user
+			final PermissionModel[] perms = { makeEntity(s, "") };
+			return perms;
+		} catch (final BadRequestException e) {
+			// Get the pre-existing perms and return it
+			return db.retrieve(PermissionModel.class, "id",
+					s.getUser().getIdNum(), s.getProject()).toArray(
+					new PermissionModel[0]);
 		}
-
-		// Update the model
-		updateMapper.map(updatedModel, oldModel);
-		if (!db.save(oldModel, s.getProject())) {
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public PermissionModel makeEntity(final Session s, final String content)
+			throws BadRequestException, WPISuiteException {
+		
+		// The user already has permissions assigned to them, so there's been a
+		// problem. Throw a bad request
+		if (db.retrieve(PermissionModel.class, "id", s.getUser().getIdNum(),
+				s.getProject()).toArray(new PermissionModel[0]).length != 0) {
+			throw new BadRequestException();
+		}
+		
+		// Create a permission model for the user. If the user is an admin, then
+		// set them to be an admin. Otherwise, they have no permissions by
+		// default
+		final PermissionModel model = new PermissionModel();
+		model.setUser(s.getUser());
+		model.setId(s.getUser().getIdNum());
+		model.setPermLevel(s.getUser().getRole() == Role.ADMIN ? UserPermissionLevel.ADMIN
+				: UserPermissionLevel.OBSERVE);
+		
+		// Save the permission to the database
+		if (!db.save(model, s.getProject())) {
 			throw new WPISuiteException();
 		}
-
-		return oldModel;
+		
+		return model;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void save(Session s, PermissionModel model) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean deleteEntity(Session s, String id) {
-		// Cannot delete permissions, that would be insecure
-		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String advancedGet(Session s, String[] args) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void deleteAll(Session s) {
-		// Cannot delete permissions, that would be insecure
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int Count() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String advancedPut(Session s, String[] args, String content) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String advancedPost(Session s, String string, String content) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	/**
 	 * Helper for populating permissions db for all users
 	 * 
@@ -219,20 +187,52 @@ public class PermissionModelEntityManager implements
 	 * @return True if user already has permissions on database False if
 	 *         permissions for user don't exist
 	 */
-	private boolean modelExists(Session s, int id) {
+	private boolean modelExists(final Session s, final int id) {
 		try {
 			if (db.retrieve(PermissionModel.class, "id", id, s.getProject())
 					.toArray(new PermissionModel[0]).length != 0) {
 				return true;
 			}
 			return false;
-		} catch (BadRequestException e) {
+		} catch (final BadRequestException e) {
 			return true;
-		} catch (WPISuiteException e) {
+		} catch (final WPISuiteException e) {
 			e.printStackTrace();
 			return true;
 		}
-
+		
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void save(final Session s, final PermissionModel model) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public PermissionModel update(final Session s, final String content)
+			throws WPISuiteException {
+		final PermissionModel updatedModel = PermissionModel.fromJSON(content);
+		PermissionModel oldModel;
+		// If the permission exists, then get it. Otherwise, create a new model
+		if ((oldModel = (PermissionModel) db.retrieve(PermissionModel.class,
+				"id", updatedModel.getUser().getIdNum(), s.getProject()).get(0)) == null) {
+			oldModel = new PermissionModel();
+		}
+		
+		// Update the model
+		updateMapper.map(updatedModel, oldModel);
+		if (!db.save(oldModel, s.getProject())) {
+			throw new WPISuiteException();
+		}
+		
+		return oldModel;
+	}
+	
 }

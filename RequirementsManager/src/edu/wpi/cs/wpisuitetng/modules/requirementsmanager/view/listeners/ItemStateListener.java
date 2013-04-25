@@ -20,23 +20,25 @@ import javax.swing.JComboBox;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class ItemStateListener implements ItemListener {
+	
 	protected final DetailPanel panel;
 	protected final JComboBox component;
-
-	public ItemStateListener(DetailPanel panel, JComboBox comboBoxType) {
+	
+	public ItemStateListener(final DetailPanel panel,
+			final JComboBox comboBoxType) {
 		this.panel = panel;
-		this.component = comboBoxType;
+		component = comboBoxType;
 	}
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		checkIfUpdated(e);
-	}
-
-	public void checkIfUpdated(ItemEvent e) {
-		if (panel.getTextName().getText().trim().length() > 0
-				&& panel.getTextDescription().getText().trim().length() > 0) {
+	
+	public void checkIfUpdated(final ItemEvent e) {
+		if ((panel.getTextName().getText().trim().length() > 0)
+				&& (panel.getTextDescription().getText().trim().length() > 0)) {
 			panel.enableSaveButton();
 		}
+	}
+	
+	@Override
+	public void itemStateChanged(final ItemEvent e) {
+		checkIfUpdated(e);
 	}
 }

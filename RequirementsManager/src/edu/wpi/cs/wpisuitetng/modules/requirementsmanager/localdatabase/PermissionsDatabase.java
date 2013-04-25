@@ -30,59 +30,86 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
  * Maintains a local database of user permissions.
  */
 public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
-
+	
 	private Map<User, PermissionModel> permissions;
-	private PermissionModelController controller;
+	private final PermissionModelController controller;
 	private static PermissionsDatabase db;
-
-	private PermissionsDatabase() {
-		super(300000);
-		permissions = new HashMap<User, PermissionModel>();
-		this.controller = new PermissionModelController();
-	}
-
+	
 	/**
 	 * Gets the singleton Permissions Database instance
 	 * 
 	 * @return the permissions database
 	 */
 	public static PermissionsDatabase getInstance() {
-		if (db == null) {
-			db = new PermissionsDatabase();
+		if (PermissionsDatabase.db == null) {
+			PermissionsDatabase.db = new PermissionsDatabase();
 		}
-		return db;
+		return PermissionsDatabase.db;
 	}
-
+	
+	private PermissionsDatabase() {
+		super(300000);
+		permissions = new HashMap<User, PermissionModel>();
+		controller = new PermissionModelController();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized void set(List<PermissionModel> permissions) {
-		this.permissions = new HashMap<User, PermissionModel>();
-		for (PermissionModel i : permissions) {
-			this.permissions.put(i.getUser(), i);
-		}
-		ToolbarView.getInstance().refreshPermissions();
-		updateListeners();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized void addAll(List<PermissionModel> permissions) {
-		for (PermissionModel i : permissions) {
-			this.permissions.put(i.getUser(), i);
-		}
-		updateListeners();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized void add(PermissionModel i) {
+	@Override
+	public synchronized void add(final PermissionModel i) {
 		permissions.put(i.getUser(), i);
 		updateListeners();
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized void addAll(final List<PermissionModel> permissions) {
+		for (final PermissionModel i : permissions) {
+			this.permissions.put(i.getUser(), i);
+		}
+		updateListeners();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized PermissionModel get(final int id)
+			throws PermissionsNotFoundException {
+		throw new PermissionsNotFoundException(PermissionModel.getUserStatic());
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized List<PermissionModel> getAll() {
+		List<PermissionModel> list = new ArrayList<PermissionModel>();
+		list = Arrays.asList(permissions.values().toArray(
+				new PermissionModel[0]));
+		return list;
+	}
+	
+	/**
+	 * Searches perm database for a username to find permissions for
+	 * 
+	 * @param name
+	 *            of user to find perm for
+	 * @return Permissions for named user or null if permission does not exist
+	 */
+	public PermissionModel getPermission(final String name) {
+		for (final PermissionModel aPer : permissions.values()) {
+			if (PermissionModel.getInstance().getUser().getUsername()
+					.equals(name)) {
+				return aPer;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Get a specific permission from the local database
 	 * 
@@ -92,7 +119,7 @@ public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 	 * @throws PermissionsNotFoundException
 	 *             if the permissions wasn't there
 	 */
-	public synchronized PermissionModel getPermissions(User u)
+	public synchronized PermissionModel getPermissions(final User u)
 			throws PermissionsNotFoundException {
 		if (permissions.get(u) != null) {
 			return permissions.get(u);
@@ -100,25 +127,7 @@ public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 			throw new PermissionsNotFoundException(u);
 		}
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized PermissionModel get(int id)
-			throws PermissionsNotFoundException {
-		throw new PermissionsNotFoundException(PermissionModel.getUserStatic());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized List<PermissionModel> getAll() {
-		List<PermissionModel> list = new ArrayList<PermissionModel>();
-		list = Arrays.asList(permissions.values().toArray(
-				new PermissionModel[0]));
-		return list;
-	}
-
+	
 	/**
 	 * Runs every 5 minutes and updates the local requirements database, which
 	 * will trigger an update of all listeners
@@ -129,32 +138,28 @@ public class PermissionsDatabase extends AbstractDatabase<PermissionModel> {
 		Thread.interrupted();
 		while (!Thread.interrupted()) {
 			// Trigger an update
-			RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
+			final RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
 			controller.getAll(observer);
 			try {
 				// Sleep for five minutes
 				Thread.sleep(secs);
-			} catch (InterruptedException ex) {
+			} catch (final InterruptedException ex) {
 				ex.printStackTrace();
 				return;
 			}
 		}
 	}
-
+	
 	/**
-	 * Searches perm database for a username to find permissions for
-	 * 
-	 * @param name
-	 *            of user to find perm for
-	 * @return Permissions for named user or null if permission does not exist
+	 * {@inheritDoc}
 	 */
-	public PermissionModel getPermission(String name) {
-		for (PermissionModel aPer : permissions.values()) {
-			if (PermissionModel.getInstance().getUser().getUsername()
-					.equals(name)) {
-				return aPer;
-			}
+	@Override
+	public synchronized void set(final List<PermissionModel> permissions) {
+		this.permissions = new HashMap<User, PermissionModel>();
+		for (final PermissionModel i : permissions) {
+			this.permissions.put(i.getUser(), i);
 		}
-		return null;
+		ToolbarView.getInstance().refreshPermissions();
+		updateListeners();
 	}
 }

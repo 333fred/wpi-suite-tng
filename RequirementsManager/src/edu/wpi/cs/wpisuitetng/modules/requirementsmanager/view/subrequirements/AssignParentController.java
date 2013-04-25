@@ -21,16 +21,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class AssignParentController {
 	
-	//The the subrequirement panel calling this controller
+	// The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
 	
-	//the detail view that the subReqPanel is in
+	// the detail view that the subReqPanel is in
 	private final DetailPanel detailView;
 	
-	//the requirement to assign a parent to
+	// the requirement to assign a parent to
 	private final Requirement model;
 	
-
 	/**
 	 * Construct the controller
 	 * 
@@ -41,37 +40,42 @@ public class AssignParentController {
 	 * @param parentView
 	 *            the DetailPanel
 	 */
-	public AssignParentController(SubRequirementPanel subRequirementPanel,
-			Requirement model, DetailPanel parentView) {
-		this.view = subRequirementPanel;
+	public AssignParentController(
+			final SubRequirementPanel subRequirementPanel,
+			final Requirement model, final DetailPanel parentView) {
+		view = subRequirementPanel;
 		this.model = model;
-		this.detailView = parentView;
+		detailView = parentView;
 	}
-
+	
 	/**
-	 * Save a parent requirement to the server. It gets the selected requirement from the subreq panel
-	 * and makes the selected requirement a parent of the passed requirement. It then makes the 
-	 * passed requirement linked to the selected requirement, to make sure there is a complete link
+	 * Save a parent requirement to the server. It gets the selected requirement
+	 * from the subreq panel
+	 * and makes the selected requirement a parent of the passed requirement. It
+	 * then makes the
+	 * passed requirement linked to the selected requirement, to make sure there
+	 * is a complete link
 	 * from a parent to the child and vice versa
 	 */
 	public void saveParent() {
-		String selectedIndex = (String) view.getList().getSelectedValue();
-		Requirement anReq = RequirementDatabase.getInstance().getRequirement(
-				selectedIndex);
+		final String selectedIndex = (String) view.getList().getSelectedValue();
+		final Requirement anReq = RequirementDatabase.getInstance()
+				.getRequirement(selectedIndex);
 		Requirement anParReq = null;
-
-		Integer modelID = new Integer(model.getrUID());
-		Integer anReqID = new Integer(anReq.getrUID());
-
+		
+		final Integer modelID = new Integer(model.getrUID());
+		final Integer anReqID = new Integer(anReq.getrUID());
+		
 		RequirementsController controller = null;
 		
-		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(this.detailView);
-
+		final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+				detailView);
+		
 		if (model.getpUID().size() > 0) {
 			try {
 				anParReq = RequirementDatabase.getInstance().get(
 						model.getpUID().get(0));
-			} catch (RequirementNotFoundException e) {
+			} catch (final RequirementNotFoundException e) {
 				e.printStackTrace();
 			}
 			anParReq.getSubRequirements().remove(modelID);
@@ -79,17 +83,17 @@ public class AssignParentController {
 			controller = new RequirementsController();
 			controller.save(anParReq, observer);
 		}
-
+		
 		model.addPUID(anReqID);
 		anReq.addSubRequirement(modelID);
-
+		
 		controller = new RequirementsController();
 		controller.save(anReq, observer);
 		controller.save(model, observer);
-
+		
 		view.refreshTopPanel();
 		view.refreshValidParents();
 		view.refreshParentLabel();
 	}
-
+	
 }

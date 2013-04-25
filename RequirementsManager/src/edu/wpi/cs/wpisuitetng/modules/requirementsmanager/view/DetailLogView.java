@@ -30,14 +30,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableM
  * A panel containing a form for adding a new log to a requirement
  */
 public class DetailLogView extends JPanel {
+	
 	/** For Notes */
-
-	private EventTableModel logModel;
-	private EventTable logTable;
+	
+	private final EventTableModel logModel;
+	private final EventTable logTable;
 	private Requirement requirement;
-	private DetailPanel parentView;
-	private EventCellRenderer cellRenderer;
-	private JScrollPane logScrollPane;
+	private final DetailPanel parentView;
+	private final EventCellRenderer cellRenderer;
+	private final JScrollPane logScrollPane;
 	
 	/**
 	 * Construct the panel and add layout components
@@ -47,39 +48,38 @@ public class DetailLogView extends JPanel {
 	 * @param parentView
 	 *            the parent view
 	 */
-	public DetailLogView(Requirement requirement, DetailPanel parentView) {
+	public DetailLogView(final Requirement requirement,
+			final DetailPanel parentView) {
 		this.requirement = requirement;
 		this.parentView = parentView;
-
+		
 		setLayout(new BorderLayout());
-
+		
 		// Create the log list
 		logModel = new EventTableModel();
 		logTable = new EventTable(logModel);
 		cellRenderer = new EventCellRenderer();
 		
-		
 		logTable.getTableHeader().setVisible(false);
 		// Add the list to the scroll pane
 		logScrollPane = new JScrollPane();
 		logScrollPane.getViewport().add(logTable);
-
+		
 		// Set up the frame
-		JPanel logPane = new JPanel();
+		final JPanel logPane = new JPanel();
 		logPane.setLayout(new BorderLayout());
 		logPane.add(logScrollPane, BorderLayout.CENTER);
 		add(logPane, BorderLayout.CENTER);
 		
-
-		this.refresh(this.requirement);
+		refresh(this.requirement);
 	}
-
-	public void refresh(Requirement requirement) {
-		List<Event> logs = new ArrayList<Event>();
+	
+	public void refresh(final Requirement requirement) {
+		final List<Event> logs = new ArrayList<Event>();
 		this.requirement = requirement;
-		for (RequirementChangeset aLog : requirement.getLogs()) {
+		for (final RequirementChangeset aLog : requirement.getLogs()) {
 			logs.add(aLog);
-		}		
+		}
 		logModel.setRowData(logs);
 	}
 	

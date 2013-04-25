@@ -19,21 +19,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
 public enum Status {
 	BLANK("None"), NEW("New"), IN_PROGRESS("In Progress"), OPEN("Open"), COMPLETE(
 			"Complete"), DELETED("Deleted");
-
-	private String name;
-
-	private Status(String name) {
-		this.name = name;
-	}
-
-	public String toString() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
+	
 	/**
 	 * Return the enum that the given string represents
 	 * 
@@ -41,15 +27,30 @@ public enum Status {
 	 *            String to parse
 	 * @return The enum value, or null if it doesnt exist
 	 */
-
-	public static Status getFromString(String str) {
-		for (Status status : values()) {
+	
+	public static Status getFromString(final String str) {
+		for (final Status status : Status.values()) {
 			if (str.equals(status.toString())) {
 				return status;
 			}
 		}
-
+		
 		return null;
 	}
-
+	
+	private String name;
+	
+	private Status(final String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 }

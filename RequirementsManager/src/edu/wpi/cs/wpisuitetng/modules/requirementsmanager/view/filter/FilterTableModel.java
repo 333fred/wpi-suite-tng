@@ -21,83 +21,80 @@ import javax.swing.table.TableModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
 public class FilterTableModel implements TableModel {
-
+	
 	/** Array list representing the data in the table */
-	private List<String[]> tableData;
-
+	private final List<String[]> tableData;
+	
 	/** The listeners for this table model */
-	private List<TableModelListener> listeners;
-
+	private final List<TableModelListener> listeners;
+	
 	/** the list of the fitlers being displaying */
 	private List<Filter> filters;
-
+	
 	/** Array of the names of the columns */
-	private String[] columnNames;
-
+	private final String[] columnNames;
+	
 	/**
 	 * Creates a new Filter Table Model with the given filters
 	 * 
 	 * @param filters
 	 *            The initial set of filters to display
 	 */
-
-	public FilterTableModel(List<Filter> filters) {
+	
+	public FilterTableModel(final List<Filter> filters) {
 		tableData = new ArrayList<String[]>();
 		listeners = new ArrayList<TableModelListener>();
-
-		String[] columnNames = { "Id", "Field", "Operation", "Value" };
+		
+		final String[] columnNames = { "Id", "Field", "Operation", "Value" };
 		this.columnNames = columnNames;
-
+		
 		updateFilters(filters);
 	}
-
-	/**
-	 * Updates the data displayed with the new list of filters
-	 * 
-	 * @param filters
-	 */
-
-	public void updateFilters(List<Filter> filters) {
-		this.filters = filters;
-		tableData.clear(); // clear out the table data
-		for (Filter filter : filters) {
-			// create the new column data
-			String[] columnData = new String[getColumnCount()];
-			int ci = 0;
-			columnData[ci++] = filter.getId() + "";
-			columnData[ci++] = filter.getField().toString();
-			columnData[ci++] = filter.getOperation().toString();
-			columnData[ci++] = filter.getStringValue();
-			// add the row
-			tableData.add(columnData);
-		}
-		// notify the listeners
-		for (TableModelListener l : listeners) {
-			l.tableChanged(new TableModelEvent(this));
-		}
+	
+	@Override
+	public void addTableModelListener(final TableModelListener l) {
+		listeners.add(l);
 	}
-
-	public int getRowCount() {
-		return tableData.size();
+	
+	@Override
+	public Class<?> getColumnClass(final int columnIndex) {
+		return String.class;
 	}
-
+	
+	@Override
 	public int getColumnCount() {
 		return columnNames.length;
 	}
-
-	public String getColumnName(int columnIndex) {
+	
+	@Override
+	public String getColumnName(final int columnIndex) {
 		return columnNames[columnIndex];
 	}
-
-	public Class<?> getColumnClass(int columnIndex) {
-		return String.class;
+	
+	/**
+	 * Returns the filter at the given row index
+	 */
+	
+	public Filter getFilterAt(final int rowIndex) {
+		return getFilterById(Integer.parseInt((String) getValueAt(rowIndex, 0)));
 	}
-
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
+	
+	private Filter getFilterById(final int id) {
+		for (final Filter filter : filters) {
+			if (filter.getId() == id) {
+				return filter;
+			}
+		}
+		return null;
 	}
-
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	
+	@Override
+	public int getRowCount() {
+		return tableData.size();
+	}
+	
+	@Override
+	public Object getValueAt(final int rowIndex, final int columnIndex) {
 		Object o = new Object();
 		try {
 			if (rowIndex < tableData.size()) {
@@ -107,7 +104,7 @@ public class FilterTableModel implements TableModel {
 						.println("Row index was not less than tableData.size() SIZE:"
 								+ tableData.size() + " INDEX: " + rowIndex);
 			}
-		} catch (IndexOutOfBoundsException e) {
+		} catch (final IndexOutOfBoundsException e) {
 			e.printStackTrace();
 			System.out.println("RowIndex: " + rowIndex + " ColumnIndex: "
 					+ columnIndex + " ListSize " + tableData.size()
@@ -115,34 +112,47 @@ public class FilterTableModel implements TableModel {
 		}
 		return o;
 	}
-
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
+	
+	@Override
+	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+		return false;
 	}
-
-	public void addTableModelListener(TableModelListener l) {
-		listeners.add(l);
-	}
-
-	public void removeTableModelListener(TableModelListener l) {
+	
+	@Override
+	public void removeTableModelListener(final TableModelListener l) {
 		listeners.remove(l);
 	}
-
+	
+	@Override
+	public void setValueAt(final Object aValue, final int rowIndex,
+			final int columnIndex) {
+		
+	}
+	
 	/**
-	 * Returns the filter at the given row index
+	 * Updates the data displayed with the new list of filters
+	 * 
+	 * @param filters
 	 */
-
-	public Filter getFilterAt(int rowIndex) {
-		return getFilterById(Integer.parseInt((String) getValueAt(rowIndex, 0)));
-	}
-
-	private Filter getFilterById(int id) {
-		for (Filter filter : filters) {
-			if (filter.getId() == id) {
-				return filter;
-			}
+	
+	public void updateFilters(final List<Filter> filters) {
+		this.filters = filters;
+		tableData.clear(); // clear out the table data
+		for (final Filter filter : filters) {
+			// create the new column data
+			final String[] columnData = new String[getColumnCount()];
+			int ci = 0;
+			columnData[ci++] = filter.getId() + "";
+			columnData[ci++] = filter.getField().toString();
+			columnData[ci++] = filter.getOperation().toString();
+			columnData[ci++] = filter.getStringValue();
+			// add the row
+			tableData.add(columnData);
 		}
-		return null;
+		// notify the listeners
+		for (final TableModelListener l : listeners) {
+			l.tableChanged(new TableModelEvent(this));
+		}
 	}
-
+	
 }

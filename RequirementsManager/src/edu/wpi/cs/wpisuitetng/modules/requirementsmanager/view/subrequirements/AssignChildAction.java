@@ -16,31 +16,33 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 /**
- * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.subrequirements.AssignChild()}
+ * Action that calls {@link
+ * edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.
+ * RequirementsManager.subrequirements.AssignChild()}
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class AssignChildAction extends AbstractAction {
+	
 	private final AssignChildController controller;
-
+	
 	/**
 	 * Construct the action
 	 * 
 	 * @param controller
 	 *            the controller to trigger
 	 */
-	public AssignChildAction(AssignChildController controller) {
+	public AssignChildAction(final AssignChildController controller) {
 		super("Assign Child");
 		this.controller = controller;
 	}
-
+	
 	/*
 	 * @see
 	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		controller.saveChild();
 	}
-
+	
 }

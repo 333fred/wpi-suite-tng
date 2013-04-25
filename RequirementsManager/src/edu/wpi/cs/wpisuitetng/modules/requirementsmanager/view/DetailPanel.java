@@ -66,18 +66,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 /**
  * JPanel class to display the different fields of the requirement
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class DetailPanel extends Tab implements ISaveNotifier {
-
+	
 	public enum Mode {
 		CREATE, EDIT, UPDATE, VIEW;
 	}
 	
-	/** VIEW: Only View
-	 *  UPDATE: Change ActualEffort, Notes, Tests, Tasks
-	 *  ADMIN: Everything
+	/**
+	 * VIEW: Only View
+	 * UPDATE: Change ActualEffort, Notes, Tests, Tasks
+	 * ADMIN: Everything
 	 */
-
+	
 	// Text fields
 	private JTextArea textName;
 	private JTextArea textDescription;
@@ -87,13 +88,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JTextField textEstimate;
 	private JTextField textActual;
 	private JTextField textRelease;
-
+	
 	// combo boxes
 	private JComboBox comboBoxType;
 	private JComboBox comboBoxStatus;
 	private JComboBox comboBoxPriority;
 	private JComboBox comboBoxIteration;
-
+	
 	// Event Views
 	private DetailNoteView noteView;
 	private DetailLogView logView;
@@ -101,22 +102,22 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private DetailTaskView taskView;
 	private SubRequirementPanel subRequirementView;
 	private DetailATestView aTestView;
-
+	
 	// requirement that is displayed
-	private Requirement requirement;
-
+	private final Requirement requirement;
+	
 	// controller for all the tabs
-	private MainTabController mainTabController;
-
+	private final MainTabController mainTabController;
+	
 	// Buttons
 	private JButton btnSave;
 	private JButton btnCancel;
-
+	
 	// layouts
 	private GridLayout mainLayout;
 	private SpringLayout layout;
 	private SpringLayout buttonPanelLayout;
-
+	
 	// OnChange Action Listeners
 	private TextUpdateListener textTitleListener;
 	private TextUpdateListener textDescriptionListener;
@@ -127,12 +128,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private TextUpdateListener textEstimateListener;
 	private TextUpdateListener textActualListener;
 	private TextUpdateListener textReleaseListener;
-
+	
 	// swing spacing constants
 	private static final int VERTICAL_PADDING = 10;
 	private static final int HORIZONTAL_PADDING = 20;
 	private static final int CLOSE = -5;
-
+	
 	// Text labels
 	private JLabel lblName;
 	private JLabel lblDescription;
@@ -145,7 +146,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblRelease;
 	private JLabel lblTotalEstimate;
 	private JLabel lblTotEstDisplay;
-
+	
 	// Sub-panels
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
@@ -154,21 +155,21 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JScrollPane mainScrollPane;
 	private DetailEventPane eventPane;
 	private JSplitPane splitPane;
-
+	
 	// Boolean to indicate whether the tab should be closed upon saving
 	private boolean closeTab;
-
+	
 	private Color defaultColor;
-
+	
 	/** The edit mode of this requirement view */
 	public Mode mode;
-
-	public DetailPanel(Requirement requirement, Mode mode,
-			MainTabController mainTabController) {
+	
+	public DetailPanel(final Requirement requirement, final Mode mode,
+			final MainTabController mainTabController) {
 		this.requirement = requirement;
 		this.mode = mode;
 		this.mainTabController = mainTabController;
-
+		
 		createPanels();
 		createComponents();
 		setPanelSizes();
@@ -184,64 +185,158 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		
 	}
 	
-	private void createPanels() {
-		this.mainPanel = new JPanel();
-		this.defaultColor = mainPanel.getBackground();
-		this.mainLayout = new GridLayout(0, 1);
-		this.setLayout(mainLayout);
-		layout = new SpringLayout();
-		mainPanel.setLayout(layout);
-		mainScrollPane = new JScrollPane();
-		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		mainScrollPane.getViewport().add(mainPanel);
-		mainScrollPane.setBorder(null);
-
-		buttonPanelLayout = new SpringLayout();
-		buttonPanel = new JPanel(buttonPanelLayout);
-		leftPanel = new JPanel(new BorderLayout());
+	private void addComboBoxListeners() {
+		comboBoxStatusListener = new ItemStateListener(this, comboBoxStatus);
+		comboBoxStatus.addItemListener(comboBoxStatusListener);
+		comboBoxTypeListener = new ItemStateListener(this, comboBoxType);
+		comboBoxType.addItemListener(comboBoxTypeListener);
+		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
+		comboBoxPriority.addItemListener(comboBoxPriorityListener);
+		comboBoxIterationListener = new ItemStateListener(this,
+				getComboBoxIteration());
+		getComboBoxIteration().addItemListener(comboBoxIterationListener);
 	}
 	
-	private void createComponents() {
-		createJLabels();
-		createTextNameArea();
-		createTextNameValidArea();
-		createTextDescriptionArea();
-		createTextDescriptionValidArea();
-		createSaveErrorArea();
-		createComboBoxes();
-		createTextEstimateArea();
-		createTextActualArea();
-		createTextReleaseArea();
-		createButtons();
-	}
-
-	private void setPanelSizes() {
-		buttonPanel.setPreferredSize(new Dimension(textSaveError
-				.getPreferredSize().width
-				+ textSaveError.getPreferredSize().width, btnSave
-				.getPreferredSize().height + 10));
-		int preferredHeight = 515;
-		int preferredWidth = (int) (textDescription.getPreferredSize()
-				.getWidth() + HORIZONTAL_PADDING * 2);
-		mainPanel.setPreferredSize(new Dimension(preferredWidth,
-				preferredHeight));
-	}
-	
-	private void createComponentListeners() {
-		if (mode == Mode.VIEW) {
+	/**
+	 * @param lblName
+	 * @param lblDescription
+	 * @param lblType
+	 * @param lblStatus
+	 * @param lblPriority
+	 * @param lblIteration
+	 * @param lblEstimate
+	 * @param lblActual
+	 * @param lblRelease
+	 * @param scrollDescription
+	 * @param btnCancel
+	 */
+	private void addComponentConstraints() {
+		// Align left edges of objects
+		layout.putConstraint(SpringLayout.WEST, lblName,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblDescription,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblType,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblStatus,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textName,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textNameValid,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, scrollDescription,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxType,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, comboBoxStatus,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblPriority,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.EAST, comboBoxType);
+		layout.putConstraint(SpringLayout.WEST, lblIteration,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.EAST,
+				comboBoxStatus);
+		layout.putConstraint(SpringLayout.WEST, comboBoxPriority,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.EAST, comboBoxType);
+		layout.putConstraint(SpringLayout.WEST, getComboBoxIteration(),
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.EAST,
+				comboBoxStatus);
+		layout.putConstraint(SpringLayout.WEST, lblEstimate,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblActual,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.EAST,
+				comboBoxStatus);
+		layout.putConstraint(SpringLayout.WEST, textEstimate,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, textActual,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.EAST,
+				comboBoxStatus);
+		layout.putConstraint(SpringLayout.WEST, lblRelease, 0,
+				SpringLayout.WEST, lblActual);
+		layout.putConstraint(SpringLayout.WEST, textRelease, 0,
+				SpringLayout.WEST, lblActual);
+		layout.putConstraint(SpringLayout.WEST, lblTotalEstimate,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
+				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		
-		}
-		else if (mode == Mode.UPDATE) {
-			addTextActualListener();	
-		}
-		else {
-			addTextNameAreaListener();
-			addTextDescriptionAreaListener();
-			addComboBoxListeners();
-			addTextEstimateListener();
-			addTextActualListener();
-			addTextReleaseListener();
-		}
+		// Align North Edges of Objects
+		layout.putConstraint(SpringLayout.NORTH, lblName,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.NORTH, textName,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblName);
+		layout.putConstraint(SpringLayout.NORTH, textNameValid,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, textName);
+		layout.putConstraint(SpringLayout.NORTH, lblDescription,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
+		layout.putConstraint(SpringLayout.NORTH, scrollDescription,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblDescription);
+		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, scrollDescription);
+		layout.putConstraint(SpringLayout.NORTH, lblType,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				textDescriptionValid);
+		layout.putConstraint(SpringLayout.NORTH, comboBoxType,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblType);
+		layout.putConstraint(SpringLayout.NORTH, lblStatus,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxType);
+		layout.putConstraint(SpringLayout.NORTH, comboBoxStatus,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblStatus);
+		layout.putConstraint(SpringLayout.NORTH, lblPriority,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				textDescriptionValid);
+		layout.putConstraint(SpringLayout.NORTH, comboBoxPriority,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblPriority);
+		layout.putConstraint(SpringLayout.NORTH, lblIteration,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				comboBoxPriority);
+		layout.putConstraint(SpringLayout.NORTH, getComboBoxIteration(),
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblIteration);
+		layout.putConstraint(SpringLayout.NORTH, lblEstimate,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				comboBoxStatus);
+		layout.putConstraint(SpringLayout.NORTH, lblActual,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				getComboBoxIteration());
+		layout.putConstraint(SpringLayout.NORTH, textEstimate,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblEstimate);
+		layout.putConstraint(SpringLayout.NORTH, textActual,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblActual);
+		layout.putConstraint(SpringLayout.NORTH, lblRelease,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH, textEstimate);
+		layout.putConstraint(SpringLayout.NORTH, textRelease,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblRelease);
+		layout.putConstraint(SpringLayout.NORTH, lblTotalEstimate,
+				DetailPanel.VERTICAL_PADDING, SpringLayout.SOUTH, textEstimate);
+		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay,
+				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
+				SpringLayout.SOUTH, lblTotalEstimate);
+		
+		// Align Buttons
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,
+				SpringLayout.NORTH, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
+				SpringLayout.WEST, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,
+				SpringLayout.NORTH, buttonPanel);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,
+				SpringLayout.EAST, btnSave);
+		buttonPanelLayout.putConstraint(SpringLayout.WEST, textSaveError, 10,
+				SpringLayout.EAST, btnCancel);
+		buttonPanelLayout.putConstraint(SpringLayout.NORTH, textSaveError, 5,
+				SpringLayout.SOUTH, buttonPanel);
 	}
 	
 	private void addComponents() {
@@ -257,13 +352,30 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.add(textEstimate);
 		mainPanel.add(textActual);
 		mainPanel.add(textRelease);
-
+		
 		buttonPanel.add(btnSave);
 		buttonPanel.add(btnCancel);
 		buttonPanel.add(textSaveError);
-
+		
 		leftPanel.add(mainScrollPane, BorderLayout.CENTER);
 		leftPanel.add(buttonPanel, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * 
+	 */
+	private void addJLabels() {
+		mainPanel.add(lblName);
+		mainPanel.add(lblDescription);
+		mainPanel.add(lblType);
+		mainPanel.add(lblStatus);
+		mainPanel.add(lblPriority);
+		mainPanel.add(lblIteration);
+		mainPanel.add(lblEstimate);
+		mainPanel.add(lblActual);
+		mainPanel.add(lblRelease);
+		mainPanel.add(lblTotalEstimate);
+		mainPanel.add(lblTotEstDisplay);
 	}
 	
 	private void addSplitPane() {
@@ -272,166 +384,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		add(splitPane);
 		splitPane.setResizeWeight(0.75);
 	}
-
-	/**
-	 * Disables the editing fields based upon the edit mode
-	 * 
-	 */
-
-	private void disableFieldsMode() {
-		if (mode == Mode.VIEW) {
-			textName.setEnabled(false);
-			textName.setBackground(defaultColor);
-
-			textDescription.setEnabled(false);
-			textDescription.setBackground(defaultColor);
-
-			getComboBoxIteration().setEnabled(false);
-			getComboBoxIteration().setBackground(defaultColor);
-			getComboBoxIteration().setForeground(Color.BLACK);
-
-			getComboBoxStatus().setEnabled(false);
-			getComboBoxStatus().setBackground(defaultColor);
-			getComboBoxStatus().setForeground(Color.BLACK);
-
-			textRelease.setEnabled(false);
-			textRelease.setBackground(defaultColor);
-
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-
-			textActual.setEnabled(false);
-			textActual.setBackground(defaultColor);
-
-			comboBoxType.setEnabled(false);
-			comboBoxType.setBackground(defaultColor);
-			comboBoxType.setForeground(Color.BLACK);
-
-			comboBoxPriority.setEnabled(false);
-			comboBoxPriority.setBackground(defaultColor);
-			comboBoxPriority.setForeground(Color.BLACK);
-
-		} else if (mode == Mode.UPDATE) {
-			textName.setEnabled(false);
-			textName.setBackground(defaultColor);
-
-			textDescription.setEnabled(false);
-			textDescription.setBackground(defaultColor);
-
-			getComboBoxIteration().setEnabled(false);
-			getComboBoxIteration().setBackground(defaultColor);
-			getComboBoxIteration().setForeground(Color.BLACK);
-
-			getComboBoxStatus().setEnabled(false);
-			getComboBoxStatus().setBackground(defaultColor);
-			getComboBoxStatus().setForeground(Color.BLACK);
-
-			textRelease.setEnabled(false);
-			textRelease.setBackground(defaultColor);
-
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-			
-			comboBoxType.setEnabled(false);
-			comboBoxType.setBackground(defaultColor);
-			comboBoxType.setForeground(Color.BLACK);
-
-			comboBoxPriority.setEnabled(false);
-			comboBoxPriority.setBackground(defaultColor);
-			comboBoxPriority.setForeground(Color.BLACK);
-			
-			
-
-		} else if (mode == Mode.EDIT) {
-			
-			// edit, everything can be edited
-		}
-	}
-
-	/** Sets the disabled text color of all the fields */
-
-	private void setDisabledTextColor() {
-		textName.setDisabledTextColor(Color.BLACK);
-		textDescription.setDisabledTextColor(Color.BLACK);
-		textRelease.setDisabledTextColor(Color.BLACK);
-		textEstimate.setDisabledTextColor(Color.BLACK);
-		textActual.setDisabledTextColor(Color.BLACK);
-	}
-
-	private void createEventSidePanel() {
-		logView = new DetailLogView(this.getRequirement(), this);
-		noteView = new DetailNoteView(this.getRequirement(), this);
-		userView = new AssigneePanel(requirement, this);
-		taskView = new DetailTaskView(this.getRequirement(), this);
-		aTestView = new DetailATestView(this.getRequirement(), this);
-		subRequirementView = new SubRequirementPanel(this.getRequirement(),
-				this);
-		eventPane = new DetailEventPane(noteView, logView, userView, taskView,
-				aTestView, subRequirementView);
-		if (requirement.getStatus() == Status.DELETED
-				|| requirement.getStatus() == Status.COMPLETE || mode == Mode.VIEW ) {//|| mode == Mode.CREATE
-			eventPane.disableUserButtons();
-		}
-		if (mode == Mode.UPDATE) {
-			eventPane.disableUsersAndSubReqs();
-		}
-		else if (mode ==Mode.CREATE){
-			eventPane.disableSubReqs();
-		}
-		
-	}
-
-	private void createButtons() {
-		btnSave = new JButton("Save Requirement");
-		btnCancel = new JButton("Cancel");
-		btnCancel.setAction(new CancelAction(this));
-
-		switch (mode) {
-		case CREATE:
-			btnSave.setText("Create Requirement");
-			break;
-		case EDIT:
-		case UPDATE:
-		case VIEW:
-			btnSave.setText("Save Requirement");
-			break;
-		}
-	}
-
-	private void addTextReleaseListener() {
-		textRelease.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_TAB) {
-					if (event.getModifiers() == 0) {
-						textRelease.transferFocus();
-					} else {
-						textRelease.transferFocusBackward();
-					}
-					event.consume();
-				}
-				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					// don't allow enter, consume the event, do nothing
-					event.consume();
-				}
-			}
-		});
-		textReleaseListener = new TextUpdateListener(this, textRelease, null);
-		textRelease.addKeyListener(textReleaseListener);
-	}
-
-	private void createTextReleaseArea() {
-		textRelease = new JTextField(9);
-		textRelease.setBorder((new JTextField()).getBorder());
-		textRelease.setName("ReleaseNum");
-		textRelease.setMaximumSize(textRelease.getPreferredSize());
-		textRelease.setDisabledTextColor(Color.GRAY);
-	}
-
+	
 	private void addTextActualListener() {
 		textActual.addKeyListener(new KeyAdapter() {
+			
 			@Override
-			public void keyPressed(KeyEvent event) {
+			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
 						textActual.transferFocus();
@@ -449,166 +407,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActualListener = new TextUpdateListener(this, textActual, null);
 		textActual.addKeyListener(textActualListener);
 	}
-
-	private void createTextActualArea() {
-		textActual = new JTextField(9);
-		textActual.setBorder((new JTextField()).getBorder());
-		textActual.setEnabled(false); // disabled until complete
-		textActual.setBackground(defaultColor);
-		textActual.setMaximumSize(textActual.getPreferredSize());
-		textActual.setName("Effort");
-		textActual.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textActualDoc = (AbstractDocument) textActual
-				.getDocument();
-		// box allows 12 numbers (around max int)
-		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
-
-		// actual field is editable when requirement is complete
-		if (requirement.getStatus() == Status.COMPLETE && (mode == Mode.EDIT || requirement.getUsers().contains(PermissionModel.getInstance().getUser().getUsername()))) {
-			textActual.setEnabled(true);
-			textActual.setBackground(Color.WHITE);
-		}
-	}
-
-	private void addTextEstimateListener() {
-		textEstimate.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_TAB) {
-					if (event.getModifiers() == 0) {
-						textEstimate.transferFocus();
-					} else {
-						textEstimate.transferFocusBackward();
-					}
-					event.consume();
-				}
-			}
-		});
-		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
-		textEstimate.addKeyListener(textEstimateListener);
-	}
-
-	private void createTextEstimateArea() {
-		textEstimate = new JTextField(9);
-		textEstimate.setBorder((new JTextField()).getBorder());
-		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
-		textEstimate.setName("Estimate");
-		textEstimate.setDisabledTextColor(Color.GRAY);
-		AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate
-				.getDocument();
-		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
-
-		// prevent in-progress or complete requirements from having their
-		// estimates changed
-		if (requirement.getStatus() == Status.IN_PROGRESS
-				|| requirement.getStatus() == Status.COMPLETE) {
-			textEstimate.setEnabled(false);
-			textEstimate.setBackground(defaultColor);
-		}
-	}
-
-	private void addComboBoxListeners() {
-		comboBoxStatusListener = new ItemStateListener(this, comboBoxStatus);
-		comboBoxStatus.addItemListener(comboBoxStatusListener);
-		comboBoxTypeListener = new ItemStateListener(this, comboBoxType);
-		comboBoxType.addItemListener(comboBoxTypeListener);
-		comboBoxPriorityListener = new ItemStateListener(this, comboBoxPriority);
-		comboBoxPriority.addItemListener(comboBoxPriorityListener);
-		comboBoxIterationListener = new ItemStateListener(this,
-				getComboBoxIteration());
-		getComboBoxIteration().addItemListener(comboBoxIterationListener);
-	}
-
-	private void createComboBoxes() {
-		// Type ComboBox
-
-		comboBoxType = new JComboBox();
-		comboBoxType.setBackground(Color.WHITE);
-
-		for (Type t : Type.values()) {
-			comboBoxType.addItem(t.toString());
-		}
-		comboBoxType.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
-		comboBoxType.setSelectedIndex(0);
-
-		comboBoxStatus = new JComboBox();
-		comboBoxStatus.setBackground(Color.WHITE);
-		comboBoxStatus.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());	
-		this.determineAvailableStatusOptions(this.getRequirement());
-
-		comboBoxPriority = new JComboBox();
-		comboBoxPriority.setBackground(Color.WHITE);
-		for (Priority t : Priority.values()) {
-			comboBoxPriority.addItem(t.toString());
-		}
-		comboBoxPriority.setSelectedIndex(0);
-		comboBoxPriority.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
-
-		createIterationComboBox();
-	}
-
-	private void createIterationComboBox() {
-		List<Iteration> iterationList = IterationDatabase.getInstance()
-				.getAll();
-		iterationList = Iteration.sortIterations(iterationList);
-		int availableIterationNum = 0;
-		int currentAvailableIterationIndex = 0;
-		Date currentDate = new Date();
-		for (Iteration iteration : iterationList) {
-			// if the current date is before the end date of the iteration, or
-			// the iteration is this requirement's current iteration or is the
-			// backlog
-			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| requirement.getIteration() == iteration.getId() || iteration
-					.getId() == -1) && iteration.getId() != -2) {
-				// increment the number of available iterations
-				availableIterationNum++;
-			}
-
-		}
-		String[] availableIterations = new String[availableIterationNum];
-		for (Iteration iteration : iterationList) {
-			// if the current date is before the end date of the iteration,
-			// or the iteration is this requirement's current iteration,
-			// or it is the backlog, add it to the list
-			if ((currentDate.compareTo(iteration.getEndDate()) <= 0
-					|| requirement.getIteration() == iteration.getId() || iteration
-					.getId() == -1) && iteration.getId() != -2) {
-				availableIterations[currentAvailableIterationIndex] = iteration
-						.getName();
-				currentAvailableIterationIndex++;
-			}
-		}
-		comboBoxIteration = new JComboBox(availableIterations);
-		comboBoxIteration.setName("Iteration");
-		comboBoxIteration.setPrototypeDisplayValue("Non-Functional");
-		comboBoxIteration.setBackground(Color.WHITE);
-	}
-
-	private void createSaveErrorArea() {
-		textSaveError = new JTextArea(1, 40);
-		textSaveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		textSaveError.setOpaque(false);
-		textSaveError.setEnabled(false);
-		textSaveError.setDisabledTextColor(Color.BLACK);
-		textSaveError.setLineWrap(true);
-		textSaveError.setWrapStyleWord(true);
-	}
-
-	private void createTextDescriptionValidArea() {
-		textDescriptionValid = new JTextArea(1, 40);
-		textDescriptionValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		textDescriptionValid.setOpaque(false);
-		textDescriptionValid.setEnabled(false);
-		textDescriptionValid.setDisabledTextColor(Color.BLACK);
-		textDescriptionValid.setLineWrap(true);
-		textDescriptionValid.setWrapStyleWord(true);
-	}
-
+	
 	private void addTextDescriptionAreaListener() {
 		textDescription.addKeyListener(new KeyAdapter() {
+			
 			@Override
-			public void keyPressed(KeyEvent event) {
+			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
 						textDescription.transferFocus();
@@ -623,35 +427,31 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				textDescriptionValid);
 		textDescription.addKeyListener(textDescriptionListener);
 	}
-
-	private void createTextDescriptionArea() {
-		textDescription = new JTextArea(8, 40);
-		textDescription.setLineWrap(true);
-		textDescription.setWrapStyleWord(true);
-		textDescription.setBorder((new JTextField()).getBorder());
-		textDescription.setName("Description");
-		textDescription.setDisabledTextColor(Color.GRAY);
-		scrollDescription = new JScrollPane(textDescription);
-		scrollDescription
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollDescription.setSize(400, 450);
-		scrollDescription.setBorder(null);
+	
+	private void addTextEstimateListener() {
+		textEstimate.addKeyListener(new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(final KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textEstimate.transferFocus();
+					} else {
+						textEstimate.transferFocusBackward();
+					}
+					event.consume();
+				}
+			}
+		});
+		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
+		textEstimate.addKeyListener(textEstimateListener);
 	}
-
-	private void createTextNameValidArea() {
-		textNameValid = new JTextArea(1, 40);
-		textNameValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		textNameValid.setOpaque(false);
-		textNameValid.setEnabled(false);
-		textNameValid.setDisabledTextColor(Color.BLACK);
-		textNameValid.setLineWrap(true);
-		textNameValid.setWrapStyleWord(true);
-	}
-
+	
 	private void addTextNameAreaListener() {
 		textName.addKeyListener(new KeyAdapter() {
+			
 			@Override
-			public void keyPressed(KeyEvent event) {
+			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
 						textName.transferFocus();
@@ -669,20 +469,174 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				textNameValid);
 		textName.addKeyListener(textTitleListener);
 	}
-
-	private void createTextNameArea() {
-		textName = new JTextArea(1, 40);
-		textName.setLineWrap(true);
-		textName.setWrapStyleWord(true);
-		textName.setMaximumSize(new Dimension(40, 2));
-		AbstractDocument textNameDoc = (AbstractDocument) textName
-				.getDocument();
-		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
-		textName.setBorder((new JTextField()).getBorder());
-		textName.setName("Name");
-		textName.setDisabledTextColor(Color.GRAY);
+	
+	private void addTextReleaseListener() {
+		textRelease.addKeyListener(new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(final KeyEvent event) {
+				if (event.getKeyCode() == KeyEvent.VK_TAB) {
+					if (event.getModifiers() == 0) {
+						textRelease.transferFocus();
+					} else {
+						textRelease.transferFocusBackward();
+					}
+					event.consume();
+				}
+				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+					// don't allow enter, consume the event, do nothing
+					event.consume();
+				}
+			}
+		});
+		textReleaseListener = new TextUpdateListener(this, textRelease, null);
+		textRelease.addKeyListener(textReleaseListener);
 	}
-
+	
+	/**
+	 * Method to set this tab to close when the tab closes
+	 * 
+	 */
+	
+	public void closeTabAfterSave() {
+		closeTab = true;
+	}
+	
+	private void createButtons() {
+		btnSave = new JButton("Save Requirement");
+		btnCancel = new JButton("Cancel");
+		btnCancel.setAction(new CancelAction(this));
+		
+		switch (mode) {
+			case CREATE:
+				btnSave.setText("Create Requirement");
+				break;
+			case EDIT:
+			case UPDATE:
+			case VIEW:
+				btnSave.setText("Save Requirement");
+				break;
+		}
+	}
+	
+	private void createComboBoxes() {
+		// Type ComboBox
+		
+		comboBoxType = new JComboBox();
+		comboBoxType.setBackground(Color.WHITE);
+		
+		for (final Type t : Type.values()) {
+			comboBoxType.addItem(t.toString());
+		}
+		comboBoxType.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
+		comboBoxType.setSelectedIndex(0);
+		
+		comboBoxStatus = new JComboBox();
+		comboBoxStatus.setBackground(Color.WHITE);
+		comboBoxStatus.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
+		determineAvailableStatusOptions(getRequirement());
+		
+		comboBoxPriority = new JComboBox();
+		comboBoxPriority.setBackground(Color.WHITE);
+		for (final Priority t : Priority.values()) {
+			comboBoxPriority.addItem(t.toString());
+		}
+		comboBoxPriority.setSelectedIndex(0);
+		comboBoxPriority.setPrototypeDisplayValue(Type.NON_FUNCTIONAL
+				.toString());
+		
+		createIterationComboBox();
+	}
+	
+	private void createComponentListeners() {
+		if (mode == Mode.VIEW) {
+			
+		} else if (mode == Mode.UPDATE) {
+			addTextActualListener();
+		} else {
+			addTextNameAreaListener();
+			addTextDescriptionAreaListener();
+			addComboBoxListeners();
+			addTextEstimateListener();
+			addTextActualListener();
+			addTextReleaseListener();
+		}
+	}
+	
+	private void createComponents() {
+		createJLabels();
+		createTextNameArea();
+		createTextNameValidArea();
+		createTextDescriptionArea();
+		createTextDescriptionValidArea();
+		createSaveErrorArea();
+		createComboBoxes();
+		createTextEstimateArea();
+		createTextActualArea();
+		createTextReleaseArea();
+		createButtons();
+	}
+	
+	private void createEventSidePanel() {
+		logView = new DetailLogView(getRequirement(), this);
+		noteView = new DetailNoteView(getRequirement(), this);
+		userView = new AssigneePanel(requirement, this);
+		taskView = new DetailTaskView(getRequirement(), this);
+		aTestView = new DetailATestView(getRequirement(), this);
+		subRequirementView = new SubRequirementPanel(getRequirement(), this);
+		eventPane = new DetailEventPane(noteView, logView, userView, taskView,
+				aTestView, subRequirementView);
+		if ((requirement.getStatus() == Status.DELETED)
+				|| (requirement.getStatus() == Status.COMPLETE)
+				|| (mode == Mode.VIEW)) {// || mode == Mode.CREATE
+			eventPane.disableUserButtons();
+		}
+		if (mode == Mode.UPDATE) {
+			eventPane.disableUsersAndSubReqs();
+		} else if (mode == Mode.CREATE) {
+			eventPane.disableSubReqs();
+		}
+		
+	}
+	
+	private void createIterationComboBox() {
+		List<Iteration> iterationList = IterationDatabase.getInstance()
+				.getAll();
+		iterationList = Iteration.sortIterations(iterationList);
+		int availableIterationNum = 0;
+		int currentAvailableIterationIndex = 0;
+		final Date currentDate = new Date();
+		for (final Iteration iteration : iterationList) {
+			// if the current date is before the end date of the iteration, or
+			// the iteration is this requirement's current iteration or is the
+			// backlog
+			if (((currentDate.compareTo(iteration.getEndDate()) <= 0)
+					|| (requirement.getIteration() == iteration.getId()) || (iteration
+					.getId() == -1)) && (iteration.getId() != -2)) {
+				// increment the number of available iterations
+				availableIterationNum++;
+			}
+			
+		}
+		final String[] availableIterations = new String[availableIterationNum];
+		for (final Iteration iteration : iterationList) {
+			// if the current date is before the end date of the iteration,
+			// or the iteration is this requirement's current iteration,
+			// or it is the backlog, add it to the list
+			if (((currentDate.compareTo(iteration.getEndDate()) <= 0)
+					|| (requirement.getIteration() == iteration.getId()) || (iteration
+					.getId() == -1)) && (iteration.getId() != -2)) {
+				availableIterations[currentAvailableIterationIndex] = iteration
+						.getName();
+				currentAvailableIterationIndex++;
+			}
+		}
+		comboBoxIteration = new JComboBox(availableIterations);
+		comboBoxIteration.setName("Iteration");
+		comboBoxIteration.setPrototypeDisplayValue("Non-Functional");
+		comboBoxIteration.setBackground(Color.WHITE);
+	}
+	
 	public void createJLabels() {
 		lblName = new JLabel("*Name:");
 		lblDescription = new JLabel("*Description:");
@@ -696,24 +650,461 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblTotalEstimate = new JLabel("Total Estimate:");
 		lblTotEstDisplay = new JLabel("");
 	}
-
+	
+	private void createPanels() {
+		mainPanel = new JPanel();
+		defaultColor = mainPanel.getBackground();
+		mainLayout = new GridLayout(0, 1);
+		setLayout(mainLayout);
+		layout = new SpringLayout();
+		mainPanel.setLayout(layout);
+		mainScrollPane = new JScrollPane();
+		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		mainScrollPane.getViewport().add(mainPanel);
+		mainScrollPane.setBorder(null);
+		
+		buttonPanelLayout = new SpringLayout();
+		buttonPanel = new JPanel(buttonPanelLayout);
+		leftPanel = new JPanel(new BorderLayout());
+	}
+	
+	private void createSaveErrorArea() {
+		textSaveError = new JTextArea(1, 40);
+		textSaveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textSaveError.setOpaque(false);
+		textSaveError.setEnabled(false);
+		textSaveError.setDisabledTextColor(Color.BLACK);
+		textSaveError.setLineWrap(true);
+		textSaveError.setWrapStyleWord(true);
+	}
+	
+	private void createTextActualArea() {
+		textActual = new JTextField(9);
+		textActual.setBorder((new JTextField()).getBorder());
+		textActual.setEnabled(false); // disabled until complete
+		textActual.setBackground(defaultColor);
+		textActual.setMaximumSize(textActual.getPreferredSize());
+		textActual.setName("Effort");
+		textActual.setDisabledTextColor(Color.GRAY);
+		final AbstractDocument textActualDoc = (AbstractDocument) textActual
+				.getDocument();
+		// box allows 12 numbers (around max int)
+		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
+		
+		// actual field is editable when requirement is complete
+		if ((requirement.getStatus() == Status.COMPLETE)
+				&& ((mode == Mode.EDIT) || requirement.getUsers().contains(
+						PermissionModel.getInstance().getUser().getUsername()))) {
+			textActual.setEnabled(true);
+			textActual.setBackground(Color.WHITE);
+		}
+	}
+	
+	private void createTextDescriptionArea() {
+		textDescription = new JTextArea(8, 40);
+		textDescription.setLineWrap(true);
+		textDescription.setWrapStyleWord(true);
+		textDescription.setBorder((new JTextField()).getBorder());
+		textDescription.setName("Description");
+		textDescription.setDisabledTextColor(Color.GRAY);
+		scrollDescription = new JScrollPane(textDescription);
+		scrollDescription
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollDescription.setSize(400, 450);
+		scrollDescription.setBorder(null);
+	}
+	
+	private void createTextDescriptionValidArea() {
+		textDescriptionValid = new JTextArea(1, 40);
+		textDescriptionValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textDescriptionValid.setOpaque(false);
+		textDescriptionValid.setEnabled(false);
+		textDescriptionValid.setDisabledTextColor(Color.BLACK);
+		textDescriptionValid.setLineWrap(true);
+		textDescriptionValid.setWrapStyleWord(true);
+	}
+	
+	private void createTextEstimateArea() {
+		textEstimate = new JTextField(9);
+		textEstimate.setBorder((new JTextField()).getBorder());
+		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
+		textEstimate.setName("Estimate");
+		textEstimate.setDisabledTextColor(Color.GRAY);
+		final AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate
+				.getDocument();
+		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
+		
+		// prevent in-progress or complete requirements from having their
+		// estimates changed
+		if ((requirement.getStatus() == Status.IN_PROGRESS)
+				|| (requirement.getStatus() == Status.COMPLETE)) {
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+		}
+	}
+	
+	private void createTextNameArea() {
+		textName = new JTextArea(1, 40);
+		textName.setLineWrap(true);
+		textName.setWrapStyleWord(true);
+		textName.setMaximumSize(new Dimension(40, 2));
+		final AbstractDocument textNameDoc = (AbstractDocument) textName
+				.getDocument();
+		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
+		textName.setBorder((new JTextField()).getBorder());
+		textName.setName("Name");
+		textName.setDisabledTextColor(Color.GRAY);
+	}
+	
+	private void createTextNameValidArea() {
+		textNameValid = new JTextArea(1, 40);
+		textNameValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		textNameValid.setOpaque(false);
+		textNameValid.setEnabled(false);
+		textNameValid.setDisabledTextColor(Color.BLACK);
+		textNameValid.setLineWrap(true);
+		textNameValid.setWrapStyleWord(true);
+	}
+	
+	private void createTextReleaseArea() {
+		textRelease = new JTextField(9);
+		textRelease.setBorder((new JTextField()).getBorder());
+		textRelease.setName("ReleaseNum");
+		textRelease.setMaximumSize(textRelease.getPreferredSize());
+		textRelease.setDisabledTextColor(Color.GRAY);
+	}
+	
 	/**
+	 * Method to determine to which statuses the currently viewed requirement
+	 * can manually be set based on its current status as governed by the
+	 * stakeholders' specs; also sets the combo box to the appropriate set of
+	 * statuses
+	 */
+	public void determineAvailableStatusOptions(final Requirement req) {
+		comboBoxStatus.removeAllItems();
+		for (final Status t : Status.values()) {
+			comboBoxStatus.addItem(t.toString());
+		}
+		comboBoxStatus.removeItem("None");
+		boolean hasComplete = true;
+		for (final Task aTask : req.getTasks()) {
+			if (!aTask.isCompleted()) {
+				hasComplete = false;
+			}
+		}
+		if (!hasComplete) {
+			comboBoxStatus.removeItem(Status.COMPLETE.toString());
+		}
+		
+		if (req.getStatus() == Status.IN_PROGRESS) {
+			// In Progress: In Progress, Complete, Deleted
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			if (!req.subReqsCompleted()) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+			
+			if ((req.getSubRequirements().size() > 0) || !req.tasksCompleted()) {
+				comboBoxStatus.removeItem(Status.DELETED.toString());
+			}
+		} else if ((req.getSubRequirements().size() > 0)
+				|| !req.tasksCompleted()) {
+			comboBoxStatus.removeItem(Status.DELETED.toString());
+		}
+		if (req.getStatus() == Status.NEW) {
+			// New: New, Deleted
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			comboBoxStatus.removeItem(Status.OPEN.toString());
+			if (hasComplete) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+		}
+		if (req.getStatus() == Status.OPEN) {
+			// Open: Open, Deleted
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			if (hasComplete) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+		}
+		if (req.getStatus() == Status.COMPLETE) {
+			// Complete: Open, Complete, Deleted
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+		}
+		if (req.getStatus() == Status.DELETED) {
+			// Deleted: Open, Deleted, Complete
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			if (hasComplete) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+		}
+		comboBoxStatus.setSelectedItem(req.getStatus().toString());
+	}
+	
+	/**
+	 * Checks requirement status: If deleted, disables all editable fields
+	 * except status Else do nothing
+	 */
+	public void disableAllFieldsIfDeleted() {
+		final JPanel panel = new JPanel();
+		final Color defaultColor = panel.getBackground();
+		
+		if ((getRequirement().getStatus() != Status.DELETED)
+				&& (getRequirement().getStatus() != Status.COMPLETE)) {
+			return;
+		}
+		textName.setEnabled(false);
+		textName.setBackground(defaultColor);
+		textDescription.setEnabled(false);
+		textDescription.setBackground(defaultColor);
+		getComboBoxIteration().setEnabled(false);
+		getComboBoxIteration().setBackground(defaultColor);
+		textRelease.setEnabled(false);
+		textRelease.setBackground(defaultColor);
+		textEstimate.setEnabled(false);
+		textEstimate.setBackground(defaultColor);
+		if (getRequirement().getStatus() != Status.COMPLETE) {
+			textActual.setEnabled(false);
+			textActual.setBackground(defaultColor);
+		}
+		comboBoxType.setEnabled(false);
+		comboBoxPriority.setEnabled(false);
+		
+	}
+	
+	/**
+	 * Disables the editing fields based upon the edit mode
 	 * 
 	 */
-	private void addJLabels() {
-		mainPanel.add(lblName);
-		mainPanel.add(lblDescription);
-		mainPanel.add(lblType);
-		mainPanel.add(lblStatus);
-		mainPanel.add(lblPriority);
-		mainPanel.add(lblIteration);
-		mainPanel.add(lblEstimate);
-		mainPanel.add(lblActual);
-		mainPanel.add(lblRelease);
-		mainPanel.add(lblTotalEstimate);
-		mainPanel.add(lblTotEstDisplay);
+	
+	private void disableFieldsMode() {
+		if (mode == Mode.VIEW) {
+			textName.setEnabled(false);
+			textName.setBackground(defaultColor);
+			
+			textDescription.setEnabled(false);
+			textDescription.setBackground(defaultColor);
+			
+			getComboBoxIteration().setEnabled(false);
+			getComboBoxIteration().setBackground(defaultColor);
+			getComboBoxIteration().setForeground(Color.BLACK);
+			
+			getComboBoxStatus().setEnabled(false);
+			getComboBoxStatus().setBackground(defaultColor);
+			getComboBoxStatus().setForeground(Color.BLACK);
+			
+			textRelease.setEnabled(false);
+			textRelease.setBackground(defaultColor);
+			
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+			
+			textActual.setEnabled(false);
+			textActual.setBackground(defaultColor);
+			
+			comboBoxType.setEnabled(false);
+			comboBoxType.setBackground(defaultColor);
+			comboBoxType.setForeground(Color.BLACK);
+			
+			comboBoxPriority.setEnabled(false);
+			comboBoxPriority.setBackground(defaultColor);
+			comboBoxPriority.setForeground(Color.BLACK);
+			
+		} else if (mode == Mode.UPDATE) {
+			textName.setEnabled(false);
+			textName.setBackground(defaultColor);
+			
+			textDescription.setEnabled(false);
+			textDescription.setBackground(defaultColor);
+			
+			getComboBoxIteration().setEnabled(false);
+			getComboBoxIteration().setBackground(defaultColor);
+			getComboBoxIteration().setForeground(Color.BLACK);
+			
+			getComboBoxStatus().setEnabled(false);
+			getComboBoxStatus().setBackground(defaultColor);
+			getComboBoxStatus().setForeground(Color.BLACK);
+			
+			textRelease.setEnabled(false);
+			textRelease.setBackground(defaultColor);
+			
+			textEstimate.setEnabled(false);
+			textEstimate.setBackground(defaultColor);
+			
+			comboBoxType.setEnabled(false);
+			comboBoxType.setBackground(defaultColor);
+			comboBoxType.setForeground(Color.BLACK);
+			
+			comboBoxPriority.setEnabled(false);
+			comboBoxPriority.setBackground(defaultColor);
+			comboBoxPriority.setForeground(Color.BLACK);
+			
+		} else if (mode == Mode.EDIT) {
+			
+			// edit, everything can be edited
+		}
 	}
-
+	
+	public void disableSaveButton() {
+		btnSave.setEnabled(false);
+	}
+	
+	public void displaySaveError(final String error) {
+		textSaveError.setText(error);
+	}
+	
+	public void enableSaveButton() {
+		if (mode == Mode.VIEW) {
+			return; // we can not enable save in view mode
+		}
+		btnSave.setEnabled(true);
+	}
+	
+	@Override
+	public void fail(final Exception exception) {
+		displaySaveError("Unable to complete request: "
+				+ exception.getMessage());
+	}
+	
+	public List<String> getAssignedUsers() {
+		return userView.getAssignedUsersList();
+	}
+	
+	/**
+	 * @return the btnCancel
+	 */
+	public JButton getBtnCancel() {
+		return btnCancel;
+	}
+	
+	/**
+	 * @return the btnSave
+	 */
+	public JButton getBtnSave() {
+		return btnSave;
+	}
+	
+	/**
+	 * @return the comboBoxIteration
+	 */
+	public JComboBox getComboBoxIteration() {
+		return comboBoxIteration;
+	}
+	
+	/**
+	 * @return the comboBoxPriority
+	 */
+	public JComboBox getComboBoxPriority() {
+		return comboBoxPriority;
+	}
+	
+	/**
+	 * @return the comboBoxStatus
+	 */
+	public JComboBox getComboBoxStatus() {
+		return comboBoxStatus;
+	}
+	
+	/**
+	 * @return the comboBoxType
+	 */
+	public JComboBox getComboBoxType() {
+		return comboBoxType;
+	}
+	
+	public MainTabController getMainTabController() {
+		return mainTabController;
+	}
+	
+	public Requirement getModel() {
+		return getRequirement();
+	}
+	
+	public List<Note> getNoteList() {
+		return noteView.getNotesList();
+	}
+	
+	public DetailNoteView getNoteView() {
+		return noteView;
+	}
+	
+	/**
+	 * @return the requirement
+	 */
+	public Requirement getRequirement() {
+		return requirement;
+	}
+	
+	public DetailTaskView getTaskView() {
+		return taskView;
+	}
+	
+	/**
+	 * @return the textActual
+	 */
+	public JTextField getTextActual() {
+		return textActual;
+	}
+	
+	/**
+	 * @return the textDescription
+	 */
+	public JTextArea getTextDescription() {
+		return textDescription;
+	}
+	
+	/**
+	 * @return the textDescriptionValid
+	 */
+	public JTextArea getTextDescriptionValid() {
+		return textDescriptionValid;
+	}
+	
+	/**
+	 * @return the textEstimate
+	 */
+	public JTextField getTextEstimate() {
+		return textEstimate;
+	}
+	
+	public JComboBox getTextIteration() {
+		return getComboBoxIteration();
+	}
+	
+	/**
+	 * @return the textName
+	 */
+	public JTextArea getTextName() {
+		return textName;
+	}
+	
+	/**
+	 * @return the textNameValid
+	 */
+	public JTextArea getTextNameValid() {
+		return textNameValid;
+	}
+	
+	/**
+	 * @return the textRelease
+	 */
+	public JTextField getTextRelease() {
+		return textRelease;
+	}
+	
+	public JTextArea getTextSaveError() {
+		return textSaveError;
+	}
+	
+	private Integer getTotalEstimate() {
+		return traverseTreeEstimates(requirement, requirement.getEstimate());
+	}
+	
+	public AssigneePanel getUserView() {
+		return userView;
+	}
+	
 	/**
 	 *
 	 */
@@ -727,7 +1118,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			getComboBoxIteration().setEnabled(false);
 			getComboBoxIteration().setBackground(defaultColor);
 			comboBoxStatus.setSelectedItem(Status.NEW.toString());
-
+			
 		} else {
 			textName.setText(getRequirement().getName());
 			textDescription.setText(getRequirement().getDescription());
@@ -736,526 +1127,40 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			textActual.setText(Integer.toString(getRequirement().getEffort()));
 			textRelease.setText(getRequirement().getReleaseNum());
 			lblTotEstDisplay.setText(getTotalEstimate().toString());
-
+			
 			try {
 				getComboBoxIteration()
 						.setSelectedItem(
 								IterationDatabase.getInstance()
 										.get(getRequirement().getIteration())
 										.getName());
-			} catch (IterationNotFoundException e) {
+			} catch (final IterationNotFoundException e) {
 				System.out.println("Exception Caught: Iteration Not Found.");
 			}
-
+			
 			comboBoxType.setSelectedItem(getRequirement().getType().toString());
-
+			
 			comboBoxPriority.setSelectedItem(getRequirement().getPriority()
 					.toString());
-
+			
 			setSaveButtonAction();
 			comboBoxStatus.setSelectedItem(requirement.getStatus().toString());
-
-			this.disableAllFieldsIfDeleted();
+			
+			disableAllFieldsIfDeleted();
 			comboBoxStatus.removeItem("None");
 		}
 	}
-
-	/**
-	 * @param lblName
-	 * @param lblDescription
-	 * @param lblType
-	 * @param lblStatus
-	 * @param lblPriority
-	 * @param lblIteration
-	 * @param lblEstimate
-	 * @param lblActual
-	 * @param lblRelease
-	 * @param scrollDescription
-	 * @param btnCancel
-	 */
-	private void addComponentConstraints() {
-		// Align left edges of objects
-		layout.putConstraint(SpringLayout.WEST, lblName, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblDescription,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblType, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblStatus, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textName, HORIZONTAL_PADDING,
-				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textNameValid,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, scrollDescription,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textDescriptionValid,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxType,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, comboBoxStatus,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblPriority,
-				HORIZONTAL_PADDING, SpringLayout.EAST, comboBoxType);
-		layout.putConstraint(SpringLayout.WEST, lblIteration,
-				HORIZONTAL_PADDING, SpringLayout.EAST, comboBoxStatus);
-		layout.putConstraint(SpringLayout.WEST, comboBoxPriority,
-				HORIZONTAL_PADDING, SpringLayout.EAST, comboBoxType);
-		layout.putConstraint(SpringLayout.WEST, getComboBoxIteration(),
-				HORIZONTAL_PADDING, SpringLayout.EAST, comboBoxStatus);
-		layout.putConstraint(SpringLayout.WEST, lblEstimate,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblActual, HORIZONTAL_PADDING,
-				SpringLayout.EAST, comboBoxStatus);
-		layout.putConstraint(SpringLayout.WEST, textEstimate,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, textActual, HORIZONTAL_PADDING,
-				SpringLayout.EAST, comboBoxStatus);
-		layout.putConstraint(SpringLayout.WEST, lblRelease, 0,
-				SpringLayout.WEST, lblActual);
-		layout.putConstraint(SpringLayout.WEST, textRelease, 0,
-				SpringLayout.WEST, lblActual);
-		layout.putConstraint(SpringLayout.WEST, lblTotalEstimate,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
-				HORIZONTAL_PADDING, SpringLayout.WEST, this);
-
-		// Align North Edges of Objects
-		layout.putConstraint(SpringLayout.NORTH, lblName, VERTICAL_PADDING,
-				SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.NORTH, textName, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblName);
-		layout.putConstraint(SpringLayout.NORTH, textNameValid,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, textName);
-		layout.putConstraint(SpringLayout.NORTH, lblDescription,
-				VERTICAL_PADDING, SpringLayout.SOUTH, textNameValid);
-		layout.putConstraint(SpringLayout.NORTH, scrollDescription,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblDescription);
-		layout.putConstraint(SpringLayout.NORTH, textDescriptionValid,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, scrollDescription);
-		layout.putConstraint(SpringLayout.NORTH, lblType, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textDescriptionValid);
-		layout.putConstraint(SpringLayout.NORTH, comboBoxType, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblType);
-		layout.putConstraint(SpringLayout.NORTH, lblStatus, VERTICAL_PADDING,
-				SpringLayout.SOUTH, comboBoxType);
-		layout.putConstraint(SpringLayout.NORTH, comboBoxStatus,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblStatus);
-		layout.putConstraint(SpringLayout.NORTH, lblPriority, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textDescriptionValid);
-		layout.putConstraint(SpringLayout.NORTH, comboBoxPriority,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblPriority);
-		layout.putConstraint(SpringLayout.NORTH, lblIteration,
-				VERTICAL_PADDING, SpringLayout.SOUTH, comboBoxPriority);
-		layout.putConstraint(SpringLayout.NORTH, getComboBoxIteration(),
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblIteration);
-		layout.putConstraint(SpringLayout.NORTH, lblEstimate, VERTICAL_PADDING,
-				SpringLayout.SOUTH, comboBoxStatus);
-		layout.putConstraint(SpringLayout.NORTH, lblActual, VERTICAL_PADDING,
-				SpringLayout.SOUTH, getComboBoxIteration());
-		layout.putConstraint(SpringLayout.NORTH, textEstimate, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblEstimate);
-		layout.putConstraint(SpringLayout.NORTH, textActual, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblActual);
-		layout.putConstraint(SpringLayout.NORTH, lblRelease, VERTICAL_PADDING,
-				SpringLayout.SOUTH, textEstimate);
-		layout.putConstraint(SpringLayout.NORTH, textRelease, VERTICAL_PADDING
-				+ CLOSE, SpringLayout.SOUTH, lblRelease);
-		layout.putConstraint(SpringLayout.NORTH, lblTotalEstimate,
-				VERTICAL_PADDING, SpringLayout.SOUTH, textEstimate);
-		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay,
-				VERTICAL_PADDING + CLOSE, SpringLayout.SOUTH, lblTotalEstimate);
-
-		// Align Buttons
-		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,
-				SpringLayout.NORTH, buttonPanel);
-		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
-				SpringLayout.WEST, buttonPanel);
-		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnCancel, 5,
-				SpringLayout.NORTH, buttonPanel);
-		buttonPanelLayout.putConstraint(SpringLayout.WEST, btnCancel, 10,
-				SpringLayout.EAST, btnSave);
-		buttonPanelLayout.putConstraint(SpringLayout.WEST, textSaveError, 10,
-				SpringLayout.EAST, btnCancel);
-		buttonPanelLayout.putConstraint(SpringLayout.NORTH, textSaveError, 5,
-				SpringLayout.SOUTH, buttonPanel);
-	}
-
-	/**
-	 * Method to determine to which statuses the currently viewed requirement
-	 * can manually be set based on its current status as governed by the
-	 * stakeholders' specs; also sets the combo box to the appropriate set of
-	 * statuses
-	 */
-	public void determineAvailableStatusOptions(Requirement req) {
-		this.comboBoxStatus.removeAllItems();
-		for (Status t : Status.values()) {
-			this.comboBoxStatus.addItem(t.toString());
-		}
-		comboBoxStatus.removeItem("None");
-		boolean hasComplete = true;
-		for (Task aTask : req.getTasks()) {
-			if (!aTask.isCompleted())
-				hasComplete = false;
-		}
-		if (!hasComplete)
-			this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
-
-		if (req.getStatus() == Status.IN_PROGRESS) {
-			// In Progress: In Progress, Complete, Deleted
-			this.comboBoxStatus.removeItem(Status.NEW.toString());
-			if (!req.subReqsCompleted()) {
-				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
-			}
-
-			if (req.getSubRequirements().size() > 0
-					|| !req.tasksCompleted()) {
-				this.comboBoxStatus.removeItem(Status.DELETED.toString());
-			}
-		} else if (req.getSubRequirements().size() > 0
-				|| !req.tasksCompleted()) {
-			this.comboBoxStatus.removeItem(Status.DELETED.toString());
-		}
-		if (req.getStatus() == Status.NEW) {
-			// New: New, Deleted
-			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
-			this.comboBoxStatus.removeItem(Status.OPEN.toString());
-			if (hasComplete)
-				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
-		}
-		if (req.getStatus() == Status.OPEN) {
-			// Open: Open, Deleted
-			this.comboBoxStatus.removeItem(Status.NEW.toString());
-			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
-			if (hasComplete)
-				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
-		}
-		if (req.getStatus() == Status.COMPLETE) {
-			// Complete: Open, Complete, Deleted
-			this.comboBoxStatus.removeItem(Status.NEW.toString());
-			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
-		}
-		if (req.getStatus() == Status.DELETED) {
-			// Deleted: Open, Deleted, Complete
-			this.comboBoxStatus.removeItem(Status.NEW.toString());
-			this.comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
-			if (hasComplete)
-				this.comboBoxStatus.removeItem(Status.COMPLETE.toString());
-		}
-		comboBoxStatus.setSelectedItem(req.getStatus().toString());
-	}
-
-
-	public List<Note> getNoteList() {
-		return noteView.getNotesList();
-	}
 	
-	public void setNoteList(List<Note> notes) {
-		noteView.setNotesList(notes);
-	}
-
-	public MainTabController getMainTabController() {
-		return mainTabController;
-	}
-
-	public void displaySaveError(String error) {
-		this.textSaveError.setText(error);
-	}
-
-	/**
-	 * @return the textName
-	 */
-	public JTextArea getTextName() {
-		return textName;
-	}
-
-	/**
-	 * @param textName
-	 *            the textName to set
-	 */
-	public void setTextName(JTextArea textName) {
-		this.textName = textName;
-	}
-
-	/**
-	 * @return the textNameValid
-	 */
-	public JTextArea getTextNameValid() {
-		return textNameValid;
-	}
-
-	/**
-	 * @param textNameValid
-	 *            the textNameValid to set
-	 */
-	public void setTextNameValid(JTextArea textNameValid) {
-		this.textNameValid = textNameValid;
-	}
-
-	/**
-	 * @return the textDescription
-	 */
-	public JTextArea getTextDescription() {
-		return textDescription;
-	}
-
-	/**
-	 * @param textDescription
-	 *            the textDescription to set
-	 */
-	public void setTextDescription(JTextArea textDescription) {
-		this.textDescription = textDescription;
-	}
-
-	/**
-	 * @return the textDescriptionValid
-	 */
-	public JTextArea getTextDescriptionValid() {
-		return textDescriptionValid;
-	}
-
-	/**
-	 * @param textDescriptionValid
-	 *            the textDescriptionValid to set
-	 */
-	public void setTextDescriptionValid(JTextArea textDescriptionValid) {
-		this.textDescriptionValid = textDescriptionValid;
-	}
-
-	/**
-	 * @return the comboBoxPriority
-	 */
-	public JComboBox getComboBoxPriority() {
-		return comboBoxPriority;
-	}
-
-	/**
-	 * @param comboBoxPriority
-	 *            the comboBoxPriority to set
-	 */
-	public void setComboBoxPriority(JComboBox comboBoxPriority) {
-		this.comboBoxPriority = comboBoxPriority;
-	}
-
-	/**
-	 * @return the comboBoxType
-	 */
-	public JComboBox getComboBoxType() {
-		return comboBoxType;
-	}
-
-	/**
-	 * @param comboBoxType
-	 *            the comboBoxType to set
-	 */
-	public void setComboBoxType(JComboBox comboBoxType) {
-		this.comboBoxType = comboBoxType;
-	}
-
-	/**
-	 * @return the comboBoxStatus
-	 */
-	public JComboBox getComboBoxStatus() {
-		return comboBoxStatus;
-	}
-
-	/**
-	 * @param comboBoxStatus
-	 *            the comboBoxStatus to set
-	 */
-	public void setComboBoxStatus(JComboBox comboBoxStatus) {
-		this.comboBoxStatus = comboBoxStatus;
-	}
-
-	/**
-	 * @return the textEstimate
-	 */
-	public JTextField getTextEstimate() {
-		return textEstimate;
-	}
-
-	/**
-	 * @param textEstimate
-	 *            the textEstimate to set
-	 */
-	public void setTextEstimate(JTextField textEstimate) {
-		this.textEstimate = textEstimate;
-	}
-
-	public Requirement getModel() {
-		return getRequirement();
-	}
-
-	public JComboBox getTextIteration() {
-		return this.getComboBoxIteration();
-	}
-
-	/**
-	 * @return the textRelease
-	 */
-	public JTextField getTextRelease() {
-		return textRelease;
-	}
-
-	/**
-	 * @param textRelease
-	 *            the textRelease to set
-	 */
-	public void setTextRelease(JTextField textRelease) {
-		this.textRelease = textRelease;
-	}
-
-	/**
-	 * @return the textActual
-	 */
-	public JTextField getTextActual() {
-		return textActual;
-	}
-
-	/**
-	 * @param textActual
-	 *            the textActual to set
-	 */
-	public void setTextActual(JTextField textActual) {
-		this.textActual = textActual;
-	}
-
-	public void disableSaveButton() {
-		this.btnSave.setEnabled(false);
-	}
-
-	public void enableSaveButton() {
-		if (mode == Mode.VIEW) {
-			return; // we can not enable save in view mode
-		}
-		this.btnSave.setEnabled(true);
-	}
-	
-	public JTextArea getTextSaveError() {
-		return textSaveError;
-	}
-
-	public List<String> getAssignedUsers() {
-		return this.userView.getAssignedUsersList();
-	}
-
-	/**
-	 * Checks requirement status: If deleted, disables all editable fields
-	 * except status Else do nothing
-	 */
-	public void disableAllFieldsIfDeleted() {
-		JPanel panel = new JPanel();
-		Color defaultColor = panel.getBackground();
-
-		if (getRequirement().getStatus() != Status.DELETED
-				&& getRequirement().getStatus() != Status.COMPLETE)
-			return;
-		textName.setEnabled(false);
-		textName.setBackground(defaultColor);
-		textDescription.setEnabled(false);
-		textDescription.setBackground(defaultColor);
-		getComboBoxIteration().setEnabled(false);
-		getComboBoxIteration().setBackground(defaultColor);
-		textRelease.setEnabled(false);
-		textRelease.setBackground(defaultColor);
-		textEstimate.setEnabled(false);
-		textEstimate.setBackground(defaultColor);
-		if(getRequirement().getStatus() != Status.COMPLETE){
-			textActual.setEnabled(false);
-			textActual.setBackground(defaultColor);
-		}
-		comboBoxType.setEnabled(false);
-		comboBoxPriority.setEnabled(false);
-
-	}
-
-	/**
-	 * @return the requirement
-	 */
-	public Requirement getRequirement() {
-		return requirement;
-	}
-
-	@Override
-	public void responseSuccess() {
-
-		for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
-			if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
-				(((DetailPanel) mainTabController.getTabView()
-						.getComponentAt(i))).updateTotalEstimate();
-				(((DetailPanel) mainTabController.getTabView()
-						.getComponentAt(i))).updateSubReqTab();
-			}
-		}
-
-		// if the tab should close, close it
-		if (closeTab) {
-			getMainTabController().closeCurrentTab();
-			return;
-		}
-		// other wise we shall update the requriment in the log view
-
-		Requirement updatedRequirement;
-		try {
-			updatedRequirement = RequirementDatabase.getInstance().get(
-					this.requirement.getrUID());
-			logView.refresh(updatedRequirement);
-		} catch (RequirementNotFoundException e) {
-			System.out.println("Unable to find requirement? Wat?");
-		}
-
-	}
-
-	@Override
-	public void responseError(int statusCode, String statusMessage) {
-		displaySaveError("Received " + statusCode + " error from server: "
-				+ statusMessage);
-
-	}
-
-	@Override
-	public void fail(Exception exception) {
-		displaySaveError("Unable to complete request: "
-				+ exception.getMessage());
-	}
-
-	/**
-	 * Method to set this tab to close when the tab closes
-	 * 
-	 */
-
-	public void closeTabAfterSave() {
-		closeTab = true;
-	}
-
-	/**
-	 * @return the comboBoxIteration
-	 */
-	public JComboBox getComboBoxIteration() {
-		return comboBoxIteration;
-	}
-
-	public DetailTaskView getTaskView() {
-		return taskView;
-	}
-
-	public DetailNoteView getNoteView() {
-		return noteView;
-	}
-
-	public AssigneePanel getUserView() {
-		return userView;
-	}
-
 	@Override
 	public boolean onTabClosed() {
 		if (btnSave.isEnabled()) {
-
+			
 			mainTabController.switchToTab(this);
-
-			Object[] options = { "Save Changes", "Discard Changes", "Cancel" };
-
-			int res = JOptionPane
+			
+			final Object[] options = { "Save Changes", "Discard Changes",
+					"Cancel" };
+			
+			final int res = JOptionPane
 					.showOptionDialog(
 							this,
 							"There are unsaved changes, are you sure you want to continue?",
@@ -1272,17 +1177,17 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			} else {
 				return false;
 			}
-
+			
 		}
-
+		
 		if (taskView.getTaskPanel().getAddTask().isEnabled()
 				|| noteView.getNotePanel().getAddnote().isEnabled()
 				|| aTestView.getTestPanel().getAddATest().isEnabled()) {
 			mainTabController.switchToTab(this);
-
-			Object[] altOptions = { "Discard Changes", "Cancel" };
-
-			int res = JOptionPane
+			
+			final Object[] altOptions = { "Discard Changes", "Cancel" };
+			
+			final int res = JOptionPane
 					.showOptionDialog(
 							this,
 							"There are unsaved changes in subtabs, are you sure you want to continue?",
@@ -1290,56 +1195,128 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, altOptions,
 							altOptions[1]);
-
+			
 			if (res == 0) {
 				return true;
 			} else if (res == 1) {
 				return false;
 			}
-
+			
 		}
 		return true;
 	}
-
-	public void updateSubReqTab() {
-		subRequirementView.refreshAll();
+	
+	@Override
+	public void responseError(final int statusCode, final String statusMessage) {
+		displaySaveError("Received " + statusCode + " error from server: "
+				+ statusMessage);
+		
 	}
-
-	public void updateTotalEstimate() {
-		Integer estimate = 0;
-
-		Requirement tempReq = null;
-		try {
-			tempReq = RequirementDatabase.getInstance().get(
-					requirement.getrUID());
-			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());
-			lblTotEstDisplay.setText(estimate.toString());
-		} catch (RequirementNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private Integer getTotalEstimate() {
-		return traverseTreeEstimates(requirement, requirement.getEstimate());
-	}
-
-	private int traverseTreeEstimates(Requirement current, int totals) {
-		Requirement child = null;
-		int sum = 0;
-
-		for (Integer i : current.getSubRequirements()) {
-			try {
-				child = RequirementDatabase.getInstance().get(i);
-				sum = sum + child.getEstimate()
-						+ traverseTreeEstimates(child, 0);
-			} catch (RequirementNotFoundException e) {
-				e.printStackTrace();
+	
+	@Override
+	public void responseSuccess() {
+		
+		for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
+			if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+				(((DetailPanel) mainTabController.getTabView()
+						.getComponentAt(i))).updateTotalEstimate();
+				(((DetailPanel) mainTabController.getTabView()
+						.getComponentAt(i))).updateSubReqTab();
 			}
 		}
-		return totals + sum;
+		
+		// if the tab should close, close it
+		if (closeTab) {
+			getMainTabController().closeCurrentTab();
+			return;
+		}
+		// other wise we shall update the requriment in the log view
+		
+		Requirement updatedRequirement;
+		try {
+			updatedRequirement = RequirementDatabase.getInstance().get(
+					requirement.getrUID());
+			logView.refresh(updatedRequirement);
+		} catch (final RequirementNotFoundException e) {
+			System.out.println("Unable to find requirement? Wat?");
+		}
+		
 	}
-
+	
+	/**
+	 * @param btnCancel
+	 *            the btnCancel to set
+	 */
+	public void setBtnCancel(final JButton btnCancel) {
+		this.btnCancel = btnCancel;
+	}
+	
+	/**
+	 * @param btnSave
+	 *            the btnSave to set
+	 */
+	public void setBtnSave(final JButton btnSave) {
+		this.btnSave = btnSave;
+	}
+	
+	/**
+	 * @param comboBoxIteration
+	 *            the comboBoxIteration to set
+	 */
+	public void setComboBoxIteration(final JComboBox comboBoxIteration) {
+		this.comboBoxIteration = comboBoxIteration;
+	}
+	
+	/**
+	 * @param comboBoxPriority
+	 *            the comboBoxPriority to set
+	 */
+	public void setComboBoxPriority(final JComboBox comboBoxPriority) {
+		this.comboBoxPriority = comboBoxPriority;
+	}
+	
+	/**
+	 * @param comboBoxStatus
+	 *            the comboBoxStatus to set
+	 */
+	public void setComboBoxStatus(final JComboBox comboBoxStatus) {
+		this.comboBoxStatus = comboBoxStatus;
+	}
+	
+	/**
+	 * @param comboBoxType
+	 *            the comboBoxType to set
+	 */
+	public void setComboBoxType(final JComboBox comboBoxType) {
+		this.comboBoxType = comboBoxType;
+	}
+	
+	/** Sets the disabled text color of all the fields */
+	
+	private void setDisabledTextColor() {
+		textName.setDisabledTextColor(Color.BLACK);
+		textDescription.setDisabledTextColor(Color.BLACK);
+		textRelease.setDisabledTextColor(Color.BLACK);
+		textEstimate.setDisabledTextColor(Color.BLACK);
+		textActual.setDisabledTextColor(Color.BLACK);
+	}
+	
+	public void setNoteList(final List<Note> notes) {
+		noteView.setNotesList(notes);
+	}
+	
+	private void setPanelSizes() {
+		buttonPanel.setPreferredSize(new Dimension(textSaveError
+				.getPreferredSize().width
+				+ textSaveError.getPreferredSize().width, btnSave
+				.getPreferredSize().height + 10));
+		final int preferredHeight = 515;
+		final int preferredWidth = (int) (textDescription.getPreferredSize()
+				.getWidth() + (DetailPanel.HORIZONTAL_PADDING * 2));
+		mainPanel.setPreferredSize(new Dimension(preferredWidth,
+				preferredHeight));
+	}
+	
 	private void setSaveButtonAction() {
 		if (mode == Mode.CREATE) {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
@@ -1347,44 +1324,97 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 		}
 	}
-
+	
 	/**
-	 * @return the btnSave
+	 * @param textActual
+	 *            the textActual to set
 	 */
-	public JButton getBtnSave() {
-		return btnSave;
-	}
-
-	/**
-	 * @param btnSave the btnSave to set
-	 */
-	public void setBtnSave(JButton btnSave) {
-		this.btnSave = btnSave;
-	}
-
-	/**
-	 * @return the btnCancel
-	 */
-	public JButton getBtnCancel() {
-		return btnCancel;
-	}
-
-	/**
-	 * @param btnCancel the btnCancel to set
-	 */
-	public void setBtnCancel(JButton btnCancel) {
-		this.btnCancel = btnCancel;
-	}
-
-	/**
-	 * @param comboBoxIteration the comboBoxIteration to set
-	 */
-	public void setComboBoxIteration(JComboBox comboBoxIteration) {
-		this.comboBoxIteration = comboBoxIteration;
+	public void setTextActual(final JTextField textActual) {
+		this.textActual = textActual;
 	}
 	
+	/**
+	 * @param textDescription
+	 *            the textDescription to set
+	 */
+	public void setTextDescription(final JTextArea textDescription) {
+		this.textDescription = textDescription;
+	}
 	
+	/**
+	 * @param textDescriptionValid
+	 *            the textDescriptionValid to set
+	 */
+	public void setTextDescriptionValid(final JTextArea textDescriptionValid) {
+		this.textDescriptionValid = textDescriptionValid;
+	}
 	
+	/**
+	 * @param textEstimate
+	 *            the textEstimate to set
+	 */
+	public void setTextEstimate(final JTextField textEstimate) {
+		this.textEstimate = textEstimate;
+	}
 	
+	/**
+	 * @param textName
+	 *            the textName to set
+	 */
+	public void setTextName(final JTextArea textName) {
+		this.textName = textName;
+	}
+	
+	/**
+	 * @param textNameValid
+	 *            the textNameValid to set
+	 */
+	public void setTextNameValid(final JTextArea textNameValid) {
+		this.textNameValid = textNameValid;
+	}
+	
+	/**
+	 * @param textRelease
+	 *            the textRelease to set
+	 */
+	public void setTextRelease(final JTextField textRelease) {
+		this.textRelease = textRelease;
+	}
+	
+	private int traverseTreeEstimates(final Requirement current,
+			final int totals) {
+		Requirement child = null;
+		int sum = 0;
+		
+		for (final Integer i : current.getSubRequirements()) {
+			try {
+				child = RequirementDatabase.getInstance().get(i);
+				sum = sum + child.getEstimate()
+						+ traverseTreeEstimates(child, 0);
+			} catch (final RequirementNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return totals + sum;
+	}
+	
+	public void updateSubReqTab() {
+		subRequirementView.refreshAll();
+	}
+	
+	public void updateTotalEstimate() {
+		Integer estimate = 0;
+		
+		Requirement tempReq = null;
+		try {
+			tempReq = RequirementDatabase.getInstance().get(
+					requirement.getrUID());
+			estimate = traverseTreeEstimates(tempReq, tempReq.getEstimate());
+			lblTotEstDisplay.setText(estimate.toString());
+		} catch (final RequirementNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 }

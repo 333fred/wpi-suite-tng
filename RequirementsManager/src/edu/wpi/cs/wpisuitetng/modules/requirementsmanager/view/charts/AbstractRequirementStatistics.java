@@ -27,68 +27,68 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
 public abstract class AbstractRequirementStatistics {
-
+	
 	Map<String, Integer> data;
-
+	
 	protected AbstractRequirementStatistics() {
-		this.data = new HashMap<String, Integer>();
-		this.update();
+		data = new HashMap<String, Integer>();
+		update();
 	}
-
-	/**
-	 * method to force reacquisition of data
-	 */
-	public abstract void update();
-
+	
+	public abstract JFreeChart buildBarChart();
+	
+	protected JFreeChart buildBarChart(final String title,
+			final String category, final String axisLabel) {
+		final JFreeChart chart = ChartFactory.createBarChart(title, category,
+				axisLabel, toCategoryDataset(category),
+				PlotOrientation.VERTICAL, true, false, false);
+		final CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
+		final NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
+		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		return chart;
+	}
+	
+	public abstract JFreeChart buildLineChart();
+	
+	protected JFreeChart buildLineChart(final String title,
+			final String category, final String axisLabel) {
+		final JFreeChart chart = ChartFactory.createLineChart(title, category,
+				axisLabel, toCategoryDataset(category),
+				PlotOrientation.VERTICAL, false, false, false);
+		final CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
+		final NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
+		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		return chart;
+	}
+	
+	public abstract JFreeChart buildPieChart();
+	
+	protected JFreeChart buildPieChart(final String title) {
+		return ChartFactory.createPieChart3D(title, toPieDataset(), true,
+				false, false);
+	}
+	
+	public CategoryDataset toCategoryDataset(final String category) {
+		final DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
+		for (final String key : data.keySet()) {
+			categoryDataset.setValue(data.get(key), category, key);
+		}
+		return categoryDataset;
+	}
+	
 	public PieDataset toPieDataset() {
-		DefaultPieDataset pieDataset = new DefaultPieDataset();
-		for (String key : data.keySet()) {
-			if (this.data.get(key) != 0) {// remove zero elements
+		final DefaultPieDataset pieDataset = new DefaultPieDataset();
+		for (final String key : data.keySet()) {
+			if (data.get(key) != 0) {// remove zero elements
 				pieDataset.setValue(key, data.get(key));
 			}
 		}
 		return pieDataset;
 	}
-
-	public CategoryDataset toCategoryDataset(String category) {
-		DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
-		for (String key : data.keySet()) {
-			categoryDataset.setValue(data.get(key), category, key);
-		}
-		return categoryDataset;
-	}
-
-	public abstract JFreeChart buildPieChart();
-
-	public abstract JFreeChart buildBarChart();
-
-	public abstract JFreeChart buildLineChart();
-
-	protected JFreeChart buildPieChart(String title) {
-		return ChartFactory.createPieChart3D(title, this.toPieDataset(), true,
-				false, false);
-	}
-
-	protected JFreeChart buildBarChart(String title, String category,
-			String axisLabel) {
-		JFreeChart chart = ChartFactory.createBarChart(title, category,
-				axisLabel, this.toCategoryDataset(category),
-				PlotOrientation.VERTICAL, true, false, false);
-		CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
-		NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-		return chart;
-	}
-
-	protected JFreeChart buildLineChart(String title, String category,
-			String axisLabel) {
-		JFreeChart chart = ChartFactory.createLineChart(title, category,
-				axisLabel, this.toCategoryDataset(category),
-				PlotOrientation.VERTICAL, false, false, false);
-		CategoryPlot xyPlot = (CategoryPlot) chart.getPlot();
-		NumberAxis range = (NumberAxis) xyPlot.getRangeAxis();
-		range.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-		return chart;
-	}
-
+	
+	/**
+	 * method to force reacquisition of data
+	 */
+	public abstract void update();
+	
 }

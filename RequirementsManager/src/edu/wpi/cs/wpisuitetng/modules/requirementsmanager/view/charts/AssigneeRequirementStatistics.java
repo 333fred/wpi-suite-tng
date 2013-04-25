@@ -29,23 +29,41 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 public class AssigneeRequirementStatistics extends
 		AbstractRequirementStatistics {
-
+	
+	@Override
+	public JFreeChart buildBarChart() {
+		return this
+				.buildBarChart("Requirements by User", "Requirement", "User");
+	}
+	
+	@Override
+	public JFreeChart buildLineChart() {
+		update();
+		return this.buildLineChart("Requirements by User", "Requirement",
+				"User");
+	}
+	
+	@Override
+	public JFreeChart buildPieChart() {
+		return this.buildPieChart("Requirements by User");
+	}
+	
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
 	 * IRequirementStatistics#update()
 	 */
 	@Override
 	public void update() {
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getFilteredRequirements(); // refresh list of requirements
+		final List<Requirement> requirements = RequirementDatabase
+				.getInstance().getFilteredRequirements(); // refresh list of
+															// requirements
 		// TODO: replace with a method to get all users, record them as
 		// zero-counts in the map, and then simply work through and increment
 		// for each requirement
-		for (Requirement requirement : requirements) {
+		for (final Requirement requirement : requirements) {
 			// for each set of assigned users
-			for (String user : requirement.getUsers()) {
+			for (final String user : requirement.getUsers()) {
 				// if a user has not been encountered before, add him/her to the
 				// map
 				if (data.get(user) == null) {
@@ -56,26 +74,11 @@ public class AssigneeRequirementStatistics extends
 				}
 				// otherwise, simply increment the value
 				else {
-					Integer oldValue = data.get(user);
+					final Integer oldValue = data.get(user);
 					data.put(user, new Integer(oldValue.intValue() + 1));
 				}
 			}
 		}
 	}
-
-	public JFreeChart buildLineChart() {
-		this.update();
-		return this.buildLineChart("Requirements by User", "Requirement",
-				"User");
-	}
-
-	public JFreeChart buildPieChart() {
-		return this.buildPieChart("Requirements by User");
-	}
-
-	public JFreeChart buildBarChart() {
-		return this
-				.buildBarChart("Requirements by User", "Requirement", "User");
-	}
-
+	
 }

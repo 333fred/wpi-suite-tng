@@ -21,25 +21,7 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
  */
 
 public interface IModelController<T extends AbstractModel> {
-
-	/**
-	 * Gets the model with the given id from the server
-	 * 
-	 * @param id
-	 *            the id of the model to get
-	 * @param observer
-	 *            the observer to handle server response
-	 */
-	public void get(int id, RequestObserver observer);
-
-	/**
-	 * Gets all of this type from the server
-	 * 
-	 * @param observer
-	 *            the observer to handle server response
-	 */
-	public void getAll(RequestObserver observer);
-
+	
 	/**
 	 * Creates a given model on the server for the first time
 	 * 
@@ -49,7 +31,35 @@ public interface IModelController<T extends AbstractModel> {
 	 *            the observer to handle server response
 	 */
 	public void create(T model, RequestObserver observer);
-
+	
+	/**
+	 * Deletes the given model on server.
+	 * 
+	 * @param model
+	 *            the model to update
+	 * @param observer
+	 *            the observer to handle server response
+	 */
+	public void delete(T model, RequestObserver observer);
+	
+	/**
+	 * Gets the model with the given id from the server
+	 * 
+	 * @param id
+	 *            the id of the model to get
+	 * @param observer
+	 *            the observer to handle server response
+	 */
+	public void get(int id, RequestObserver observer);
+	
+	/**
+	 * Gets all of this type from the server
+	 * 
+	 * @param observer
+	 *            the observer to handle server response
+	 */
+	public void getAll(RequestObserver observer);
+	
 	/**
 	 * Updates the given model on server. It must be created once before it is
 	 * saved.
@@ -60,14 +70,4 @@ public interface IModelController<T extends AbstractModel> {
 	 *            the observer to handle server response
 	 */
 	public void save(T model, RequestObserver observer);
-
-	/**
-	 * Deletes the given model on server.
-	 * 
-	 * @param model
-	 *            the model to update
-	 * @param observer
-	 *            the observer to handle server response
-	 */
-	public void delete(T model, RequestObserver observer);
 }

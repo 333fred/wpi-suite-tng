@@ -20,20 +20,21 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
  */
 
 public class UserController extends AbstractController<StringListModel> {
-
+	
 	/**
 	 * Creates a controller to retrieve users from the server
 	 */
 	public UserController() {
 		super("stringlistmodel");
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(StringListModel model, RequestObserver observer) {
+	public void delete(final StringListModel model,
+			final RequestObserver observer) {
 		// Nothing is stored on the server, do nothing.
 	}
-
+	
 }

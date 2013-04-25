@@ -28,68 +28,71 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  */
 public class IterationRequirementStatistics extends
 		AbstractRequirementStatistics {
-
+	
+	@Override
+	public JFreeChart buildBarChart() {
+		update();
+		return this.buildBarChart("Requirements by Iteration", "Iteration",
+				"Requirements");
+	}
+	
+	@Override
+	public JFreeChart buildLineChart() {
+		update();
+		return this.buildLineChart("Requirements by Iteration", "Iteration",
+				"Requirements");
+	}
+	
+	@Override
+	public JFreeChart buildPieChart() {
+		update();
+		return this.buildPieChart("Requirements by Iteration");
+	}
+	
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
 	 * IRequirementStatistics#update()
 	 */
 	@Override
 	public void update() {
-
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getFilteredRequirements(); // refresh list of requirements
-
+		
+		final List<Requirement> requirements = RequirementDatabase
+				.getInstance().getFilteredRequirements(); // refresh list of
+															// requirements
+		
 		// for every possible status
-		for (Iteration iteration : IterationDatabase.getInstance()
+		for (final Iteration iteration : IterationDatabase.getInstance()
 				.getAll()) {
-			this.data.put(iteration.getName(), new Integer(0)); // set the
-																// number of
-																// counted
-																// requirements
-																// with that
-																// status to
-																// zero
+			data.put(iteration.getName(), new Integer(0)); // set the
+															// number of
+															// counted
+															// requirements
+															// with that
+															// status to
+															// zero
 		}
-
+		
 		// for every requirement in this project
-		for (Requirement requirement : requirements) {
-
+		for (final Requirement requirement : requirements) {
+			
 			try {
-				Iteration iteration = IterationDatabase.getInstance()
+				final Iteration iteration = IterationDatabase.getInstance()
 						.get(requirement.getIteration());
-				Integer oldValue = this.data.get(iteration.getName());
-				this.data.put(iteration.getName(),
-						new Integer(oldValue.intValue() + 1)); // increment the
-																// number of
-																// requirements
-																// for a given
-																// iteration
-			} catch (IterationNotFoundException e) {
+				final Integer oldValue = data.get(iteration.getName());
+				data.put(iteration.getName(), new Integer(
+						oldValue.intValue() + 1)); // increment the
+													// number of
+													// requirements
+													// for a given
+													// iteration
+			} catch (final IterationNotFoundException e) {
 				System.out
 						.println("Iteration wasn't found, disregarding: IterationRequirementStatistics:54");
 			}
-
+			
 		}
-
+		
 	}
-
-	public JFreeChart buildLineChart() {
-		this.update();
-		return this.buildLineChart("Requirements by Iteration", "Iteration",
-				"Requirements");
-	}
-
-	public JFreeChart buildPieChart() {
-		this.update();
-		return this.buildPieChart("Requirements by Iteration");
-	}
-
-	public JFreeChart buildBarChart() {
-		this.update();
-		return this.buildBarChart("Requirements by Iteration", "Iteration",
-				"Requirements");
-	}
-
+	
 }

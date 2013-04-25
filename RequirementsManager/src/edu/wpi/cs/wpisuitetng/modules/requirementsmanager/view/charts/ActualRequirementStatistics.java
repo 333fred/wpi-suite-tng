@@ -26,42 +26,45 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  */
 
 public class ActualRequirementStatistics extends AbstractRequirementStatistics {
-
+	
+	@Override
+	public JFreeChart buildBarChart() {
+		final JFreeChart barChart = this.buildBarChart(
+				"Requirements by Actual Effort", "Requirement", "Effort");
+		return barChart;
+	}
+	
+	@Override
+	public JFreeChart buildLineChart() {
+		update();
+		return this.buildLineChart("Requirements by Actual Effort",
+				"Requirment", "Effort");
+	}
+	
+	@Override
+	public JFreeChart buildPieChart() {
+		return this.buildPieChart("Requirements by Actual Effort");
+	}
+	
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
 	 * IRequirementStatistics#update()
 	 */
 	@Override
 	public void update() {
-
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getFilteredRequirements(); // refresh list of requirements
-
+		
+		final List<Requirement> requirements = RequirementDatabase
+				.getInstance().getFilteredRequirements(); // refresh list of
+															// requirements
+		
 		// for each requirement
-		for (Requirement requirement : requirements) {
+		for (final Requirement requirement : requirements) {
 			// get amount of effort spent per requirement
 			data.put(requirement.getName(), requirement.getEffort());
-
+			
 		}
-
+		
 	}
-
-	public JFreeChart buildLineChart() {
-		this.update();
-		return this.buildLineChart("Requirements by Actual Effort",
-				"Requirment", "Effort");
-	}
-
-	public JFreeChart buildPieChart() {
-		return this.buildPieChart("Requirements by Actual Effort");
-	}
-
-	public JFreeChart buildBarChart() {
-		JFreeChart barChart = this.buildBarChart(
-				"Requirements by Actual Effort", "Requirement", "Effort");
-		return barChart;
-	}
-
+	
 }

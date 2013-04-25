@@ -34,18 +34,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * 
  * @author spkordell
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class MakeNotePanel extends JPanel {
-
+	
 	private final JTextArea noteField;
 	private final JButton addnote;
-
+	
 	// private final JButton deleteNote;
 	private final JLabel addnoteLabel;
-
+	
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
-
+	
 	/**
 	 * Construct the panel, add and layout components.
 	 * 
@@ -55,15 +55,16 @@ public class MakeNotePanel extends JPanel {
 	 * @param parentView
 	 *            the view of the requirement in question
 	 */
-	public MakeNotePanel(Requirement model, DetailPanel parentView) {
+	public MakeNotePanel(final Requirement model, final DetailPanel parentView) {
 		noteField = new JTextArea();
 		noteField.setLineWrap(true);
 		noteField.setWrapStyleWord(true);
 		noteField.setBorder((new JTextField()).getBorder());
-
+		
 		noteField.addKeyListener(new KeyAdapter() {
+			
 			@Override
-			public void keyPressed(KeyEvent event) {
+			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
 						noteField.transferFocus();
@@ -78,55 +79,67 @@ public class MakeNotePanel extends JPanel {
 				}
 			}
 		});
-
+		
 		addnote = new JButton("Add note");
 		addnoteLabel = new JLabel("Add a new note:");
-
+		
 		// deleteNote = new JButton("Delete note");
-
+		
 		addnote.setAction(new SaveNoteAction(new SaveNoteController(this,
 				model, parentView)));
 		
 		addnote.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				addnote.setEnabled(false);
 			}
 		});
-
-		this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-		this.setBorder(BorderFactory.createCompoundBorder(
+		
+		setBorder(BorderFactory.createLineBorder(Color.black, 1));
+		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.black, 1),
 				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-
-		SpringLayout layout = new SpringLayout();
-		this.setLayout(layout);
-
+		
+		final SpringLayout layout = new SpringLayout();
+		setLayout(layout);
+		
 		final JScrollPane noteFieldPane = new JScrollPane(noteField);
-
+		
 		layout.putConstraint(SpringLayout.NORTH, addnoteLabel, 0,
 				SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.WEST, addnoteLabel, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, noteFieldPane,
-				VERTICAL_PADDING, SpringLayout.SOUTH, addnoteLabel);
+				MakeNotePanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				addnoteLabel);
 		layout.putConstraint(SpringLayout.WEST, noteFieldPane, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, noteFieldPane, 0,
 				SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, noteFieldPane,
-				note_FIELD_HEIGHT, SpringLayout.NORTH, noteFieldPane);
-		layout.putConstraint(SpringLayout.NORTH, addnote, VERTICAL_PADDING,
-				SpringLayout.SOUTH, noteFieldPane);
+				MakeNotePanel.note_FIELD_HEIGHT, SpringLayout.NORTH,
+				noteFieldPane);
+		layout.putConstraint(SpringLayout.NORTH, addnote,
+				MakeNotePanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				noteFieldPane);
 		layout.putConstraint(SpringLayout.EAST, addnote, 0, SpringLayout.EAST,
 				this);
-		layout.putConstraint(SpringLayout.SOUTH, this, VERTICAL_PADDING,
-				SpringLayout.SOUTH, addnote);
-
+		layout.putConstraint(SpringLayout.SOUTH, this,
+				MakeNotePanel.VERTICAL_PADDING, SpringLayout.SOUTH, addnote);
+		
 		this.add(addnoteLabel);
 		this.add(noteFieldPane);
 		this.add(addnote);
 	}
-
+	
+	/**
+	 * @return the addnote
+	 */
+	public JButton getAddnote() {
+		return addnote;
+	}
+	
 	/**
 	 * A function to the get the text area
 	 * 
@@ -135,14 +148,7 @@ public class MakeNotePanel extends JPanel {
 	public JTextArea getnoteField() {
 		return noteField;
 	}
-
-	/**
-	 * @return the addnote
-	 */
-	public JButton getAddnote() {
-		return addnote;
-	}
-
+	
 	/**
 	 * Enables and disables input on this panel.
 	 * 
@@ -150,7 +156,7 @@ public class MakeNotePanel extends JPanel {
 	 *            if value is true, input is enabled, otherwise input is
 	 *            disabled.
 	 */
-	public void setInputEnabled(boolean value) {
+	public void setInputEnabled(final boolean value) {
 		noteField.setEnabled(value);
 		addnote.setEnabled(value);
 		if (value) {

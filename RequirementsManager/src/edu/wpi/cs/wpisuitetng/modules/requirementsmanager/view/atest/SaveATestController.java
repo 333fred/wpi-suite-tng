@@ -29,13 +29,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableM
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
 public class SaveATestController {
-
+	
 	private final MakeATestPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
 	private final EventTableModel testModel;
 	private final EventTable testTable;
-
+	
 	/**
 	 * Construct the controller
 	 * 
@@ -46,28 +46,29 @@ public class SaveATestController {
 	 * @param parentView
 	 *            the DetailPanel displaying the current requirement
 	 */
-	public SaveATestController(MakeATestPanel view, Requirement model,
-			DetailPanel parentView, EventTable testTable) {
+	public SaveATestController(final MakeATestPanel view,
+			final Requirement model, final DetailPanel parentView,
+			final EventTable testTable) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
 		this.testTable = testTable;
-		this.testModel = (EventTableModel) testTable.getModel();
+		testModel = (EventTableModel) testTable.getModel();
 	}
-
+	
 	/**
 	 * Save a aTest to the server
 	 */
-	public void saveaTest(int[] selectedRows) {
+	public void saveaTest(final int[] selectedRows) {
 		final String testText = view.getaTestField().getText();
 		final String testName = view.getaTestName().getText();
 		if (selectedRows == null) { // Creating a aTest!
 		} else if (selectedRows.length < 1) {
 			// aTest must have a name and description of at least one character
-			if (testText.length() > 0 && testName.length() > 0) {
-				ATest tempTest = new ATest(testName, testText);
-				tempTest.setId(this.model.getTests().size() + 1);
-				this.model.addTest(tempTest);
+			if ((testText.length() > 0) && (testName.length() > 0)) {
+				final ATest tempTest = new ATest(testName, testText);
+				tempTest.setId(model.getTests().size() + 1);
+				model.addTest(tempTest);
 				testModel.addEvent(tempTest);
 				view.getaTestName().setText("");
 				view.getaTestField().setText("");
@@ -76,26 +77,26 @@ public class SaveATestController {
 				// if the requirement hasn't been just created
 				if (model.getName().length() > 0) {
 					// Save to requirement!
-					RequirementsController controller = new RequirementsController();
-					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-							this.parentView);
+					final RequirementsController controller = new RequirementsController();
+					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+							parentView);
 					controller.save(model, observer);
 				}
 			}
 		} else {
-
+			
 			// Modifying aTests
 			
-			List<ATest> selectedATests = new ArrayList<ATest>();
+			final List<ATest> selectedATests = new ArrayList<ATest>();
 			
-			for (int i : selectedRows) {
+			for (final int i : selectedRows) {
 				selectedATests.add((ATest) testModel.getValueAt(i, 0));
 			}
 			
-			for (Object aTest : selectedATests) {
+			for (final Object aTest : selectedATests) {
 				if (selectedATests.size() == 1) {
 					// If only one is selected, edit the fields
-					if (testText.length() > 0 && testName.length() > 0) {
+					if ((testText.length() > 0) && (testName.length() > 0)) {
 						((ATest) aTest).setName(view.getaTestName().getText());
 						((ATest) aTest).setDescription(view.getaTestField()
 								.getText());
@@ -108,19 +109,19 @@ public class SaveATestController {
 								.getaTestStatusBox().getSelectedItem()
 								.toString()));
 			}
-
+			
 			// Save to requirement!
 			if (model.getName().length() > 0) {
-				RequirementsController controller = new RequirementsController();
-				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-						this.parentView);
+				final RequirementsController controller = new RequirementsController();
+				final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+						parentView);
 				controller.save(model, observer);
 			}
 			view.getaTestName().setText("");
 			view.getaTestField().setText("");
 			view.getaTestField().requestFocusInWindow();
 		}
-
+		
 		testTable.clearSelection();
 		view.getaTestStatus()
 				.setText(
@@ -134,6 +135,6 @@ public class SaveATestController {
 		view.getaTestField().setBackground(Color.white);
 		view.getaTestName().setBackground(Color.white);
 		view.getAddaTest().setEnabled(false);
-
+		
 	}
 }

@@ -12,26 +12,25 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOperation;
 
 public class TestShouldFilter {
-
+	
 	@Test
 	public void testFilterName() {
-		Requirement req = new Requirement();
+		final Requirement req = new Requirement();
 		req.setName("Hello World");
 		
-		Filter filter = new Filter();
+		final Filter filter = new Filter();
 		filter.setField(FilterField.NAME);
 		filter.setOperation(FilterOperation.EQUAL);
 		filter.setValue("Hello World");
 		
-		assertEquals(filter.shouldFilter(req), true);
+		Assert.assertEquals(filter.shouldFilter(req), true);
 	}
-
+	
 }

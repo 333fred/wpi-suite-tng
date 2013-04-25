@@ -11,12 +11,10 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,108 +24,122 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.FilterOper
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.FilterIterationBetween;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.CreateFilterView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
 public class CreateFilterViewTest {
+	
 	User u1 = new User("user", "user1", "password", 0);
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
 		FilterDatabase.getInstance().set(new ArrayList<Filter>());
-		Iteration theIteration = new Iteration("Yo", new Date(), new Date());
+		final Iteration theIteration = new Iteration("Yo", new Date(),
+				new Date());
 		IterationDatabase.getInstance().set(new ArrayList<Iteration>());
 		IterationDatabase.getInstance().add(theIteration);
 	}
-
+	
 	@Test
 	public void testInitializeWithFilter() {
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.NAME,
+		final Filter theFilter = new Filter(u1.getUsername(), FilterField.NAME,
 				FilterOperation.EQUAL, "name1");
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
+		final CreateFilterView view = new CreateFilterView(
+				FilterView.getInstance(), theFilter);
 		view.editFilter(theFilter);
 		view.onSavePressed();
-		assertNotNull(view);
+		Assert.assertNotNull(view);
 	}
 	
 	@Test
 	public void testInitializeWithFilterEstimate() {
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.ESTIMATE,
-				FilterOperation.EQUAL, "6");
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
+		final Filter theFilter = new Filter(u1.getUsername(),
+				FilterField.ESTIMATE, FilterOperation.EQUAL, "6");
+		final CreateFilterView view = new CreateFilterView(
+				FilterView.getInstance(), theFilter);
 		view.editFilter(theFilter);
 		view.onSavePressed();
-		assertNotNull(view);
-	}
-	
-	@Test
-	public void testInitializeWithFilterStatus() {
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.STATUS,
-				FilterOperation.EQUAL, "Complete");
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
-		view.editFilter(theFilter);
-		view.onSavePressed();
-		assertNotNull(view);
-	}
-	
-	@Test
-	public void testInitializeWithFilterPriority() {
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.PRIORITY,
-				FilterOperation.EQUAL, "Complete");
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
-		view.editFilter(theFilter);
-		view.onSavePressed();
-		assertNotNull(view);
-	}
-	
-	@Test
-	public void testInitializeWithFilterType() {
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.TYPE,
-				FilterOperation.EQUAL, "Complete");
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
-		view.editFilter(theFilter);
-		view.onSavePressed();
-		assertNotNull(view);
+		Assert.assertNotNull(view);
 	}
 	
 	@Test
 	public void testInitializeWithFilterIterationEqual() {
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
-				FilterOperation.EQUAL, 2);
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
+		final Filter theFilter = new Filter(u1.getUsername(),
+				FilterField.ITERATION, FilterOperation.EQUAL, 2);
+		final CreateFilterView view = new CreateFilterView(
+				FilterView.getInstance(), theFilter);
 		view.editFilter(theFilter);
 		view.onSavePressed();
-		assertNotNull(view);
+		Assert.assertNotNull(view);
 	}
 	
-	/*@Test
-	public void testInitializeWithFilterIterationAfter() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(0, 0, 1);
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
-				FilterOperation.OCCURS_AFTER, new Date());
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
-		view.editFilter(theFilter);
-		assertNotNull(view);
-	}*/
-	
-	/*@Test
-	public void testInitializeWithFilterIterationBetween() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(0, 0, 1);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.set(0, 0, 10);
-		Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
-				FilterOperation.OCCURS_BETWEEN, new FilterIterationBetween(cal.getTime(), cal2.getTime()));
-		CreateFilterView view = new CreateFilterView(FilterView.getInstance(), theFilter);
+	@Test
+	public void testInitializeWithFilterPriority() {
+		final Filter theFilter = new Filter(u1.getUsername(),
+				FilterField.PRIORITY, FilterOperation.EQUAL, "Complete");
+		final CreateFilterView view = new CreateFilterView(
+				FilterView.getInstance(), theFilter);
 		view.editFilter(theFilter);
 		view.onSavePressed();
-		assertNotNull(view);
-	}*/
-
+		Assert.assertNotNull(view);
+	}
+	
+	@Test
+	public void testInitializeWithFilterStatus() {
+		final Filter theFilter = new Filter(u1.getUsername(),
+				FilterField.STATUS, FilterOperation.EQUAL, "Complete");
+		final CreateFilterView view = new CreateFilterView(
+				FilterView.getInstance(), theFilter);
+		view.editFilter(theFilter);
+		view.onSavePressed();
+		Assert.assertNotNull(view);
+	}
+	
+	@Test
+	public void testInitializeWithFilterType() {
+		final Filter theFilter = new Filter(u1.getUsername(), FilterField.TYPE,
+				FilterOperation.EQUAL, "Complete");
+		final CreateFilterView view = new CreateFilterView(
+				FilterView.getInstance(), theFilter);
+		view.editFilter(theFilter);
+		view.onSavePressed();
+		Assert.assertNotNull(view);
+	}
+	
+	/*
+	 * @Test
+	 * public void testInitializeWithFilterIterationAfter() {
+	 * Calendar cal = Calendar.getInstance();
+	 * cal.set(0, 0, 1);
+	 * Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
+	 * FilterOperation.OCCURS_AFTER, new Date());
+	 * CreateFilterView view = new CreateFilterView(FilterView.getInstance(),
+	 * theFilter);
+	 * view.editFilter(theFilter);
+	 * assertNotNull(view);
+	 * }
+	 */
+	
+	/*
+	 * @Test
+	 * public void testInitializeWithFilterIterationBetween() {
+	 * Calendar cal = Calendar.getInstance();
+	 * cal.set(0, 0, 1);
+	 * Calendar cal2 = Calendar.getInstance();
+	 * cal2.set(0, 0, 10);
+	 * Filter theFilter = new Filter(u1.getUsername(), FilterField.ITERATION,
+	 * FilterOperation.OCCURS_BETWEEN, new FilterIterationBetween(cal.getTime(),
+	 * cal2.getTime()));
+	 * CreateFilterView view = new CreateFilterView(FilterView.getInstance(),
+	 * theFilter);
+	 * view.editFilter(theFilter);
+	 * view.onSavePressed();
+	 * assertNotNull(view);
+	 * }
+	 */
+	
 }

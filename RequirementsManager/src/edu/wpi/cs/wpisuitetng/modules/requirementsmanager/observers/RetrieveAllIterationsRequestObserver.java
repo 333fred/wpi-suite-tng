@@ -28,36 +28,64 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * Observer for the request to get all iterations from the server.
  */
 public class RetrieveAllIterationsRequestObserver implements RequestObserver {
-
-	private IRetreivedAllIterationsNotifier notifier;
-
+	
+	private final IRetreivedAllIterationsNotifier notifier;
+	
 	public RetrieveAllIterationsRequestObserver(
-			IRetreivedAllIterationsNotifier notifier) {
+			final IRetreivedAllIterationsNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	// TODO: implement server connection once required
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
+	 * .network.models.IRequest, java.lang.Exception)
+	 */
+	@Override
+	public void fail(final IRequest iReq, final Exception exception) {
+		// TODO Auto-generated method stub
+		notifier.errorReceivingData("Unable to complete request: "
+				+ exception.getMessage());
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
+	 * cs.wpisuitetng.network.models.IRequest)
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		// TODO Auto-generated method stub
+		notifier.errorReceivingData("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void responseSuccess(final IRequest iReq) {
 		// cast observable to request
-		Request request = (Request) iReq;
-
+		final Request request = (Request) iReq;
+		
 		// get the response from the request
-		ResponseModel response = request.getResponse();
-
+		final ResponseModel response = request.getResponse();
+		
 		if (response.getStatusCode() == 200) {
 			// parse the response
 			final Iteration[] iterations = Iteration.fromJSONArray(response
 					.getBody());
-
+			
 			IterationDatabase.getInstance().set(Arrays.asList(iterations));
-
+			
 			// notify the controller
 			SwingUtilities.invokeLater(new Runnable() {
+				
 				@Override
 				public void run() {
 					notifier.receivedData(iterations);
@@ -70,34 +98,5 @@ public class RetrieveAllIterationsRequestObserver implements RequestObserver {
 					+ iReq.getResponse().getStatusMessage());
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
-	 * cs.wpisuitetng.network.models.IRequest)
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		// TODO Auto-generated method stub
-		notifier.errorReceivingData("Received "
-				+ iReq.getResponse().getStatusCode() + " error from server: "
-				+ iReq.getResponse().getStatusMessage());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
-	 * .network.models.IRequest, java.lang.Exception)
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		// TODO Auto-generated method stub
-		notifier.errorReceivingData("Unable to complete request: "
-				+ exception.getMessage());
-	}
-
+	
 }

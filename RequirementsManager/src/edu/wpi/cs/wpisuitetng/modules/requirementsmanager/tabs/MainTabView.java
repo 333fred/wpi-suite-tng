@@ -12,17 +12,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
 import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 /**
  * The JTabbedPane that will be shown in the RequirementsManager Module.
@@ -36,17 +29,34 @@ public class MainTabView extends JTabbedPane {
 	private boolean firstTab;
 	
 	/** The tab controller for this tab view */
-	private MainTabController tabController;
+	private final MainTabController tabController;
 	
-	public MainTabView(MainTabController tabController) {
+	public MainTabView(final MainTabController tabController) {
 		this.tabController = tabController;
 		firstTab = true;
-		setTabPlacement(TOP); // set the tabs to be placed at the top
-		setTabLayoutPolicy(SCROLL_TAB_LAYOUT); // allow the tabs to be
-												// scrollable when there are too
-												// many to fit on the screen
+		setTabPlacement(SwingConstants.TOP); // set the tabs to be placed at the
+												// top
+		setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT); // allow the tabs to
+															// be
+		// scrollable when there are too
+		// many to fit on the screen
 		
 		// TabView starts off empty.
+	}
+	
+	public void addTab(final String title, final Icon icon, final Tab tab,
+			final String tip) {
+		super.addTab(title, icon, tab, tip);
+		final int index = getTabCount() - 1; // the tab was just added, so we
+												// assume
+		// that it was at the end
+		// add the tab with the given tab component
+		
+		// invoke this later to solve issues
+		// SwingUtilities.invokeLater(new CreateClosableTabInvokable(this,
+		// index, tab));
+		
+		setTabComponentAt(index, tab.getTabComponent(tabController));
 	}
 	
 	/**
@@ -65,24 +75,12 @@ public class MainTabView extends JTabbedPane {
 	 * 
 	 */
 	
-	public void addUnclosableTab(String title, Icon icon, Component component,
-			String tip) {
+	public void addUnclosableTab(final String title, final Icon icon,
+			final Component component, final String tip) {
 		super.addTab(title, icon, component, tip);
-		int index = getTabCount() - 1; // the tab was just added, so we assume
-										// that it was at the end
-	}
-	
-	public void addTab(String title, Icon icon, Tab tab, String tip) {
-		super.addTab(title, icon, tab, tip);
-		int index = getTabCount() - 1; // the tab was just added, so we assume
-										// that it was at the end
-		// add the tab with the given tab component
-		
-		// invoke this later to solve issues
-		// SwingUtilities.invokeLater(new CreateClosableTabInvokable(this,
-		// index, tab));
-		
-		setTabComponentAt(index, tab.getTabComponent(tabController));
+		final int index = getTabCount() - 1; // the tab was just added, so we
+												// assume
+		// that it was at the end
 	}
 	
 	/**
@@ -95,7 +93,7 @@ public class MainTabView extends JTabbedPane {
 	 */
 	
 	@Override
-	public void removeTabAt(int index) {
+	public void removeTabAt(final int index) {
 		if (getTabComponentAt(index) instanceof ClosableTabComponent) {
 			super.removeTabAt(index);
 		}
@@ -128,16 +126,17 @@ public class MainTabView extends JTabbedPane {
 	 * 
 	 * {@inheritDoc}
 	 */
+	
 	@Override
-	public void setSelectedIndex(int index) {
+	public void setSelectedComponent(final Component component) {
 		if (firstTab) {
 			firstTab = false;
-			super.setSelectedIndex(index);
+			super.setSelectedComponent(component);
 		}
-		int oldIndex = getSelectedIndex();
-		Tab tab = (Tab) getComponentAt(oldIndex);
+		final int oldIndex = getSelectedIndex();
+		final Tab tab = (Tab) getComponentAt(oldIndex);
 		if (tab.onLostFocus()) {
-			super.setSelectedIndex(index);
+			super.setSelectedComponent(component);
 		}
 	}
 	
@@ -148,17 +147,16 @@ public class MainTabView extends JTabbedPane {
 	 * 
 	 * {@inheritDoc}
 	 */
-	
 	@Override
-	public void setSelectedComponent(Component component) {
+	public void setSelectedIndex(final int index) {
 		if (firstTab) {
 			firstTab = false;
-			super.setSelectedComponent(component);
+			super.setSelectedIndex(index);
 		}
-		int oldIndex = getSelectedIndex();
-		Tab tab = (Tab) getComponentAt(oldIndex);
+		final int oldIndex = getSelectedIndex();
+		final Tab tab = (Tab) getComponentAt(oldIndex);
 		if (tab.onLostFocus()) {
-			super.setSelectedComponent(component);
+			super.setSelectedIndex(index);
 		}
 	}
 }

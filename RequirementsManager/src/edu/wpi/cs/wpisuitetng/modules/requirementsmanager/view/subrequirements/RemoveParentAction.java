@@ -16,31 +16,33 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 /**
- * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.subrequirements.AssignParent()}
+ * Action that calls {@link
+ * edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.
+ * RequirementsManager.subrequirements.AssignParent()}
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class RemoveParentAction extends AbstractAction {
+	
 	private final RemoveParentController controller;
-
+	
 	/**
 	 * Construct the action
 	 * 
 	 * @param controller
 	 *            the controller to trigger
 	 */
-	public RemoveParentAction(RemoveParentController controller) {
+	public RemoveParentAction(final RemoveParentController controller) {
 		super("Remove Parent");
 		this.controller = controller;
 	}
-
+	
 	/*
 	 * @see
 	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		controller.saveParent();
 	}
-
+	
 }

@@ -17,48 +17,50 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
 
 /**
  * @author Alex C
- *
+ * 
  */
 public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
-
-	private JMenuItem menuFilterDeleted;
-
+	
+	private final JMenuItem menuFilterDeleted;
+	
 	/** The tab controller used to create new tabs */
-	private MainTabController tabController;
-		
+	private final MainTabController tabController;
+	
 	/**
 	 * Creates a DeletedPopupMenu with the given tab controller
 	 * 
-	 * @param tabController 
-	 * 		The tab controller to open tabs in
+	 * @param tabController
+	 *            The tab controller to open tabs in
 	 */
-	public DeletedPopupMenu(MainTabController tabController) {
+	public DeletedPopupMenu(final MainTabController tabController) {
 		this.tabController = tabController;
-
+		
 		menuFilterDeleted = new JMenuItem("Filter By Deleted");
 		
 		menuFilterDeleted.addActionListener(this);
-
+		
 		add(menuFilterDeleted);
-
+		
 	}
 	
 	/**
 	 * The action listener is called when the user selects a menu option
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource().equals(menuFilterDeleted)) {
 			Iteration iter;
 			try {
 				// deleted has ID -2
 				iter = IterationDatabase.getInstance().get(-2);
-				RequirementTableView tableView = RequirementTableView.getInstance();
+				final RequirementTableView tableView = RequirementTableView
+						.getInstance();
 				tableView.IterationFilter(iter.getName());
-				tableView.displayFilterInformation("Filtering by " + iter.getName());
-			} catch (IterationNotFoundException e1) {
+				tableView.displayFilterInformation("Filtering by "
+						+ iter.getName());
+			} catch (final IterationNotFoundException e1) {
 				e1.printStackTrace();
-			} 
-		}		
+			}
+		}
 	}
 }

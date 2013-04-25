@@ -19,7 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  * Will be notified when data has been returned, or an error was returned
  */
 public interface IRetrieveAllFiltersNotifier {
-
+	
 	/**
 	 * Called to retrieve a specific requirement from the server by ID number
 	 * 
@@ -27,6 +27,5 @@ public interface IRetrieveAllFiltersNotifier {
 	 *            The filters
 	 */
 	public void receivedData(Filter[] filters);
-	
 	
 }

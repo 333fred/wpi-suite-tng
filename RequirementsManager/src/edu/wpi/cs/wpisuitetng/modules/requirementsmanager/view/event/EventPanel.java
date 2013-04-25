@@ -23,33 +23,32 @@ import javax.swing.JPanel;
  * 
  * @author spkordell
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class EventPanel extends JPanel {
-
+	
 	protected JLabel title;
 	protected JLabel content;
-	//protected JEditorPane content;
-
-	private Event event;
-
+	// protected JEditorPane content;
+	
+	private final Event event;
+	
 	/**
 	 * The note panel is the panel that is used to create and display notes
 	 * 
 	 * @param note
 	 *            the note that is displayed
 	 */
-	public EventPanel(Event event) {
+	public EventPanel(final Event event) {
 		this.event = event;
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		title = new JLabel(event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
 		content = new JLabel();
-		content.setText("<html><BODY>" + event.getContent()
-				+ "</BODY></HTML>");
+		content.setText("<html><BODY>" + event.getContent() + "</BODY></HTML>");
 		content.setFont(content.getFont().deriveFont(9));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory
 				.createCompoundBorder(
 						BorderFactory.createEmptyBorder(5, 0, 5, 0),
 						BorderFactory.createLineBorder(Color.black, 1)),
@@ -58,17 +57,19 @@ public class EventPanel extends JPanel {
 		this.add(content);
 	}
 	
-	public EventPanel(Event event, int maxWidth) {
+	public EventPanel(final Event event, final int maxWidth) {
 		this.event = event;
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		title = new JLabel(event.getTitle());
 		title.setFont(title.getFont().deriveFont(9));
 		title.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
 		content = new JLabel();
-        content.setText("<html><BODY><TABLE WIDTH="+(maxWidth-30)+"><TR><TD>" + event.getContent() +"</TD></TR></TABLE></BODY></HTML>");
+		content.setText("<html><BODY><TABLE WIDTH=" + (maxWidth - 30)
+				+ "><TR><TD>" + event.getContent()
+				+ "</TD></TR></TABLE></BODY></HTML>");
 		content.setFont(content.getFont().deriveFont(9));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory
 				.createCompoundBorder(
 						BorderFactory.createEmptyBorder(5, 0, 5, 0),
 						BorderFactory.createLineBorder(Color.black, 1)),
@@ -76,6 +77,5 @@ public class EventPanel extends JPanel {
 		this.add(title);
 		this.add(content);
 	}
-
-
+	
 }

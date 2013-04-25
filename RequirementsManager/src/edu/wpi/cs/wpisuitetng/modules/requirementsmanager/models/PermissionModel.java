@@ -13,11 +13,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import java.util.Comparator;
-
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
@@ -26,68 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
  * Contains the permLevel for the current user
  */
 public class PermissionModel extends AbstractModel implements Comparable {
-
-	private int id;
-	private User user;
-	private UserPermissionLevel permLevel;
-	private static PermissionModel model;
-	private static boolean initialized = false;
-
-	/**
-	 * Private function to initialize the model;	
-	 */
-	private static void init() {
-		if (!initialized) {
-			initialized = true;
-			model = new PermissionModel();
-		}
-	}
-
-	/**
-	 * Gets the singleton permLevel instance for this object
-	 * 
-	 * @return the singleton permLevel instance
-	 */
-	public static PermissionModel getInstance() {
-		init();
-		return model;
-	}
-
-	/**
-	 * Private constructor for a PermissionModel
-	 */
-	public PermissionModel() {
-		this.user = null;
-		this.permLevel = UserPermissionLevel.OBSERVE;
-		this.setId(-1);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toJSON() {
-		return new Gson().toJson(this, PermissionModel.class);
-	}
-
-	/**
-	 * Gets the content from the JSON string and returns the updated singleton
-	 * instance
-	 * 
-	 * @param content
-	 *            the json encoded string
-	 * @return the singleton permLevel model
-	 */
-	public static PermissionModel fromJSONSingleton(String content) {
-		init();
-		final Gson parser = new Gson();
-		PermissionModel json = parser
-				.fromJson(content, PermissionModel[].class)[0];
-		setUserPermissionLevelStatic(json.getPermLevel());
-		setUserStatic(json.getUser());
-		return getInstance();
-	}
-
+	
 	/**
 	 * Converts a JSON encoded array of Permission model to an instantiated
 	 * object
@@ -96,11 +32,18 @@ public class PermissionModel extends AbstractModel implements Comparable {
 	 *            the JSON encoded array
 	 * @return the array of permLevel models
 	 */
-	public static PermissionModel[] fromJSONArray(String content) {
+	public static PermissionModel[] fromJSONArray(final String content) {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, PermissionModel[].class);
 	}
-
+	
+	private int id;
+	private User user;
+	private UserPermissionLevel permLevel;
+	private static PermissionModel model;
+	
+	private static boolean initialized = false;
+	
 	/**
 	 * Returns a non-singleton version of the given JSON encoded string. Should
 	 * not be called on the client, ever. For any reason.
@@ -109,140 +52,198 @@ public class PermissionModel extends AbstractModel implements Comparable {
 	 *            the JSON encoded server
 	 * @return the non-singleton permLevel model
 	 */
-	public static PermissionModel fromJSON(String content) {
-		init();
+	public static PermissionModel fromJSON(final String content) {
+		PermissionModel.init();
 		final Gson parser = new Gson();
 		return parser.fromJson(content, PermissionModel.class);
 	}
-
+	
 	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * @param user
-	 *            the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
-	 * Gets the user from the static permLevel model
+	 * Gets the content from the JSON string and returns the updated singleton
+	 * instance
 	 * 
-	 * @return the permLevel model
+	 * @param content
+	 *            the json encoded string
+	 * @return the singleton permLevel model
 	 */
-	public static User getUserStatic() {
-		init();
-		return model.getUser();
+	public static PermissionModel fromJSONSingleton(final String content) {
+		PermissionModel.init();
+		final Gson parser = new Gson();
+		final PermissionModel json = parser.fromJson(content,
+				PermissionModel[].class)[0];
+		PermissionModel.setUserPermissionLevelStatic(json.getPermLevel());
+		PermissionModel.setUserStatic(json.getUser());
+		return PermissionModel.getInstance();
 	}
-
+	
 	/**
-	 * Sets the user in the static permLevel model
+	 * Gets the singleton permLevel instance for this object
 	 * 
-	 * @param u
-	 *            the user to set
+	 * @return the singleton permLevel instance
 	 */
-	public static void setUserStatic(User u) {
-		init();
-		model.setUser(u);
+	public static PermissionModel getInstance() {
+		PermissionModel.init();
+		return PermissionModel.model;
 	}
-
-	/**
-	 * @return the permLevel encoded as a UserPermissions class
-	 */
-	public UserPermissions getUserPermissions() {
-		return new UserPermissions(permLevel);
-	}
-
+	
 	/**
 	 * Gets the permLevel level from the static permLevel model
 	 * 
 	 * @return the permLevel level
 	 */
 	public static UserPermissionLevel getPermissionStatic() {
-		init();
-		return model.getPermLevel();
+		PermissionModel.init();
+		return PermissionModel.model.getPermLevel();
 	}
-
+	
+	/**
+	 * Gets the user from the static permLevel model
+	 * 
+	 * @return the permLevel model
+	 */
+	public static User getUserStatic() {
+		PermissionModel.init();
+		return PermissionModel.model.getUser();
+	}
+	
+	/**
+	 * Private function to initialize the model;
+	 */
+	private static void init() {
+		if (!PermissionModel.initialized) {
+			PermissionModel.initialized = true;
+			PermissionModel.model = new PermissionModel();
+		}
+	}
+	
 	/**
 	 * Sets the permLevel level of the static permLevel model
 	 * 
 	 * @param level
 	 *            the level to set
 	 */
-	public static void setUserPermissionLevelStatic(UserPermissionLevel level) {
-		init();
-		model.setPermLevel(level);
+	public static void setUserPermissionLevelStatic(
+			final UserPermissionLevel level) {
+		PermissionModel.init();
+		PermissionModel.model.setPermLevel(level);
 	}
-
+	
 	/**
-	 * @return the permLevel
+	 * Sets the user in the static permLevel model
+	 * 
+	 * @param u
+	 *            the user to set
 	 */
-	public UserPermissionLevel getPermLevel() {
-		return permLevel;
+	public static void setUserStatic(final User u) {
+		PermissionModel.init();
+		PermissionModel.model.setUser(u);
 	}
-
+	
 	/**
-	 * @param permLevel the permLevel to set
+	 * Private constructor for a PermissionModel
 	 */
-	public void setPermLevel(UserPermissionLevel permission) {
-		this.permLevel = permission;
+	public PermissionModel() {
+		user = null;
+		permLevel = UserPermissionLevel.OBSERVE;
+		setId(-1);
 	}
-
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Boolean identify(Object o) {
+	public int compareTo(final Object o) {
 		if (o instanceof PermissionModel) {
-			return ((PermissionModel) o).getUser().equals(user);
-		} else {
-			return false;
+			return (getUser().getName().compareTo(((PermissionModel) o)
+					.getUser().getName()));
 		}
+		return 999;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void save() {
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void delete() {
 	}
-
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * @return the permLevel
+	 */
+	public UserPermissionLevel getPermLevel() {
+		return permLevel;
+	}
+	
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+	
+	/**
+	 * @return the permLevel encoded as a UserPermissions class
+	 */
+	public UserPermissions getUserPermissions() {
+		return new UserPermissions(permLevel);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int compareTo(Object o){
-		if(o instanceof PermissionModel){
-			return(this.getUser().getName().compareTo(((PermissionModel) o).getUser().getName()));
+	public Boolean identify(final Object o) {
+		if (o instanceof PermissionModel) {
+			return ((PermissionModel) o).getUser().equals(user);
+		} else {
+			return false;
 		}
-		return 999;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void save() {
+	}
+	
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(final int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * @param permLevel
+	 *            the permLevel to set
+	 */
+	public void setPermLevel(final UserPermissionLevel permission) {
+		permLevel = permission;
+	}
+	
+	/**
+	 * @param user
+	 *            the user to set
+	 */
+	public void setUser(final User user) {
+		this.user = user;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toJSON() {
+		return new Gson().toJson(this, PermissionModel.class);
+	}
+	
 }

@@ -21,41 +21,46 @@ import javax.swing.AbstractAction;
  * 
  * @author Nick Massa, Matt Costi, Steve Kordell
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class SaveATestAction extends AbstractAction {
+	
 	private final SaveATestController controller;
-	private int[] selectedRows;
-
+	private final int[] selectedRows;
+	
 	/**
 	 * Construct the action
 	 * 
-	 * @param controller the controller to trigger
+	 * @param controller
+	 *            the controller to trigger
 	 */
-	public SaveATestAction(SaveATestController controller) {
+	public SaveATestAction(final SaveATestController controller) {
 		super("Save");
 		this.controller = controller;
 		selectedRows = new int[0];
 	}
-
+	
 	/**
 	 * Construct the action
 	 * 
-	 * @param controller the controller to trigger
-	 * @param objects object array of all of the aTests
+	 * @param controller
+	 *            the controller to trigger
+	 * @param objects
+	 *            object array of all of the aTests
 	 */
-	public SaveATestAction(SaveATestController controller, int[] selectedRows) {
+	public SaveATestAction(final SaveATestController controller,
+			final int[] selectedRows) {
 		super("Save");
 		this.controller = controller;
 		this.selectedRows = selectedRows;
 	}
-
+	
 	/*
 	 * @see
 	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		controller.saveaTest(selectedRows);
 	}
-
+	
 }

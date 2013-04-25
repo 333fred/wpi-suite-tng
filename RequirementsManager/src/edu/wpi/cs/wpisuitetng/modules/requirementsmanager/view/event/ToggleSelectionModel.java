@@ -17,14 +17,14 @@ import javax.swing.DefaultListSelectionModel;
 /*@author Steve*/
 
 public class ToggleSelectionModel extends DefaultListSelectionModel {
-
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	boolean gestureStarted = false;
-
+	
 	@Override
-	public void setSelectionInterval(int index0, int index1) {
-		//if shift 
+	public void setSelectionInterval(final int index0, final int index1) {
+		// if shift
 		if (!gestureStarted) {
 			if (isSelectedIndex(index0)) {
 				super.removeSelectionInterval(index0, index1);
@@ -34,12 +34,12 @@ public class ToggleSelectionModel extends DefaultListSelectionModel {
 		}
 		gestureStarted = true;
 	}
-
+	
 	@Override
-	public void setValueIsAdjusting(boolean isAdjusting) {
+	public void setValueIsAdjusting(final boolean isAdjusting) {
 		if (!isAdjusting) {
 			gestureStarted = false;
 		}
 	}
-
+	
 }

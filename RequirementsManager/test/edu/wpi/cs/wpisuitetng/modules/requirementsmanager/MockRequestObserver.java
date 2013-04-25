@@ -21,17 +21,17 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  */
 
 public class MockRequestObserver implements RequestObserver {
-
+	
 	/**
 	 * Enum to show the status of the response
 	 */
 	public enum Response {
 		SUCCESS, ERROR, FAILURE, NONE;
 	}
-
+	
 	private Response response;
 	private IRequest request;
-
+	
 	/**
 	 * Creates a new mock request observer, with the enum set to none
 	 */
@@ -39,45 +39,45 @@ public class MockRequestObserver implements RequestObserver {
 		response = Response.NONE;
 		request = null;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
-		response = Response.SUCCESS;
-		request = iReq;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		response = Response.ERROR;
-		request = iReq;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
+	public void fail(final IRequest iReq, final Exception exception) {
 		response = Response.FAILURE;
 		request = iReq;
 	}
-
+	
+	/**
+	 * @return the request
+	 */
+	public IRequest getRequest() {
+		return request;
+	}
+	
 	/**
 	 * @return the response
 	 */
 	public Response getResponse() {
 		return response;
 	}
-
+	
 	/**
-	 * @return the request
+	 * {@inheritDoc}
 	 */
-	public IRequest getRequest() {
-		return request;
+	@Override
+	public void responseError(final IRequest iReq) {
+		response = Response.ERROR;
+		request = iReq;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
+		response = Response.SUCCESS;
+		request = iReq;
 	}
 }

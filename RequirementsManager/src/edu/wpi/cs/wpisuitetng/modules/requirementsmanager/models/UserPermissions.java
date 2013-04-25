@@ -21,48 +21,51 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermis
  */
 
 public class UserPermissions {
-
-	/** The level of the users permissions  */
-	private UserPermissionLevel permissionLevel;
-
-	/** Creates a User Permission with the given level
+	
+	/** The level of the users permissions */
+	private final UserPermissionLevel permissionLevel;
+	
+	/**
+	 * Creates a User Permission with the given level
 	 * 
 	 */
 	
-	public UserPermissions(UserPermissionLevel permissionLevel) {
+	public UserPermissions(final UserPermissionLevel permissionLevel) {
 		this.permissionLevel = permissionLevel;
 	}
-
-	/** Determines if a user can create a requirement 
-	 * 
-	 * @return
-	 */
 	
-	public boolean canCreateRequirement() {		
-		return permissionLevel == UserPermissionLevel.ADMIN;
-	}
-
 	/**
 	 * Determines if a user can create an iteration
 	 * 
 	 * @return
 	 */
-
+	
 	public boolean canCreateIteration() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
-
+	
+	/**
+	 * Determines if a user can create a requirement
+	 * 
+	 * @return
+	 */
+	
+	public boolean canCreateRequirement() {
+		return permissionLevel == UserPermissionLevel.ADMIN;
+	}
+	
 	/**
 	 * Determines if a user can edit an iteration
 	 * 
 	 * @return
 	 */
-
+	
 	public boolean canEditIteration() {
 		return permissionLevel == UserPermissionLevel.ADMIN;
 	}
 	
-	/** Determines if a user can edit a requirement
+	/**
+	 * Determines if a user can edit a requirement
 	 * 
 	 * @return
 	 */
@@ -74,13 +77,13 @@ public class UserPermissions {
 	public boolean canUpdateRequirement() {
 		return permissionLevel == UserPermissionLevel.UPDATE;
 	}
-
+	
 	/**
 	 * Returns the permission level enum of the user
 	 * 
 	 * @return
 	 */
-
+	
 	public UserPermissionLevel getPermissionLevel() {
 		return permissionLevel;
 	}

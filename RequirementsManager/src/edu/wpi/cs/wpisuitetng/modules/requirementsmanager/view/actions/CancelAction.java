@@ -21,14 +21,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * Action which concerns canceling the creation/editing of a requirement
  */
 public class CancelAction extends AbstractAction {
-
-	private DetailPanel parentView;
-
-	public CancelAction(DetailPanel parentView) {
+	
+	private final DetailPanel parentView;
+	
+	public CancelAction(final DetailPanel parentView) {
 		super("Cancel");
 		this.parentView = parentView;
 	}
-
+	
 	/**
 	 * Method to cancel any edits made but not yet saved or unsaved requirement
 	 * creation
@@ -36,8 +36,8 @@ public class CancelAction extends AbstractAction {
 	 * @e any ActionEvent object
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		this.parentView.getMainTabController().closeCurrentTab();
+	public void actionPerformed(final ActionEvent e) {
+		parentView.getMainTabController().closeCurrentTab();
 	}
-
+	
 }

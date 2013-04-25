@@ -29,13 +29,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableM
  * @author Nick Massa, Matt Costi
  */
 public class SaveTaskController {
-
+	
 	private final MakeTaskPanel view;
 	private final Requirement model;
 	private final DetailPanel parentView;
 	private final EventTableModel taskModel;
 	private final EventTable taskTable;
-
+	
 	/**
 	 * Construct the controller
 	 * 
@@ -46,52 +46,57 @@ public class SaveTaskController {
 	 * @param parentView
 	 *            the DetailPanel displaying the current requirement
 	 */
-	public SaveTaskController(MakeTaskPanel view, Requirement model,
-			DetailPanel parentView, EventTable taskTable) {
+	public SaveTaskController(final MakeTaskPanel view,
+			final Requirement model, final DetailPanel parentView,
+			final EventTable taskTable) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
 		this.taskTable = taskTable;
-		this.taskModel = (EventTableModel) taskTable.getModel();
+		taskModel = (EventTableModel) taskTable.getModel();
 	}
-
+	
 	/**
 	 * Save a task to the server
 	 */
-	public void saveTask(int[] selectedRows) {
+	public void saveTask(final int[] selectedRows) {
 		final String taskText = view.getTaskField().getText();
 		final String taskName = view.getTaskName().getText();
 		int taskEstimate;
-
-		if (!view.getEstimate().getText().equals(""))
+		
+		if (!view.getEstimate().getText().equals("")) {
 			taskEstimate = Integer.parseInt(view.getEstimate().getText());
-		else
+		} else {
 			taskEstimate = -1;
-
+		}
+		
 		int estimateSum = 0;
-
-		for (Task altTask : model.getTasks())
+		
+		for (final Task altTask : model.getTasks()) {
 			estimateSum = estimateSum + altTask.getEstimate();
-
+		}
+		
 		if (selectedRows == null) { // Creating a task!
 			System.out.println("TASKS WAS NULL, ISSUE");
 		} else if (selectedRows.length < 1) {
 			// Task must have a name and description of at least one character
-			if (taskText.length() > 0 && taskName.length() > 0) {
-				Task tempTask = new Task(taskName, taskText);
-				if ((view.getUserAssigned().getSelectedItem() == ""))
+			if ((taskText.length() > 0) && (taskName.length() > 0)) {
+				final Task tempTask = new Task(taskName, taskText);
+				if ((view.getUserAssigned().getSelectedItem() == "")) {
 					tempTask.setAssignedUser(null);
-				else
+				} else {
 					tempTask.setAssignedUser((String) view.getUserAssigned()
 							.getSelectedItem());
-
-				if (taskEstimate != -1) {
-					if (taskEstimate + estimateSum <= model.getEstimate())
-						tempTask.setEstimate(taskEstimate);
 				}
-
-				tempTask.setId(this.model.getTasks().size() + 1);
-				this.model.addTask(tempTask);
+				
+				if (taskEstimate != -1) {
+					if ((taskEstimate + estimateSum) <= model.getEstimate()) {
+						tempTask.setEstimate(taskEstimate);
+					}
+				}
+				
+				tempTask.setId(model.getTasks().size() + 1);
+				model.addTask(tempTask);
 				// parentView.getTaskList().addElement(tempTask);
 				taskModel.addEvent(tempTask);
 				view.getTaskName().setText("");
@@ -101,70 +106,73 @@ public class SaveTaskController {
 				// if the requirement hasn't been just created
 				if (model.getName().length() > 0) {
 					// Save to requirement!
-					RequirementsController controller = new RequirementsController();
-					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-							this.parentView);
+					final RequirementsController controller = new RequirementsController();
+					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+							parentView);
 					controller.save(model, observer);
 				}
 				parentView.getComboBoxStatus().removeItem("Complete");
 			}
 		} else {
-
+			
 			// Modifying tasks
-			List<Task> selectedTasks = new ArrayList<Task>();
-
-			for (int i : selectedRows) {
+			final List<Task> selectedTasks = new ArrayList<Task>();
+			
+			for (final int i : selectedRows) {
 				selectedTasks.add((Task) taskModel.getValueAt(i, 0));
 			}
-
-			for (Task task : selectedTasks) {
+			
+			for (final Task task : selectedTasks) {
 				if (selectedTasks.size() == 1) {
 					// If only one is selected, edit the fields
-					if (taskText.length() > 0 && taskName.length() > 0) {
+					if ((taskText.length() > 0) && (taskName.length() > 0)) {
 						task.setName(view.getTaskName().getText());
 						task.setDescription(view.getTaskField().getText());
 					}
-
-					if ((view.getUserAssigned().getSelectedItem() == ""))
+					
+					if ((view.getUserAssigned().getSelectedItem() == "")) {
 						task.setAssignedUser(null);
-					else
+					} else {
 						task.setAssignedUser((String) view.getUserAssigned()
 								.getSelectedItem());
-
-					if (taskEstimate != -1) {
-						if (taskEstimate + estimateSum - task.getEstimate() <= model
-								.getEstimate())
-							task.setEstimate(taskEstimate);
 					}
-
+					
+					if (taskEstimate != -1) {
+						if (((taskEstimate + estimateSum) - task.getEstimate()) <= model
+								.getEstimate()) {
+							task.setEstimate(taskEstimate);
+						}
+					}
+					
 				}
 				// Check the completion status on the tasks
 				task.setCompleted(view.getTaskComplete().isSelected());
 			}
-
+			
 			// Save to requirement!
 			if (model.getName().length() > 0) {
-				RequirementsController controller = new RequirementsController();
-				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-						this.parentView);
+				final RequirementsController controller = new RequirementsController();
+				final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+						parentView);
 				controller.save(model, observer);
 			}
 			view.getTaskName().setText("");
 			view.getTaskField().setText("");
 			view.getTaskField().requestFocusInWindow();
 		}
-
-		List<Task> selectedTasks = new ArrayList<Task>();
-
-		for (int i : selectedRows) {
+		
+		final List<Task> selectedTasks = new ArrayList<Task>();
+		
+		for (final int i : selectedRows) {
 			selectedTasks.add((Task) taskModel.getValueAt(i, 0));
 		}
-
-		for (Task task : selectedTasks) {
-			if (!task.isCompleted())
+		
+		for (final Task task : selectedTasks) {
+			if (!task.isCompleted()) {
 				parentView.getComboBoxStatus().removeItem("Complete");
+			}
 		}
-
+		
 		taskTable.clearSelection();
 		view.getTaskStatus()
 				.setText(
@@ -182,6 +190,6 @@ public class SaveTaskController {
 		view.getTaskField().setBackground(Color.white);
 		view.getTaskName().setBackground(Color.white);
 		view.getAddTask().setEnabled(false);
-
+		
 	}
 }

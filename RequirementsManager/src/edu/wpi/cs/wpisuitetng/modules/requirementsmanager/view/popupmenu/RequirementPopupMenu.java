@@ -32,22 +32,23 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  */
 
 public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
-
+	
 	/** Menu options for the PopupMenu */
 	private JMenuItem menuViewRequirement;
-
+	
 	/** The tab controller to open tabs in */
-	private MainTabController tabController;
-
+	private final MainTabController tabController;
+	
 	/** List of the selected requirements to possibly open */
-	private List<Requirement> selectedRequirements;
-
-	public RequirementPopupMenu(MainTabController tabController,
-			List<Requirement> selectedRequirements) {
+	private final List<Requirement> selectedRequirements;
+	
+	public RequirementPopupMenu(final MainTabController tabController,
+			final List<Requirement> selectedRequirements) {
 		this.tabController = tabController;
 		this.selectedRequirements = selectedRequirements;
-
-		if (PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+		
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canEditRequirement()) {
 			if (selectedRequirements.size() == 1) {
 				menuViewRequirement = new JMenuItem("Edit Requirement");
 			} else {
@@ -60,19 +61,19 @@ public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
 				menuViewRequirement = new JMenuItem("View Requirements");
 			}
 		}
-
+		
 		menuViewRequirement.addActionListener(this);
-
+		
 		add(menuViewRequirement);
-
+		
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		for (Requirement r : selectedRequirements) {
+	public void actionPerformed(final ActionEvent e) {
+		for (final Requirement r : selectedRequirements) {
 			tabController.addViewRequirementTab(r);
-
+			
 		}
 	}
-
+	
 }

@@ -17,5 +17,5 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums;
  * 
  */
 public enum UserPermissionLevel {
-	ADMIN, UPDATE, OBSERVE;	
+	ADMIN, UPDATE, OBSERVE;
 }

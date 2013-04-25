@@ -20,20 +20,21 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 public class FilterTable extends JTable {
-
+	
 	/** the table model used to represnt data in the table */
-	private FilterTableModel tableModel;
-
-	public FilterTable(FilterTableModel tableModel) {
+	private final FilterTableModel tableModel;
+	
+	public FilterTable(final FilterTableModel tableModel) {
 		super(tableModel);
 		this.tableModel = tableModel;
 	}
-
-	public Component prepareRenderer(TableCellRenderer renderer, int row,
-			int column) {
-		Component c = super.prepareRenderer(renderer, row, column);
-
-		if (isRowSelected(row)) {			
+	
+	@Override
+	public Component prepareRenderer(final TableCellRenderer renderer,
+			final int row, final int column) {
+		final Component c = super.prepareRenderer(renderer, row, column);
+		
+		if (isRowSelected(row)) {
 			if (!tableModel.getFilterAt(row).isActive()) {
 				c.setBackground(new Color(184, 207, 229));
 				c.setFont(c.getFont().deriveFont(Font.ITALIC));
@@ -50,13 +51,14 @@ public class FilterTable extends JTable {
 				c.setFont(c.getFont().deriveFont(Font.BOLD));
 			}
 		}
-
+		
 		return c;
 	}
 	/*
-	@Override
-	public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
-		super.changeSelection(rowIndex,columnIndex, true, false);
-	}
-	*/
+	 * @Override
+	 * public void changeSelection(int rowIndex, int columnIndex, boolean
+	 * toggle, boolean extend) {
+	 * super.changeSelection(rowIndex,columnIndex, true, false);
+	 * }
+	 */
 }

@@ -30,114 +30,33 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel
  */
 
 public class UserEntityManager implements EntityManager<StringListModel> {
-
+	
 	Data db;
-
-	public UserEntityManager(Data db) {
+	
+	public UserEntityManager(final Data db) {
 		this.db = db;
 	}
-
-	/**
-	 * Gets all of the users on the database, and stores them in a list inside
-	 * of the StringListModel
-	 */
+	
 	@Override
-	public StringListModel makeEntity(Session s, String content) {
-		// Get all users, loop through the array and add all their names to the
-		// list, then return a new model with the list
-		List<String> users = new ArrayList<String>();
-		List<User> userList = Arrays.asList(s.getProject().getTeam());
-		if (userList.get(0) == null) {
-			return new StringListModel(users);
-		} else {
-			for (User user : userList) {
-				users.add(user.getUsername());
-			}
-		}
-
-		return new StringListModel(users);
-	}
-
-	/**
-	 * This function does nothing but return a new StringListModel, as we don't
-	 * save anything for this in the db
-	 */
-	@Override
-	public StringListModel[] getEntity(Session s, String id) {
-		StringListModel uList = new StringListModel();
-		ArrayList<String> user = new ArrayList<String>(); 
-		user.add(s.getUser().getUsername());
-		uList.setUsers(user);
-		StringListModel[] array = { uList };
-		return array;
-	}
-
-	/**
-	 * There is nothing stored in the database, so this function returns an
-	 * array with a blank model
-	 */
-	@Override
-	public StringListModel[] getAll(Session s) {
-		List<User> userList = Arrays.asList(s.getProject().getTeam());
-		StringListModel model = new StringListModel();
-		List<String> names = new ArrayList<String>();
-		for (User u : userList) {
-			if(u != null) {
-				names.add(u.getUsername());
-			}
-		}
-		model.setUsers(names);
-		StringListModel[] array = { model };
-		return array;
-	}
-
-	/**
-	 * Gets all of the users on the database, and stores them in a list inside
-	 * of the StringListModel
-	 */
-	@Override
-	public StringListModel update(Session s, String content) {
-		List<String> users = new ArrayList<String>();
-		List<User> userList = Arrays.asList(s.getProject().getTeam());
-		if (userList.get(0) == null) {
-			return new StringListModel(users);
-		} else {
-			for (User user : userList) {
-				users.add(user.getUsername());
-			}
-		}
-
-		return new StringListModel(users);
-	}
-
-	/**
-	 * We don't store anything in the database, so we don't do anything here
-	 */
-	@Override
-	public void save(Session s, StringListModel model) {
-
-	}
-
-	/**
-	 * We don't store anything in the database, so we don't do anything here
-	 */
-	@Override
-	public boolean deleteEntity(Session s, String id) {
-		return true;
-	}
-
-	@Override
-	public String advancedGet(Session s, String[] args) {
+	public String advancedGet(final Session s, final String[] args) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public void deleteAll(Session s) {
+	public String advancedPost(final Session s, final String string,
+			final String content) {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
-
+	
+	@Override
+	public String advancedPut(final Session s, final String[] args,
+			final String content) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/**
 	 * We don't store anything in the database, so return 0
 	 */
@@ -145,17 +64,100 @@ public class UserEntityManager implements EntityManager<StringListModel> {
 	public int Count() {
 		return 0;
 	}
-
+	
 	@Override
-	public String advancedPut(Session s, String[] args, String content) {
+	public void deleteAll(final Session s) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
-
+	
+	/**
+	 * We don't store anything in the database, so we don't do anything here
+	 */
 	@Override
-	public String advancedPost(Session s, String string, String content) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean deleteEntity(final Session s, final String id) {
+		return true;
 	}
-
+	
+	/**
+	 * There is nothing stored in the database, so this function returns an
+	 * array with a blank model
+	 */
+	@Override
+	public StringListModel[] getAll(final Session s) {
+		final List<User> userList = Arrays.asList(s.getProject().getTeam());
+		final StringListModel model = new StringListModel();
+		final List<String> names = new ArrayList<String>();
+		for (final User u : userList) {
+			if (u != null) {
+				names.add(u.getUsername());
+			}
+		}
+		model.setUsers(names);
+		final StringListModel[] array = { model };
+		return array;
+	}
+	
+	/**
+	 * This function does nothing but return a new StringListModel, as we don't
+	 * save anything for this in the db
+	 */
+	@Override
+	public StringListModel[] getEntity(final Session s, final String id) {
+		final StringListModel uList = new StringListModel();
+		final ArrayList<String> user = new ArrayList<String>();
+		user.add(s.getUser().getUsername());
+		uList.setUsers(user);
+		final StringListModel[] array = { uList };
+		return array;
+	}
+	
+	/**
+	 * Gets all of the users on the database, and stores them in a list inside
+	 * of the StringListModel
+	 */
+	@Override
+	public StringListModel makeEntity(final Session s, final String content) {
+		// Get all users, loop through the array and add all their names to the
+		// list, then return a new model with the list
+		final List<String> users = new ArrayList<String>();
+		final List<User> userList = Arrays.asList(s.getProject().getTeam());
+		if (userList.get(0) == null) {
+			return new StringListModel(users);
+		} else {
+			for (final User user : userList) {
+				users.add(user.getUsername());
+			}
+		}
+		
+		return new StringListModel(users);
+	}
+	
+	/**
+	 * We don't store anything in the database, so we don't do anything here
+	 */
+	@Override
+	public void save(final Session s, final StringListModel model) {
+		
+	}
+	
+	/**
+	 * Gets all of the users on the database, and stores them in a list inside
+	 * of the StringListModel
+	 */
+	@Override
+	public StringListModel update(final Session s, final String content) {
+		final List<String> users = new ArrayList<String>();
+		final List<User> userList = Arrays.asList(s.getProject().getTeam());
+		if (userList.get(0) == null) {
+			return new StringListModel(users);
+		} else {
+			for (final User user : userList) {
+				users.add(user.getUsername());
+			}
+		}
+		
+		return new StringListModel(users);
+	}
+	
 }

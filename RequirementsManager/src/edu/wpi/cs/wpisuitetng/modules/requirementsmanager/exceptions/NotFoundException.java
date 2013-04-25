@@ -17,24 +17,24 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
  */
 
 public class NotFoundException extends Exception {
-
+	
 	protected Object notFound;
-
+	
 	/**
 	 * Creates a new not found exception for a model
 	 * 
 	 * @param notFound
 	 *            the model not found
 	 */
-	public NotFoundException(Object notFound) {
+	public NotFoundException(final Object notFound) {
 		this.notFound = notFound;
 	}
-
+	
 	/**
 	 * @return the notFound
 	 */
 	public Object getNotFound() {
 		return notFound;
 	}
-
+	
 }

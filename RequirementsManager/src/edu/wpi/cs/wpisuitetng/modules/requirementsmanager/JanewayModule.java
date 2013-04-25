@@ -41,143 +41,144 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
 /**
- * Implementation of IJaneway that allows the other modules to interact with the Janeway client
+ * Implementation of IJaneway that allows the other modules to interact with the
+ * Janeway client
  */
 public class JanewayModule implements IJanewayModule {
-
+	
 	/** List of tabs that this module will display */
-	private List<JanewayTabModel> tabs;
-
+	private final List<JanewayTabModel> tabs;
+	
 	/** The tab controller for tabView */
-	private MainTabController tabController;
-
+	private final MainTabController tabController;
+	
 	/**
 	 * Toolbar view, displayed above the main tab view, and contains action
 	 * buttons for the tabs
 	 */
-	private ToolbarView toolbarView;
-
+	private final ToolbarView toolbarView;
+	
 	/** the IterationTreeView that will be displayed accross the module */
-	private IterationTreeView iterationTreeView;
-
+	private final IterationTreeView iterationTreeView;
+	
 	/** The view that will display filters */
-	private FilterView filterView;
-
-	private SubRequirementTreeView subRequirementTreeView;
-
+	private final FilterView filterView;
+	
+	private final SubRequirementTreeView subRequirementTreeView;
+	
 	/** The tabbed pane on the left for filters and iterations */
-	private JTabbedPane leftTabbedPane;
-
+	private final JTabbedPane leftTabbedPane;
+	
 	/** The controller for the toolbarView */
-	private ToolbarController toolbarController;
-
+	private final ToolbarController toolbarController;
+	
 	/** The controller for retrieving the current users permissions set */
-	private PermissionModelController permController;
-
+	private final PermissionModelController permController;
+	
 	/**
 	 * Creates a new instance of JanewayModule, initializing the tabs to be
 	 * displayed
 	 * 
 	 */
-
+	
 	public JanewayModule() {
-
+		
 		// Start the database threads
 		RequirementDatabase.getInstance().start();
 		IterationDatabase.getInstance().start();
 		PermissionsDatabase.getInstance().start();
 		permController = new PermissionModelController();
-		RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
+		final RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
 		permController.get(0, observer);
-
+		
 		// initialize the list of tabs, using an array list
 		tabs = new ArrayList<JanewayTabModel>();
-
+		
 		// initialize the tab view public void insertTab(String title, Icon
 		// icon, Component component, String tip, int index) {
-
+		
 		// initialize TabController
 		tabController = new MainTabController();
-
+		
 		// initialize the iterationTreeView
 		iterationTreeView = tabController.getIterationTreeView();
 		filterView = tabController.getFilterView();
 		subRequirementTreeView = tabController.getSubReqView();
-
+		
 		leftTabbedPane = new JTabbedPane();
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
-
-
+		
 		// initialize the toolbarView
 		toolbarView = ToolbarView.getInstance(tabController);
-
+		
 		// initialize the toolbar Controller
 		toolbarController = new ToolbarController(toolbarView, tabController);
-
+		
 		tabController.addRequirementsTab();
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				leftTabbedPane, tabController.getTabView());
+		
+		final JSplitPane splitPane = new JSplitPane(
+				JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane,
+				tabController.getTabView());
 		splitPane.setResizeWeight(0);
-
+		
 		// create a new JanewayTabModel, passing in the tab view, and a new
 		// JPanel as the toolbar
-		JanewayTabModel tab1 = new JanewayTabModel(getName(), new ImageIcon(),
-				toolbarView, splitPane);
-
+		final JanewayTabModel tab1 = new JanewayTabModel(getName(),
+				new ImageIcon(), toolbarView, splitPane);
+		
 		// add the tab to the list of tabs
 		tabs.add(tab1);
-
+		
 		registerKeyboardShortcuts(tab1);
-
+		
 		// set the color of disabled combo boxes
 		UIManager.put("ComboBox.disabledForeground", Color.BLACK);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
 	 */
 	@Override
 	public String getName() {
 		return "Requirements Manager";
 	}
-
+	
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
 	}
-
-	@SuppressWarnings("serial")
-	private void registerKeyboardShortcuts(JanewayTabModel tab) {
-		String osName = System.getProperty("os.name").toLowerCase();
-
+	
+	@SuppressWarnings ("serial")
+	private void registerKeyboardShortcuts(final JanewayTabModel tab) {
+		final String osName = System.getProperty("os.name").toLowerCase();
+		
 		// command + w for mac or control + w for windows: close the current tab
 		if (osName.contains("mac")) {
 			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke
 					.getKeyStroke("meta W"), new AbstractAction() {
+				
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					tabController.closeCurrentTab();
 				}
 			}));
 		} else {
 			tab.addKeyboardShortcut(new KeyboardShortcut(KeyStroke
 					.getKeyStroke("control W"), new AbstractAction() {
+				
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					tabController.closeCurrentTab();
 				}
 			}));
 		}
 	}
-
+	
 }

@@ -34,18 +34,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteVie
  * @author Zac Chupka, Maddie Burris
  */
 public class DetailNoteView extends JPanel {
-
-	private JScrollPane noteScrollPane;
-
+	
+	private final JScrollPane noteScrollPane;
+	
 	protected EventTable notesTable;
-	private EventTableModel tableModel;
-
+	private final EventTableModel tableModel;
+	
 	private Requirement requirement;
-	private DetailPanel parentView;
-	private MakeNotePanel makeNotePanel;
-
-	private EventCellRenderer cellRenderer;
-
+	private final DetailPanel parentView;
+	private final MakeNotePanel makeNotePanel;
+	
+	private final EventCellRenderer cellRenderer;
+	
 	/**
 	 * Construct the panel and add layout components
 	 * 
@@ -54,114 +54,115 @@ public class DetailNoteView extends JPanel {
 	 * @param parentView
 	 *            the parent view
 	 */
-	public DetailNoteView(Requirement requirement, DetailPanel parentView) {
+	public DetailNoteView(final Requirement requirement,
+			final DetailPanel parentView) {
 		this.requirement = requirement;
 		this.parentView = parentView;
-
+		
 		setLayout(new BorderLayout());
 		// Set up the note panel
 		makeNotePanel = new MakeNotePanel(requirement, parentView);
-
+		
 		// Create the note list
-
+		
 		tableModel = new EventTableModel(new ArrayList<Event>());
 		notesTable = new EventTable(tableModel);
 		cellRenderer = new EventCellRenderer();
-
+		
 		notesTable.setShowGrid(false);
 		notesTable.setIntercellSpacing(new Dimension(0, 0));
 		notesTable.getTableHeader().setVisible(false);
-
+		
 		// Add the list to the scroll pane
-		this.noteScrollPane = new JScrollPane();
+		noteScrollPane = new JScrollPane();
 		noteScrollPane.getViewport().add(notesTable);
-
+		
 		// Set up the frame
-		JPanel notePane = new JPanel();
+		final JPanel notePane = new JPanel();
 		notePane.setLayout(new BorderLayout());
 		notePane.add(noteScrollPane, BorderLayout.CENTER);
 		notePane.add(makeNotePanel, BorderLayout.SOUTH);
 		notePane.remove(notesTable.getTableHeader());
-
+		
 		add(notePane, BorderLayout.CENTER);
-
+		
 		// add key listener
-		NoteViewListener noteFieldListener = new NoteViewListener(this,
-				this.makeNotePanel.getnoteField());
-		this.makeNotePanel.getnoteField().addKeyListener(noteFieldListener);
-
+		final NoteViewListener noteFieldListener = new NoteViewListener(this,
+				makeNotePanel.getnoteField());
+		makeNotePanel.getnoteField().addKeyListener(noteFieldListener);
+		
 		setMinimumSize(new Dimension(300, 50));
 		
 		// note will be disabled on start, nothing to add
 		disableAddNote();
-
+		
 		// adds the notes to the list model
 		addNotesToList();
 	}
-
+	
 	/**
 	 * Method to populate this object's list of notes from the current
 	 * requirement's list of notes
 	 */
 	private void addNotesToList() {
-		List<Note> notes = requirement.getNotes();
-		List<Event> events = new ArrayList<Event>();
-		for (Note note : notes) {
+		final List<Note> notes = requirement.getNotes();
+		final List<Event> events = new ArrayList<Event>();
+		for (final Note note : notes) {
 			events.add(note);
 		}
 		tableModel.setRowData(events);
 	}
-
-	/**
-	 * Updates the local display of the current requirement's notes
-	 * 
-	 * @param newRequirement
-	 *            the most recent version of the current requirement
-	 */
-	public void updateRequirement(Requirement newRequirement) {
-		this.requirement = newRequirement;
-
-		// updates the notes list
-		addNotesToList();
+	
+	public void disableAddNote() {
+		makeNotePanel.getAddnote().setEnabled(false);
 	}
-
+	
 	/**
 	 * This function disables interaction with the notes panel
 	 */
 	public void disableUserButtons() {
 		makeNotePanel.setInputEnabled(false);
 	}
-
-	public void disableAddNote() {
-		this.makeNotePanel.getAddnote().setEnabled(false);
-	}
-
+	
 	public void enableAddNote() {
-		this.makeNotePanel.getAddnote().setEnabled(true);
+		makeNotePanel.getAddnote().setEnabled(true);
 	}
-
+	
 	public MakeNotePanel getNotePanel() {
 		return makeNotePanel;
 	}
-
+	
 	public List<Note> getNotesList() {
-		List<Note> notes = new ArrayList<Note>();
-		for (Event e : tableModel.getRowData()) {
+		final List<Note> notes = new ArrayList<Note>();
+		for (final Event e : tableModel.getRowData()) {
 			notes.add((Note) e);
 		}
 		return notes;
 	}
-
-	public void setNotesList(List<Note> notes) {
-		List<Event> events = new ArrayList<Event>();
-		for (Note note : notes) {
+	
+	public void scrollToBottom() {
+		noteScrollPane.getVerticalScrollBar().setValue(
+				noteScrollPane.getVerticalScrollBar().getMaximum());
+	}
+	
+	public void setNotesList(final List<Note> notes) {
+		final List<Event> events = new ArrayList<Event>();
+		for (final Note note : notes) {
 			events.add(note);
 		}
 		tableModel.setRowData(events);
 	}
-
-	public void scrollToBottom() {
-		noteScrollPane.getVerticalScrollBar().setValue(
-				noteScrollPane.getVerticalScrollBar().getMaximum());
-	}	
+	
+	/**
+	 * Updates the local display of the current requirement's notes
+	 * 
+	 * @param newRequirement
+	 *            the most recent version of the current requirement
+	 */
+	public void updateRequirement(final Requirement newRequirement) {
+		requirement = newRequirement;
+		
+		// updates the notes list
+		addNotesToList();
+	}
 }

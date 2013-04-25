@@ -23,20 +23,20 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 
 public class RequirementsController extends AbstractController<Requirement> {
-
+	
 	/**
 	 * Creates a controller to send Requirement requests to the server
 	 */
 	public RequirementsController() {
 		super("requirement");
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(Requirement model, RequestObserver observer) {
-		if (isSafeToSend()) {
+	public void delete(final Requirement model, final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
 			return;
 		}
 		Request request;
@@ -46,5 +46,5 @@ public class RequirementsController extends AbstractController<Requirement> {
 		request.addObserver(observer);
 		request.send();
 	}
-
+	
 }

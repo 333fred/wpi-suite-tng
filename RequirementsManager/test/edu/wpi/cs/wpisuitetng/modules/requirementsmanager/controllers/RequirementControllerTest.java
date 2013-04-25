@@ -22,7 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 public class RequirementControllerTest extends
 		AbstractControllerTest<Requirement> {
-
+	
 	/**
 	 * {@inheritDoc}
 	 */

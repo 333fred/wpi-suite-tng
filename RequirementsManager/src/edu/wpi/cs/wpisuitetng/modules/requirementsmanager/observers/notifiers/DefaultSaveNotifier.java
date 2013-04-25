@@ -12,26 +12,25 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
 
-
 /**
  * A default Save Notifier that does nothing
  */
 
 public class DefaultSaveNotifier implements ISaveNotifier {
-
+	
+	@Override
+	public void fail(final Exception exception) {
+		
+	}
+	
+	@Override
+	public void responseError(final int statusCode, final String statusMessage) {
+		
+	}
+	
 	@Override
 	public void responseSuccess() {
-
+		
 	}
-
-	@Override
-	public void responseError(int statusCode, String statusMessage) {
-
-	}
-
-	@Override
-	public void fail(Exception exception) {
-
-	}
-
+	
 }

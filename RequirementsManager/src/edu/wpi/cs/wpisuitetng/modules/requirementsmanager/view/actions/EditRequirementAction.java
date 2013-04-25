@@ -36,13 +36,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 /**
  * The action for saving an edited requirement, used when "Save Requirement"
- * button is pressed 
+ * button is pressed
  */
 public class EditRequirementAction extends AbstractAction {
-
-	private Requirement requirement;
-	private DetailPanel parentView;
-
+	
+	private final Requirement requirement;
+	private final DetailPanel parentView;
+	
 	/**
 	 * Constructor for EditRequirementAction Parent view is used to interact
 	 * with the GUI Requirement is used to update the requirement being edited
@@ -50,12 +50,13 @@ public class EditRequirementAction extends AbstractAction {
 	 * @param requirement
 	 * @param parentView
 	 */
-	public EditRequirementAction(Requirement requirement, DetailPanel parentView) {
+	public EditRequirementAction(final Requirement requirement,
+			final DetailPanel parentView) {
 		super("Save Requirement");
 		this.requirement = requirement;
 		this.parentView = parentView;
 	}
-
+	
 	/**
 	 * This function is called when the save requirement button is pressed on a
 	 * requirement being edited It validates input in sets responses to the user
@@ -64,23 +65,23 @@ public class EditRequirementAction extends AbstractAction {
 	 * @param e
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		RequirementsController controller = new RequirementsController();
-
+	public void actionPerformed(final ActionEvent e) {
+		final RequirementsController controller = new RequirementsController();
+		
 		// Checks to make sure the name entered is valid and updates the GUI if
 		// it is
 		if (!parentView.getTextName().getText().trim().equals("")) {
 			parentView.getTextName().setBackground(Color.WHITE);
 			parentView.getTextNameValid().setText("");
 		}
-
+		
 		// Checks to make sure the description entered is valid and updates the
 		// GUI if it is
 		if (!parentView.getTextDescription().getText().trim().equals("")) {
 			parentView.getTextDescription().setBackground(Color.WHITE);
 			parentView.getTextDescriptionValid().setText("");
 		}
-
+		
 		if (!parentView.getTextName().getText().trim().equals("")
 				&& !parentView.getTextDescription().getText().trim().equals("")) {
 			// Checks to make sure that both the name and descriptions are not
@@ -92,45 +93,45 @@ public class EditRequirementAction extends AbstractAction {
 			requirement.setReleaseNum(parentView.getTextRelease().getText());
 			requirement.setEffort(Integer.parseInt(parentView.getTextActual()
 					.getText()));
-
+			
 			boolean isDeleted = false;
 			boolean toBacklog = false;
-
+			
 			if (parentView.getComboBoxStatus().getSelectedItem().toString()
 					.equals("Deleted")) {
 				isDeleted = true;
 			}
-
+			
 			// handle moving a requirement fmor in progress to open
 			if (parentView.getComboBoxStatus().getSelectedItem().toString()
 					.equals("Open")
-					&& requirement.getStatus() == Status.IN_PROGRESS) {
+					&& (requirement.getStatus() == Status.IN_PROGRESS)) {
 				toBacklog = true;
 			}
-
+			
 			// Handle undeletion
-			if (requirement.getStatus() == Status.DELETED && !isDeleted) {
+			if ((requirement.getStatus() == Status.DELETED) && !isDeleted) {
 				toBacklog = true;
 			}
-
+			
 			try {
-
-				IterationController iterationController = new IterationController();
-				UpdateIterationRequestObserver iterationObserver = new UpdateIterationRequestObserver(
+				
+				final IterationController iterationController = new IterationController();
+				final UpdateIterationRequestObserver iterationObserver = new UpdateIterationRequestObserver(
 						new DefaultSaveNotifier());
-
+				
 				try {
-					Iteration anIteration = IterationDatabase.getInstance()
-							.get(requirement.getIteration());
+					final Iteration anIteration = IterationDatabase
+							.getInstance().get(requirement.getIteration());
 					anIteration.removeRequirement(requirement.getrUID());
 					iterationController.save(anIteration, iterationObserver);
-				} catch (IterationNotFoundException e1) {
+				} catch (final IterationNotFoundException e1) {
 					e1.printStackTrace();
 				}/*
 				 * catch (RequirementNotFoundException ex){
 				 * ex.printStackTrace(); }
 				 */
-
+				
 				String newIteration;
 				if (toBacklog) {
 					newIteration = "Backlog";
@@ -140,72 +141,73 @@ public class EditRequirementAction extends AbstractAction {
 					newIteration = parentView.getTextIteration()
 							.getSelectedItem().toString();
 				}
-
+				
 				requirement.setIteration(IterationDatabase.getInstance()
 						.getIteration(newIteration).getId());
-				Iteration anIteration = IterationDatabase.getInstance()
+				final Iteration anIteration = IterationDatabase.getInstance()
 						.getIteration(newIteration);
 				anIteration.addRequirement(requirement.getrUID());
 				iterationController.save(anIteration, iterationObserver);
-
+				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
 							.getComboBoxPriority().getSelectedItem().toString()
 							.toUpperCase().replaceAll(" ", "_")));
-				} catch (IllegalArgumentException except) {
+				} catch (final IllegalArgumentException except) {
 					requirement.setPriority(Priority.BLANK);
 				}
-
+				
 				try {
 					requirement.setType(Type.valueOf(parentView
 							.getComboBoxType().getSelectedItem().toString()
 							.toUpperCase().replaceAll(" ", "_")
 							.replaceAll("-", "_")));
-				} catch (IllegalArgumentException except) {
+				} catch (final IllegalArgumentException except) {
 					requirement.setType(Type.BLANK);
 				}
-
+				
 				requirement.setStatus(Status.valueOf(parentView
 						.getComboBoxStatus().getSelectedItem().toString()
 						.toUpperCase().replaceAll(" ", "_")));
-
+				
 				try {
 					requirement.setEstimate(Integer.parseInt(parentView
 							.getTextEstimate().getText()));
-				} catch (NumberFormatException except) {
+				} catch (final NumberFormatException except) {
 					System.out
-					.println("The number is incorrectly formatted: EditRequirement:174");
+							.println("The number is incorrectly formatted: EditRequirement:174");
 				}
-
-				if (parentView.getRequirement().getStatus() == Status.DELETED){
-					Integer reqID = parentView.getRequirement().getrUID();
+				
+				if (parentView.getRequirement().getStatus() == Status.DELETED) {
+					final Integer reqID = parentView.getRequirement().getrUID();
 					try {
-						if (parentView.getRequirement().getpUID().size() > 0){
-							Integer parentID = parentView.getRequirement().getpUID().get(0);
-							Requirement parent = RequirementDatabase.getInstance().get(parentID);
-							if (parent.getSubRequirements().size() > 0){
+						if (parentView.getRequirement().getpUID().size() > 0) {
+							final Integer parentID = parentView
+									.getRequirement().getpUID().get(0);
+							final Requirement parent = RequirementDatabase
+									.getInstance().get(parentID);
+							if (parent.getSubRequirements().size() > 0) {
 								parent.removeSubRequirement(reqID);
-								UpdateRequirementRequestObserver parentObserver = new UpdateRequirementRequestObserver(
-										this.parentView);
+								final UpdateRequirementRequestObserver parentObserver = new UpdateRequirementRequestObserver(
+										parentView);
 								controller.save(parent, parentObserver);
 							}
 							requirement.removePUID(parentID);
 						}
-					} catch (RequirementNotFoundException e1) {
+					} catch (final RequirementNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
-						
+					
 				}
-
-				UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-						this.parentView);
+				
+				final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+						parentView);
 				controller.save(requirement, observer);
 				parentView.closeTabAfterSave();
-			} catch (NumberFormatException except) {
+			} catch (final NumberFormatException except) {
 				parentView
-				.displaySaveError("Iteration must be an integer value");
+						.displaySaveError("Iteration must be an integer value");
 			}/*
 			 * catch (RequirementNotFoundException e1) { // TODO Auto-generated
 			 * catch block e1.printStackTrace(); }
@@ -213,7 +215,7 @@ public class EditRequirementAction extends AbstractAction {
 		} else {
 			if (parentView.getTextName().getText().trim().equals("")) {
 				parentView.getTextName()
-				.setBackground(new Color(243, 243, 209));
+						.setBackground(new Color(243, 243, 209));
 				parentView.getTextNameValid().setText(
 						"** Field must be non-blank **");
 			}
@@ -222,9 +224,9 @@ public class EditRequirementAction extends AbstractAction {
 						new Color(243, 243, 209));
 				parentView.getTextDescriptionValid().setText(
 						"** Field must be non-blank **");
-
+				
 			}
 		}
 	}
-
+	
 }

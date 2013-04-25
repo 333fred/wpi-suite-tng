@@ -20,50 +20,50 @@ import javax.swing.JPanel;
  */
 
 public class Tab extends JPanel {
-
+	
+	public Component getTabComponent(final MainTabController tabController) {
+		return new ClosableTabComponent(tabController);
+	}
+	
 	/**
 	 * Function called when the tab gains focus
 	 * 
 	 */
-
+	
 	public void onGainedFocus() {
-
+		
 	}
-
-	/**
-	 * Called when the tab is about to be closed.
-	 * 
-	 * @return a boolean indicating whether to close the tab or not, if false
-	 *         tab will not close
-	 */
-
-	public boolean onTabClosed() {
-		return true;
-	}
-
+	
 	/**
 	 * Called before the user is about to switch off of the tab
 	 * 
 	 * @return a boolean indicating whether to leave the tab or not, if false
 	 *         the tab will stay selected
 	 */
-
+	
 	public boolean onLostFocus() {
 		return true;
-
+		
 	}
-
+	
+	/**
+	 * Called when the tab is about to be closed.
+	 * 
+	 * @return a boolean indicating whether to close the tab or not, if false
+	 *         tab will not close
+	 */
+	
+	public boolean onTabClosed() {
+		return true;
+	}
+	
 	/**
 	 * Refreshes the tab
 	 * 
 	 */
-
+	
 	public void refresh() {
-
+		
 	}
-
-	public Component getTabComponent(MainTabController tabController) {
-		return new ClosableTabComponent(tabController);
-	}
-
+	
 }

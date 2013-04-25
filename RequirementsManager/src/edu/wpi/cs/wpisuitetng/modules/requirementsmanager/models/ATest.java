@@ -15,86 +15,41 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
- * An acceptance test 
+ * An acceptance test
  */
 public class ATest implements Event {
+	
+	public enum ATestStatus {
+		BLANK, PASSED, FAILED
+	}
+	
 	private String name;
 	private String description;
 	private ATestStatus status;
+	
 	private int id;
-
-	public ATest(String name, String description) {
+	
+	public ATest(final String name, final String description) {
 		status = ATestStatus.BLANK;
 		this.name = name;
 		this.description = description;
-		this.id = -1;
+		id = -1;
 	}
-
-	/**
-	 * @return the completed
-	 */
-	public ATestStatus getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param completed
-	 *            the completed to set
-	 */
-	public void setStatus(ATestStatus status) {
-		this.status = status;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	@Override
-	public String getTitle() {
-		return "<html><font size=4><b>" + getName() + "</b></html>";
-	}
-
+	
 	/**
 	 * Returns the content of this note to be displayed in the GUI, as specified
 	 * by Event interface
 	 * 
 	 * @return The content
 	 */
-
+	
 	@Override
 	public String getContent() {
-		String temp = "<i>" + parseNewLines(getDescription());
+		final String temp = "<i>" + parseNewLines(getDescription());
 		String completeMessage;
-		if (this.status == ATestStatus.PASSED) {
+		if (status == ATestStatus.PASSED) {
 			completeMessage = "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>";
-		} else if (this.status == ATestStatus.FAILED) {
+		} else if (status == ATestStatus.FAILED) {
 			completeMessage = "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>";
 		} else {
 			completeMessage = "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>";
@@ -102,7 +57,44 @@ public class ATest implements Event {
 		// return assembled content string;
 		return temp + completeMessage + "</i>";
 	}
-
+	
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * @return the id of the task
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @return the completed
+	 */
+	public ATestStatus getStatus() {
+		return status;
+	}
+	
+	@Override
+	public String getTitle() {
+		return "<html><font size=4><b>" + getName() + "</b></html>";
+	}
+	
+	public boolean isPassed() {
+		return getStatus() == ATestStatus.PASSED;
+	}
+	
 	/**
 	 * Changes the new line characters (\n) in the given string to html new line
 	 * tags (<br>
@@ -113,35 +105,42 @@ public class ATest implements Event {
 	 * @return The new string with <br>
 	 *         's
 	 */
-
+	
 	public String parseNewLines(String text) {
 		text = text.replaceAll("\n", "<br>");
 		return text;
-
+		
 	}
-
+	
 	/**
-	 * @return the id of the task
+	 * @param description
+	 *            the description to set
 	 */
-	public int getId() {
-		return id;
+	public void setDescription(final String description) {
+		this.description = description;
 	}
-
+	
 	/**
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(int id) {
+	public void setId(final int id) {
 		this.id = id;
 	}
-
 	
-	public enum ATestStatus {
-		BLANK,PASSED,FAILED
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(final String name) {
+		this.name = name;
 	}
-
-
-	public boolean isPassed() {
-		return this.getStatus() == ATestStatus.PASSED;
+	
+	/**
+	 * @param completed
+	 *            the completed to set
+	 */
+	public void setStatus(final ATestStatus status) {
+		this.status = status;
 	}
 }

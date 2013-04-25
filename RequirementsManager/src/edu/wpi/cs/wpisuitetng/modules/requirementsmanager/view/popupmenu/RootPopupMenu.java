@@ -30,44 +30,46 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  */
 
 public class RootPopupMenu extends JPopupMenu implements ActionListener {
-
+	
 	/** Menu options for the PopupMenu */
 	private JMenuItem menuNewIteration;
-
+	
 	/** The tab controller to open a new iteration tab in */
 	private MainTabController tabController;
-
+	
 	/**
 	 * Creates a RootPopupMenu with the tabcontroller that it needs to add tabs
 	 * 
 	 * @param tabController
 	 *            The tab controller to add the new iteration tab too
 	 */
-
-	public RootPopupMenu(MainTabController tabController) {
-		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement()) {
+	
+	public RootPopupMenu(final MainTabController tabController) {
+		if (!PermissionModel.getInstance().getUserPermissions()
+				.canEditRequirement()) {
 			return;
 		}
-
+		
 		this.tabController = tabController;
-
+		
 		menuNewIteration = new JMenuItem("New Iteration");
 		menuNewIteration.addActionListener(this);
-
-		if(PermissionModel.getInstance().getUserPermissions().canCreateIteration()) {
+		
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canCreateIteration()) {
 			add(menuNewIteration);
 		}
 	}
-
+	
 	/**
 	 * The action listener for this menu item, when the user clicks on a menu
 	 * option, (only one in this case), it will open a new tab to create an
 	 * iteration
 	 */
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		tabController.addCreateIterationTab();
 	}
-
+	
 }

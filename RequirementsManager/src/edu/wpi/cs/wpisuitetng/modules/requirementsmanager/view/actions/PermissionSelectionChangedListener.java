@@ -21,76 +21,78 @@ import javax.swing.event.ListSelectionEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
 /**
- * Need to comment! 
+ * Need to comment!
  */
 public class PermissionSelectionChangedListener implements MouseListener {
-
+	
 	PermissionsPanel panel;
-
-	public PermissionSelectionChangedListener(PermissionsPanel panel) {
+	
+	public PermissionSelectionChangedListener(final PermissionsPanel panel) {
 		this.panel = panel;
 	}
-
+	
+	@Override
+	public void mouseClicked(final MouseEvent e) {
+		// unused
+	}
+	
 	/**
 	 * Unused method
 	 */
-
-	public void valueChanged(ListSelectionEvent e) {
+	@Override
+	public void mouseEntered(final MouseEvent e) {
+		// unused
+	}
+	
+	/**
+	 * Unused method
+	 */
+	@Override
+	public void mouseExited(final MouseEvent e) {
+		// unused
+	}
+	
+	/**
+	 * Unused method
+	 */
+	@Override
+	public void mousePressed(final MouseEvent e) {
+		// unused
+	}
+	
+	/**
+	 * Update the radio buttons when the mouse button is released
+	 */
+	@Override
+	public void mouseReleased(final MouseEvent e) {
+		final JTable target = (JTable) e.getSource();
+		final int row = target.getSelectedRow();
+		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
+			if (panel
+					.getUserList()
+					.getValueAt(row, 0)
+					.equals(panel.getLocalDatabase().get(i).getUser().getName())) {
+				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
+						.getPermLevel());
+			}
+		}
+	}
+	
+	/**
+	 * Unused method
+	 */
+	
+	public void valueChanged(final ListSelectionEvent e) {
 		// iterate through the local database, check the name being equal as the
 		// name selected in the table, set the radio buttons appropriately
 		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
 			if (panel
 					.getUserList()
 					.getValueAt(i, 0)
-					.equals(panel.getLocalDatabase().get(i).getUser().getName()))
+					.equals(panel.getLocalDatabase().get(i).getUser().getName())) {
 				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
 						.getPermLevel());
+			}
 		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// unused
-	}
-
-	/**
-	 * Unused method
-	 */
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// unused
-	}
-
-	/**
-	 * Update the radio buttons when the mouse button is released
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		JTable target = (JTable) e.getSource();
-		int row = target.getSelectedRow();
-		for (int i = 0; i < panel.getLocalDatabase().size(); i++) {
-			if (panel
-					.getUserList()
-					.getValueAt(row, 0)
-					.equals(panel.getLocalDatabase().get(i).getUser().getName()))
-				panel.setSelectedButtons(panel.getLocalDatabase().get(i)
-						.getPermLevel());
-		}
-	}
-
-	/**
-	 * Unused method
-	 */
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// unused
-	}
-
-	/**
-	 * Unused method
-	 */
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// unused
 	}
 }

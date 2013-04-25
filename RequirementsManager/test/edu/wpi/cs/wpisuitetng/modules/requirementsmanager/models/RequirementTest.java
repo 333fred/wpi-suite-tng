@@ -12,15 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest.ATestStatus;
 
 public class RequirementTest {
-
+	
 	Requirement r1;
 	Requirement r1copy;
 	Requirement r2;
@@ -41,7 +37,7 @@ public class RequirementTest {
 	Note n1;
 	Note n2;
 	ATest a1, a2, a3;
-
+	
 	String name = "name";
 	String name2 = "name2";
 	String releaseNum;
@@ -52,13 +48,13 @@ public class RequirementTest {
 	private int iteration;
 	private int estimate;
 	private int effort;
-	private List<String> assignees = new ArrayList<String>();
-	private List<Integer> subRequirements = new ArrayList<Integer>();
-	private List<Integer> pUID = new ArrayList<Integer>();
-	private List<Note> notes = new ArrayList<Note>();
-	private List<Task> tasks = new ArrayList<Task>();
-	private List<ATest> tests = new ArrayList<ATest>();
-
+	private final List<String> assignees = new ArrayList<String>();
+	private final List<Integer> subRequirements = new ArrayList<Integer>();
+	private final List<Integer> pUID = new ArrayList<Integer>();
+	private final List<Note> notes = new ArrayList<Note>();
+	private final List<Task> tasks = new ArrayList<Task>();
+	private final List<ATest> tests = new ArrayList<ATest>();
+	
 	@Before
 	public void setUp() {
 		r1 = new Requirement(name, description, releaseNum, type,
@@ -77,120 +73,6 @@ public class RequirementTest {
 		a2 = new ATest("test2", "test2");
 		a3 = new ATest("test3", "test3");
 	}
-
-	@Test
-	public void testIdentify() {
-		assertTrue(r1.identify(r1));
-		assertTrue(r1.identify(r1copy));
-		assertFalse(r1.identify(new Object()));
-		assertFalse(r1.identify(null));
-		assertTrue(r1.identify(0));
-		r2.setrUID(1);
-		assertFalse(r1.identify(r2));
-	}
-
-	@Test
-	public void testfromJSON() {
-		String json = r1.toJSON();
-		Requirement newRequirement = Requirement.fromJSON(json);
-		assertEquals("name", newRequirement.getName());
-		assertEquals("", newRequirement.getDescription());
-		assertEquals(0, newRequirement.getrUID());
-	}
-
-	@Test
-	public void testfromJSONArray() {
-		Gson parser = new Gson();
-		Requirement[] array = { r1 };
-		String json = parser.toJson(array, Requirement[].class);
-		Requirement[] newRequirementArray = Requirement.fromJSONArray(json);
-		assertEquals("name", newRequirementArray[0].getName());
-		assertEquals("", newRequirementArray[0].getReleaseNum());
-		assertEquals(0, newRequirementArray[0].getEffort());
-	}
-
-	@Test
-	public void testSetProject() {
-		r1.setProject(project);
-		assertSame(project, r1.getProject());
-	}
-
-	@Test
-	public void testSetName() {
-		r1.setName(name2);
-		assertSame(name2, r1.getName());
-	}
-
-	@Test
-	public void testToListString() {
-		r1.setName(name);
-		r1.setrUID(1);
-		assertEquals("1 name", r1.toListString());
-	}
-
-	@Test
-	public void testSetDescription() {
-		r1.setDescription("desc");
-		assertEquals("desc", r1.getDescription());
-	}
-
-	@Test
-	public void testSetreleaseNum() {
-		r1.setReleaseNum("1");
-		assertEquals("1", r1.getReleaseNum());
-	}
-
-	@Test
-	public void testSetType() {
-		r1.setType(type);
-		assertSame(type, r1.getType());
-	}
-
-	@Test
-	public void testSetPriority() {
-		r1.setPriority(priority);
-		assertSame(priority, r1.getPriority());
-	}
-
-	// Testing the task completeness checking for a list of complete tasks
-	@Test
-	public void testTaskCheckTrue() {
-		Task task1 = new Task("Task 1", "This is a task!");
-		task1.setCompleted(true);
-		Task task2 = new Task("Task 2", "This is another task");
-		task2.setCompleted(true);
-		List<Task> taskList = new ArrayList<Task>();
-		taskList.add(task1);
-		taskList.add(task2);
-		r1.setTasks(taskList);
-		assertTrue(r1.tasksCompleted());
-	}
-
-	// Testing the task completeness checking for a list of complete and
-	// incomplete tasks
-	@Test
-	public void testTaskCheckFalse() {
-		Task task1 = new Task("Task 1", "This is a task!");
-		task1.setCompleted(true);
-		Task task2 = new Task("Task 2", "This is another task");
-		List<Task> taskList = new ArrayList<Task>();
-		taskList.add(task1);
-		taskList.add(task2);
-		r1.setTasks(taskList);
-		assertFalse(r1.tasksCompleted());
-	}
-
-	// Testing the task completeness for a an empty list
-	@Test
-	public void testTaskCheckEmpty() {
-		assertTrue(r1.tasksCompleted());
-	}
-
-	@Test
-	public void testAddSubRequirement() {
-		r1.addSubRequirement(0);
-		assertTrue(r1.removeSubRequirement(0));
-	}
 	
 	@Test
 	public void testAddAndRemoveNotes() {
@@ -202,13 +84,19 @@ public class RequirementTest {
 	public void testAddAndRemovePUID() {
 		r1.addPUID(0);
 		r1.removePUID(0);
-		assertTrue(r1.getpUID().isEmpty());
+		Assert.assertTrue(r1.getpUID().isEmpty());
 	}
 	
 	@Test
 	public void testAddAndRemoveUsers() {
 		r1.addUser("user1");
-		assertTrue(r1.removeUser("user1"));
+		Assert.assertTrue(r1.removeUser("user1"));
+	}
+	
+	@Test
+	public void testAddSubRequirement() {
+		r1.addSubRequirement(0);
+		Assert.assertTrue(r1.removeSubRequirement(0));
 	}
 	
 	@Test
@@ -217,14 +105,116 @@ public class RequirementTest {
 	}
 	
 	@Test
+	public void testfromJSON() {
+		final String json = r1.toJSON();
+		final Requirement newRequirement = Requirement.fromJSON(json);
+		Assert.assertEquals("name", newRequirement.getName());
+		Assert.assertEquals("", newRequirement.getDescription());
+		Assert.assertEquals(0, newRequirement.getrUID());
+	}
+	
+	@Test
+	public void testfromJSONArray() {
+		final Gson parser = new Gson();
+		final Requirement[] array = { r1 };
+		final String json = parser.toJson(array, Requirement[].class);
+		final Requirement[] newRequirementArray = Requirement
+				.fromJSONArray(json);
+		Assert.assertEquals("name", newRequirementArray[0].getName());
+		Assert.assertEquals("", newRequirementArray[0].getReleaseNum());
+		Assert.assertEquals(0, newRequirementArray[0].getEffort());
+	}
+	
+	@Test
+	public void testIdentify() {
+		Assert.assertTrue(r1.identify(r1));
+		Assert.assertTrue(r1.identify(r1copy));
+		Assert.assertFalse(r1.identify(new Object()));
+		Assert.assertFalse(r1.identify(null));
+		Assert.assertTrue(r1.identify(0));
+		r2.setrUID(1);
+		Assert.assertFalse(r1.identify(r2));
+	}
+	
+	@Test
+	public void testSetDescription() {
+		r1.setDescription("desc");
+		Assert.assertEquals("desc", r1.getDescription());
+	}
+	
+	@Test
+	public void testSetName() {
+		r1.setName(name2);
+		Assert.assertSame(name2, r1.getName());
+	}
+	
+	@Test
+	public void testSetPriority() {
+		r1.setPriority(priority);
+		Assert.assertSame(priority, r1.getPriority());
+	}
+	
+	@Test
+	public void testSetProject() {
+		r1.setProject(project);
+		Assert.assertSame(project, r1.getProject());
+	}
+	
+	@Test
+	public void testSetreleaseNum() {
+		r1.setReleaseNum("1");
+		Assert.assertEquals("1", r1.getReleaseNum());
+	}
+	
+	@Test
+	public void testSetType() {
+		r1.setType(type);
+		Assert.assertSame(type, r1.getType());
+	}
+	
+	// Testing the task completeness for a an empty list
+	@Test
+	public void testTaskCheckEmpty() {
+		Assert.assertTrue(r1.tasksCompleted());
+	}
+	
+	// Testing the task completeness checking for a list of complete and
+	// incomplete tasks
+	@Test
+	public void testTaskCheckFalse() {
+		final Task task1 = new Task("Task 1", "This is a task!");
+		task1.setCompleted(true);
+		final Task task2 = new Task("Task 2", "This is another task");
+		final List<Task> taskList = new ArrayList<Task>();
+		taskList.add(task1);
+		taskList.add(task2);
+		r1.setTasks(taskList);
+		Assert.assertFalse(r1.tasksCompleted());
+	}
+	
+	// Testing the task completeness checking for a list of complete tasks
+	@Test
+	public void testTaskCheckTrue() {
+		final Task task1 = new Task("Task 1", "This is a task!");
+		task1.setCompleted(true);
+		final Task task2 = new Task("Task 2", "This is another task");
+		task2.setCompleted(true);
+		final List<Task> taskList = new ArrayList<Task>();
+		taskList.add(task1);
+		taskList.add(task2);
+		r1.setTasks(taskList);
+		Assert.assertTrue(r1.tasksCompleted());
+	}
+	
+	@Test
 	public void testTestsPassed() {
 		r1.setTests(tests);
 		r1.addTest(a1);
 		a1.setStatus(ATestStatus.PASSED);
-		assertTrue(r1.testsPassed());
+		Assert.assertTrue(r1.testsPassed());
 		r1.addTest(a2);
 		a2.setStatus(ATestStatus.FAILED);
-		assertFalse(r1.testsPassed());
+		Assert.assertFalse(r1.testsPassed());
 	}
 	
 	@Test
@@ -232,14 +222,21 @@ public class RequirementTest {
 		r1.setTests(tests);
 		r1.addTest(a1);
 		a1.setStatus(ATestStatus.PASSED);
-		assertTrue(r1.testsPassed());
+		Assert.assertTrue(r1.testsPassed());
 		r1.addTest(a3);
 		a2.setStatus(ATestStatus.BLANK);
-		assertFalse(r1.testsPassed());
+		Assert.assertFalse(r1.testsPassed());
+	}
+	
+	@Test
+	public void testToListString() {
+		r1.setName(name);
+		r1.setrUID(1);
+		Assert.assertEquals("1 name", r1.toListString());
 	}
 	
 	@Test
 	public void testToString() {
-		assertEquals(r1.toString(), "name");
+		Assert.assertEquals(r1.toString(), "name");
 	}
 }

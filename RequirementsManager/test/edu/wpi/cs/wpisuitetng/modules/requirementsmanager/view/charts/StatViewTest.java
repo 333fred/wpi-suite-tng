@@ -12,8 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,28 +20,28 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.C
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView.DataType;
 
 public class StatViewTest {
-
+	
 	StatView stats;
-
-	@Before
-	public void setup() {
-		StatView.init();
-		stats = StatView.getInstance();
-	}
-
-	@Test
-	public void testDefaultEnums() {
-		assertEquals(stats.getChartType(), ChartType.PIE);
-		assertEquals(stats.getChartDataType(), DataType.STATUS);
-	}
-
+	
 	@Test
 	public void setSelectedValuesTest() {
 		stats.updateChartDataType(DataType.ITERATION);
 		stats.updateChartType(ChartType.BAR);
 		stats.updateSelectedItems();
-		assertEquals(stats.getChartType(), ChartType.BAR);
-		assertEquals(stats.getChartDataType(), DataType.ITERATION);
+		Assert.assertEquals(stats.getChartType(), ChartType.BAR);
+		Assert.assertEquals(stats.getChartDataType(), DataType.ITERATION);
 	}
-
+	
+	@Before
+	public void setup() {
+		StatView.init();
+		stats = StatView.getInstance();
+	}
+	
+	@Test
+	public void testDefaultEnums() {
+		Assert.assertEquals(stats.getChartType(), ChartType.PIE);
+		Assert.assertEquals(stats.getChartDataType(), DataType.STATUS);
+	}
+	
 }

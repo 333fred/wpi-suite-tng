@@ -30,38 +30,43 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
  * Implementation of the abstract Changeset type, that can be
- *  displayed as an Event
+ * displayed as an Event
  */
 
 public class RequirementChangeset extends Changeset implements Event {
-
+	
+	public static RequirementChangeset fromJSON(final String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, RequirementChangeset.class);
+	}
+	
+	public static RequirementChangeset[] fromJSONArray(final String content) {
+		final Gson parser = new Gson();
+		return parser.fromJson(content, RequirementChangeset[].class);
+	}
+	
 	/**
 	 * Create a requirement changeset with null user and the current time
 	 */
 	public RequirementChangeset() {
 	}
-
+	
 	/**
 	 * Create a requirement changeset with the given user and the current time
 	 * 
 	 * @param u
 	 *            the creator
 	 */
-	public RequirementChangeset(User u) {
+	public RequirementChangeset(final User u) {
 		super(u);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public String getTitle() {
-		return "<html><font size=4><b>" + user.getName()
-				+ " on<font size=.25></b> "
-				+ new SimpleDateFormat("MM/dd/yy hh:mm a").format(date)
-				+ "</html>";
+	public void delete() {
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -70,18 +75,18 @@ public class RequirementChangeset extends Changeset implements Event {
 		// Check for every change in field that could be in this changeset, and
 		// add it to the return string
 		String content = "";
-
+		
 		// Start by checking to see if this the creation changeset. If so, then
 		// just say we created the requirement and return
 		if (changes.get("creation") != null) {
 			content += "Created Requirement<br></html>";
 			return content;
 		}
-
+		
 		// Otherwise, check all changes that we track and record them in the
 		// log, returning at the end
 		if (changes.get("name") != null) {
-			FieldChange<?> change = changes.get("name");
+			final FieldChange<?> change = changes.get("name");
 			// Name is specially formatted, so we don't use the oldToNew method
 			content += "Name: " + "<b>\"" + change.getOldValue().toString()
 					+ "\"</b>" + " to <b>\"" + change.getNewValue().toString()
@@ -109,18 +114,18 @@ public class RequirementChangeset extends Changeset implements Event {
 		if (changes.get("iteration") != null) {
 			// Get the default string for an old and new value
 			// content += oldToNew("Iteration", changes.get("iteration"));
-			int oldIteration = ((Double) changes.get("iteration").getOldValue())
-					.intValue();
-			int newIteration = ((Double) changes.get("iteration").getNewValue())
-					.intValue();
+			final int oldIteration = ((Double) changes.get("iteration")
+					.getOldValue()).intValue();
+			final int newIteration = ((Double) changes.get("iteration")
+					.getNewValue()).intValue();
 			try {
-				String oldName = IterationDatabase.getInstance()
+				final String oldName = IterationDatabase.getInstance()
 						.get(oldIteration).getName();
-				String newName = IterationDatabase.getInstance()
+				final String newName = IterationDatabase.getInstance()
 						.get(newIteration).getName();
 				content += oldToNew("Iteration", new FieldChange<String>(
 						oldName, newName));
-			} catch (IterationNotFoundException e) {
+			} catch (final IterationNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -136,18 +141,18 @@ public class RequirementChangeset extends Changeset implements Event {
 		if (changes.get("users") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change
-			List<Object> added = new ArrayList<Object>();
-			List<Object> removed = new ArrayList<Object>();
+			final List<Object> added = new ArrayList<Object>();
+			final List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("users"));
 			if (added.size() > 0) {
 				content += "Added " + added.size() + " assignee(s)<br>";
-				for (Object o : added) {
+				for (final Object o : added) {
 					content += "   " + o.toString() + "<br>";
 				}
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + removed.size() + " assignee(s)<br>";
-				for (Object o : removed) {
+				for (final Object o : removed) {
 					content += "   " + o.toString() + "<br>";
 				}
 			}
@@ -155,20 +160,20 @@ public class RequirementChangeset extends Changeset implements Event {
 		if (changes.get("subRequirements") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change
-			List<Object> added = new ArrayList<Object>();
-			List<Object> removed = new ArrayList<Object>();
+			final List<Object> added = new ArrayList<Object>();
+			final List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("subRequirements"));
 			if (added.size() > 0) {
 				content += "Added " + added.size()
 						+ " Sub-Requirement(s)<br><I>";
-				for (Object o : added) {
-					Integer i = (int) Math.round((Double) o);
+				for (final Object o : added) {
+					final Integer i = (int) Math.round((Double) o);
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
-						Requirement tempReq = RequirementDatabase.getInstance()
-								.get(i);
+						final Requirement tempReq = RequirementDatabase
+								.getInstance().get(i);
 						content += tempReq.getName() + "<br>";
-					} catch (RequirementNotFoundException e) {
+					} catch (final RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
 								+ i.toString() + "<br>";
 						e.printStackTrace();
@@ -179,14 +184,14 @@ public class RequirementChangeset extends Changeset implements Event {
 			if (removed.size() > 0) {
 				content += "Removed " + removed.size()
 						+ " Sub-Requirement(s)<br><I>";
-				for (Object o : removed) {
-					Integer i = (int) Math.round((Double) o);
+				for (final Object o : removed) {
+					final Integer i = (int) Math.round((Double) o);
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
-						Requirement tempReq = RequirementDatabase.getInstance()
-								.get(i);
+						final Requirement tempReq = RequirementDatabase
+								.getInstance().get(i);
 						content += tempReq.getName() + "<br>";
-					} catch (RequirementNotFoundException e) {
+					} catch (final RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
 								+ i.toString() + "<br>";
 						e.printStackTrace();
@@ -198,39 +203,39 @@ public class RequirementChangeset extends Changeset implements Event {
 		if (changes.get("pUID") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change
-			List<Object> added = new ArrayList<Object>();
-			List<Object> removed = new ArrayList<Object>();
+			final List<Object> added = new ArrayList<Object>();
+			final List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("pUID"));
 			if (added.size() > 0) {
 				content += "Added " + added.size()
 						+ " Parent Requirement(s)<br><I>";
-				for (Object o : added) {
-					Integer i = (int) Math.round((Double) o);
+				for (final Object o : added) {
+					final Integer i = (int) Math.round((Double) o);
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
-						Requirement tempReq = RequirementDatabase.getInstance()
-								.get(i);
+						final Requirement tempReq = RequirementDatabase
+								.getInstance().get(i);
 						content += tempReq.getName() + "<br>";
-					} catch (RequirementNotFoundException e) {
+					} catch (final RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
 								+ i.toString() + "<br>";
 						e.printStackTrace();
 					}
-
+					
 				}
 				content += "</I>";
 			}
 			if (removed.size() > 0) {
 				content += "Removed " + removed.size()
 						+ " Parent Requirement(s)<br><I>";
-				for (Object o : removed) {
-					Integer i = (int) Math.round((Double) o);
+				for (final Object o : removed) {
+					final Integer i = (int) Math.round((Double) o);
 					content += "&nbsp;&nbsp;&nbsp;";
 					try {
-						Requirement tempReq = RequirementDatabase.getInstance()
-								.get(i);
+						final Requirement tempReq = RequirementDatabase
+								.getInstance().get(i);
 						content += tempReq.getName() + "<br>";
-					} catch (RequirementNotFoundException e) {
+					} catch (final RequirementNotFoundException e) {
 						content += "Unknown requirement with ID "
 								+ i.toString() + "<br>";
 						e.printStackTrace();
@@ -242,8 +247,8 @@ public class RequirementChangeset extends Changeset implements Event {
 		if (changes.get("notes") != null) {
 			// Use oldToNewList to get the list of additions and removals from
 			// the change
-			List<Object> added = new ArrayList<Object>();
-			List<Object> removed = new ArrayList<Object>();
+			final List<Object> added = new ArrayList<Object>();
+			final List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("notes"));
 			if (added.size() > 0) {
 				content += "Added " + added.size() + " note<br>";
@@ -253,8 +258,8 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 		}
 		if (changes.get("tasks") != null) {
-			List<Object> added = new ArrayList<Object>();
-			List<Object> removed = new ArrayList<Object>();
+			final List<Object> added = new ArrayList<Object>();
+			final List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("tasks"));
 			int modified = added.size();
 			if (removed.size() > 0) {
@@ -266,8 +271,8 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 		}
 		if (changes.get("aTests") != null) {
-			List<Object> added = new ArrayList<Object>();
-			List<Object> removed = new ArrayList<Object>();
+			final List<Object> added = new ArrayList<Object>();
+			final List<Object> removed = new ArrayList<Object>();
 			oldToNewList(added, removed, changes.get("aTests"));
 			int modified = added.size();
 			if (removed.size() > 0) {
@@ -278,10 +283,26 @@ public class RequirementChangeset extends Changeset implements Event {
 				content += "Added " + modified + " tests(s)<br>";
 			}
 		}
-
+		
 		return content;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getTitle() {
+		return "<html><font size=4><b>" + user.getName()
+				+ " on<font size=.25></b> "
+				+ new SimpleDateFormat("MM/dd/yy hh:mm a").format(date)
+				+ "</html>";
+	}
+	
+	@Override
+	public Boolean identify(final Object o) {
+		return equals(o);
+	}
+	
 	/**
 	 * Takes a given field change, such a enum to enum or string to string, and
 	 * returns a formatted string showing the description with the given type
@@ -292,11 +313,11 @@ public class RequirementChangeset extends Changeset implements Event {
 	 *            the FieldChange with the old and new values
 	 * @return the formatted change description
 	 */
-	private String oldToNew(String type, FieldChange<?> change) {
+	private String oldToNew(final String type, final FieldChange<?> change) {
 		return type + " <b>" + change.getOldValue().toString() + "</b>"
 				+ " to <b>" + change.getNewValue().toString() + "</b><br>";
 	}
-
+	
 	/**
 	 * Takes two List<Object> variables, loops through a given change, and adds
 	 * all added and removed variables to the correct list
@@ -308,13 +329,13 @@ public class RequirementChangeset extends Changeset implements Event {
 	 * @param change
 	 *            the FieldChange with the old and new Lists
 	 */
-	private void oldToNewList(List<Object> added, List<Object> removed,
-			FieldChange<?> change) {
-		List<Object> oldList = (List<Object>) change.getOldValue();
-		List<Object> newList = (List<Object>) change.getNewValue();
-		for (Object oldObj : oldList) {
+	private void oldToNewList(final List<Object> added,
+			final List<Object> removed, final FieldChange<?> change) {
+		final List<Object> oldList = (List<Object>) change.getOldValue();
+		final List<Object> newList = (List<Object>) change.getNewValue();
+		for (final Object oldObj : oldList) {
 			boolean detected = false;
-			for (Object newObj : newList) {
+			for (final Object newObj : newList) {
 				if (oldObj.equals(newObj)) {
 					// In this case, we've confirmed that the new list
 					// of requirements has the given requirement from
@@ -331,9 +352,9 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 		}
 		// Now check for newly added requirements
-		for (Object newObj : newList) {
+		for (final Object newObj : newList) {
 			boolean detected = false;
-			for (Object oldObj : oldList) {
+			for (final Object oldObj : oldList) {
 				if (newObj.equals(oldObj)) {
 					// In this case, we've confirmed that the old list
 					// of requirements has the given requirement from
@@ -350,37 +371,16 @@ public class RequirementChangeset extends Changeset implements Event {
 			}
 		}
 	}
-
+	
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
-
+		
 	}
-
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public String toJSON() {
 		return new Gson().toJson(this, RequirementChangeset.class);
 	}
-
-	public static RequirementChangeset fromJSON(String content) {
-		final Gson parser = new Gson();
-		return parser.fromJson(content, RequirementChangeset.class);
-	}
-
-	public static RequirementChangeset[] fromJSONArray(String content) {
-		final Gson parser = new Gson();
-		return parser.fromJson(content, RequirementChangeset[].class);
-	}
-
-	@Override
-	public Boolean identify(Object o) {
-		return this.equals(o);
-	}
-
+	
 }

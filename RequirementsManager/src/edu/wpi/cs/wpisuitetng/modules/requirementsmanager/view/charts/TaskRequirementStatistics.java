@@ -28,38 +28,40 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  */
 
 public class TaskRequirementStatistics extends AbstractRequirementStatistics {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
-	 * IRequirementStatistics#update()
-	 */
+	
 	@Override
-	public void update() {
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getFilteredRequirements(); // refresh list of requirements
-
-		// for each requirement
-		for (Requirement requirement : requirements) {
-			// get the length of the list of tasks
-			data.put(requirement.getName(), requirement.getTasks().size());
-		}
-	}
-
-	public JFreeChart buildPieChart() {
-		return this.buildPieChart("Requirements by Task");
-	}
-
 	public JFreeChart buildBarChart() {
 		return this.buildBarChart("Requirements by Task", "Requirement",
 				"Tasks");
 	}
-
+	
 	@Override
 	public JFreeChart buildLineChart() {
 		return this.buildLineChart("Requirements by Task", "Requirement",
 				"Tasks");
 	}
-
+	
+	@Override
+	public JFreeChart buildPieChart() {
+		return this.buildPieChart("Requirements by Task");
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
+	 * IRequirementStatistics#update()
+	 */
+	@Override
+	public void update() {
+		final List<Requirement> requirements = RequirementDatabase
+				.getInstance().getFilteredRequirements(); // refresh list of
+															// requirements
+		
+		// for each requirement
+		for (final Requirement requirement : requirements) {
+			// get the length of the list of tasks
+			data.put(requirement.getName(), requirement.getTasks().size());
+		}
+	}
+	
 }

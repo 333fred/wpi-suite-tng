@@ -11,13 +11,10 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,75 +24,79 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView.Status;
 
 public class IterationViewTest {
-
+	
 	MainTabController mainTabController = null;
 	Calendar startCalendar;
 	Calendar endCalendar;
-
 	
 	@Before
-	public void setup(){
+	public void setup() {
 		startCalendar = Calendar.getInstance();
 		endCalendar = Calendar.getInstance();
 		startCalendar.set(0, 0, 13);
 		endCalendar.set(0, 0, 14);
-		Iteration existingIteration = new Iteration ("Existing Iteration", startCalendar.getTime(), endCalendar.getTime());
+		final Iteration existingIteration = new Iteration("Existing Iteration",
+				startCalendar.getTime(), endCalendar.getTime());
 		IterationDatabase.getInstance().set(new ArrayList<Iteration>());
 		IterationDatabase.getInstance().add(existingIteration);
 		startCalendar.set(0, 0, 10);
 		endCalendar.set(0, 0, 12);
-		if(this.mainTabController == null){
-			this.mainTabController = new MainTabController();
+		if (mainTabController == null) {
+			mainTabController = new MainTabController();
 		}
 	}
 	
-
 	@Test
 	public void testInitializePanelCreate() {
-		IterationView it = new IterationView(mainTabController);
-		assertNotNull(it);
-	}
-	
-	@Test
-	public void testInitializePanelView() {
-		Iteration iteration = new Iteration("Good Iteration",
-				startCalendar.getTime(), endCalendar.getTime(), 1);
-		IterationView it = new IterationView(iteration, Status.VIEW, mainTabController);
-		assertNotNull(it);
+		final IterationView it = new IterationView(mainTabController);
+		Assert.assertNotNull(it);
 	}
 	
 	@Test
 	public void testInitializePanelEdit() {
-		Iteration iteration = new Iteration("Good Iteration",
+		final Iteration iteration = new Iteration("Good Iteration",
 				startCalendar.getTime(), endCalendar.getTime(), 1);
-		IterationView it = new IterationView(iteration, Status.EDIT, mainTabController);
-		assertNotNull(it);
+		final IterationView it = new IterationView(iteration, Status.EDIT,
+				mainTabController);
+		Assert.assertNotNull(it);
 	}
 	
 	@Test
 	public void testInitializePanelEditEmptyName() {
-		Iteration iteration = new Iteration("",
-				startCalendar.getTime(), endCalendar.getTime(), 1);
-		IterationView it = new IterationView(iteration, Status.EDIT, mainTabController);
+		final Iteration iteration = new Iteration("", startCalendar.getTime(),
+				endCalendar.getTime(), 1);
+		final IterationView it = new IterationView(iteration, Status.EDIT,
+				mainTabController);
 		it.updateSave(null);
-		assertFalse(it.getButSave().isEnabled());
+		Assert.assertFalse(it.getButSave().isEnabled());
 	}
 	
 	@Test
 	public void testInitializePanelEditOutOfOrderDate() {
-		Iteration iteration = new Iteration("Good Iteration",
+		final Iteration iteration = new Iteration("Good Iteration",
 				endCalendar.getTime(), startCalendar.getTime(), 1);
-		IterationView it = new IterationView(iteration, Status.EDIT, mainTabController);
+		final IterationView it = new IterationView(iteration, Status.EDIT,
+				mainTabController);
 		it.updateSave(null);
-		assertFalse(it.getButSave().isEnabled());
+		Assert.assertFalse(it.getButSave().isEnabled());
 	}
 	
 	@Test
 	public void testInitializePanelEditStartEndSameDate() {
-		Iteration iteration = new Iteration("Good Iteration",
+		final Iteration iteration = new Iteration("Good Iteration",
 				startCalendar.getTime(), startCalendar.getTime(), 1);
-		IterationView it = new IterationView(iteration, Status.EDIT, mainTabController);
+		final IterationView it = new IterationView(iteration, Status.EDIT,
+				mainTabController);
 		it.updateSave(null);
-		assertFalse(it.getButSave().isEnabled());
+		Assert.assertFalse(it.getButSave().isEnabled());
+	}
+	
+	@Test
+	public void testInitializePanelView() {
+		final Iteration iteration = new Iteration("Good Iteration",
+				startCalendar.getTime(), endCalendar.getTime(), 1);
+		final IterationView it = new IterationView(iteration, Status.VIEW,
+				mainTabController);
+		Assert.assertNotNull(it);
 	}
 }

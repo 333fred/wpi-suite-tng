@@ -23,36 +23,36 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 
 public class SavePermissionRequestObserver implements RequestObserver {
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
-		ResponseModel response = iReq.getResponse();
-		PermissionModel perm = PermissionModel.fromJSON(response.getBody());
-		PermissionsDatabase.getInstance().add(perm);
-		
+	public void fail(final IRequest iReq, final Exception exception) {
+		System.out.println("Failure saving permissions");
 		
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseError(IRequest iReq) {
+	public void responseError(final IRequest iReq) {
 		System.out.println("Error saving permissions");
 		System.out.println("Error: " + iReq.getResponse().getBody());
-
+		
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		System.out.println("Failure saving permissions");
-
+	public void responseSuccess(final IRequest iReq) {
+		final ResponseModel response = iReq.getResponse();
+		final PermissionModel perm = PermissionModel.fromJSON(response
+				.getBody());
+		PermissionsDatabase.getInstance().add(perm);
+		
 	}
-
+	
 }

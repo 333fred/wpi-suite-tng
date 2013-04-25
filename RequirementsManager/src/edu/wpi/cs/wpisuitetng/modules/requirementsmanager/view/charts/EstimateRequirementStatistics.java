@@ -26,42 +26,45 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 public class EstimateRequirementStatistics extends
 		AbstractRequirementStatistics {
-
+	
+	@Override
+	public JFreeChart buildBarChart() {
+		final JFreeChart barChart = this.buildBarChart(
+				"Requirements by Estimate", "Requirement", "Estimate");
+		return barChart;
+	}
+	
+	@Override
+	public JFreeChart buildLineChart() {
+		update();
+		return this.buildLineChart("Estimates by Requirements", "Requirement",
+				"Estimate");
+	}
+	
+	@Override
+	public JFreeChart buildPieChart() {
+		return this.buildPieChart("Requirements by Estimate");
+	}
+	
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.
 	 * IRequirementStatistics#update()
 	 */
 	@Override
 	public void update() {
-
-		List<Requirement> requirements = RequirementDatabase.getInstance()
-				.getFilteredRequirements(); // refresh list of requirements
-
+		
+		final List<Requirement> requirements = RequirementDatabase
+				.getInstance().getFilteredRequirements(); // refresh list of
+															// requirements
+		
 		// for each requirement
-		for (Requirement requirement : requirements) {
+		for (final Requirement requirement : requirements) {
 			// get the estimate for each requirement
 			data.put(requirement.getName(), requirement.getEstimate());
-
+			
 		}
-
+		
 	}
-
-	public JFreeChart buildPieChart() {
-		return this.buildPieChart("Requirements by Estimate");
-	}
-
-	public JFreeChart buildBarChart() {
-		JFreeChart barChart = this.buildBarChart("Requirements by Estimate",
-				"Requirement", "Estimate");
-		return barChart;
-	}
-
-	public JFreeChart buildLineChart() {
-		this.update();
-		return this.buildLineChart("Estimates by Requirements", "Requirement",
-				"Estimate");
-	}
-
+	
 }

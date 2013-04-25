@@ -12,23 +12,22 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 
-
 /**
  * Thrown when a filter is not found in the database
  */
 
 public class FilterNotFoundException extends NotFoundException {
-
+	
 	/**
 	 * Creates a new not found exception with the given id
 	 * 
 	 * @param filter
 	 *            The not found filter
 	 */
-	public FilterNotFoundException(Integer id) {
+	public FilterNotFoundException(final Integer id) {
 		super(id);
 	}
-
+	
 	/**
 	 * Gets the id of the missing filter
 	 * 
@@ -37,5 +36,5 @@ public class FilterNotFoundException extends NotFoundException {
 	public int getFilterId() {
 		return (Integer) notFound;
 	}
-
+	
 }

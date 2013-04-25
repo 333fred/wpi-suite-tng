@@ -20,13 +20,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
 public class RemoveChildController {
 	
-	//The the subrequirement panel calling this controller
+	// The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
 	
-	//the detail view that the subReqPanel is in
+	// the detail view that the subReqPanel is in
 	private final DetailPanel detailView;
 	
-	//the requirement to assign a parent to
+	// the requirement to assign a parent to
 	private final Requirement model;
 	
 	/**
@@ -39,37 +39,40 @@ public class RemoveChildController {
 	 * @param ChildView
 	 *            the DetailPanel
 	 */
-	public RemoveChildController(SubRequirementPanel subRequirementPanel,
-			Requirement model, DetailPanel ChildView) {
-		this.view = subRequirementPanel;
+	public RemoveChildController(final SubRequirementPanel subRequirementPanel,
+			final Requirement model, final DetailPanel ChildView) {
+		view = subRequirementPanel;
 		this.model = model;
-		this.detailView = ChildView;
+		detailView = ChildView;
 	}
-
+	
 	/**
-	 * Save a child subRequirement to the server. It removes the selected requirement as a child 
-	 * of the passed requirement by removing all links between the two requirements.
+	 * Save a child subRequirement to the server. It removes the selected
+	 * requirement as a child
+	 * of the passed requirement by removing all links between the two
+	 * requirements.
 	 */
 	public void saveChild() {
-
-		String selectedIndex = (String) view.getListSubReq().getSelectedValue();
-		Requirement anReq = RequirementDatabase.getInstance().getRequirement(
-				selectedIndex);
-
-		Integer modelID = new Integer(model.getrUID());
-		Integer anReqID = new Integer(anReq.getrUID());
-
+		
+		final String selectedIndex = (String) view.getListSubReq()
+				.getSelectedValue();
+		final Requirement anReq = RequirementDatabase.getInstance()
+				.getRequirement(selectedIndex);
+		
+		final Integer modelID = new Integer(model.getrUID());
+		final Integer anReqID = new Integer(anReq.getrUID());
+		
 		model.removeSubRequirement(anReqID);
 		anReq.removePUID(modelID);
-
-		RequirementsController controller = new RequirementsController();
-		UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-				this.detailView);
+		
+		final RequirementsController controller = new RequirementsController();
+		final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+				detailView);
 		controller.save(model, observer);
 		// observer = new UpdateRequirementRequestObserver(
 		// new SaveOtherRequirement());
 		controller.save(anReq, observer);
-
+		
 		view.refreshTopPanel();
 		view.refreshParentLabel();
 		if (view.isParentSelected()) {
@@ -77,7 +80,7 @@ public class RemoveChildController {
 		} else {
 			view.refreshValidChildren();
 		}
-
+		
 	}
-
+	
 }

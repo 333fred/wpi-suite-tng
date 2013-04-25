@@ -26,57 +26,29 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 public abstract class AbstractController<T extends AbstractModel> implements
 		IModelController<T> {
-
+	
+	/**
+	 * Returns whether it is safe to send a request. This is an abstraction in
+	 * case checking become more complicated than calling a Network method
+	 * 
+	 * @return true if it is safe to send, false otherwise
+	 */
+	protected static boolean isSafeToSend() {
+		return Network.getInstance().isInitialized();
+	}
+	
 	String type;
-
+	
 	/**
 	 * Creates an Abstract controller which gives requests of a given type
 	 * 
 	 * @param type
 	 *            the model specific string of the controller
 	 */
-	protected AbstractController(String type) {
+	protected AbstractController(final String type) {
 		this.type = type;
 	}
-
-	/**
-	 * Creates a get request for a given model type and id
-	 * 
-	 * @param id
-	 *            the id of the model to retrieve
-	 * @param observer
-	 *            the observer that will handle server response
-	 */
-	@Override
-	public void get(int id, RequestObserver observer) {
-		if (isSafeToSend()) {
-			return;
-		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type + "/" + id, HttpMethod.GET);
-		request.addObserver(observer);
-		request.send();
-	}
-
-	/**
-	 * Creates a getAll server request for models of the given type
-	 * 
-	 * @param observer
-	 *            the observer that will handle server response
-	 */
-	@Override
-	public void getAll(RequestObserver observer) {
-		if (isSafeToSend()) {
-			return;
-		}
-		Request request;
-		request = Network.getInstance().makeRequest(
-				"requirementsmanager/" + type, HttpMethod.GET);
-		request.addObserver(observer);
-		request.send();
-	}
-
+	
 	/**
 	 * Creates a create server request for models of the given type
 	 * 
@@ -86,8 +58,8 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	 *            the observer that will handle the server response
 	 */
 	@Override
-	public void create(T model, RequestObserver observer) {
-		if (isSafeToSend()) {
+	public void create(final T model, final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
 			return;
 		}
 		Request request;
@@ -96,9 +68,47 @@ public abstract class AbstractController<T extends AbstractModel> implements
 		request.setBody(model.toJSON());
 		request.addObserver(observer);
 		request.send();
-
+		
 	}
-
+	
+	/**
+	 * Creates a get request for a given model type and id
+	 * 
+	 * @param id
+	 *            the id of the model to retrieve
+	 * @param observer
+	 *            the observer that will handle server response
+	 */
+	@Override
+	public void get(final int id, final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
+			return;
+		}
+		Request request;
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/" + type + "/" + id, HttpMethod.GET);
+		request.addObserver(observer);
+		request.send();
+	}
+	
+	/**
+	 * Creates a getAll server request for models of the given type
+	 * 
+	 * @param observer
+	 *            the observer that will handle server response
+	 */
+	@Override
+	public void getAll(final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
+			return;
+		}
+		Request request;
+		request = Network.getInstance().makeRequest(
+				"requirementsmanager/" + type, HttpMethod.GET);
+		request.addObserver(observer);
+		request.send();
+	}
+	
 	/**
 	 * Creates a server save request for a model of the given type
 	 * 
@@ -108,8 +118,8 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	 *            the observer that will handle the server response
 	 */
 	@Override
-	public void save(T model, RequestObserver observer) {
-		if (isSafeToSend()) {
+	public void save(final T model, final RequestObserver observer) {
+		if (AbstractController.isSafeToSend()) {
 			return;
 		}
 		Request request;
@@ -118,15 +128,5 @@ public abstract class AbstractController<T extends AbstractModel> implements
 		request.setBody(model.toJSON());
 		request.addObserver(observer);
 		request.send();
-	}
-
-	/**
-	 * Returns whether it is safe to send a request. This is an abstraction in
-	 * case checking become more complicated than calling a Network method
-	 * 
-	 * @return true if it is safe to send, false otherwise
-	 */
-	protected static boolean isSafeToSend() {
-		return Network.getInstance().isInitialized();
 	}
 }

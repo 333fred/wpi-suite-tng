@@ -19,22 +19,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
  * Will be notified when data has been returned, or an error was returned
  */
 public interface IRetreiveRequirementByIDControllerNotifier {
-
+	
+	/**
+	 * Called when a error was returned from the server, instead of data
+	 * 
+	 * @param errorMessage
+	 */
+	
+	public void errorReceivingData(String errorMessage);
+	
 	/**
 	 * Called to retrieve a specific requirement from the server by ID number
 	 * 
 	 * @param requirement
 	 *            The requirement
 	 */
-
+	
 	public void receivedData(Requirement requirement);
-
-	/**
-	 * Called when a error was returned from the server, instead of data
-	 * 
-	 * @param errorMessage
-	 */
-
-	public void errorReceivingData(String errorMessage);
-
+	
 }

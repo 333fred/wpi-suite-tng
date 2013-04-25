@@ -17,11 +17,16 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers;
  */
 
 public interface ISaveNotifier {
-
-	/** Called when saving was successful */
-
-	public void responseSuccess();
-
+	
+	/**
+	 * Called when saving completely failed,
+	 * 
+	 * @param exception
+	 *            The exception that was created
+	 */
+	
+	public void fail(Exception exception);
+	
 	/**
 	 * Called when there was an error response from the sever
 	 * 
@@ -30,16 +35,11 @@ public interface ISaveNotifier {
 	 * @param statusMessage
 	 *            The status message
 	 */
-
+	
 	public void responseError(int statusCode, String statusMessage);
-
-	/**
-	 * Called when saving completely failed,
-	 * 
-	 * @param exception
-	 *            The exception that was created
-	 */
-
-	public void fail(Exception exception);
-
+	
+	/** Called when saving was successful */
+	
+	public void responseSuccess();
+	
 }

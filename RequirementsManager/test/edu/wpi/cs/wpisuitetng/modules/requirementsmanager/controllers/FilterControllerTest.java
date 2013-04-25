@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  */
 
 public class FilterControllerTest extends AbstractControllerTest<Filter> {
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -35,5 +35,5 @@ public class FilterControllerTest extends AbstractControllerTest<Filter> {
 		id = model.getId();
 		modelPath = "/requirementsmanager/filter";
 	}
-
+	
 }

@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
@@ -28,11 +29,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  *         Action that calls {@link MainTabController#addCreateRequirementTab()}
  *         , default mnemonic key is C.
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class RefreshAction extends AbstractAction {
-
+	
 	private final RequirementTableView requirementList;
-
+	
 	/**
 	 * Create a RefreshAction object which operates on a specific
 	 * RequirementListView
@@ -41,20 +42,20 @@ public class RefreshAction extends AbstractAction {
 	 *            the current view, which is to be refreshed
 	 * 
 	 */
-	public RefreshAction(RequirementTableView requirementList) {
+	public RefreshAction(final RequirementTableView requirementList) {
 		super("Refresh");
 		this.requirementList = requirementList;
-		putValue(MNEMONIC_KEY, KeyEvent.VK_F5);
+		putValue(Action.MNEMONIC_KEY, KeyEvent.VK_F5);
 	}
-
+	
 	/**
 	 * Method to refresh the view upon receiving any ActionEvent
 	 * 
 	 * @e any ActionEvent
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		requirementList.refresh();
 	}
-
+	
 }

@@ -11,18 +11,17 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class IRequirementStatisticsTest {
-
+	
 	// TODO: work out how to force the RequirementDatabase class to use a mock
 	// project
-
+	
 	@Test
 	public void testDummy() {
-		assertEquals(1, 1);
+		Assert.assertEquals(1, 1);
 	}
-
+	
 }

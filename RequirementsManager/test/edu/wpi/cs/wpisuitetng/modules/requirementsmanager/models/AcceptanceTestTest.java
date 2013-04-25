@@ -12,15 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest.ATestStatus;
-
 
 public class AcceptanceTestTest {
 	
@@ -35,51 +31,55 @@ public class AcceptanceTestTest {
 	}
 	
 	@Test
-	public void testStatus() {
+	public void testContent() {
+		final String temp = "<i>" + a1.parseNewLines(a1.getDescription());
+		Assert.assertEquals(a1.getContent(), temp
+				+ "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>" + "</i>");
 		a1.setStatus(ATestStatus.PASSED);
-		assertTrue(a1.isPassed());
+		Assert.assertEquals(a1.getContent(), temp
+				+ "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>" + "</i>");
 		a1.setStatus(ATestStatus.FAILED);
-		assertEquals(a1.getStatus(), ATestStatus.FAILED);
-		assertFalse(a1.isPassed());
+		Assert.assertEquals(a1.getContent(), temp
+				+ "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>" + "</i>");
 	}
 	
 	@Test
 	public void testDesciption() {
 		a1.setDescription("test");
-		assertEquals(a1.getDescription(), "test");
-	}
-	
-	@Test
-	public void testName() {
-		a1.setName("name");
-		assertEquals(a1.getName(), "name");	
-	}
-	
-	@Test
-	public void testTitle() {
-		assertEquals(a1.getTitle(), "<html><font size=4><b>" + "name" + "</b></html>");
+		Assert.assertEquals(a1.getDescription(), "test");
 	}
 	
 	@Test
 	public void testId() {
 		a1.setId(1);
-		assertEquals(a1.getId(), 1);
+		Assert.assertEquals(a1.getId(), 1);
+	}
+	
+	@Test
+	public void testName() {
+		a1.setName("name");
+		Assert.assertEquals(a1.getName(), "name");
 	}
 	
 	@Test
 	public void testParseNewLines() {
-		String text = "text\n";
-		assertEquals(a1.parseNewLines(text), "text<br>");
+		final String text = "text\n";
+		Assert.assertEquals(a1.parseNewLines(text), "text<br>");
 	}
 	
 	@Test
-	public void testContent() {
-		String temp = "<i>" + a1.parseNewLines(a1.getDescription());
-		assertEquals(a1.getContent(), temp + "<br><FONT COLOR=\"green\">OPEN</FONT COLOR>" + "</i>");
+	public void testStatus() {
 		a1.setStatus(ATestStatus.PASSED);
-		assertEquals(a1.getContent(), temp + "<br><FONT COLOR=\"blue\">PASSED</FONT COLOR>" + "</i>");
+		Assert.assertTrue(a1.isPassed());
 		a1.setStatus(ATestStatus.FAILED);
-		assertEquals(a1.getContent(), temp + "<br><FONT COLOR=\"red\">FAILED</FONT COLOR>" + "</i>");
+		Assert.assertEquals(a1.getStatus(), ATestStatus.FAILED);
+		Assert.assertFalse(a1.isPassed());
+	}
+	
+	@Test
+	public void testTitle() {
+		Assert.assertEquals(a1.getTitle(), "<html><font size=4><b>" + "name"
+				+ "</b></html>");
 	}
 	
 }

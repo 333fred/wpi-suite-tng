@@ -23,7 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
  * implementation.
  */
 public class FilterValidator {
-
+	
 	/**
 	 * Validates a given filter to ensure that it is correct before saving
 	 * 
@@ -34,22 +34,21 @@ public class FilterValidator {
 	 * @return a list of validation issues. If there are none, this is the empy
 	 *         list
 	 */
-	public List<ValidationIssue> validate(Session s, Filter f) {
-
-		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-
+	public List<ValidationIssue> validate(final Session s, final Filter f) {
+		
+		final List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
+		
 		// Ensure the user is set correctly. If it isn't, then add an issue
 		
-		if ( !(f.getCreator().equals(s.getUsername())) ) {
+		if (!(f.getCreator().equals(s.getUsername()))) {
 			issues.add(new ValidationIssue(
 					"Filter's user must be the current user!"));
 		}
-
-
+		
 		// TODO: Do more than validate that the user is set correctly
-
+		
 		return issues;
-
+		
 	}
-
+	
 }

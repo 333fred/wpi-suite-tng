@@ -30,44 +30,45 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  * Toolbar panel used to edit permissions
  */
 public class PermissionToolbarPane extends JPanel {
-
+	
 	private static PermissionToolbarPane singleton;
-
+	
 	public static PermissionToolbarPane createSingleton(
-			MainTabController tabController) {
-		if (singleton == null) {
-			singleton = new PermissionToolbarPane(tabController);
+			final MainTabController tabController) {
+		if (PermissionToolbarPane.singleton == null) {
+			PermissionToolbarPane.singleton = new PermissionToolbarPane(
+					tabController);
 		}
-		return singleton;
+		return PermissionToolbarPane.singleton;
 	}
-
+	
 	public static PermissionToolbarPane getInstance() {
-		return singleton;
+		return PermissionToolbarPane.singleton;
 	}
-
+	
 	/** Button for creating a permissions panel */
-	private JButton createPermissions;
-
-	private JLabel nameLabel;
-	private JLabel userName;
-	private JLabel permissionLabel;
-	private JLabel userLevel;
-
+	private final JButton createPermissions;
+	
+	private final JLabel nameLabel;
+	private final JLabel userName;
+	private final JLabel permissionLabel;
+	private final JLabel userLevel;
+	
 	/**
 	 * Default constructor that creates the pane for the toolbar
 	 */
-	public PermissionToolbarPane(MainTabController tabController) {
-
-		SpringLayout permissionLayout = new SpringLayout();
-		this.setLayout(permissionLayout);
-		this.setOpaque(false);
-
+	public PermissionToolbarPane(final MainTabController tabController) {
+		
+		final SpringLayout permissionLayout = new SpringLayout();
+		setLayout(permissionLayout);
+		setOpaque(false);
+		
 		// create objects for user permission panel
 		nameLabel = new JLabel();
 		userName = new JLabel();
 		permissionLabel = new JLabel();
 		userLevel = new JLabel();
-
+		
 		// Construct the permissions button
 		createPermissions = new JButton("Show Permissions");
 		createPermissions.setAction(new CreatePermissionPanelAction(
@@ -78,8 +79,8 @@ public class PermissionToolbarPane extends JPanel {
 		} else {
 			createPermissions.setEnabled(false);
 		}
-		User usr = PermissionModel.getInstance().getUser();
-
+		final User usr = PermissionModel.getInstance().getUser();
+		
 		nameLabel.setText("Current User: ");
 		if (!(usr == null)) {
 			if (!(usr.getName() == null)) {
@@ -89,10 +90,11 @@ public class PermissionToolbarPane extends JPanel {
 			userName.setText("User is NULL");
 		}
 		permissionLabel.setText("Permission: ");
-		String permLevel = PermissionModel.getInstance().getPermLevel().toString();
+		final String permLevel = PermissionModel.getInstance().getPermLevel()
+				.toString();
 		userLevel.setText(permLevel.substring(0, 1).concat(
 				permLevel.substring(1).toLowerCase()));
-
+		
 		// stack all the labels on top of each other
 		permissionLayout.putConstraint(SpringLayout.NORTH, nameLabel, 3,
 				SpringLayout.NORTH, this);
@@ -104,11 +106,11 @@ public class PermissionToolbarPane extends JPanel {
 				SpringLayout.SOUTH, userName);
 		permissionLayout.putConstraint(SpringLayout.NORTH, createPermissions,
 				3, SpringLayout.SOUTH, userLevel);
-
+		
 		// center everything horizontally
 		permissionLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER,
 				createPermissions, 0, SpringLayout.HORIZONTAL_CENTER, this);
-
+		
 		permissionLayout.putConstraint(SpringLayout.WEST, nameLabel, 8,
 				SpringLayout.WEST, this);
 		permissionLayout.putConstraint(SpringLayout.EAST, nameLabel, 0,
@@ -121,41 +123,14 @@ public class PermissionToolbarPane extends JPanel {
 				SpringLayout.WEST, userLevel);
 		permissionLayout.putConstraint(SpringLayout.EAST, userLevel, -8,
 				SpringLayout.EAST, this);
-
+		
 		this.add(nameLabel);
 		this.add(userName);
 		this.add(permissionLabel);
 		this.add(userLevel);
 		this.add(createPermissions);
 	}
-
-	/**
-	 * Updates the status bar with the current permission
-	 */
-	public void refreshPermission() {
-		userLevel.setText(PermissionModel.getInstance().getPermLevel()
-				.toString());
-		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
-			createPermissions.setEnabled(true);
-			RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
-			PermissionModelController controller = new PermissionModelController();
-			controller.getAll(observer);
-
-		} else {
-			createPermissions.setEnabled(false);
-		}
-		User usr = PermissionModel.getInstance().getUser();
-		if (!(usr == null)) {
-			if (!(usr.getName() == null)) {
-				userName.setText(usr.getName());
-			}
-		} else
-			userName.setText("NULL");
-		String permLevel = PermissionModel.getInstance().getPermLevel().toString();
-		userLevel.setText(permLevel.substring(0, 1).concat(
-				permLevel.substring(1).toLowerCase()));
-	}
-
+	
 	/**
 	 * 
 	 * @return The width of the widest label
@@ -167,5 +142,34 @@ public class PermissionToolbarPane extends JPanel {
 						.getPreferredSize().getWidth() + userName
 						.getPreferredSize().getWidth()));
 	}
-
+	
+	/**
+	 * Updates the status bar with the current permission
+	 */
+	public void refreshPermission() {
+		userLevel.setText(PermissionModel.getInstance().getPermLevel()
+				.toString());
+		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
+			createPermissions.setEnabled(true);
+			final RetrieveAllPermissionsRequestObserver observer = new RetrieveAllPermissionsRequestObserver();
+			final PermissionModelController controller = new PermissionModelController();
+			controller.getAll(observer);
+			
+		} else {
+			createPermissions.setEnabled(false);
+		}
+		final User usr = PermissionModel.getInstance().getUser();
+		if (!(usr == null)) {
+			if (!(usr.getName() == null)) {
+				userName.setText(usr.getName());
+			}
+		} else {
+			userName.setText("NULL");
+		}
+		final String permLevel = PermissionModel.getInstance().getPermLevel()
+				.toString();
+		userLevel.setText(permLevel.substring(0, 1).concat(
+				permLevel.substring(1).toLowerCase()));
+	}
+	
 }

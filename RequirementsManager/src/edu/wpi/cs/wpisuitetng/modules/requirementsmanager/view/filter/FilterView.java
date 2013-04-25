@@ -22,42 +22,17 @@ import javax.swing.JSplitPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
-/** The view for viewing and creating filters 
+/**
+ * The view for viewing and creating filters
  * 
  * @author Mitchell
- *
+ * 
  */
 
 public class FilterView extends JPanel {
-
+	
 	/** */
 	private static FilterView fv;
-	
-	/** View for displaying and enabling / disabling filters */
-	private FilterTableView filterTableView;
-	
-	/** View for creating and editing filters */
-	private CreateFilterView createFilterView;
-	
-	/** List of the filter update listeners */
-	private List<FilterUpdateListener> filterUpdateListeners;
-	
-	private FilterView() {
-		
-		filterTableView = new FilterTableView(this);
-		createFilterView = new CreateFilterView(this);	
-		filterUpdateListeners = new ArrayList<FilterUpdateListener>();
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, filterTableView, createFilterView);
-	
-		splitPane.setDividerLocation(0.75f);
-		
-		setLayout(new BorderLayout());
-		
-		add(filterTableView, BorderLayout.CENTER);
-		add(createFilterView, BorderLayout.SOUTH);
-
-	}
 	
 	/**
 	 * 
@@ -65,59 +40,93 @@ public class FilterView extends JPanel {
 	 */
 	
 	public static FilterView getInstance() {
-		if (fv == null) {
-			fv = new FilterView();
+		if (FilterView.fv == null) {
+			FilterView.fv = new FilterView();
 		}
-		return fv;
+		return FilterView.fv;
 	}
 	
-	/** Refreshes the filters displayed in the table view 
+	/** View for displaying and enabling / disabling filters */
+	private final FilterTableView filterTableView;
+	
+	/** View for creating and editing filters */
+	private final CreateFilterView createFilterView;
+	
+	/** List of the filter update listeners */
+	private final List<FilterUpdateListener> filterUpdateListeners;
+	
+	private FilterView() {
+		
+		filterTableView = new FilterTableView(this);
+		createFilterView = new CreateFilterView(this);
+		filterUpdateListeners = new ArrayList<FilterUpdateListener>();
+		
+		final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+				filterTableView, createFilterView);
+		
+		splitPane.setDividerLocation(0.75f);
+		
+		setLayout(new BorderLayout());
+		
+		add(filterTableView, BorderLayout.CENTER);
+		add(createFilterView, BorderLayout.SOUTH);
+		
+	}
+	
+	/**
+	 * Adds the given listener
 	 * 
+	 * @param listener
+	 *            THe listener to add
 	 */
 	
-	public void refreshTableView() {
-		filterTableView.refresh();
-	}   
-	
-	/** Adds the given listener
-	 * 
-	 * @param listener THe listener to add
-	 */
-	
-	public void addFilterUpdateListener(FilterUpdateListener listener) {
+	public void addFilterUpdateListener(final FilterUpdateListener listener) {
 		filterUpdateListeners.add(listener);
 	}
 	
-	/** Removes the given listener 
-	 * 
-	 * @param listener The listener to remove
-	 */
-	
-	public void removeFilterUpdateListener(FilterUpdateListener listener) {
-		filterUpdateListeners.remove(listener);
-	}
-	
-	protected void notifyListeners() {
-		for (FilterUpdateListener listener : filterUpdateListeners) {
-			listener.filtersUpdated();
-		}
-	}
-	
-	/** Edits the given filter
-	 * 
-	 * @param toEdit
-	 */
-	
-	public void editFilter(Filter toEdit) {
-		createFilterView.editFilter(Filter.cloneFilter(toEdit));
-	}
-	
-	/** Cancels the editing of the filter 
+	/**
+	 * Cancels the editing of the filter
 	 * 
 	 */
 	
 	public void cancelEdit() {
 		createFilterView.cancelEdit();
+	}
+	
+	/**
+	 * Edits the given filter
+	 * 
+	 * @param toEdit
+	 */
+	
+	public void editFilter(final Filter toEdit) {
+		createFilterView.editFilter(Filter.cloneFilter(toEdit));
+	}
+	
+	protected void notifyListeners() {
+		for (final FilterUpdateListener listener : filterUpdateListeners) {
+			listener.filtersUpdated();
+		}
+	}
+	
+	/**
+	 * Refreshes the filters displayed in the table view
+	 * 
+	 */
+	
+	public void refreshTableView() {
+		filterTableView.refresh();
+	}
+	
+	/**
+	 * Removes the given listener
+	 * 
+	 * @param listener
+	 *            The listener to remove
+	 */
+	
+	public void removeFilterUpdateListener(final FilterUpdateListener listener) {
+		filterUpdateListeners.remove(listener);
 	}
 	
 }

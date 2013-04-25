@@ -32,9 +32,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabView;
  */
 public class ToolbarController extends DefaultToolbarController implements
 		ChangeListener {
-
+	
 	private ToolbarGroupView relevantTabGroup;
-
+	
 	/**
 	 * Control the given DefaultToolbarView based on the state of the tabs in
 	 * tabController.
@@ -44,13 +44,13 @@ public class ToolbarController extends DefaultToolbarController implements
 	 * @param tabController
 	 *            The MainTabController to listen to for changes
 	 */
-	public ToolbarController(DefaultToolbarView toolbarView,
-			MainTabController tabController) {
+	public ToolbarController(final DefaultToolbarView toolbarView,
+			final MainTabController tabController) {
 		super(toolbarView);
 		tabController.addChangeListener(this);
 	}
-
-	private void setRelevantTabGroup(ToolbarGroupView group) {
+	
+	private void setRelevantTabGroup(final ToolbarGroupView group) {
 		// keep track of only one toolbar group for the active tab
 		if (relevantTabGroup != null) {
 			setRelevant(relevantTabGroup, false);
@@ -60,20 +60,20 @@ public class ToolbarController extends DefaultToolbarController implements
 			setRelevant(relevantTabGroup, true);
 		}
 	}
-
+	
 	@Override
-	public void stateChanged(ChangeEvent e) {
+	public void stateChanged(final ChangeEvent e) {
 		// TODO: there has to be a cleaner way to do this
 		if (e.getSource() instanceof MainTabView) {
-			MainTabView view = (MainTabView) e.getSource();
-			Component selectedComponent = view.getSelectedComponent();
+			final MainTabView view = (MainTabView) e.getSource();
+			final Component selectedComponent = view.getSelectedComponent();
 			if (selectedComponent instanceof IToolbarGroupProvider) {
-				IToolbarGroupProvider provider = (IToolbarGroupProvider) selectedComponent;
+				final IToolbarGroupProvider provider = (IToolbarGroupProvider) selectedComponent;
 				setRelevantTabGroup(provider.getGroup());
 			} else {
 				setRelevantTabGroup(null);
 			}
 		}
 	}
-
+	
 }

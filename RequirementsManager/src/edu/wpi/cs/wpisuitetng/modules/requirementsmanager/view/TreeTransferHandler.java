@@ -39,64 +39,99 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
-@SuppressWarnings("serial")
-public class TreeTransferHandler extends TransferHandler implements ISaveNotifier {
+@SuppressWarnings ("serial")
+public class TreeTransferHandler extends TransferHandler implements
+		ISaveNotifier {
+	
+	private class NodesTransferable implements Transferable {
+		
+		DefaultMutableTreeNode[] nodes;
+		
+		private NodesTransferable(final DefaultMutableTreeNode[] nodes) {
+			this.nodes = nodes;
+		}
+		
+		@Override
+		public Object getTransferData(final DataFlavor flavor)
+				throws UnsupportedFlavorException {
+			if (!isDataFlavorSupported(flavor)) {
+				throw new UnsupportedFlavorException(flavor);
+			}
+			return nodes;
+		}
+		
+		@Override
+		public DataFlavor[] getTransferDataFlavors() {
+			return flavors;
+		}
+		
+		@Override
+		public boolean isDataFlavorSupported(final DataFlavor flavor) {
+			return nodesFlavor.equals(flavor);
+		}
+	}
+	
 	DataFlavor nodesFlavor;
 	DataFlavor[] flavors = new DataFlavor[1];
 	DefaultMutableTreeNode[] nodesToRemove;
-	private MainTabController tabController;
+	private final MainTabController tabController;
+	
 	private Requirement draggedRequirement;
-
-	public TreeTransferHandler(MainTabController tabController) {
+	
+	public TreeTransferHandler(final MainTabController tabController) {
 		this.tabController = tabController;
 		try {
-			String mimeType = DataFlavor.javaJVMLocalObjectMimeType
+			final String mimeType = DataFlavor.javaJVMLocalObjectMimeType
 					+ ";class=\""
 					+ javax.swing.tree.DefaultMutableTreeNode[].class.getName()
 					+ "\"";
 			nodesFlavor = new DataFlavor(mimeType);
 			flavors[0] = nodesFlavor;
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			System.out.println("ClassNotFound: " + e.getMessage());
 		}
 	}
-
+	
 	@Override
-	public boolean canImport(TransferHandler.TransferSupport support) {
-		if (!PermissionModel.getInstance().getUserPermissions().canEditRequirement())
+	public boolean canImport(final TransferHandler.TransferSupport support) {
+		if (!PermissionModel.getInstance().getUserPermissions()
+				.canEditRequirement()) {
 			return false;
+		}
 		if (!support.isDrop()) {
 			return false;
-		}		
+		}
 		support.setShowDropLocation(true);
 		if (!support.isDataFlavorSupported(nodesFlavor)) {
 			return false;
 		}
 		// Do not allow a drop on the drag source selections.
-		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
-		JTree tree = (JTree) support.getComponent();
+		final JTree.DropLocation dl = (JTree.DropLocation) support
+				.getDropLocation();
+		final JTree tree = (JTree) support.getComponent();
 		// int dropRow = tree.getRowForPath(dl.getPath());
-		int[] selRows = tree.getSelectionRows();
+		final int[] selRows = tree.getSelectionRows();
 		/*
 		 * for (int i = 0; i < selRows.length; i++) { if (selRows[i] == dropRow)
 		 * { return false; } }
 		 */
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
-		TreePath dest = dl.getPath();
+		final TreePath dest = dl.getPath();
 		if (dest == null) {
 			return false;
 		}
-		DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();		
+		final DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
+				.getLastPathComponent();
 		if (selRows == null) {
 			return false;
 		}
-		TreePath path = tree.getPathForRow(selRows[0]);
+		final TreePath path = tree.getPathForRow(selRows[0]);
 		
-		DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
+		final DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
-		if (firstNode.getChildCount() > 0
-				&& target.getLevel() < firstNode.getLevel()) {
+		if ((firstNode.getChildCount() > 0)
+				&& (target.getLevel() < firstNode.getLevel())) {
 			return false;
 		}
 		// Do not allowing dropping requirements into requirements
@@ -111,75 +146,55 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 		if (((Requirement) firstNode.getUserObject()).getStatus() == Status.DELETED) {
 			return false;
 		}
-
+		
 		// don't allow dropping into completed iterations
-		Date currentDate = new Date();
-		Iteration iteration = (Iteration) target.getUserObject();
-		if (currentDate.compareTo(iteration.getEndDate()) > 0
-				&& iteration.getId() != -1) {
+		final Date currentDate = new Date();
+		final Iteration iteration = (Iteration) target.getUserObject();
+		if ((currentDate.compareTo(iteration.getEndDate()) > 0)
+				&& (iteration.getId() != -1)) {
 			return false;
 		}
-
+		
 		// don't allow dropping into deleted iteration
 		if (iteration.getId() == -2) {
 			return false;
 		}
-
+		
 		// don't allow dropping into iteration that is already in
 		if (firstNode.getParent() == target) {
 			return false;
 		}
 		// Do not allow MOVE-action drops if a non-leaf node is
 		// selected unless all of its children are also selected.
-		int action = support.getDropAction();
-		if (action == MOVE) {
+		final int action = support.getDropAction();
+		if (action == TransferHandler.MOVE) {
 			return haveCompleteNode(tree);
 		}
 		return true;
 	}
-
-	private boolean haveCompleteNode(JTree tree) {
-		int[] selRows = tree.getSelectionRows();
-		TreePath path = tree.getPathForRow(selRows[0]);
-		DefaultMutableTreeNode first = (DefaultMutableTreeNode) path
-				.getLastPathComponent();
-		int childCount = first.getChildCount();
-		// first has children and no children are selected.
-		if (childCount > 0 && selRows.length == 1)
-			return false;
-		// first may have children.
-		for (int i = 1; i < selRows.length; i++) {
-			path = tree.getPathForRow(selRows[i]);
-			DefaultMutableTreeNode next = (DefaultMutableTreeNode) path
-					.getLastPathComponent();
-			if (first.isNodeChild(next)) {
-				// Found a child of first.
-				if (childCount > selRows.length - 1) {
-					// Not all children of first are selected.
-					return false;
-				}
-			}
-		}
-		return true;
+	
+	/** Defensive copy used in createTransferable. */
+	private DefaultMutableTreeNode copy(final TreeNode node) {
+		return new DefaultMutableTreeNode(node);
 	}
-
+	
 	@Override
-	protected Transferable createTransferable(JComponent c) {
-		JTree tree = (JTree) c;
-		TreePath[] paths = tree.getSelectionPaths();
+	protected Transferable createTransferable(final JComponent c) {
+		final JTree tree = (JTree) c;
+		final TreePath[] paths = tree.getSelectionPaths();
 		if (paths != null) {
 			// Make up a node array of copies for transfer and
 			// another for/of the nodes that will be removed in
 			// exportDone after a successful drop.
-			List<DefaultMutableTreeNode> copies = new ArrayList<DefaultMutableTreeNode>();
-			List<DefaultMutableTreeNode> toRemove = new ArrayList<DefaultMutableTreeNode>();
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[0]
+			final List<DefaultMutableTreeNode> copies = new ArrayList<DefaultMutableTreeNode>();
+			final List<DefaultMutableTreeNode> toRemove = new ArrayList<DefaultMutableTreeNode>();
+			final DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[0]
 					.getLastPathComponent();
-			DefaultMutableTreeNode copy = copy(node);
+			final DefaultMutableTreeNode copy = copy(node);
 			copies.add(copy);
 			toRemove.add(node);
 			for (int i = 1; i < paths.length; i++) {
-				DefaultMutableTreeNode next = (DefaultMutableTreeNode) paths[i]
+				final DefaultMutableTreeNode next = (DefaultMutableTreeNode) paths[i]
 						.getLastPathComponent();
 				// Do not allow higher level nodes to be added to list.
 				if (next.getLevel() < node.getLevel()) {
@@ -192,7 +207,7 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 					toRemove.add(next);
 				}
 			}
-			DefaultMutableTreeNode[] nodes = copies
+			final DefaultMutableTreeNode[] nodes = copies
 					.toArray(new DefaultMutableTreeNode[copies.size()]);
 			nodesToRemove = toRemove
 					.toArray(new DefaultMutableTreeNode[toRemove.size()]);
@@ -200,158 +215,168 @@ public class TreeTransferHandler extends TransferHandler implements ISaveNotifie
 		}
 		return null;
 	}
-
-	/** Defensive copy used in createTransferable. */
-	private DefaultMutableTreeNode copy(TreeNode node) {
-		return new DefaultMutableTreeNode(node);
-	}
-
+	
 	@Override
-	protected void exportDone(JComponent source, Transferable data, int action) {
-		if ((action & MOVE) == MOVE) {
-			JTree tree = (JTree) source;
-			DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+	protected void exportDone(final JComponent source, final Transferable data,
+			final int action) {
+		if ((action & TransferHandler.MOVE) == TransferHandler.MOVE) {
+			final JTree tree = (JTree) source;
+			final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 			// Remove nodes saved in nodesToRemove in createTransferable.
-			for (int i = 0; i < nodesToRemove.length; i++) {
-				model.removeNodeFromParent(nodesToRemove[i]);
+			for (final DefaultMutableTreeNode element : nodesToRemove) {
+				model.removeNodeFromParent(element);
 			}
 		}
 	}
-
+	
 	@Override
-	public int getSourceActions(JComponent c) {
-		return COPY_OR_MOVE;
-	}
-
-	@Override
-	public boolean importData(TransferHandler.TransferSupport support) {
-		if (!canImport(support)) {
-			return false;
-		}
-		// Extract transfer data.
-		DefaultMutableTreeNode[] nodes = null;
-		try {
-			Transferable t = support.getTransferable();
-			nodes = (DefaultMutableTreeNode[]) t.getTransferData(nodesFlavor);
-		} catch (UnsupportedFlavorException ufe) {
-			System.out.println("UnsupportedFlavor: " + ufe.getMessage());
-		} catch (java.io.IOException ioe) {
-			System.out.println("I/O error: " + ioe.getMessage());
-		}
-		// Get drop location info.
-		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
-		int childIndex = dl.getChildIndex();
-		TreePath dest = dl.getPath();
-		DefaultMutableTreeNode parent = (DefaultMutableTreeNode) dest
-				.getLastPathComponent();
-		JTree tree = (JTree) support.getComponent();
-		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-		// Configure for drop mode.
-		int index = childIndex; // DropMode.INSERT
-		if (childIndex == -1) { // DropMode.ON
-			index = parent.getChildCount();
-		}
-		// Add data to model.
-		for (int i = 0; i < nodes.length; i++) {
-			model.insertNodeInto(nodes[i], parent, index++);
-			IterationController iterationController = new IterationController();
-			Requirement requirement = (Requirement) (((DefaultMutableTreeNode) nodes[i].getUserObject()).getUserObject());
-			Iteration anIteration;
-			try {
-				anIteration = IterationDatabase.getInstance().get(requirement.getIteration());
-				anIteration.removeRequirement(requirement.getrUID());
-				UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(this);
-				iterationController.save(anIteration, observer);
-			} catch (IterationNotFoundException e) {
-				e.printStackTrace();
-			}
-			anIteration = (Iteration) ((DefaultMutableTreeNode)nodes[i].getParent()).getUserObject();
-			anIteration.addRequirement(requirement.getrUID());
-			UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(this);
-			iterationController.save(anIteration, observer);
-			requirement.setIteration(anIteration.getId());
-			RequirementsController requirementController = new RequirementsController();
-			UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(this);
-			requirementController.save(requirement, reqObserver);
-			this.draggedRequirement = requirement;
-		}
-
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return getClass().getName();
-	}
-
-	private class NodesTransferable implements Transferable {
-		DefaultMutableTreeNode[] nodes;
-
-		private NodesTransferable(DefaultMutableTreeNode[] nodes) {
-			this.nodes = nodes;
-		}
-
-		@Override
-		public Object getTransferData(DataFlavor flavor)
-				throws UnsupportedFlavorException {
-			if (!isDataFlavorSupported(flavor))
-				throw new UnsupportedFlavorException(flavor);
-			return nodes;
-		}
-
-		@Override
-		public DataFlavor[] getTransferDataFlavors() {
-			return flavors;
-		}
-
-		@Override
-		public boolean isDataFlavorSupported(DataFlavor flavor) {
-			return nodesFlavor.equals(flavor);
-		}
-	}
-
-	@Override
-	public void responseSuccess() {
-		if (getTabController() != null) {
-
-			Requirement requirement = getDraggedRequirement();
-
-			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
-				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
-					if (((((DetailPanel) getTabController().getTabView()
-							.getComponentAt(i))).getModel().getrUID()) == (requirement
-							.getrUID())) {
-						try {
-							(((DetailPanel) getTabController().getTabView().getComponentAt(i))).getComboBoxIteration().setSelectedItem(IterationDatabase.getInstance().get(requirement.getIteration()).getName());
-						} catch (IterationNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-		}
-	}
-
-	@Override
-	public void responseError(int statusCode, String statusMessage) {
+	public void fail(final Exception exception) {
 		// TODO Auto-generated method stub
 	}
-
-	@Override
-	public void fail(Exception exception) {
-		// TODO Auto-generated method stub
+	
+	public Requirement getDraggedRequirement() {
+		return draggedRequirement;
 	}
-
+	
+	@Override
+	public int getSourceActions(final JComponent c) {
+		return TransferHandler.COPY_OR_MOVE;
+	}
+	
 	/**
 	 * @return the tabController
 	 */
 	public MainTabController getTabController() {
 		return tabController;
 	}
-
-	public Requirement getDraggedRequirement() {
-		return draggedRequirement;
+	
+	private boolean haveCompleteNode(final JTree tree) {
+		final int[] selRows = tree.getSelectionRows();
+		TreePath path = tree.getPathForRow(selRows[0]);
+		final DefaultMutableTreeNode first = (DefaultMutableTreeNode) path
+				.getLastPathComponent();
+		final int childCount = first.getChildCount();
+		// first has children and no children are selected.
+		if ((childCount > 0) && (selRows.length == 1)) {
+			return false;
+		}
+		// first may have children.
+		for (int i = 1; i < selRows.length; i++) {
+			path = tree.getPathForRow(selRows[i]);
+			final DefaultMutableTreeNode next = (DefaultMutableTreeNode) path
+					.getLastPathComponent();
+			if (first.isNodeChild(next)) {
+				// Found a child of first.
+				if (childCount > (selRows.length - 1)) {
+					// Not all children of first are selected.
+					return false;
+				}
+			}
+		}
+		return true;
 	}
-
+	
+	@Override
+	public boolean importData(final TransferHandler.TransferSupport support) {
+		if (!canImport(support)) {
+			return false;
+		}
+		// Extract transfer data.
+		DefaultMutableTreeNode[] nodes = null;
+		try {
+			final Transferable t = support.getTransferable();
+			nodes = (DefaultMutableTreeNode[]) t.getTransferData(nodesFlavor);
+		} catch (final UnsupportedFlavorException ufe) {
+			System.out.println("UnsupportedFlavor: " + ufe.getMessage());
+		} catch (final java.io.IOException ioe) {
+			System.out.println("I/O error: " + ioe.getMessage());
+		}
+		// Get drop location info.
+		final JTree.DropLocation dl = (JTree.DropLocation) support
+				.getDropLocation();
+		final int childIndex = dl.getChildIndex();
+		final TreePath dest = dl.getPath();
+		final DefaultMutableTreeNode parent = (DefaultMutableTreeNode) dest
+				.getLastPathComponent();
+		final JTree tree = (JTree) support.getComponent();
+		final DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+		// Configure for drop mode.
+		int index = childIndex; // DropMode.INSERT
+		if (childIndex == -1) { // DropMode.ON
+			index = parent.getChildCount();
+		}
+		// Add data to model.
+		for (final DefaultMutableTreeNode node : nodes) {
+			model.insertNodeInto(node, parent, index++);
+			final IterationController iterationController = new IterationController();
+			final Requirement requirement = (Requirement) (((DefaultMutableTreeNode) node
+					.getUserObject()).getUserObject());
+			Iteration anIteration;
+			try {
+				anIteration = IterationDatabase.getInstance().get(
+						requirement.getIteration());
+				anIteration.removeRequirement(requirement.getrUID());
+				final UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(
+						this);
+				iterationController.save(anIteration, observer);
+			} catch (final IterationNotFoundException e) {
+				e.printStackTrace();
+			}
+			anIteration = (Iteration) ((DefaultMutableTreeNode) node
+					.getParent()).getUserObject();
+			anIteration.addRequirement(requirement.getrUID());
+			final UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(
+					this);
+			iterationController.save(anIteration, observer);
+			requirement.setIteration(anIteration.getId());
+			final RequirementsController requirementController = new RequirementsController();
+			final UpdateRequirementRequestObserver reqObserver = new UpdateRequirementRequestObserver(
+					this);
+			requirementController.save(requirement, reqObserver);
+			draggedRequirement = requirement;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public void responseError(final int statusCode, final String statusMessage) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void responseSuccess() {
+		if (getTabController() != null) {
+			
+			final Requirement requirement = getDraggedRequirement();
+			
+			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
+				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
+					if (((((DetailPanel) getTabController().getTabView()
+							.getComponentAt(i))).getModel().getrUID()) == (requirement
+							.getrUID())) {
+						try {
+							(((DetailPanel) getTabController().getTabView()
+									.getComponentAt(i))).getComboBoxIteration()
+									.setSelectedItem(
+											IterationDatabase
+													.getInstance()
+													.get(requirement
+															.getIteration())
+													.getName());
+						} catch (final IterationNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+	
 }

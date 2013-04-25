@@ -32,24 +32,25 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  * The action for editing a requirement
  */
 public class EnableEditingAction extends AbstractAction {
-
-	private RequirementTableView tableView;
+	
+	private final RequirementTableView tableView;
 	TableRowSorter<TableModel> sorter;
-
+	
 	/**
-	 * Constructor for EnableEditingAction 
+	 * Constructor for EnableEditingAction
 	 * 
 	 * @param tableView
 	 */
-	public EnableEditingAction(RequirementTableView tableView, TableRowSorter<TableModel> sorter) {
+	public EnableEditingAction(final RequirementTableView tableView,
+			final TableRowSorter<TableModel> sorter) {
 		super("Enable Editing");
 		this.tableView = tableView;
 		this.sorter = sorter;
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-
+	public void actionPerformed(final ActionEvent e) {
+		
 		// TODO Auto-generated method stub
 		if (tableView.isEditable()) {
 			tableView.setEditable(false);
@@ -59,12 +60,14 @@ public class EnableEditingAction extends AbstractAction {
 			tableView.getTable().clearUpdated();
 			tableView.refresh();
 		} else {
-			List<SortKey> sortKeys = new ArrayList<SortKey>(tableView.getTable().getRowSorter().getSortKeys());
+			final List<SortKey> sortKeys = new ArrayList<SortKey>(tableView
+					.getTable().getRowSorter().getSortKeys());
 			
 			// Turn off row sorting (it breaks editing right now)
 			tableView.getTable().setRowSorter(null);
 			
-			Comparator<String> PriorityComparator = new Comparator<String>() {
+			final Comparator<String> PriorityComparator = new Comparator<String>() {
+				
 				@Override
 				public int compare(String s1, String s2) {
 					if (s1.trim().equals("")) {
@@ -73,21 +76,25 @@ public class EnableEditingAction extends AbstractAction {
 					if (s2.trim().equals("")) {
 						s2 = "BLANK";
 					}
-					String upper1 = s1.toUpperCase();
-					String upper2 = s2.toUpperCase();
-					Priority p1 = Priority.valueOf(upper1);
-					Priority p2 = Priority.valueOf(upper2);
+					final String upper1 = s1.toUpperCase();
+					final String upper2 = s2.toUpperCase();
+					final Priority p1 = Priority.valueOf(upper1);
+					final Priority p2 = Priority.valueOf(upper2);
 					return p1.compareTo(p2);
 				}
 			};
-
-			Comparator<String> IterationStringComparator = new Comparator<String>() {
-				public int compare(String s1, String s2) {
-					IterationDatabase Idb = IterationDatabase.getInstance();
-					Iteration Iteration1 = Idb.getIteration(s1);
-					Iteration Iteration2 = Idb.getIteration(s2);
-
-					if (Iteration1.getStartDate().before(Iteration2.getStartDate())) {
+			
+			final Comparator<String> IterationStringComparator = new Comparator<String>() {
+				
+				@Override
+				public int compare(final String s1, final String s2) {
+					final IterationDatabase Idb = IterationDatabase
+							.getInstance();
+					final Iteration Iteration1 = Idb.getIteration(s1);
+					final Iteration Iteration2 = Idb.getIteration(s2);
+					
+					if (Iteration1.getStartDate().before(
+							Iteration2.getStartDate())) {
 						return -1; // first argument is less, or before second
 					} else if (Iteration1.getStartDate().after(
 							Iteration2.getStartDate())) {
@@ -97,31 +104,32 @@ public class EnableEditingAction extends AbstractAction {
 				}
 			};
 			
-			Comparator<String> numberComparator = new Comparator<String>() {
-				public int compare(String s1, String s2) {
-					int Estimate1 = Integer.parseInt(s1);
-					int Estimate2 = Integer.parseInt(s2);
+			final Comparator<String> numberComparator = new Comparator<String>() {
+				
+				@Override
+				public int compare(final String s1, final String s2) {
+					final int Estimate1 = Integer.parseInt(s1);
+					final int Estimate2 = Integer.parseInt(s2);
 					
 					if (Estimate1 < Estimate2) {
 						return -1;
-					}
-					else if (Estimate1 > Estimate2) {
+					} else if (Estimate1 > Estimate2) {
 						return 1;
-					}
-					else {
+					} else {
 						return 0;
 					}
 				}
 			};
-
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+			
+			final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
 					tableView.getTable().getModel());
 			/*
 			 * for (int i = 0; i < this.table.getColumnCount(); i++) { if
 			 * (this.table.getColumnName(i).equals("Priority")) {
 			 * sorter.setComparator(i, comparator); } }
 			 */
-			// TODO: find a better way to get the the appropriate columns (for loop
+			// TODO: find a better way to get the the appropriate columns (for
+			// loop
 			// was failing for me for no reason)
 			sorter.setComparator(3, PriorityComparator);
 			sorter.setComparator(5, IterationStringComparator);
@@ -133,8 +141,8 @@ public class EnableEditingAction extends AbstractAction {
 			// set isEditable to true
 			tableView.setEditable(true);
 			tableView.changeButtonStatus();
-			tableView.displayEditInformation("Editing Enabled");		
+			tableView.displayEditInformation("Editing Enabled");
 		}
 	}
-
+	
 }

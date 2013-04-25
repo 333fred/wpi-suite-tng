@@ -30,87 +30,72 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IR
 
 public class FilterDatabase extends AbstractDatabase<Filter> implements
 		IRetrieveAllFiltersNotifier {
-
+	
 	private Map<Integer, Filter> filters;
-	private FilterController controller;
+	private final FilterController controller;
 	private static FilterDatabase database;
-
-	/**
-	 * Private constructor for creating the database singleton
-	 */
-	private FilterDatabase() {
-		super(0); // The run will be overridden, so give it 0 seconds
-		this.filters = new HashMap<Integer, Filter>();
-		this.controller = new FilterController();
-	}
-
+	
 	/**
 	 * Gets the singleton filter database instance
 	 * 
 	 * @return the database singleton
 	 */
 	public static FilterDatabase getInstance() {
-		if (database == null) {
-			database = new FilterDatabase();
+		if (FilterDatabase.database == null) {
+			FilterDatabase.database = new FilterDatabase();
 		}
-		return database;
+		return FilterDatabase.database;
 	}
-
+	
+	/**
+	 * Private constructor for creating the database singleton
+	 */
+	private FilterDatabase() {
+		super(0); // The run will be overridden, so give it 0 seconds
+		filters = new HashMap<Integer, Filter>();
+		controller = new FilterController();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized void set(List<Filter> filters) {
-		this.filters = new HashMap<Integer, Filter>();
-		for (Filter f : filters) {
+	@Override
+	public synchronized void add(final Filter f) {
+		filters.put(f.getId(), f);
+		updateListeners();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized void addAll(final List<Filter> filters) {
+		for (final Filter f : filters) {
 			this.filters.put(f.getId(), f);
 		}
 		updateListeners();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public synchronized void addAll(List<Filter> filters) {
-		for (Filter f : filters) {
-			this.filters.put(f.getId(), f);
-		}
-		updateListeners();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized void add(Filter f) {
-		this.filters.put(f.getId(), f);
-		updateListeners();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized Filter get(int id) throws FilterNotFoundException {
+	@Override
+	public synchronized Filter get(final int id) throws FilterNotFoundException {
 		if (filters.get(id) != null) {
 			return filters.get(id);
 		} else {
 			throw new FilterNotFoundException(id);
 		}
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public synchronized List<Filter> getAll() {
-		return new ArrayList<Filter>(filters.values());
-	}
-
+	
 	/**
 	 * Returns all of the currently active filters
 	 * 
 	 * @return the list of currently active filters
 	 */
 	public synchronized List<Filter> getActiveFilters() {
-		List<Filter> activeFilters = new ArrayList<Filter>();
-		for (Filter f : getAll()) {
+		final List<Filter> activeFilters = new ArrayList<Filter>();
+		for (final Filter f : getAll()) {
 			if (f.isActive()) {
 				activeFilters.add(f);
 			}
@@ -118,32 +103,53 @@ public class FilterDatabase extends AbstractDatabase<Filter> implements
 		return activeFilters;
 	}
 	
-	/** Removes the given filter from the database
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized List<Filter> getAll() {
+		return new ArrayList<Filter>(filters.values());
+	}
+	
+	/**
+	 * Sets the received filters to be in the database
+	 */
+	@Override
+	public void receivedData(final Filter[] filters) {
+		set(Arrays.asList(filters));
+	}
+	
+	/**
+	 * Removes the given filter from the database
 	 * 
 	 * @param toRemove
 	 */
 	
-	public synchronized void remove(Filter toRemove) {
+	public synchronized void remove(final Filter toRemove) {
 		filters.remove(toRemove.getId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void run() {
 		// This database should not run continuously, so just update
-		RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
+		final RetrieveAllFiltersRequestObserver observer = new RetrieveAllFiltersRequestObserver(
 				this);
 		controller.getAll(observer);
 	}
-
+	
 	/**
-	 * Sets the received filters to be in the database
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void receivedData(Filter[] filters) {
-		set(Arrays.asList(filters));
+	public synchronized void set(final List<Filter> filters) {
+		this.filters = new HashMap<Integer, Filter>();
+		for (final Filter f : filters) {
+			this.filters.put(f.getId(), f);
+		}
+		updateListeners();
 	}
-
+	
 }

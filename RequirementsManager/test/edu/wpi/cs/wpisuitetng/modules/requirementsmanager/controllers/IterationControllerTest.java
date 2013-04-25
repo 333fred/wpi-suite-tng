@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
  */
 
 public class IterationControllerTest extends AbstractControllerTest<Iteration> {
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -36,5 +36,5 @@ public class IterationControllerTest extends AbstractControllerTest<Iteration> {
 		id = model.getId();
 		modelPath = "/requirementsmanager/iteration";
 	}
-
+	
 }

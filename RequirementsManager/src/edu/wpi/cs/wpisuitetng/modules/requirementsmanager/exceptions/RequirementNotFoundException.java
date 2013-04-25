@@ -16,21 +16,21 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
  * An exception to indicate a requirement not found
  */
 public class RequirementNotFoundException extends NotFoundException {
-
+	
 	/**
 	 * Creates a new exception with the given id
 	 * 
 	 * @param id
 	 */
-	public RequirementNotFoundException(int id) {
+	public RequirementNotFoundException(final int id) {
 		super(id);
 	}
-
+	
 	/**
 	 * @return the id
 	 */
 	public int getId() {
 		return (Integer) notFound;
 	}
-
+	
 }

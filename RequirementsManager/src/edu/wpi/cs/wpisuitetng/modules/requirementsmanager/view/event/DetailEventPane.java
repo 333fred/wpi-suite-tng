@@ -30,14 +30,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
  */
 
 public class DetailEventPane extends JTabbedPane {
-
+	
 	JPanel notesListPane;
 	JPanel logListPane;
 	JPanel userListPane;
 	JPanel taskListPane;
 	JPanel atestListPane;
 	JPanel subreqListPane;
-
+	
 	/**
 	 * Creates a new DetailEvent pane, that displays the given NotesListPane,
 	 * and LogListPane
@@ -47,10 +47,11 @@ public class DetailEventPane extends JTabbedPane {
 	 * @param logListPane
 	 *            TheJPanel that represents the list of logs to represent
 	 */
-
 	
-	public DetailEventPane(JPanel notesListPane, JPanel logListPane,
-			JPanel userListPane, JPanel taskListPane, JPanel atestListPane, JPanel subreqListPane) {
+	public DetailEventPane(final JPanel notesListPane,
+			final JPanel logListPane, final JPanel userListPane,
+			final JPanel taskListPane, final JPanel atestListPane,
+			final JPanel subreqListPane) {
 		this.notesListPane = notesListPane;
 		this.logListPane = logListPane;
 		this.userListPane = userListPane;
@@ -74,6 +75,10 @@ public class DetailEventPane extends JTabbedPane {
 		
 	}
 	
+	public void disableSubReqs() {
+		((SubRequirementPanel) subreqListPane).disableUserButtons();
+	}
+	
 	public void disableUserButtons() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((DetailNoteView) notesListPane).disableUserButtons();
@@ -82,14 +87,10 @@ public class DetailEventPane extends JTabbedPane {
 		((DetailTaskView) taskListPane).disableUserButtons();
 	}
 	
-	//Notes, Tests, Tasks
+	// Notes, Tests, Tasks
 	public void disableUsersAndSubReqs() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((DetailATestView) atestListPane).disableUserButtons();
 		((SubRequirementPanel) subreqListPane).disableUserButtons();
-	}
-
-	public void disableSubReqs() {
-		((SubRequirementPanel) subreqListPane).disableUserButtons();		
 	}
 }

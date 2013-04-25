@@ -19,22 +19,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
  * Will be notified when data has been returned, or an error was returned
  */
 public interface IRetreiveIterationByIDControllerNotifier {
-
+	
+	/**
+	 * Called when a error was returned from the server, instead of data
+	 * 
+	 * @param errorMessage
+	 */
+	
+	public void errorReceivingData(String errorMessage);
+	
 	/**
 	 * Called to retrieve a specific iteration from the server by its ID number
 	 * 
 	 * @param iteration
 	 *            The iteration
 	 */
-
+	
 	public void receivedData(Iteration iteration);
-
-	/**
-	 * Called when a error was returned from the server, instead of data
-	 * 
-	 * @param errorMessage
-	 */
-
-	public void errorReceivingData(String errorMessage);
-
+	
 }

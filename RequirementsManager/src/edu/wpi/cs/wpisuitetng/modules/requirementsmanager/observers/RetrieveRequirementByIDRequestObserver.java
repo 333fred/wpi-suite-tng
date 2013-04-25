@@ -24,35 +24,50 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * by id
  */
 public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
-
+	
 	/** The controller managing the request */
-	private IRetreiveRequirementByIDControllerNotifier notifier;
-
+	private final IRetreiveRequirementByIDControllerNotifier notifier;
+	
 	/**
 	 * Construct the observer
 	 * 
 	 * @param controller
 	 */
 	public RetrieveRequirementByIDRequestObserver(
-			IRetreiveRequirementByIDControllerNotifier notifier) {
+			final IRetreiveRequirementByIDControllerNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void fail(final IRequest iReq, final Exception exception) {
+		// an error occurred
+		notifier.errorReceivingData("Unable to complete request: "
+				+ exception.getMessage());
+	}
+	
+	@Override
+	public void responseError(final IRequest iReq) {
+		// an error occurred
+		notifier.errorReceivingData("Received "
+				+ iReq.getResponse().getStatusCode() + " error from server: "
+				+ iReq.getResponse().getStatusMessage());
+	}
+	
+	@Override
+	public void responseSuccess(final IRequest iReq) {
 		// cast observable to request
-		Request request = (Request) iReq;
-
+		final Request request = (Request) iReq;
+		
 		// get the response from the request
-		ResponseModel response = request.getResponse();
-
+		final ResponseModel response = request.getResponse();
+		
 		if (response.getStatusCode() == 200) {
 			// parse the response
-			Requirement[] requirements = Requirement.fromJSONArray(response
-					.getBody());
-
+			final Requirement[] requirements = Requirement
+					.fromJSONArray(response.getBody());
+			
 			RequirementDatabase.getInstance().add(requirements[0]);
-
+			
 			// notify the controller
 			notifier.receivedData(requirements[0]);
 		} else {
@@ -62,20 +77,5 @@ public class RetrieveRequirementByIDRequestObserver implements RequestObserver {
 					+ iReq.getResponse().getStatusMessage());
 		}
 	}
-
-	@Override
-	public void responseError(IRequest iReq) {
-		// an error occurred
-		notifier.errorReceivingData("Received "
-				+ iReq.getResponse().getStatusCode() + " error from server: "
-				+ iReq.getResponse().getStatusMessage());
-	}
-
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		// an error occurred
-		notifier.errorReceivingData("Unable to complete request: "
-				+ exception.getMessage());
-	}
-
+	
 }

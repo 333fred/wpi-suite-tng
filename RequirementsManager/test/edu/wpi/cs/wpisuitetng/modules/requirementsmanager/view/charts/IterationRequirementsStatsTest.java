@@ -12,18 +12,19 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-import static org.junit.Assert.assertEquals;
-
 import org.jfree.chart.ChartFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class IterationRequirementsStatsTest {
-
+	
 	IterationRequirementStatistics data = new IterationRequirementStatistics();
-
+	
 	@Test
 	public void iterationPieChart() {
-		assertEquals(ChartFactory.createPieChart3D("Requirements by Iteration",	data.toPieDataset(), true, false, false),
+		Assert.assertEquals(
+				ChartFactory.createPieChart3D("Requirements by Iteration",
+						data.toPieDataset(), true, false, false),
 				data.buildPieChart());
 	}
 }

@@ -21,47 +21,48 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
 
-public class EventTable extends JTable implements TableColumnModelListener, TableModelListener {
-
+public class EventTable extends JTable implements TableColumnModelListener,
+		TableModelListener {
+	
 	/** the table model for this */
-	private EventTableModel tableModel;
-
-	public EventTable(EventTableModel tableModel) {
+	private final EventTableModel tableModel;
+	
+	public EventTable(final EventTableModel tableModel) {
 		super(tableModel);
 		this.tableModel = tableModel;
 	}
-
+	
 	@Override
-	public TableCellRenderer getCellRenderer(int row, int column) {
+	public void columnMarginChanged(final ChangeEvent e) {
+		updateRowHeights();
+	}
+	
+	@Override
+	public TableCellRenderer getCellRenderer(final int row, final int column) {
 		return new EventCellRenderer();
 	}
-
+	
+	@Override
+	public void tableChanged(final TableModelEvent e) {
+		super.tableChanged(e);
+		updateRowHeights();
+	}
+	
 	private void updateRowHeights() {
 		try {
 			for (int row = 0; row < getRowCount(); row++) {
 				int rowHeight = getRowHeight();
 				for (int column = 0; column < getColumnCount(); column++) {
-					Component comp = prepareRenderer(
+					final Component comp = prepareRenderer(
 							getCellRenderer(row, column), row, column);
 					rowHeight = Math.max(rowHeight,
 							comp.getPreferredSize().height);
 				}
-
+				
 				setRowHeight(row, rowHeight);
 			}
-		} catch (ClassCastException e) {
+		} catch (final ClassCastException e) {
 			System.out.println("class cast exception in event table");
 		}
-	}
-	
-	@Override
-	public void tableChanged(TableModelEvent e) {
-		super.tableChanged(e);
-		updateRowHeights();
-	}
-	
-	@Override
-	public void columnMarginChanged(ChangeEvent e) {
-		updateRowHeights();
 	}
 }

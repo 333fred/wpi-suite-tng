@@ -16,7 +16,7 @@ import java.util.Comparator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 public class RequirementComparator implements Comparator<Requirement> {
-
+	
 	/**
 	 * Compares two requirements based upon their IDs
 	 * 
@@ -29,10 +29,11 @@ public class RequirementComparator implements Comparator<Requirement> {
 	 * positive int
 	 * 
 	 */
-
+	
 	@Override
-	public int compare(Requirement requirement1, Requirement requirement2) {
-
+	public int compare(final Requirement requirement1,
+			final Requirement requirement2) {
+		
 		if (requirement1.getrUID() < requirement2.getrUID()) {
 			return -1; // first argument is less, or before second
 		} else if (requirement1.getrUID() > requirement2.getrUID()) {

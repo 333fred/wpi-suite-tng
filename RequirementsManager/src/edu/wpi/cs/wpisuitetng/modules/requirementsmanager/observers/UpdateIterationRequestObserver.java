@@ -25,72 +25,67 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * Controller for updating an existing Iteration
  */
 public class UpdateIterationRequestObserver implements RequestObserver {
-
-	private ISaveNotifier notifier;
-
-	public UpdateIterationRequestObserver(ISaveNotifier notifier) {
+	
+	private final ISaveNotifier notifier;
+	
+	public UpdateIterationRequestObserver(final ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
-	 * .cs.wpisuitetng.network.models.IRequest)
-	 */
-	@Override
-	public void responseSuccess(IRequest iReq) {
-
-		// cast observable to a Request
-		Request request = (Request) iReq;
-
-		// get the response from the request
-		ResponseModel response = request.getResponse();
-
-		Iteration req = Iteration.fromJSON(response.getBody());
-		IterationDatabase.getInstance().add(req);
-
-		notifier.responseSuccess();
-		
-		StatView.getInstance().updateChart();		
-
-		
-		// detailPanel.logView.refresh(req);
-
-		/*
-		 * if (response.getStatusCgiode() == 200) { // parse the Iteration from
-		 * the body final Iteration Iteration =
-		 * Iteration.fromJSON(response.getBody());
-		 * 
-		 * // make sure the Iteration isn't null if (Iteration != null) {
-		 * //success here! } else { //Display error } } else { //Display Error }
-		 */
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
-	 * cs.wpisuitetng.network.models.IRequest)
-	 */
-	@Override
-	public void responseError(IRequest iReq) {
-		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
-				.getResponse().getStatusMessage());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng
 	 * .network.models.IRequest, java.lang.Exception)
 	 */
 	@Override
-	public void fail(IRequest iReq, Exception exception) {
+	public void fail(final IRequest iReq, final Exception exception) {
 		notifier.fail(exception);
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.
+	 * cs.wpisuitetng.network.models.IRequest)
+	 */
+	@Override
+	public void responseError(final IRequest iReq) {
+		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
+				.getResponse().getStatusMessage());
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi
+	 * .cs.wpisuitetng.network.models.IRequest)
+	 */
+	@Override
+	public void responseSuccess(final IRequest iReq) {
+		
+		// cast observable to a Request
+		final Request request = (Request) iReq;
+		
+		// get the response from the request
+		final ResponseModel response = request.getResponse();
+		
+		final Iteration req = Iteration.fromJSON(response.getBody());
+		IterationDatabase.getInstance().add(req);
+		
+		notifier.responseSuccess();
+		
+		StatView.getInstance().updateChart();
+		
+		// detailPanel.logView.refresh(req);
+		
+		/*
+		 * if (response.getStatusCgiode() == 200) { // parse the Iteration from
+		 * the body final Iteration Iteration =
+		 * Iteration.fromJSON(response.getBody());
+		 * // make sure the Iteration isn't null if (Iteration != null) {
+		 * //success here! } else { //Display error } } else { //Display Error }
+		 */
+	}
+	
 }

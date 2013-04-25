@@ -22,29 +22,29 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 
 public class SavePermissionsAction extends AbstractAction {
-
+	
 	PermissionModel model;
 	PermissionsPanel panel;
-
-	public SavePermissionsAction(PermissionsPanel panel, PermissionModel model) {
+	
+	public SavePermissionsAction(final PermissionsPanel panel,
+			final PermissionModel model) {
 		super("Save Permission");
 		this.model = model;
 		this.panel = panel;
 	}
 	
-	
 	/**
 	 * Saves the currently selected permission in the manger
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e1) {
-		PermissionModelController controller = new PermissionModelController();
-		SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
+	public void actionPerformed(final ActionEvent e1) {
+		final PermissionModelController controller = new PermissionModelController();
+		final SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
 		
 		model.setPermLevel(panel.getPermission());
 		
 		controller.save(model, observer);
 		
 	}
-
+	
 }

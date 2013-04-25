@@ -25,53 +25,53 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 
 public class UpdateFilterRequestObserver implements RequestObserver {
-
-	private ISaveNotifier notifier;
-
+	
+	private final ISaveNotifier notifier;
+	
 	/**
 	 * Creates a request observer with the given controller as a callback
 	 * 
 	 * @param controller
 	 *            the controller to callback
 	 */
-	public UpdateFilterRequestObserver(ISaveNotifier notifier) {		
+	public UpdateFilterRequestObserver(final ISaveNotifier notifier) {
 		this.notifier = notifier;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void fail(final IRequest iReq, final Exception exception) {
+		notifier.fail(exception);
 		
-		//put the saved filter into the database
-		ResponseModel response = iReq.getResponse();
-
-		//if (response.getStatusCode() == 200) {
-			Filter filter = Filter.fromJSON(response.getBody());
-			FilterDatabase.getInstance().add(filter);
-		//}
-		
-		notifier.responseSuccess();
-
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void responseError(IRequest iReq) {
+	public void responseError(final IRequest iReq) {
 		notifier.responseError(iReq.getResponse().getStatusCode(), iReq
 				.getResponse().getStatusMessage());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		notifier.fail(exception);
-
+	public void responseSuccess(final IRequest iReq) {
+		
+		// put the saved filter into the database
+		final ResponseModel response = iReq.getResponse();
+		
+		// if (response.getStatusCode() == 200) {
+		final Filter filter = Filter.fromJSON(response.getBody());
+		FilterDatabase.getInstance().add(filter);
+		// }
+		
+		notifier.responseSuccess();
+		
 	}
-
+	
 }

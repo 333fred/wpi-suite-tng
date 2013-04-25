@@ -19,31 +19,34 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 public class DocumentNumberAndSizeFilter extends DocumentFilter {
+	
 	int maxChars;
-
-	public DocumentNumberAndSizeFilter(int maxChars) {
+	
+	public DocumentNumberAndSizeFilter(final int maxChars) {
 		this.maxChars = maxChars;
 	};
-
+	
 	@Override
-	public void insertString(FilterBypass fb, int off, String str,
-			AttributeSet attr) throws BadLocationException {
-		if ((fb.getDocument().getLength() + str.length()) <= maxChars
+	public void insertString(final FilterBypass fb, final int off,
+			final String str, final AttributeSet attr)
+			throws BadLocationException {
+		if (((fb.getDocument().getLength() + str.length()) <= maxChars)
 				&& str.matches("^0*[0-9]{1,14}$")) {
 			super.insertString(fb, off, str, attr);
 		} else {
 			Toolkit.getDefaultToolkit().beep();
 		}
 	}
-
+	
 	@Override
-	public void replace(FilterBypass fb, int offs, int len, String str,
-			AttributeSet a) throws BadLocationException {
-		if ((fb.getDocument().getLength() + str.length() - len) <= maxChars
-				&& str.matches("[0-9]{1,14}"))
+	public void replace(final FilterBypass fb, final int offs, final int len,
+			final String str, final AttributeSet a) throws BadLocationException {
+		if ((((fb.getDocument().getLength() + str.length()) - len) <= maxChars)
+				&& str.matches("[0-9]{1,14}")) {
 			super.replace(fb, offs, len, str, a);
-		else
+		} else {
 			Toolkit.getDefaultToolkit().beep();
+		}
 	}
-
+	
 }

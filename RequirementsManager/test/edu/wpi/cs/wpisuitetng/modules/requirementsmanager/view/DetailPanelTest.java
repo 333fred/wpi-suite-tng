@@ -7,11 +7,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import junit.extensions.abbot.ComponentTestFixture;
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import abbot.tester.JTextComponentTester;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -23,208 +25,222 @@ public class DetailPanelTest extends ComponentTestFixture {
 	MainTabController mainTabController = null;
 	
 	@Before
-	public void setup(){
-		if(this.mainTabController == null){
-			this.mainTabController = new MainTabController();
-		}
-	}
-
-	
-	
-	
-	@Test
-	public void testCreationForEachModeNew(){
-		Requirement r = new Requirement();
-		r.setStatus(Status.NEW);
-		DetailPanel detailPanel = null;
-		for(Mode mode : Mode.values()){
-			detailPanel = new DetailPanel(r, mode, this.mainTabController);
-			assertNotNull(detailPanel);
+	public void setup() {
+		if (mainTabController == null) {
+			mainTabController = new MainTabController();
 		}
 	}
 	
 	@Test
-	public void testCreationForComplete(){
-		Requirement r = new Requirement();
+	public void testCreationForComplete() {
+		final Requirement r = new Requirement();
 		r.setStatus(Status.COMPLETE);
 		DetailPanel detailPanel = null;
-		detailPanel = new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		assertNotNull(detailPanel);
+		detailPanel = new DetailPanel(r, Mode.EDIT, mainTabController);
+		Assert.assertNotNull(detailPanel);
 	}
 	
 	@Test
-	public void testCreationForDeleted(){
-		Requirement r = new Requirement();
+	public void testCreationForDeleted() {
+		final Requirement r = new Requirement();
 		r.setStatus(Status.DELETED);
 		DetailPanel detailPanel = null;
-		detailPanel = new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		assertNotNull(detailPanel);
+		detailPanel = new DetailPanel(r, Mode.EDIT, mainTabController);
+		Assert.assertNotNull(detailPanel);
 	}
 	
 	@Test
-	public void testCreationForInProgress(){
-		Requirement r = new Requirement();
+	public void testCreationForEachModeNew() {
+		final Requirement r = new Requirement();
+		r.setStatus(Status.NEW);
+		DetailPanel detailPanel = null;
+		for (final Mode mode : Mode.values()) {
+			detailPanel = new DetailPanel(r, mode, mainTabController);
+			Assert.assertNotNull(detailPanel);
+		}
+	}
+	
+	@Test
+	public void testCreationForInProgress() {
+		final Requirement r = new Requirement();
 		r.setStatus(Status.IN_PROGRESS);
 		DetailPanel detailPanel = null;
-		detailPanel = new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		assertNotNull(detailPanel);
+		detailPanel = new DetailPanel(r, Mode.EDIT, mainTabController);
+		Assert.assertNotNull(detailPanel);
 	}
 	
 	@Test
-	public void testCreationForOpen(){
-		Requirement r = new Requirement();
+	public void testCreationForOpen() {
+		final Requirement r = new Requirement();
 		r.setStatus(Status.OPEN);
 		DetailPanel detailPanel = null;
-		detailPanel = new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		assertNotNull(detailPanel);
+		detailPanel = new DetailPanel(r, Mode.EDIT, mainTabController);
+		Assert.assertNotNull(detailPanel);
+	}
+	
+	@Test
+	public void testGetMainTabController() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		
+		Assert.assertTrue(detailPanel.getMainTabController().equals(
+				mainTabController));
+	}
+	
+	@Test
+	public void testGetModel() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		
+		Assert.assertTrue(detailPanel.getModel().equals(r));
 	}
 	
 	@Test
 	public void testNoteSetAndGet() {
-		Requirement r = new Requirement();
-		Note n = new Note("note", "creator");
+		final Requirement r = new Requirement();
+		final Note n = new Note("note", "creator");
 		r.addNote(n);
-		List<Note> noteList = new ArrayList<Note>();
+		final List<Note> noteList = new ArrayList<Note>();
 		noteList.add(n);
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
 		
-		assertTrue(detailPanel.getNoteList().equals(noteList));
+		Assert.assertTrue(detailPanel.getNoteList().equals(noteList));
 		
-		Note n2 = new Note("note2", "Creator");
+		final Note n2 = new Note("note2", "Creator");
 		noteList.add(n2);
 		detailPanel.setNoteList(noteList);
 		
-		assertTrue(detailPanel.getNoteList().equals(noteList));
+		Assert.assertTrue(detailPanel.getNoteList().equals(noteList));
 		
-		}
+	}
+	
+	@Test
+	public void testSaveButtonEnables() {
+		final Requirement r = new Requirement();
+		final DetailPanel panel = new DetailPanel(r, DetailPanel.Mode.CREATE,
+				mainTabController);
+		
+		final JTextComponentTester tester = new JTextComponentTester();
+		
+		showFrame(panel);
+		
+		Assert.assertFalse(panel.getBtnSave().isEnabled());
+		
+		tester.actionEnterText(panel.getTextName(), "Req Name");
+		Assert.assertFalse(panel.getBtnSave().isEnabled());
+		
+		tester.actionEnterText(panel.getTextDescription(), "Req Desc");
+		Assert.assertTrue(panel.getBtnSave().isEnabled());
+		
+	}
 	
 	@Test
 	public void testSaveError() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
 		
 		detailPanel.displaySaveError("Save Error");
 		
-		assertEquals(detailPanel.getTextSaveError().getText(), "Save Error");
-	}
-	
-	@Test 
-	public void testGetMainTabController() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		
-		assertTrue(detailPanel.getMainTabController().equals(mainTabController));
-	}
-	
-	@Test
-	public void testTextName() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextArea textName = new JTextArea("name");
-		detailPanel.setTextName(textName);
-		
-		assertTrue(detailPanel.getTextName().equals(textName));
-		assertEquals(detailPanel.getTextName().getText(), "name");
-	}
-	
-	@Test
-	public void testTextNameValid() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextArea textNameValid = new JTextArea("valid");
-		detailPanel.setTextNameValid(textNameValid);
-		
-		assertTrue(detailPanel.getTextNameValid().equals(textNameValid));
-		assertEquals(detailPanel.getTextNameValid().getText(), "valid");
-	}
-	
-	@Test
-	public void testTextDescription() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextArea textDesc = new JTextArea("Desc");
-		detailPanel.setTextDescription(textDesc);
-		
-		assertTrue(detailPanel.getTextDescription().equals(textDesc));
-		assertEquals(detailPanel.getTextDescription().getText(), "Desc");
-	}
-	
-	@Test
-	public void testTextDescriptionValid() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextArea textDescValid = new JTextArea("valid");
-		detailPanel.setTextDescriptionValid(textDescValid);
-		
-		assertTrue(detailPanel.getTextDescriptionValid().equals(textDescValid));
-		assertEquals(detailPanel.getTextDescriptionValid().getText(), "valid");
-	}
-	
-	@Test
-	public void testTextEstimate() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextField textEst = new JTextField("123");
-		detailPanel.setTextEstimate(textEst);
-		
-		assertTrue(detailPanel.getTextEstimate().equals(textEst));
-		assertEquals(detailPanel.getTextEstimate().getText(), "123");
-	}
-	
-	@Test 
-	public void testGetModel(){
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		
-		assertTrue(detailPanel.getModel().equals(r));
-	}
-	
-	@Test
-	public void testTextActual() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextField textActual = new JTextField("123");
-		detailPanel.setTextActual(textActual);
-		
-		assertTrue(detailPanel.getTextActual().equals(textActual));
-		assertEquals(detailPanel.getTextActual().getText(), "123");
-	}
-	
-	@Test
-	public void testTextRelease() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
-		JTextField textRelease = new JTextField("v1.1");
-		detailPanel.setTextRelease(textRelease);
-		
-		assertTrue(detailPanel.getTextRelease().equals(textRelease));
-		assertEquals(detailPanel.getTextRelease().getText(), "v1.1");
+		Assert.assertEquals(detailPanel.getTextSaveError().getText(),
+				"Save Error");
 	}
 	
 	@Test
 	public void testTabClose() {
-		Requirement r = new Requirement();
-		DetailPanel detailPanel= new DetailPanel(r, Mode.EDIT, this.mainTabController);
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
 		
-		assertTrue(detailPanel.onTabClosed());
+		Assert.assertTrue(detailPanel.onTabClosed());
 	}
 	
-	@Test	
-	public void testSaveButtonEnables() {
-		Requirement r = new Requirement();		
-		DetailPanel panel = new DetailPanel(r, DetailPanel.Mode.CREATE, mainTabController);
+	@Test
+	public void testTextActual() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextField textActual = new JTextField("123");
+		detailPanel.setTextActual(textActual);
 		
-		JTextComponentTester tester = new JTextComponentTester();
+		Assert.assertTrue(detailPanel.getTextActual().equals(textActual));
+		Assert.assertEquals(detailPanel.getTextActual().getText(), "123");
+	}
+	
+	@Test
+	public void testTextDescription() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextArea textDesc = new JTextArea("Desc");
+		detailPanel.setTextDescription(textDesc);
 		
-		showFrame(panel);
+		Assert.assertTrue(detailPanel.getTextDescription().equals(textDesc));
+		Assert.assertEquals(detailPanel.getTextDescription().getText(), "Desc");
+	}
+	
+	@Test
+	public void testTextDescriptionValid() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextArea textDescValid = new JTextArea("valid");
+		detailPanel.setTextDescriptionValid(textDescValid);
 		
-		assertFalse(panel.getBtnSave().isEnabled());
+		Assert.assertTrue(detailPanel.getTextDescriptionValid().equals(
+				textDescValid));
+		Assert.assertEquals(detailPanel.getTextDescriptionValid().getText(),
+				"valid");
+	}
+	
+	@Test
+	public void testTextEstimate() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextField textEst = new JTextField("123");
+		detailPanel.setTextEstimate(textEst);
 		
-		tester.actionEnterText(panel.getTextName(), "Req Name");
-		assertFalse(panel.getBtnSave().isEnabled());
+		Assert.assertTrue(detailPanel.getTextEstimate().equals(textEst));
+		Assert.assertEquals(detailPanel.getTextEstimate().getText(), "123");
+	}
+	
+	@Test
+	public void testTextName() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextArea textName = new JTextArea("name");
+		detailPanel.setTextName(textName);
 		
-		tester.actionEnterText(panel.getTextDescription(), "Req Desc");
-		assertTrue(panel.getBtnSave().isEnabled());
+		Assert.assertTrue(detailPanel.getTextName().equals(textName));
+		Assert.assertEquals(detailPanel.getTextName().getText(), "name");
+	}
+	
+	@Test
+	public void testTextNameValid() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextArea textNameValid = new JTextArea("valid");
+		detailPanel.setTextNameValid(textNameValid);
 		
+		Assert.assertTrue(detailPanel.getTextNameValid().equals(textNameValid));
+		Assert.assertEquals(detailPanel.getTextNameValid().getText(), "valid");
+	}
+	
+	@Test
+	public void testTextRelease() {
+		final Requirement r = new Requirement();
+		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
+				mainTabController);
+		final JTextField textRelease = new JTextField("v1.1");
+		detailPanel.setTextRelease(textRelease);
+		
+		Assert.assertTrue(detailPanel.getTextRelease().equals(textRelease));
+		Assert.assertEquals(detailPanel.getTextRelease().getText(), "v1.1");
 	}
 }

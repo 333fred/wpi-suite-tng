@@ -15,14 +15,15 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions;
 import java.util.Date;
 
 /**
- * Thrown when a user attempts to put in a date and it is not formatted properly or chronologically possible
+ * Thrown when a user attempts to put in a date and it is not formatted properly
+ * or chronologically possible
  */
 public class InvalidDateException extends Exception {
-
+	
 	Date invalidDate;
-
-	public InvalidDateException(Date invalidDate) {
+	
+	public InvalidDateException(final Date invalidDate) {
 		this.invalidDate = invalidDate;
 	}
-
+	
 }

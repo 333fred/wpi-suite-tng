@@ -26,44 +26,45 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * QueryUserRequestController
  */
 public class QueryUserRequestObserver implements RequestObserver {
-
+	
 	private final AssigneePanel parentView;
-
-	public QueryUserRequestObserver(AssigneePanel parentView) {
+	
+	public QueryUserRequestObserver(final AssigneePanel parentView) {
 		this.parentView = parentView;
 	}
-
+	
 	@Override
-	public void responseSuccess(IRequest iReq) {
+	public void fail(final IRequest iReq, final Exception exception) {
+		System.out.println("User Query response Failure");
+	}
+	
+	@Override
+	public void responseError(final IRequest iReq) {
+		System.out.println("User Query Response Error");
+		
+	}
+	
+	@Override
+	public void responseSuccess(final IRequest iReq) {
 		// If the network hasn't been initialized, then this will fail, so
 		// return
 		if (Network.getInstance().isInitialized()) {
 			return;
 		}
-		ResponseModel response = iReq.getResponse();
-
+		final ResponseModel response = iReq.getResponse();
+		
 		final StringListModel users = StringListModel.fromJSONArray(response
 				.getBody())[0];
-
+		
 		// notify the controller
 		SwingUtilities.invokeLater(new Runnable() {
+			
 			@Override
 			public void run() {
 				parentView.setUnassignedUsersList(users);
 			}
 		});
-
+		
 	}
-
-	@Override
-	public void responseError(IRequest iReq) {
-		System.out.println("User Query Response Error");
-
-	}
-
-	@Override
-	public void fail(IRequest iReq, Exception exception) {
-		System.out.println("User Query response Failure");
-	}
-
+	
 }

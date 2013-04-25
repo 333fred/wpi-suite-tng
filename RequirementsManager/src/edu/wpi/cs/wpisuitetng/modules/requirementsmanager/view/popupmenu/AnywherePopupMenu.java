@@ -30,44 +30,46 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  */
 
 public class AnywherePopupMenu extends JPopupMenu implements ActionListener {
-
+	
 	/** The Tabcontroller used to open tabs */
-	private MainTabController tabController;
-
-	private JMenuItem itemCreateIteration;
-	private JMenuItem itemCreateRequirement;
-
+	private final MainTabController tabController;
+	
+	private final JMenuItem itemCreateIteration;
+	private final JMenuItem itemCreateRequirement;
+	
 	/**
 	 * Creates a new instance of anywhere popup menu
 	 * 
 	 * @param tabController
 	 *            tab controller ot open tabs in
 	 */
-
-	public AnywherePopupMenu(MainTabController tabController) {
+	
+	public AnywherePopupMenu(final MainTabController tabController) {
 		this.tabController = tabController;
-
+		
 		itemCreateIteration = new JMenuItem("New Iteration");
 		itemCreateRequirement = new JMenuItem("New Requirement");
-
+		
 		itemCreateIteration.addActionListener(this);
 		itemCreateRequirement.addActionListener(this);
-
-		if(PermissionModel.getInstance().getUserPermissions().canCreateRequirement()) {
+		
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canCreateRequirement()) {
 			add(itemCreateRequirement);
 		}
-		if(PermissionModel.getInstance().getUserPermissions().canCreateIteration()) {
+		if (PermissionModel.getInstance().getUserPermissions()
+				.canCreateIteration()) {
 			add(itemCreateIteration);
 		}
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource().equals(itemCreateIteration)) {
 			tabController.addCreateIterationTab();
 		} else {
 			tabController.addCreateRequirementTab();
 		}
-
+		
 	}
 }
