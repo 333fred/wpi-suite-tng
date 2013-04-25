@@ -734,14 +734,14 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	
 	@Override
 	public void refresh() {
-		// retreive a new copy of requirements, and update the list view
+		// retrieve a new copy of requirements, and update the list view
 		if (isEditable) {
 			final Object[] options = { "Save Changes", "Discard Changes",
 					"Cancel" };
 			final int res = JOptionPane
 					.showOptionDialog(
 							this,
-							"There are unsaved changes, You need to discart them before you can refresh",
+							"There are unsaved changes, refreshing will discard them.",
 							"Requirements: Confirm Refresh",
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, options,
