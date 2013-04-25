@@ -72,7 +72,7 @@ public class PermissionsPanel extends Tab {
 
 		// construct the table of users and their permissions
 		String[] columnNames = new String[2];
-		columnNames[0] = "User name";
+		columnNames[0] = "User Name";
 		columnNames[1] = "Permission Level";
 
 		String[][] rowData = new String[localPermissions.size()][2];

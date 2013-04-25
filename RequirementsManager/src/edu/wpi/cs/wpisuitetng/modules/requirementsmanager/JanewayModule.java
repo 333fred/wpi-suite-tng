@@ -33,7 +33,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.PermissionsDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrievePermissionsRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.DraggableTabbedPane;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
