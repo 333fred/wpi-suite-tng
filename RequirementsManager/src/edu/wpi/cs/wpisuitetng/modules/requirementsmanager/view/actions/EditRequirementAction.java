@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
  * The action for saving an edited requirement, used when "Save Requirement"
  * button is pressed
  */
+@SuppressWarnings ("serial")
 public class EditRequirementAction extends AbstractAction {
 	
 	private final Requirement requirement;
@@ -205,10 +206,7 @@ public class EditRequirementAction extends AbstractAction {
 			} catch (final NumberFormatException except) {
 				parentView
 						.displaySaveError("Iteration must be an integer value");
-			}/*
-			 * catch (RequirementNotFoundException e1) { // TODO Auto-generated
-			 * catch block e1.printStackTrace(); }
-			 */
+			}
 		} else {
 			if (parentView.getTextName().getText().trim().equals("")) {
 				parentView.getTextName()

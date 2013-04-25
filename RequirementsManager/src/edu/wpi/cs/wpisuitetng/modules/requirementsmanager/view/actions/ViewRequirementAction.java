@@ -18,7 +18,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
@@ -26,9 +25,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  * CreateDefectAction in the DefectTracker module
  * 
  * @author Alex Gorowara
- * 
- *         Action that calls {@link MainTabController#addCreateDefectTab()},
- *         default mnemonic key is C.
  */
 @SuppressWarnings ("serial")
 public class ViewRequirementAction extends AbstractAction {
@@ -39,7 +35,7 @@ public class ViewRequirementAction extends AbstractAction {
 	/**
 	 * Create a CreateDefectAction
 	 * 
-	 * @param controller
+	 * @param requirementList
 	 *            When the action is performed, controller.addCreateDefectTab()
 	 *            is called
 	 */

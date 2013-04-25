@@ -33,6 +33,9 @@ public class OpenRequirementTabAction implements
 	 * Create a new OpenRequirementTabAction with the given tabController
 	 * 
 	 * @param tabController
+	 *            the controller for this tab action
+	 * @param oldRequirement
+	 *            the requirement to open a tab for
 	 */
 	
 	public OpenRequirementTabAction(final MainTabController tabController,

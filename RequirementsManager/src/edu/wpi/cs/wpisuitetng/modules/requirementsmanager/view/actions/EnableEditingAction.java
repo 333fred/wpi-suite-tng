@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
 /**
  * The action for editing a requirement
  */
+@SuppressWarnings ("serial")
 public class EnableEditingAction extends AbstractAction {
 	
 	private final RequirementTableView tableView;
@@ -40,6 +41,8 @@ public class EnableEditingAction extends AbstractAction {
 	 * Constructor for EnableEditingAction
 	 * 
 	 * @param tableView
+	 * @param sorter
+	 *            Sorter for the rows
 	 */
 	public EnableEditingAction(final RequirementTableView tableView,
 			final TableRowSorter<TableModel> sorter) {
@@ -51,7 +54,6 @@ public class EnableEditingAction extends AbstractAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		
-		// TODO Auto-generated method stub
 		if (tableView.isEditable()) {
 			tableView.setEditable(false);
 			tableView.displayEditInformation("");
@@ -120,16 +122,16 @@ public class EnableEditingAction extends AbstractAction {
 				}
 			};
 			
-			final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+			final TableRowSorter<TableModel> rowSorter = new TableRowSorter<TableModel>(
 					tableView.getTable().getModel());
 			
 			// TODO: find a better way to get the the appropriate columns (for
 			// loop was failing for me for no reason)
-			sorter.setComparator(3, PriorityComparator);
-			sorter.setComparator(5, IterationStringComparator);
-			sorter.setComparator(6, numberComparator);
-			sorter.setComparator(7, numberComparator);
-			tableView.getTable().setRowSorter(sorter);
+			rowSorter.setComparator(3, PriorityComparator);
+			rowSorter.setComparator(5, IterationStringComparator);
+			rowSorter.setComparator(6, numberComparator);
+			rowSorter.setComparator(7, numberComparator);
+			tableView.getTable().setRowSorter(rowSorter);
 			tableView.getTable().getRowSorter().setSortKeys(sortKeys);
 			
 			// set isEditable to true
