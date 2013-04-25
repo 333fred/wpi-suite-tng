@@ -99,7 +99,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 	@Override
 	public boolean deleteEntity(final Session s, final String id)
 			throws WPISuiteException {
-		// TODO should user need to be Admin?
 		ensureRole(s, Role.ADMIN);
 		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;
 	}
@@ -149,8 +148,9 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 			requirements = db.retrieve(Requirement.class, "rUID", intId,
 					s.getProject()).toArray(new Requirement[0]);
 		} catch (final WPISuiteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Requirements Entity Manager, getEntity, Line 151");
+			System.out.println("Status: " + e.getStatus());
+			System.out.println("Message: " + e.getMessage());
 		}
 		
 		if ((requirements.length < 1) || (requirements[0] == null)) {
@@ -236,7 +236,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		final List<ValidationIssue> issues = validator.validate(s,
 				newRequirement, RequirementActionMode.CREATE);
 		if (issues.size() > 0) {
-			// TODO: pass errors to client through exception
 			for (final ValidationIssue issue : issues) {
 				System.out.println("Validation issue: " + issue.getMessage());
 			}
@@ -291,25 +290,6 @@ public class RequirementsEntityManager implements EntityManager<Requirement> {
 		final RequirementChangeset changeset = new RequirementChangeset(
 				s.getUser());
 		final ChangesetCallback callback = new ChangesetCallback(changeset);
-		
-		// Save the iteration values
-		final int oldIteration = oldReq.getIteration();
-		final int newIteration = updatedRequirement.getIteration();
-		
-		// if (updatedRequirement.getStatus() == Status.DELETED){
-		// Integer parentID = updatedRequirement.getpUID().get(0);
-		// Integer reqID = updatedRequirement.getrUID();
-		// try {
-		// Requirement parent;
-		// parent = getRequirement(parentID,s);
-		// parent.removeSubRequirement(reqID);
-		// update(s,parent.toJSON());
-		// updatedRequirement.removePUID(parentID);
-		// } catch (RequirementNotFoundException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
 		
 		// Copy values from the new requirement to the old requirement
 		updateMapper.map(updatedRequirement, oldReq, callback);
