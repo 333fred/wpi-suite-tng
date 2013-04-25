@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Mitchell Caisse
+ *    @author Mitchell Caisse
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs;
 
@@ -17,9 +17,6 @@ import javax.swing.JPanel;
 
 /**
  * Interface for listening to when a tab has gained focus
- * 
- * @author Mitchell
- * 
  */
 
 public class Tab extends JPanel {

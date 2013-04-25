@@ -33,13 +33,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
 /**
- * Controller wrapper around the MainTabView Provides convient methods for
+ * Controller wrapper around the MainTabView Provides convenient methods for
  * operating on Tabs from the MainTabView
  * 
  * Adapted from MainTabController in the DefectModule
- * 
- * @author Mitchell
- * 
  */
 
 public class MainTabController {
@@ -47,7 +44,7 @@ public class MainTabController {
 	/** The MainTabView that this controller manages */
 	private final MainTabView tabView;
 
-	/** The iteration tree view that is displayed accross this module */
+	/** The iteration tree view that is displayed across this module */
 	private IterationTreeView iterationTreeView;
 
 	/** THe filter view on the left */
