@@ -19,5 +19,11 @@
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="lib/abbot.jar"/>
+	<classpathentry kind="lib" path="lib/costello.jar"/>
+	<classpathentry kind="lib" path="lib/example.jar"/>
+	<classpathentry kind="lib" path="lib/gnu-regexp-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

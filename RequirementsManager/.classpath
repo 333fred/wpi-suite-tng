@@ -21,5 +21,11 @@
 	<classpathentry kind="lib" path="/Janeway/lib/junit.jar"/>
 	<classpathentry kind="lib" path="/Janeway/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="/Janeway/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="/Janeway/lib/abbot.jar"/>
+	<classpathentry kind="lib" path="/Janeway/lib/costello.jar"/>
+	<classpathentry kind="lib" path="/Janeway/lib/example.jar"/>
+	<classpathentry kind="lib" path="/Janeway/lib/gnu-regexp-1.1.4.jar"/>
+	<classpathentry kind="lib" path="/Janeway/lib/groovy-all-1.8.1.jar"/>
+	<classpathentry kind="lib" path="/Janeway/lib/jdom-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
