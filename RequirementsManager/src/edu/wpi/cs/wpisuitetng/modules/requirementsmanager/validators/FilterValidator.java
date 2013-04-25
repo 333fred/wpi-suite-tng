@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    @author Fredric
+ *    @author Fredric Silberberg
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
@@ -18,6 +18,10 @@ import java.util.List;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
+/**
+ * Validates Filters so that they fit in with the given Data
+ * implementation.
+ */
 public class FilterValidator {
 
 	/**

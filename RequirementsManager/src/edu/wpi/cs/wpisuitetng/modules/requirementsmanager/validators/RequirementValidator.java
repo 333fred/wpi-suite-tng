@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *		Jason Whitehouse
+ *		@author Jason Whitehouse
  ********************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators;
 
@@ -31,9 +31,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.Require
 /**
  * Validates Requirements so that they fit in with the given Data
  * implementation.
- * 
- * @author Jason Whitehouse
- * 
  */
 public class RequirementValidator {
 
