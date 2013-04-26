@@ -38,9 +38,7 @@ public class DetailPanelTest extends ComponentTestFixture {
 	
 	@Before
 	public void setup() {
-		if (mainTabController == null) {
-			mainTabController = new MainTabController();
-		}
+		mainTabController = new MainTabController();
 	}
 	
 	@Test
@@ -93,6 +91,10 @@ public class DetailPanelTest extends ComponentTestFixture {
 	@Test
 	public void testGetMainTabController() {
 		final Requirement r = new Requirement();
+		// TODO: Why the heck isn't before being called to set this up?
+		if (mainTabController == null) {
+			mainTabController = new MainTabController();
+		}
 		final DetailPanel detailPanel = new DetailPanel(r, Mode.EDIT,
 				mainTabController);
 		

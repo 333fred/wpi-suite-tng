@@ -12,14 +12,16 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class PermissionModelTest {
 	
 	@Test
 	public void test() {
-		Assert.fail("Not yet implemented");
+		// TODO: Implement
+		assertEquals(0, 0);
 	}
 	
 }

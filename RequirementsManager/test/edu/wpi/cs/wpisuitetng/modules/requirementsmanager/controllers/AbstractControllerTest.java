@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
@@ -27,11 +28,13 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * Abstract class to test all of the controllers
+ * This is ignored as it just provides a framework for testing, not actually
+ * doing a test
  * 
  * @param <T>
  *            The type of model this will be testing
  */
-
+@Ignore
 public abstract class AbstractControllerTest<T extends AbstractModel> {
 	
 	protected AbstractController<T> controller;
