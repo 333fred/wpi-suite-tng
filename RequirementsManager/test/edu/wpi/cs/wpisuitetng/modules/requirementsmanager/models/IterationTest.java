@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.InvalidDateException;
 
 public class IterationTest {
 	
@@ -91,7 +90,7 @@ public class IterationTest {
 	}
 	
 	@Test
-	public void testFromJSON() throws InvalidDateException {
+	public void testFromJSON() {
 		final String json = i1.toJSON();
 		final Iteration newIteration = Iteration.fromJSON(json);
 		Assert.assertEquals("name", newIteration.getName());
