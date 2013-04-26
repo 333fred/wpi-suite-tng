@@ -94,17 +94,16 @@ public class SaveEditingTableAction extends AbstractAction implements
 					reqToChange.setIteration(newIteration.getId());
 					
 					try {
-						System.out.println("\n\nWORK DARN YOU\n\n");
 						reqToChange.setType(Type.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 2)).toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
 					} catch (final IllegalArgumentException except) {
+						//We use "" instead of "None"
 						reqToChange.setType(Type.BLANK);
-						System.out.println("\n\nWhat\n\n");
 					}
 					
 					try {
 						reqToChange.setPriority(Priority.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 3)).toUpperCase().replaceAll(" ", "_")));
 					} catch (final IllegalArgumentException except) {
-						reqToChange.setType(Type.BLANK);
+						reqToChange.setPriority(Priority.BLANK);
 					}
 					
 					try {
