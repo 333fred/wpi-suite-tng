@@ -32,13 +32,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RowCol;
  * 
  */
 public class RequirementsTable extends JTable {
-	
+
 	private static final long serialVersionUID = 1L;
-	// TODO: How to get the actual number for this?
+	/** list of edited rows for saving */
 	private boolean[] editedRows;
+	/** List of edited row/column pairs for highlighting */
 	private ArrayList<RowCol> editedRowColumns;
 	private final RequirementTableView view;
-	
+
 	/**
 	 * @param rowData
 	 * @param columnNames
@@ -48,120 +49,123 @@ public class RequirementsTable extends JTable {
 		super(rowData, columnNames);
 		this.view = view;
 	}
-	
+
 	public void clearUpdated() {
 		editedRows = new boolean[super.getRowCount()];
 		editedRowColumns = new ArrayList<RowCol>();
 	};
-	
+
 	@Override
 	public TableCellRenderer getCellRenderer(final int row, final int column) {
+		//Make sure that editedRows is initialized and of the proper size
 		if (editedRows == null) {
 			editedRows = new boolean[super.getRowCount()];
 		} else if (editedRows.length < super.getRowCount()) {
 			final boolean[] temp = new boolean[super.getRowCount()];
 			editedRows = temp;
 		}
-		
-		if(editedRowColumns==null)
+
+		if (editedRowColumns == null)
 			editedRowColumns = new ArrayList<RowCol>();
-		
-		for(RowCol map : editedRowColumns){
-			if(map.getRow()==row&&map.getCol()==column){
-			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-			renderer.setBackground(Color.yellow);
-			return renderer;
+
+		for (RowCol map : editedRowColumns) {
+			if (map.getRow() == row && map.getCol() == column) {
+				final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+				renderer.setBackground(Color.yellow);
+				return renderer;
+			}
 		}
-		}
-		return super.getCellRenderer(row, column);		
+		return super.getCellRenderer(row, column);
 
 	}
-	
+
 	public boolean[] getEditedRows() {
 		return editedRows;
 	}
-	
+
 	@Override
 	public boolean isCellEditable(final int row, final int column) {
-		// Only the "Estimate" column is currently editable
+		// All columns can be editable in certain circumstances
 		boolean statusEditable = false;
 		final String status = (String) super.getModel().getValueAt(
 				convertRowIndexToModel(row), 4);
 		if (super.convertColumnIndexToModel(column) == 4)
 			statusEditable = true;
 		else if (super.convertColumnIndexToModel(column) == 6) {
-		statusEditable = !status.equals("In Progress")
-				&& !status.equals("Deleted") && !status.equals("Complete");		
+			statusEditable = !status.equals("In Progress")
+					&& !status.equals("Deleted") && !status.equals("Complete");
 		} else if (super.convertColumnIndexToModel(column) == 7) {
-			statusEditable = status.equals("Complete");			
+			statusEditable = status.equals("Complete");
 		} else {
-			statusEditable = !status.equals("Deleted") && !status.equals("Complete");			
+			statusEditable = !status.equals("Deleted")
+					&& !status.equals("Complete");
 		}
-		
+
 		return (view.isEditable() && statusEditable);
 	}
-	
+
 	@Override
+	/**
+	 * Overrides the cell editor to allow use of combo boxes for Status, Priority, and Iteration fields
+	 */
 	public TableCellEditor getCellEditor(final int row, final int column) {
 		if (convertColumnIndexToModel(column) == 2) {
-			//final String[] items1 = { "None", "Epic", "Theme", "User Story", "Non Functional", "Scenario" };
-			final JComboBox comboBox1 = new JComboBox();			
+			// final String[] items1 = { "None", "Epic", "Theme", "User Story",
+			// "Non Functional", "Scenario" };
+			final JComboBox comboBox1 = new JComboBox();
 			for (final Type t : Type.values()) {
-				if(t == Type.BLANK){
+				if (t == Type.BLANK) {
 					comboBox1.addItem("");
 				} else {
 					comboBox1.addItem(t.toString());
 				}
 			}
-			//comboBox1.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());	
-			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 3) {
-			//final String[] items1 = { "None", "Low", "Medium", "High" };			
+			// final String[] items1 = { "None", "Low", "Medium", "High" };
 			final JComboBox comboBox1 = new JComboBox();
-			
+
 			for (final Priority t : Priority.values()) {
-				if(t == Priority.BLANK){
+				if (t == Priority.BLANK) {
 					comboBox1.addItem("");
 				} else {
 					comboBox1.addItem(t.toString());
 				}
-			}			
-			comboBox1.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
-			//comboBox1.setSelectedItem(getValueAt(row, column));
+			}
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 4) {
 			final JComboBox comboBox1 = getAvailableStatusOptions(row);
-			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 5) {
 			final JComboBox comboBox1 = new JComboBox(getIterations(row));
-			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else {
 			return super.getCellEditor(row, column);
 		}
 	}
-	
+
 	private String[] getIterations(int row) {
+		//Get iterations from the database
 		List<Iteration> iterationList = IterationDatabase.getInstance()
-				.getAll();		
-		
+				.getAll();
+
 		Requirement requirement = null;
 
+		//Now get the current requirement
 		try {
-			requirement = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(convertRowIndexToModel(row), 0)));
+			requirement = RequirementDatabase.getInstance().get(
+					Integer.parseInt((String) view.getTable().getModel()
+							.getValueAt(convertRowIndexToModel(row), 0)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		
 		iterationList = Iteration.sortIterations(iterationList);
 		int availableIterationNum = 0;
 		int currentAvailableIterationIndex = 0;
@@ -176,7 +180,7 @@ public class RequirementsTable extends JTable {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
-			
+
 		}
 		final String[] availableIterations = new String[availableIterationNum];
 		for (final Iteration iteration : iterationList) {
@@ -193,19 +197,21 @@ public class RequirementsTable extends JTable {
 		}
 		return availableIterations;
 	}
-	
+
 	public JComboBox getAvailableStatusOptions(int row) {
 		JComboBox comboBoxStatus = new JComboBox();
 		Requirement req = null;
 
 		try {
-			req = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(convertRowIndexToModel(row), 0)));
+			req = RequirementDatabase.getInstance().get(
+					Integer.parseInt((String) view.getTable().getModel()
+							.getValueAt(convertRowIndexToModel(row), 0)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		comboBoxStatus.removeAllItems();
 		for (final Status t : Status.values()) {
 			comboBoxStatus.addItem(t.toString());
@@ -220,14 +226,14 @@ public class RequirementsTable extends JTable {
 		if (!hasComplete) {
 			comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
-		
+
 		if (req.getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			comboBoxStatus.removeItem(Status.NEW.toString());
 			if (!req.subReqsCompleted()) {
 				comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
-			
+
 			if ((req.getSubRequirements().size() > 0) || !req.tasksCompleted()) {
 				comboBoxStatus.removeItem(Status.DELETED.toString());
 			}
@@ -267,7 +273,7 @@ public class RequirementsTable extends JTable {
 
 		return comboBoxStatus;
 	}
-	
+
 	@Override
 	public void setValueAt(final Object value, final int row, final int col) {
 		if (!view.isEditable()) {
