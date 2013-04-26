@@ -808,6 +808,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 	public void setEditable(final boolean editable) {
 		isEditable = editable;
+		tabController.setSidePaneEnabled(!editable);
 	}
 
 	@Override
