@@ -146,7 +146,7 @@ public class RequirementsTable extends JTable {
 		Requirement requirement = null;
 
 		try {
-			requirement = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(row, 0)));
+			requirement = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(convertRowIndexToModel(row), 0)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RequirementNotFoundException e) {
@@ -191,7 +191,7 @@ public class RequirementsTable extends JTable {
 		Requirement req = null;
 
 		try {
-			req = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(row, 0)));
+			req = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(convertRowIndexToModel(row), 0)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (RequirementNotFoundException e) {
