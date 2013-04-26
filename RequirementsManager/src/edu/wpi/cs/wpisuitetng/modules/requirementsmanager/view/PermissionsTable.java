@@ -52,7 +52,7 @@ public class PermissionsTable extends JTable {
 	 */
 	@Override
 	public TableCellEditor getCellEditor(final int row, final int column) {
-		if (convertColumnIndexToModel(column) == 1) {
+		if (convertColumnIndexToModel(column) == 2) {
 			// Create the combo box
 			final String[] items1 = { "Admin", "Update", "Observe" };
 			final JComboBox comboBox1 = new JComboBox(items1);
@@ -70,7 +70,7 @@ public class PermissionsTable extends JTable {
 	 */
 	@Override
 	public TableCellRenderer getCellRenderer(final int row, final int column) {
-		if (!isCellEditable(row, convertColumnIndexToView(1))) {
+		if (!isCellEditable(row, convertColumnIndexToView(2))) {
 			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 			renderer.setBackground(Color.lightGray);
 			return renderer;
@@ -89,7 +89,7 @@ public class PermissionsTable extends JTable {
 				.equals(PermissionModel.getInstance().getUser().getUsername())
 				&& !localPermissions.get(convertRowIndexToModel(row)).getUser()
 						.getUsername().equals("admin")) {
-			return convertColumnIndexToModel(column) == 1;
+			return convertColumnIndexToModel(column) == 2;
 		} else {
 			return false;
 		}
@@ -102,7 +102,7 @@ public class PermissionsTable extends JTable {
 	@Override
 	public void setValueAt(final Object value, final int row, final int col) {
 		super.setValueAt(value, row, col);
-		if (convertColumnIndexToModel(col) == 1) {
+		if (convertColumnIndexToModel(col) == 2) {
 			final PermissionModelController controller = new PermissionModelController();
 			final SavePermissionRequestObserver observer = new SavePermissionRequestObserver();
 			
