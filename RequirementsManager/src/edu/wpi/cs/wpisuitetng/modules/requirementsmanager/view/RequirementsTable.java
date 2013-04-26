@@ -58,7 +58,7 @@ public class RequirementsTable extends JTable {
 				&& ((super.convertColumnIndexToModel(column) == 6) || super.convertColumnIndexToModel(column) == 1)) {
 			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 			renderer.setBackground(Color.yellow);
-			editedRowColumns.remove(map);
+			//editedRowColumns.remove(map);
 			return renderer;
 		}
 		}
