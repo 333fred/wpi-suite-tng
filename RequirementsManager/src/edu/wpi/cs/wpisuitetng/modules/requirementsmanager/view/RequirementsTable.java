@@ -16,7 +16,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
@@ -102,25 +104,34 @@ public class RequirementsTable extends JTable {
 	@Override
 	public TableCellEditor getCellEditor(final int row, final int column) {
 		if (convertColumnIndexToModel(column) == 2) {
-			final String[] items1 = { "None", "Epic", "Theme", "User Story", "Non Functional", "Scenario" };
-			final JComboBox comboBox1 = new JComboBox(items1);
-			comboBox1.setSelectedItem(getValueAt(row, column));
+			//final String[] items1 = { "None", "Epic", "Theme", "User Story", "Non Functional", "Scenario" };
+			final JComboBox comboBox1 = new JComboBox();			
+			for (final Type t : Type.values()) {
+				comboBox1.addItem(t.toString());
+			}
+			//comboBox1.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());	
+			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 3) {
-			final String[] items1 = { "None", "Low", "Medium", "High" };
-			final JComboBox comboBox1 = new JComboBox(items1);
-			comboBox1.setSelectedItem(getValueAt(row, column));
+			//final String[] items1 = { "None", "Low", "Medium", "High" };			
+			final JComboBox comboBox1 = new JComboBox();
+			
+			for (final Priority t : Priority.values()) {
+				comboBox1.addItem(t.toString());
+			}			
+			comboBox1.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
+			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 4) {
 			final JComboBox comboBox1 = getAvailableStatusOptions(row);
-			comboBox1.setSelectedItem(getValueAt(row, column));
+			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 5) {
 			final JComboBox comboBox1 = new JComboBox(getIterations(row));
-			comboBox1.setSelectedItem(getValueAt(row, column));
+			//comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else {

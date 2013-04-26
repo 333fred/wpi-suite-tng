@@ -94,9 +94,11 @@ public class SaveEditingTableAction extends AbstractAction implements
 					reqToChange.setIteration(newIteration.getId());
 					
 					try {
-						reqToChange.setType(Type.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 2)).toUpperCase().replaceAll(" ", "_")));
+						System.out.println("\n\nWORK DARN YOU\n\n");
+						reqToChange.setType(Type.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 2)).toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
 					} catch (final IllegalArgumentException except) {
 						reqToChange.setType(Type.BLANK);
+						System.out.println("\n\nWhat\n\n");
 					}
 					
 					try {
@@ -105,7 +107,11 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setType(Type.BLANK);
 					}
 					
+					try {
 					reqToChange.setStatus(Status.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 4)).toUpperCase().replaceAll(" ", "_")));
+					} catch (final IllegalArgumentException except) {
+						reqToChange.setStatus(Status.BLANK);
+					}
 					
 					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this);
