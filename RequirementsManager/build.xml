@@ -21,6 +21,12 @@
 		<pathelement path="build-test"/>
 		<pathelement path="${junit-jar}"/>
 	</path>
+	
+	<path id="test-gui-classpath">
+		<path refid="classpath"/>
+		<pathelement path="build-test-gui"/>
+		<pathelement path="${junit-jar}"/>
+	</path>
 
 	<target name="compile-base">
 		<mkdir dir="build"/>
@@ -55,10 +61,19 @@
 			<classpath refid="test-classpath"/>
 		</javac>
 	</target>
+	
+	<target name="compile-gui-test" depends="janeway-jar, core-jar">
+		<mkdir dir="build-test-gui"/>
+		<javac srcdir="test-gui" destdir="build-test-gui" includeJavaRuntime="yes" debug="true" target="1.6"
+				debuglevel="lines,vars,source">
+			<classpath refid="test-gui-classpath"/>
+		</javac>
+	</target>
 
 	<target name="clean">
 		<delete dir="build"/>
 		<delete dir="build-test"/>
+		<delete dir="build-test-gui"/>
 		<delete file="${core-jar-dest}"/>
 		<delete file="${janeway-jar-dest}"/>
 	</target>
@@ -74,6 +89,21 @@
 				</fileset>
 			</batchtest>
 		</junit>
+	</target>
+	
+	<target name="test-gui" depends="compile-gui-test, compile">
+		<junit printsummary="yes" haltonfailure="no">
+			<classpath refid="test-gui-classpath"/>
+			<formatter type="xml"/>
+			<batchtest fork="yes" todir="${test-results}">
+				<fileset dir="test-gui">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="test-all" depends="test, test-gui">
 	</target>
 	
 	<target name="dist" depends="compile">
