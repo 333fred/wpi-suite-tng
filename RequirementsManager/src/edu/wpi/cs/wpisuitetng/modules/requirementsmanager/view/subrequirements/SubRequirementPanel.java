@@ -36,6 +36,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Requirem
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.action.AssignChildAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.action.AssignParentAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.action.RemoveChildAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.action.RemoveParentAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.AssignChildController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.AssignParentController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.RemoveChildController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.RemoveParentController;
 
 /**
  * @author Kyle, Matt, Chris

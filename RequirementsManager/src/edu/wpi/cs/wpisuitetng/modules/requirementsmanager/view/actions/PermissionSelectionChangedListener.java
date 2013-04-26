@@ -18,7 +18,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions.PermissionsPanel;
 
 /**
  * Need to comment!

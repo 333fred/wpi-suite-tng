@@ -10,7 +10,7 @@
  *    @authors Jason Whitehouse, Alex Woodyard
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions;
 
 import java.awt.Color;
 import java.util.List;

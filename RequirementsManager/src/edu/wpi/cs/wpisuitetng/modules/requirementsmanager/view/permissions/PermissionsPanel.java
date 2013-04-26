@@ -11,7 +11,7 @@
  *    @author Conor Geary
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions;
 
 import java.util.Collections;
 import java.util.List;

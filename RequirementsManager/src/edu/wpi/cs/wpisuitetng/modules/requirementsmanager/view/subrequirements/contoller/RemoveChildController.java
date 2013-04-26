@@ -6,19 +6,20 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nick, Matt
+ * Contributors:
  * 		
  *******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
 
-public class AssignChildController {
+public class RemoveChildController {
 	
 	// The the subrequirement panel calling this controller
 	private final SubRequirementPanel view;
@@ -26,7 +27,7 @@ public class AssignChildController {
 	// the detail view that the subReqPanel is in
 	private final DetailPanel detailView;
 	
-	// the requirement to assign children to
+	// the requirement to assign a parent to
 	private final Requirement model;
 	
 	/**
@@ -39,7 +40,7 @@ public class AssignChildController {
 	 * @param ChildView
 	 *            the DetailPanel
 	 */
-	public AssignChildController(final SubRequirementPanel subRequirementPanel,
+	public RemoveChildController(final SubRequirementPanel subRequirementPanel,
 			final Requirement model, final DetailPanel ChildView) {
 		view = subRequirementPanel;
 		this.model = model;
@@ -47,24 +48,21 @@ public class AssignChildController {
 	}
 	
 	/**
-	 * Save a child requirement to the server. It gets the selected requirement
-	 * from the subreq panel
-	 * and makes the selected requirement a child of the passed requirement. It
-	 * then makes the
-	 * passed requirement linked to the selected requirement, to make sure there
-	 * is a complete link
-	 * from a parent to the child and vice versa
+	 * Save a child subRequirement to the server. It removes the selected
+	 * requirement as a child
+	 * of the passed requirement by removing all links between the two
+	 * requirements.
 	 */
 	public void saveChild() {
 		
-		final Requirement anReq = (Requirement) view.getList().getSelectedValue();
+		final Requirement anReq = (Requirement) view.getListSubReq().getSelectedValue();
 		
 		final Integer modelID = new Integer(model.getrUID());
 		final Integer anReqID = new Integer(anReq.getrUID());
 		
-		model.addSubRequirement(anReqID);
+		model.removeSubRequirement(anReqID);
+		anReq.removePUID(modelID);
 		
-		anReq.addPUID(modelID);
 		final RequirementsController controller = new RequirementsController();
 		final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 				detailView);
@@ -72,7 +70,12 @@ public class AssignChildController {
 		controller.save(anReq, observer);
 		
 		view.refreshTopPanel();
-		view.refreshValidChildren();
+		view.refreshParentLabel();
+		if (view.isParentSelected()) {
+			view.refreshValidParents();
+		} else {
+			view.refreshValidChildren();
+		}
 		
 	}
 	

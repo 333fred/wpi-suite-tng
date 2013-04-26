@@ -9,21 +9,23 @@
  * Contributors: Nick, Matt
  *    
  *******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.action;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.RemoveParentController;
+
 /**
  * Action that calls {@link
  * edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.
- * RequirementsManager.subrequirements.AssignChild()}
+ * RequirementsManager.subrequirements.AssignParent()}
  */
 @SuppressWarnings ("serial")
-public class AssignChildAction extends AbstractAction {
+public class RemoveParentAction extends AbstractAction {
 	
-	private final AssignChildController controller;
+	private final RemoveParentController controller;
 	
 	/**
 	 * Construct the action
@@ -31,8 +33,8 @@ public class AssignChildAction extends AbstractAction {
 	 * @param controller
 	 *            the controller to trigger
 	 */
-	public AssignChildAction(final AssignChildController controller) {
-		super("Assign Child");
+	public RemoveParentAction(final RemoveParentController controller) {
+		super("Remove Parent");
 		this.controller = controller;
 	}
 	
@@ -41,7 +43,7 @@ public class AssignChildAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		controller.saveChild();
+		controller.saveParent();
 	}
 	
 }

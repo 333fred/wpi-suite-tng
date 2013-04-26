@@ -16,6 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions.PermissionsPanel;
+
 public class PermissionsPanelTest {
 	
 	/** the permissions panel to test */

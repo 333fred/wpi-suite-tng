@@ -26,10 +26,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts.StatView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subrequirementsTree.SubRequirementTreeView;
 
 /**

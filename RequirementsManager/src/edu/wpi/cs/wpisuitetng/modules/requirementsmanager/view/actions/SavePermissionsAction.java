@@ -19,7 +19,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.PermissionsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions.PermissionsPanel;
 
 /**
  * An action impementation to handle saving the permissions designated by an
