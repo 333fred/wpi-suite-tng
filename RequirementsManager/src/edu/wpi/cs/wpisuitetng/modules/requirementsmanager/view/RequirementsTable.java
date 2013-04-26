@@ -16,11 +16,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RowCol;
 
 /**
@@ -83,7 +85,9 @@ public class RequirementsTable extends JTable {
 		boolean statusEditable = false;
 		final String status = (String) super.getModel().getValueAt(
 				convertRowIndexToModel(row), 4);
-		if (super.convertColumnIndexToModel(column) == 6) {
+		if (super.convertColumnIndexToModel(column) == 4)
+			statusEditable = true;
+		else if (super.convertColumnIndexToModel(column) == 6) {
 		statusEditable = !status.equals("In Progress")
 				&& !status.equals("Deleted") && !status.equals("Complete");		
 		} else if (super.convertColumnIndexToModel(column) == 7) {
@@ -110,8 +114,7 @@ public class RequirementsTable extends JTable {
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 4) {
-			final String[] items1 = { "Admin", "Update", "Observe" };
-			final JComboBox comboBox1 = new JComboBox(items1);
+			final JComboBox comboBox1 = getAvailableStatusOptions(row);
 			comboBox1.setSelectedItem(getValueAt(row, column));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
@@ -127,8 +130,7 @@ public class RequirementsTable extends JTable {
 	
 	private String[] getIterations(int row) {
 		List<Iteration> iterationList = IterationDatabase.getInstance()
-				.getAll();
-		
+				.getAll();		
 		
 		Requirement requirement = null;
 
@@ -171,6 +173,80 @@ public class RequirementsTable extends JTable {
 			}
 		}
 		return availableIterations;
+	}
+	
+	public JComboBox getAvailableStatusOptions(int row) {
+		JComboBox comboBoxStatus = new JComboBox();
+		Requirement req = null;
+
+		try {
+			req = RequirementDatabase.getInstance().get(Integer.parseInt((String) view.getTable().getModel().getValueAt(row, 0)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (RequirementNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		comboBoxStatus.removeAllItems();
+		for (final Status t : Status.values()) {
+			comboBoxStatus.addItem(t.toString());
+		}
+		comboBoxStatus.removeItem("None");
+		boolean hasComplete = true;
+		for (final Task aTask : req.getTasks()) {
+			if (!aTask.isCompleted()) {
+				hasComplete = false;
+			}
+		}
+		if (!hasComplete) {
+			comboBoxStatus.removeItem(Status.COMPLETE.toString());
+		}
+		
+		if (req.getStatus() == Status.IN_PROGRESS) {
+			// In Progress: In Progress, Complete, Deleted
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			if (!req.subReqsCompleted()) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+			
+			if ((req.getSubRequirements().size() > 0) || !req.tasksCompleted()) {
+				comboBoxStatus.removeItem(Status.DELETED.toString());
+			}
+		} else if ((req.getSubRequirements().size() > 0)
+				|| !req.tasksCompleted()) {
+			comboBoxStatus.removeItem(Status.DELETED.toString());
+		}
+		if (req.getStatus() == Status.NEW) {
+			// New: New, Deleted
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			comboBoxStatus.removeItem(Status.OPEN.toString());
+			if (hasComplete) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+		}
+		if (req.getStatus() == Status.OPEN) {
+			// Open: Open, Deleted
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			if (hasComplete) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+		}
+		if (req.getStatus() == Status.COMPLETE) {
+			// Complete: Open, Complete, Deleted
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+		}
+		if (req.getStatus() == Status.DELETED) {
+			// Deleted: Open, Deleted, Complete
+			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.IN_PROGRESS.toString());
+			if (hasComplete) {
+				comboBoxStatus.removeItem(Status.COMPLETE.toString());
+			}
+		}
+
+		return comboBoxStatus;
 	}
 	
 	@Override
