@@ -913,4 +913,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		return btnSave;
 	}
 
+	public MainTabController getController() {
+		return tabController;
+	}
+
 }

@@ -28,6 +28,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
@@ -87,6 +89,8 @@ public class SaveEditingTableAction extends AbstractAction implements
 						.getModel().getValueAt(i, 8);	
 				try {
 					final Requirement reqToChange = rdb.get(id);
+					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+							this);
 					reqToChange.setEstimate(newEstimate);
 					reqToChange.setName(newName);
 					reqToChange.setEffort(newEffort);
@@ -112,8 +116,14 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setStatus(Status.BLANK);
 					}
 					
-					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-							this);
+					Requirement parentReq = null;
+					if(reqToChange.getStatus().equals(Status.DELETED)&&reqToChange.getpUID().size()>0){
+						parentReq = RequirementDatabase.getInstance().get(reqToChange.getpUID().get(0));
+						parentReq.removeSubRequirement(reqToChange.getrUID());
+						reqToChange.removePUID(parentReq.getrUID());
+						saveController.save(parentReq, observer);
+					}
+					
 					saveController.save(reqToChange, observer);
 				} catch (final RequirementNotFoundException e1) {
 					e1.printStackTrace();
@@ -145,6 +155,25 @@ public class SaveEditingTableAction extends AbstractAction implements
 	
 	@Override
 	public void responseSuccess() {
-		// TODO Auto-generated method stub
+		// Update all tabs of their total estimates and sub requirement panel
+		MainTabController tabController = this.tableView.getController();
+		for (int i = 0; i < tabController.getTabView().getTabCount(); i++) {
+			if (tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
+				final DetailPanel detailPanel = (((DetailPanel) tabController
+						.getTabView().getComponentAt(i)));
+				detailPanel.updateTotalEstimate();
+				detailPanel.updateSubReqTab();
+				
+				try {
+					detailPanel
+							.determineAvailableStatusOptions(RequirementDatabase
+									.getInstance().get(
+											detailPanel.getRequirement()
+													.getrUID()));
+				} catch (final RequirementNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
