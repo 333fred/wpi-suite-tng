@@ -106,7 +106,7 @@ public class RequirementsTable extends JTable {
 					&& !status.equals("Deleted") && !status.equals("Complete");
 		} else if (super.convertColumnIndexToModel(column) == 7) {
 			statusEditable = status.equals("Complete");
-		} else {
+		} else if (super.convertColumnIndexToModel(column) != 5) {
 			statusEditable = !status.equals("Deleted")
 					&& !status.equals("Complete");
 		}
