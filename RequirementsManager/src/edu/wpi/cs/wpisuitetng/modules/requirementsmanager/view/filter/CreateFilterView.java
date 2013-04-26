@@ -90,9 +90,9 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	private final JLabel labField;
 	private final JLabel labOperation;
 	private final JLabel labEqualTo;
-	private final JLabel labEqualToBetween;
-	
+	private final JLabel labEqualToBetween;	
 	private final JLabel labSaveError;
+	
 	private final JComboBox cboxField;
 	
 	private final JComboBox cboxOperation;
@@ -998,6 +998,30 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	}
 	
 	
+	/** Will disable all of the fields in this View
+	 * 
+	 */
 	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		cboxField.setEnabled(enabled);
+		cboxOperation.setEnabled(enabled);
+		cboxEqualTo.setEnabled(enabled);
+		txtEqualTo.setEnabled(enabled);
+		calEqualTo.setEnabled(enabled);
+		calEqualToBetween.setEnabled(enabled);
+		butCancel.setEnabled(enabled);
+		if (enabled) {
+			//appropriatly update the save button
+			updateSave();
+		}
+		else {
+			//disalbe everything else			
+			butSave.setEnabled(enabled);
+			
+		}
+		
+	}
 	
 }
