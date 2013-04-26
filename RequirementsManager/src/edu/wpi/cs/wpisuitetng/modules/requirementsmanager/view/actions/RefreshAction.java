@@ -58,4 +58,12 @@ public class RefreshAction extends AbstractAction {
 		requirementList.refresh();
 	}
 	
+	/** 
+	 * @return The requirement table view this action is for
+	 */
+	
+	public RequirementTableView getRequirementTableView() {
+		return requirementList;
+	}
+	
 }

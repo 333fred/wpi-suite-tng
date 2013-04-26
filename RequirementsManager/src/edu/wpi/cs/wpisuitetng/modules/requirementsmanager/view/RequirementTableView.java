@@ -46,15 +46,18 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.PermissionModelController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.FilterDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
@@ -73,6 +76,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.RefreshAc
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SaveEditingTableAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpdateListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.TextSearchListener;
 
 /**
  * RequirementListView is the basic GUI that will display a list of the current
@@ -83,17 +87,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView
  * @author Steve, Mitchell
  * 
  */
-@SuppressWarnings ("serial")
+@SuppressWarnings("serial")
 public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		IDatabaseListener, IReceivedAllRequirementNotifier,
 		IRetreivedAllIterationsNotifier, FilterUpdateListener {
-	
+
 	private static RequirementTableView tv;
-	
+
 	public static RequirementTableView getInstance() {
 		return RequirementTableView.tv;
 	}
-	
+
 	public static RequirementTableView getInstance(
 			final MainTabController tabController) {
 		if (RequirementTableView.tv == null) {
@@ -101,14 +105,14 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		}
 		return RequirementTableView.tv;
 	}
-	
+
 	/** The MainTabController that this view is inside of */
 	private final MainTabController tabController;
-	
+
 	private RequirementsController requirementsController;
-	
+
 	private IterationController iterationController;
-	
+
 	/** The list of requirements that the view is displaying */
 	private Requirement[] requirements;
 	/**
@@ -116,56 +120,57 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * this view
 	 */
 	private ToolbarGroupView toolbarGroupView;
-	
+
 	/** The View and Refresh buttons used on the toolbar */
 	private JButton butView;
-	
+
 	private JButton butRefresh;
-	
+
 	/** Flag used to make paint only refresh the requirements once, on load */
 	private boolean firstPaint;
-	
-	@SuppressWarnings ("rawtypes")
+
+	@SuppressWarnings("rawtypes")
 	private Vector<Vector> rowData;
 	private RequirementsTable table;
 	private JButton btnEdit;
-	
+
 	private JButton btnSave;
 	private JButton btnClearTreeFilter;
 	private JTextArea textEditInfo;
-	
+
 	private JTextArea textTreeFilterInfo;
-	
+
 	private JTextArea textFilterInfo;
-	
+
 	private JPlaceholderTextField textSearchBox;
-	
+
+	private TextSearchListener textSearchListener;
+
 	private boolean isEditable;
-	
+
 	private TableRowSorter<TableModel> sorter;
-	
+
 	/**
 	 * Constructor for a RequirementTableView
 	 * 
 	 * 
 	 */
-	@SuppressWarnings ("rawtypes")
+	@SuppressWarnings("rawtypes")
 	private RequirementTableView(final MainTabController tabController) {
 		this.tabController = tabController;
 		FilterView.getInstance().addFilterUpdateListener(this);
 		firstPaint = false;
 		// register this listener to the Database
-		RequirementDatabase.getInstance().registerListener(this);
-		
+
 		iterationController = new IterationController();
 		requirementsController = new RequirementsController();
 		// init the toolbar group
 		initializeToolbarGroup();
-		
+
 		requirements = new Requirement[0];
-		
+
 		setLayout(new BorderLayout(0, 0));
-		
+
 		final Vector<String> columnNames = new Vector<String>();
 		columnNames.addElement("ID");
 		columnNames.addElement("Name");
@@ -176,27 +181,27 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		columnNames.addElement("Estimate");
 		columnNames.addElement("Effort");
 		columnNames.addElement("Release Number");
-		
+
 		rowData = new Vector<Vector>();
-		
+
 		// editing is disabled until the button is pressed
 		isEditable = false;
-		
+
 		table = new RequirementsTable(rowData, columnNames, this);
-		
+
 		btnEdit = new JButton("Enable Editing");
 		btnSave = new JButton("Save Changes");
 		btnClearTreeFilter = new JButton("Clear Filter");
-		
+
 		// save button is diabled until editing is enabled
 		btnSave.setEnabled(false);
-		
+
 		// set button actions
 		btnSave.setAction(new SaveEditingTableAction(this, sorter));
 		btnEdit.setAction(new EnableEditingAction(this, sorter));
-		
+
 		final AbstractAction ClearFilterAction = new AbstractAction() {
-			
+
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				sorter.setRowFilter(null);
@@ -204,61 +209,64 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				btnClearTreeFilter.setEnabled(false);
 			}
 		};
-		
+
 		// set clear tree filter's button action
 		btnClearTreeFilter.setAction(ClearFilterAction);
 		btnClearTreeFilter.setText("Clear Tree Filter");
 		// button is disabled until a tree filter is applied
 		btnClearTreeFilter.setEnabled(false);
-		
+
 		textEditInfo = new JTextArea(1, 25);
 		textEditInfo.setOpaque(false);
 		textEditInfo.setEnabled(false);
 		textEditInfo.setDisabledTextColor(Color.BLACK);
 		textEditInfo.setLineWrap(true);
 		textEditInfo.setWrapStyleWord(true);
-		
-		textSearchBox = new JPlaceholderTextField("Search for a Requirement", 15);
+
+		textSearchBox = new JPlaceholderTextField("Search for a Requirement",
+				15);
 		textSearchBox.setOpaque(true);
 		textSearchBox.setEnabled(true);
 		textSearchBox.setBorder((new JTextField()).getBorder());
 		textSearchBox.setDisabledTextColor(Color.BLACK);
-	//	textSearchBox.setLineWrap(true);
-	//	textSearchBox.setWrapStyleWord(true);
-		
+		textSearchListener = new TextSearchListener(this, textSearchBox);
+		textSearchBox.addKeyListener(textSearchListener);
+		// textSearchBox.setLineWrap(true);
+		// textSearchBox.setWrapStyleWord(true);
+
 		textSearchBox.getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
-			//	newFilter();
+				// newFilter();
 			}
-			
+
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
-			//	newFilter();
+				// newFilter();
 			}
-			
+
 			@Override
 			public void removeUpdate(final DocumentEvent e) {
-			//	newFilter();
+				// newFilter();
 			}
 
 		});
-		
+
 		textTreeFilterInfo = new JTextArea(1, 20);
 		textTreeFilterInfo.setOpaque(false);
 		textTreeFilterInfo.setEnabled(false);
 		textTreeFilterInfo.setDisabledTextColor(Color.BLACK);
 		textTreeFilterInfo.setLineWrap(true);
 		textTreeFilterInfo.setWrapStyleWord(true);
-		
+
 		textFilterInfo = new JTextArea(1, 15);
 		textFilterInfo.setOpaque(false);
 		textFilterInfo.setEnabled(false);
 		textFilterInfo.setDisabledTextColor(Color.BLACK);
 		textFilterInfo.setLineWrap(true);
 		textFilterInfo.setWrapStyleWord(true);
-		
+
 		final SpringLayout editPanelLayout = new SpringLayout();
 		final JPanel editPanel = new JPanel(editPanelLayout);
 		editPanel.add(btnEdit);
@@ -276,22 +284,22 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 								+ textEditInfo
 										.getPreferredScrollableViewportSize().height
 								+ 10));
-		
+
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnEdit, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnSave, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
-		
+
 		editPanelLayout.putConstraint(SpringLayout.EAST, btnEdit, -5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
-		
+
 		editPanelLayout.putConstraint(SpringLayout.WEST, textEditInfo, 0,
 				SpringLayout.WEST, btnEdit);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInfo, 0,
 				SpringLayout.SOUTH, btnEdit);
-		
+
 		editPanelLayout.putConstraint(SpringLayout.WEST, btnClearTreeFilter, 5,
 				SpringLayout.WEST, editPanel);
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER,
@@ -310,15 +318,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				SpringLayout.SOUTH, textSearchBox);
 		editPanelLayout.putConstraint(SpringLayout.WEST, textFilterInfo, 0,
 				SpringLayout.WEST, textSearchBox);
-		
+
 		final JScrollPane scrollPane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		table.getColumnModel()
 				.removeColumn(table.getColumnModel().getColumn(0));
-		
+
 		// Create comparators for table sorting
 		final Comparator<String> PriorityComparator = new Comparator<String>() {
-			
+
 			@Override
 			public int compare(String s1, String s2) {
 				if (s1.trim().equals("")) {
@@ -334,15 +342,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				return p1.compareTo(p2);
 			}
 		};
-		
+
 		final Comparator<String> IterationStringComparator = new Comparator<String>() {
-			
+
 			@Override
 			public int compare(final String s1, final String s2) {
 				final IterationDatabase Idb = IterationDatabase.getInstance();
 				final Iteration Iteration1 = Idb.getIteration(s1);
 				final Iteration Iteration2 = Idb.getIteration(s2);
-				
+
 				if (Iteration1.getStartDate().before(Iteration2.getStartDate())) {
 					return -1; // first argument is less, or before second
 				} else if (Iteration1.getStartDate().after(
@@ -352,14 +360,14 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				return 0; // dates are equal
 			}
 		};
-		
+
 		final Comparator<String> numberComparator = new Comparator<String>() {
-			
+
 			@Override
 			public int compare(final String s1, final String s2) {
 				final int Estimate1 = Integer.parseInt(s1);
 				final int Estimate2 = Integer.parseInt(s2);
-				
+
 				if (Estimate1 < Estimate2) {
 					return -1;
 				} else if (Estimate1 > Estimate2) {
@@ -369,9 +377,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				}
 			}
 		};
-		
+
 		sorter = new TableRowSorter<TableModel>(table.getModel());
-		
+
 		// column 3 sorts by priority
 		sorter.setComparator(3, PriorityComparator);
 		// column 5 sorts by iteration date
@@ -379,9 +387,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		// column 6 and 7 sorts as numbers rather than strings
 		sorter.setComparator(6, numberComparator);
 		sorter.setComparator(7, numberComparator);
-		
+
 		table.setRowSorter(sorter);
-		
+
 		// Add to this list of the column does not need equal size
 		final String shortCols = "Estimate|Effort";
 		for (int i = 0; i < table.getColumnCount(); i++) {
@@ -390,13 +398,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				table.getColumnModel().getColumn(i).setPreferredWidth(10);
 			}
 		}
-		
+
 		add(scrollPane, BorderLayout.CENTER);
 		add(editPanel, BorderLayout.SOUTH);
-		
+
 		// Add double click event listener
 		table.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(final MouseEvent e) {
 				if ((e.getClickCount() == 2) && !isEditable) {
@@ -406,9 +414,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				}
 			}
 		});
-		
+
 		table.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if ((event.getKeyCode() == KeyEvent.VK_ENTER) && !isEditable) {
@@ -417,9 +425,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				event.consume();
 			}
 		});
-		
+
+		FilterDatabase.getInstance().registerListener(this);
+		IterationDatabase.getInstance().registerListener(this);
+		RequirementDatabase.getInstance().registerListener(this);
+
 	}
-	
+
 	// sets the buttons enabled/disabled depending on the isEditable state
 	public void changeButtonStatus() {
 		if (isEditable) {
@@ -430,59 +442,59 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			btnSave.setEnabled(false);
 		}
 	}
-	
+
 	// writes to hidden panel to inform the user of editing, etc..
 	public void displayEditInformation(final String text) {
 		textEditInfo.setText(text);
 	}
-	
+
 	// writes to hidden panel to inform the user of editing, etc..
 	public void displayFilterInformation(final String text) {
 		textTreeFilterInfo.setText(text);
 	}
-	
+
 	@Override
 	public void errorReceivingData(
 			final String RetrieveAllRequirementsRequestObserver) {
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	
+
 	@Override
 	public void filtersUpdated() {
 		refresh();
 	}
-	
+
 	/**
 	 * Inherited from IToolBarGroup Provider, Provides the toolbar buttons used
 	 * by this view
 	 * 
 	 */
-	
+
 	@Override
 	public ToolbarGroupView getGroup() {
 		return toolbarGroupView;
 	}
-	
+
 	private void getIterationsFromServer() {
 		final RetrieveAllIterationsRequestObserver observer = new RetrieveAllIterationsRequestObserver(
 				this);
 		iterationController.getAll(observer);
 	}
-	
+
 	/**
 	 * Updates the permission of the current user
 	 */
 	private void getPermissionFromServer() {
 		final PermissionModelController controller = new PermissionModelController();
 		final RetrievePermissionsRequestObserver observer = new RetrievePermissionsRequestObserver();
-		
+
 		controller.get(0, observer);
 	}
-	
+
 	/**
 	 * Function to retreive the requirements from the server
 	 * 
@@ -490,25 +502,25 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * view will automaticaly be updated once the request comes back
 	 * 
 	 */
-	
+
 	private void getRequirementsFromServer() {
 		final RetrieveAllRequirementsRequestObserver observer = new RetrieveAllRequirementsRequestObserver(
 				this);
 		requirementsController.getAll(observer);
 	}
-	
+
 	@Override
 	public Component getTabComponent(final MainTabController tabController) {
 		return new UnclosableTabComponent(tabController, "Requirements");
 	}
-	
+
 	/**
 	 * @return the table
 	 */
 	public RequirementsTable getTable() {
 		return table;
 	}
-	
+
 	/**
 	 * Initializes the toolbar group, and adds the buttons that will be
 	 * displayed to it.
@@ -516,48 +528,48 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * 
 	 */
 	private void initializeToolbarGroup() {
-		
+
 		final JPanel content = new JPanel();
 		final SpringLayout layout = new SpringLayout();
 		content.setLayout(layout);
 		content.setOpaque(false);
-		
+
 		butView = new JButton("Edit Requirement");
 		butRefresh = new JButton("Refresh");
-		
+
 		butRefresh.setAction(new RefreshAction(this));
-		
+
 		layout.putConstraint(SpringLayout.NORTH, butRefresh, 5,
 				SpringLayout.NORTH, content);
 		layout.putConstraint(SpringLayout.WEST, butRefresh, 16,
 				SpringLayout.WEST, content);
 		layout.putConstraint(SpringLayout.EAST, butRefresh, -16,
 				SpringLayout.EAST, content);
-		
+
 		layout.putConstraint(SpringLayout.NORTH, butView, 5,
 				SpringLayout.SOUTH, butRefresh);
 		layout.putConstraint(SpringLayout.WEST, butView, 16, SpringLayout.WEST,
 				content);
 		layout.putConstraint(SpringLayout.EAST, butView, 0, SpringLayout.EAST,
 				butRefresh);
-		
+
 		// create and add the buttons that will be displayed
 		content.add(butRefresh);
-		
+
 		toolbarGroupView = new ToolbarGroupView("Refresh", content);
 		// set the width of the group so it is not too long
 		toolbarGroupView.setPreferredWidth((int) (butView.getPreferredSize()
 				.getWidth() + 40));
-		
+
 	}
-	
+
 	/**
 	 * @return the isEditable
 	 */
 	public boolean isEditable() {
 		return isEditable;
 	}
-	
+
 	public void IterationFilter(final String IterationName) {
 		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
@@ -569,18 +581,39 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		sorter.setRowFilter(rf);
 		btnClearTreeFilter.setEnabled(true);
 	}
-	
-	private void newFilter() {
+
+	/**
+	 * @return the textSearchBox
+	 */
+	public JPlaceholderTextField getTextSearchBox() {
+		return textSearchBox;
+	}
+
+	/**
+	 * @return the textFilterInfo
+	 */
+	public JTextArea getTextFilterInfo() {
+		return textFilterInfo;
+	}
+
+	/**
+	 * @return the sorter
+	 */
+	public TableRowSorter<TableModel> getSorter() {
+		return sorter;
+	}
+
+	public void newFilter(String filterText) {
 		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter(textSearchBox.getText());
+			rf = RowFilter.regexFilter(filterText);
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}
 		sorter.setRowFilter(rf);
 	}
-	
+
 	/**
 	 * @author Steve Kordell
 	 */
@@ -588,18 +621,18 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		// update to use this function instead
 		viewRequirement(index);
 	}
-	
+
 	/**
 	 * Method that updates the content of the list view when this tab gains
 	 * focus
 	 * 
 	 */
-	
+
 	@Override
 	public void onGainedFocus() {
 		refresh();
 	}
-	
+
 	@Override
 	public boolean onLostFocus() {
 		if (isEditable) {
@@ -613,7 +646,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, options,
 							options[2]);
-			
+
 			if (res == 0) {
 				btnSave.getAction().actionPerformed(null);
 			} else if (res == 1) {
@@ -621,12 +654,12 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			} else {
 				return false;
 			}
-			
+
 		}
 		return true;
-		
+
 	}
-	
+
 	/**
 	 * Retrieve the requirements from the server when the GUI is first painted
 	 * 
@@ -634,7 +667,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 *            The Graphics object
 	 * 
 	 */
-	
+
 	@Override
 	public void paint(final Graphics g) {
 		// call super so there is no change to functionality
@@ -645,7 +678,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			firstPaint = true;
 		}
 	}
-	
+
 	/**
 	 * Takes a list of requirements, and turns them into a list of Strings that
 	 * the View will display
@@ -655,9 +688,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 * @return a list of requirements in string form, that can be shown on the
 	 *         JList
 	 */
-	
+
 	private void parseRequirements() {
-		
+
 		rowData.clear();
 		for (final Requirement requirement : requirements) {
 			final Vector<String> row = new Vector<String>();
@@ -698,18 +731,18 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			rowData.add(row);
 		}
 	}
-	
+
 	@Override
 	public void receivedData(final Iteration[] iterations) {
 		updateListView();
 	}
-	
+
 	@Override
 	public void receivedData(final Requirement[] requirements) {
-		
+
 		final RowFilter rf = sorter.getRowFilter();
 		sorter.setRowFilter(null);
-		
+
 		this.requirements = RequirementDatabase.getInstance()
 				.getFilteredRequirements().toArray(new Requirement[0]);
 		if (this.requirements.length == 0) {
@@ -723,41 +756,45 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			textFilterInfo.setText("No Requirements Found");
 		}
 	}
-	
+
 	/**
 	 * Retreives the list of requirements from the server, then updates the List
 	 * View acordingly
 	 * 
 	 */
-	
+
 	@Override
 	public void refresh() {
 		// retrieve a new copy of requirements, and update the list view
 		if (isEditable) {
 			final Object[] options = { "Save Changes", "Discard Changes",
 					"Cancel" };
-			final int res = JOptionPane
-					.showOptionDialog(
-							this,
-							"There are unsaved changes, refreshing will discard them.",
-							"Requirements: Confirm Refresh",
-							JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE, null, options,
-							options[1]);
-			
+			final int res = JOptionPane.showOptionDialog(this,
+					"There are unsaved changes, refreshing will discard them.",
+					"Requirements: Confirm Refresh",
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+
 			if (res == 0) {
 				btnSave.getAction().actionPerformed(null);
 			} else if (res == 1) {
 				btnEdit.getAction().actionPerformed(null);
 			} else {
-				
+
 			}
 		} else {
 			getRequirementsFromServer();
 			getIterationsFromServer();
 			getPermissionFromServer();
 		}
-		
+
+		// check if we can edit based upon current user permissions
+		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
+			btnEdit.setEnabled(true);
+		} else {
+			btnEdit.setEnabled(false);
+		}
+
 		tabController.refreshIterationTree();
 		PermissionToolbarPane.getInstance().refreshPermission();
 		ToolbarView.getInstance().refreshPermissions();
@@ -765,7 +802,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		tabController.refreshSubReqView();
 		changeButtonStatus();
 	}
-	
+
 	/**
 	 * @param editable
 	 *            the isEditable to set
@@ -773,36 +810,46 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public void setEditable(final boolean editable) {
 		isEditable = editable;
 	}
-	
+
 	@Override
 	public boolean shouldRemove() {
 		// this listener should persist
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
+		requirements = RequirementDatabase.getInstance()
+				.getFilteredRequirements().toArray(new Requirement[0]);
+		updateListView();
+
+		// check if we can edit based upon current user permissions
+		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
+			btnEdit.setEnabled(true);
+		} else {
+			btnEdit.setEnabled(false);
+		}
 	}
-	
+
 	/**
 	 * Updates the list view according to the values in the Requirements Array
 	 * 
 	 * @throws RequirementNotFoundException
 	 * 
 	 * */
-	
+
 	private void updateListView() {
-		
+
 		parseRequirements();
-		
+
 		table.repaint();
 	}
-	
+
 	/**
 	 * Open a new tab containing a view of the selected requirement in the list
 	 * view
 	 */
-	
+
 	public void viewRequirement() {
 		for (final int i : table.getSelectedRows()) {
 			viewRequirement(i);
@@ -812,29 +859,29 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			// table
 		}
 	}
-	
+
 	/**
 	 * Views a requirement with the given index
 	 * 
 	 * @param index
 	 *            Index of the requirement to view
 	 */
-	
+
 	public void viewRequirement(final int index) {
 		boolean requirementIsOpen = false;
-		
+
 		if ((index < 0) || (index >= requirements.length)) {
 			// invalid index
 			System.out.println("Invalid index " + index);
 		}
-		
+
 		Requirement requirementToFetch = null;
-		
+
 		// convert index to new view index (incase of sorting)
 		final int newIndex = table.convertRowIndexToModel(index);
 		// get the rUID of the requirement in the hidden column
 		final String reqId = (String) table.getModel().getValueAt(newIndex, 0);
-		
+
 		// iterate through the requirements
 		for (final Requirement requirement : requirements) {
 			// if the rUIDs match
@@ -845,7 +892,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				break;
 			}
 		}
-		
+
 		// Check to make sure the requirement is not already being
 		// displayed. This is assuming that the list view is displayed in
 		// the left most tab, index 0
@@ -859,17 +906,31 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				}
 			}
 		}
-		
+
 		if (!requirementIsOpen) {
 			// create the controller for fetching the new requirement
 			final RequirementsController controller = new RequirementsController();
 			final RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
 					new OpenRequirementTabAction(tabController,
 							requirementToFetch));
-			
+
 			// get the requirement from the server
 			controller.get(requirementToFetch.getrUID(), observer);
 		}
 	}
-	
+
+	/**
+	 * @return the btnEdit
+	 */
+	public JButton getBtnEdit() {
+		return btnEdit;
+	}
+
+	/**
+	 * @return the btnSave
+	 */
+	public JButton getBtnSave() {
+		return btnSave;
+	}
+
 }
