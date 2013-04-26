@@ -167,10 +167,9 @@ public class RequirementsTable extends JTable {
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
-				}			
-			
-			
-		} else {
+				}
+
+			} else {
 				selectionModel.removeSelectionInterval(
 						convertRowIndexToModel(row),
 						convertRowIndexToModel(row));
