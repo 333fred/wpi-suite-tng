@@ -912,5 +912,21 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			controller.get(requirementToFetch.getrUID(), observer);
 		}
 	}
+
+	/**
+	 * @return the btnEdit
+	 */
+	public JButton getBtnEdit() {
+		return btnEdit;
+	}
+
+
+	/**
+	 * @return the btnSave
+	 */
+	public JButton getBtnSave() {
+		return btnSave;
+	}
+	
 	
 }
