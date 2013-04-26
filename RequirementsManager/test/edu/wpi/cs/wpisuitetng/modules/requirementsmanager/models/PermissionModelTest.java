@@ -12,16 +12,43 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.UserPermissionLevel;
 
 public class PermissionModelTest {
 	
+	PermissionModel model;
+	User u;
+	
+	@Before
+	public void setup() {
+		u = new User("u1", "u1", "p1", 1);
+		model = new PermissionModel();
+	}
+	
 	@Test
-	public void test() {
-		// TODO: Implement
-		assertEquals(0, 0);
+	public void testGetPermissionModel() {
+		assertEquals(PermissionModel.getInstance(), new PermissionModel());
+	}
+	
+	@Test
+	public void testUserMethods() {
+		PermissionModel.setUserStatic(u);
+		assertEquals(PermissionModel.getUserStatic(), u);
+		assertEquals(PermissionModel.getInstance().getUser(), u);
+	}
+	
+	@Test
+	public void testPermissionLevelMethods() {
+		PermissionModel.setUserPermissionLevelStatic(UserPermissionLevel.UPDATE);
+		assertEquals(PermissionModel.getPermissionStatic(), UserPermissionLevel.UPDATE);
+		assertEquals(PermissionModel.getInstance().getUserPermissions(), UserPermissionLevel.UPDATE);
 	}
 	
 }
