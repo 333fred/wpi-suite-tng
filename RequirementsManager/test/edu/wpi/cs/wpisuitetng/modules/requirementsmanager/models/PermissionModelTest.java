@@ -34,7 +34,9 @@ public class PermissionModelTest {
 	
 	@Test
 	public void testGetPermissionModel() {
-		assertEquals(PermissionModel.getInstance(), new PermissionModel());
+		assertEquals(PermissionModel.getInstance().getUser(), null);
+		assertEquals(PermissionModel.getPermissionStatic(), UserPermissionLevel.OBSERVE);
+		assertEquals(PermissionModel.getInstance().getId(), -1);
 	}
 	
 	@Test
@@ -46,9 +48,9 @@ public class PermissionModelTest {
 	
 	@Test
 	public void testPermissionLevelMethods() {
-		PermissionModel.setUserPermissionLevelStatic(UserPermissionLevel.UPDATE);
-		assertEquals(PermissionModel.getPermissionStatic(), UserPermissionLevel.UPDATE);
-		assertEquals(PermissionModel.getInstance().getUserPermissions(), UserPermissionLevel.UPDATE);
+		UserPermissionLevel l = UserPermissionLevel.UPDATE;
+		PermissionModel.setUserPermissionLevelStatic(l);
+		assertEquals(PermissionModel.getPermissionStatic(), l);
 	}
 	
 }
