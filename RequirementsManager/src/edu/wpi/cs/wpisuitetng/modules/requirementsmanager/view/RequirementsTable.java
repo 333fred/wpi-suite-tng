@@ -107,7 +107,11 @@ public class RequirementsTable extends JTable {
 			//final String[] items1 = { "None", "Epic", "Theme", "User Story", "Non Functional", "Scenario" };
 			final JComboBox comboBox1 = new JComboBox();			
 			for (final Type t : Type.values()) {
-				comboBox1.addItem(t.toString());
+				if(t == Type.BLANK){
+					comboBox1.addItem("");
+				} else {
+					comboBox1.addItem(t.toString());
+				}
 			}
 			//comboBox1.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());	
 			//comboBox1.setSelectedItem(getValueAt(row, column));
@@ -118,7 +122,11 @@ public class RequirementsTable extends JTable {
 			final JComboBox comboBox1 = new JComboBox();
 			
 			for (final Priority t : Priority.values()) {
-				comboBox1.addItem(t.toString());
+				if(t == Priority.BLANK){
+					comboBox1.addItem("");
+				} else {
+					comboBox1.addItem(t.toString());
+				}
 			}			
 			comboBox1.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
 			//comboBox1.setSelectedItem(getValueAt(row, column));
