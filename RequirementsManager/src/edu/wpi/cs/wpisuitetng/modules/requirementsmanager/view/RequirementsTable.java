@@ -104,7 +104,7 @@ public class RequirementsTable extends JTable {
 					&& !status.equals("Deleted") && !status.equals("Complete");
 		} else if (super.convertColumnIndexToModel(column) == 7) {
 			statusEditable = status.equals("Complete");
-		} else if (super.convertColumnIndexToModel(column) != 5) {
+		} else {
 			statusEditable = !status.equals("Deleted")
 					&& !status.equals("Complete");
 		}
@@ -145,6 +145,10 @@ public class RequirementsTable extends JTable {
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 4) {
 			final JComboBox comboBox1 = getAvailableStatusOptions(row);
+			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
+			return dce1;
+		} else if (convertColumnIndexToModel(column) == 5) {
+			final JComboBox comboBox1 = new JComboBox(getIterations(row));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else {

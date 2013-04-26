@@ -16,16 +16,20 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.IterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.IterationNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.RequirementNotFoundException;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -61,6 +65,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		final RequirementsController saveController = new RequirementsController();
+		final IterationController iterationController = new IterationController();
 		final RequirementDatabase rdb = RequirementDatabase.getInstance();
 		
 		final boolean[] changedRows = tableView.getTable().getEditedRows();
@@ -117,12 +122,31 @@ public class SaveEditingTableAction extends AbstractAction implements
 					}
 					
 					Requirement parentReq = null;
+					Iteration anIteration = null;
 					if(reqToChange.getStatus().equals(Status.DELETED)&&reqToChange.getpUID().size()>0){
 						parentReq = RequirementDatabase.getInstance().get(reqToChange.getpUID().get(0));
 						parentReq.removeSubRequirement(reqToChange.getrUID());
 						reqToChange.removePUID(parentReq.getrUID());
 						saveController.save(parentReq, observer);
 					}
+					
+					
+					try {
+						anIteration = IterationDatabase.getInstance().get(
+								reqToChange.getIteration());
+						anIteration.removeRequirement(reqToChange.getrUID());
+						final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
+								this);
+						iterationController.save(anIteration, observer2);
+					} catch (final IterationNotFoundException f) {
+						f.printStackTrace();
+					}
+					anIteration = newIteration;
+					anIteration.addRequirement(reqToChange.getrUID());
+					final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
+							this);
+					iterationController.save(anIteration, observer2);
+					
 					
 					saveController.save(reqToChange, observer);
 				} catch (final RequirementNotFoundException e1) {
