@@ -67,13 +67,6 @@ public class RequirementsTable extends JTable {
 
 		if (editedRowColumns == null)
 			editedRowColumns = new ArrayList<RowCol>();
-
-		//gray our non-changeable elements
-		if(!isCellEditable(row, column) && view.isEditable()){
-			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-			renderer.setBackground(Color.lightGray);
-			return renderer;
-		}
 		
 		//Highlight changed elements
 		for (RowCol map : editedRowColumns) {
@@ -83,6 +76,15 @@ public class RequirementsTable extends JTable {
 				return renderer;
 			}
 		}
+		
+		//gray out non-changeable elements
+		if(!isCellEditable(row, column) && view.isEditable()){
+			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+			renderer.setBackground(Color.lightGray);
+			return renderer;
+		}
+
+		//If it is neither edited nor non-editable, return the standard
 		return super.getCellRenderer(row, column);
 
 	}
