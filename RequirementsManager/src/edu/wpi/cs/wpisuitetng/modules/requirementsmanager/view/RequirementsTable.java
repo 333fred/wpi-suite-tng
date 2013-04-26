@@ -53,7 +53,7 @@ public class RequirementsTable extends JTable {
 			editedRowColumns = new ArrayList<RowCol>();
 		
 		for(RowCol map : editedRowColumns){
-			if(map.getRow()==row&&map.getCol()==column){
+			if(map.getRow()==convertRowIndexToModel(row)&&map.getCol()==convertColumnIndexToModel(column)){
 			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 			renderer.setBackground(Color.yellow);
 			return renderer;
@@ -112,7 +112,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row,col));
+					editedRowColumns.add(new RowCol(super.convertRowIndexToModel(row),super.convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -128,7 +128,7 @@ public class RequirementsTable extends JTable {
 					} else {
 						// we save the parsed int to removed leading 0s
 						editedRows[convertRowIndexToModel(row)] = true;
-						editedRowColumns.add(new RowCol(row,col));
+						editedRowColumns.add(new RowCol(super.convertRowIndexToModel(row),super.convertColumnIndexToModel(col)));
 						selectionModel.removeSelectionInterval(
 								convertRowIndexToModel(row),
 								convertRowIndexToModel(row));
@@ -145,7 +145,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row,col));
+					editedRowColumns.add(new RowCol(super.convertRowIndexToModel(row),super.convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -162,7 +162,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row,col));
+					editedRowColumns.add(new RowCol(super.convertRowIndexToModel(row),super.convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
