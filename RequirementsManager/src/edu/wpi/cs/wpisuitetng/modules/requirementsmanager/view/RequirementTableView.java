@@ -22,6 +22,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Vector;
 
@@ -149,6 +150,11 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	private boolean isEditable;
 
 	private TableRowSorter<TableModel> sorter;
+	
+	/** Row filter for filtering by iteration */
+	RowFilter<Object, Object> searchFilter;
+	/** Row filter for search bar*/
+	RowFilter<Object, Object> treeFilter;
 
 	/**
 	 * Constructor for a RequirementTableView
@@ -204,7 +210,8 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				sorter.setRowFilter(null);
+				treeFilter = null;
+				sorter.setRowFilter(searchFilter);		
 				textTreeFilterInfo.setText("");
 				btnClearTreeFilter.setEnabled(false);
 			}
@@ -550,14 +557,20 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	}
 
 	public void IterationFilter(final String IterationName) {
-		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter("^" + IterationName + "$", 5);
+			treeFilter = RowFilter.regexFilter("^" + IterationName + "$", 5);
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}
-		sorter.setRowFilter(rf);
+		if(searchFilter != null){
+			ArrayList<RowFilter<Object, Object>> combinedFilters = new ArrayList<RowFilter<Object, Object>>();
+			combinedFilters.add(treeFilter);
+			combinedFilters.add(searchFilter);
+			sorter.setRowFilter(RowFilter.andFilter(combinedFilters));
+		} else {
+			sorter.setRowFilter(treeFilter);
+		}
 		btnClearTreeFilter.setEnabled(true);
 	}
 
@@ -583,15 +596,28 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	}
 
 	public void nameFilter(String filterText) {
-		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			
-			rf = RowFilter.regexFilter("(?i)" + filterText, 1);
+			searchFilter = RowFilter.regexFilter("(?i)" + filterText, 1);
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}
-		sorter.setRowFilter(rf);
+		if(treeFilter != null){
+			ArrayList<RowFilter<Object, Object>> combinedFilters = new ArrayList<RowFilter<Object, Object>>();
+			combinedFilters.add(treeFilter);
+			combinedFilters.add(searchFilter);
+			sorter.setRowFilter(RowFilter.andFilter(combinedFilters));
+		} else {
+			sorter.setRowFilter(searchFilter);
+		}
+	}
+	
+	/**
+	 * Removes the search filter from the table view
+	 */
+	public void clearSearchFilter() {
+		searchFilter = null;
+		sorter.setRowFilter(treeFilter);
 	}
 
 	/**
@@ -912,5 +938,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public JButton getBtnSave() {
 		return btnSave;
 	}
+
 
 }

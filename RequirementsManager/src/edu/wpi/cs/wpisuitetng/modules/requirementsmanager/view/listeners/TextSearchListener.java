@@ -50,7 +50,8 @@ public class TextSearchListener implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		String filterText = tableView.getTextSearchBox().getText().trim();
 		if (filterText.equals("")) {
-			tableView.getSorter().setRowFilter(null);
+			
+			tableView.clearSearchFilter();
 		}
 		else {
 			tableView.nameFilter(filterText);
