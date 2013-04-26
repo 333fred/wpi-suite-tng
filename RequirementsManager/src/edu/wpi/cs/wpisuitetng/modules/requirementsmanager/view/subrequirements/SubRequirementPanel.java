@@ -24,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
@@ -92,9 +93,11 @@ public class SubRequirementPanel extends JPanel {
 		
 		validChildList = new DefaultListModel();
 		bottomReqNames = new JList();
+		bottomReqNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		childrenList = new DefaultListModel();
 		topReqNames = new JList();
+		topReqNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		validParentList = new DefaultListModel();
 		
@@ -556,6 +559,7 @@ public class SubRequirementPanel extends JPanel {
 		childrenList = new DefaultListModel();
 		initializeTopList(requirement);
 		topReqNames = new JList(childrenList); // Create list of children and put it in a JList
+		topReqNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		topScrollPane.setViewportView(topReqNames);
 		removeChild.setEnabled(false); //Nothing on the new list will be selected
 		topReqNames.addListSelectionListener(new ListSelectionListener() {
@@ -589,6 +593,7 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames = new JList(validChildList);// Create list of valid
 													// children and put it in a
 													// JList
+		bottomReqNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		bottomScrollPane.setViewportView(bottomReqNames);
 		addReq.setEnabled(false);// Set the viewport and initialize the button
 									// as disabled
@@ -624,6 +629,7 @@ public class SubRequirementPanel extends JPanel {
 		bottomReqNames = new JList(validParentList);// Create list of valid
 													// parents and put it in a
 													// JList
+		bottomReqNames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		bottomScrollPane.setViewportView(bottomReqNames);
 		addReq.setEnabled(false);// Set the viewport and initialize the button
 									// as disabled
