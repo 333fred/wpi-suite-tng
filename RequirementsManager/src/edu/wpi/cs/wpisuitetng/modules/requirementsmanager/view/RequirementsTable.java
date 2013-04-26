@@ -4,6 +4,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JTable;
@@ -19,7 +21,7 @@ public class RequirementsTable extends JTable {
 	private static final long serialVersionUID = 1L;
 	// TODO: How to get the actual number for this?
 	private boolean[] editedRows;
-	private boolean[] editedColumns;
+	private ArrayList<HashMap> editedRowColumns;
 	private final RequirementTableView view;
 	
 	/**
@@ -34,7 +36,7 @@ public class RequirementsTable extends JTable {
 	
 	public void clearUpdated() {
 		editedRows = new boolean[super.getRowCount()];
-		editedColumns = new boolean[super.getColumnCount()];
+		editedRowColumns = new ArrayList<HashMap>();
 	};
 	
 	@Override
@@ -46,21 +48,24 @@ public class RequirementsTable extends JTable {
 			editedRows = temp;
 		}
 		
-		if (editedColumns == null) {
-			editedColumns = new boolean[super.getColumnCount()];
-		} else if (editedColumns.length < super.getColumnCount()) {
-			final boolean[] temp2 = new boolean[super.getColumnCount()];
-			editedColumns = temp2;
-		}
+		if(editedRowColumns==null)
+			editedRowColumns = new ArrayList<HashMap>();
 		
-		if (editedRows[super.convertRowIndexToModel(row)] && editedColumns[super.convertColumnIndexToModel(column)]
+		for(HashMap map : editedRowColumns){
+			if(map.containsKey(row)){
+				if(((Integer)map.get(row))==column){
+		if (editedRows[super.convertRowIndexToModel(row)]
 				&& ((super.convertColumnIndexToModel(column) == 6) || super.convertColumnIndexToModel(column) == 1)) {
 			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 			renderer.setBackground(Color.yellow);
+			editedRowColumns.remove(map);
 			return renderer;
-		} else {
-			return super.getCellRenderer(row, column);
 		}
+		}
+		}
+		}
+		return super.getCellRenderer(row, column);		
+
 	}
 	
 	public boolean[] getEditedRows() {
@@ -107,7 +112,9 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedColumns[convertColumnIndexToModel(col)] = true;
+					HashMap tempMap = new HashMap();
+					tempMap.put(row, col);
+					editedRowColumns.add(tempMap);
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -123,7 +130,9 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedColumns[convertColumnIndexToModel(col)] = true;
+					HashMap tempMap = new HashMap();
+					tempMap.put(row, col);
+					editedRowColumns.add(tempMap);
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
