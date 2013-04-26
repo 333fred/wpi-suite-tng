@@ -58,8 +58,8 @@ public class ActualRequirementStatistics extends AbstractRequirementStatistics {
 		
 		// for each requirement
 		for (final Requirement requirement : requirements) {
-			// get amount of effort spent per requirement
-			data.put(requirement.getName(), requirement.getEffort());
+			// get amount of effort spent per requirement	
+			data.add(new StringIntegerPair(requirement.getName(), requirement.getEffort()));
 			
 		}
 		

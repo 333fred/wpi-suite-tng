@@ -64,7 +64,7 @@ public class VelocityIterationStatistics extends AbstractRequirementStatistics {
 
 			if (anIteration.getId() != -1 && anIteration.getId() != -2) {
 				System.out.println("Adding an iteration to chart: " + anIteration.getName());
-				data.put(anIteration.getName(), anIteration.getEstimate());
+				data.add(new StringIntegerPair(anIteration.getName(), anIteration.getEstimate()));
 			}
 		}
 

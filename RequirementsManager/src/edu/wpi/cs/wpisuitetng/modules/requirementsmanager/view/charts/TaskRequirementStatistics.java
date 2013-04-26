@@ -58,7 +58,7 @@ public class TaskRequirementStatistics extends AbstractRequirementStatistics {
 		// for each requirement
 		for (final Requirement requirement : requirements) {
 			// get the length of the list of tasks
-			data.put(requirement.getName(), requirement.getTasks().size());
+			data.add(new StringIntegerPair(requirement.getName(),requirement.getTasks().size()));
 		}
 	}
 	

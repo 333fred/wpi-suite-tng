@@ -59,7 +59,7 @@ public class EstimateRequirementStatistics extends
 		// for each requirement
 		for (final Requirement requirement : requirements) {
 			// get the estimate for each requirement
-			data.put(requirement.getName(), requirement.getEstimate());
+			data.add(new StringIntegerPair(requirement.getName(), requirement.getEstimate()));
 			
 		}
 		

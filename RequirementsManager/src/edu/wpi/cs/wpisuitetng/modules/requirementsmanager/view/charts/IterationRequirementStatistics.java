@@ -12,7 +12,9 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jfree.chart.JFreeChart;
 
@@ -59,10 +61,12 @@ public class IterationRequirementStatistics extends
 				.getInstance().getFilteredRequirements(); // refresh list of
 															// requirements
 		
+		Map<String, Integer> mapData = new HashMap<String, Integer>();
+		
 		// for every possible status
 		for (final Iteration iteration : IterationDatabase.getInstance()
 				.getAll()) {
-			data.put(iteration.getName(), new Integer(0)); // set the
+			mapData.put(iteration.getName(), new Integer(0)); // set the
 															// number of
 															// counted
 															// requirements
@@ -77,8 +81,8 @@ public class IterationRequirementStatistics extends
 			try {
 				final Iteration iteration = IterationDatabase.getInstance()
 						.get(requirement.getIteration());
-				final Integer oldValue = data.get(iteration.getName());
-				data.put(iteration.getName(), new Integer(
+				final Integer oldValue = mapData.get(iteration.getName());
+				mapData.put(iteration.getName(), new Integer(
 						oldValue.intValue() + 1)); // increment the
 													// number of
 													// requirements
@@ -89,6 +93,12 @@ public class IterationRequirementStatistics extends
 						.println("Iteration wasn't found, disregarding: IterationRequirementStatistics:54");
 			}
 			
+		}
+		
+		
+		//parse into a list
+		for (String key : mapData.keySet()) {
+			data.add(new StringIntegerPair(key, mapData.get(key)));
 		}
 		
 	}

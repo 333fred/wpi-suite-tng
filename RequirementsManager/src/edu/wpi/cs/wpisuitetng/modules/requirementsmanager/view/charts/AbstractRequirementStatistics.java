@@ -14,11 +14,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -36,10 +32,10 @@ import org.jfree.data.general.PieDataset;
 
 public abstract class AbstractRequirementStatistics {
 	
-	Map<String, Integer> data;
-	
+	protected List<StringIntegerPair> data;
+		
 	protected AbstractRequirementStatistics() {
-		data = new HashMap<String, Integer>();
+		data = new ArrayList<StringIntegerPair>();
 		update();
 	}
 	
@@ -101,13 +97,9 @@ public abstract class AbstractRequirementStatistics {
 	public CategoryDataset toCategoryDataset(final String category) {
 		final DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
 		
-		Set<String> keys = data.keySet();
-		List<String> keysList= new ArrayList<String>(keys);
-		Collections.sort(keysList);
-		
-		for (final String key : keysList) {
-			System.out.println("Adding some stuff to categoryData set: " + data.get(key) + " Key: " + key + " Category: " + category);
-			categoryDataset.addValue(data.get(key), category, key);
+		for (final StringIntegerPair pair : data) {
+			//System.out.println("Adding some stuff to categoryData set: " + data.get(key) + " Key: " + key + " Category: " + category);
+			categoryDataset.addValue(pair.getInterger(), category, pair.getString());
 		}
 		return categoryDataset;
 	}
@@ -119,9 +111,9 @@ public abstract class AbstractRequirementStatistics {
 	 */
 	public PieDataset toPieDataset() {
 		final DefaultPieDataset pieDataset = new DefaultPieDataset();
-		for (final String key : data.keySet()) {
-			if (data.get(key) != 0) {// remove zero elements
-				pieDataset.setValue(key, data.get(key));
+		for (final StringIntegerPair pair : data) {
+			if (pair.getInterger() != 0) {// remove zero elements
+				pieDataset.setValue(pair.getString(), pair.getInterger());
 			}
 		}
 		return pieDataset;
