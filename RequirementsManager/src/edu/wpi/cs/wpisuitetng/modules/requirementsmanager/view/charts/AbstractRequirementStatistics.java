@@ -13,8 +13,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -96,8 +100,14 @@ public abstract class AbstractRequirementStatistics {
 	 */
 	public CategoryDataset toCategoryDataset(final String category) {
 		final DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
-		for (final String key : data.keySet()) {
-			categoryDataset.setValue(data.get(key), category, key);
+		
+		Set<String> keys = data.keySet();
+		List<String> keysList= new ArrayList<String>(keys);
+		Collections.sort(keysList);
+		
+		for (final String key : keysList) {
+			System.out.println("Adding some stuff to categoryData set: " + data.get(key) + " Key: " + key + " Category: " + category);
+			categoryDataset.addValue(data.get(key), category, key);
 		}
 		return categoryDataset;
 	}

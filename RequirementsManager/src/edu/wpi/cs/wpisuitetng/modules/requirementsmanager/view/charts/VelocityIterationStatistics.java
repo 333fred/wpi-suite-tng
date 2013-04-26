@@ -54,12 +54,16 @@ public class VelocityIterationStatistics extends AbstractRequirementStatistics {
 	@Override
 	public void update() {
 
-		final List<Iteration> iterations = IterationDatabase.getInstance()
+		List<Iteration> iterations = IterationDatabase.getInstance()
 				.getAll(); // refresh list of iterations
+		
+		//lets sort the iterations by start date		
+		iterations = Iteration.sortIterations(iterations);
 
 		for (final Iteration anIteration : iterations) {
 
 			if (anIteration.getId() != -1 && anIteration.getId() != -2) {
+				System.out.println("Adding an iteration to chart: " + anIteration.getName());
 				data.put(anIteration.getName(), anIteration.getEstimate());
 			}
 		}
