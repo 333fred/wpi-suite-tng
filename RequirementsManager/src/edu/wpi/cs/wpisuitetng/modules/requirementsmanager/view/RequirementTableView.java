@@ -223,35 +223,14 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		textEditInfo.setLineWrap(true);
 		textEditInfo.setWrapStyleWord(true);
 
-		textSearchBox = new JPlaceholderTextField("Search for a Requirement",
-				15);
+		textSearchBox = new JPlaceholderTextField("Search Requirement by Name",
+				18);
 		textSearchBox.setOpaque(true);
 		textSearchBox.setEnabled(true);
 		textSearchBox.setBorder((new JTextField()).getBorder());
 		textSearchBox.setDisabledTextColor(Color.BLACK);
 		textSearchListener = new TextSearchListener(this, textSearchBox);
 		textSearchBox.addKeyListener(textSearchListener);
-		// textSearchBox.setLineWrap(true);
-		// textSearchBox.setWrapStyleWord(true);
-
-		textSearchBox.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void changedUpdate(final DocumentEvent e) {
-				// newFilter();
-			}
-
-			@Override
-			public void insertUpdate(final DocumentEvent e) {
-				// newFilter();
-			}
-
-			@Override
-			public void removeUpdate(final DocumentEvent e) {
-				// newFilter();
-			}
-
-		});
 
 		textTreeFilterInfo = new JTextArea(1, 20);
 		textTreeFilterInfo.setOpaque(false);
@@ -603,11 +582,12 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		return sorter;
 	}
 
-	public void newFilter(String filterText) {
+	public void nameFilter(String filterText) {
 		RowFilter rf = null;
 		// If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter(filterText);
+			
+			rf = RowFilter.regexFilter("(?i)" + filterText, 1);
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}

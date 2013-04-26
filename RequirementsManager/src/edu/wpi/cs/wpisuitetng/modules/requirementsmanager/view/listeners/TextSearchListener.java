@@ -53,7 +53,7 @@ public class TextSearchListener implements KeyListener {
 			tableView.getSorter().setRowFilter(null);
 		}
 		else {
-			tableView.newFilter(filterText);
+			tableView.nameFilter(filterText);
 		}
 		if (tableView.getTable().getRowCount() == 0) {
 			tableView.getTextFilterInfo().setText("No Requirements Found");
