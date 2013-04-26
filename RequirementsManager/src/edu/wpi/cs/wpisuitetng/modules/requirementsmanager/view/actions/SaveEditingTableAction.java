@@ -93,6 +93,9 @@ public class SaveEditingTableAction extends AbstractAction implements
 					reqToChange.setReleaseNum(newRelease);
 					reqToChange.setIteration(newIteration.getId());
 					
+					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+							this);
+					
 					try {
 						reqToChange.setType(Type.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 2)).toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
 					} catch (final IllegalArgumentException except) {
@@ -104,7 +107,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setPriority(Priority.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 3)).toUpperCase().replaceAll(" ", "_")));
 					} catch (final IllegalArgumentException except) {
 						reqToChange.setPriority(Priority.BLANK);
-					}
+					}								
 					
 					try {
 					reqToChange.setStatus(Status.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 4)).toUpperCase().replaceAll(" ", "_")));
@@ -112,8 +115,15 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setStatus(Status.BLANK);
 					}
 					
-					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
-							this);
+					Requirement reqParent = null;
+					if(reqToChange.getStatus().equals(Status.DELETED)&&reqToChange.getpUID().size()>0) {
+						reqParent = RequirementDatabase.getInstance().get(reqToChange.getpUID().get(0));
+						reqParent.removeSubRequirement(reqToChange.getrUID());
+						reqToChange.removePUID(reqParent.getrUID());
+						saveController.save(reqParent, observer);						
+					}
+					
+					
 					saveController.save(reqToChange, observer);
 				} catch (final RequirementNotFoundException e1) {
 					e1.printStackTrace();
