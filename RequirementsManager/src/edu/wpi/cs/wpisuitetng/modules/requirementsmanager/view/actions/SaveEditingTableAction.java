@@ -96,10 +96,25 @@ public class SaveEditingTableAction extends AbstractAction implements
 					final Requirement reqToChange = rdb.get(id);
 					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this);
+					Requirement parentReq = null;
+					Iteration anIteration = null;
+					
 					reqToChange.setEstimate(newEstimate);
 					reqToChange.setName(newName);
 					reqToChange.setEffort(newEffort);
 					reqToChange.setReleaseNum(newRelease);
+					
+					try {
+						anIteration = IterationDatabase.getInstance().get(
+								reqToChange.getIteration());
+						anIteration.removeRequirement(reqToChange.getrUID());
+						final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
+								this);
+						iterationController.save(anIteration, observer2);
+					} catch (final IterationNotFoundException f) {
+						f.printStackTrace();
+					}
+					
 					reqToChange.setIteration(newIteration.getId());
 					
 					try {
@@ -121,8 +136,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setStatus(Status.BLANK);
 					}
 					
-					Requirement parentReq = null;
-					Iteration anIteration = null;
+					
 					if(reqToChange.getStatus().equals(Status.DELETED)&&reqToChange.getpUID().size()>0){
 						parentReq = RequirementDatabase.getInstance().get(reqToChange.getpUID().get(0));
 						parentReq.removeSubRequirement(reqToChange.getrUID());
@@ -131,16 +145,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 					}
 					
 					
-					try {
-						anIteration = IterationDatabase.getInstance().get(
-								reqToChange.getIteration());
-						anIteration.removeRequirement(reqToChange.getrUID());
-						final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
-								this);
-						iterationController.save(anIteration, observer2);
-					} catch (final IterationNotFoundException f) {
-						f.printStackTrace();
-					}
+					
 					anIteration = newIteration;
 					anIteration.addRequirement(reqToChange.getrUID());
 					final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
