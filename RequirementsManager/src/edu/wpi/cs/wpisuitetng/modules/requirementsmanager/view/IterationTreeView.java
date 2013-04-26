@@ -576,4 +576,14 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		tree.setCellRenderer(renderer);
 		IterationTreeView.restoreExpanstionState(tree, 0, eState);
 	}
+	
+	/** Will disable all of the fields in this View
+	 * 
+	 */
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		tree.setEnabled(enabled);
+	}
 }

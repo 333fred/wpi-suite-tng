@@ -468,4 +468,14 @@ public class SubRequirementTreeView extends JPanel implements
 		}
 	}
 	
+	/** Will disable all of the fields in this View
+	 * 
+	 */
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		tree.setEnabled(enabled);
+	}
+	
 }

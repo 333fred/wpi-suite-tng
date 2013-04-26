@@ -129,4 +129,14 @@ public class FilterView extends JPanel {
 		filterUpdateListeners.remove(listener);
 	}
 	
+	/** Will disable all of the fields in this View
+	 * 
+	 */
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		filterTableView.setEnabled(enabled);
+		createFilterView.setEnabled(enabled);
+	}
 }
