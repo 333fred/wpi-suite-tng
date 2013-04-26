@@ -124,14 +124,17 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		// Grab the object we dragged to as node
 		final DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
 				.getLastPathComponent(); 
-		// Grab the object we dragged from as node
+		// Grab the object we dragged from as node		
+		if (selRows == null) {
+			return false;
+		}
 		final TreePath path = tree.getPathForRow(selRows[0]); 
 		final DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
 		
 		// If the destination is the deleted folder, don't do anything
-		if (target.getUserObject().equals("Deleted")
-				|| firstNode.getUserObject().equals("Deleted")) {
+		if (target.getUserObject().equals("<html><b><i>Deleted</i></b></html>")
+				|| firstNode.getUserObject().equals("<html><b><i>Deleted</i></b></html>")) {
 			return false;
 		}
 		
