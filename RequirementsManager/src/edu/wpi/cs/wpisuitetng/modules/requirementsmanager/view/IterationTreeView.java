@@ -330,6 +330,9 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 	protected void onRightClick(int x, final int y, final int selRow,
 			final TreePath selPath) {
+		if (!isEnabled()) {
+			return;
+		}
 		System.out.println("Right click iteration tree view");
 
 		// add a menu offset
