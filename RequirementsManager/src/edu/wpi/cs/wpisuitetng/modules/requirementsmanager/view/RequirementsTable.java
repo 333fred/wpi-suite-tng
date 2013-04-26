@@ -69,7 +69,7 @@ public class RequirementsTable extends JTable {
 			editedRowColumns = new ArrayList<RowCol>();
 
 		for (RowCol map : editedRowColumns) {
-			if (map.getRow() == row && map.getCol() == column) {
+			if (map.getRow() == convertRowIndexToModel(row) && map.getCol() == convertColumnIndexToModel(column)) {
 				final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 				renderer.setBackground(Color.yellow);
 				return renderer;
@@ -96,7 +96,7 @@ public class RequirementsTable extends JTable {
 					&& !status.equals("Deleted") && !status.equals("Complete");
 		} else if (super.convertColumnIndexToModel(column) == 7) {
 			statusEditable = status.equals("Complete");
-		} else {
+		} else if (super.convertColumnIndexToModel(column) != 5) {
 			statusEditable = !status.equals("Deleted")
 					&& !status.equals("Complete");
 		}
@@ -137,10 +137,6 @@ public class RequirementsTable extends JTable {
 			return dce1;
 		} else if (convertColumnIndexToModel(column) == 4) {
 			final JComboBox comboBox1 = getAvailableStatusOptions(row);
-			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
-			return dce1;
-		} else if (convertColumnIndexToModel(column) == 5) {
-			final JComboBox comboBox1 = new JComboBox(getIterations(row));
 			final DefaultCellEditor dce1 = new DefaultCellEditor(comboBox1);
 			return dce1;
 		} else {
@@ -230,6 +226,7 @@ public class RequirementsTable extends JTable {
 		if (req.getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			comboBoxStatus.removeItem(Status.NEW.toString());
+			comboBoxStatus.removeItem(Status.OPEN.toString());
 			if (!req.subReqsCompleted()) {
 				comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
@@ -298,7 +295,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -314,7 +311,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -330,7 +327,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -346,7 +343,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -361,7 +358,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -376,7 +373,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -391,7 +388,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
@@ -406,7 +403,7 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(row, col));
+					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
