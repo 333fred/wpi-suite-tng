@@ -83,8 +83,9 @@ public class SaveEditingTableAction extends AbstractAction implements
 				final String newName = (String) tableView.getTable()
 						.getModel().getValueAt(i, 1);
 				
-				final Iteration newIteration = IterationDatabase.getInstance().getIteration(
-						(String)tableView.getTable().getModel().getValueAt(i, 5));
+				String iterationName = (String)tableView.getTable().getModel().getValueAt(i, 5);				
+				Iteration newIteration = IterationDatabase.getInstance().getIteration(
+						iterationName);
 				
 				final int newEstimate = Integer.parseInt((String) tableView
 						.getTable().getModel().getValueAt(i, 6));
@@ -93,8 +94,8 @@ public class SaveEditingTableAction extends AbstractAction implements
 				final String newRelease = (String) tableView.getTable()
 						.getModel().getValueAt(i, 8);	
 				try {
-					final Requirement reqToChange = rdb.get(id);
-					final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+					Requirement reqToChange = rdb.get(id);
+					UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
 							this);
 					Requirement parentReq = null;
 					Iteration anIteration = null;
@@ -104,18 +105,25 @@ public class SaveEditingTableAction extends AbstractAction implements
 					reqToChange.setEffort(newEffort);
 					reqToChange.setReleaseNum(newRelease);
 					
-					try {
-						anIteration = IterationDatabase.getInstance().get(
-								reqToChange.getIteration());
-						anIteration.removeRequirement(reqToChange.getrUID());
-						final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
-								this);
-						iterationController.save(anIteration, observer2);
-					} catch (final IterationNotFoundException f) {
-						f.printStackTrace();
-					}
+
+//					try {
+//						anIteration = IterationDatabase.getInstance().get(
+//								reqToChange.getIteration());
+//						anIteration.removeRequirement(reqToChange.getrUID());
+//						final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
+//								this);
+//						iterationController.save(anIteration, observer2);
+//					} catch (final IterationNotFoundException f) {
+//						f.printStackTrace();
+//					}
+//					
+//					newIteration.addRequirement(reqToChange.getrUID());
+//					final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
+//							this);
+//					iterationController.save(newIteration, observer2);
+//					
+//					reqToChange.setIteration(newIteration.getId());
 					
-					reqToChange.setIteration(newIteration.getId());
 					
 					try {
 						reqToChange.setType(Type.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 2)).toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
@@ -144,14 +152,23 @@ public class SaveEditingTableAction extends AbstractAction implements
 						saveController.save(parentReq, observer);
 					}
 					
-					
-					
-					anIteration = newIteration;
-					anIteration.addRequirement(reqToChange.getrUID());
-					final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
-							this);
-					iterationController.save(anIteration, observer2);
-					
+					if(reqToChange.getStatus().equals(Status.DELETED)){
+						try {
+							anIteration = IterationDatabase.getInstance().get(reqToChange.getIteration());
+							anIteration.removeRequirement(reqToChange.getrUID());
+							final UpdateIterationRequestObserver observerDelete = new UpdateIterationRequestObserver(
+									this);
+							iterationController.save(anIteration, observerDelete);
+						} catch (IterationNotFoundException e1) {
+							e1.printStackTrace();
+						}
+						
+						anIteration = IterationDatabase.getInstance().getIteration("Deleted");						
+						reqToChange.setIteration(anIteration.getId());
+						anIteration.addRequirement(reqToChange.getrUID());
+						final UpdateIterationRequestObserver observer3 = new UpdateIterationRequestObserver(this);
+						iterationController.save(anIteration, observer3);
+					}
 					
 					saveController.save(reqToChange, observer);
 				} catch (final RequirementNotFoundException e1) {
