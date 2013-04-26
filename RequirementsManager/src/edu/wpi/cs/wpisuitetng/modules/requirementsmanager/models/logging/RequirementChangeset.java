@@ -305,7 +305,7 @@ public class RequirementChangeset extends Changeset implements Event {
 	 */
 	@Override
 	public String getTitle() {
-		return "<html><font size=4><b>" + user.getName()
+		return "<html><font size=4><b>" + user.getUsername()
 				+ " on<font size=.25></b> "
 				+ new SimpleDateFormat("MM/dd/yy hh:mm a").format(date)
 				+ "</html>";
