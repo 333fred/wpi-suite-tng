@@ -36,35 +36,43 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Documen
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
- * A panel containing a a creation and edit form
- * for the tasks in a requirement
+ * A panel containing a a creation and edit form for the tasks in a requirement
  * 
  * @author Nick M, Matt C
  */
-@SuppressWarnings ("serial")
+@SuppressWarnings("serial")
 public class MakeTaskPanel extends JPanel {
-	
+
 	// The fields to make a task
-	private final JTextArea taskName;
-	private final JTextArea taskDescription;
-	private final JButton addTask;
-	private final JLabel addTaskLabel;
-	private final JCheckBox taskComplete;
-	private final JComboBox userAssigned;
-	
+	private final JTextArea txtTaskName;
+	private final JTextArea txtTaskDescription;
+	private final JButton butSave;
+	private final JButton butCancel;
+	private final JLabel labAddTask;
+	private final JCheckBox cbxTaskComplete;
+	private final JComboBox cbxUserAssigned;
+
 	// Jlabels for task fields
-	private final JLabel taskStatus;
-	private final JLabel nameTaskLabel;
-	private final JLabel descTaskLabel;
-	private final JLabel userAssignedLabel;
-	
-	private final JLabel estimateLabel;
-	private final JTextField taskEstimate;
-	
+	private final JLabel labTaskStatus;
+	private final JLabel labNnameTask;
+	private final JLabel labDescTask;
+	private final JLabel labUserAssigned;
+	private final JLabel labEstimate;
+
+	/** Label for realtime validation */
+	private final JLabel labSaveError;
+	private final JTextField txtTaskEstimate;
+
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane taskFieldPane;
-	
+
+	/** The requriement this task panel is in */
+	private final Requirement requirement;
+
+	/** Make task listener used for listening to hte text boxes for changes */
+	private final MakeTaskListener makeTaskListener;
+
 	/**
 	 * Construct the panel, add and layout components.
 	 * 
@@ -74,29 +82,31 @@ public class MakeTaskPanel extends JPanel {
 	 * @param parentView
 	 *            the view of the requirement in question
 	 */
-	public MakeTaskPanel(final Requirement model, final DetailPanel parentView) {
-		
+	public MakeTaskPanel(final Requirement requirement,
+			final DetailPanel parentView) {
+		this.requirement = requirement;
+
 		// setup the task name field
-		taskName = new JTextArea(1, 40);
-		taskName.setLineWrap(true);
-		taskName.setWrapStyleWord(true);
-		taskName.setMaximumSize(new Dimension(40, 1));
-		final AbstractDocument textNameDoc = (AbstractDocument) taskName
+		txtTaskName = new JTextArea(1, 40);
+		txtTaskName.setLineWrap(true);
+		txtTaskName.setWrapStyleWord(true);
+		txtTaskName.setMaximumSize(new Dimension(40, 1));
+		final AbstractDocument textNameDoc = (AbstractDocument) txtTaskName
 				.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
-		taskName.setBorder((new JTextField()).getBorder());
-		taskName.setName("Name");
-		taskName.setDisabledTextColor(Color.GRAY);
-		
-		taskName.addKeyListener(new KeyAdapter() {
-			
+		txtTaskName.setBorder((new JTextField()).getBorder());
+		txtTaskName.setName("Name");
+		txtTaskName.setDisabledTextColor(Color.GRAY);
+
+		txtTaskName.addKeyListener(new KeyAdapter() {
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						taskName.transferFocus();
+						txtTaskName.transferFocus();
 					} else {
-						taskName.transferFocusBackward();
+						txtTaskName.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -105,86 +115,95 @@ public class MakeTaskPanel extends JPanel {
 				}
 			}
 		});
-		
+
 		// setup the task description field
-		taskDescription = new JTextArea();
-		taskDescription.setLineWrap(true);
-		taskDescription.setWrapStyleWord(true);
-		taskDescription.setDisabledTextColor(Color.GRAY);
-		
-		taskDescription.addKeyListener(new KeyAdapter() {
-			
+		txtTaskDescription = new JTextArea();
+		txtTaskDescription.setLineWrap(true);
+		txtTaskDescription.setWrapStyleWord(true);
+		txtTaskDescription.setDisabledTextColor(Color.GRAY);
+
+		txtTaskDescription.addKeyListener(new KeyAdapter() {
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						taskDescription.transferFocus();
+						txtTaskDescription.transferFocus();
 					} else {
-						taskDescription.transferFocusBackward();
+						txtTaskDescription.transferFocusBackward();
 					}
 					event.consume();
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					taskDescription.append("\n");
+					txtTaskDescription.append("\n");
 					event.consume();
 				}
 			}
 		});
-		
-		estimateLabel = new JLabel("Estimate:");
-		
-		taskEstimate = new JTextField(9);
-		taskEstimate.setBorder((new JTextField()).getBorder());
-		taskEstimate.setMaximumSize(taskEstimate.getPreferredSize());
-		taskEstimate.setName("Estimate");
-		taskEstimate.setDisabledTextColor(Color.GRAY);
-		final AbstractDocument textEstimateDoc = (AbstractDocument) taskEstimate
+
+		labEstimate = new JLabel("Estimate:");
+
+		txtTaskEstimate = new JTextField(9);
+		txtTaskEstimate.setBorder((new JTextField()).getBorder());
+		txtTaskEstimate.setMaximumSize(txtTaskEstimate.getPreferredSize());
+		txtTaskEstimate.setName("Estimate");
+		txtTaskEstimate.setDisabledTextColor(Color.GRAY);
+		final AbstractDocument textEstimateDoc = (AbstractDocument) txtTaskEstimate
 				.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
-		
+
 		// setup all the buttons and label text
-		addTask = new JButton("Save");
-		taskStatus = new JLabel(
+		butSave = new JButton("Save");
+		labTaskStatus = new JLabel(
 				"No tasks selected. Fill name and description to create a new one.");
-		addTaskLabel = new JLabel("Task:");
-		nameTaskLabel = new JLabel("Name:");
-		descTaskLabel = new JLabel("Description:");
-		userAssignedLabel = new JLabel("User:");
-		taskComplete = new JCheckBox("Completed");
-		userAssigned = new JComboBox();
-		userAssigned.setBackground(Color.white);
-		
+		labAddTask = new JLabel("Task:");
+		labNnameTask = new JLabel("Name:");
+		labDescTask = new JLabel("Description:");
+		labUserAssigned = new JLabel("User:");
+		cbxTaskComplete = new JCheckBox("Completed");
+		cbxUserAssigned = new JComboBox();
+		cbxUserAssigned.setBackground(Color.white);
+
+		labSaveError = new JLabel();
+		butCancel = new JButton("Cancel");
+
+		makeTaskListener = new MakeTaskListener(this);
+		// add the key listeners
+		txtTaskDescription.addKeyListener(makeTaskListener);
+		txtTaskName.addKeyListener(makeTaskListener);
+		txtTaskEstimate.addKeyListener(makeTaskListener);
+
 		setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.black, 1),
 				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-		
+
 		final SpringLayout layout = new SpringLayout();
 		setLayout(layout);
-		
-		taskFieldPane = new JScrollPane(taskDescription);
-		
+
+		taskFieldPane = new JScrollPane(txtTaskDescription);
+
 		// Setup the layout of the task Panel
-		layout.putConstraint(SpringLayout.NORTH, addTaskLabel, 0,
+		layout.putConstraint(SpringLayout.NORTH, labAddTask, 0,
 				SpringLayout.NORTH, this);
-		layout.putConstraint(SpringLayout.WEST, addTaskLabel, 0,
+		layout.putConstraint(SpringLayout.WEST, labAddTask, 0,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, taskStatus, 0,
-				SpringLayout.SOUTH, addTaskLabel);
-		layout.putConstraint(SpringLayout.NORTH, nameTaskLabel,
-				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH, taskStatus);
-		layout.putConstraint(SpringLayout.NORTH, taskName,
+		layout.putConstraint(SpringLayout.NORTH, labTaskStatus, 0,
+				SpringLayout.SOUTH, labAddTask);
+		layout.putConstraint(SpringLayout.NORTH, labNnameTask,
 				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				nameTaskLabel);
-		layout.putConstraint(SpringLayout.WEST, taskName, 0, SpringLayout.WEST,
-				nameTaskLabel);
-		layout.putConstraint(SpringLayout.EAST, taskName, 0, SpringLayout.EAST,
-				this);
-		layout.putConstraint(SpringLayout.NORTH, descTaskLabel,
-				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH, taskName);
+				labTaskStatus);
+		layout.putConstraint(SpringLayout.NORTH, txtTaskName,
+				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
+				labNnameTask);
+		layout.putConstraint(SpringLayout.WEST, txtTaskName, 0,
+				SpringLayout.WEST, labNnameTask);
+		layout.putConstraint(SpringLayout.EAST, txtTaskName, 0,
+				SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.NORTH, labDescTask,
+				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH, txtTaskName);
 		layout.putConstraint(SpringLayout.NORTH, taskFieldPane,
-				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				descTaskLabel);
+				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH, labDescTask);
 		layout.putConstraint(SpringLayout.WEST, taskFieldPane, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, taskFieldPane, 0,
@@ -192,112 +211,124 @@ public class MakeTaskPanel extends JPanel {
 		layout.putConstraint(SpringLayout.SOUTH, taskFieldPane,
 				MakeTaskPanel.note_FIELD_HEIGHT, SpringLayout.NORTH,
 				taskFieldPane);
-		
-		layout.putConstraint(SpringLayout.NORTH, taskComplete,
+
+		layout.putConstraint(SpringLayout.NORTH, cbxTaskComplete,
 				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
 				taskFieldPane);
-		layout.putConstraint(SpringLayout.WEST, taskComplete, 0,
+		layout.putConstraint(SpringLayout.WEST, cbxTaskComplete, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this,
 				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				taskComplete);
-		
-		layout.putConstraint(SpringLayout.NORTH, userAssignedLabel,
+				cbxTaskComplete);
+
+		layout.putConstraint(SpringLayout.NORTH, labUserAssigned,
 				MakeTaskPanel.VERTICAL_PADDING + 5, SpringLayout.SOUTH,
-				taskComplete);
-		layout.putConstraint(SpringLayout.WEST, userAssignedLabel, 4,
+				cbxTaskComplete);
+		layout.putConstraint(SpringLayout.WEST, labUserAssigned, 4,
 				SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, userAssignedLabel, 0,
-				SpringLayout.EAST, taskComplete);
-		
-		layout.putConstraint(SpringLayout.NORTH, userAssigned,
+		layout.putConstraint(SpringLayout.EAST, labUserAssigned, 0,
+				SpringLayout.EAST, cbxTaskComplete);
+
+		layout.putConstraint(SpringLayout.NORTH, cbxUserAssigned,
 				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				taskComplete);
-		layout.putConstraint(SpringLayout.WEST, userAssigned, 60,
-				SpringLayout.WEST, userAssignedLabel);
-		layout.putConstraint(SpringLayout.EAST, userAssigned, 60,
-				SpringLayout.EAST, taskComplete);
-		
-		layout.putConstraint(SpringLayout.NORTH, estimateLabel,
+				cbxTaskComplete);
+		layout.putConstraint(SpringLayout.WEST, cbxUserAssigned, 60,
+				SpringLayout.WEST, labUserAssigned);
+		layout.putConstraint(SpringLayout.EAST, cbxUserAssigned, 60,
+				SpringLayout.EAST, cbxTaskComplete);
+
+		layout.putConstraint(SpringLayout.NORTH, labEstimate,
 				MakeTaskPanel.VERTICAL_PADDING + 5, SpringLayout.SOUTH,
-				userAssignedLabel);
-		layout.putConstraint(SpringLayout.WEST, estimateLabel, 4,
+				labUserAssigned);
+		layout.putConstraint(SpringLayout.WEST, labEstimate, 4,
 				SpringLayout.WEST, this);
-		
-		layout.putConstraint(SpringLayout.NORTH, taskEstimate,
+
+		layout.putConstraint(SpringLayout.NORTH, txtTaskEstimate,
 				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				userAssigned);
-		layout.putConstraint(SpringLayout.WEST, taskEstimate, 60,
-				SpringLayout.WEST, estimateLabel);
-		layout.putConstraint(SpringLayout.EAST, taskEstimate, 60,
-				SpringLayout.EAST, taskComplete);
-		
-		layout.putConstraint(SpringLayout.NORTH, addTask,
+				cbxUserAssigned);
+		layout.putConstraint(SpringLayout.WEST, txtTaskEstimate, 60,
+				SpringLayout.WEST, labEstimate);
+		layout.putConstraint(SpringLayout.EAST, txtTaskEstimate, 60,
+				SpringLayout.EAST, cbxTaskComplete);
+
+		layout.putConstraint(SpringLayout.NORTH, butCancel,
 				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				userAssignedLabel);
-		layout.putConstraint(SpringLayout.EAST, addTask, 0, SpringLayout.EAST,
-				this);
+				labUserAssigned);
+		layout.putConstraint(SpringLayout.EAST, butCancel, 0,
+				SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this,
-				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH, addTask);
-		
+				MakeTaskPanel.VERTICAL_PADDING, SpringLayout.SOUTH, butCancel);
+
+		layout.putConstraint(SpringLayout.NORTH, butSave, 0,
+				SpringLayout.NORTH, butCancel);
+		layout.putConstraint(SpringLayout.EAST, butSave, -4, SpringLayout.WEST,
+				butCancel);
+
+		layout.putConstraint(SpringLayout.SOUTH, labSaveError, -8,
+				SpringLayout.NORTH, butSave);
+		layout.putConstraint(SpringLayout.WEST, labSaveError, 12,
+				SpringLayout.EAST, cbxUserAssigned);
+
 		// add all of the swing components to the this task panel
-		this.add(taskEstimate);
-		this.add(estimateLabel);
-		this.add(taskStatus);
-		this.add(userAssignedLabel);
-		this.add(userAssigned);
-		this.add(addTaskLabel);
-		this.add(addTask);
-		this.add(taskName);
-		this.add(nameTaskLabel);
-		this.add(descTaskLabel);
-		this.add(taskComplete);
-		this.add(taskFieldPane);
-		
+		add(txtTaskEstimate);
+		add(labEstimate);
+		add(labTaskStatus);
+		add(labUserAssigned);
+		add(cbxUserAssigned);
+		add(labAddTask);
+		add(butSave);
+		add(txtTaskName);
+		add(labNnameTask);
+		add(labDescTask);
+		add(cbxTaskComplete);
+		add(taskFieldPane);
+		add(butCancel);
+
+		add(labSaveError);
 		// default the add button and complete checkbox
 		// to un-enabled
-		addTask.setEnabled(false);
-		taskComplete.setEnabled(false);
-		
+		butSave.setEnabled(false);
+		cbxTaskComplete.setEnabled(false);
+
 	}
-	
+
 	public JButton getAddTask() {
-		return addTask;
+		return butSave;
 	}
-	
+
 	public JTextField getEstimate() {
-		return taskEstimate;
+		return txtTaskEstimate;
 	}
-	
+
 	public JCheckBox getTaskComplete() {
-		return taskComplete;
+		return cbxTaskComplete;
 	}
-	
+
 	/**
 	 * A function to the get the text area
 	 * 
 	 * @return the note JTextArea
 	 */
 	public JTextArea getTaskField() {
-		return taskDescription;
+		return txtTaskDescription;
 	}
-	
+
 	public JScrollPane getTaskFieldPane() {
 		return taskFieldPane;
 	}
-	
+
 	public JTextComponent getTaskName() {
-		return taskName;
+		return txtTaskName;
 	}
-	
+
 	public JLabel getTaskStatus() {
-		return taskStatus;
+		return labTaskStatus;
 	}
-	
+
 	public JComboBox getUserAssigned() {
-		return userAssigned;
+		return cbxUserAssigned;
 	}
-	
+
 	/**
 	 * Enables and disables input on this panel.
 	 * 
@@ -306,16 +337,56 @@ public class MakeTaskPanel extends JPanel {
 	 *            disabled.
 	 */
 	public void setInputEnabled(final boolean value) {
-		taskName.setEnabled(false);
-		taskDescription.setEnabled(value);
-		addTask.setEnabled(value);
-		userAssigned.setEnabled(value);
-		taskEstimate.setEnabled(value);
+		txtTaskName.setEnabled(false);
+		txtTaskDescription.setEnabled(value);
+		butSave.setEnabled(value);
+		cbxUserAssigned.setEnabled(value);
+		txtTaskEstimate.setEnabled(value);
 		if (value) {
-			addTaskLabel.setForeground(Color.black);
+			labAddTask.setForeground(Color.black);
 		} else {
-			addTaskLabel.setForeground(Color.gray);
+			labAddTask.setForeground(Color.gray);
 		}
 	}
-	
+
+	public void setErrorField(final String errorText) {
+		labSaveError.setText(errorText);
+	}
+
+	public void validateInput() {
+		boolean error = false;
+		String errorText = "";
+
+		String taskName = txtTaskName.getText().trim();
+		if (taskName.isEmpty()) {
+			error = true;
+			errorText = "Name must not be blank";
+		} else if (txtTaskDescription.getText().trim().isEmpty()) {
+			error = true;
+			errorText = "Description must not be blank";
+		} else {
+			String taskEstimate = txtTaskEstimate.getText().trim();
+			if (taskEstimate.isEmpty()) {
+				error = true;
+				errorText = "Estimate field must not be blank";
+			} else {
+				try {
+					Integer.parseInt(taskEstimate);
+				} catch (NumberFormatException e) {
+					error = true;
+					errorText = "Estimate field must be a number";
+				}
+			}
+		}
+
+		if (error) {
+			labSaveError.setText(errorText);
+			butSave.setEnabled(false);
+		} else {
+			labSaveError.setText("");
+			butSave.setEnabled(true);
+		}
+
+	}
+
 }
