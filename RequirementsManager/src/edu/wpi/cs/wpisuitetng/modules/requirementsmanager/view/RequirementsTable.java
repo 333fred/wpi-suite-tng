@@ -68,6 +68,14 @@ public class RequirementsTable extends JTable {
 		if (editedRowColumns == null)
 			editedRowColumns = new ArrayList<RowCol>();
 
+		//gray our non-changeable elements
+		if(!isCellEditable(row, column) && view.isEditable()){
+			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+			renderer.setBackground(Color.lightGray);
+			return renderer;
+		}
+		
+		//Highlight changed elements
 		for (RowCol map : editedRowColumns) {
 			if (map.getRow() == convertRowIndexToModel(row) && map.getCol() == convertColumnIndexToModel(column)) {
 				final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
