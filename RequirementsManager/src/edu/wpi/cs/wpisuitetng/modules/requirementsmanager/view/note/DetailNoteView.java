@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -72,6 +73,7 @@ public class DetailNoteView extends JPanel {
 		notesTable.setShowGrid(false);
 		notesTable.setIntercellSpacing(new Dimension(0, 0));
 		notesTable.getTableHeader().setVisible(false);
+		notesTable.setEnabled(false); //Disable selection
 		
 		// Add the list to the scroll pane
 		noteScrollPane = new JScrollPane();

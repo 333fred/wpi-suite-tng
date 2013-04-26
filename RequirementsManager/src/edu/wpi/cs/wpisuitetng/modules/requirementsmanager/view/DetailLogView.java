@@ -61,6 +61,7 @@ public class DetailLogView extends JPanel {
 		cellRenderer = new EventCellRenderer();
 		
 		logTable.getTableHeader().setVisible(false);
+		logTable.setEnabled(false); //Disable selection
 		// Add the list to the scroll pane
 		logScrollPane = new JScrollPane();
 		logScrollPane.getViewport().add(logTable);
