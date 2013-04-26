@@ -71,17 +71,19 @@ public class PermissionsPanel extends Tab {
 		Collections.sort(localPermissions);
 		
 		// construct the table of users and their permissions
-		final String[] columnNames = new String[2];
-		columnNames[0] = "User Name";
-		columnNames[1] = "Permission Level";
+		final String[] columnNames = new String[3];
+		columnNames[0] = "User";
+		columnNames[1] = "Full Name";
+		columnNames[2] = "Permission Level";
 		
-		final String[][] rowData = new String[localPermissions.size()][2];
+		final String[][] rowData = new String[localPermissions.size()][3];
 		for (int i = 0; i < localPermissions.size(); i++) {
-			rowData[i][0] = localPermissions.get(i).getUser().getName();
+			rowData[i][0] = localPermissions.get(i).getUser().getUsername();
+			rowData[i][1] = localPermissions.get(i).getUser().getName();
 			// Handle correct casing of options
 			final String perm = localPermissions.get(i).getPermLevel()
 					.toString();
-			rowData[i][1] = perm.substring(0, 1).concat(
+			rowData[i][2] = perm.substring(0, 1).concat(
 					perm.substring(1).toLowerCase());
 		}
 		
@@ -93,7 +95,7 @@ public class PermissionsPanel extends Tab {
 		for (int i = 0; i < userTable.getRowCount(); i++) {
 			if (userTable.isRowSelected(i)) {
 				setSelectedButtons((UserPermissionLevel) userTable.getValueAt(
-						i, 1));
+						i, 2));
 				if (localPermissions.get(i).getUser().getUsername()
 						.equals("admin")
 						|| localPermissions.get(i).getUser().getUsername()
@@ -177,13 +179,15 @@ public class PermissionsPanel extends Tab {
 	@Override
 	public void refresh() {
 		localPermissions = PermissionsDatabase.getInstance().getAll();
-		final String[][] rowData = new String[localPermissions.size()][2];
-		final String[] columnNames = new String[2];
-		columnNames[0] = "User name";
-		columnNames[1] = "Permission Level";
+		final String[][] rowData = new String[localPermissions.size()][3];
+		final String[] columnNames = new String[3];
+		columnNames[0] = "User";
+		columnNames[1] = "Full Name";
+		columnNames[2] = "Permission Level";
 		for (int i = 0; i < localPermissions.size(); i++) {
-			rowData[i][0] = localPermissions.get(i).getUser().getName();
-			rowData[i][1] = localPermissions.get(i).getPermLevel().toString();
+			rowData[i][0] = localPermissions.get(i).getUser().getUsername();
+			rowData[i][1] = localPermissions.get(i).getUser().getName();
+			rowData[i][2] = localPermissions.get(i).getPermLevel().toString();
 		}
 		userTable = new PermissionsTable(rowData, columnNames, localPermissions);
 	}

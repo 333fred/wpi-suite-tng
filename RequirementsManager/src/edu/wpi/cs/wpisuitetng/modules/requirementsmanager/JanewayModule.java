@@ -106,6 +106,12 @@ public class JanewayModule implements IJanewayModule {
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
+
+		/*
+		iterationTreeView.setEnabled(false);
+		subRequirementTreeView.setEnabled(false);
+		filterView.setEnabled(false);
+		*/
 		
 		// initialize the toolbarView
 		toolbarView = ToolbarView.getInstance(tabController);

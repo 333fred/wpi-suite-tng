@@ -198,6 +198,14 @@ public class FilterTableView extends JPanel implements
 	
 	@Override
 	public void valueChanged(final ListSelectionEvent e) {
+		updateButtonStatus();		
+	}
+	
+	/** Updates the status of the buttoms 
+	 * 
+	 */
+	
+	private void updateButtonStatus() {
 		if (tableView.getSelectedRowCount() == 0) {
 			butEnable.setEnabled(false);
 			butDelete.setEnabled(true);
@@ -221,7 +229,25 @@ public class FilterTableView extends JPanel implements
 			butEnable.setEnabled(true);
 			butDelete.setEnabled(true);
 			filterView.cancelEdit();
+		}	
+	}
+	
+	/** Will disable all of the fields in this View
+	 * 
+	 */
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		tableView.setEnabled(enabled);
+		if (enabled) {
+			//if we are enabled make sure we properly enable the buttons
+			updateButtonStatus();
 		}
-		
+		else {
+			//disabling, just disable the buttons
+			butDelete.setEnabled(enabled);
+			butEnable.setEnabled(enabled);
+		}
 	}
 }

@@ -40,37 +40,37 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.s
  */
 
 public class MainTabController {
-	
+
 	/** The MainTabView that this controller manages */
 	private final MainTabView tabView;
-	
+
 	/** The iteration tree view that is displayed across this module */
 	private final IterationTreeView iterationTreeView;
-	
+
 	/** THe filter view on the left */
 	private final FilterView filterView;
-	
+
 	private final SubRequirementTreeView subRequirementTreeView;
-	
+
 	/**
 	 * Creates a new instance of TabController to manage the specified view
 	 */
-	
+
 	public MainTabController() {
 		iterationTreeView = new IterationTreeView(this);
 		subRequirementTreeView = new SubRequirementTreeView(this);
 		filterView = FilterView.getInstance();
 		tabView = new MainTabView(this);
-		
+
 		tabView.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(final ChangeEvent e) {
 				onChangeTab();
 			}
 		});
 	}
-	
+
 	/**
 	 * Add a change listener to the view this is controlling.
 	 * 
@@ -80,7 +80,7 @@ public class MainTabController {
 	public void addChangeListener(final ChangeListener listener) {
 		tabView.addChangeListener(listener);
 	}
-	
+
 	/**
 	 * Adds a new create iteration tab, and return a reference
 	 * 
@@ -91,20 +91,20 @@ public class MainTabController {
 		return addTab("New Iteration", new ImageIcon(), iterationView,
 				"New Iteration");
 	}
-	
+
 	/**
 	 * Adds a tab to create a new requirement
 	 * 
 	 * @return The tab that was added
 	 */
-	
+
 	public TabWrap addCreateRequirementTab() {
 		final DetailPanel emptyDetailView = new DetailPanel(new Requirement(),
 				DetailPanel.Mode.CREATE, this);
 		return addTab("New Requirement", new ImageIcon(), emptyDetailView,
 				"New Requirement");
 	}
-	
+
 	/**
 	 * Creates an iteration tab for the given iteration
 	 * 
@@ -113,7 +113,7 @@ public class MainTabController {
 	 * @return the iteration tab
 	 */
 	public TabWrap addIterationTab(final Iteration iteration) {
-		
+
 		IterationView.Status status;
 		if (PermissionModel.getInstance().getUserPermissions()
 				.canEditIteration()) {
@@ -121,7 +121,7 @@ public class MainTabController {
 		} else {
 			status = IterationView.Status.VIEW;
 		}
-		
+
 		for (int j = 0; j < getTabView().getTabCount(); j++) {
 			final Component tabComponent = getTabView().getComponentAt(j);
 			if (tabComponent instanceof IterationView) {
@@ -132,39 +132,39 @@ public class MainTabController {
 				}
 			}
 		}
-		
+
 		// iteration was not open, add it
 		final IterationView iterationView = new IterationView(iteration,
 				status, this);
 		return addTab(iteration.getName(), new ImageIcon(), iterationView,
 				iteration.getName());
 	}
-	
+
 	/**
 	 * Adds a tab to modify permissions
 	 * 
 	 * @return The permissions tab to be added
 	 */
 	public TabWrap addPermissionTab() {
-		
+
 		return addTab("Permissions", new ImageIcon(), new PermissionsPanel(),
 				"Permissions");
 	}
-	
+
 	/**
 	 * Adds the Requirement Table View to the tabs
 	 * 
 	 * @return The tab that was added
 	 */
-	
+
 	public TabWrap addRequirementsTab() {
 		final RequirementTableView requirementListView = RequirementTableView
 				.getInstance(this);
-		
+
 		return addTab("Requirements", new ImageIcon(), requirementListView,
 				"The list of requirements");
 	}
-	
+
 	/**
 	 * Adds a tab for statistics
 	 * 
@@ -174,7 +174,7 @@ public class MainTabController {
 		return addTab("Statistics", new ImageIcon(), StatView.getInstance(),
 				"Statistics");
 	}
-	
+
 	/**
 	 * Adds a tab to the TabView that this controller manages, and returns a new
 	 * instance of Tab representing the new tab created
@@ -189,14 +189,14 @@ public class MainTabController {
 	 *            The tooltip that the tab will display
 	 * @return The new instance of Tab representing the one added
 	 */
-	
+
 	public TabWrap addTab(final String title, final Icon icon, final Tab tab,
 			final String tip) {
 		SwingUtilities.invokeLater(new AddTabInvokable(tabView, title, icon,
 				tab, tip));
 		return new TabWrap(tabView, tab);
 	}
-	
+
 	/**
 	 * Adds a new View Requirement tab that shows the details about the given
 	 * requirement
@@ -207,7 +207,7 @@ public class MainTabController {
 	 *            The requirement to view
 	 * @return The tab that was added
 	 */
-	
+
 	public TabWrap addViewRequirementTab(final Requirement requirement) {
 		DetailPanel.Mode mode;
 		if (PermissionModel.getInstance().getUserPermissions()
@@ -221,7 +221,7 @@ public class MainTabController {
 		}
 		final DetailPanel requirmentDetailView = new DetailPanel(requirement,
 				mode, this);
-		
+
 		// check if this requirement is already opened
 		for (int i = 0; i < getTabView().getTabCount(); i++) {
 			if (getTabView().getComponentAt(i) instanceof DetailPanel) {
@@ -232,11 +232,11 @@ public class MainTabController {
 				}
 			}
 		}
-		
+
 		return addTab(requirement.getName(), new ImageIcon(),
 				requirmentDetailView, requirement.getName());
 	}
-	
+
 	/**
 	 * Closes all open tabs, that can be closed
 	 */
@@ -246,10 +246,10 @@ public class MainTabController {
 			if (openTab instanceof Tab) {
 				closeTab((Tab) openTab);
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * Closes the currently active tab
 	 */
@@ -261,7 +261,7 @@ public class MainTabController {
 					.println("Tried to close a tab that does not exist: MainTabController:238");
 		}
 	}
-	
+
 	/**
 	 * Closes other tabs
 	 * 
@@ -279,7 +279,7 @@ public class MainTabController {
 			}
 		}
 	}
-	
+
 	/**
 	 * Closes the given tab
 	 * 
@@ -293,7 +293,7 @@ public class MainTabController {
 			tabView.remove(tab);
 		}
 	}
-	
+
 	/**
 	 * Closes the tab at the given index
 	 * 
@@ -311,21 +311,21 @@ public class MainTabController {
 					.println("Tried to close a tab that does not exist: MainTabController:250");
 		}
 	}
-	
+
 	/**
 	 * @return the filter view of the tab controller
 	 */
 	public FilterView getFilterView() {
 		return filterView;
 	}
-	
+
 	/**
 	 * @return the iteration tree view of the tab controller
 	 */
 	public IterationTreeView getIterationTreeView() {
 		return iterationTreeView;
 	}
-	
+
 	/**
 	 * Returns the number of tabs currently open
 	 * 
@@ -334,7 +334,7 @@ public class MainTabController {
 	public int getNumberOfOpenTabs() {
 		return tabView.getTabCount();
 	}
-	
+
 	/**
 	 * Returns a list of all the open tabs
 	 * 
@@ -349,21 +349,21 @@ public class MainTabController {
 		}
 		return openTabs;
 	}
-	
+
 	/**
 	 * @return the subrequirements tree view of this controller
 	 */
 	public SubRequirementTreeView getSubReqView() {
 		return subRequirementTreeView;
 	}
-	
+
 	/**
 	 * @return the main tab view of this controller
 	 */
 	public MainTabView getTabView() {
 		return tabView;
 	}
-	
+
 	/**
 	 * Called when the selected tab has been changed, notifies the tab that is
 	 * is being displayed
@@ -371,33 +371,33 @@ public class MainTabController {
 	private void onChangeTab() {
 		refreshIterationTree();
 		refreshSubReqView();
-		
+
 		final Component selectedComponent = tabView.getSelectedComponent();
 		final Tab selectedTab = (Tab) selectedComponent;
 		selectedTab.onGainedFocus();
 	}
-	
+
 	/**
 	 * Updates the filter view from the local cache
 	 */
 	public void refreshFilterView() {
 		filterView.refreshTableView();
 	}
-	
+
 	/**
 	 * Updates the iteration view from the local cache
 	 */
 	public void refreshIterationTree() {
 		iterationTreeView.refresh();
 	}
-	
+
 	/**
 	 * Updates the subrequirement view from the local cache
 	 */
 	public void refreshSubReqView() {
 		subRequirementTreeView.refresh();
 	}
-	
+
 	/**
 	 * Changes the selected tab to the tab with the given index
 	 * 
@@ -407,13 +407,13 @@ public class MainTabController {
 	public void switchToTab(final int tabIndex) {
 		try {
 			tabView.setSelectedIndex(tabIndex);
-			
+
 		} catch (final IndexOutOfBoundsException e) {
 			System.out
 					.println("Tried to close an invalid tab : MainTabController:272");
 		}
 	}
-	
+
 	/**
 	 * Switches the view to a given tab
 	 * 
@@ -423,5 +423,17 @@ public class MainTabController {
 	public void switchToTab(final Tab tab) {
 		final int index = tabView.indexOfComponent(tab);
 		switchToTab(index);
+	}
+
+	/**
+	 * Sets the side pane as enabled or disabled
+	 * 
+	 * @param enabled
+	 */
+
+	public void setSidePaneEnabled(boolean enabled) {
+		getIterationTreeView().setEnabled(enabled);
+		getSubReqView().setEnabled(enabled);
+		getFilterView().setEnabled(enabled);
 	}
 }

@@ -151,10 +151,11 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	private TableRowSorter<TableModel> sorter;
 	
+
 	/** Row filter for filtering by iteration */
-	RowFilter<Object, Object> searchFilter;
+	private RowFilter<Object, Object> searchFilter;
 	/** Row filter for search bar*/
-	RowFilter<Object, Object> treeFilter;
+	private RowFilter<Object, Object> treeFilter;
 
 	/**
 	 * Constructor for a RequirementTableView
@@ -211,7 +212,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				treeFilter = null;
-				sorter.setRowFilter(searchFilter);		
+				ApplyFilters(sorter);	
 				textTreeFilterInfo.setText("");
 				btnClearTreeFilter.setEnabled(false);
 			}
@@ -563,14 +564,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}
-		if(searchFilter != null){
-			ArrayList<RowFilter<Object, Object>> combinedFilters = new ArrayList<RowFilter<Object, Object>>();
-			combinedFilters.add(treeFilter);
-			combinedFilters.add(searchFilter);
-			sorter.setRowFilter(RowFilter.andFilter(combinedFilters));
-		} else {
-			sorter.setRowFilter(treeFilter);
-		}
+		ApplyFilters(sorter);
 		btnClearTreeFilter.setEnabled(true);
 	}
 
@@ -594,6 +588,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	public TableRowSorter<TableModel> getSorter() {
 		return sorter;
 	}
+	
+	/**
+	 * @param sorter the sorter to set
+	 */
+	public void setSorter(TableRowSorter<TableModel> sorter) {
+		this.sorter = sorter;
+	}
 
 	public void nameFilter(String filterText) {
 		// If current expression doesn't parse, don't update.
@@ -602,14 +603,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		} catch (final java.util.regex.PatternSyntaxException e) {
 			return;
 		}
-		if(treeFilter != null){
-			ArrayList<RowFilter<Object, Object>> combinedFilters = new ArrayList<RowFilter<Object, Object>>();
-			combinedFilters.add(treeFilter);
-			combinedFilters.add(searchFilter);
-			sorter.setRowFilter(RowFilter.andFilter(combinedFilters));
-		} else {
-			sorter.setRowFilter(searchFilter);
-		}
+		ApplyFilters(sorter);
 	}
 	
 	/**
@@ -617,7 +611,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 	public void clearSearchFilter() {
 		searchFilter = null;
-		sorter.setRowFilter(treeFilter);
+		ApplyFilters(sorter);
 	}
 
 	/**
@@ -746,7 +740,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	@Override
 	public void receivedData(final Requirement[] requirements) {
 
-		final RowFilter rf = sorter.getRowFilter();
 		sorter.setRowFilter(null);
 
 		this.requirements = RequirementDatabase.getInstance()
@@ -757,7 +750,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			textFilterInfo.setText("");
 		}
 		updateListView();
-		sorter.setRowFilter(rf);
+		ApplyFilters(sorter);
 		if (getTable().getRowCount() == 0) {
 			textFilterInfo.setText("No Requirements Found");
 		}
@@ -815,6 +808,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	 */
 	public void setEditable(final boolean editable) {
 		isEditable = editable;
+		tabController.setSidePaneEnabled(!editable);
 	}
 
 	@Override
@@ -941,6 +935,18 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	public MainTabController getController() {
 		return tabController;
+	}
+	
+	public void ApplyFilters (TableRowSorter rs){
+		ArrayList<RowFilter<Object, Object>> combinedFilters = new ArrayList<RowFilter<Object, Object>>();
+
+		if(searchFilter != null){
+			combinedFilters.add(searchFilter);
+		}
+		if(treeFilter != null){
+			combinedFilters.add(treeFilter);
+		}
+		sorter.setRowFilter(RowFilter.andFilter(combinedFilters));	
 	}
 
 }

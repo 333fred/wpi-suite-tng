@@ -132,7 +132,10 @@ public class EnableEditingAction extends AbstractAction {
 			rowSorter.setComparator(6, numberComparator);
 			rowSorter.setComparator(7, numberComparator);
 			tableView.getTable().setRowSorter(rowSorter);
+			tableView.setSorter(rowSorter);
 			tableView.getTable().getRowSorter().setSortKeys(sortKeys);
+			
+			tableView.ApplyFilters(rowSorter);
 			
 			// set isEditable to true
 			tableView.setEditable(true);
