@@ -69,6 +69,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 		final RequirementDatabase rdb = RequirementDatabase.getInstance();
 		
 		final boolean[] changedRows = tableView.getTable().getEditedRows();
+		boolean hasChanged = false;
 		
 		// if the user is still currently editing a cell, and they try to save
 		if (tableView.getTable().getCellEditor() != null) {
@@ -78,6 +79,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 		
 		for (int i = 0; i < changedRows.length; i++) {
 			if (changedRows[i]) {
+				hasChanged = true;
 				final int id = Integer.parseInt((String) tableView.getTable()
 						.getModel().getValueAt(i, 0));
 				final String newName = (String) tableView.getTable()
@@ -198,6 +200,9 @@ public class SaveEditingTableAction extends AbstractAction implements
 			tableView.displayEditInformation("");
 			tableView.changeButtonStatus();
 			tableView.getTable().clearUpdated();
+			if(!hasChanged) {
+				tableView.refresh();
+			}
 		}
 	}
 	
