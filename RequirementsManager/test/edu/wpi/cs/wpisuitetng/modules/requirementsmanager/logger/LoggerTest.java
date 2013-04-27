@@ -11,6 +11,10 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +25,14 @@ import org.junit.Test;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.logger.FieldChange;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Priority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Status;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.commonenums.Type;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.ATest;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 
 public class LoggerTest {
@@ -206,6 +217,84 @@ public class LoggerTest {
 		
 	}
 	
+	
+	@Test
+	public void testAllChanges(){
+		final String[] changeTypes = {"creation", "name", "description", "type", "priority", "status", 
+		                            "releaseNum", "iteration", "estimate", "effort", "users", "subRequirements", 
+		                            "pUID", "notes", "tasks", "aTests"};
+		HashMap<String, FieldChange<?>> map = new HashMap<String, FieldChange<?>>();
+		for(String type : changeTypes){
+			FieldChange change;
+			if(type.equals("creation")){
+				continue;	// skip this to avoid making a creation-only changeset
+			}
+			else if(type.equals("type")){
+				change = new FieldChange<Type>(Type.USER_STORY, Type.NON_FUNCTIONAL);
+			}
+			else if(type.equals("priority")){
+				change = new FieldChange<Priority>(Priority.HIGH, Priority.LOW);
+			}
+			else if(type.equals("status")){
+				change = new FieldChange<Status>(Status.IN_PROGRESS, Status.OPEN);
+			}
+			else if(type.equals("iteration")){
+				Iteration oldItr = new Iteration();
+				oldItr.setId(0);
+				IterationDatabase.getInstance().add(oldItr);
+				Iteration newItr = new Iteration();
+				newItr.setId(1);
+				IterationDatabase.getInstance().add(newItr);
+				change = new FieldChange<Iteration>(oldItr, newItr);
+			}
+			else if(type.equals("users")){
+				User addedOne = new User("Add Name", "addname", "plus", 0);
+				User addedTwo = new User("Plus Name", "pluname", "add", 1);
+				User removed = new User("Remove Name", "remname", "minus", 2);
+				List<User> addedUsers = new ArrayList<User>();
+				List<User> removedUsers = new ArrayList<User>();
+				addedUsers.add(addedOne);
+				addedUsers.add(addedTwo);
+				removedUsers.add(removed);
+				change = new FieldChange<List<User>>(addedUsers, removedUsers);
+			}
+			else if(type.equals("subRequirements")){
+				change = new FieldChange<List<Requirement>>(new ArrayList<Requirement>(), new ArrayList<Requirement>());
+				// there won't be RequirementDatabase support for the test requirements anyway
+			}
+			else if(type.equals("pUID")){
+				change = new FieldChange<List<Requirement>>(new ArrayList<Requirement>(), new ArrayList<Requirement>());	// or for these
+			}
+			else if(type.equals("notes")){
+				List<String> addedNotes = new ArrayList<String>();
+				List<String> removedNotes = new ArrayList<String>();
+				addedNotes.add("new");
+				addedNotes.add("notes");
+				removedNotes.add("nothing");
+				change = new FieldChange<List<String>>(addedNotes, removedNotes);
+			}
+			else if(type.equals("tasks")){
+				List<Task> addedTasks = new ArrayList<Task>();
+				List<Task> removedTasks = new ArrayList<Task>();
+				addedTasks.add(new Task("name", "desc"));
+				change = new FieldChange<List<Task>>(addedTasks, removedTasks);
+			}
+			else if(type.equals("aTests")){
+				List<ATest> addedTests = new ArrayList<ATest>();
+				List<ATest> removedTests = new ArrayList<ATest>();
+				removedTests.add(new ATest("name", "desc"));
+				change = new FieldChange<List<ATest>>(addedTests, removedTests);
+			}
+			else{
+				change = new FieldChange<String>("old", "new");
+			}
+			map.put(type, change);
+		}
+		RequirementChangeset rc = new RequirementChangeset();
+		rc.setChanges(map);
+		assertNotNull(rc.getContent());
+	}
+		
 	/**
 	 * Trivial test to ensure that JUnit is playing nicely; should always pass.
 	 */
