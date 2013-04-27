@@ -73,6 +73,9 @@ public class MakeTaskPanel extends JPanel {
 
 	/** Make task listener used for listening to hte text boxes for changes */
 	private final MakeTaskListener makeTaskListener;
+	
+	/** id of the task being edited, -2 if none */
+	private int taskId;
 
 	/**
 	 * Construct the panel, add and layout components.
@@ -290,6 +293,7 @@ public class MakeTaskPanel extends JPanel {
 		// to un-enabled
 		butSave.setEnabled(false);
 		cbxTaskComplete.setEnabled(false);
+		taskId = -2;
 
 	}
 
@@ -377,7 +381,9 @@ public class MakeTaskPanel extends JPanel {
 					int estimateSum = 0;
 					
 					for (final Task altTask : requirement.getTasks()) {
-						estimateSum = estimateSum + altTask.getEstimate();
+						if(altTask.getId() != taskId) {
+							estimateSum = estimateSum + altTask.getEstimate();
+						}
 					}
 					
 					if((est + estimateSum) > requirement.getEstimate()){
@@ -400,6 +406,14 @@ public class MakeTaskPanel extends JPanel {
 			butSave.setEnabled(true);
 		}
 
+	}
+	
+	/**
+	 * Sets the id of the edited task for reference
+	 * @param id, the id
+	 */
+	public void setTaskId(int id) {
+		taskId = id;
 	}
 
 }

@@ -214,6 +214,7 @@ public class DetailTaskView extends JPanel {
 						.equals("")) {
 					makeTaskPanel.getAddTask().setEnabled(false);
 				}
+				makeTaskPanel.setTaskId(-2);
 			} else {
 				makeTaskPanel.getTaskComplete().setEnabled(true);
 				if (taskTable.getSelectedRowCount() > 1) {
@@ -235,6 +236,7 @@ public class DetailTaskView extends JPanel {
 							makeTaskPanel.getBackground());
 					makeTaskPanel.getEstimate().setBackground(
 							makeTaskPanel.getBackground());
+					makeTaskPanel.setTaskId(-2);
 				} else {
 					makeTaskPanel
 					.getTaskStatus()
@@ -263,6 +265,7 @@ public class DetailTaskView extends JPanel {
 					makeTaskPanel.getEstimate().setBackground(Color.white);
 					makeTaskPanel.getUserAssigned().setSelectedItem(
 							getSingleSelectedTask().getAssignedUser());
+					makeTaskPanel.setTaskId(getSingleSelectedTask().getId());
 				}
 			}
 		}

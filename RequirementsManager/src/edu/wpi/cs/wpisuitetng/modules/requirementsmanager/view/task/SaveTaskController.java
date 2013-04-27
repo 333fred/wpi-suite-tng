@@ -73,7 +73,9 @@ public class SaveTaskController {
 		int estimateSum = 0;
 		
 		for (final Task altTask : model.getTasks()) {
-			estimateSum = estimateSum + altTask.getEstimate();
+			if(altTask.getId() != altTask.getId()) {
+				estimateSum = estimateSum + altTask.getEstimate();
+			}
 		}
 		
 		if (selectedRows == null) { // Creating a task!
