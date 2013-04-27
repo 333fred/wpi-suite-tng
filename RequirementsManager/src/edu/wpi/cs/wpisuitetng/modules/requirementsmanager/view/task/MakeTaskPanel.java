@@ -31,6 +31,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentNumberAndSizeFilter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
@@ -371,7 +372,19 @@ public class MakeTaskPanel extends JPanel {
 				errorText = "Estimate field must not be blank";
 			} else {
 				try {
-					Integer.parseInt(taskEstimate);
+					final int est = Integer.parseInt(taskEstimate);
+					//check if estimates sum correctly
+					int estimateSum = 0;
+					
+					for (final Task altTask : requirement.getTasks()) {
+						estimateSum = estimateSum + altTask.getEstimate();
+					}
+					
+					if((est + estimateSum) > requirement.getEstimate()){
+						error = true;
+						errorText = "Sum of task estimates too high";
+					}
+					
 				} catch (NumberFormatException e) {
 					error = true;
 					errorText = "Estimate field must be a number";
