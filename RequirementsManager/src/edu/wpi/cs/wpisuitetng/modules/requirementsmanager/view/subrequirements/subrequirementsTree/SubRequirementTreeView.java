@@ -174,12 +174,12 @@ public class SubRequirementTreeView extends JPanel implements
 			public void mousePressed(final MouseEvent e) { // Listener for when
 															// we click on the
 															// tree view
-				
+				final int selRow = tree.getRowForLocation(e.getX(),
+						e.getY());
+				final TreePath selPath = tree.getPathForLocation(e.getX(),
+						e.getY());
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					final int selRow = tree.getRowForLocation(e.getX(),
-							e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(),
-							e.getY());
+					//this was a left click
 					if (selRow != -1) { // If we double click, call function to
 										// handle double click on that spot
 						if (e.getClickCount() == 2) {
@@ -188,11 +188,6 @@ public class SubRequirementTreeView extends JPanel implements
 					}
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
 					// This was a right click
-					
-					final int selRow = tree.getRowForLocation(e.getX(),
-							e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(),
-							e.getY());
 					onRightClick(e.getX(), e.getY(), selRow, selPath); // Call
 																		// function
 																		// to
@@ -253,7 +248,7 @@ public class SubRequirementTreeView extends JPanel implements
 			// get the requirement from the server
 			controller.get(requirement.getrUID(), observer);
 		}
-		
+		this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
 	}
 	
 	/**

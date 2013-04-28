@@ -156,26 +156,24 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 			@Override
 			public void mousePressed(final MouseEvent e) {
+				final int selRow = tree.getRowForLocation(e.getX(),
+						e.getY());
+				final TreePath selPath = tree.getPathForLocation(e.getX(),
+						e.getY());
+
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					final int selRow = tree.getRowForLocation(e.getX(),
-							e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(),
-							e.getY());
+					//this was a left click
 					if (selRow != -1) {
 						if (e.getClickCount() == 2) {
+							//it was a double click
 							onDoubleClick(selRow, selPath);
 						}
 					}
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
 					// this was a right click
-
-					final int selRow = tree.getRowForLocation(e.getX(),
-							e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(),
-							e.getY());
 					onRightClick(e.getX(), e.getY(), selRow, selPath);
 				}
-			}
+			}	
 		};
 		tree.addMouseListener(ml);
 	}
@@ -312,6 +310,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			// get the requirement from the server
 			controller.get(requirement.getrUID(), observer);
 		}
+		this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
 	}
 
 	/**

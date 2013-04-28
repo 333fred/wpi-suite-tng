@@ -46,6 +46,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Iterati
 /**
  * View for creating or editing a iteration
  */
+@SuppressWarnings("serial")
 public class IterationView extends Tab implements ISaveNotifier,
 		IDatabaseListener {
 	
