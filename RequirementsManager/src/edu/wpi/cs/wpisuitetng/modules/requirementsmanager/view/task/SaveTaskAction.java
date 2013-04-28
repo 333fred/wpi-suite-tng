@@ -17,7 +17,7 @@ import javax.swing.AbstractAction;
 
 /**
  * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.SaveATestController.tasks.SaveTaskController#savetask()}
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.SaveTaskController#saveTask(int[])}
  * 
  * @author Nick Massa, Matt Costi
  */
@@ -44,7 +44,7 @@ public class SaveTaskAction extends AbstractAction {
 	 * 
 	 * @param controller
 	 *            the controller to trigger
-	 * @param objects
+	 * @param selectedRows
 	 *            object array of all of the tasks
 	 */
 	public SaveTaskAction(final SaveTaskController controller,

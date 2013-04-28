@@ -45,6 +45,8 @@ public class SaveTaskController {
 	 *            the requirement to which tasks are being added
 	 * @param parentView
 	 *            the DetailPanel displaying the current requirement
+	 * @param taskTable
+	 *            The tasktable to control
 	 */
 	public SaveTaskController(final MakeTaskPanel view,
 			final Requirement model, final DetailPanel parentView,
@@ -58,7 +60,11 @@ public class SaveTaskController {
 	
 	/**
 	 * Save a task to the server
+	 * 
+	 * @param selectedRows
+	 *            The rows to save
 	 */
+	@SuppressWarnings ("unchecked")
 	public void saveTask(final int[] selectedRows) {
 		final String taskText = view.getTaskField().getText();
 		final String taskName = view.getTaskName().getText();
@@ -74,7 +80,7 @@ public class SaveTaskController {
 		int estimateSum = 0;
 		
 		for (final Task altTask : model.getTasks()) {
-			if(altTask.getId() != altTask.getId()) {
+			if (altTask.getId() != altTask.getId()) {
 				estimateSum = estimateSum + altTask.getEstimate();
 			}
 		}
@@ -176,7 +182,7 @@ public class SaveTaskController {
 			}
 		}
 		
-		if(allTasksComplete){
+		if (allTasksComplete) {
 			parentView.getComboBoxStatus().removeItem("Complete");
 			parentView.getComboBoxStatus().addItem("Complete");
 		}
