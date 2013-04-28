@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest.DetailATestView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
@@ -28,12 +29,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 @SuppressWarnings ("serial")
 public class DetailEventPane extends JTabbedPane {
 	
-	JPanel notesListPane;
-	JPanel logListPane;
-	JPanel userListPane;
-	JPanel taskListPane;
-	JPanel atestListPane;
-	JPanel subreqListPane;
+	private JPanel notesListPane;
+	private JPanel logListPane;
+	private JPanel userListPane;
+	private JPanel taskListPane;
+	private JPanel atestListPane;
+	private JPanel subreqListPane;
 	
 	/**
 	 * Creates a new DetailEvent pane, that displays the given NotesListPane,
@@ -103,5 +104,9 @@ public class DetailEventPane extends JTabbedPane {
 	public void disableUsersAndSubReqs() {
 		((AssigneePanel) userListPane).disableUserButtons();
 		((SubRequirementPanel) subreqListPane).disableUserButtons();
+	}
+	
+	public void updateRequirement(Requirement newRequirement) {
+		((DetailNoteView) notesListPane).updateRequirement(newRequirement);
 	}
 }

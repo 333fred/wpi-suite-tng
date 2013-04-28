@@ -139,6 +139,8 @@ public class SaveEditingTableAction extends AbstractAction implements
 					}
 					
 					saveController.save(reqToChange, observer);
+					RequirementDatabase.getInstance().add(reqToChange);
+					
 				} catch (final RequirementNotFoundException e1) {
 					e1.printStackTrace();
 				}

@@ -22,7 +22,6 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -67,19 +66,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
 /**
  * JPanel class to display the different fields of the requirement
  */
-@SuppressWarnings ("serial")
+@SuppressWarnings("serial")
 public class DetailPanel extends Tab implements ISaveNotifier {
-	
+
 	public enum Mode {
 		CREATE, EDIT, UPDATE, VIEW;
 	}
-	
+
 	/**
-	 * VIEW: Only View
-	 * UPDATE: Change ActualEffort, Notes, Tests, Tasks
-	 * ADMIN: Everything
+	 * VIEW: Only View UPDATE: Change ActualEffort, Notes, Tests, Tasks ADMIN:
+	 * Everything
 	 */
-	
+
 	// Text fields
 	private JTextArea textName;
 	private JTextArea textDescription;
@@ -91,13 +89,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JTextField textRelease;
 	private JTextField lblTotEstDisplay;
 
-	
 	// combo boxes
 	private JComboBox comboBoxType;
 	private JComboBox comboBoxStatus;
 	private JComboBox comboBoxPriority;
 	private JComboBox comboBoxIteration;
-	
+
 	// Event Views
 	private DetailNoteView noteView;
 	private DetailLogView logView;
@@ -105,22 +102,22 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private DetailTaskView taskView;
 	private SubRequirementPanel subRequirementView;
 	private DetailATestView aTestView;
-	
+
 	// requirement that is displayed
-	private final Requirement requirement;
-	
+	private Requirement requirement;
+
 	// controller for all the tabs
 	private final MainTabController mainTabController;
-	
+
 	// Buttons
 	private JButton btnSave;
 	private JButton btnCancel;
-	
+
 	// layouts
 	private GridLayout mainLayout;
 	private SpringLayout layout;
 	private SpringLayout buttonPanelLayout;
-	
+
 	// OnChange Action Listeners
 	private TextUpdateListener textTitleListener;
 	private TextUpdateListener textDescriptionListener;
@@ -131,12 +128,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private TextUpdateListener textEstimateListener;
 	private TextUpdateListener textActualListener;
 	private TextUpdateListener textReleaseListener;
-	
+
 	// swing spacing constants
 	private static final int VERTICAL_PADDING = 10;
 	private static final int HORIZONTAL_PADDING = 20;
 	private static final int CLOSE = -5;
-	
+
 	// Text labels
 	private JLabel lblName;
 	private JLabel lblDescription;
@@ -148,7 +145,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblActual;
 	private JLabel lblRelease;
 	private JLabel lblTotalEstimate;
-	
+
 	// Sub-panels
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
@@ -157,21 +154,24 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JScrollPane mainScrollPane;
 	private DetailEventPane eventPane;
 	private JSplitPane splitPane;
-	
+
 	// Boolean to indicate whether the tab should be closed upon saving
 	private boolean closeTab;
-	
+
+	/** Dirty flag, weather to update this tab or not on refocus */
+	private boolean dirty;
+
 	private Color defaultColor;
-	
+
 	/** The edit mode of this requirement view */
 	private final Mode mode;
-	
+
 	public DetailPanel(final Requirement requirement, final Mode mode,
 			final MainTabController mainTabController) {
 		this.requirement = requirement;
 		this.mode = mode;
 		this.mainTabController = mainTabController;
-		
+
 		createPanels();
 		createComponents();
 		setPanelSizes();
@@ -184,9 +184,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		setDisabledTextColor();
 		disableFieldsMode();
 		disableSaveButton();
-		
+
 	}
-	
+
 	private void addComboBoxListeners() {
 		comboBoxStatusListener = new ItemStateListener(this, comboBoxStatus);
 		comboBoxStatus.addItemListener(comboBoxStatusListener);
@@ -198,7 +198,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				getComboBoxIteration());
 		getComboBoxIteration().addItemListener(comboBoxIterationListener);
 	}
-	
+
 	/**
 	 * @param lblName
 	 * @param lblDescription
@@ -262,7 +262,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.WEST, lblTotEstDisplay,
 				DetailPanel.HORIZONTAL_PADDING, SpringLayout.WEST, this);
-		
+
 		// Align North Edges of Objects
 		layout.putConstraint(SpringLayout.NORTH, lblName,
 				DetailPanel.VERTICAL_PADDING, SpringLayout.NORTH, this);
@@ -325,7 +325,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		layout.putConstraint(SpringLayout.NORTH, lblTotEstDisplay,
 				DetailPanel.VERTICAL_PADDING + DetailPanel.CLOSE,
 				SpringLayout.SOUTH, lblTotalEstimate);
-		
+
 		// Align Buttons
 		buttonPanelLayout.putConstraint(SpringLayout.NORTH, btnSave, 5,
 				SpringLayout.NORTH, buttonPanel);
@@ -340,7 +340,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		buttonPanelLayout.putConstraint(SpringLayout.NORTH, textSaveError, 5,
 				SpringLayout.SOUTH, buttonPanel);
 	}
-	
+
 	private void addComponents() {
 		addJLabels();
 		mainPanel.add(textName);
@@ -354,15 +354,15 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.add(textEstimate);
 		mainPanel.add(textActual);
 		mainPanel.add(textRelease);
-		
+
 		buttonPanel.add(btnSave);
 		buttonPanel.add(btnCancel);
 		buttonPanel.add(textSaveError);
-		
+
 		leftPanel.add(mainScrollPane, BorderLayout.CENTER);
 		leftPanel.add(buttonPanel, BorderLayout.SOUTH);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -379,17 +379,17 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.add(lblTotalEstimate);
 		mainPanel.add(lblTotEstDisplay);
 	}
-	
+
 	private void addSplitPane() {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel,
 				eventPane);
 		add(splitPane);
 		splitPane.setResizeWeight(0.75);
 	}
-	
+
 	private void addTextActualListener() {
 		textActual.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -409,10 +409,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textActualListener = new TextUpdateListener(this, textActual, null);
 		textActual.addKeyListener(textActualListener);
 	}
-	
+
 	private void addTextDescriptionAreaListener() {
 		textDescription.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -429,10 +429,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				textDescriptionValid);
 		textDescription.addKeyListener(textDescriptionListener);
 	}
-	
+
 	private void addTextEstimateListener() {
 		textEstimate.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -448,10 +448,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimateListener = new TextUpdateListener(this, textEstimate, null);
 		textEstimate.addKeyListener(textEstimateListener);
 	}
-	
+
 	private void addTextNameAreaListener() {
 		textName.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -471,10 +471,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				textNameValid);
 		textName.addKeyListener(textTitleListener);
 	}
-	
+
 	private void addTextReleaseListener() {
 		textRelease.addKeyListener(new KeyAdapter() {
-			
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
@@ -494,50 +494,50 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textReleaseListener = new TextUpdateListener(this, textRelease, null);
 		textRelease.addKeyListener(textReleaseListener);
 	}
-	
+
 	/**
 	 * Method to set this tab to close when the tab closes
 	 * 
 	 */
-	
+
 	public void closeTabAfterSave() {
 		closeTab = true;
 	}
-	
+
 	private void createButtons() {
 		btnSave = new JButton("Save Requirement");
 		btnCancel = new JButton("Cancel");
 		btnCancel.setAction(new CancelAction(this));
-		
+
 		switch (mode) {
-			case CREATE:
-				btnSave.setText("Create Requirement");
-				break;
-			case EDIT:
-			case UPDATE:
-			case VIEW:
-				btnSave.setText("Save Requirement");
-				break;
+		case CREATE:
+			btnSave.setText("Create Requirement");
+			break;
+		case EDIT:
+		case UPDATE:
+		case VIEW:
+			btnSave.setText("Save Requirement");
+			break;
 		}
 	}
-	
+
 	private void createComboBoxes() {
 		// Type ComboBox
-		
+
 		comboBoxType = new JComboBox();
 		comboBoxType.setBackground(Color.WHITE);
-		
+
 		for (final Type t : Type.values()) {
 			comboBoxType.addItem(t.toString());
 		}
 		comboBoxType.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
 		comboBoxType.setSelectedIndex(0);
-		
+
 		comboBoxStatus = new JComboBox();
 		comboBoxStatus.setBackground(Color.WHITE);
 		comboBoxStatus.setPrototypeDisplayValue(Type.NON_FUNCTIONAL.toString());
 		determineAvailableStatusOptions(getRequirement());
-		
+
 		comboBoxPriority = new JComboBox();
 		comboBoxPriority.setBackground(Color.WHITE);
 		for (final Priority t : Priority.values()) {
@@ -546,13 +546,13 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		comboBoxPriority.setSelectedIndex(0);
 		comboBoxPriority.setPrototypeDisplayValue(Type.NON_FUNCTIONAL
 				.toString());
-		
+
 		createIterationComboBox();
 	}
-	
+
 	private void createComponentListeners() {
 		if (mode == Mode.VIEW) {
-			
+
 		} else if (mode == Mode.UPDATE) {
 			addTextActualListener();
 		} else {
@@ -564,7 +564,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			addTextReleaseListener();
 		}
 	}
-	
+
 	private void createComponents() {
 		createJLabels();
 		createTextNameArea();
@@ -578,7 +578,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		createTextReleaseArea();
 		createButtons();
 	}
-	
+
 	private void createEventSidePanel() {
 		logView = new DetailLogView(getRequirement(), this);
 		noteView = new DetailNoteView(getRequirement(), this);
@@ -598,9 +598,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} else if (mode == Mode.CREATE) {
 			eventPane.disableSubReqs();
 		}
-		
+
 	}
-	
+
 	private void createIterationComboBox() {
 		List<Iteration> iterationList = IterationDatabase.getInstance()
 				.getAll();
@@ -618,7 +618,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
-			
+
 		}
 		final String[] availableIterations = new String[availableIterationNum];
 		for (final Iteration iteration : iterationList) {
@@ -638,7 +638,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		comboBoxIteration.setPrototypeDisplayValue("Non-Functional");
 		comboBoxIteration.setBackground(Color.WHITE);
 	}
-	
+
 	public void createJLabels() {
 		lblName = new JLabel("*Name:");
 		lblDescription = new JLabel("*Description:");
@@ -651,7 +651,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblRelease = new JLabel("Release Number:");
 		lblTotalEstimate = new JLabel("Total Estimate:");
 	}
-	
+
 	private void createPanels() {
 		mainPanel = new JPanel();
 		defaultColor = mainPanel.getBackground();
@@ -663,17 +663,18 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 		mainScrollPane.getViewport().add(mainPanel);
 		mainScrollPane.setBorder(null);
-		
+
 		buttonPanelLayout = new SpringLayout();
 		buttonPanel = new JPanel(buttonPanelLayout);
 		leftPanel = new JPanel(new BorderLayout());
-		
+
 		if (this.requirement.getName().equals("SWAG")) {
 			System.out.println("rawr");
-			//this.mainTabController.addTab("Dashboard", new ImageIcon(), new Tab(), "Dashboard");
+			// this.mainTabController.addTab("Dashboard", new ImageIcon(), new
+			// Tab(), "Dashboard");
 		}
 	}
-	
+
 	private void createSaveErrorArea() {
 		textSaveError = new JTextArea(1, 40);
 		textSaveError.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -683,7 +684,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textSaveError.setLineWrap(true);
 		textSaveError.setWrapStyleWord(true);
 	}
-	
+
 	private void createTextActualArea() {
 		textActual = new JTextField(9);
 		textActual.setBorder((new JTextField()).getBorder());
@@ -696,7 +697,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 				.getDocument();
 		// box allows 12 numbers (around max int)
 		textActualDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
-		
+
 		// actual field is editable when requirement is complete
 		if ((requirement.getStatus() == Status.COMPLETE)
 				&& ((mode == Mode.EDIT) || requirement.getUsers().contains(
@@ -705,7 +706,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			textActual.setBackground(Color.WHITE);
 		}
 	}
-	
+
 	private void createTextDescriptionArea() {
 		textDescription = new JTextArea(8, 40);
 		textDescription.setLineWrap(true);
@@ -719,7 +720,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		scrollDescription.setSize(400, 450);
 		scrollDescription.setBorder(null);
 	}
-	
+
 	private void createTextDescriptionValidArea() {
 		textDescriptionValid = new JTextArea(1, 40);
 		textDescriptionValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -729,21 +730,21 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textDescriptionValid.setLineWrap(true);
 		textDescriptionValid.setWrapStyleWord(true);
 	}
-	
+
 	private void createTextEstimateArea() {
 		textEstimate = new JTextField(9);
 		textEstimate.setBorder((new JTextField()).getBorder());
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		textEstimate.setName("Estimate");
 		textEstimate.setDisabledTextColor(Color.GRAY);
-		
+
 		lblTotEstDisplay = new JTextField(9);
 		lblTotEstDisplay.setEditable(false);
 		lblTotEstDisplay.setBorder((new JTextField()).getBorder());
 		final AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate
 				.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
-		
+
 		// prevent in-progress or complete requirements from having their
 		// estimates changed
 		if ((requirement.getStatus() == Status.IN_PROGRESS)
@@ -752,7 +753,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			textEstimate.setBackground(defaultColor);
 		}
 	}
-	
+
 	private void createTextNameArea() {
 		textName = new JTextArea(1, 40);
 		textName.setLineWrap(true);
@@ -765,7 +766,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textName.setName("Name");
 		textName.setDisabledTextColor(Color.GRAY);
 	}
-	
+
 	private void createTextNameValidArea() {
 		textNameValid = new JTextArea(1, 40);
 		textNameValid.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -775,7 +776,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textNameValid.setLineWrap(true);
 		textNameValid.setWrapStyleWord(true);
 	}
-	
+
 	private void createTextReleaseArea() {
 		textRelease = new JTextField(9);
 		textRelease.setBorder((new JTextField()).getBorder());
@@ -783,7 +784,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textRelease.setMaximumSize(textRelease.getPreferredSize());
 		textRelease.setDisabledTextColor(Color.GRAY);
 	}
-	
+
 	/**
 	 * Method to determine to which statuses the currently viewed requirement
 	 * can manually be set based on its current status as governed by the
@@ -805,14 +806,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		if (!hasComplete) {
 			comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
-		
+
 		if (req.getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			comboBoxStatus.removeItem(Status.NEW.toString());
 			if (!req.subReqsCompleted()) {
 				comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
-			
+
 			if ((req.getSubRequirements().size() > 0) || !req.tasksCompleted()) {
 				comboBoxStatus.removeItem(Status.DELETED.toString());
 			}
@@ -851,7 +852,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		comboBoxStatus.setSelectedItem(req.getStatus().toString());
 	}
-	
+
 	/**
 	 * Checks requirement status: If deleted, disables all editable fields
 	 * except status Else do nothing
@@ -859,7 +860,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void disableAllFieldsIfDeleted() {
 		final JPanel panel = new JPanel();
 		final Color defaultColor = panel.getBackground();
-		
+
 		if ((getRequirement().getStatus() != Status.DELETED)
 				&& (getRequirement().getStatus() != Status.COMPLETE)) {
 			return;
@@ -880,248 +881,248 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		}
 		comboBoxType.setEnabled(false);
 		comboBoxPriority.setEnabled(false);
-		
+
 	}
-	
+
 	/**
 	 * Disables the editing fields based upon the edit mode
 	 * 
 	 */
-	
+
 	private void disableFieldsMode() {
 		if (mode == Mode.VIEW) {
 			textName.setEnabled(false);
 			textName.setBackground(defaultColor);
-			
+
 			textDescription.setEnabled(false);
 			textDescription.setBackground(defaultColor);
-			
+
 			getComboBoxIteration().setEnabled(false);
 			getComboBoxIteration().setBackground(defaultColor);
 			getComboBoxIteration().setForeground(Color.BLACK);
-			
+
 			getComboBoxStatus().setEnabled(false);
 			getComboBoxStatus().setBackground(defaultColor);
 			getComboBoxStatus().setForeground(Color.BLACK);
-			
+
 			textRelease.setEnabled(false);
 			textRelease.setBackground(defaultColor);
-			
+
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
-			
+
 			textActual.setEnabled(false);
 			textActual.setBackground(defaultColor);
-			
+
 			comboBoxType.setEnabled(false);
 			comboBoxType.setBackground(defaultColor);
 			comboBoxType.setForeground(Color.BLACK);
-			
+
 			comboBoxPriority.setEnabled(false);
 			comboBoxPriority.setBackground(defaultColor);
 			comboBoxPriority.setForeground(Color.BLACK);
-			
+
 		} else if (mode == Mode.UPDATE) {
 			textName.setEnabled(false);
 			textName.setBackground(defaultColor);
-			
+
 			textDescription.setEnabled(false);
 			textDescription.setBackground(defaultColor);
-			
+
 			getComboBoxIteration().setEnabled(false);
 			getComboBoxIteration().setBackground(defaultColor);
 			getComboBoxIteration().setForeground(Color.BLACK);
-			
+
 			getComboBoxStatus().setEnabled(false);
 			getComboBoxStatus().setBackground(defaultColor);
 			getComboBoxStatus().setForeground(Color.BLACK);
-			
+
 			textRelease.setEnabled(false);
 			textRelease.setBackground(defaultColor);
-			
+
 			textEstimate.setEnabled(false);
 			textEstimate.setBackground(defaultColor);
-			
+
 			comboBoxType.setEnabled(false);
 			comboBoxType.setBackground(defaultColor);
 			comboBoxType.setForeground(Color.BLACK);
-			
+
 			comboBoxPriority.setEnabled(false);
 			comboBoxPriority.setBackground(defaultColor);
 			comboBoxPriority.setForeground(Color.BLACK);
-			
+
 		} else if (mode == Mode.EDIT) {
-			
+
 			// edit, everything can be edited
 		}
 	}
-	
+
 	public void disableSaveButton() {
 		btnSave.setEnabled(false);
 	}
-	
+
 	public void displaySaveError(final String error) {
 		textSaveError.setText(error);
 	}
-	
+
 	public void enableSaveButton() {
 		if (mode == Mode.VIEW) {
 			return; // we can not enable save in view mode
 		}
 		btnSave.setEnabled(true);
 	}
-	
+
 	@Override
 	public void fail(final Exception exception) {
 		displaySaveError("Unable to complete request: "
 				+ exception.getMessage());
 	}
-	
+
 	public List<String> getAssignedUsers() {
 		return userView.getAssignedUsersList();
 	}
-	
+
 	/**
 	 * @return the btnCancel
 	 */
 	public JButton getBtnCancel() {
 		return btnCancel;
 	}
-	
+
 	/**
 	 * @return the btnSave
 	 */
 	public JButton getBtnSave() {
 		return btnSave;
 	}
-	
+
 	/**
 	 * @return the comboBoxIteration
 	 */
 	public JComboBox getComboBoxIteration() {
 		return comboBoxIteration;
 	}
-	
+
 	/**
 	 * @return the comboBoxPriority
 	 */
 	public JComboBox getComboBoxPriority() {
 		return comboBoxPriority;
 	}
-	
+
 	/**
 	 * @return the comboBoxStatus
 	 */
 	public JComboBox getComboBoxStatus() {
 		return comboBoxStatus;
 	}
-	
+
 	/**
 	 * @return the comboBoxType
 	 */
 	public JComboBox getComboBoxType() {
 		return comboBoxType;
 	}
-	
+
 	public MainTabController getMainTabController() {
 		return mainTabController;
 	}
-	
+
 	/**
 	 * @return the mode
 	 */
 	public Mode getMode() {
 		return mode;
 	}
-	
+
 	public Requirement getModel() {
 		return getRequirement();
 	}
-	
+
 	public List<Note> getNoteList() {
 		return noteView.getNotesList();
 	}
-	
+
 	public DetailNoteView getNoteView() {
 		return noteView;
 	}
-	
+
 	/**
 	 * @return the requirement
 	 */
 	public Requirement getRequirement() {
 		return requirement;
 	}
-	
+
 	public DetailTaskView getTaskView() {
 		return taskView;
 	}
-	
+
 	/**
 	 * @return the textActual
 	 */
 	public JTextField getTextActual() {
 		return textActual;
 	}
-	
+
 	/**
 	 * @return the textDescription
 	 */
 	public JTextArea getTextDescription() {
 		return textDescription;
 	}
-	
+
 	/**
 	 * @return the textDescriptionValid
 	 */
 	public JTextArea getTextDescriptionValid() {
 		return textDescriptionValid;
 	}
-	
+
 	/**
 	 * @return the textEstimate
 	 */
 	public JTextField getTextEstimate() {
 		return textEstimate;
 	}
-	
+
 	public JComboBox getTextIteration() {
 		return getComboBoxIteration();
 	}
-	
+
 	/**
 	 * @return the textName
 	 */
 	public JTextArea getTextName() {
 		return textName;
 	}
-	
+
 	/**
 	 * @return the textNameValid
 	 */
 	public JTextArea getTextNameValid() {
 		return textNameValid;
 	}
-	
+
 	/**
 	 * @return the textRelease
 	 */
 	public JTextField getTextRelease() {
 		return textRelease;
 	}
-	
+
 	public JTextArea getTextSaveError() {
 		return textSaveError;
 	}
-	
+
 	private Integer getTotalEstimate() {
 		return traverseTreeEstimates(requirement) + requirement.getEstimate();
 	}
-	
+
 	public AssigneePanel getUserView() {
 		return userView;
 	}
-	
+
 	/**
 	 *
 	 */
@@ -1135,7 +1136,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			getComboBoxIteration().setEnabled(false);
 			getComboBoxIteration().setBackground(defaultColor);
 			comboBoxStatus.setSelectedItem(Status.NEW.toString());
-			
+
 		} else {
 			textName.setText(getRequirement().getName());
 			textDescription.setText(getRequirement().getDescription());
@@ -1144,12 +1145,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			textActual.setText(Integer.toString(getRequirement().getEffort()));
 			textRelease.setText(getRequirement().getReleaseNum());
 			String estimateStr = getTotalEstimate().toString();
-			//pad the string
-			for(int i = estimateStr.length(); i < 9; i++) {
+			// pad the string
+			for (int i = estimateStr.length(); i < 9; i++) {
 				estimateStr.concat(" ");
 			}
 			lblTotEstDisplay.setText(estimateStr);
-			
+
 			try {
 				getComboBoxIteration()
 						.setSelectedItem(
@@ -1159,29 +1160,29 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			} catch (final IterationNotFoundException e) {
 				System.out.println("Exception Caught: Iteration Not Found.");
 			}
-			
+
 			comboBoxType.setSelectedItem(getRequirement().getType().toString());
-			
+
 			comboBoxPriority.setSelectedItem(getRequirement().getPriority()
 					.toString());
-			
+
 			setSaveButtonAction();
 			comboBoxStatus.setSelectedItem(requirement.getStatus().toString());
-			
+
 			disableAllFieldsIfDeleted();
 			comboBoxStatus.removeItem("None");
 		}
 	}
-	
+
 	@Override
 	public boolean onTabClosed() {
 		if (btnSave.isEnabled()) {
-			
+
 			mainTabController.switchToTab(this);
-			
+
 			final Object[] options = { "Save Changes", "Discard Changes",
 					"Cancel" };
-			
+
 			final int res = JOptionPane
 					.showOptionDialog(
 							this,
@@ -1199,16 +1200,16 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			} else {
 				return false;
 			}
-			
+
 		}
-		
+
 		if (taskView.getTaskPanel().getAddTask().isEnabled()
 				|| noteView.getNotePanel().getAddnote().isEnabled()
 				|| aTestView.getTestPanel().getAddATest().isEnabled()) {
 			mainTabController.switchToTab(this);
-			
+
 			final Object[] altOptions = { "Discard Changes", "Cancel" };
-			
+
 			final int res = JOptionPane
 					.showOptionDialog(
 							this,
@@ -1217,27 +1218,27 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, altOptions,
 							altOptions[1]);
-			
+
 			if (res == 0) {
 				return true;
 			} else if (res == 1) {
 				return false;
 			}
-			
+
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void responseError(final int statusCode, final String statusMessage) {
 		displaySaveError("Received " + statusCode + " error from server: "
 				+ statusMessage);
-		
+
 	}
-	
+
 	@Override
 	public void responseSuccess() {
-		
+
 		for (int i = 0; i < mainTabController.getTabView().getTabCount(); i++) {
 			if (mainTabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
 				(((DetailPanel) mainTabController.getTabView()
@@ -1246,14 +1247,14 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 						.getComponentAt(i))).updateSubReqTab();
 			}
 		}
-		
+
 		// if the tab should close, close it
 		if (closeTab) {
 			getMainTabController().closeCurrentTab();
 			return;
 		}
 		// other wise we shall update the requriment in the log view
-		
+
 		Requirement updatedRequirement;
 		try {
 			updatedRequirement = RequirementDatabase.getInstance().get(
@@ -1262,9 +1263,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		} catch (final RequirementNotFoundException e) {
 			System.out.println("Unable to find requirement? Wat?");
 		}
-		
+
 	}
-	
+
 	/**
 	 * @param btnCancel
 	 *            the btnCancel to set
@@ -1272,7 +1273,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setBtnCancel(final JButton btnCancel) {
 		this.btnCancel = btnCancel;
 	}
-	
+
 	/**
 	 * @param btnSave
 	 *            the btnSave to set
@@ -1280,7 +1281,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setBtnSave(final JButton btnSave) {
 		this.btnSave = btnSave;
 	}
-	
+
 	/**
 	 * @param comboBoxIteration
 	 *            the comboBoxIteration to set
@@ -1288,7 +1289,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setComboBoxIteration(final JComboBox comboBoxIteration) {
 		this.comboBoxIteration = comboBoxIteration;
 	}
-	
+
 	/**
 	 * @param comboBoxPriority
 	 *            the comboBoxPriority to set
@@ -1296,7 +1297,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setComboBoxPriority(final JComboBox comboBoxPriority) {
 		this.comboBoxPriority = comboBoxPriority;
 	}
-	
+
 	/**
 	 * @param comboBoxStatus
 	 *            the comboBoxStatus to set
@@ -1304,7 +1305,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setComboBoxStatus(final JComboBox comboBoxStatus) {
 		this.comboBoxStatus = comboBoxStatus;
 	}
-	
+
 	/**
 	 * @param comboBoxType
 	 *            the comboBoxType to set
@@ -1312,9 +1313,9 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setComboBoxType(final JComboBox comboBoxType) {
 		this.comboBoxType = comboBoxType;
 	}
-	
+
 	/** Sets the disabled text color of all the fields */
-	
+
 	private void setDisabledTextColor() {
 		textName.setDisabledTextColor(Color.BLACK);
 		textDescription.setDisabledTextColor(Color.BLACK);
@@ -1322,11 +1323,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimate.setDisabledTextColor(Color.BLACK);
 		textActual.setDisabledTextColor(Color.BLACK);
 	}
-	
+
 	public void setNoteList(final List<Note> notes) {
 		noteView.setNotesList(notes);
 	}
-	
+
 	private void setPanelSizes() {
 		buttonPanel.setPreferredSize(new Dimension(textSaveError
 				.getPreferredSize().width
@@ -1338,7 +1339,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		mainPanel.setPreferredSize(new Dimension(preferredWidth,
 				preferredHeight));
 	}
-	
+
 	private void setSaveButtonAction() {
 		if (mode == Mode.CREATE) {
 			btnSave.setAction(new SaveRequirementAction(requirement, this));
@@ -1346,7 +1347,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 			btnSave.setAction(new EditRequirementAction(requirement, this));
 		}
 	}
-	
+
 	/**
 	 * @param textActual
 	 *            the textActual to set
@@ -1354,7 +1355,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextActual(final JTextField textActual) {
 		this.textActual = textActual;
 	}
-	
+
 	/**
 	 * @param textDescription
 	 *            the textDescription to set
@@ -1362,7 +1363,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextDescription(final JTextArea textDescription) {
 		this.textDescription = textDescription;
 	}
-	
+
 	/**
 	 * @param textDescriptionValid
 	 *            the textDescriptionValid to set
@@ -1370,7 +1371,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextDescriptionValid(final JTextArea textDescriptionValid) {
 		this.textDescriptionValid = textDescriptionValid;
 	}
-	
+
 	/**
 	 * @param textEstimate
 	 *            the textEstimate to set
@@ -1378,7 +1379,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextEstimate(final JTextField textEstimate) {
 		this.textEstimate = textEstimate;
 	}
-	
+
 	/**
 	 * @param textName
 	 *            the textName to set
@@ -1386,7 +1387,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextName(final JTextArea textName) {
 		this.textName = textName;
 	}
-	
+
 	/**
 	 * @param textNameValid
 	 *            the textNameValid to set
@@ -1394,7 +1395,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextNameValid(final JTextArea textNameValid) {
 		this.textNameValid = textNameValid;
 	}
-	
+
 	/**
 	 * @param textRelease
 	 *            the textRelease to set
@@ -1402,40 +1403,80 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	public void setTextRelease(final JTextField textRelease) {
 		this.textRelease = textRelease;
 	}
-	
+
 	private int traverseTreeEstimates(final Requirement current) {
 		Requirement child = null;
 		int sum = 0;
-		
+
 		for (final Integer i : current.getSubRequirements()) {
 			try {
 				child = RequirementDatabase.getInstance().get(i);
-				sum = sum + child.getEstimate()
-						+ traverseTreeEstimates(child);
+				sum = sum + child.getEstimate() + traverseTreeEstimates(child);
 			} catch (final RequirementNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
 		return sum;
 	}
-	
+
 	public void updateSubReqTab() {
 		subRequirementView.refreshAll();
 	}
-	
+
 	public void updateTotalEstimate() {
 		Integer estimate = 0;
-		
+
 		Requirement tempReq = null;
 		try {
 			tempReq = RequirementDatabase.getInstance().get(
 					requirement.getrUID());
-			estimate = traverseTreeEstimates(tempReq)+tempReq.getEstimate();
+			estimate = traverseTreeEstimates(tempReq) + tempReq.getEstimate();
 			lblTotEstDisplay.setText(estimate.toString());
 		} catch (final RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
+	/**
+	 * Sets weather this tab will refresh the requirement on next focus
+	 * 
+	 * @param dirty
+	 */
+
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	/** What to do when this tab regains focus */
+
+	public void onGainedFocus() {
+		if (dirty) {
+			final Object[] options = {"Updated Changes", "Local Changes"};
+
+			final int res = JOptionPane
+					.showOptionDialog(
+							this,
+							"This requirement has been edited outside this tab. Do you want to discard your changes in here, and use the update changes, or keep the local changes",
+							requirement.getName() + ": Confirm Close",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[2]);			
+			if (res == 0) {
+				//update changes, get the new requirement, and populate the fields
+				try {
+					requirement = RequirementDatabase.getInstance().get(requirement.getrUID());
+					loadFields(); // update the fields
+					eventPane.updateRequirement(requirement); //update event pane
+					
+				} catch (RequirementNotFoundException e) {
+					//we couldnt find the requirement?, do nothing then.
+				}
+				
+			} else {
+				//local changes, we dont need to do anything then really
+			}
+		}
+	}
+
 }
