@@ -36,52 +36,52 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Task;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.logging.RequirementChangeset;
 
 public class LoggerTest {
-	
+
 	Requirement requirement;
 	User user;
 	Session session;
-	
+
 	@Before
 	public void setUp() {
-		
+
 		requirement = new Requirement();
 		user = new User("John Doe", "JDoe", "Password", 7);
 		session = new Session(user, "ssid");
-		
+
 	}
-	
+
 	/**
 	 * Test to confirm that a creation message can be generated for a
 	 * requirement.
 	 */
 	@Test
 	public void testCreationLog() {
-		
+
 		requirement = new Requirement();
 		requirement.logCreation(session);
 		final List<RequirementChangeset> reqChangeList = requirement.getLogs();
 		final Map<String, FieldChange<?>> map = reqChangeList.get(0)
 				.getChanges();
-		
+
 		Assert.assertEquals(reqChangeList.size(), 1); // confirm that there is
-														// only one
+		// only one
 		// set of recorded changes
 		Assert.assertEquals(map.keySet().size(), 1); // confirm that only one
-														// change
+		// change
 		// has been made in that set
 		Assert.assertTrue(map.containsKey("creation")); // confirm that that one
-														// change
+		// change
 		// is a creation change
-		
+
 	}
-	
+
 	/**
 	 * Test to confirm that a series of events can be added to a log as a single
 	 * log.
 	 */
 	@Test
 	public void testMultipleEvents() {
-		
+
 		requirement = new Requirement();
 		final RequirementChangeset reqChange = new RequirementChangeset(user);
 		reqChange.getChanges().put("TYPE_A",
@@ -91,79 +91,79 @@ public class LoggerTest {
 				new FieldChange<Exception>(new Exception("OLD_B"),
 						new Exception("NEW_B")));
 		requirement.logEvents(reqChange);
-		
+
 		Assert.assertEquals(requirement.getLogs().size(), 1); // confirm that
-																// only one
+		// only one
 		// log has been added
 		Assert.assertEquals(requirement.getLogs().get(0).getChanges().keySet()
 				.size(), 2); // confirm that this one log has recorded two
-								// changes
+		// changes
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges()
 				.containsKey("TYPE_A")); // confirm that change A has been added
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges()
 				.containsKey("TYPE_B")); // confirm that change B has been added
 		Assert.assertEquals(
 				requirement.getLogs().get(0).getChanges().get("TYPE_B")
-						.getOldValue().toString(),
+				.getOldValue().toString(),
 				new Exception("OLD_B").toString()); // confirm
-													// one
-													// value
-													// as
-													// a
-													// sample
-		
+		// one
+		// value
+		// as
+		// a
+		// sample
+
 	}
-	
+
 	/**
 	 * Test to confirm that a series of individual changes can be added as
 	 * multiple logs.
 	 */
 	@Test
 	public void testMultipleLogs() {
-		
+
 		requirement = new Requirement();
-		
+
 		final RequirementChangeset changeA = new RequirementChangeset(user);
 		changeA.getChanges().put("TYPE_A",
 				new FieldChange<String>("OLD_A", "NEW_A"));
 		requirement.logEvents(changeA);
-		
+
 		final RequirementChangeset changeB = new RequirementChangeset(user);
 		changeB.getChanges().put("TYPE_B",
 				new FieldChange<String>("OLD_B", "NEW_B"));
 		requirement.logEvents(changeB);
-		
+
 		Assert.assertEquals(requirement.getLogs().size(), 2); // confirm that
-																// two and
+		// two and
 		// only two logs have
 		// been added
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges()
 				.containsKey("TYPE_B")); // confirm that the most recently added
-											// log is first
+		// log is first
 		Assert.assertTrue(requirement.getLogs().get(1).getChanges()
 				.containsKey("TYPE_A")); // confirm that the other log still
-											// exists
-		
+		// exists
+
 	}
-	
+
 	/**
 	 * Test to confirm that a series of multiple-change events can be added as
 	 * multiple logs.
 	 */
 	@Test
 	public void testMultipleMultipleChangeLogs() {
-		
+
 		requirement = new Requirement();
-		
+
 		requirement.logCreation(session);
-		
+
 		final RequirementChangeset changeA = new RequirementChangeset(user);
 		changeA.getChanges().put("TYPE_A1",
 				new FieldChange<String>("OLD_A1", "NEW_A1"));
 		changeA.getChanges().put("TYPE_A2",
 				new FieldChange<Object>(new Object(), new Object()));
 		requirement.logEvents(changeA);
-		
+
 		final RequirementChangeset changeB = new RequirementChangeset(user);
 		changeB.getChanges().put(
 				"TYPE_B1",
@@ -174,55 +174,55 @@ public class LoggerTest {
 				new FieldChange<Requirement>(new Requirement(),
 						new Requirement()));
 		requirement.logEvents(changeB);
-		
+
 		Assert.assertEquals(requirement.getLogs().size(), 3); // confirm that
-																// three and
+		// three and
 		// only three logs have
 		// been added
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges()
 				.containsKey("TYPE_B1")); // confirm that the most recently
-											// added log is first
+		// added log is first
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges()
 				.containsKey("TYPE_B2")); // confirm that all changes have been
-											// added to the most recent log
-		
+		// added to the most recent log
+
 	}
-	
+
 	/**
 	 * Test to confirm that a single event can be added to a log.
 	 */
 	@Test
 	public void testSingleEvent() {
-		
+
 		requirement = new Requirement();
 		final RequirementChangeset reqChange = new RequirementChangeset(user);
 		reqChange.getChanges().put("TYPE",
 				new FieldChange<String>("OLD", "NEW"));
 		requirement.logEvents(reqChange);
-		
+
 		Assert.assertEquals(requirement.getLogs().size(), 1); // confirm that
-																// one and
+		// one and
 		// only one changeset
 		// has been added
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges()
 				.containsKey("TYPE")); // confirm that a change of type TYPE was
-										// logged
-										// to the zeroth and only changeset
+		// logged
+		// to the zeroth and only changeset
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges().get("TYPE")
 				.getOldValue().equals("OLD")); // confirm that the old value was
-												// saved
+		// saved
 		Assert.assertTrue(requirement.getLogs().get(0).getChanges().get("TYPE")
 				.getNewValue().equals("NEW")); // conrfim that the new value was
-												// saved
-		
+		// saved
+
 	}
-	
-	
+
+
 	@Test
 	public void testAllChanges(){
-		final String[] changeTypes = {"creation", "name", "description", "type", "priority", "status", 
-		                            "releaseNum", "iteration", "estimate", "effort", "users", "subRequirements", 
-		                            "pUID", "notes", "tasks", "aTests"};
+		final String[] changeTypes = {"creation", "name", "description", "type", "priority", "status",
+				"releaseNum", "iteration", "estimate", "effort", "users", "subRequirements",
+				"pUID", "notes", "tasks", "aTests"};
 		HashMap<String, FieldChange<?>> map = new HashMap<String, FieldChange<?>>();
 		for(String type : changeTypes){
 			FieldChange change;
@@ -239,6 +239,7 @@ public class LoggerTest {
 				change = new FieldChange<Status>(Status.IN_PROGRESS, Status.OPEN);
 			}
 			else if(type.equals("iteration")){
+
 				Iteration oldItr = new Iteration();
 				oldItr.setId(0);
 				IterationDatabase.getInstance().add(oldItr);
@@ -294,15 +295,15 @@ public class LoggerTest {
 		rc.setChanges(map);
 		assertNotNull(rc.getContent());
 	}
-		
+
 	/**
 	 * Trivial test to ensure that JUnit is playing nicely; should always pass.
 	 */
 	@Test
 	public void trivialTest() {
-		
+
 		Assert.assertEquals(1, 1);
-		
+
 	}
-	
+
 }
