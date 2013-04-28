@@ -240,7 +240,7 @@ public class RequirementsTable extends JTable {
 		if (req.getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			comboBoxStatus.removeItem(Status.NEW.toString());
-			comboBoxStatus.removeItem(Status.OPEN.toString());
+			//comboBoxStatus.removeItem(Status.OPEN.toString());
 			if (!req.subReqsCompleted()) {
 				comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
