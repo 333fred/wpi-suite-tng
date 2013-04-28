@@ -33,6 +33,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.PermissionSelectionChangedListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.SavePermissionsAction;
 
+/**
+ * This panel is for managing the permissions for all users on the project. Only
+ * admins can access this panel
+ */
 @SuppressWarnings ("serial")
 public class PermissionsPanel extends Tab {
 	
@@ -54,6 +58,10 @@ public class PermissionsPanel extends Tab {
 	/** A button to save changes in permissions */
 	private final JButton saveButton;
 	
+	/**
+	 * Creates a new PermissionsPanel to manage the permissions for users on the
+	 * project
+	 */
 	@SuppressWarnings ("unchecked")
 	public PermissionsPanel() {
 		final PermissionModel model = PermissionModel.getInstance();

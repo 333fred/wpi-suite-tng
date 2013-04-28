@@ -27,6 +27,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.Permission
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissionRequestObserver;
 
+/**
+ * This table is for holding all the users and their permissions they are
+ * currently assigned. Admins can change permissions by selecting from the
+ * dropdowns of every user
+ */
+
 public class PermissionsTable extends JTable {
 	
 	private static final long serialVersionUID = 1L;
@@ -39,6 +45,8 @@ public class PermissionsTable extends JTable {
 	 *            The data to populate the table
 	 * @param columnNames
 	 *            The column headers
+	 * @param localPermissions
+	 *            The current local permissions
 	 */
 	public PermissionsTable(final String[][] rowData,
 			final String[] columnNames,
@@ -51,6 +59,7 @@ public class PermissionsTable extends JTable {
 	 * Override superclass to make permission cell editor be a combobox
 	 */
 	@Override
+	@SuppressWarnings ({"rawtypes", "unchecked" })
 	public TableCellEditor getCellEditor(final int row, final int column) {
 		if (convertColumnIndexToModel(column) == 2) {
 			// Create the combo box
