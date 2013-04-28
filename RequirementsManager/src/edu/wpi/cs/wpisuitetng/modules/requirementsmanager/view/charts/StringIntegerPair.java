@@ -1,9 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * 		@author Team Swagasaurus
+ *******************************************************************************/
+
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
-/** String and iteger pair for use in AbstractRequirementStatistics, stores the String value to display in the char
+/** String and integer pair for use in AbstractRequirementStatistics, stores the String value to display in the char
  * a long with its integer value.
  * 
- * User to keep the order of the values, as using toString on Iteration might not be the most conveint.
+ * Used to keep the order of the values, as using toString on Iteration might not be the most convenient.
  */
 
 public class StringIntegerPair {	
