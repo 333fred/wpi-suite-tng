@@ -21,7 +21,7 @@ import javax.swing.event.ListSelectionEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions.PermissionsPanel;
 
 /**
- * Need to comment!
+ * Listener to change permissions
  */
 public class PermissionSelectionChangedListener implements MouseListener {
 	

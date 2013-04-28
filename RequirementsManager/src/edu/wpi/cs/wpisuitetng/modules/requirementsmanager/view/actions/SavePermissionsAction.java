@@ -22,7 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.SavePermissi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.permissions.PermissionsPanel;
 
 /**
- * An action impementation to handle saving the permissions designated by an
+ * An action implementation to handle saving the permissions designated by an
  * admin in the PermissionsPanel
  */
 @SuppressWarnings ("serial")

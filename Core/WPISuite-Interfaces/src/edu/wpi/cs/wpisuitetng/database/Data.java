@@ -63,6 +63,8 @@ public interface Data
 	
 	/**
 	 * Deletes aTNG from the database
+	 * NOTE: This is currently broken, and will cause IllegalStateException.
+	 * This is being investigated
 	 * @param aTNG
 	 * @return the object that was deleted
 	 */

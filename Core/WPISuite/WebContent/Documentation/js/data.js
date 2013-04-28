@@ -86,13 +86,17 @@ var data = [
     				id: 52
     			}]
     		},   
+    	{label: 'Search Requirements By Name',
+    	folder: false,
+    	id: 120
+    	},
+    	{label: 'Editing Fields From Table',
+    	folder: false,
+    	id: 7
+    	},
         {label: 'Viewing Statistics',
     	folder: false,
     	id: 6
-    	},
-    	{label: 'Editing Estimates',
-    	folder: false,
-    	id: 7
     	},
     	{label: 'Sort Requirements',
     	folder: false,
