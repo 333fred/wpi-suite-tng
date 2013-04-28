@@ -17,7 +17,7 @@ import javax.swing.AbstractAction;
 
 /**
  * Action that calls
- * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.RequirementsManager.notes.SaveNoteController#savenote()}
+ * {@link edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.SaveNoteController#savenote()}
  */
 @SuppressWarnings ("serial")
 public class SaveNoteAction extends AbstractAction {

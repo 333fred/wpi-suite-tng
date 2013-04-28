@@ -18,7 +18,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Note;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
@@ -34,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.NoteVie
  * 
  * @author Zac Chupka, Maddie Burris
  */
+@SuppressWarnings ("serial")
 public class DetailNoteView extends JPanel {
 	
 	private final JScrollPane noteScrollPane;
@@ -42,9 +42,11 @@ public class DetailNoteView extends JPanel {
 	private final EventTableModel tableModel;
 	
 	private Requirement requirement;
+	@SuppressWarnings ("unused")
 	private final DetailPanel parentView;
 	private final MakeNotePanel makeNotePanel;
 	
+	@SuppressWarnings ("unused")
 	private final EventCellRenderer cellRenderer;
 	
 	/**
@@ -73,7 +75,7 @@ public class DetailNoteView extends JPanel {
 		notesTable.setShowGrid(false);
 		notesTable.setIntercellSpacing(new Dimension(0, 0));
 		notesTable.getTableHeader().setVisible(false);
-		notesTable.setEnabled(false); //Disable selection
+		notesTable.setEnabled(false); // Disable selection
 		
 		// Add the list to the scroll pane
 		noteScrollPane = new JScrollPane();
@@ -115,6 +117,9 @@ public class DetailNoteView extends JPanel {
 		tableModel.setRowData(events);
 	}
 	
+	/**
+	 * Disables the addNote button
+	 */
 	public void disableAddNote() {
 		makeNotePanel.getAddnote().setEnabled(false);
 	}
@@ -126,14 +131,27 @@ public class DetailNoteView extends JPanel {
 		makeNotePanel.setInputEnabled(false);
 	}
 	
+	/**
+	 * Enables the addNote button
+	 */
 	public void enableAddNote() {
 		makeNotePanel.getAddnote().setEnabled(true);
 	}
 	
+	/**
+	 * Gets the panel for making notes
+	 * 
+	 * @return the note panel
+	 */
 	public MakeNotePanel getNotePanel() {
 		return makeNotePanel;
 	}
 	
+	/**
+	 * Gets the current full list of notes
+	 * 
+	 * @return the list of notes
+	 */
 	public List<Note> getNotesList() {
 		final List<Note> notes = new ArrayList<Note>();
 		for (final Event e : tableModel.getRowData()) {
@@ -142,11 +160,20 @@ public class DetailNoteView extends JPanel {
 		return notes;
 	}
 	
+	/**
+	 * Scrolls the panel to the bottom
+	 */
 	public void scrollToBottom() {
 		noteScrollPane.getVerticalScrollBar().setValue(
 				noteScrollPane.getVerticalScrollBar().getMaximum());
 	}
 	
+	/**
+	 * Sets the list of notes to the given list
+	 * 
+	 * @param notes
+	 *            the notes to set
+	 */
 	public void setNotesList(final List<Note> notes) {
 		final List<Event> events = new ArrayList<Event>();
 		for (final Note note : notes) {
