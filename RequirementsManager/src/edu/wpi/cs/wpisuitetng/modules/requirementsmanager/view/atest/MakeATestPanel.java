@@ -61,6 +61,9 @@ public class MakeATestPanel extends JPanel {
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane aTestFieldPane;
 
+	/** The listner for txt fields for real time validation */
+	private MakeATestListener makeATestListener;
+
 	/**
 	 * Construct the panel, add and layout components.
 	 * 
@@ -142,6 +145,10 @@ public class MakeATestPanel extends JPanel {
 
 		labSaveError = new JLabel("");
 
+		makeATestListener = new MakeATestListener(this);
+		txtName.addKeyListener(makeATestListener);
+		txtDescription.addKeyListener(makeATestListener);
+
 		aTestStatus = new JLabel(
 				"No Acceptance Test selected. Fill name and description to create a new one.");
 		addaTestLabel = new JLabel("Acceptance Test:");
@@ -208,8 +215,13 @@ public class MakeATestPanel extends JPanel {
 
 		layout.putConstraint(SpringLayout.NORTH, butAdd, 0, SpringLayout.NORTH,
 				butCancel);
-		layout.putConstraint(SpringLayout.EAST, butAdd, -8, SpringLayout.WEST,
+		layout.putConstraint(SpringLayout.EAST, butAdd, -4, SpringLayout.WEST,
 				butCancel);
+
+		layout.putConstraint(SpringLayout.NORTH, labSaveError, 0,
+				SpringLayout.NORTH, butCancel);
+		layout.putConstraint(SpringLayout.WEST, labSaveError, 4,
+				SpringLayout.WEST, this);
 
 		// add all of the swing components to the this aTest panel
 		this.add(aTestStatus);
@@ -221,6 +233,7 @@ public class MakeATestPanel extends JPanel {
 		this.add(descaTestLabel);
 		this.add(cbxStatus);
 		this.add(aTestFieldPane);
+		this.add(labSaveError);
 
 		// default the add button and complete checkbox
 		// to un-enabled
@@ -293,6 +306,35 @@ public class MakeATestPanel extends JPanel {
 		}
 	}
 
+	/** Validates the input */
+
+	public boolean validateInput() {
+
+		boolean error = false;
+		String errorText = "";
+
+		if (txtName.getText().trim().isEmpty()) {
+			error = true;
+			errorText = "Name must not be blank";
+		}
+		else if (txtDescription.getText().trim().isEmpty()) {
+			error = true;
+			errorText = "Description must not be blank";
+		}
+
+		if (error) {
+			butAdd.setEnabled(false);
+			labSaveError.setText(errorText);
+			return false;
+		}
+		else {
+			butAdd.setEnabled(true);
+			labSaveError.setText("");
+			return true;
+		}
+
+	}
+
 	/**
 	 * Called when the cancel button is pressed
 	 * 
@@ -301,6 +343,7 @@ public class MakeATestPanel extends JPanel {
 	public void onCancel() {
 		txtName.setText("");
 		txtDescription.setText("");
+		butAdd.setEnabled(false);
 	}
 
 }
