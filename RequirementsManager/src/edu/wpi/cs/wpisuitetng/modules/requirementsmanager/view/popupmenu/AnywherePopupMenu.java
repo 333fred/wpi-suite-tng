@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  * @author Mitchell
  * 
  */
-
+@SuppressWarnings ("serial")
 public class AnywherePopupMenu extends JPopupMenu implements ActionListener {
 	
 	/** The Tabcontroller used to open tabs */

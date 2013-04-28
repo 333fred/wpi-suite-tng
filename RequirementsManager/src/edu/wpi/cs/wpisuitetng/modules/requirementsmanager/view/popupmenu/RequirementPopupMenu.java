@@ -25,12 +25,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 
 /**
  * Class for creating a right click menu in IterationTreeView, when a user right
- * clicks on a requirement node
+ * clicks on a requirement node. This displays options for edit requirement
  * 
  * @author Mitchell
  * 
  */
-
+@SuppressWarnings ("serial")
 public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
 	
 	/** Menu options for the PopupMenu */
@@ -42,6 +42,15 @@ public class RequirementPopupMenu extends JPopupMenu implements ActionListener {
 	/** List of the selected requirements to possibly open */
 	private final List<Requirement> selectedRequirements;
 	
+	/**
+	 * Creates a new RequirementPopupMenu with the given controller and selected
+	 * requirements
+	 * 
+	 * @param tabController
+	 *            the controller
+	 * @param selectedRequirements
+	 *            all of the requirements to display options for
+	 */
 	public RequirementPopupMenu(final MainTabController tabController,
 			final List<Requirement> selectedRequirements) {
 		this.tabController = tabController;

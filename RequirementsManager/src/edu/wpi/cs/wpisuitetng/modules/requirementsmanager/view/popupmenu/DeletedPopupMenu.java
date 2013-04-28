@@ -16,15 +16,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
 /**
- * @author Alex C
+ * Popup menu for the deleted iteration. It displays options for viewing only
+ * deletec requirements in the requirements table view
  * 
+ * @author Alex C
  */
+@SuppressWarnings ("serial")
 public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
 	
 	private final JMenuItem menuFilterDeleted;
-	
-	/** The tab controller used to create new tabs */
-	private final MainTabController tabController;
 	
 	/**
 	 * Creates a DeletedPopupMenu with the given tab controller
@@ -33,8 +33,6 @@ public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
 	 *            The tab controller to open tabs in
 	 */
 	public DeletedPopupMenu(final MainTabController tabController) {
-		this.tabController = tabController;
-		
 		menuFilterDeleted = new JMenuItem("View Table By Deleted");
 		
 		menuFilterDeleted.addActionListener(this);

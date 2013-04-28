@@ -26,12 +26,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
 
 /**
  * Class for creating a right click menu in IterationTreeView, when a user right
- * clicks an iteration node
+ * clicks an iteration node. Contains options for editing iterations and viewing
+ * requirements in that iteration
  * 
  * @author Mitchell
  * 
  */
-
+@SuppressWarnings ("serial")
 public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 	
 	/** Menu options for the PopupMenu */
@@ -111,8 +112,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			final RequirementTableView tableView = RequirementTableView
 					.getInstance();
 			tableView.IterationFilter(iter.getName());
-			tableView
-					.displayFilterInformation("Viewing by " + iter.getName());
+			tableView.displayFilterInformation("Viewing by " + iter.getName());
 		}
 	}
 }

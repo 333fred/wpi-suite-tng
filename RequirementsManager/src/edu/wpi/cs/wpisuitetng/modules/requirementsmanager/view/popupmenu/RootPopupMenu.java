@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  * @author Mitchell
  * 
  */
-
+@SuppressWarnings ("serial")
 public class RootPopupMenu extends JPopupMenu implements ActionListener {
 	
 	/** Menu options for the PopupMenu */

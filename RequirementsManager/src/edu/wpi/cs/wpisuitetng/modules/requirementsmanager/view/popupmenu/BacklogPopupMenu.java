@@ -25,6 +25,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.PermissionModel
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableView;
 
+/**
+ * This is the popup menu for backlog, which contains options to create a new
+ * requirement and view only requirements in the backlog in the table view
+ */
+@SuppressWarnings ("serial")
 public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 	
 	/** Menu options for the PopupMenu */
