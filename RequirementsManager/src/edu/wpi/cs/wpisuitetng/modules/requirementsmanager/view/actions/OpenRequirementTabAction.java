@@ -54,7 +54,7 @@ public class OpenRequirementTabAction implements
 	
 	@Override
 	public void errorReceivingData(final String errorMessage) {
-		// we couldnt fetch the requirement, open old requirement
+		// we couldn't fetch the requirement, open old requirement
 		openRequirementTab(oldRequirement);
 		
 		// print the error message
@@ -84,7 +84,7 @@ public class OpenRequirementTabAction implements
 	
 	@Override
 	public void receivedData(final Requirement requirement) {
-		// we received teh new requirement open the tab
+		// we received the new requirement open the tab
 		openRequirementTab(requirement);
 		
 	}
