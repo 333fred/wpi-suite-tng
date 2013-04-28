@@ -35,7 +35,7 @@ public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
 	public DeletedPopupMenu(final MainTabController tabController) {
 		this.tabController = tabController;
 		
-		menuFilterDeleted = new JMenuItem("Filter By Deleted");
+		menuFilterDeleted = new JMenuItem("View Table By Deleted");
 		
 		menuFilterDeleted.addActionListener(this);
 		
@@ -56,7 +56,7 @@ public class DeletedPopupMenu extends JPopupMenu implements ActionListener {
 				final RequirementTableView tableView = RequirementTableView
 						.getInstance();
 				tableView.IterationFilter(iter.getName());
-				tableView.displayFilterInformation("Filtering by "
+				tableView.displayFilterInformation("Viewing by "
 						+ iter.getName());
 			} catch (final IterationNotFoundException e1) {
 				e1.printStackTrace();

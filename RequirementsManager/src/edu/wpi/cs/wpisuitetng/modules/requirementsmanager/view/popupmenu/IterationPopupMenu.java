@@ -67,7 +67,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			} else {
 				menuEditIteration = new JMenuItem("View Iteration");
 			}
-			menuFilterIteration = new JMenuItem("Filter By Iteration");
+			menuFilterIteration = new JMenuItem("View Table By Iteration");
 			
 			menuEditIteration.addActionListener(this);
 			menuFilterIteration.addActionListener(this);
@@ -83,7 +83,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 			} else {
 				menuEditIteration = new JMenuItem("View Iterations");
 			}
-			menuFilterIteration = new JMenuItem("Filter By Iteration");
+			menuFilterIteration = new JMenuItem("View Table By Iteration");
 			menuEditIteration.addActionListener(this);
 			menuFilterIteration.addActionListener(this);
 			add(menuEditIteration);
@@ -112,7 +112,7 @@ public class IterationPopupMenu extends JPopupMenu implements ActionListener {
 					.getInstance();
 			tableView.IterationFilter(iter.getName());
 			tableView
-					.displayFilterInformation("Filtering by " + iter.getName());
+					.displayFilterInformation("Viewing by " + iter.getName());
 		}
 	}
 }

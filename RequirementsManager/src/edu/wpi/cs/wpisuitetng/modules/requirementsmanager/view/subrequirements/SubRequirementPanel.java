@@ -124,7 +124,7 @@ public class SubRequirementPanel extends JPanel {
 		
 		addReq = new JButton("Add"); // Add the buttons and labels
 		
-		removeChild = new JButton("Remove Children");
+		removeChild = new JButton("Remove Child");
 		
 		removeParent = new JButton("Remove Parent");
 		parentLabel = new JLabel("Parent:");
@@ -186,6 +186,8 @@ public class SubRequirementPanel extends JPanel {
 				SpringLayout.SOUTH, topScrollPane);
 		layout.putConstraint(SpringLayout.WEST, removeChild, 16,
 				SpringLayout.WEST, viewPanel);
+		layout.putConstraint(SpringLayout.EAST, removeChild, 80,
+				SpringLayout.EAST, parentLabel);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeParent, 5,
 				SpringLayout.SOUTH, topScrollPane);
@@ -221,9 +223,8 @@ public class SubRequirementPanel extends JPanel {
 		subreqPanelLayout.putConstraint(SpringLayout.WEST, addReq, 16,
 				SpringLayout.WEST, editSubReqPanel);
 		
-		subreqPanelLayout.putConstraint(SpringLayout.EAST, addReq, 16,
-		
-		SpringLayout.EAST, removeChild);
+		subreqPanelLayout.putConstraint(SpringLayout.EAST, addReq, 80+16,
+				SpringLayout.EAST, parentLabel);
 		
 		// Set the layout of this panel and the lower panel
 		setLayout(new BorderLayout());

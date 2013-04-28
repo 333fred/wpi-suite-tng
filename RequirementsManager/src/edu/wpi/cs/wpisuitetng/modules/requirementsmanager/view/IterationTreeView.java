@@ -59,7 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPop
 
 @SuppressWarnings("serial")
 public class IterationTreeView extends JPanel implements IDatabaseListener,
-		IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 
 	protected static final int ROOT_LEVEL = 0;
 	protected static final int ITERATION_LEVEL = 1;
@@ -156,26 +156,24 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 
 			@Override
 			public void mousePressed(final MouseEvent e) {
+				final int selRow = tree.getRowForLocation(e.getX(),
+						e.getY());
+				final TreePath selPath = tree.getPathForLocation(e.getX(),
+						e.getY());
+
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					final int selRow = tree.getRowForLocation(e.getX(),
-							e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(),
-							e.getY());
+					//this was a left click
 					if (selRow != -1) {
 						if (e.getClickCount() == 2) {
+							//it was a double click
 							onDoubleClick(selRow, selPath);
 						}
 					}
 				} else if (e.getButton() == MouseEvent.BUTTON3) {
 					// this was a right click
-
-					final int selRow = tree.getRowForLocation(e.getX(),
-							e.getY());
-					final TreePath selPath = tree.getPathForLocation(e.getX(),
-							e.getY());
 					onRightClick(e.getX(), e.getY(), selRow, selPath);
 				}
-			}
+			}	
 		};
 		tree.addMouseListener(ml);
 	}
@@ -184,7 +182,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 	public void errorReceivingData(
 			final String RetrieveAllRequirementsRequestObserver) {
 		System.out
-				.println("IterationTeamView: Error receiving requirements from server");
+		.println("IterationTeamView: Error receiving requirements from server");
 
 	}
 
@@ -247,7 +245,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			if (iterationName.equals("Backlog")
 					|| iterationName.equals("Deleted") || (toAdd == null)) {
 				continue; // either iteration was not found, or user tried to
-							// open backlog
+				// open backlog
 			}
 			selectedIterations.add(toAdd);
 		}
@@ -273,7 +271,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			final Requirement toAdd = (Requirement) ((DefaultMutableTreeNode) (tree
 					.getSelectionPaths()[0].getLastPathComponent()))
 					.getUserObject();
-	
+
 			selectedRequirements.add(toAdd);
 		}
 		return selectedRequirements;
@@ -312,6 +310,19 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			// get the requirement from the server
 			controller.get(requirement.getrUID(), observer);
 		}
+		this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+
+		/*
+		// create the controller for fetching the new requirement
+		final RequirementsController controller = new RequirementsController();
+		final RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
+				new OpenRequirementTabAction(tabController, requirement));
+
+		// get the requirement from the server
+		controller.get(requirement.getrUID(), observer);
+		//}
+		 *
+		 */
 	}
 
 	/**
@@ -566,7 +577,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					iterationNode.add(requirementNode);
 				} catch (final RequirementNotFoundException e) {
 					System.out
-							.println("Requirement Not Found: IterationTreeView:369");
+					.println("Requirement Not Found: IterationTreeView:369");
 				}
 			}
 			top.add(iterationNode);
@@ -579,11 +590,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		tree.setCellRenderer(renderer);
 		IterationTreeView.restoreExpanstionState(tree, 0, eState);
 	}
-	
+
 	/** Will disable all of the fields in this View
 	 * 
 	 */
-	
+
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
