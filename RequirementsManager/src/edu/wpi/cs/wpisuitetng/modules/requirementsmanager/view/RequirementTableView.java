@@ -220,7 +220,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 		// set clear tree filter's button action
 		btnClearTreeFilter.setAction(ClearFilterAction);
-		btnClearTreeFilter.setText("Clear Tree Filter");
+		btnClearTreeFilter.setText("Restore Default View");
 		// button is disabled until a tree filter is applied
 		btnClearTreeFilter.setEnabled(false);
 
