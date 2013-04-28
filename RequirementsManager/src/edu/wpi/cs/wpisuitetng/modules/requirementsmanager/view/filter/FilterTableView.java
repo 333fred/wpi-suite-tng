@@ -160,6 +160,7 @@ public class FilterTableView extends JPanel implements
 		return null;
 	}
 	
+	
 	@Override
 	public void receivedData(final Filter[] filters) {
 		updateFilters();
@@ -208,7 +209,7 @@ public class FilterTableView extends JPanel implements
 	private void updateButtonStatus() {
 		if (tableView.getSelectedRowCount() == 0) {
 			butEnable.setEnabled(false);
-			butDelete.setEnabled(true);
+			butDelete.setEnabled(false);
 			filterView.cancelEdit();
 		} else if (tableView.getSelectedRowCount() == 1) {
 			butEnable.setEnabled(true);

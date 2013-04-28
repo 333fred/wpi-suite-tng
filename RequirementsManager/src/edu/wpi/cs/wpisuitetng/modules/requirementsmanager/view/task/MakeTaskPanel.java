@@ -76,6 +76,9 @@ public class MakeTaskPanel extends JPanel {
 	/** Make task listener used for listening to hte text boxes for changes */
 	private final MakeTaskListener makeTaskListener;
 
+	/** The detail task view */
+	private DetailTaskView taskView;
+
 	/** id of the task being edited, -2 if none */
 	private int taskId;
 
@@ -94,8 +97,9 @@ public class MakeTaskPanel extends JPanel {
 	 *            the view of the requirement in question
 	 */
 	public MakeTaskPanel(final Requirement requirement,
-			final DetailPanel parentView) {
+			final DetailPanel parentView, DetailTaskView taskView) {
 		this.requirement = requirement;
+		this.taskView = taskView;
 
 		// setup the task name field
 		txtTaskName = new JTextArea(1, 40);
@@ -152,7 +156,7 @@ public class MakeTaskPanel extends JPanel {
 			}
 		});
 
-		labEstimate = new JLabel("Estimate:");
+		labEstimate = new JLabel("*Estimate:");
 
 		txtTaskEstimate = new JTextField(9);
 		txtTaskEstimate.setBorder((new JTextField()).getBorder());
@@ -169,8 +173,8 @@ public class MakeTaskPanel extends JPanel {
 		labTaskStatus = new JLabel(
 				"No tasks selected. Fill name and description to create a new one.");
 		labAddTask = new JLabel("Task:");
-		labNnameTask = new JLabel("Name:");
-		labDescTask = new JLabel("Description:");
+		labNnameTask = new JLabel("*Name:");
+		labDescTask = new JLabel("*Description:");
 		labUserAssigned = new JLabel("User:");
 		cbxTaskComplete = new JCheckBox("Completed");
 		cbxUserAssigned = new JComboBox();
@@ -448,6 +452,7 @@ public class MakeTaskPanel extends JPanel {
 		labSaveError.setText("");
 		butSave.setEnabled(false);
 		taskId = -2;
+		taskView.clearSelection();
 	}
 
 }

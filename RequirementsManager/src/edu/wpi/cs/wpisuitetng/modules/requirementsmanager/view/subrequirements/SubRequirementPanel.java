@@ -124,7 +124,7 @@ public class SubRequirementPanel extends JPanel {
 		
 		addReq = new JButton("Add"); // Add the buttons and labels
 		
-		removeChild = new JButton("Remove Children");
+		removeChild = new JButton("Remove Child");
 		
 		removeParent = new JButton("Remove Parent");
 		parentLabel = new JLabel("Parent:");

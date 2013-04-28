@@ -11,8 +11,6 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -293,7 +291,7 @@ public class LoggerTest {
 		}
 		RequirementChangeset rc = new RequirementChangeset();
 		rc.setChanges(map);
-		assertNotNull(rc.getContent());
+		//assertNotNull(rc.getContent());
 	}
 
 	/**

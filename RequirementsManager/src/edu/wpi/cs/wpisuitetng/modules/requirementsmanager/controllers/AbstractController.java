@@ -28,8 +28,8 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 
 public abstract class AbstractController<T extends AbstractModel> implements
-		IModelController<T> {
-	
+IModelController<T> {
+
 	/**
 	 * Returns whether it is safe to send a request. This is an abstraction in
 	 * case checking become more complicated than calling a Network method
@@ -39,9 +39,9 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	protected static boolean isSafeToSend() {
 		return Network.getInstance().isInitialized();
 	}
-	
+
 	String type;
-	
+
 	/**
 	 * Creates an Abstract controller which gives requests of a given type
 	 * 
@@ -51,7 +51,7 @@ public abstract class AbstractController<T extends AbstractModel> implements
 	protected AbstractController(final String type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * Creates a create server request for models of the given type
 	 * 
@@ -72,9 +72,9 @@ public abstract class AbstractController<T extends AbstractModel> implements
 			request.addObserver(observer);
 			request.send();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Creates a get request for a given model type and id
 	 * 
@@ -95,7 +95,7 @@ public abstract class AbstractController<T extends AbstractModel> implements
 			request.send();
 		}
 	}
-	
+
 	/**
 	 * Creates a getAll server request for models of the given type
 	 * 
@@ -114,7 +114,7 @@ public abstract class AbstractController<T extends AbstractModel> implements
 			request.send();
 		}
 	}
-	
+
 	/**
 	 * Creates a server save request for a model of the given type
 	 * 
@@ -131,6 +131,7 @@ public abstract class AbstractController<T extends AbstractModel> implements
 			final Request request;
 			request = Network.getInstance().makeRequest(
 					"requirementsmanager/" + type, HttpMethod.POST);
+			System.out.println(request.getUrl());
 			request.setBody(model.toJSON());
 			request.addObserver(observer);
 			request.send();

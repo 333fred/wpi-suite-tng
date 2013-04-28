@@ -8,7 +8,7 @@
  *
  * Contributors:
  * 	@author Fredric
- *    
+ * 
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -149,6 +149,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 	 */
 	@Test
 	public void saveGood() {
+		setupNetwork();
 		setupNetworkConfig();
 		controller.save(model, observer);
 		final MockRequest request = network.getLastRequestMade();

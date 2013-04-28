@@ -116,20 +116,7 @@ public class EditRequirementAction extends AbstractAction {
 			}
 			
 			try {
-				
-				final IterationController iterationController = new IterationController();
-				final UpdateIterationRequestObserver iterationObserver = new UpdateIterationRequestObserver(
-						new DefaultSaveNotifier());
-				
-				try {
-					final Iteration anIteration = IterationDatabase
-							.getInstance().get(requirement.getIteration());
-					anIteration.removeRequirement(requirement.getrUID());
-					iterationController.save(anIteration, iterationObserver);
-				} catch (final IterationNotFoundException e1) {
-					e1.printStackTrace();
-				}
-				
+			
 				String newIteration;
 				if (toBacklog) {
 					newIteration = "Backlog";
@@ -142,10 +129,6 @@ public class EditRequirementAction extends AbstractAction {
 				
 				requirement.setIteration(IterationDatabase.getInstance()
 						.getIteration(newIteration).getId());
-				final Iteration anIteration = IterationDatabase.getInstance()
-						.getIteration(newIteration);
-				anIteration.addRequirement(requirement.getrUID());
-				iterationController.save(anIteration, iterationObserver);
 				
 				try {
 					requirement.setPriority(Priority.valueOf(parentView
