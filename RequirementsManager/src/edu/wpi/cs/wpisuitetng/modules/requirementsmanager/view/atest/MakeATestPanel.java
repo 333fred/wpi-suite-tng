@@ -64,6 +64,9 @@ public class MakeATestPanel extends JPanel {
 	/** The listner for txt fields for real time validation */
 	private MakeATestListener makeATestListener;
 
+	/** The detail a test view */
+	private DetailATestView aTestView;
+
 	/**
 	 * Construct the panel, add and layout components.
 	 * 
@@ -72,7 +75,8 @@ public class MakeATestPanel extends JPanel {
 	 *            saved
 	 */
 	@SuppressWarnings("unchecked")
-	public MakeATestPanel(final Requirement model) {
+	public MakeATestPanel(final Requirement model, DetailATestView aTestView) {
+		this.aTestView = aTestView;
 
 		// setup the aTest name field
 		txtName = new JTextArea(1, 40);
@@ -344,6 +348,7 @@ public class MakeATestPanel extends JPanel {
 		txtName.setText("");
 		txtDescription.setText("");
 		butAdd.setEnabled(false);
+		aTestView.clearSelection();
 	}
 
 }

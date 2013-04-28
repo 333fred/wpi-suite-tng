@@ -63,7 +63,7 @@ public class DetailTaskView extends JPanel {
 		this.parentView = parentView;
 		setLayout(new BorderLayout());
 		// Set up the task panel
-		makeTaskPanel = new MakeTaskPanel(requirement, parentView);
+		makeTaskPanel = new MakeTaskPanel(requirement, parentView,this);
 
 		// Create the task list TODO: CHANGE GETSELECTEDVALUES TO
 		// GETSELECTEDVALUES
@@ -327,6 +327,14 @@ public class DetailTaskView extends JPanel {
 				}
 			}
 		}
+	}
+
+	/** Clears the selected tasks
+	 * 
+	 */
+
+	public void clearSelection() {
+		taskTable.getSelectionModel().clearSelection();
 	}
 
 }

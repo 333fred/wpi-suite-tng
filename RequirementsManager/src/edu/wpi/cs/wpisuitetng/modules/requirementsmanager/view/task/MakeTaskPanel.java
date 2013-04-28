@@ -76,6 +76,9 @@ public class MakeTaskPanel extends JPanel {
 	/** Make task listener used for listening to hte text boxes for changes */
 	private final MakeTaskListener makeTaskListener;
 
+	/** The detail task view */
+	private DetailTaskView taskView;
+
 	/** id of the task being edited, -2 if none */
 	private int taskId;
 
@@ -94,8 +97,9 @@ public class MakeTaskPanel extends JPanel {
 	 *            the view of the requirement in question
 	 */
 	public MakeTaskPanel(final Requirement requirement,
-			final DetailPanel parentView) {
+			final DetailPanel parentView, DetailTaskView taskView) {
 		this.requirement = requirement;
+		this.taskView = taskView;
 
 		// setup the task name field
 		txtTaskName = new JTextArea(1, 40);
@@ -448,6 +452,7 @@ public class MakeTaskPanel extends JPanel {
 		labSaveError.setText("");
 		butSave.setEnabled(false);
 		taskId = -2;
+		taskView.clearSelection();
 	}
 
 }
