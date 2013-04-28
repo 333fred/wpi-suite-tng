@@ -80,7 +80,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	 * @return True if the filter is a duplicate. False otherwise
 	 */
 	public static boolean isFilterDuplicate(final Filter toCheck) {
-		System.out.println("isFilterDuplicate toCheck: " + toCheck);
 		final List<Filter> filters = FilterDatabase.getInstance().getAll();
 		for (final Filter filter : filters) {
 			if (filter.equalToWithoutId(toCheck)) {
@@ -360,8 +359,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			updateEqualsField();
 			updateSave();
 		} else if (source.equals(cboxOperation)) {
-			// System.out.println("Operation performed on cboxOperation Items?: "
-			// + cboxOperation.getItemCount());
 			if ((cboxOperation.getItemCount() != 0)) {
 				updateEqualsField();
 				updateSave();
@@ -403,7 +400,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	
 	public void editFilter(final Filter toEdit) {
 		filter = toEdit;
-		System.out.println("EditFilter : " + filter.getValue().toString());
 		updateMode(Mode.EDIT);
 	}
 	
@@ -612,22 +608,12 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	 * Populates the filter view fields from a pre-existing filter
 	 */
 	public void populateFieldsFromFilter() {
-		System.out.println("Populate Filter Fields1: "
-				+ filter.getValue().toString());
 		cboxField.setSelectedItem(filter.getField().toString());
-		System.out.println("Populate Filter Fields2: "
-				+ filter.getValue().toString());
 		cboxOperation.setSelectedItem(filter.getOperation().toString());
-		
-		System.out.println("Populate Filter Fields3: "
-				+ filter.getValue().toString());
 		
 		switch (filter.getField()) {
 		// special iteration case. woo woo
 			case ITERATION:
-				
-				System.out.println("Iteration : "
-						+ filter.getValue().toString());
 				switch (filter.getOperation()) {
 					case EQUAL:
 					case NOT_EQUAL:
@@ -668,8 +654,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			case RELEASE_NUMBER:
 			case EFFORT:
 			case ESTIMATE:
-				System.out
-						.println("Estimate : " + filter.getValue().toString());
 				txtEqualTo.setText(filter.getValue().toString());
 				break;
 			
@@ -677,7 +661,6 @@ public class CreateFilterView extends JPanel implements ActionListener,
 			case PRIORITY:
 			case STATUS:
 			case TYPE:
-				System.out.println("Type : " + filter.getValue().toString());
 				cboxEqualTo.setSelectedItem(filter.getValue().toString());
 				break;
 			default:
@@ -839,17 +822,11 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	
 	/** Updates the status of the save button */
 	
-	public void updateSave() {
-		
-		System.out.println("Updating Save");
-		
+	public void updateSave() {		
 		if (cboxOperation.getItemCount() == 0) {
 			labSaveError.setText("");
 			return;
 		}
-		
-		System.out.println("Updating Save 2");
-		
 		boolean error = false;
 		String errorString = "";
 		final FilterField field = FilterField.getFromString((String) cboxField

@@ -12,10 +12,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.AssigneePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailLogView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest.DetailATestView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
@@ -25,16 +26,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task.DetailTaskVi
  * Class for displaying the note view and the log view on the right side of the
  * Detail View
  */
-@SuppressWarnings ("serial")
+@SuppressWarnings("serial")
 public class DetailEventPane extends JTabbedPane {
-	
-	JPanel notesListPane;
-	JPanel logListPane;
-	JPanel userListPane;
-	JPanel taskListPane;
-	JPanel atestListPane;
-	JPanel subreqListPane;
-	
+
+	private DetailNoteView notesListPane;
+	private DetailLogView logListPane;
+	private AssigneePanel userListPane;
+	private DetailTaskView taskListPane;
+	private DetailATestView atestListPane;
+	private SubRequirementPanel subreqListPane;
+
 	/**
 	 * Creates a new DetailEvent pane, that displays the given NotesListPane,
 	 * and LogListPane
@@ -52,17 +53,18 @@ public class DetailEventPane extends JTabbedPane {
 	 * @param subreqListPane
 	 *            the ListPane that all all the subrequirement
 	 */
-	public DetailEventPane(final JPanel notesListPane,
-			final JPanel logListPane, final JPanel userListPane,
-			final JPanel taskListPane, final JPanel atestListPane,
-			final JPanel subreqListPane) {
+	public DetailEventPane(final DetailNoteView notesListPane,
+			final DetailLogView logListPane, final AssigneePanel userListPane,
+			final DetailTaskView taskListPane,
+			final DetailATestView atestListPane,
+			final SubRequirementPanel subreqListPane) {
 		this.notesListPane = notesListPane;
 		this.logListPane = logListPane;
 		this.userListPane = userListPane;
 		this.taskListPane = taskListPane;
 		this.atestListPane = atestListPane;
 		this.subreqListPane = subreqListPane;
-		
+
 		// add the given tabs to the pane
 		addTab("Notes", new ImageIcon(), notesListPane,
 				"The notes for this requirement");
@@ -76,32 +78,36 @@ public class DetailEventPane extends JTabbedPane {
 				"The acceptance tests assigned to this requirement");
 		addTab("Subrequirements", new ImageIcon(), subreqListPane,
 				"The subrequirements for this requirement");
-		
+
 	}
-	
+
 	/**
 	 * Disables the subrequirement's fields
 	 */
 	public void disableSubReqs() {
-		((SubRequirementPanel) subreqListPane).disableUserButtons();
+		subreqListPane.disableUserButtons();
 	}
-	
+
 	/**
 	 * Disables the user buttons
 	 */
 	public void disableUserButtons() {
-		((AssigneePanel) userListPane).disableUserButtons();
-		((DetailNoteView) notesListPane).disableUserButtons();
-		((SubRequirementPanel) subreqListPane).disableUserButtons();
-		((DetailATestView) atestListPane).disableUserButtons();
-		((DetailTaskView) taskListPane).disableUserButtons();
+		userListPane.disableUserButtons();
+		notesListPane.disableUserButtons();
+		subreqListPane.disableUserButtons();
+		atestListPane.disableUserButtons();
+		taskListPane.disableUserButtons();
 	}
-	
+
 	/**
 	 * Disables users and subrequirements
 	 */
 	public void disableUsersAndSubReqs() {
-		((AssigneePanel) userListPane).disableUserButtons();
-		((SubRequirementPanel) subreqListPane).disableUserButtons();
+		userListPane.disableUserButtons();
+		subreqListPane.disableUserButtons();
+	}
+
+	public void updateRequirement(Requirement newRequirement) {
+		notesListPane.updateRequirement(newRequirement);
 	}
 }
