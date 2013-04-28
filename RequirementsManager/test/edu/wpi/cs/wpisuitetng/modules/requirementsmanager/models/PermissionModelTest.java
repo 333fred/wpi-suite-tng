@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -25,18 +26,19 @@ public class PermissionModelTest {
 	
 	PermissionModel model;
 	User u;
+	static boolean run = false;
 	
 	@Before
 	public void setup() {
 		u = new User("u1", "u1", "p1", 1);
 		model = new PermissionModel();
-	}
-	
-	@Test
-	public void testGetPermissionModel() {
-		assertEquals(PermissionModel.getInstance().getUser(), null);
-		assertEquals(PermissionModel.getPermissionStatic(), UserPermissionLevel.OBSERVE);
-		assertEquals(PermissionModel.getInstance().getId(), -1);
+		if (!run) {
+			run = true;
+			// This needs to run first, as it is a singleton
+			assertEquals(PermissionModel.getInstance().getUser(), null);
+			assertEquals(PermissionModel.getPermissionStatic(), UserPermissionLevel.OBSERVE);
+			assertEquals(PermissionModel.getInstance().getId(), -1);
+		}
 	}
 	
 	@Test

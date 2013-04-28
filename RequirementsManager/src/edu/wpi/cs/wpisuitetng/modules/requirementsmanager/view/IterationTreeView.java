@@ -59,7 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPop
 
 @SuppressWarnings("serial")
 public class IterationTreeView extends JPanel implements IDatabaseListener,
-		IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 
 	protected static final int ROOT_LEVEL = 0;
 	protected static final int ITERATION_LEVEL = 1;
@@ -184,7 +184,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 	public void errorReceivingData(
 			final String RetrieveAllRequirementsRequestObserver) {
 		System.out
-				.println("IterationTeamView: Error receiving requirements from server");
+		.println("IterationTeamView: Error receiving requirements from server");
 
 	}
 
@@ -247,7 +247,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			if (iterationName.equals("Backlog")
 					|| iterationName.equals("Deleted") || (toAdd == null)) {
 				continue; // either iteration was not found, or user tried to
-							// open backlog
+				// open backlog
 			}
 			selectedIterations.add(toAdd);
 		}
@@ -273,7 +273,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 			final Requirement toAdd = (Requirement) ((DefaultMutableTreeNode) (tree
 					.getSelectionPaths()[0].getLastPathComponent()))
 					.getUserObject();
-	
+
 			selectedRequirements.add(toAdd);
 		}
 		return selectedRequirements;
@@ -291,27 +291,14 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 						((DefaultMutableTreeNode) selPath
 								.getLastPathComponent()).toString());
 
-		// Check to make sure the requirement is not already being
-		// displayed. This is assuming that the list view is displayed in
-		// the left most tab, index 0
-		for (int i = 0; i < tabController.getTabView().getTabCount(); i++) {
-			if (tabController.getTabView().getComponentAt(i) instanceof DetailPanel) {
-				if (((((DetailPanel) tabController.getTabView().getComponentAt(
-						i))).getModel().getrUID()) == (requirement.getrUID())) {
-					tabController.switchToTab(i);
-					requirementIsOpen = true;
-				}
-			}
-		}
-		if (!requirementIsOpen) {
-			// create the controller for fetching the new requirement
-			final RequirementsController controller = new RequirementsController();
-			final RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
-					new OpenRequirementTabAction(tabController, requirement));
+		// create the controller for fetching the new requirement
+		final RequirementsController controller = new RequirementsController();
+		final RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
+				new OpenRequirementTabAction(tabController, requirement));
 
-			// get the requirement from the server
-			controller.get(requirement.getrUID(), observer);
-		}
+		// get the requirement from the server
+		controller.get(requirement.getrUID(), observer);
+		//}
 	}
 
 	/**
@@ -566,7 +553,7 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 					iterationNode.add(requirementNode);
 				} catch (final RequirementNotFoundException e) {
 					System.out
-							.println("Requirement Not Found: IterationTreeView:369");
+					.println("Requirement Not Found: IterationTreeView:369");
 				}
 			}
 			top.add(iterationNode);
@@ -579,11 +566,11 @@ public class IterationTreeView extends JPanel implements IDatabaseListener,
 		tree.setCellRenderer(renderer);
 		IterationTreeView.restoreExpanstionState(tree, 0, eState);
 	}
-	
+
 	/** Will disable all of the fields in this View
 	 * 
 	 */
-	
+
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
