@@ -215,6 +215,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				ApplyFilters(sorter);	
 				textTreeFilterInfo.setText("");
 				btnClearTreeFilter.setEnabled(false);
+				if (getTable().getRowCount() == 0) {
+					textFilterInfo.setText("No Requirements Found");
+					btnEdit.setEnabled(false);
+				}
+				else {
+					btnEdit.setEnabled(true);
+				}
 			}
 		};
 
@@ -425,7 +432,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			btnEdit.setText("Discard Changes");
 			btnSave.setEnabled(true);
 		} else {
-			btnEdit.setText("Enable Editing");
+			btnEdit.setText("Enable Editing");if(rowData.size() == 0) {
+				btnEdit.setEnabled(false);
+			}
 			btnSave.setEnabled(false);
 		}
 	}
@@ -670,6 +679,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void paint(final Graphics g) {
+		if (getTable().getRowCount() == 0) {
+			textFilterInfo.setText("No Requirements Found");
+			btnEdit.setEnabled(false);
+		}
+		else {
+			btnEdit.setEnabled(true);
+		}
 		// call super so there is no change to functionality
 		super.paint(g);
 		// refresh the requirements, the first time this is called
@@ -753,6 +769,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		ApplyFilters(sorter);
 		if (getTable().getRowCount() == 0) {
 			textFilterInfo.setText("No Requirements Found");
+			btnEdit.setEnabled(false);
+		}
+		else {
+			btnEdit.setEnabled(true);
 		}
 	}
 
@@ -788,9 +808,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		}
 
 		// check if we can edit based upon current user permissions
-		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
-			btnEdit.setEnabled(true);
-		} else {
+		if (!(PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN)) {
 			btnEdit.setEnabled(false);
 		}
 
@@ -799,7 +817,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		ToolbarView.getInstance().refreshPermissions();
 		tabController.refreshFilterView();
 		tabController.refreshSubReqView();
-		changeButtonStatus();
 	}
 
 	/**
@@ -824,9 +841,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		updateListView();
 
 		// check if we can edit based upon current user permissions
-		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
-			btnEdit.setEnabled(true);
-		} else {
+		if (!(PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN)) {
 			btnEdit.setEnabled(false);
 		}
 	}
