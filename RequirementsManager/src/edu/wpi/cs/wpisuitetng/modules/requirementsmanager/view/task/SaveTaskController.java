@@ -63,6 +63,7 @@ public class SaveTaskController {
 		final String taskText = view.getTaskField().getText();
 		final String taskName = view.getTaskName().getText();
 		int taskEstimate;
+		boolean allTasksComplete = true;
 		
 		if (!view.getEstimate().getText().equals("")) {
 			taskEstimate = Integer.parseInt(view.getEstimate().getText());
@@ -170,8 +171,14 @@ public class SaveTaskController {
 		
 		for (final Task task : selectedTasks) {
 			if (!task.isCompleted()) {
+				allTasksComplete = false;
 				parentView.getComboBoxStatus().removeItem("Complete");
 			}
+		}
+		
+		if(allTasksComplete){
+			parentView.getComboBoxStatus().removeItem("Complete");
+			parentView.getComboBoxStatus().addItem("Complete");
 		}
 		
 		taskTable.clearSelection();
