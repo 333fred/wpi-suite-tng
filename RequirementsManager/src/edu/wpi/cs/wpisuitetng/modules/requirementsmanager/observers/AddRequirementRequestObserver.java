@@ -90,15 +90,7 @@ public class AddRequirementRequestObserver implements RequestObserver {
 			// make sure the requirement isn't null
 			if (requirement != null) {
 				Iteration anIteration;
-				try {
-					anIteration = IterationDatabase.getInstance().get(-1);
-					anIteration.addRequirement(requirement.getrUID());
-					final UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(
-							new DefaultSaveNotifier());
-					iterationController.save(anIteration, observer);
-				} catch (final IterationNotFoundException e1) {
-					e1.printStackTrace();
-				}
+
 			}
 		}
 		// notify the controller

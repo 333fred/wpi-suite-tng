@@ -106,26 +106,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 					reqToChange.setName(newName);
 					reqToChange.setEffort(newEffort);
 					reqToChange.setReleaseNum(newRelease);
-					
-
-//					try {
-//						anIteration = IterationDatabase.getInstance().get(
-//								reqToChange.getIteration());
-//						anIteration.removeRequirement(reqToChange.getrUID());
-//						final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
-//								this);
-//						iterationController.save(anIteration, observer2);
-//					} catch (final IterationNotFoundException f) {
-//						f.printStackTrace();
-//					}
-//					
-//					newIteration.addRequirement(reqToChange.getrUID());
-//					final UpdateIterationRequestObserver observer2 = new UpdateIterationRequestObserver(
-//							this);
-//					iterationController.save(newIteration, observer2);
-//					
-//					reqToChange.setIteration(newIteration.getId());
-					
+										
 					
 					try {
 						reqToChange.setType(Type.valueOf(((String)tableView.getTable().getModel().getValueAt(i, 2)).toUpperCase().replaceAll(" ", "_").replaceAll("-", "_")));
