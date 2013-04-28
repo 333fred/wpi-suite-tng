@@ -34,7 +34,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.QueryUserRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 
-@SuppressWarnings ("serial")
+/**
+ * The assignee panel which shows the assignees for an individual requirement
+ */
+
+@SuppressWarnings ({ "deprecation", "unchecked", "serial", "rawtypes" })
 public class AssigneePanel extends JPanel {
 	
 	/**
@@ -46,7 +50,6 @@ public class AssigneePanel extends JPanel {
 	 * 
 	 * 
 	 */
-	
 	private class AssignUserAction implements ActionListener {
 		
 		@Override
@@ -65,7 +68,8 @@ public class AssigneePanel extends JPanel {
 			for (final Object m : unassignedUsers.getSelectedValues()) {
 				unassignedUsersList.removeElement(m);
 			}
-			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(detailPanel);
+			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+					detailPanel);
 			
 			controller = new RequirementsController();
 			
@@ -99,7 +103,8 @@ public class AssigneePanel extends JPanel {
 			for (final Object m : assignedUsers.getSelectedValues()) {
 				assignedUsersList.removeElement(m);
 			}
-			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(detailPanel);
+			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(
+					detailPanel);
 			
 			controller = new RequirementsController();
 			
@@ -136,6 +141,14 @@ public class AssigneePanel extends JPanel {
 	
 	private RequirementsController controller;
 	
+	/**
+	 * Creates a new assignee panel for the given requirement and parent view
+	 * 
+	 * @param requirement
+	 *            the requirement to assign people
+	 * @param detailPanel
+	 *            the panel to display in
+	 */
 	public AssigneePanel(final Requirement requirement,
 			final DetailPanel detailPanel) {
 		this.requirement = requirement;
@@ -263,6 +276,11 @@ public class AssigneePanel extends JPanel {
 		assignedUsers.setBackground(defaultColor);
 	}
 	
+	/**
+	 * Gets the list of users assigned to the requirement
+	 * 
+	 * @return the users
+	 */
 	public List<String> getAssignedUsersList() {
 		final List<String> users = new ArrayList<String>();
 		for (final Object aUser : assignedUsersList.toArray()) {
@@ -271,6 +289,11 @@ public class AssigneePanel extends JPanel {
 		return users;
 	}
 	
+	/**
+	 * Gets all the users that aren't assigned to the requirement
+	 * 
+	 * @return the model with the unassigned users
+	 */
 	public DefaultListModel getUnassignedUsersList() {
 		return unassignedUsersList;
 	}
@@ -291,21 +314,24 @@ public class AssigneePanel extends JPanel {
 	 * populated from this requirement Unassigned Users list will be pulled from
 	 * the sever, then filtered to filter out the assigned users from the
 	 * assigned users list
+	 * 
+	 * @param allUsers
+	 *            all of the unsigned users
 	 */
 	
 	public void initializeLists(final List<String> allUsers) {
 		// lists for assignedUsers and unassigned users
-		final List<String> assignedUsers = requirement.getUsers();
+		final List<String> newAssignedUsers1 = requirement.getUsers();
 		
 		// create a new list to store the unassigned users;
-		final List<String> unassignedUsers = new ArrayList<String>();
+		final List<String> newUnassignedUsers = new ArrayList<String>();
 		
 		// loop through all users, and filter out the unassigned users
 		for (final String user : allUsers) {
 			// check if this user is contained in assignedUsers
-			if (!assignedUsers.contains(user)) {
+			if (!newAssignedUsers1.contains(user)) {
 				// if not add it to unassigned users list
-				unassignedUsers.add(user);
+				newUnassignedUsers.add(user);
 			}
 		}
 		
@@ -314,20 +340,32 @@ public class AssigneePanel extends JPanel {
 		unassignedUsersList.clear();
 		
 		// iterate through and add them to the list
-		for (final String user : assignedUsers) {
+		for (final String user : newAssignedUsers1) {
 			assignedUsersList.addElement(user);
 		}
 		
-		for (final String user : unassignedUsers) {
+		for (final String user : newUnassignedUsers) {
 			unassignedUsersList.addElement(user);
 		}
 		
 	}
 	
+	/**
+	 * Sets the already assigned users list
+	 * 
+	 * @param list
+	 *            the new assigned users
+	 */
 	public void setAssignedUsersList(final DefaultListModel list) {
 		assignedUsersList = list;
 	}
 	
+	/**
+	 * Sets the unassigned users list
+	 * 
+	 * @param list
+	 *            the new unassigned users
+	 */
 	public void setUnassignedUsersList(final StringListModel list) {
 		initializeLists(list.getUsers());
 	}

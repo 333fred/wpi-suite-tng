@@ -15,20 +15,20 @@ import java.util.Comparator;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 
+/**
+ * Compares two iterations based upon their starting dates
+ * 
+ * Compares its two arguments for order. Returns a negative integer, zero,
+ * or a positive integer as the first argument is less than, equal to, or
+ * greater than the second.
+ * 
+ * first argument is less than second return negative int first argument is
+ * equal to seccond return 0 first argument is greater than second return
+ * postive int
+ * 
+ */
+
 public class IterationComparator implements Comparator<Iteration> {
-	
-	/**
-	 * Compares two iterations based upon their starting dates
-	 * 
-	 * Compares its two arguments for order. Returns a negative integer, zero,
-	 * or a positive integer as the first argument is less than, equal to, or
-	 * greater than the second.
-	 * 
-	 * first argument is less than second return negative int first argument is
-	 * equal to seccond return 0 first argument is greater than second return
-	 * postive int
-	 * 
-	 */
 	
 	@Override
 	public int compare(final Iteration iteration1, final Iteration iteration2) {
