@@ -11,6 +11,8 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -46,9 +48,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.c
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.RemoveParentController;
 
 /**
- * @author Kyle, Matt, Chris
+ * @author Kyle, Matt, Chris, Steve
  * 
  */
+@SuppressWarnings("serial")
 public class SubRequirementPanel extends JPanel {
 	
 	/** The list of requirements that the view is displaying */
@@ -77,7 +80,9 @@ public class SubRequirementPanel extends JPanel {
 	private final JLabel childLabel;
 	
 	// Radio buttons to choose between adding children/parents
+	@SuppressWarnings("unused")
 	private JRadioButton radioParent;
+	@SuppressWarnings("unused")
 	private JRadioButton radioChild;
 	
 	private final ButtonGroup btnGroup;
@@ -152,19 +157,21 @@ public class SubRequirementPanel extends JPanel {
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		bottomScrollPane.setBorder(BorderFactory.createEtchedBorder());
 		
+		JPanel viewPanel = new JPanel(layout);
+		
 		// Create the constraints for the GUI
 		layout.putConstraint(SpringLayout.NORTH, parentLabel, 5,
-				SpringLayout.NORTH, this);
+				SpringLayout.NORTH, viewPanel);
 		layout.putConstraint(SpringLayout.WEST, parentLabel, 16,
-				SpringLayout.WEST, this);
+				SpringLayout.WEST, viewPanel);
 		
 		layout.putConstraint(SpringLayout.NORTH, childLabel, 5,
 				SpringLayout.SOUTH, parentLabel);
 		layout.putConstraint(SpringLayout.WEST, childLabel, 16,
-				SpringLayout.WEST, this);
+				SpringLayout.WEST, viewPanel);
 		
 		layout.putConstraint(SpringLayout.NORTH, parentReq, 5,
-				SpringLayout.NORTH, this);
+				SpringLayout.NORTH, viewPanel);
 		layout.putConstraint(SpringLayout.WEST, parentReq, 14,
 				SpringLayout.EAST, parentLabel);
 		
@@ -173,12 +180,12 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, topScrollPane, 5,
 				SpringLayout.EAST, childLabel);
 		layout.putConstraint(SpringLayout.EAST, topScrollPane, -64,
-				SpringLayout.EAST, this);
+				SpringLayout.EAST, viewPanel);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeChild, 5,
 				SpringLayout.SOUTH, topScrollPane);
 		layout.putConstraint(SpringLayout.WEST, removeChild, 16,
-				SpringLayout.WEST, this);
+				SpringLayout.WEST, viewPanel);
 		
 		layout.putConstraint(SpringLayout.NORTH, removeParent, 5,
 				SpringLayout.SOUTH, topScrollPane);
@@ -188,9 +195,9 @@ public class SubRequirementPanel extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, editSubReqPanel, 10,
 				SpringLayout.SOUTH, removeChild);
 		layout.putConstraint(SpringLayout.SOUTH, editSubReqPanel, -1,
-				SpringLayout.SOUTH, this);
+				SpringLayout.SOUTH, viewPanel);
 		layout.putConstraint(SpringLayout.WIDTH, editSubReqPanel, -1,
-				SpringLayout.WIDTH, this);
+				SpringLayout.WIDTH, viewPanel);
 		
 		subreqPanelLayout.putConstraint(SpringLayout.NORTH, radioChild, 5,
 				SpringLayout.NORTH, editSubReqPanel);
@@ -219,15 +226,15 @@ public class SubRequirementPanel extends JPanel {
 		SpringLayout.EAST, removeChild);
 		
 		// Set the layout of this panel and the lower panel
-		setLayout(layout);
+		setLayout(new BorderLayout());
 		editSubReqPanel.setLayout(subreqPanelLayout);
-		
-		this.add(parentLabel); // Add the swing components
-		this.add(parentReq);
-		this.add(childLabel);
-		this.add(topScrollPane);
-		this.add(removeParent);
-		this.add(removeChild);
+				
+		viewPanel.add(parentLabel); // Add the swing components
+		viewPanel.add(parentReq);
+		viewPanel.add(childLabel);
+		viewPanel.add(topScrollPane);
+		viewPanel.add(removeParent);
+		viewPanel.add(removeChild);
 		
 		editSubReqPanel.add(radioChild); // Add the lower swing components for
 											// adding requirements
@@ -237,7 +244,15 @@ public class SubRequirementPanel extends JPanel {
 		
 		// Do other things here
 		
-		this.add(editSubReqPanel); // Add the lower panel
+		viewPanel.add(editSubReqPanel); // Add the lower panel
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		scrollPane.getViewport().add(viewPanel);
+		scrollPane.setBorder(null);	
+		viewPanel.setPreferredSize(new Dimension(topReqNames.getPreferredSize().width+40,450));
+		
+		this.add(scrollPane,BorderLayout.CENTER);
 		
 		// If the requirement is not deleted or complete, set actions and
 		// enabling
