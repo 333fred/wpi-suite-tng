@@ -34,7 +34,7 @@ public class RemoveChildAction extends AbstractAction {
 	 *            the controller to trigger
 	 */
 	public RemoveChildAction(final RemoveChildController controller) {
-		super("Remove Children");
+		super("Remove Child");
 		this.controller = controller;
 	}
 	
