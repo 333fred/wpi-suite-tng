@@ -346,8 +346,8 @@ ISaveNotifier {
 			updateEqualsField();
 			updateSave();
 		} else if (source.equals(cboxOperation)) {
-			if ((cboxOperation.getItemCount() != 0)
-					&& cboxField.getSelectedItem().equals("Iteration")) {
+			//	System.out.println("Operation performed on cboxOperation Items?: " + cboxOperation.getItemCount());
+			if ((cboxOperation.getItemCount() != 0)) {
 				updateEqualsField();
 				updateSave();
 			}
@@ -360,7 +360,7 @@ ISaveNotifier {
 			if (mode == Mode.CREATE) {
 				onCancelPressed();
 			} else {
-				//clear the selected filter when user presses cancel edit
+				// clear the selected filter when user presses cancel edit
 				filterView.clearSelectedFilters();
 				cancelEdit();
 			}
@@ -420,7 +420,7 @@ ISaveNotifier {
 				.getFromString((String) cboxOperation.getSelectedItem());
 
 		String equalToStr;
-		String filterStringValue = null;
+		//String filterStringValue = null;
 
 		// get the equal to value from the text box or combo box
 		switch (field) {
@@ -470,8 +470,6 @@ ISaveNotifier {
 				}
 				// save the ID of the iteration
 				filter.setValue(iterations.get(iterationIndex).getId());
-				filterStringValue = iterations.get(iterationIndex)
-						.getName();
 			} else {
 				if (calEqualTo.getDate() == null) {
 					error = true;
@@ -502,11 +500,6 @@ ISaveNotifier {
 					.getSelectedItem()));
 			filter.setOperation(FilterOperation
 					.getFromString((String) cboxOperation.getSelectedItem()));
-
-			if (filterStringValue == null) {
-				filterStringValue = filter.getValue().toString();
-			}
-			filter.setStringValue(filterStringValue);
 
 			if (CreateFilterView.isFilterDuplicate(filter)) {
 				labSaveError.setText("Identical Filter already exists");
@@ -592,12 +585,15 @@ ISaveNotifier {
 	}
 
 	public void populateFieldsFromFilter() {
-		System.out.println("Populate Filter Fields1: " + filter.getValue().toString());
+		System.out.println("Populate Filter Fields1: "
+				+ filter.getValue().toString());
 		cboxField.setSelectedItem(filter.getField().toString());
-		System.out.println("Populate Filter Fields2: " + filter.getValue().toString());
+		System.out.println("Populate Filter Fields2: "
+				+ filter.getValue().toString());
 		cboxOperation.setSelectedItem(filter.getOperation().toString());
 
-		System.out.println("Populate Filter Fields3: " + filter.getValue().toString());
+		System.out.println("Populate Filter Fields3: "
+				+ filter.getValue().toString());
 
 		switch (filter.getField()) {
 		// special iteration case. woo woo
@@ -611,8 +607,8 @@ ISaveNotifier {
 				final int iterationId = ((Integer) filter.getValue());
 				Iteration iteration;
 				try {
-					iteration = IterationDatabase.getInstance().get(
-							iterationId);
+					iteration = IterationDatabase.getInstance()
+							.get(iterationId);
 				} catch (final IterationNotFoundException e) {
 					// iteration is no longer in existance, we should
 					// probally
@@ -795,10 +791,15 @@ ISaveNotifier {
 	/** Updates the status of the save button */
 
 	public void updateSave() {
+
+		System.out.println("Updating Save");
+
 		if (cboxOperation.getItemCount() == 0) {
 			labSaveError.setText("");
 			return;
 		}
+
+		System.out.println("Updating Save 2");
 
 		boolean error = false;
 		String errorString = "";
@@ -858,8 +859,8 @@ ISaveNotifier {
 					errorString = "Start date must before end date";
 					error = true;
 				} else {
-					checkFilter.setValue(new FilterIterationBetween(
-							startDate, endDate));
+					checkFilter.setValue(new FilterIterationBetween(startDate,
+							endDate));
 				}
 			} else if ((operation == FilterOperation.EQUAL)
 					|| (operation == FilterOperation.NOT_EQUAL)) {
@@ -870,10 +871,10 @@ ISaveNotifier {
 					errorString = "Equal To combobox not populatd yet";
 				} else {
 
-					final int iterationIndex = cboxEqualTo
-							.getSelectedIndex();
+					final int iterationIndex = cboxEqualTo.getSelectedIndex();
 					// save the ID of the iteration
-					checkFilter.setValue(iterations.get(iterationIndex).getId());
+					checkFilter
+					.setValue(iterations.get(iterationIndex).getId());
 				}
 
 			} else {
@@ -889,9 +890,8 @@ ISaveNotifier {
 		case PRIORITY:
 
 			if (cboxEqualTo.getSelectedIndex() != -1) {
-				final Priority p = Priority
-						.getFromString((String) cboxEqualTo
-								.getSelectedItem());
+				final Priority p = Priority.getFromString((String) cboxEqualTo
+						.getSelectedItem());
 				if (p == null) {
 					error = true;
 					errorString = "EqualTo combobox has not updated yet";
@@ -1009,8 +1009,8 @@ ISaveNotifier {
 		return labSaveError;
 	}
 
-
-	/** Will disable all of the fields in this View
+	/**
+	 * Will disable all of the fields in this View
 	 * 
 	 */
 
@@ -1025,11 +1025,10 @@ ISaveNotifier {
 		calEqualToBetween.setEnabled(enabled);
 		butCancel.setEnabled(enabled);
 		if (enabled) {
-			//appropriatly update the save button
+			// appropriatly update the save button
 			updateSave();
-		}
-		else {
-			//disalbe everything else
+		} else {
+			// disalbe everything else
 			butSave.setEnabled(enabled);
 
 		}
