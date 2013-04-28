@@ -445,6 +445,11 @@ public class SubRequirementTreeView extends JPanel implements
 				top.add(requirementNode);
 			}
 			
+			
+			//Removed the Deleted Tree Node code from the hierarchy tree. This was seens as pointless to display here. Saved in case
+			//we decide to reimplement it.
+			
+			/*
 			final DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode(
 					"<html><b><i>Deleted</i></b></html>");
 			for (final Requirement anReq : deletedReqs) {
@@ -452,6 +457,7 @@ public class SubRequirementTreeView extends JPanel implements
 				deletedNode.add(requirementNode);
 			}
 			top.add(deletedNode);
+			*/
 			
 			((DefaultTreeModel) tree.getModel()).nodeStructureChanged(top);
 			final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree
