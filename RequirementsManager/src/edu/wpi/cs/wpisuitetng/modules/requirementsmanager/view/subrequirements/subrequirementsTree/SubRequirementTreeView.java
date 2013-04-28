@@ -38,7 +38,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IDatabaseListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveAllRequirementsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrieveRequirementByIDRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IReceivedAllRequirementNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
@@ -47,6 +46,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions.OpenRequi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subreqpopupmenu.SubReqAnywherePopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.subreqpopupmenu.SubReqRequirementPopupMenu;
 
+/**
+ * Tree View that shows all the requirements grouped by parent->child
+ */
+@SuppressWarnings ("serial")
 public class SubRequirementTreeView extends JPanel implements
 		IDatabaseListener, IReceivedAllRequirementNotifier {
 	
@@ -124,15 +127,13 @@ public class SubRequirementTreeView extends JPanel implements
 	
 	private final DefaultMutableTreeNode top;
 	
-	private final RetrieveAllRequirementsRequestObserver retrieveAllRequirementsController;
-	
 	private final MainTabController tabController;
 	
 	/** List of all the iterations currently being displayed */
 	List<Requirement> requirements;
 	
 	private boolean firstPaint;
-
+	
 	protected TreePath lastSelPath;
 	
 	/**
@@ -147,9 +148,6 @@ public class SubRequirementTreeView extends JPanel implements
 	public SubRequirementTreeView(final MainTabController tabController) {
 		super(new BorderLayout());
 		this.tabController = tabController;
-		
-		retrieveAllRequirementsController = new RetrieveAllRequirementsRequestObserver(
-				this);
 		
 		firstPaint = true;
 		
@@ -176,12 +174,11 @@ public class SubRequirementTreeView extends JPanel implements
 			public void mousePressed(final MouseEvent e) { // Listener for when
 															// we click on the
 															// tree view
-				final int selRow = tree.getRowForLocation(e.getX(),
-						e.getY());
+				final int selRow = tree.getRowForLocation(e.getX(), e.getY());
 				final TreePath selPath = tree.getPathForLocation(e.getX(),
 						e.getY());
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					//this was a left click
+					// this was a left click
 					if (selRow != -1) { // If we double click, call function to
 										// handle double click on that spot
 						if (e.getClickCount() == 2) {
@@ -198,7 +195,9 @@ public class SubRequirementTreeView extends JPanel implements
 																		// right
 																		// click
 				}
-				tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+				tree.setSelectionPath(selPath); // Prevent null pointers on
+												// Mouse Release when focus
+												// changes
 				lastSelPath = selPath;
 			}
 			
@@ -244,7 +243,10 @@ public class SubRequirementTreeView extends JPanel implements
 				if (((((DetailPanel) tabController.getTabView().getComponentAt(
 						i))).getModel().getrUID()) == (requirement.getrUID())) {
 					tabController.switchToTab(i);
-					this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+					this.tree.setSelectionPath(selPath); // Prevent null
+															// pointers on Mouse
+															// Release when
+															// focus changes
 					requirementIsOpen = true;
 				}
 			}
@@ -258,7 +260,8 @@ public class SubRequirementTreeView extends JPanel implements
 			// get the requirement from the server
 			controller.get(requirement.getrUID(), observer);
 		}
-		this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+		this.tree.setSelectionPath(selPath); // Prevent null pointers on Mouse
+												// Release when focus changes
 	}
 	
 	/**
@@ -326,10 +329,13 @@ public class SubRequirementTreeView extends JPanel implements
 	}
 	
 	@Override
-	public void receivedData(final Requirement[] requirements) {
+	public void receivedData(final Requirement[] newRequirements) {
 		refresh();
 	}
 	
+	/**
+	 * Refreshes and updates the view
+	 */
 	public void refresh() {
 		requirements = RequirementDatabase.getInstance().getAll();
 		updateTreeView();
@@ -417,8 +423,6 @@ public class SubRequirementTreeView extends JPanel implements
 	public void updateTreeView() {
 		final String eState = SubRequirementTreeView.getExpansionState(tree, 0);
 		DefaultMutableTreeNode requirementNode = null;
-		final DefaultMutableTreeNode subRequirementNode = null;
-		final Requirement tempReq = null;
 		List<Requirement> topReqsWithChildren = new ArrayList<Requirement>();
 		List<Requirement> topReqsWOChildren = new ArrayList<Requirement>();
 		List<Requirement> deletedReqs = new ArrayList<Requirement>();
@@ -455,19 +459,20 @@ public class SubRequirementTreeView extends JPanel implements
 				top.add(requirementNode);
 			}
 			
-			
-			//Removed the Deleted Tree Node code from the hierarchy tree. This was seens as pointless to display here. Saved in case
-			//we decide to reimplement it.
+			// Removed the Deleted Tree Node code from the hierarchy tree. This
+			// was seens as pointless to display here. Saved in case
+			// we decide to reimplement it.
 			
 			/*
-			final DefaultMutableTreeNode deletedNode = new DefaultMutableTreeNode(
-					"<html><b><i>Deleted</i></b></html>");
-			for (final Requirement anReq : deletedReqs) {
-				requirementNode = new DefaultMutableTreeNode(anReq);
-				deletedNode.add(requirementNode);
-			}
-			top.add(deletedNode);
-			*/
+			 * final DefaultMutableTreeNode deletedNode = new
+			 * DefaultMutableTreeNode(
+			 * "<html><b><i>Deleted</i></b></html>");
+			 * for (final Requirement anReq : deletedReqs) {
+			 * requirementNode = new DefaultMutableTreeNode(anReq);
+			 * deletedNode.add(requirementNode);
+			 * }
+			 * top.add(deletedNode);
+			 */
 			
 			((DefaultTreeModel) tree.getModel()).nodeStructureChanged(top);
 			final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree
@@ -479,7 +484,8 @@ public class SubRequirementTreeView extends JPanel implements
 		}
 	}
 	
-	/** Will disable all of the fields in this View
+	/**
+	 * Will disable all of the fields in this View
 	 * 
 	 */
 	

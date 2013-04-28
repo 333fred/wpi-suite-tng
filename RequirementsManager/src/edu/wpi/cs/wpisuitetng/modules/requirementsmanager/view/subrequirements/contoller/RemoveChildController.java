@@ -13,11 +13,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
+
+/**
+ * This controller controls the removing of child requirements to another
+ * requirement
+ */
 
 public class RemoveChildController {
 	
@@ -55,7 +59,8 @@ public class RemoveChildController {
 	 */
 	public void saveChild() {
 		
-		final Requirement anReq = (Requirement) view.getListSubReq().getSelectedValue();
+		final Requirement anReq = (Requirement) view.getListSubReq()
+				.getSelectedValue();
 		
 		final Integer modelID = new Integer(model.getrUID());
 		final Integer anReqID = new Integer(anReq.getrUID());

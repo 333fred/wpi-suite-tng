@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController
  * 
  */
 
+@SuppressWarnings ("serial")
 public class SubReqAnywherePopupMenu extends JPopupMenu implements
 		ActionListener {
 	

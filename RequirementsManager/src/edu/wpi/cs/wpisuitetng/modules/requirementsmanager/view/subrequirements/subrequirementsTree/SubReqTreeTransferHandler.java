@@ -36,6 +36,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.IS
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
+/**
+ * Handles transfers for the subrequirement tree
+ */
+
 @SuppressWarnings ("serial")
 public class SubReqTreeTransferHandler extends TransferHandler implements
 		ISaveNotifier {
@@ -111,10 +115,10 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 				.getDropLocation();
 		final JTree tree = (JTree) support.getComponent();
 		// Grab our source indexes (implemented as 1)
-		final int[] selRows = tree.getSelectionRows(); 
+		final int[] selRows = tree.getSelectionRows();
 		
 		// Grab our destination
-		final TreePath dest = dl.getPath(); 
+		final TreePath dest = dl.getPath();
 		
 		// Don't allow dragging off the tree
 		if (dest == null) {
@@ -123,18 +127,19 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 		
 		// Grab the object we dragged to as node
 		final DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest
-				.getLastPathComponent(); 
-		// Grab the object we dragged from as node		
+				.getLastPathComponent();
+		// Grab the object we dragged from as node
 		if (selRows == null) {
 			return false;
 		}
-		final TreePath path = tree.getPathForRow(selRows[0]); 
+		final TreePath path = tree.getPathForRow(selRows[0]);
 		final DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path
 				.getLastPathComponent();
 		
 		// If the destination is the deleted folder, don't do anything
 		if (target.getUserObject().equals("<html><b><i>Deleted</i></b></html>")
-				|| firstNode.getUserObject().equals("<html><b><i>Deleted</i></b></html>")) {
+				|| firstNode.getUserObject().equals(
+						"<html><b><i>Deleted</i></b></html>")) {
 			return false;
 		}
 		
@@ -326,6 +331,7 @@ public class SubReqTreeTransferHandler extends TransferHandler implements
 	}
 	
 	@Override
+	@SuppressWarnings ("unused")
 	public boolean importData(final TransferHandler.TransferSupport support) {
 		if (!canImport(support)) {
 			return false;

@@ -20,6 +20,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
 
+/**
+ * This controller controls the adding of parent requirements to another
+ * requirement
+ */
+
 public class AssignParentController {
 	
 	// The the subrequirement panel calling this controller
@@ -59,7 +64,8 @@ public class AssignParentController {
 	 * from a parent to the child and vice versa
 	 */
 	public void saveParent() {
-		final Requirement anReq = (Requirement) view.getList().getSelectedValue();
+		final Requirement anReq = (Requirement) view.getList()
+				.getSelectedValue();
 		Requirement anParReq = null;
 		
 		final Integer modelID = new Integer(model.getrUID());

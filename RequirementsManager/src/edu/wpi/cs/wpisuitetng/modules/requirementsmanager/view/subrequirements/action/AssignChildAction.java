@@ -18,9 +18,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.AssignChildController;
 
 /**
- * Action that calls {@link
- * edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.
- * RequirementsManager.subrequirements.AssignChild()}
+ * Action that calls the saveChild method in the controller
  */
 @SuppressWarnings ("serial")
 public class AssignChildAction extends AbstractAction {

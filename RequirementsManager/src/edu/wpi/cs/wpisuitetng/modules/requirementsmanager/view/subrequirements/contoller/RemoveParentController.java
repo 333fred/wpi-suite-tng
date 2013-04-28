@@ -20,6 +20,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.SubRequirementPanel;
 
+/**
+ * This controller controls the removing of parent requirements to another
+ * requirement
+ */
+
 public class RemoveParentController {
 	
 	// The the subrequirement panel calling this controller

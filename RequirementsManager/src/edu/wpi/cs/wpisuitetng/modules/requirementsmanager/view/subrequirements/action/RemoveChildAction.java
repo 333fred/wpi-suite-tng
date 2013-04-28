@@ -18,9 +18,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.RemoveChildController;
 
 /**
- * Action that calls {@link
- * edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.
- * RequirementsManager.subrequirements.AssignChild()}
+ * Action that calls saveChild in the controller
  */
 @SuppressWarnings ("serial")
 public class RemoveChildAction extends AbstractAction {

@@ -15,20 +15,20 @@ import java.util.Comparator;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
+/**
+ * Compares two requirements based upon their IDs
+ * 
+ * Compares its two arguments for order. Returns a negative integer, zero,
+ * or a positive integer as the first argument is less than, equal to, or
+ * greater than the second.
+ * 
+ * first argument is less than second return negative int first argument is
+ * equal to second return 0 first argument is greater than second return
+ * positive int
+ * 
+ */
+
 public class RequirementComparator implements Comparator<Requirement> {
-	
-	/**
-	 * Compares two requirements based upon their IDs
-	 * 
-	 * Compares its two arguments for order. Returns a negative integer, zero,
-	 * or a positive integer as the first argument is less than, equal to, or
-	 * greater than the second.
-	 * 
-	 * first argument is less than second return negative int first argument is
-	 * equal to second return 0 first argument is greater than second return
-	 * positive int
-	 * 
-	 */
 	
 	@Override
 	public int compare(final Requirement requirement1,

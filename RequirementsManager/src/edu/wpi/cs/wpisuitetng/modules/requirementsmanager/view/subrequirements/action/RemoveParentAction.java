@@ -18,9 +18,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.subrequirements.contoller.RemoveParentController;
 
 /**
- * Action that calls {@link
- * edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.
- * RequirementsManager.subrequirements.AssignParent()}
+ * Action that calls saveParent in the controller
  */
 @SuppressWarnings ("serial")
 public class RemoveParentAction extends AbstractAction {
