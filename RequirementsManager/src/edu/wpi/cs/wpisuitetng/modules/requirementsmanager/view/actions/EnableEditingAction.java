@@ -8,7 +8,6 @@
  *
  * Contributors: 
  * 	@author Alex Chen
- *    
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;

@@ -8,7 +8,6 @@
  *
  * Contributors: 
  * 	@author Chris Keane
- *    
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.actions;
