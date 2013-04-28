@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.text.AbstractDocument;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -46,6 +47,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.AddFilterRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateFilterRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentNumberAndSizeFilter;
 
 /**
  * View for creating and editing filters
@@ -774,12 +776,27 @@ public class CreateFilterView extends JPanel implements ActionListener,
 				labEqualToBetween.setVisible(false);
 				cboxEqualTo.setVisible(false);
 			}
-		} else {
+		} else if (field == FilterField.NAME || field == FilterField.RELEASE_NUMBER){
 			cboxEqualTo.setVisible(false);
-			txtEqualTo.setVisible(true);
 			calEqualTo.setVisible(false);
 			calEqualToBetween.setVisible(false);
 			labEqualToBetween.setVisible(false);
+			txtEqualTo.setVisible(true);
+			txtEqualTo.setText("");
+			final AbstractDocument txtEqualToDoc = (AbstractDocument) txtEqualTo
+					.getDocument();
+			txtEqualToDoc.setDocumentFilter(null);
+		}
+		else {
+			cboxEqualTo.setVisible(false);
+			calEqualTo.setVisible(false);
+			calEqualToBetween.setVisible(false);
+			labEqualToBetween.setVisible(false);
+			txtEqualTo.setVisible(true);
+			txtEqualTo.setText("");
+			final AbstractDocument txtEqualToDoc = (AbstractDocument) txtEqualTo
+					.getDocument();
+			txtEqualToDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
 		}
 	}
 	
