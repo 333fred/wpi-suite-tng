@@ -26,7 +26,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.exceptions.Requirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.IterationDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.Event;
 
 /**
@@ -128,10 +127,10 @@ public class RequirementChangeset extends Changeset implements Event {
 		}
 		if (changes.get("iteration") != null) {
 			// Get the default string for an old and new value
-			final int oldIteration = ((Iteration) changes.get("iteration")
-					.getOldValue()).getId();
-			final int newIteration = ((Iteration) changes.get("iteration")
-					.getNewValue()).getId();
+			final int oldIteration = ((Double) changes.get("iteration")
+					.getOldValue()).intValue();
+			final int newIteration = ((Double) changes.get("iteration")
+					.getNewValue()).intValue();
 			try {
 				final String oldName = IterationDatabase.getInstance()
 						.get(oldIteration).getName();
