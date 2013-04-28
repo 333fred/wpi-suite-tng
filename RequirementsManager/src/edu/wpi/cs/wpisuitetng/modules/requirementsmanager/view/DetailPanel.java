@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -666,6 +667,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		buttonPanelLayout = new SpringLayout();
 		buttonPanel = new JPanel(buttonPanelLayout);
 		leftPanel = new JPanel(new BorderLayout());
+		
+		if (this.requirement.getName().equals("SWAG")) {
+			System.out.println("rawr");
+			//this.mainTabController.addTab("Dashboard", new ImageIcon(), new Tab(), "Dashboard");
+		}
 	}
 	
 	private void createSaveErrorArea() {

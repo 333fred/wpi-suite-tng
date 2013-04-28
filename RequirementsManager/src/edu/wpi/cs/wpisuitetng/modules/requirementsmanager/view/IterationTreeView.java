@@ -65,6 +65,8 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 	protected static final int ITERATION_LEVEL = 1;
 	protected static final int REQUIREMENT_LEVEL = 2;
 
+	private TreePath lastSelPath;
+	
 	public static String getExpansionState(final JTree tree, final int row) {
 		final TreePath rowPath = tree.getPathForRow(row);
 		final StringBuffer buf = new StringBuffer();
@@ -120,6 +122,8 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 
 	private boolean firstPaint;
 
+	private MouseListener ml;
+
 	public IterationTreeView(final MainTabController tabController) {
 		super(new BorderLayout());
 		this.tabController = tabController;
@@ -152,15 +156,14 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 		getRequirementsFromServer();
 		getIterationsFromServer();
 
-		final MouseListener ml = new MouseAdapter() {
-
+		this.ml = new MouseAdapter() {
 			@Override
 			public void mousePressed(final MouseEvent e) {
 				final int selRow = tree.getRowForLocation(e.getX(),
 						e.getY());
 				final TreePath selPath = tree.getPathForLocation(e.getX(),
 						e.getY());
-
+				
 				if (e.getButton() == MouseEvent.BUTTON1) {
 					//this was a left click
 					if (selRow != -1) {
@@ -173,7 +176,15 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 					// this was a right click
 					onRightClick(e.getX(), e.getY(), selRow, selPath);
 				}
-			}	
+				tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+				lastSelPath = selPath;
+			}
+			
+			@Override
+			public void mouseReleased(final MouseEvent e) {
+				tree.setSelectionPath(lastSelPath);
+			}
+			
 		};
 		tree.addMouseListener(ml);
 	}
@@ -283,7 +294,6 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			return;
 		}
 		boolean requirementIsOpen = false;
-		// TODO Auto-generated method stub
 		final Requirement requirement = RequirementDatabase.getInstance()
 				.getRequirement(
 						((DefaultMutableTreeNode) selPath
@@ -297,6 +307,7 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 				if (((((DetailPanel) tabController.getTabView().getComponentAt(
 						i))).getModel().getrUID()) == (requirement.getrUID())) {
 					tabController.switchToTab(i);
+					this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
 					requirementIsOpen = true;
 				}
 			}
@@ -310,8 +321,7 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			// get the requirement from the server
 			controller.get(requirement.getrUID(), observer);
 		}
-		this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
-
+		
 		/*
 		// create the controller for fetching the new requirement
 		final RequirementsController controller = new RequirementsController();
