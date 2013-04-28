@@ -208,7 +208,7 @@ ActionListener {
 	private void updateButtonStatus() {
 		if (tableView.getSelectedRowCount() == 0) {
 			butEnable.setEnabled(false);
-			butDelete.setEnabled(true);
+			butDelete.setEnabled(false);
 			filterView.cancelEdit();
 		} else if (tableView.getSelectedRowCount() == 1) {
 			butEnable.setEnabled(true);
