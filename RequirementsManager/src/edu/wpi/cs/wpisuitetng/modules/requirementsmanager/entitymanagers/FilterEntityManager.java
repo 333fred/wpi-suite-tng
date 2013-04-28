@@ -35,11 +35,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.validators.ValidationI
  * Entity manager for filters
  */
 public class FilterEntityManager implements EntityManager<Filter> {
-	
+
 	private final Data db;
 	private final ModelMapper updateMapper;
 	private final FilterValidator validator;
-	
+
 	/**
 	 * Creates a new entity manager for filters, with the given database
 	 * 
@@ -49,9 +49,10 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	public FilterEntityManager(final Data db) {
 		this.db = db;
 		updateMapper = new ModelMapper();
+		updateMapper.getBlacklist().add("stringValue");
 		validator = new FilterValidator();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -60,7 +61,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -70,7 +71,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -80,7 +81,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -88,7 +89,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	public int Count() {
 		return db.retrieveAll(new Filter()).size();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -97,7 +98,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		ensureRole(s, Role.ADMIN);
 		db.deleteAll(new Filter(), s.getProject());
 	}
-	
+
 	/**
 	 * Deletes the filter from the database.
 	 * 
@@ -117,7 +118,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Ensures that a given user has given permissions
 	 * 
@@ -136,7 +137,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 			throw new UnauthorizedException();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -144,7 +145,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	public Filter[] getAll(final Session s) {
 		final List<Model> models = db.retrieveAll(new Filter(), s.getProject());
 		final List<Filter> filters = new ArrayList<Filter>();
-		
+
 		// Make sure that we only return non-deleted filters that belong to
 		// current user
 		for (final Model m : models) {
@@ -156,28 +157,28 @@ public class FilterEntityManager implements EntityManager<Filter> {
 				filters.add(f);
 			}
 		}
-		
+
 		return filters.toArray(new Filter[0]);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Filter[] getEntity(final Session s, final String id)
 			throws NotFoundException {
-		
+
 		// Attempt to get the filter id
 		final int filterId = Integer.parseInt(id);
 		if (filterId < 1) {
 			throw new NotFoundException();
 		}
-		
+
 		final Filter[] filter = { getFilter(filterId, s) };
-		
+
 		return filter;
 	}
-	
+
 	/**
 	 * Finds a specific filter given an id and a session
 	 * 
@@ -191,7 +192,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 */
 	public Filter getFilter(final int id, final Session s)
 			throws NotFoundException {
-		
+
 		// Attempt to find the filter
 		Filter[] filter = null;
 		try {
@@ -200,21 +201,21 @@ public class FilterEntityManager implements EntityManager<Filter> {
 		} catch (final WPISuiteException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Check for filter existence
 		if ((filter.length < 1) || (filter[0] == null)) {
 			throw new NotFoundException();
 		}
-		
+
 		// Make sure the filter belongs to this user and is not deleted
 		final Filter f = filter[0];
 		if (!f.isDeleted() && !f.getCreator().equals(s.getUsername())) {
 			throw new NotFoundException();
 		}
-		
+
 		return f;
 	}
-	
+
 	/**
 	 * Gets the next valid id for this class
 	 * 
@@ -225,7 +226,7 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	 *             if there was a lookup error
 	 */
 	private int getId(final Session s) throws WPISuiteException {
-		
+
 		IdManager idManager;
 		if (db.retrieve(IdManager.class, "type", "filter", s.getProject())
 				.size() != 0) {
@@ -239,42 +240,42 @@ public class FilterEntityManager implements EntityManager<Filter> {
 			throw new WPISuiteException();
 		}
 		return id;
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Filter makeEntity(final Session s, final String content)
 			throws BadRequestException, WPISuiteException {
-		
+
 		final Filter newFilter = Filter.fromJSON(content);
-		
+
 		newFilter.setId(getId(s));
 		newFilter.setCreator(s.getUsername());
-		
+
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
-		
+
 		issues = validator.validate(s, newFilter);
-		
+
 		if (issues.size() > 0) {
 			for (final ValidationIssue issue : issues) {
 				System.out.println(issue.getMessage());
 			}
 			throw new BadRequestException();
 		}
-		
+
 		// Save the filter
 		if (!db.save(newFilter, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		
+
 		return newFilter;
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -282,29 +283,29 @@ public class FilterEntityManager implements EntityManager<Filter> {
 	public void save(final Session s, final Filter model) {
 		db.save(model, s.getProject());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Filter update(final Session s, final String content)
 			throws WPISuiteException {
-		
+
 		// Get updated filter
 		final Filter updatedFilter = Filter.fromJSON(content);
 		Filter oldFilter;
-		
+
 		// Validate the filter, and error if failure
 		List<ValidationIssue> issues;
 		issues = validator.validate(s, updatedFilter);
-		
+
 		if (issues.size() > 0) {
 			for (final ValidationIssue issue : issues) {
 				System.out.println(issue.getMessage());
 			}
 			throw new BadRequestException();
 		}
-		
+
 		// Get the old iteration
 		try {
 			oldFilter = getFilter(updatedFilter.getId(), s);
@@ -312,15 +313,15 @@ public class FilterEntityManager implements EntityManager<Filter> {
 			System.out.println("update, getfilter ");
 			throw new WPISuiteException();
 		}
-		
+
 		// Coppy values from the old filter to the new filter
 		updateMapper.map(updatedFilter, oldFilter);
-		
+
 		// Save the filter and return
 		if (!db.save(oldFilter, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		
+
 		return oldFilter;
 	}
 }
