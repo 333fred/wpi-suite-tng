@@ -34,7 +34,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Permissi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.RequirementDatabase;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationTreeView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
@@ -68,9 +67,6 @@ public class JanewayModule implements IJanewayModule {
 	
 	/** The tabbed pane on the left for filters and iterations */
 	private final JTabbedPane leftTabbedPane;
-	
-	/** The controller for the toolbarView */
-	private final ToolbarController toolbarController;
 	
 	/** The controller for retrieving the current users permissions set */
 	private final PermissionModelController permController;
@@ -106,18 +102,9 @@ public class JanewayModule implements IJanewayModule {
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
-
-		/*
-		iterationTreeView.setEnabled(false);
-		subRequirementTreeView.setEnabled(false);
-		filterView.setEnabled(false);
-		*/
 		
 		// initialize the toolbarView
 		toolbarView = ToolbarView.getInstance(tabController);
-		
-		// initialize the toolbar Controller
-		toolbarController = new ToolbarController(toolbarView, tabController);
 		
 		tabController.addRequirementsTab();
 		
