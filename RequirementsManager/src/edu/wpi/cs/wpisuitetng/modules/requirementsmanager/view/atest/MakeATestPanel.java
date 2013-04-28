@@ -14,9 +14,11 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,30 +35,32 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.DocumentSizeFilter;
 
 /**
- * A panel containing a a creation and edit form
- * for the aTests in a requirement
+ * A panel containing a a creation and edit form for the aTests in a requirement
  * 
  * @author Nick M, Matt C, Steve Kordell
  */
-@SuppressWarnings ({ "serial", "rawtypes" })
+@SuppressWarnings({ "serial", "rawtypes" })
 public class MakeATestPanel extends JPanel {
-	
+
 	// The fields to make a aTest
-	private final JTextArea aTestName;
-	private final JTextArea aTestDescription;
-	private final JButton addaTest;
+	private final JTextArea txtName;
+	private final JTextArea txtDescription;
+	private final JButton butAdd;
+	private final JButton butCancel;
 	private final JLabel addaTestLabel;
-	private final JComboBox aTestStatusBox;
-	
+	private final JComboBox cbxStatus;
+
 	// Jlabels for aTest fields
 	private final JLabel aTestStatus;
 	private final JLabel nameaTestLabel;
 	private final JLabel descaTestLabel;
-	
+
+	private final JLabel labSaveError;
+
 	private static final int VERTICAL_PADDING = 5;
 	private static final int note_FIELD_HEIGHT = 50;
 	private final JScrollPane aTestFieldPane;
-	
+
 	/**
 	 * Construct the panel, add and layout components.
 	 * 
@@ -64,30 +68,30 @@ public class MakeATestPanel extends JPanel {
 	 *            the requirement to which a notes made with this class will be
 	 *            saved
 	 */
-	@SuppressWarnings ("unchecked")
+	@SuppressWarnings("unchecked")
 	public MakeATestPanel(final Requirement model) {
-		
+
 		// setup the aTest name field
-		aTestName = new JTextArea(1, 40);
-		aTestName.setLineWrap(true);
-		aTestName.setWrapStyleWord(true);
-		aTestName.setMaximumSize(new Dimension(40, 2));
-		final AbstractDocument textNameDoc = (AbstractDocument) aTestName
+		txtName = new JTextArea(1, 40);
+		txtName.setLineWrap(true);
+		txtName.setWrapStyleWord(true);
+		txtName.setMaximumSize(new Dimension(40, 2));
+		final AbstractDocument textNameDoc = (AbstractDocument) txtName
 				.getDocument();
 		textNameDoc.setDocumentFilter(new DocumentSizeFilter(100));
-		aTestName.setBorder((new JTextField()).getBorder());
-		aTestName.setName("Name");
-		aTestName.setDisabledTextColor(Color.GRAY);
-		
-		aTestName.addKeyListener(new KeyAdapter() {
-			
+		txtName.setBorder((new JTextField()).getBorder());
+		txtName.setName("Name");
+		txtName.setDisabledTextColor(Color.GRAY);
+
+		txtName.addKeyListener(new KeyAdapter() {
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						aTestName.transferFocus();
+						txtName.transferFocus();
 					} else {
-						aTestName.transferFocusBackward();
+						txtName.transferFocusBackward();
 					}
 					event.consume();
 				}
@@ -96,53 +100,67 @@ public class MakeATestPanel extends JPanel {
 				}
 			}
 		});
-		
+
 		// setup the aTest description field
-		aTestDescription = new JTextArea();
-		aTestDescription.setLineWrap(true);
-		aTestDescription.setWrapStyleWord(true);
-		aTestDescription.setDisabledTextColor(Color.GRAY);
-		
-		aTestDescription.addKeyListener(new KeyAdapter() {
-			
+		txtDescription = new JTextArea();
+		txtDescription.setLineWrap(true);
+		txtDescription.setWrapStyleWord(true);
+		txtDescription.setDisabledTextColor(Color.GRAY);
+
+		txtDescription.addKeyListener(new KeyAdapter() {
+
 			@Override
 			public void keyPressed(final KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_TAB) {
 					if (event.getModifiers() == 0) {
-						aTestDescription.transferFocus();
+						txtDescription.transferFocus();
 					} else {
-						aTestDescription.transferFocusBackward();
+						txtDescription.transferFocusBackward();
 					}
 					event.consume();
 				}
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					aTestDescription.append("\n");
+					txtDescription.append("\n");
 					event.consume();
 				}
 			}
 		});
-		
+
 		// setup all the buttons and label text
-		addaTest = new JButton("Save");
+		butAdd = new JButton("Save");
+
+		butCancel = new JButton("Cancel");
+
+		butCancel.setAction(new AbstractAction("Cancel") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				onCancel();
+			}
+
+		});
+
+		labSaveError = new JLabel("");
+
 		aTestStatus = new JLabel(
 				"No Acceptance Test selected. Fill name and description to create a new one.");
 		addaTestLabel = new JLabel("Acceptance Test:");
 		nameaTestLabel = new JLabel("Name:");
 		descaTestLabel = new JLabel("Description:");
 		final String[] availableStatuses = { "", "PASSED", "FAILED" };
-		aTestStatusBox = new JComboBox(availableStatuses);
-		aTestStatusBox.setBackground(Color.WHITE);
-		
+		cbxStatus = new JComboBox(availableStatuses);
+		cbxStatus.setBackground(Color.WHITE);
+
 		setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.black, 1),
 				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-		
+
 		final SpringLayout layout = new SpringLayout();
 		setLayout(layout);
-		
-		aTestFieldPane = new JScrollPane(aTestDescription);
-		
+
+		aTestFieldPane = new JScrollPane(txtDescription);
+
 		// Setup the layout of the aTest Panel
 		layout.putConstraint(SpringLayout.NORTH, addaTestLabel, 0,
 				SpringLayout.NORTH, this);
@@ -153,15 +171,15 @@ public class MakeATestPanel extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, nameaTestLabel,
 				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
 				aTestStatus);
-		layout.putConstraint(SpringLayout.NORTH, aTestName,
+		layout.putConstraint(SpringLayout.NORTH, txtName,
 				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
 				nameaTestLabel);
-		layout.putConstraint(SpringLayout.WEST, aTestName, 0,
-				SpringLayout.WEST, nameaTestLabel);
-		layout.putConstraint(SpringLayout.EAST, aTestName, 0,
-				SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.WEST, txtName, 0, SpringLayout.WEST,
+				nameaTestLabel);
+		layout.putConstraint(SpringLayout.EAST, txtName, 0, SpringLayout.EAST,
+				this);
 		layout.putConstraint(SpringLayout.NORTH, descaTestLabel,
-				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH, aTestName);
+				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH, txtName);
 		layout.putConstraint(SpringLayout.NORTH, aTestFieldPane,
 				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
 				descaTestLabel);
@@ -172,87 +190,91 @@ public class MakeATestPanel extends JPanel {
 		layout.putConstraint(SpringLayout.SOUTH, aTestFieldPane,
 				MakeATestPanel.note_FIELD_HEIGHT, SpringLayout.NORTH,
 				aTestFieldPane);
-		
-		layout.putConstraint(SpringLayout.NORTH, aTestStatusBox,
+
+		layout.putConstraint(SpringLayout.NORTH, cbxStatus,
 				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
 				aTestFieldPane);
-		layout.putConstraint(SpringLayout.WEST, aTestStatusBox, 0,
+		layout.putConstraint(SpringLayout.WEST, cbxStatus, 0,
 				SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this,
-				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				aTestStatusBox);
-		
-		layout.putConstraint(SpringLayout.NORTH, addaTest,
-				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH,
-				aTestStatusBox);
-		layout.putConstraint(SpringLayout.EAST, addaTest, 0, SpringLayout.EAST,
-				this);
+				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH, cbxStatus);
+
+		layout.putConstraint(SpringLayout.NORTH, butCancel,
+				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH, cbxStatus);
+		layout.putConstraint(SpringLayout.EAST, butCancel, 0,
+				SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.SOUTH, this,
-				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH, addaTest);
-		
+				MakeATestPanel.VERTICAL_PADDING, SpringLayout.SOUTH, butCancel);
+
+		layout.putConstraint(SpringLayout.NORTH, butAdd, 0, SpringLayout.NORTH,
+				butCancel);
+		layout.putConstraint(SpringLayout.EAST, butAdd, -8, SpringLayout.WEST,
+				butCancel);
+
 		// add all of the swing components to the this aTest panel
 		this.add(aTestStatus);
 		this.add(addaTestLabel);
-		this.add(addaTest);
-		this.add(aTestName);
+		this.add(butCancel);
+		this.add(butAdd);
+		this.add(txtName);
 		this.add(nameaTestLabel);
 		this.add(descaTestLabel);
-		this.add(aTestStatusBox);
+		this.add(cbxStatus);
 		this.add(aTestFieldPane);
-		
+
 		// default the add button and complete checkbox
 		// to un-enabled
-		addaTest.setEnabled(false);
-		aTestStatusBox.setEnabled(false);
-		
+		butAdd.setEnabled(false);
+		cbxStatus.setEnabled(false);
+
 	}
-	
+
 	/**
 	 * Returns the add ATest button
 	 * 
 	 * @return the button
 	 */
 	public JButton getAddATest() {
-		return addaTest;
+		return butAdd;
 	}
-	
+
 	/**
 	 * A function to the get the text area
 	 * 
 	 * @return the note JTextArea
 	 */
 	public JTextArea getaTestField() {
-		return aTestDescription;
+		return txtDescription;
 	}
-	
+
 	/**
 	 * @return the ATest field scroll pane
 	 */
 	public JScrollPane getaTestFieldPane() {
 		return aTestFieldPane;
 	}
-	
+
 	/**
 	 * @return the ATest name text component
 	 */
 	public JTextComponent getaTestName() {
-		return aTestName;
+		return txtName;
 	}
-	
+
 	/**
 	 * @return the status label
 	 */
 	public JLabel getaTestStatus() {
 		return aTestStatus;
 	}
-	
+
 	/**
 	 * @return the status combobox
 	 */
 	public JComboBox getaTestStatusBox() {
-		return aTestStatusBox;
+		return cbxStatus;
 	}
-	
+
 	/**
 	 * Enables and disables input on this panel.
 	 * 
@@ -261,13 +283,24 @@ public class MakeATestPanel extends JPanel {
 	 *            disabled.
 	 */
 	public void setInputEnabled(final boolean value) {
-		aTestDescription.setEnabled(value);
-		addaTest.setEnabled(value);
-		aTestName.setEnabled(value);
+		txtDescription.setEnabled(value);
+		butAdd.setEnabled(value);
+		txtName.setEnabled(value);
 		if (value) {
 			addaTestLabel.setForeground(Color.black);
 		} else {
 			addaTestLabel.setForeground(Color.gray);
 		}
 	}
+
+	/**
+	 * Called when the cancel button is pressed
+	 * 
+	 */
+
+	public void onCancel() {
+		txtName.setText("");
+		txtDescription.setText("");
+	}
+
 }
