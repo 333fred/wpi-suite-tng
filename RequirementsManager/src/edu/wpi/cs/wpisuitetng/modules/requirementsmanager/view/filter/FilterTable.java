@@ -19,11 +19,22 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+/**
+ * Creates a table view that holds a FilterTableModel. This is used to display
+ * all of the filters that the user has assigned and not deleted
+ */
+@SuppressWarnings ("serial")
 public class FilterTable extends JTable {
 	
 	/** the table model used to represnt data in the table */
 	private final FilterTableModel tableModel;
 	
+	/**
+	 * Creates a new filter table from the given table model
+	 * 
+	 * @param tableModel
+	 *            the table model of filters to display
+	 */
 	public FilterTable(final FilterTableModel tableModel) {
 		super(tableModel);
 		this.tableModel = tableModel;

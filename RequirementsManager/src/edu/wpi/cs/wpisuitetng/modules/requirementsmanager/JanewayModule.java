@@ -70,6 +70,7 @@ public class JanewayModule implements IJanewayModule {
 	private final JTabbedPane leftTabbedPane;
 	
 	/** The controller for the toolbarView */
+	@SuppressWarnings ("unused")
 	private final ToolbarController toolbarController;
 	
 	/** The controller for retrieving the current users permissions set */
@@ -106,12 +107,6 @@ public class JanewayModule implements IJanewayModule {
 		leftTabbedPane.addTab("Iterations", iterationTreeView);
 		leftTabbedPane.addTab("Hierarchy", subRequirementTreeView);
 		leftTabbedPane.addTab("Filters", filterView);
-
-		/*
-		iterationTreeView.setEnabled(false);
-		subRequirementTreeView.setEnabled(false);
-		filterView.setEnabled(false);
-		*/
 		
 		// initialize the toolbarView
 		toolbarView = ToolbarView.getInstance(tabController);

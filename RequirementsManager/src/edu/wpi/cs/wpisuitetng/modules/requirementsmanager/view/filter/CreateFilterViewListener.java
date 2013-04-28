@@ -16,29 +16,24 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Listener for all actions performed on the CreateFilterView
+ */
+
 public class CreateFilterViewListener implements KeyListener,
 		PropertyChangeListener {
-	
-	public enum Type {
-		TEXT, OTHER
-	}
 	
 	/** The iteration view this listener is in */
 	private final CreateFilterView createFilterView;
 	
-	/** set to false after the first key press, used to stop the blinking */
-	private final boolean first;
-	
 	/**
 	 * Creates a new IterationView Listener with the given view and component
 	 * 
-	 * @param iterationView
-	 * @param component
+	 * @param createFilterView
+	 *            The filter view to listen for changes on
 	 */
-	
 	public CreateFilterViewListener(final CreateFilterView createFilterView) {
 		this.createFilterView = createFilterView;
-		first = true;
 	}
 	
 	@Override
