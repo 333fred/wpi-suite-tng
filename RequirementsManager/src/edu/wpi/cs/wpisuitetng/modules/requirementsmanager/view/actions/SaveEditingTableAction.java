@@ -155,7 +155,8 @@ public class SaveEditingTableAction extends AbstractAction implements
 					}
 					
 					if(reqToChange.getStatus().equals(Status.DELETED)){
-						try {
+						reqToChange.setIteration(-2);
+						/*try {
 							anIteration = IterationDatabase.getInstance().get(reqToChange.getIteration());
 							anIteration.removeRequirement(reqToChange.getrUID());
 							final UpdateIterationRequestObserver observerDelete = new UpdateIterationRequestObserver(
@@ -169,9 +170,10 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setIteration(anIteration.getId());
 						anIteration.addRequirement(reqToChange.getrUID());
 						final UpdateIterationRequestObserver observer3 = new UpdateIterationRequestObserver(this);
-						iterationController.save(anIteration, observer3);
+						iterationController.save(anIteration, observer3);*/
 					} else if(reqToChange.getStatus().equals(Status.OPEN)){
-						try {
+						reqToChange.setIteration(-1);
+						/*try {
 							anIteration = IterationDatabase.getInstance().get(reqToChange.getIteration());
 							anIteration.removeRequirement(reqToChange.getrUID());
 							final UpdateIterationRequestObserver observerDelete = new UpdateIterationRequestObserver(
@@ -185,7 +187,7 @@ public class SaveEditingTableAction extends AbstractAction implements
 						reqToChange.setIteration(anIteration.getId());
 						anIteration.addRequirement(reqToChange.getrUID());
 						final UpdateIterationRequestObserver observer3 = new UpdateIterationRequestObserver(this);
-						iterationController.save(anIteration, observer3);
+						iterationController.save(anIteration, observer3);*/
 					}
 					
 					saveController.save(reqToChange, observer);

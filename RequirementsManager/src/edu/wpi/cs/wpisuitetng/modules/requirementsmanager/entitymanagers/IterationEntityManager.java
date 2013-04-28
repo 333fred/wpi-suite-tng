@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.entitymanagers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -137,11 +138,11 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		boolean backlogExists = false;
 		
 		// check if any of the iterations we retrieved are the backlog
-		for (final Iteration it : is) {
+		for (Iteration it : is) {
 			if (it.getId() == -1) {
 				backlogExists = true;
-				break;
 			}
+			updateIncludedRequirements(it, s);
 		}
 		
 		// If we don't find one, then we have to create it and save it to the
@@ -272,6 +273,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 			// Make sure we actually got a iteration, and return if we have
 			// Otherwise, throw an exception
 			if (iteration.get(0) instanceof Iteration) {
+				updateIncludedRequirements((Iteration) iteration.get(0), s);
 				return ((Iteration) iteration.get(0));
 			} else {
 				throw new WPISuiteException();
@@ -363,6 +365,25 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		}
 		
 		return oldIteration;
+	}
+	
+	/**
+	 * Updates the list of requirements assigned to the given iteration
+	 * @param it the iteration to update
+	 * @param s the current session
+	 */
+	public void updateIncludedRequirements(Iteration it, Session s) {
+		Requirement[] requirements = db.retrieveAll(new Requirement(), s.getProject()).toArray(
+				new Requirement[0]);
+		
+		ArrayList<Integer>requirementsForIteration = new ArrayList<Integer>();
+		
+		for(Requirement r : requirements){
+			if(r.getIteration() == it.getId()){
+				requirementsForIteration.add(r.getrUID());
+			}
+		}
+		it.setRequirements(requirementsForIteration);	
 	}
 	
 }
