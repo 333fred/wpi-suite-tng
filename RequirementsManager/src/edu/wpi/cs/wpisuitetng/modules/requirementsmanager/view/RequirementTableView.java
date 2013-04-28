@@ -216,7 +216,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				textTreeFilterInfo.setText("");
 				btnClearTreeFilter.setEnabled(false);
 				if (getTable().getRowCount() == 0) {
-					textFilterInfo.setText("No Requirements Found");
+					btnSave.setEnabled(false);
 					btnEdit.setEnabled(false);
 				}
 				else {
@@ -680,7 +680,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 	@Override
 	public void paint(final Graphics g) {
 		if (getTable().getRowCount() == 0) {
-			textFilterInfo.setText("No Requirements Found");
+			btnSave.setEnabled(false);
 			btnEdit.setEnabled(false);
 		}
 		else {
