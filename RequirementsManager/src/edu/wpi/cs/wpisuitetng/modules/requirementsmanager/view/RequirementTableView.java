@@ -277,15 +277,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnSave, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
 
-		editPanelLayout.putConstraint(SpringLayout.EAST, btnEdit, -5,
+		editPanelLayout.putConstraint(SpringLayout.WEST, btnEdit, 5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
-		editPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
+		editPanelLayout.putConstraint(SpringLayout.EAST, btnSave, -5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
 
 		editPanelLayout.putConstraint(SpringLayout.WEST, textEditInfo, 0,
-				SpringLayout.WEST, btnEdit);
+				SpringLayout.WEST, btnSave);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInfo, 0,
-				SpringLayout.SOUTH, btnEdit);
+				SpringLayout.SOUTH, btnSave);
 
 		editPanelLayout.putConstraint(SpringLayout.WEST, btnClearTreeFilter, 5,
 				SpringLayout.WEST, editPanel);
