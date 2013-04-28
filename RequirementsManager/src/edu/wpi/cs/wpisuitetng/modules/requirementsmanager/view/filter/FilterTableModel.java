@@ -20,6 +20,10 @@ import javax.swing.table.TableModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Filter;
 
+/**
+ * Table model to hold the filters that a user has created and not deleted.
+ */
+
 public class FilterTableModel implements TableModel {
 	
 	/** Array list representing the data in the table */
@@ -45,8 +49,8 @@ public class FilterTableModel implements TableModel {
 		tableData = new ArrayList<String[]>();
 		listeners = new ArrayList<TableModelListener>();
 		
-		final String[] columnNames = { "Id", "Field", "Operation", "Value" };
-		this.columnNames = columnNames;
+		final String[] cols = { "Id", "Field", "Operation", "Value" };
+		this.columnNames = cols;
 		
 		updateFilters(filters);
 	}
@@ -73,8 +77,11 @@ public class FilterTableModel implements TableModel {
 	
 	/**
 	 * Returns the filter at the given row index
+	 * 
+	 * @param rowIndex
+	 *            the index to look under
+	 * @return the requested filter. Null if the filter doesn't exist
 	 */
-	
 	public Filter getFilterAt(final int rowIndex) {
 		return getFilterById(Integer.parseInt((String) getValueAt(rowIndex, 0)));
 	}
@@ -132,13 +139,13 @@ public class FilterTableModel implements TableModel {
 	/**
 	 * Updates the data displayed with the new list of filters
 	 * 
-	 * @param filters
+	 * @param newFilters
 	 */
 	
-	public void updateFilters(final List<Filter> filters) {
-		this.filters = filters;
+	public void updateFilters(final List<Filter> newFilters) {
+		filters = newFilters;
 		tableData.clear(); // clear out the table data
-		for (final Filter filter : filters) {
+		for (final Filter filter : newFilters) {
 			// create the new column data
 			final String[] columnData = new String[getColumnCount()];
 			int ci = 0;

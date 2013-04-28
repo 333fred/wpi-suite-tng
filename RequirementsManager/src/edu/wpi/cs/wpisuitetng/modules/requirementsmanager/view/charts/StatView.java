@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Steve Kordell, Alex Gorowara
+ *    @author Steve Kordell
+ *    @author Alex Gorowara
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
@@ -41,7 +42,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterUpda
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.filter.FilterView;
 
 /**
- * 
+ * Tab view of the project stats
  */
 @SuppressWarnings ({ "serial", "unchecked", "rawtypes" })
 public class StatView extends Tab implements ActionListener,

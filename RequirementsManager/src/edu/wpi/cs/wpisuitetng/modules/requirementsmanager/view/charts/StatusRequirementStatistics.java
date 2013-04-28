@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,8 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Alex Gorowara
- * Steve Kordell
+ * 		@author Alex Gorowara
+ * 		@author Steve Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.charts;
 
@@ -24,7 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 
 /**
  * class to contain data on how many requirements are assigned to each status
- * 
  */
 public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 
@@ -66,14 +65,7 @@ public class StatusRequirementStatistics extends AbstractRequirementStatistics {
 			final Status status = requirement.getStatus();
 			final Integer oldValue = mapData.get(status.toString());
 			mapData.put(status.toString(), new Integer(oldValue.intValue() + 1));
-			// increment the
-			// number
-			// of
-			// requirements
-			// for
-			// a
-			// given
-			// status
+			// increment the number of requirements for a given status
 		}
 
 		mapData.remove("BLANK");
