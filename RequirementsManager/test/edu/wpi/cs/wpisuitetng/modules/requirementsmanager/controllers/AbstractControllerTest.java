@@ -8,7 +8,7 @@
  *
  * Contributors:
  * 	@author Fredric
- *    
+ * 
  *******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers;
@@ -36,7 +36,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 @Ignore
 public abstract class AbstractControllerTest<T extends AbstractModel> {
-	
+
 	protected AbstractController<T> controller;
 	protected MockRequestObserver observer;
 	protected T model;
@@ -44,7 +44,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 	protected String netConfig;
 	protected String modelPath;
 	protected int id;
-	
+
 	/**
 	 * Test creating a create request with null network
 	 */
@@ -53,7 +53,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		controller.create(model, observer);
 		Assert.assertEquals(network.getLastRequestMade(), null);
 	}
-	
+
 	/**
 	 * Test creating a create request with null network
 	 */
@@ -62,7 +62,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		controller.delete(model, observer);
 		Assert.assertEquals(network.getLastRequestMade(), null);
 	}
-	
+
 	/**
 	 * Test creating a create request with null network
 	 */
@@ -71,7 +71,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		controller.getAll(observer);
 		Assert.assertEquals(network.getLastRequestMade(), null);
 	}
-	
+
 	/**
 	 * Test creating a create request with null network
 	 */
@@ -80,7 +80,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		controller.get(id, observer);
 		Assert.assertEquals(network.getLastRequestMade(), null);
 	}
-	
+
 	/**
 	 * Test creating a create request with null network
 	 */
@@ -89,7 +89,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		controller.save(model, observer);
 		Assert.assertEquals(network.getLastRequestMade(), null);
 	}
-	
+
 	/**
 	 * Tests creating a good create request
 	 */
@@ -102,7 +102,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		Assert.assertEquals(request.getBody(), model.toJSON());
 		Assert.assertEquals(request.getHttpMethod(), HttpMethod.PUT);
 	}
-	
+
 	/**
 	 * Test creating a good delete request
 	 */
@@ -116,7 +116,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		Assert.assertEquals(request.getBody(), null);
 		Assert.assertEquals(request.getHttpMethod(), HttpMethod.DELETE);
 	}
-	
+
 	/**
 	 * Gets creating a good get by id request
 	 */
@@ -129,7 +129,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		Assert.assertEquals(request.getBody(), null);
 		Assert.assertEquals(request.getHttpMethod(), HttpMethod.GET);
 	}
-	
+
 	/**
 	 * Gets creating a good get by id request
 	 */
@@ -143,26 +143,29 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		Assert.assertEquals(request.getBody(), null);
 		Assert.assertEquals(request.getHttpMethod(), HttpMethod.GET);
 	}
-	
+
 	/**
 	 * Tests creating a good save request
 	 */
 	@Test
 	public void saveGood() {
+		setupNetwork();
 		setupNetworkConfig();
+		System.out.println(controller);
 		controller.save(model, observer);
 		final MockRequest request = network.getLastRequestMade();
+		System.out.println(model);
 		Assert.assertEquals(request.getUrl().toString(), netConfig + modelPath);
 		Assert.assertEquals(request.getBody(), model.toJSON());
 		Assert.assertEquals(request.getHttpMethod(), HttpMethod.POST);
 	}
-	
+
 	/**
 	 * Pre-Test setup
 	 */
 	@Before
 	public abstract void setup();
-	
+
 	/**
 	 * Sets up a new network. The configuration is null to test that particular
 	 * branch in the controller
@@ -172,7 +175,7 @@ public abstract class AbstractControllerTest<T extends AbstractModel> {
 		network = new MockNetwork();
 		Network.initNetwork(network);
 	}
-	
+
 	/**
 	 * Sets up the network configuration
 	 */
