@@ -72,6 +72,7 @@ ISaveNotifier {
 	private static final int HORIZONTAL_PADDING = 8;
 
 	public static boolean isFilterDuplicate(final Filter toCheck) {
+		System.out.println("isFilterDuplicate toCheck: " + toCheck);
 		final List<Filter> filters = FilterDatabase.getInstance().getAll();
 		for (final Filter filter : filters) {
 			if (filter.equalToWithoutId(toCheck)) {
@@ -387,6 +388,7 @@ ISaveNotifier {
 
 	public void editFilter(final Filter toEdit) {
 		filter = toEdit;
+		System.out.println("EditFilter : " + filter.getValue().toString());
 		updateMode(Mode.EDIT);
 	}
 
@@ -590,12 +592,18 @@ ISaveNotifier {
 	}
 
 	public void populateFieldsFromFilter() {
+		System.out.println("Populate Filter Fields1: " + filter.getValue().toString());
 		cboxField.setSelectedItem(filter.getField().toString());
+		System.out.println("Populate Filter Fields2: " + filter.getValue().toString());
 		cboxOperation.setSelectedItem(filter.getOperation().toString());
+
+		System.out.println("Populate Filter Fields3: " + filter.getValue().toString());
 
 		switch (filter.getField()) {
 		// special iteration case. woo woo
 		case ITERATION:
+
+			System.out.println("Iteration : " + filter.getValue().toString());
 			switch (filter.getOperation()) {
 			case EQUAL:
 			case NOT_EQUAL:
@@ -636,6 +644,7 @@ ISaveNotifier {
 		case RELEASE_NUMBER:
 		case EFFORT:
 		case ESTIMATE:
+			System.out.println("Estimate : " + filter.getValue().toString());
 			txtEqualTo.setText(filter.getValue().toString());
 			break;
 
@@ -643,6 +652,7 @@ ISaveNotifier {
 		case PRIORITY:
 		case STATUS:
 		case TYPE:
+			System.out.println("Type : " + filter.getValue().toString());
 			cboxEqualTo.setSelectedItem(filter.getValue().toString());
 			break;
 
@@ -863,7 +873,7 @@ ISaveNotifier {
 					final int iterationIndex = cboxEqualTo
 							.getSelectedIndex();
 					// save the ID of the iteration
-					filter.setValue(iterations.get(iterationIndex).getId());
+					checkFilter.setValue(iterations.get(iterationIndex).getId());
 				}
 
 			} else {
@@ -871,7 +881,7 @@ ISaveNotifier {
 					error = true;
 					errorString = "Date cannot be blank";
 				} else {
-					filter.setValue(calEqualTo.getDate());
+					checkFilter.setValue(calEqualTo.getDate());
 				}
 			}
 			break;
@@ -886,7 +896,7 @@ ISaveNotifier {
 					error = true;
 					errorString = "EqualTo combobox has not updated yet";
 				} else {
-					filter.setValue(p);
+					checkFilter.setValue(p);
 				}
 			}
 			break;
@@ -898,7 +908,7 @@ ISaveNotifier {
 					error = true;
 					errorString = "EqualTo combobox has not updated yet";
 				} else {
-					filter.setValue(s);
+					checkFilter.setValue(s);
 				}
 			}
 			break;
@@ -910,7 +920,7 @@ ISaveNotifier {
 					error = true;
 					errorString = "EqualTo combobox has not updated yet";
 				} else {
-					filter.setValue(t);
+					checkFilter.setValue(t);
 				}
 			}
 			break;
