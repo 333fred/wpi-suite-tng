@@ -18,11 +18,23 @@ import javax.swing.text.JTextComponent;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.note.DetailNoteView;
 
+/**
+ * Listener to monitor changes in the note view
+ */
+
 public class NoteViewListener implements KeyListener {
 	
 	protected DetailNoteView panel;
 	protected JTextComponent component;
 	
+	/**
+	 * Creates a new listener for the given note view and component
+	 * 
+	 * @param panel
+	 *            the NoteView to listen on
+	 * @param component
+	 *            the component to listen on
+	 */
 	public NoteViewListener(final DetailNoteView panel,
 			final JTextComponent component) {
 		this.panel = panel;

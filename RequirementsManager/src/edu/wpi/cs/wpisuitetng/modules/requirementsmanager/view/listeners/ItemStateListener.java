@@ -19,17 +19,35 @@ import javax.swing.JComboBox;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.DetailPanel;
 
+/**
+ * A listener for listening to detail panel changes.
+ */
+@SuppressWarnings ("rawtypes")
 public class ItemStateListener implements ItemListener {
 	
 	protected final DetailPanel panel;
 	protected final JComboBox component;
 	
+	/**
+	 * Creates a new listener for the given detail panel and combobox
+	 * 
+	 * @param panel
+	 *            the panel to listen on
+	 * @param comboBoxType
+	 *            the box to listen on
+	 */
 	public ItemStateListener(final DetailPanel panel,
 			final JComboBox comboBoxType) {
 		this.panel = panel;
 		component = comboBoxType;
 	}
 	
+	/**
+	 * Checks to see if the box has been updated
+	 * 
+	 * @param e
+	 *            the event that could cause an update
+	 */
 	public void checkIfUpdated(final ItemEvent e) {
 		if ((panel.getTextName().getText().trim().length() > 0)
 				&& (panel.getTextDescription().getText().trim().length() > 0)) {

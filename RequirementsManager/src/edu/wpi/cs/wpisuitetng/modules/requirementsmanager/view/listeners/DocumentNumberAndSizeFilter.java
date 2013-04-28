@@ -18,10 +18,21 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+/**
+ * Filter to constrain the number and type of characters that can be typed into
+ * any text field. Filter constrains to only numbers.
+ */
+
 public class DocumentNumberAndSizeFilter extends DocumentFilter {
 	
 	int maxChars;
 	
+	/**
+	 * Creates a new filter with the given number of max characters
+	 * 
+	 * @param maxChars
+	 *            the maximum number of characters
+	 */
 	public DocumentNumberAndSizeFilter(final int maxChars) {
 		this.maxChars = maxChars;
 	};

@@ -29,18 +29,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.IterationView;
 public class IterationViewListener implements KeyListener,
 		PropertyChangeListener {
 	
-	public enum Type {
-		TEXT, OTHER
-	}
-	
 	/** The iteration view this listener is in */
 	private final IterationView iterationView;
 	
 	/** The component this listener is listening on */
 	private final JComponent component;
-	
-	/** set to false after the first key press, used to stop the blinking */
-	private final boolean first;
 	
 	/**
 	 * Creates a new IterationView Listener with the given view and component
@@ -53,7 +46,6 @@ public class IterationViewListener implements KeyListener,
 			final JComponent component) {
 		this.iterationView = iterationView;
 		this.component = component;
-		first = true;
 	}
 	
 	@Override

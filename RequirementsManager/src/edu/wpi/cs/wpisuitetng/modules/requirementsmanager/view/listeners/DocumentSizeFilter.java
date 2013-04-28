@@ -50,10 +50,20 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+/**
+ * This filter constrains a text field a given number of characters.
+ */
+
 public class DocumentSizeFilter extends DocumentFilter {
 	
 	int maxCharacters;
 	
+	/**
+	 * Creates a new filters with the given number of characters
+	 * 
+	 * @param maxChars
+	 *            the maximum number of characters
+	 */
 	public DocumentSizeFilter(final int maxChars) {
 		maxCharacters = maxChars;
 	}

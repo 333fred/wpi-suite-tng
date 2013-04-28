@@ -22,47 +22,54 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RequirementTableV
  * Listener for the Search box in the RequirementTableView
  * 
  * @author Alex
- *
+ * 
  */
 public class TextSearchListener implements KeyListener {
 	
 	protected final RequirementTableView tableView;
 	protected final JTextComponent searchBox;
-
-	public TextSearchListener(final RequirementTableView tableView, final JTextComponent searchBox) {
+	
+	/**
+	 * Creates a new listener for the given tableview and component
+	 * 
+	 * @param tableView
+	 *            the TableView to listen on
+	 * @param searchBox
+	 *            the search box to listen on
+	 */
+	public TextSearchListener(final RequirementTableView tableView,
+			final JTextComponent searchBox) {
 		this.tableView = tableView;
 		this.searchBox = searchBox;
 	}
-
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		String filterText = tableView.getTextSearchBox().getText().trim();
 		if (filterText.equals("")) {
 			
 			tableView.clearSearchFilter();
-		}
-		else {
+		} else {
 			tableView.nameFilter(filterText);
 		}
 		if (tableView.getTable().getRowCount() == 0) {
 			tableView.getTextFilterInfo().setText("No Requirements Found");
-		}
-		else {
+		} else {
 			tableView.getTextFilterInfo().setText("");
 		}
-			
+		
 	}
-
+	
 }
