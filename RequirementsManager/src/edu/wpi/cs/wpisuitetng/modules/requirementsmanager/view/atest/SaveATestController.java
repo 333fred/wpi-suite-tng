@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * 		
+ * 		@author Nick Massa
+ * 		@author Matt Costi
+ * 		@author Steve Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
@@ -26,8 +28,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableM
 
 /**
  * This controller handles saving requirement aTests to the server
- * 
- * @author Nick Massa, Matt Costi, Steve Kordell
  */
 public class SaveATestController {
 	

@@ -34,7 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.localdatabase.Iteratio
  */
 
 public class Filter extends AbstractModel {
-	
+
 	/**
 	 * Creates a clone of the given filter
 	 * TODO: Shouldn't we be using the clone() method inherited from Object?
@@ -49,7 +49,7 @@ public class Filter extends AbstractModel {
 				toClone.getStringValue(), toClone.getActive(),
 				toClone.isDeleted());
 	}
-	
+
 	/**
 	 * Converts the given Json encoded filter to an actual filter object
 	 * 
@@ -61,7 +61,7 @@ public class Filter extends AbstractModel {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, Filter.class);
 	}
-	
+
 	/**
 	 * Converts the given Json encoded array of filters to an actual array of
 	 * filter objects
@@ -74,33 +74,33 @@ public class Filter extends AbstractModel {
 		final Gson parser = new Gson();
 		return parser.fromJson(content, Filter[].class);
 	}
-	
+
 	private int id;
-	
+
 	private String creator;
 	private FilterField field;
 	private FilterOperation operation;
 	/** String of the value, will store the JSON for the object */
 	private String jsonValue;
-	
+
 	// TODO: Do we use stringValue?
 	@SuppressWarnings ("unused")
 	private String stringValue;
-	
+
 	private boolean active;
-	
+
 	private boolean deleted;
-	
+
 	/** Enum representing the type of value in this filter */
 	private FilterValueType valueType;
-	
+
 	/**
 	 * Creates a blank filter with no user
 	 */
 	public Filter() {
 		this(null, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
-	
+
 	/**
 	 * Creates a blank filter with the given user
 	 * 
@@ -110,7 +110,7 @@ public class Filter extends AbstractModel {
 	public Filter(final String u) {
 		this(u, FilterField.NAME, FilterOperation.EQUAL, new String());
 	}
-	
+
 	/**
 	 * Creates a filter with the given fields
 	 * 
@@ -133,7 +133,7 @@ public class Filter extends AbstractModel {
 		active = true;
 		setDeleted(false);
 	}
-	
+
 	private Filter(final String user, final int id, final FilterField field,
 			final FilterOperation operation, final Object value,
 			final String stringValue, final boolean active,
@@ -147,7 +147,7 @@ public class Filter extends AbstractModel {
 		this.active = active;
 		this.deleted = deleted;
 	}
-	
+
 	/**
 	 * Helper function for shouldFilter that checks enum values
 	 * 
@@ -158,16 +158,16 @@ public class Filter extends AbstractModel {
 	@SuppressWarnings ("rawtypes")
 	private boolean checkEnum(final Enum value) {
 		switch (getOperation()) {
-			case EQUAL:
-				return value.equals(getValue());
-				
-			case NOT_EQUAL:
-				return !value.equals(getValue());
-			default:
-				return false;
+		case EQUAL:
+			return value.equals(getValue());
+
+		case NOT_EQUAL:
+			return !value.equals(getValue());
+		default:
+			return false;
 		}
 	}
-	
+
 	/**
 	 * Helper function for shouldFilter that checks integer values
 	 * 
@@ -175,27 +175,27 @@ public class Filter extends AbstractModel {
 	 *            integer value to check
 	 * @return whether to filter or not
 	 */
-	
+
 	private boolean checkInteger(final int value) {
 		switch (getOperation()) {
-			case EQUAL:
-				return value == (Integer) getValue();
-			case NOT_EQUAL:
-				return value != (Integer) getValue();
-			case LESS_THAN:
-				return value < (Integer) getValue();
-			case LESS_THAN_EQUAL:
-				return value <= (Integer) getValue();
-			case GREATER_THAN_EQUAL:
-				return value >= (Integer) getValue();
-			case GREATER_THAN:
-				return value > (Integer) getValue();
-			default:
-				return false;
-				
+		case EQUAL:
+			return value == (Integer) getValue();
+		case NOT_EQUAL:
+			return value != (Integer) getValue();
+		case LESS_THAN:
+			return value < (Integer) getValue();
+		case LESS_THAN_EQUAL:
+			return value <= (Integer) getValue();
+		case GREATER_THAN_EQUAL:
+			return value >= (Integer) getValue();
+		case GREATER_THAN:
+			return value > (Integer) getValue();
+		default:
+			return false;
+
 		}
 	}
-	
+
 	/**
 	 * Helper function for shouldFilter that checks iteration values
 	 * 
@@ -212,28 +212,28 @@ public class Filter extends AbstractModel {
 			// iteration is not value
 			return false;
 		}
-		
+
 		switch (getOperation()) {
-			case EQUAL:
-				return value == (Integer) getValue();
-			case NOT_EQUAL:
-				return value != (Integer) getValue();
-			case OCCURS_AFTER:
-				valueDate = (Date) getValue();
-				// less than one if this date is before argument
-				return reqIteration.getStartDate().compareTo(valueDate) >= 0;
-			case OCCURS_BEFORE:
-				valueDate = (Date) getValue();
-				// less than one if this date is before argument
-				return reqIteration.getStartDate().compareTo(valueDate) <= 0;
-			case OCCURS_BETWEEN:
-				return ((FilterIterationBetween) getValue())
-						.isIterationBetween(reqIteration);
-			default:
-				return false;
+		case EQUAL:
+			return value == (Integer) getValue();
+		case NOT_EQUAL:
+			return value != (Integer) getValue();
+		case OCCURS_AFTER:
+			valueDate = (Date) getValue();
+			// less than one if this date is before argument
+			return reqIteration.getStartDate().compareTo(valueDate) >= 0;
+		case OCCURS_BEFORE:
+			valueDate = (Date) getValue();
+			// less than one if this date is before argument
+			return reqIteration.getStartDate().compareTo(valueDate) <= 0;
+		case OCCURS_BETWEEN:
+			return ((FilterIterationBetween) getValue())
+					.isIterationBetween(reqIteration);
+		default:
+			return false;
 		}
 	}
-	
+
 	/**
 	 * Helper function for shouldFilter that checks string values
 	 * 
@@ -241,32 +241,32 @@ public class Filter extends AbstractModel {
 	 *            String value to check
 	 * @return whether to filter or not
 	 */
-	
+
 	private boolean checkString(final String value) {
 		switch (getOperation()) {
-			case EQUAL:
-				return value.equals(getValue());
-			case NOT_EQUAL:
-				return !value.equals(getValue());
-			case CONTAINS:
-				return value.contains((String) getValue());
-			case STARTS_WITH:
-				return value.startsWith((String) getValue());
-			default:
-				// we shold not get to default, what type of magic is this
-				return false;
+		case EQUAL:
+			return value.equals(getValue());
+		case NOT_EQUAL:
+			return !value.equals(getValue());
+		case CONTAINS:
+			return value.contains((String) getValue());
+		case STARTS_WITH:
+			return value.startsWith((String) getValue());
+		default:
+			// we shold not get to default, what type of magic is this
+			return false;
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * Checks if two filters are the same, without considering the filter id's
 	 * 
@@ -279,49 +279,49 @@ public class Filter extends AbstractModel {
 				&& getOperation().equals(other.getOperation())
 				&& getValue().equals(other.getValue());
 	}
-	
+
 	/**
 	 * @return the active
 	 */
 	public boolean getActive() {
 		return active;
 	}
-	
+
 	/**
 	 * @return the creator
 	 */
 	public String getCreator() {
 		return creator;
 	}
-	
+
 	/**
 	 * @return the field
 	 */
 	public FilterField getField() {
 		return field;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public int getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @return the jsonValue
 	 */
 	public String getJsonValue() {
 		return jsonValue;
 	}
-	
+
 	/**
 	 * @return the operation
 	 */
 	public FilterOperation getOperation() {
 		return operation;
 	}
-	
+
 	/**
 	 * @return the stringValue
 	 */
@@ -338,14 +338,14 @@ public class Filter extends AbstractModel {
 				// idea to delete it here
 				return "Not Found";
 			}
-			
+
 			return iteration.getName();
 			// we must get the operation, otherwise we return to string
-			
+
 		}
 		return getValue().toString();
 	}
-	
+
 	/**
 	 * Returns a properly casted type of the Value Object
 	 * 
@@ -357,7 +357,7 @@ public class Filter extends AbstractModel {
 		final Object o = gson.fromJson(jsonValue, valueType.getClassType());
 		return o;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -370,28 +370,28 @@ public class Filter extends AbstractModel {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * @return the active
 	 */
 	public boolean isActive() {
 		return active;
 	}
-	
+
 	/**
 	 * @return the whether or not this filter has been permanently deleted
 	 */
 	public boolean isDeleted() {
 		return deleted;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void save() {
 	}
-	
+
 	/**
 	 * @param active
 	 *            the active to set
@@ -399,7 +399,7 @@ public class Filter extends AbstractModel {
 	public void setActive(final boolean active) {
 		this.active = active;
 	}
-	
+
 	/**
 	 * @param creator
 	 *            the creator to set
@@ -407,7 +407,7 @@ public class Filter extends AbstractModel {
 	public void setCreator(final String creator) {
 		this.creator = creator;
 	}
-	
+
 	/**
 	 * @param deleted
 	 *            set that this filter has been deleted. Once it has been
@@ -416,7 +416,7 @@ public class Filter extends AbstractModel {
 	public void setDeleted(final boolean deleted) {
 		this.deleted = deleted;
 	}
-	
+
 	/**
 	 * @param field
 	 *            the field to set
@@ -424,7 +424,7 @@ public class Filter extends AbstractModel {
 	public void setField(final FilterField field) {
 		this.field = field;
 	}
-	
+
 	/**
 	 * @param id
 	 *            the id to set
@@ -432,7 +432,7 @@ public class Filter extends AbstractModel {
 	public void setId(final int id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @param jsonValue
 	 *            the jsonValue to set
@@ -440,7 +440,7 @@ public class Filter extends AbstractModel {
 	public void setJsonValue(final String jsonValue) {
 		this.jsonValue = jsonValue;
 	}
-	
+
 	/**
 	 * @param operation
 	 *            the operation to set
@@ -448,27 +448,20 @@ public class Filter extends AbstractModel {
 	public void setOperation(final FilterOperation operation) {
 		this.operation = operation;
 	}
-	
-	/**
-	 * @param stringValue
-	 *            the stringValue to set
-	 */
-	public void setStringValue(final String stringValue) {
-		this.stringValue = stringValue;
-	}
-	
+
+
 	/**
 	 * Sets the value type of the filter with the given value.
 	 * 
 	 * @param value
 	 */
-	
+
 	public void setValue(final Object value) {
 		valueType = FilterValueType.getFromClassType(value.getClass());
 		final Gson gson = new Gson();
 		jsonValue = gson.toJson(value); // convert the object to JSON
 	}
-	
+
 	/**
 	 * Checks a requirement to see if it should be filtered
 	 * 
@@ -482,32 +475,32 @@ public class Filter extends AbstractModel {
 		if (!isActive()) {
 			return false;
 		}
-		
+
 		switch (getField()) {
-			case NAME:
-				return checkString(toFilter.getName());
-			case RELEASE_NUMBER:
-				return checkString(toFilter.getReleaseNum());
-			case TYPE:
-				return checkEnum(toFilter.getType());
-			case PRIORITY:
-				return checkEnum(toFilter.getPriority());
-			case STATUS:
-				return checkEnum(toFilter.getStatus());
-			case ITERATION:
-				return checkIteration(toFilter.getIteration());
-			case ESTIMATE:
-				return checkInteger(toFilter.getEstimate());
-			case EFFORT:
-				return checkInteger(toFilter.getEffort());
-			default:
-				// There was nothing, so return false
-				break;
+		case NAME:
+			return checkString(toFilter.getName());
+		case RELEASE_NUMBER:
+			return checkString(toFilter.getReleaseNum());
+		case TYPE:
+			return checkEnum(toFilter.getType());
+		case PRIORITY:
+			return checkEnum(toFilter.getPriority());
+		case STATUS:
+			return checkEnum(toFilter.getStatus());
+		case ITERATION:
+			return checkIteration(toFilter.getIteration());
+		case ESTIMATE:
+			return checkInteger(toFilter.getEstimate());
+		case EFFORT:
+			return checkInteger(toFilter.getEffort());
+		default:
+			// There was nothing, so return false
+			break;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -515,7 +508,7 @@ public class Filter extends AbstractModel {
 	public String toJSON() {
 		return new Gson().toJson(this, Filter.class);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -525,5 +518,5 @@ public class Filter extends AbstractModel {
 				+ operation + " Value: " + jsonValue + " Active: " + active
 				+ "]";
 	}
-	
+
 }

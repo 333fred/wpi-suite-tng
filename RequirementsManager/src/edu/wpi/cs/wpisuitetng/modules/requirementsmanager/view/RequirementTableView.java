@@ -215,6 +215,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				ApplyFilters(sorter);	
 				textTreeFilterInfo.setText("");
 				btnClearTreeFilter.setEnabled(false);
+				if (getTable().getRowCount() == 0) {
+					textFilterInfo.setText("No Requirements Found");
+					btnEdit.setEnabled(false);
+				}
+				else {
+					btnEdit.setEnabled(true);
+				}
 			}
 		};
 
@@ -277,15 +284,15 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		editPanelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnSave, 0,
 				SpringLayout.VERTICAL_CENTER, editPanel);
 
-		editPanelLayout.putConstraint(SpringLayout.EAST, btnEdit, -5,
+		editPanelLayout.putConstraint(SpringLayout.WEST, btnEdit, 5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
-		editPanelLayout.putConstraint(SpringLayout.WEST, btnSave, 5,
+		editPanelLayout.putConstraint(SpringLayout.EAST, btnSave, -5,
 				SpringLayout.HORIZONTAL_CENTER, editPanel);
 
 		editPanelLayout.putConstraint(SpringLayout.WEST, textEditInfo, 0,
-				SpringLayout.WEST, btnEdit);
+				SpringLayout.WEST, btnSave);
 		editPanelLayout.putConstraint(SpringLayout.NORTH, textEditInfo, 0,
-				SpringLayout.SOUTH, btnEdit);
+				SpringLayout.SOUTH, btnSave);
 
 		editPanelLayout.putConstraint(SpringLayout.WEST, btnClearTreeFilter, 5,
 				SpringLayout.WEST, editPanel);
@@ -425,7 +432,9 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			btnEdit.setText("Discard Changes");
 			btnSave.setEnabled(true);
 		} else {
-			btnEdit.setText("Enable Editing");
+			btnEdit.setText("Enable Editing");if(rowData.size() == 0) {
+				btnEdit.setEnabled(false);
+			}
 			btnSave.setEnabled(false);
 		}
 	}
@@ -670,6 +679,13 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 
 	@Override
 	public void paint(final Graphics g) {
+		if (getTable().getRowCount() == 0) {
+			textFilterInfo.setText("No Requirements Found");
+			btnEdit.setEnabled(false);
+		}
+		else {
+			btnEdit.setEnabled(true);
+		}
 		// call super so there is no change to functionality
 		super.paint(g);
 		// refresh the requirements, the first time this is called
@@ -753,6 +769,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		ApplyFilters(sorter);
 		if (getTable().getRowCount() == 0) {
 			textFilterInfo.setText("No Requirements Found");
+			btnEdit.setEnabled(false);
+		}
+		else {
+			btnEdit.setEnabled(true);
 		}
 	}
 
@@ -788,9 +808,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		}
 
 		// check if we can edit based upon current user permissions
-		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
-			btnEdit.setEnabled(true);
-		} else {
+		if (!(PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN)) {
 			btnEdit.setEnabled(false);
 		}
 
@@ -799,7 +817,6 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		ToolbarView.getInstance().refreshPermissions();
 		tabController.refreshFilterView();
 		tabController.refreshSubReqView();
-		changeButtonStatus();
 	}
 
 	/**
@@ -824,9 +841,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		updateListView();
 
 		// check if we can edit based upon current user permissions
-		if (PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN) {
-			btnEdit.setEnabled(true);
-		} else {
+		if (!(PermissionModel.getInstance().getPermLevel() == UserPermissionLevel.ADMIN)) {
 			btnEdit.setEnabled(false);
 		}
 	}

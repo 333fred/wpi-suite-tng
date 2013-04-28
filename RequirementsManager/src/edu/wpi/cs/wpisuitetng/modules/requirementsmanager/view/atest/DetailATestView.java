@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Nick, Conor, Matt
+ *    @author Nick Massa
+ *    @author Conor Geary
+ *    @author Matt Costi
+ *    @author Steve Kordell
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.atest;
 
@@ -33,8 +36,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.event.EventTableM
 
 /**
  * Panel containing a aTest for a requirement
- * 
- * @author Nick Massa, Matt Costi, Steve Kordell
  */
 @SuppressWarnings ("serial")
 public class DetailATestView extends JPanel {
@@ -291,10 +292,9 @@ public class DetailATestView extends JPanel {
 		addaTestsToList();
 	}
 
-	/** Clears the selected ATests
-	 * 
+	/** 
+	 * Clears the selected ATests
 	 */
-
 	public void clearSelection() {
 		testTable.getSelectionModel().clearSelection();
 	}

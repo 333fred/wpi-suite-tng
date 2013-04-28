@@ -11,6 +11,9 @@
  *******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.logger;
 
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,6 +218,88 @@ public class LoggerTest {
 
 	}
 
+	@Test
+	public void testGetContentCreation() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("creation", new FieldChange<String>("true", "false"));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Created Requirement<br></html>");
+	}
+	
+	@Test
+	public void testGetContentName() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("name", new FieldChange<String>("a", "b"));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Name: " + "<b>\"" + "a"
+				+ "\"</b>" + " to <b>\"" + "b" + "\"</b><br>");
+	}
+	
+	@Test
+	public void testGetContentDescription() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("description", new FieldChange<String>("a", "b"));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Updated the Description<br>");
+	}
+	
+	@Test
+	public void testGetContentType() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("type", new FieldChange<Type>(Type.USER_STORY, Type.NON_FUNCTIONAL));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Type" + " <b>" + "User Story" + "</b>"
+				+ " to <b>" + "Non Functional" + "</b><br>");
+	}
+	
+	@Test
+	public void testGetContentPriority() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("priority", new FieldChange<Priority>(Priority.HIGH, Priority.LOW));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Priority" + " <b>" + "High" + "</b>"
+				+ " to <b>" + "Low" + "</b><br>");
+	}
+	
+	@Test
+	public void testGetContentStatus() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("status", new FieldChange<Status>(Status.OPEN, Status.IN_PROGRESS));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Status" + " <b>" + "Open" + "</b>"
+				+ " to <b>" + "In Progress" + "</b><br>");
+	}
+	
+	@Test
+	public void testGetContentReleaseNumber() {
+		requirement = new Requirement();
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("releaseNum", new FieldChange<String>("v1.1", "v1.2"));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Release Number" + " <b>" + "v1.1" + "</b>"
+				+ " to <b>" + "v1.2" + "</b><br>");
+	}
+	/*
+	@Test
+	public void testGetContentIteration() {
+		requirement = new Requirement();
+		Iteration i1 = new Iteration("Iteration 1", null, null);
+		Iteration i2 = new Iteration("Iteration 2", null, null);
+		IterationDatabase.getInstance().add(i1);
+		IterationDatabase.getInstance().add(i2);
+		final RequirementChangeset reqChange = new RequirementChangeset(user);
+		reqChange.getChanges().put("iteration", new FieldChange<>(1.0, 2.0));
+		requirement.logEvents(reqChange);
+		assertEquals(reqChange.getContent(), "Iteration" + " <b>" + "Iteration 1" + "</b>"
+				+ " to <b>" + "Iteration 2" + "</b><br>");
+	}
+	*/
 
 	@Test
 	public void testAllChanges(){
@@ -224,19 +309,7 @@ public class LoggerTest {
 		HashMap<String, FieldChange<?>> map = new HashMap<String, FieldChange<?>>();
 		for(String type : changeTypes){
 			FieldChange change;
-			if(type.equals("creation")){
-				continue;	// skip this to avoid making a creation-only changeset
-			}
-			else if(type.equals("type")){
-				change = new FieldChange<Type>(Type.USER_STORY, Type.NON_FUNCTIONAL);
-			}
-			else if(type.equals("priority")){
-				change = new FieldChange<Priority>(Priority.HIGH, Priority.LOW);
-			}
-			else if(type.equals("status")){
-				change = new FieldChange<Status>(Status.IN_PROGRESS, Status.OPEN);
-			}
-			else if(type.equals("iteration")){
+			if(type.equals("iteration")){
 
 				Iteration oldItr = new Iteration();
 				oldItr.setId(0);
@@ -291,17 +364,8 @@ public class LoggerTest {
 		}
 		RequirementChangeset rc = new RequirementChangeset();
 		rc.setChanges(map);
-		//assertNotNull(rc.getContent());
+		assertNotNull(rc.getContent());
 	}
 
-	/**
-	 * Trivial test to ensure that JUnit is playing nicely; should always pass.
-	 */
-	@Test
-	public void trivialTest() {
-
-		Assert.assertEquals(1, 1);
-
-	}
 
 }
