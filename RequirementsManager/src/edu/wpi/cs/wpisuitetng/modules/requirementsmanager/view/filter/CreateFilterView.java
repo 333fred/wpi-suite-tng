@@ -839,17 +839,11 @@ public class CreateFilterView extends JPanel implements ActionListener,
 	
 	/** Updates the status of the save button */
 	
-	public void updateSave() {
-		
-		System.out.println("Updating Save");
-		
+	public void updateSave() {		
 		if (cboxOperation.getItemCount() == 0) {
 			labSaveError.setText("");
 			return;
 		}
-		
-		System.out.println("Updating Save 2");
-		
 		boolean error = false;
 		String errorString = "";
 		final FilterField field = FilterField.getFromString((String) cboxField

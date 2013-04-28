@@ -171,6 +171,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		this.requirement = requirement;
 		this.mode = mode;
 		this.mainTabController = mainTabController;
+		dirty = false;
 
 		createPanels();
 		createComponents();
