@@ -77,6 +77,7 @@ public class TreeTransferHandler extends TransferHandler implements
 	private final MainTabController tabController;
 	
 	private Requirement draggedRequirement;
+	private Iteration targetIteration;
 	
 	public TreeTransferHandler(final MainTabController tabController) {
 		this.tabController = tabController;
@@ -321,6 +322,7 @@ public class TreeTransferHandler extends TransferHandler implements
 			anIteration = (Iteration) ((DefaultMutableTreeNode) node
 					.getParent()).getUserObject();
 			anIteration.addRequirement(requirement.getrUID());
+			targetIteration = anIteration;
 			final UpdateIterationRequestObserver observer = new UpdateIterationRequestObserver(
 					this);
 			iterationController.save(anIteration, observer);
@@ -330,6 +332,7 @@ public class TreeTransferHandler extends TransferHandler implements
 					this);
 			requirementController.save(requirement, reqObserver);
 			draggedRequirement = requirement;
+			
 		}
 		
 		return true;
@@ -348,21 +351,17 @@ public class TreeTransferHandler extends TransferHandler implements
 			
 			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
-					if (((((DetailPanel) getTabController().getTabView()
-							.getComponentAt(i))).getModel().getrUID()) == (requirement
-							.getrUID())) {
-						try {
-							(((DetailPanel) getTabController().getTabView()
-									.getComponentAt(i))).getComboBoxIteration()
-									.setSelectedItem(
-											IterationDatabase
-													.getInstance()
-													.get(requirement
-															.getIteration())
-													.getName());
-						} catch (final IterationNotFoundException e) {
-							e.printStackTrace();
-						}
+					
+					DetailPanel panel = (((DetailPanel) getTabController().getTabView()
+							.getComponentAt(i)));
+					
+					if ((panel.getModel().getrUID()) == (requirement.getrUID())) {						
+						panel.getComboBoxIteration().setSelectedItem(targetIteration.getName());
+						if (targetIteration.getName().equals("Backlog")) {
+							panel.getComboBoxStatus().setSelectedItem("Open");
+						} else {
+							panel.getComboBoxStatus().setSelectedItem("In Progress");		
+						}	
 					}
 				}
 			}
