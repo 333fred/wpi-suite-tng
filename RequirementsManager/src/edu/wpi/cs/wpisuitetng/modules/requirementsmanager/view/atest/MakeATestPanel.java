@@ -142,6 +142,8 @@ public class MakeATestPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				onCancel();
+				txtName.setBackground(Color.white);
+				txtDescription.setBackground(Color.white);
 			}
 
 		});
@@ -316,21 +318,26 @@ public class MakeATestPanel extends JPanel {
 		boolean error = false;
 		String errorText = "";
 
-		if (txtName.getText().trim().isEmpty()) {
-			error = true;
-			errorText = "Name must not be blank";
-		}
-		else if (txtDescription.getText().trim().isEmpty()) {
+		txtDescription.setBackground(Color.white);
+		txtName.setBackground(Color.white);
+
+		if (txtDescription.getText().trim().isEmpty()) {
 			error = true;
 			errorText = "Description must not be blank";
+			txtDescription.setBackground(new Color(243, 243, 209));
+		}
+
+		if (txtName.getText().trim().isEmpty()) {
+			error = true;
+			txtName.setBackground(new Color(243, 243, 209));
+			errorText = "Name must not be blank";
 		}
 
 		if (error) {
 			butAdd.setEnabled(false);
 			labSaveError.setText(errorText);
 			return false;
-		}
-		else {
+		} else {
 			butAdd.setEnabled(true);
 			labSaveError.setText("");
 			return true;
