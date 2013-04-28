@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 -- WPI Suite: Team Swagasarus
+ * Copyright (c) 2013 -- WPI Suite: Team Swagasaurus
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,10 +27,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.RequirementsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.controllers.UserController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.models.StringListModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.QueryUserRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequirementRequestObserver;
 
 @SuppressWarnings ("serial")
 public class AssigneePanel extends JPanel {
@@ -50,7 +52,6 @@ public class AssigneePanel extends JPanel {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			for (final Object m : unassignedUsers.getSelectedValues()) {
-				detailPanel.enableSaveButton();
 				// add the selected element(s) in alphabetical order
 				int i = 0;
 				while ((i < (assignedUsersList.getSize() - 1))
@@ -64,6 +65,13 @@ public class AssigneePanel extends JPanel {
 			for (final Object m : unassignedUsers.getSelectedValues()) {
 				unassignedUsersList.removeElement(m);
 			}
+			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(detailPanel);
+			
+			controller = new RequirementsController();
+			
+			requirement.setUsers(getAssignedUsersList());
+			
+			controller.save(requirement, observer);
 		}
 	}
 	
@@ -78,7 +86,6 @@ public class AssigneePanel extends JPanel {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			for (final Object m : assignedUsers.getSelectedValues()) {
-				detailPanel.enableSaveButton();
 				// add the selected element(s) in alphabetical order
 				int i = 0;
 				while ((i < (unassignedUsersList.getSize() - 1))
@@ -92,6 +99,13 @@ public class AssigneePanel extends JPanel {
 			for (final Object m : assignedUsers.getSelectedValues()) {
 				assignedUsersList.removeElement(m);
 			}
+			final UpdateRequirementRequestObserver observer = new UpdateRequirementRequestObserver(detailPanel);
+			
+			controller = new RequirementsController();
+			
+			requirement.setUsers(getAssignedUsersList());
+			
+			controller.save(requirement, observer);
 		}
 	}
 	
@@ -119,6 +133,8 @@ public class AssigneePanel extends JPanel {
 	private Requirement requirement;
 	
 	private final DetailPanel detailPanel;
+	
+	private RequirementsController controller;
 	
 	public AssigneePanel(final Requirement requirement,
 			final DetailPanel detailPanel) {

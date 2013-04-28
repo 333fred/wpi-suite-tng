@@ -45,7 +45,7 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 		this.tabController = tabController;
 		
 		menuCreateRequirement = new JMenuItem("New Requirement");
-		menuFilterBacklog = new JMenuItem("Filter By Backlog");
+		menuFilterBacklog = new JMenuItem("View Table By Backlog");
 		
 		menuCreateRequirement.addActionListener(this);
 		menuFilterBacklog.addActionListener(this);
@@ -73,7 +73,7 @@ public class BacklogPopupMenu extends JPopupMenu implements ActionListener {
 				final RequirementTableView tableView = RequirementTableView
 						.getInstance();
 				tableView.IterationFilter(iter.getName());
-				tableView.displayFilterInformation("Filtering by "
+				tableView.displayFilterInformation("Viewing by "
 						+ iter.getName());
 			} catch (final IterationNotFoundException e1) {
 				e1.printStackTrace();
