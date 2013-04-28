@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -88,6 +89,8 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JTextField textEstimate;
 	private JTextField textActual;
 	private JTextField textRelease;
+	private JTextField lblTotEstDisplay;
+
 	
 	// combo boxes
 	private JComboBox comboBoxType;
@@ -145,7 +148,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 	private JLabel lblActual;
 	private JLabel lblRelease;
 	private JLabel lblTotalEstimate;
-	private JLabel lblTotEstDisplay;
 	
 	// Sub-panels
 	private JPanel mainPanel;
@@ -648,7 +650,6 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblActual = new JLabel("Effort:");
 		lblRelease = new JLabel("Release Number:");
 		lblTotalEstimate = new JLabel("Total Estimate:");
-		lblTotEstDisplay = new JLabel("");
 	}
 	
 	private void createPanels() {
@@ -666,6 +667,11 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		buttonPanelLayout = new SpringLayout();
 		buttonPanel = new JPanel(buttonPanelLayout);
 		leftPanel = new JPanel(new BorderLayout());
+		
+		if (this.requirement.getName().equals("SWAG")) {
+			System.out.println("rawr");
+			//this.mainTabController.addTab("Dashboard", new ImageIcon(), new Tab(), "Dashboard");
+		}
 	}
 	
 	private void createSaveErrorArea() {
@@ -730,6 +736,10 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		textEstimate.setMaximumSize(textEstimate.getPreferredSize());
 		textEstimate.setName("Estimate");
 		textEstimate.setDisabledTextColor(Color.GRAY);
+		
+		lblTotEstDisplay = new JTextField(9);
+		lblTotEstDisplay.setEditable(false);
+		lblTotEstDisplay.setBorder((new JTextField()).getBorder());
 		final AbstractDocument textEstimateDoc = (AbstractDocument) textEstimate
 				.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
@@ -1133,7 +1143,12 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 					.getEstimate()));
 			textActual.setText(Integer.toString(getRequirement().getEffort()));
 			textRelease.setText(getRequirement().getReleaseNum());
-			lblTotEstDisplay.setText(getTotalEstimate().toString());
+			String estimateStr = getTotalEstimate().toString();
+			//pad the string
+			for(int i = estimateStr.length(); i < 9; i++) {
+				estimateStr.concat(" ");
+			}
+			lblTotEstDisplay.setText(estimateStr);
 			
 			try {
 				getComboBoxIteration()

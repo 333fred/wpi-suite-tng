@@ -132,6 +132,8 @@ public class SubRequirementTreeView extends JPanel implements
 	List<Requirement> requirements;
 	
 	private boolean firstPaint;
+
+	protected TreePath lastSelPath;
 	
 	/**
 	 * The subrequirement tree of all requirements of a project
@@ -196,6 +198,13 @@ public class SubRequirementTreeView extends JPanel implements
 																		// right
 																		// click
 				}
+				tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+				lastSelPath = selPath;
+			}
+			
+			@Override
+			public void mouseReleased(final MouseEvent e) {
+				tree.setSelectionPath(lastSelPath);
 			}
 		};
 		tree.addMouseListener(ml);
@@ -235,6 +244,7 @@ public class SubRequirementTreeView extends JPanel implements
 				if (((((DetailPanel) tabController.getTabView().getComponentAt(
 						i))).getModel().getrUID()) == (requirement.getrUID())) {
 					tabController.switchToTab(i);
+					this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
 					requirementIsOpen = true;
 				}
 			}
