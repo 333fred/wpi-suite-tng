@@ -14,9 +14,11 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.task;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -73,9 +75,17 @@ public class MakeTaskPanel extends JPanel {
 
 	/** Make task listener used for listening to hte text boxes for changes */
 	private final MakeTaskListener makeTaskListener;
-	
+
+	/** The detail task view */
+	private DetailTaskView taskView;
+
 	/** id of the task being edited, -2 if none */
 	private int taskId;
+
+	/** Enum for whether the task is being created or edited */
+	private enum Mode {
+		CREATE, EDIT;
+	}
 
 	/**
 	 * Construct the panel, add and layout components.
@@ -87,8 +97,9 @@ public class MakeTaskPanel extends JPanel {
 	 *            the view of the requirement in question
 	 */
 	public MakeTaskPanel(final Requirement requirement,
-			final DetailPanel parentView) {
+			final DetailPanel parentView, DetailTaskView taskView) {
 		this.requirement = requirement;
+		this.taskView = taskView;
 
 		// setup the task name field
 		txtTaskName = new JTextArea(1, 40);
@@ -145,13 +156,14 @@ public class MakeTaskPanel extends JPanel {
 			}
 		});
 
-		labEstimate = new JLabel("Estimate:");
+		labEstimate = new JLabel("*Estimate:");
 
 		txtTaskEstimate = new JTextField(9);
 		txtTaskEstimate.setBorder((new JTextField()).getBorder());
 		txtTaskEstimate.setMaximumSize(txtTaskEstimate.getPreferredSize());
 		txtTaskEstimate.setName("Estimate");
 		txtTaskEstimate.setDisabledTextColor(Color.GRAY);
+		txtTaskEstimate.setText("0");
 		final AbstractDocument textEstimateDoc = (AbstractDocument) txtTaskEstimate
 				.getDocument();
 		textEstimateDoc.setDocumentFilter(new DocumentNumberAndSizeFilter(12));
@@ -161,8 +173,8 @@ public class MakeTaskPanel extends JPanel {
 		labTaskStatus = new JLabel(
 				"No tasks selected. Fill name and description to create a new one.");
 		labAddTask = new JLabel("Task:");
-		labNnameTask = new JLabel("Name:");
-		labDescTask = new JLabel("Description:");
+		labNnameTask = new JLabel("*Name:");
+		labDescTask = new JLabel("*Description:");
 		labUserAssigned = new JLabel("User:");
 		cbxTaskComplete = new JCheckBox("Completed");
 		cbxUserAssigned = new JComboBox();
@@ -170,6 +182,18 @@ public class MakeTaskPanel extends JPanel {
 
 		labSaveError = new JLabel();
 		butCancel = new JButton("Cancel");
+
+		butCancel.setAction( new AbstractAction() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				onCancel();
+			}
+
+
+		});
+
+		butCancel.setText("Cancel");
 
 		makeTaskListener = new MakeTaskListener(this);
 		// add the key listeners
@@ -379,18 +403,18 @@ public class MakeTaskPanel extends JPanel {
 					final int est = Integer.parseInt(taskEstimate);
 					//check if estimates sum correctly
 					int estimateSum = 0;
-					
+
 					for (final Task altTask : requirement.getTasks()) {
 						if(altTask.getId() != taskId) {
 							estimateSum = estimateSum + altTask.getEstimate();
 						}
 					}
-					
+
 					if((est + estimateSum) > requirement.getEstimate()){
 						error = true;
 						errorText = "Sum of task estimates too high";
 					}
-					
+
 				} catch (NumberFormatException e) {
 					error = true;
 					errorText = "Estimate field must be a number";
@@ -407,13 +431,28 @@ public class MakeTaskPanel extends JPanel {
 		}
 
 	}
-	
+
 	/**
 	 * Sets the id of the edited task for reference
 	 * @param id, the id
 	 */
 	public void setTaskId(int id) {
 		taskId = id;
+	}
+
+	/** Called when the cancel button is pressed
+	 * 
+	 */
+
+	public void onCancel() {
+		txtTaskName.setText("");
+		txtTaskDescription.setText("");
+		txtTaskEstimate.setText("0");
+
+		labSaveError.setText("");
+		butSave.setEnabled(false);
+		taskId = -2;
+		taskView.clearSelection();
 	}
 
 }
