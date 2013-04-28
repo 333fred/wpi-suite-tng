@@ -156,8 +156,8 @@ public class MakeATestPanel extends JPanel {
 		aTestStatus = new JLabel(
 				"No Acceptance Test selected. Fill name and description to create a new one.");
 		addaTestLabel = new JLabel("Acceptance Test:");
-		nameaTestLabel = new JLabel("Name:");
-		descaTestLabel = new JLabel("Description:");
+		nameaTestLabel = new JLabel("*Name:");
+		descaTestLabel = new JLabel("*Description:");
 		final String[] availableStatuses = { "", "PASSED", "FAILED" };
 		cbxStatus = new JComboBox(availableStatuses);
 		cbxStatus.setBackground(Color.WHITE);

@@ -156,7 +156,7 @@ public class MakeTaskPanel extends JPanel {
 			}
 		});
 
-		labEstimate = new JLabel("Estimate:");
+		labEstimate = new JLabel("*Estimate:");
 
 		txtTaskEstimate = new JTextField(9);
 		txtTaskEstimate.setBorder((new JTextField()).getBorder());
@@ -173,8 +173,8 @@ public class MakeTaskPanel extends JPanel {
 		labTaskStatus = new JLabel(
 				"No tasks selected. Fill name and description to create a new one.");
 		labAddTask = new JLabel("Task:");
-		labNnameTask = new JLabel("Name:");
-		labDescTask = new JLabel("Description:");
+		labNnameTask = new JLabel("*Name:");
+		labDescTask = new JLabel("*Description:");
 		labUserAssigned = new JLabel("User:");
 		cbxTaskComplete = new JCheckBox("Completed");
 		cbxUserAssigned = new JComboBox();
