@@ -196,6 +196,7 @@ public class MakeTaskPanel extends JPanel {
 		});
 
 		butCancel.setText("Cancel");
+		butCancel.setEnabled(false);
 
 		makeTaskListener = new MakeTaskListener(this);
 		// add the key listeners
@@ -391,7 +392,7 @@ public class MakeTaskPanel extends JPanel {
 		txtTaskDescription.setBackground(Color.white);
 		txtTaskEstimate.setBackground(Color.white);
 		txtTaskName.setBackground(Color.white);
-		
+
 		String taskEstimate = txtTaskEstimate.getText().trim();
 		if (taskEstimate.isEmpty()) {
 			error = true;
@@ -421,18 +422,26 @@ public class MakeTaskPanel extends JPanel {
 				errorText = "Estimate field must be a number";
 			}
 		}
-		
+
 		if (txtTaskDescription.getText().trim().isEmpty()) {
 			error = true;
 			txtTaskDescription.setBackground(new Color(243, 243, 209));
 			errorText = "Description must not be blank";
 		}
-		
+
 		String taskName = txtTaskName.getText().trim();
 		if (taskName.isEmpty()) {
 			error = true;
 			txtTaskName.setBackground(new Color(243, 243, 209));
 			errorText = "Name must not be blank";
+		}
+
+		//enable / disable save button
+		if (txtTaskName.getText().isEmpty() && txtTaskDescription.getText().isEmpty() && txtTaskEstimate.getText().equals("0")) {
+			butCancel.setEnabled(false);
+		}
+		else {
+			butCancel.setEnabled(true);
 		}
 
 		if (error) {
@@ -469,6 +478,7 @@ public class MakeTaskPanel extends JPanel {
 		butSave.setEnabled(false);
 		taskId = -2;
 		taskView.clearSelection();
+		butCancel.setEnabled(false);
 	}
 
 }
