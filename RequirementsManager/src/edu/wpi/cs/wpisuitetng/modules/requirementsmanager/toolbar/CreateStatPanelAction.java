@@ -41,7 +41,7 @@ public class CreateStatPanelAction extends AbstractAction {
 	public CreateStatPanelAction(final MainTabController controller) {
 		super("Show Statistics");
 		this.controller = controller;
-		putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
+		putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
 	}
 	
 	@Override
