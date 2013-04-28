@@ -645,7 +645,7 @@ public class DetailPanel extends Tab implements ISaveNotifier {
 		lblPriority = new JLabel("Priority:");
 		lblIteration = new JLabel("Iteration:");
 		lblEstimate = new JLabel("Estimate:");
-		lblActual = new JLabel("Actual:");
+		lblActual = new JLabel("Effort:");
 		lblRelease = new JLabel("Release Number:");
 		lblTotalEstimate = new JLabel("Total Estimate:");
 		lblTotEstDisplay = new JLabel("");
