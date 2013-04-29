@@ -31,68 +31,83 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.RowCol;
  * @author Alex
  * 
  */
+@SuppressWarnings ({ "rawtypes", "unchecked" })
 public class RequirementsTable extends JTable {
-
+	
 	private static final long serialVersionUID = 1L;
 	/** list of edited rows for saving */
 	private boolean[] editedRows;
 	/** List of edited row/column pairs for highlighting */
 	private ArrayList<RowCol> editedRowColumns;
 	private final RequirementTableView view;
-
+	
 	/**
+	 * Creates a requirements table with the given row data, column names, and
+	 * in the given view
+	 * 
 	 * @param rowData
+	 *            all of data in the rows
 	 * @param columnNames
+	 *            the names of the columns
+	 * @param view
+	 *            the view to show in
 	 */
 	public RequirementsTable(final Vector rowData, final Vector columnNames,
 			final RequirementTableView view) {
 		super(rowData, columnNames);
 		this.view = view;
 	}
-
+	
+	/**
+	 * Clears the edited rows
+	 */
 	public void clearUpdated() {
 		editedRows = new boolean[super.getRowCount()];
 		editedRowColumns = new ArrayList<RowCol>();
 	};
-
+	
 	@Override
 	public TableCellRenderer getCellRenderer(final int row, final int column) {
-		//Make sure that editedRows is initialized and of the proper size
+		// Make sure that editedRows is initialized and of the proper size
 		if (editedRows == null) {
 			editedRows = new boolean[super.getRowCount()];
 		} else if (editedRows.length < super.getRowCount()) {
 			final boolean[] temp = new boolean[super.getRowCount()];
 			editedRows = temp;
 		}
-
+		
 		if (editedRowColumns == null)
 			editedRowColumns = new ArrayList<RowCol>();
 		
-		//Highlight changed elements
+		// Highlight changed elements
 		for (RowCol map : editedRowColumns) {
-			if (map.getRow() == convertRowIndexToModel(row) && map.getCol() == convertColumnIndexToModel(column)) {
+			if (map.getRow() == convertRowIndexToModel(row)
+					&& map.getCol() == convertColumnIndexToModel(column)) {
 				final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 				renderer.setBackground(Color.yellow);
 				return renderer;
 			}
 		}
 		
-		//gray out non-changeable elements
-		if(!isCellEditable(row, column) && view.isEditable()){
+		// gray out non-changeable elements
+		if (!isCellEditable(row, column) && view.isEditable()) {
 			final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 			renderer.setBackground(Color.lightGray);
 			return renderer;
 		}
-
-		//If it is neither edited nor non-editable, return the standard
+		
+		// If it is neither edited nor non-editable, return the standard
 		return super.getCellRenderer(row, column);
-
+		
 	}
-
+	
+	/**
+	 * @return all rows that have been updated
+	 */
 	public boolean[] getEditedRows() {
 		return editedRows;
 	}
-
+	
 	@Override
 	public boolean isCellEditable(final int row, final int column) {
 		// All columns can be editable in certain circumstances
@@ -110,10 +125,10 @@ public class RequirementsTable extends JTable {
 			statusEditable = !status.equals("Deleted")
 					&& !status.equals("Complete");
 		}
-
+		
 		return (view.isEditable() && statusEditable);
 	}
-
+	
 	@Override
 	/**
 	 * Overrides the cell editor to allow use of combo boxes for Status, Priority, and Iteration fields
@@ -135,7 +150,7 @@ public class RequirementsTable extends JTable {
 		} else if (convertColumnIndexToModel(column) == 3) {
 			// final String[] items1 = { "None", "Low", "Medium", "High" };
 			final JComboBox comboBox1 = new JComboBox();
-
+			
 			for (final Priority t : Priority.values()) {
 				if (t == Priority.BLANK) {
 					comboBox1.addItem("");
@@ -157,15 +172,15 @@ public class RequirementsTable extends JTable {
 			return super.getCellEditor(row, column);
 		}
 	}
-
+	
 	private String[] getIterations(int row) {
-		//Get iterations from the database
+		// Get iterations from the database
 		List<Iteration> iterationList = IterationDatabase.getInstance()
 				.getAll();
-
+		
 		Requirement requirement = null;
-
-		//Now get the current requirement
+		
+		// Now get the current requirement
 		try {
 			requirement = RequirementDatabase.getInstance().get(
 					Integer.parseInt((String) view.getTable().getModel()
@@ -175,7 +190,7 @@ public class RequirementsTable extends JTable {
 		} catch (RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
-
+		
 		iterationList = Iteration.sortIterations(iterationList);
 		int availableIterationNum = 0;
 		int currentAvailableIterationIndex = 0;
@@ -190,7 +205,7 @@ public class RequirementsTable extends JTable {
 				// increment the number of available iterations
 				availableIterationNum++;
 			}
-
+			
 		}
 		final String[] availableIterations = new String[availableIterationNum];
 		for (final Iteration iteration : iterationList) {
@@ -207,11 +222,18 @@ public class RequirementsTable extends JTable {
 		}
 		return availableIterations;
 	}
-
+	
+	/**
+	 * Gets the available status options for a given row
+	 * 
+	 * @param row
+	 *            the row to look at
+	 * @return the options available to that row
+	 */
 	public JComboBox getAvailableStatusOptions(int row) {
 		JComboBox comboBoxStatus = new JComboBox();
 		Requirement req = null;
-
+		
 		try {
 			req = RequirementDatabase.getInstance().get(
 					Integer.parseInt((String) view.getTable().getModel()
@@ -221,7 +243,7 @@ public class RequirementsTable extends JTable {
 		} catch (RequirementNotFoundException e) {
 			e.printStackTrace();
 		}
-
+		
 		comboBoxStatus.removeAllItems();
 		for (final Status t : Status.values()) {
 			comboBoxStatus.addItem(t.toString());
@@ -236,15 +258,15 @@ public class RequirementsTable extends JTable {
 		if (!hasComplete) {
 			comboBoxStatus.removeItem(Status.COMPLETE.toString());
 		}
-
+		
 		if (req.getStatus() == Status.IN_PROGRESS) {
 			// In Progress: In Progress, Complete, Deleted
 			comboBoxStatus.removeItem(Status.NEW.toString());
-			//comboBoxStatus.removeItem(Status.OPEN.toString());
+			// comboBoxStatus.removeItem(Status.OPEN.toString());
 			if (!req.subReqsCompleted()) {
 				comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
-
+			
 			if ((req.getSubRequirements().size() > 0) || !req.tasksCompleted()) {
 				comboBoxStatus.removeItem(Status.DELETED.toString());
 			}
@@ -281,10 +303,11 @@ public class RequirementsTable extends JTable {
 				comboBoxStatus.removeItem(Status.COMPLETE.toString());
 			}
 		}
-
+		
 		return comboBoxStatus;
 	}
-
+	
+	@SuppressWarnings ("cast")
 	@Override
 	public void setValueAt(final Object value, final int row, final int col) {
 		if (!view.isEditable()) {
@@ -296,10 +319,10 @@ public class RequirementsTable extends JTable {
 			final boolean[] temp = new boolean[super.getRowCount()];
 			editedRows = temp;
 		}
-
+		
 		// The estimate column should only accept non-negative integers
 		try {
-
+			
 			if (super.convertColumnIndexToModel(col) == 6) {
 				final int i = Integer.parseInt((String) value);
 				if ((i < 0)
@@ -309,13 +332,15 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(Integer.toString(i), row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 7) {
 				final int i = Integer.parseInt((String) value);
 				if ((i < 0)
@@ -325,15 +350,17 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(Integer.toString(i), row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 8) {
-
+				
 				final String i = (String) value;
 				if ((i.length() < 0)
 						|| (i.equals((String) super.getValueAt(row, col)))) {
@@ -341,15 +368,17 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 1) {
-
+				
 				final String i = (String) value;
 				if ((i.length() < 0) || (i.length() > 100)
 						|| (i.equals((String) super.getValueAt(row, col)))) {
@@ -357,73 +386,83 @@ public class RequirementsTable extends JTable {
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 2) {
-
+				
 				final String i = (String) value;
 				if (i.equals((String) super.getValueAt(row, col))) {
 					return;
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 3) {
-
+				
 				final String i = (String) value;
 				if (i.equals((String) super.getValueAt(row, col))) {
 					return;
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 4) {
-
+				
 				final String i = (String) value;
 				if (i.equals((String) super.getValueAt(row, col))) {
 					return;
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
 				}
-
+				
 			} else if (super.convertColumnIndexToModel(col) == 5) {
-
+				
 				final String i = (String) value;
 				if (i.equals((String) super.getValueAt(row, col))) {
 					return;
 				} else {
 					// we save the parsed int to removed leading 0s
 					editedRows[convertRowIndexToModel(row)] = true;
-					editedRowColumns.add(new RowCol(convertRowIndexToModel(row), convertColumnIndexToModel(col)));
+					editedRowColumns.add(new RowCol(
+							convertRowIndexToModel(row),
+							convertColumnIndexToModel(col)));
 					selectionModel.removeSelectionInterval(
 							convertRowIndexToModel(row),
 							convertRowIndexToModel(row));
 					super.setValueAt(i, row, col);
 				}
-
+				
 			} else {
 				selectionModel.removeSelectionInterval(
 						convertRowIndexToModel(row),

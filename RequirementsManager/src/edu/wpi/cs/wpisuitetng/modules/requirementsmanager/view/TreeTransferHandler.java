@@ -39,6 +39,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.UpdateRequir
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.observers.notifiers.ISaveNotifier;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.tabs.MainTabController;
 
+/**
+ * Transfer handler for the iteration view tree
+ */
+
 @SuppressWarnings ("serial")
 public class TreeTransferHandler extends TransferHandler implements
 		ISaveNotifier {
@@ -79,6 +83,12 @@ public class TreeTransferHandler extends TransferHandler implements
 	private Requirement draggedRequirement;
 	private Iteration targetIteration;
 	
+	/**
+	 * Creates a new transfer handler with on the given controller
+	 * 
+	 * @param tabController
+	 *            the controller that holds the view to handle
+	 */
 	public TreeTransferHandler(final MainTabController tabController) {
 		this.tabController = tabController;
 		try {
@@ -111,7 +121,7 @@ public class TreeTransferHandler extends TransferHandler implements
 				.getDropLocation();
 		final JTree tree = (JTree) support.getComponent();
 		final int[] selRows = tree.getSelectionRows();
-
+		
 		// Do not allow a non-leaf node to be copied to a level
 		// which is less than its source level.
 		final TreePath dest = dl.getPath();
@@ -231,6 +241,9 @@ public class TreeTransferHandler extends TransferHandler implements
 		// TODO Auto-generated method stub
 	}
 	
+	/**
+	 * @return the requirement that has been dragged.
+	 */
 	public Requirement getDraggedRequirement() {
 		return draggedRequirement;
 	}
@@ -352,16 +365,18 @@ public class TreeTransferHandler extends TransferHandler implements
 			for (int i = 0; i < getTabController().getTabView().getTabCount(); i++) {
 				if (getTabController().getTabView().getComponentAt(i) instanceof DetailPanel) {
 					
-					DetailPanel panel = (((DetailPanel) getTabController().getTabView()
-							.getComponentAt(i)));
+					DetailPanel panel = (((DetailPanel) getTabController()
+							.getTabView().getComponentAt(i)));
 					
-					if ((panel.getModel().getrUID()) == (requirement.getrUID())) {						
-						panel.getComboBoxIteration().setSelectedItem(targetIteration.getName());
+					if ((panel.getModel().getrUID()) == (requirement.getrUID())) {
+						panel.getComboBoxIteration().setSelectedItem(
+								targetIteration.getName());
 						if (targetIteration.getName().equals("Backlog")) {
 							panel.getComboBoxStatus().setSelectedItem("Open");
 						} else {
-							panel.getComboBoxStatus().setSelectedItem("In Progress");		
-						}	
+							panel.getComboBoxStatus().setSelectedItem(
+									"In Progress");
+						}
 					}
 				}
 			}

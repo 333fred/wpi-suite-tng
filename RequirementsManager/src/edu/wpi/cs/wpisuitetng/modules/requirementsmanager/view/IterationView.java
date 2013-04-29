@@ -46,7 +46,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.listeners.Iterati
 /**
  * View for creating or editing a iteration
  */
-@SuppressWarnings("serial")
+@SuppressWarnings ("serial")
 public class IterationView extends Tab implements ISaveNotifier,
 		IDatabaseListener {
 	
@@ -116,7 +116,12 @@ public class IterationView extends Tab implements ISaveNotifier,
 	
 	/** Status enum, whether created or edited */
 	public enum Status {
-		CREATE, EDIT, VIEW
+		/** If this is a create view */
+		CREATE,
+		/** If this is an edit view */
+		EDIT,
+		/** If this is a read-only view */
+		VIEW
 	}
 	
 	/**
@@ -202,6 +207,17 @@ public class IterationView extends Tab implements ISaveNotifier,
 	
 	private final int HORIZONTAL_PADDING = 20;
 	
+	/**
+	 * Creates an iteration view for a given iteration, with a given status, in
+	 * the given tab controller
+	 * 
+	 * @param iteration
+	 *            the iteration to view
+	 * @param status
+	 *            the status of the panel
+	 * @param mainTabController
+	 *            the controller to hold the view
+	 */
 	public IterationView(final Iteration iteration, final Status status,
 			final MainTabController mainTabController) {
 		this.iteration = iteration;
@@ -409,6 +425,12 @@ public class IterationView extends Tab implements ISaveNotifier,
 		
 	}
 	
+	/**
+	 * Creates a new iteration view with a new iteration
+	 * 
+	 * @param mainTabController
+	 *            the controller to house the view in
+	 */
 	public IterationView(final MainTabController mainTabController) {
 		this(new Iteration(), Status.CREATE, mainTabController);
 	}
@@ -463,14 +485,23 @@ public class IterationView extends Tab implements ISaveNotifier,
 				+ exception.getMessage());
 	}
 	
+	/**
+	 * @return the save button for the view
+	 */
 	public JButton getButSave() {
 		return butSave;
 	}
 	
+	/**
+	 * @return the current id of the iteration
+	 */
 	public int getIterationId() {
 		return iteration.getId();
 	}
 	
+	/**
+	 * @return the tab controller that houses this view
+	 */
 	public MainTabController getMainTabController() {
 		return mainTabController;
 	}

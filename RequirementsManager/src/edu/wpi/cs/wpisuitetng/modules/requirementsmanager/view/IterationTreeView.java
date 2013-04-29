@@ -57,16 +57,29 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.Iterati
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RequirementPopupMenu;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanager.view.popupmenu.RootPopupMenu;
 
-@SuppressWarnings("serial")
-public class IterationTreeView extends JPanel implements IDatabaseListener,
-IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+/**
+ * Creates the view with iterations holding all requirements assigned to them
+ */
 
+@SuppressWarnings ("serial")
+public class IterationTreeView extends JPanel implements IDatabaseListener,
+		IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
+	
 	protected static final int ROOT_LEVEL = 0;
 	protected static final int ITERATION_LEVEL = 1;
 	protected static final int REQUIREMENT_LEVEL = 2;
-
+	
 	private TreePath lastSelPath;
 	
+	/**
+	 * Gets how expanded a given row in a given tree is
+	 * 
+	 * @param tree
+	 *            the tree to look in
+	 * @param row
+	 *            the row to look at
+	 * @return the expansion state
+	 */
 	public static String getExpansionState(final JTree tree, final int row) {
 		final TreePath rowPath = tree.getPathForRow(row);
 		final StringBuffer buf = new StringBuffer();
@@ -83,7 +96,16 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 		}
 		return buf.toString();
 	}
-
+	
+	/**
+	 * Determines if path 1 is a descendent of path 2
+	 * 
+	 * @param path1
+	 *            the possible child
+	 * @param path2
+	 *            the possible parent
+	 * @return true if path 1 is a descendent
+	 */
 	// is path1 descendant of path2
 	public static boolean isDescendant(TreePath path1, final TreePath path2) {
 		int count1 = path1.getPathCount();
@@ -97,7 +119,17 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 		}
 		return path1.equals(path2);
 	}
-
+	
+	/**
+	 * Restores expansion state for a given tree and row to a given state
+	 * 
+	 * @param tree
+	 *            the tree to restore
+	 * @param row
+	 *            the row to restor
+	 * @param expansionState
+	 *            the expansion state to restore
+	 */
 	public static void restoreExpanstionState(final JTree tree, final int row,
 			final String expansionState) {
 		final StringTokenizer stok = new StringTokenizer(expansionState, ",");
@@ -106,69 +138,75 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			tree.expandRow(token);
 		}
 	}
-
+	
 	private final JTree tree;
-
+	
 	private final DefaultMutableTreeNode top;
-
+	
 	private final IterationController iterationsController;
-
+	
 	private final RequirementsController requirementsController;
-
+	
 	private final MainTabController tabController;
-
+	
 	/** List of all the iterations currently being displayed */
 	List<Iteration> iterations;
-
+	
 	private boolean firstPaint;
-
+	
 	private MouseListener ml;
-
+	
+	/**
+	 * Creates a new tree view in the given controller
+	 * 
+	 * @param tabController
+	 *            the controller to create a view for
+	 */
 	public IterationTreeView(final MainTabController tabController) {
 		super(new BorderLayout());
 		this.tabController = tabController;
 		iterations = new ArrayList<Iteration>();
-
+		
 		iterationsController = new IterationController();
 		requirementsController = new RequirementsController();
-
+		
 		firstPaint = true;
-
+		
 		top = new DefaultMutableTreeNode("<HTML><B>Iterations</B></HTML>");
 		tree = new JTree(top);
 		tree.setEditable(false);
 		tree.setDragEnabled(true);
 		tree.setDropMode(DropMode.ON);
-
+		
 		tree.setTransferHandler(new TreeTransferHandler(tabController));
 		tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
-
+		
 		final JScrollPane treeView = new JScrollPane(tree);
-
+		
 		add(treeView, BorderLayout.CENTER);
-
+		
 		// register ourselves as a listener
 		IterationDatabase.getInstance().registerListener(this);
 		RequirementDatabase.getInstance().registerListener(this);
-
+		
 		// fetch the requirements and iterations from the server
 		getRequirementsFromServer();
 		getIterationsFromServer();
-
+		
 		this.ml = new MouseAdapter() {
+			
 			@Override
 			public void mousePressed(final MouseEvent e) {
-				final int selRow = tree.getRowForLocation(e.getX(),
-						e.getY());
+				final int selRow = tree.getRowForLocation(e.getX(), e.getY());
 				final TreePath selPath = tree.getPathForLocation(e.getX(),
 						e.getY());
 				
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					//this was a left click
+					// this was a left click
 					if (selRow != -1) {
 						if (e.getClickCount() == 2) {
-							//it was a double click
+							// it was a double click
 							onDoubleClick(selRow, selPath);
 						}
 					}
@@ -176,7 +214,9 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 					// this was a right click
 					onRightClick(e.getX(), e.getY(), selRow, selPath);
 				}
-				tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+				tree.setSelectionPath(selPath); // Prevent null pointers on
+												// Mouse Release when focus
+												// changes
 				lastSelPath = selPath;
 			}
 			
@@ -188,34 +228,32 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 		};
 		tree.addMouseListener(ml);
 	}
-
+	
 	@Override
 	public void errorReceivingData(
 			final String RetrieveAllRequirementsRequestObserver) {
 		System.out
-		.println("IterationTeamView: Error receiving requirements from server");
-
+				.println("IterationTeamView: Error receiving requirements from server");
+		
 	}
-
-	private Iteration getIterationFromName(final String name) {
-		for (final Iteration i : iterations) {
-			if (i.getName().equals(name)) {
-				return i;
-			}
-		}
-		return null;
-	}
-
+	
 	private void getIterationsFromServer() {
 		final RetrieveAllIterationsRequestObserver observer = new RetrieveAllIterationsRequestObserver(
 				this);
 		iterationsController.getAll(observer);
 	}
-
+	
+	/**
+	 * Gets the requirement from a name
+	 * 
+	 * @param name
+	 *            the name to look for
+	 * @return the requirement, or null if there is nones
+	 */
 	public Requirement getRequirementFromName(final String name) {
 		return RequirementDatabase.getInstance().getRequirement(name);
 	}
-
+	
 	/**
 	 * Retreives the iterations from the server
 	 * 
@@ -225,30 +263,30 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 				this);
 		requirementsController.getAll(observer);
 	}
-
+	
 	/**
 	 * Returns an array of the currently selected iterations
 	 * 
 	 * @return The currently selected iterations
 	 */
-
+	
 	public List<Iteration> getSelectedIterations() {
 		// TODO: Handle selecting closed iteration
 		final int[] selectedIndexes = tree.getSelectionRows();
 		final TreePath[] paths = tree.getSelectionPaths();
-
+		
 		if ((selectedIndexes == null) || (paths == null)) {
 			return new ArrayList<Iteration>();
 		}
-
+		
 		final List<Iteration> selectedIterations = new ArrayList<Iteration>();
-
+		
 		for (final TreePath path : paths) {
 			if (((DefaultMutableTreeNode) path.getLastPathComponent())
 					.getLevel() != IterationTreeView.ITERATION_LEVEL) {
 				continue; // thing selected was not an iteration
 			}
-
+			
 			final Iteration toAdd = (Iteration) ((DefaultMutableTreeNode) tree
 					.getSelectionPaths()[0].getLastPathComponent())
 					.getUserObject();
@@ -261,19 +299,24 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			selectedIterations.add(toAdd);
 		}
 		return selectedIterations;
-
+		
 	}
-
+	
+	/**
+	 * Gets all selected requirements from the tree
+	 * 
+	 * @return all selected requirements
+	 */
 	public List<Requirement> getSelectedRequirements() {
 		final int[] selectedIndexes = tree.getSelectionRows();
 		final TreePath[] paths = tree.getSelectionPaths();
-
+		
 		if ((selectedIndexes == null) || (paths == null)) {
 			return new ArrayList<Requirement>();
 		}
-
+		
 		final List<Requirement> selectedRequirements = new ArrayList<Requirement>();
-
+		
 		for (final TreePath path : paths) {
 			if (((DefaultMutableTreeNode) path.getLastPathComponent())
 					.getLevel() != IterationTreeView.REQUIREMENT_LEVEL) {
@@ -282,12 +325,12 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			final Requirement toAdd = (Requirement) ((DefaultMutableTreeNode) (tree
 					.getSelectionPaths()[0].getLastPathComponent()))
 					.getUserObject();
-
+			
 			selectedRequirements.add(toAdd);
 		}
 		return selectedRequirements;
 	}
-
+	
 	protected void onDoubleClick(final int selRow, final TreePath selPath) {
 		if (((DefaultMutableTreeNode) selPath.getLastPathComponent())
 				.getLevel() != 2) {
@@ -298,7 +341,7 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 				.getRequirement(
 						((DefaultMutableTreeNode) selPath
 								.getLastPathComponent()).toString());
-
+		
 		// Check to make sure the requirement is not already being
 		// displayed. This is assuming that the list view is displayed in
 		// the left most tab, index 0
@@ -307,7 +350,10 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 				if (((((DetailPanel) tabController.getTabView().getComponentAt(
 						i))).getModel().getrUID()) == (requirement.getrUID())) {
 					tabController.switchToTab(i);
-					this.tree.setSelectionPath(selPath); //Prevent null pointers on Mouse Release when focus changes
+					this.tree.setSelectionPath(selPath); // Prevent null
+															// pointers on Mouse
+															// Release when
+															// focus changes
 					requirementIsOpen = true;
 				}
 			}
@@ -317,24 +363,24 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			final RequirementsController controller = new RequirementsController();
 			final RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
 					new OpenRequirementTabAction(tabController, requirement));
-
+			
 			// get the requirement from the server
 			controller.get(requirement.getrUID(), observer);
 		}
 		
 		/*
-		// create the controller for fetching the new requirement
-		final RequirementsController controller = new RequirementsController();
-		final RetrieveRequirementByIDRequestObserver observer = new RetrieveRequirementByIDRequestObserver(
-				new OpenRequirementTabAction(tabController, requirement));
-
-		// get the requirement from the server
-		controller.get(requirement.getrUID(), observer);
-		//}
-		 *
+		 * // create the controller for fetching the new requirement
+		 * final RequirementsController controller = new
+		 * RequirementsController();
+		 * final RetrieveRequirementByIDRequestObserver observer = new
+		 * RetrieveRequirementByIDRequestObserver(
+		 * new OpenRequirementTabAction(tabController, requirement));
+		 * // get the requirement from the server
+		 * controller.get(requirement.getrUID(), observer);
+		 * //}
 		 */
 	}
-
+	
 	/**
 	 * Called when the user right clicks, will determine where the user clicked
 	 * on the tree, and open the correct menu
@@ -348,42 +394,42 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 	 * @param selPath
 	 *            The selection path of where the user clicked
 	 */
-
+	
 	protected void onRightClick(int x, final int y, final int selRow,
 			final TreePath selPath) {
 		if (!isEnabled()) {
 			return;
 		}
 		System.out.println("Right click iteration tree view");
-
+		
 		// add a menu offset
 		x += 10;
-
+		
 		// we right clicked on something in particular
 		if (selRow != -1) {
 			System.out.println("We right clicked on something");
 			JPopupMenu menuToShow;
 			final int levelClickedOn = ((DefaultMutableTreeNode) selPath
 					.getLastPathComponent()).getLevel();
-
+			
 			if (tree.getSelectionModel().getSelectionMode() == TreeSelectionModel.SINGLE_TREE_SELECTION) {
 				// we are in single selection mode
 				tree.setSelectionPath(selPath);
-
+				
 			} else {
 				// multi selection mode
 				tree.addSelectionPath(selPath);
 			}
-
+			
 			boolean backLogSingleSel = false;
 			// Does the current user have admin permissions?
-
+			
 			// check if the user has selected only the backlog
 			if ((tree.getSelectionPaths().length == 1)
 					&& (levelClickedOn == IterationTreeView.ITERATION_LEVEL)) {
-
+				
 				System.out.println("We right clicked on one thing");
-
+				
 				// one thing selected, check for backlog
 				// final Iteration selectedIteration = (Iteration)
 				// tree.getSelectionPaths()[0].getLastPathComponent();
@@ -391,9 +437,9 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 						.getSelectionPaths()[0].getLastPathComponent())
 						.getUserObject();
 				final String iterationName = selectedIteration.getName();
-
+				
 				System.out.println("IterationName: " + iterationName);
-
+				
 				if (iterationName.equals("Backlog")) {
 					backLogSingleSel = true;
 					// user has selected backlog
@@ -409,49 +455,51 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 					delMenu.show(this, x, y);
 				}
 			}
-
+			
 			// the backlog was not selected, or not only thing selected
 			if (!backLogSingleSel) {
 				switch (levelClickedOn) {
-
-				case ROOT_LEVEL:
-					menuToShow = new RootPopupMenu(tabController);
-					menuToShow.show(this, x, y);
-					break;
-
-				case ITERATION_LEVEL:
-					System.out.println("IteraitonLevel");
-					final List<Iteration> selectedIterations = getSelectedIterations();
-					if (selectedIterations.size() == 0) {
-						System.out.println("Selected Iterations size is 0");
-						// there were no selected iterations, WUT ARE WE
-						// DOIN
-						// HERE
+				
+					case ROOT_LEVEL:
+						menuToShow = new RootPopupMenu(tabController);
+						menuToShow.show(this, x, y);
 						break;
-					}
-					menuToShow = new IterationPopupMenu(tabController,
-							selectedIterations);
-					menuToShow.show(this, x, y);
-					break;
-
-				case REQUIREMENT_LEVEL:
-					final List<Requirement> selectedRequirements = getSelectedRequirements();
-					if (selectedRequirements.size() == 0) {
-						// there were no selected requirements,
+					
+					case ITERATION_LEVEL:
+						System.out.println("IteraitonLevel");
+						final List<Iteration> selectedIterations = getSelectedIterations();
+						if (selectedIterations.size() == 0) {
+							System.out.println("Selected Iterations size is 0");
+							// there were no selected iterations, WUT ARE WE
+							// DOIN
+							// HERE
+							break;
+						}
+						menuToShow = new IterationPopupMenu(tabController,
+								selectedIterations);
+						menuToShow.show(this, x, y);
 						break;
-					}
-					menuToShow = new RequirementPopupMenu(tabController,
-							selectedRequirements);
-					menuToShow.show(this, x, y);
-					break;
+					
+					case REQUIREMENT_LEVEL:
+						final List<Requirement> selectedRequirements = getSelectedRequirements();
+						if (selectedRequirements.size() == 0) {
+							// there were no selected requirements,
+							break;
+						}
+						menuToShow = new RequirementPopupMenu(tabController,
+								selectedRequirements);
+						menuToShow.show(this, x, y);
+						break;
+					default:
+						break;
 				}
 			}
-
+			
 		} else {
 			// we right clicked in the tree.
 			// TODO: We might want to check if multiple selected, and then open
 			// according menu?
-
+			
 			// do this only if more than one thing was selected
 			if ((tree.getSelectionPaths() != null)
 					&& (tree.getSelectionPaths().length > 1)) {
@@ -468,43 +516,45 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 						sameLevel = false;
 					}
 				}
-
+				
 				if (sameLevel) {
-
+					
 					JPopupMenu menuToShow;
-
+					
 					switch (curSelectionLevel) {
-
-					case ROOT_LEVEL:
-						menuToShow = new RootPopupMenu(tabController);
-						menuToShow.show(this, x, y);
-						break;
-
-					case ITERATION_LEVEL:
-						final List<Iteration> selectedIterations = getSelectedIterations();
-						if (selectedIterations.size() == 0) {
-							// there were no selected iterations, WUT ARE WE
-							// DOIN HERE
+					
+						case ROOT_LEVEL:
+							menuToShow = new RootPopupMenu(tabController);
+							menuToShow.show(this, x, y);
 							break;
-						}
-						menuToShow = new IterationPopupMenu(tabController,
-								selectedIterations);
-						menuToShow.show(this, x, y);
-						break;
-
-					case REQUIREMENT_LEVEL:
-						final List<Requirement> selectedRequirements = getSelectedRequirements();
-						if (selectedRequirements.size() == 0) {
-							// there were no selected requirements,
+						
+						case ITERATION_LEVEL:
+							final List<Iteration> selectedIterations = getSelectedIterations();
+							if (selectedIterations.size() == 0) {
+								// there were no selected iterations, WUT ARE WE
+								// DOIN HERE
+								break;
+							}
+							menuToShow = new IterationPopupMenu(tabController,
+									selectedIterations);
+							menuToShow.show(this, x, y);
 							break;
-						}
-						menuToShow = new RequirementPopupMenu(tabController,
-								selectedRequirements);
-						menuToShow.show(this, x, y);
-						break;
+						
+						case REQUIREMENT_LEVEL:
+							final List<Requirement> selectedRequirements = getSelectedRequirements();
+							if (selectedRequirements.size() == 0) {
+								// there were no selected requirements,
+								break;
+							}
+							menuToShow = new RequirementPopupMenu(
+									tabController, selectedRequirements);
+							menuToShow.show(this, x, y);
+							break;
+						default:
+							break;
 					}
 				}
-
+				
 			} else {
 				// if nothing selected, we create the anywhere menu, to create
 				// req and iter.
@@ -512,16 +562,16 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 						tabController);
 				menuToShow.show(this, x, y);
 			}
-
+			
 		}
-
+		
 	}
-
+	
 	/**
 	 * Overriding paint function to update this on first paint
 	 * 
 	 */
-
+	
 	@Override
 	public void paint(final Graphics g) {
 		super.paint(g);
@@ -531,53 +581,59 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 			getIterationsFromServer();
 		}
 	}
-
+	
 	@Override
-	public void receivedData(final Iteration[] iterations) {
-		this.iterations = Arrays.asList(iterations);
+	public void receivedData(final Iteration[] newIterations) {
+		this.iterations = Arrays.asList(newIterations);
 		updateTreeView();
-
+		
 	}
-
+	
 	@Override
 	public void receivedData(final Requirement[] requirements) {
 		refresh();
 	}
-
+	
+	/**
+	 * Refreshes the iteration views
+	 */
 	public void refresh() {
 		getIterationsFromServer();
 	}
-
+	
 	/**
 	 * This listener should persist
 	 * 
 	 */
-
+	
 	@Override
 	public boolean shouldRemove() {
 		return false;
 	}
-
+	
 	/**
 	 * Called when there was a change in iterations in the local database TODO:
 	 * Unimplement this for now
 	 */
-
+	
 	@Override
 	public void update() {
 	}
-
+	
+	/**
+	 * Updates the view with all iterations and requirements from the server
+	 */
 	public void updateTreeView() {
-
+		
 		final String eState = IterationTreeView.getExpansionState(tree, 0);
 		DefaultMutableTreeNode iterationNode = null;
 		DefaultMutableTreeNode requirementNode = null;
 		Requirement requirement = null;
 		top.removeAllChildren();
-
+		
 		// sort the iterations
 		iterations = Iteration.sortIterations(iterations);
-
+		
 		for (final Iteration anIteration : iterations) {
 			iterationNode = new DefaultMutableTreeNode(anIteration);
 			for (final Integer aReq : anIteration.getRequirements()) {
@@ -587,12 +643,12 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 					iterationNode.add(requirementNode);
 				} catch (final RequirementNotFoundException e) {
 					System.out
-					.println("Requirement Not Found: IterationTreeView:369");
+							.println("Requirement Not Found: IterationTreeView:369");
 				}
 			}
 			top.add(iterationNode);
 		}
-
+		
 		((DefaultTreeModel) tree.getModel()).nodeStructureChanged(top);
 		final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree
 				.getCellRenderer();
@@ -600,11 +656,12 @@ IReceivedAllRequirementNotifier, IRetreivedAllIterationsNotifier {
 		tree.setCellRenderer(renderer);
 		IterationTreeView.restoreExpanstionState(tree, 0, eState);
 	}
-
-	/** Will disable all of the fields in this View
+	
+	/**
+	 * Will disable all of the fields in this View
 	 * 
 	 */
-
+	
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
