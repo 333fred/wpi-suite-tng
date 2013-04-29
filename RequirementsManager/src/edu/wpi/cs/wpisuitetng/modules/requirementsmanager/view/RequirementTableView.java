@@ -230,8 +230,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 				if (getTable().getRowCount() == 0) {
 					btnSave.setEnabled(false);
 					btnEdit.setEnabled(false);
+					textFilterInfo.setText("No Requirements Found");
 				} else {
 					btnEdit.setEnabled(true);
+					textFilterInfo.setText("");
 				}
 			}
 		};
@@ -719,8 +721,10 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 		if (getTable().getRowCount() == 0) {
 			btnSave.setEnabled(false);
 			btnEdit.setEnabled(false);
+			textFilterInfo.setText("No Requirements Found");
 		} else {
 			btnEdit.setEnabled(true);
+			textFilterInfo.setText("");
 		}
 		// call super so there is no change to functionality
 		super.paint(g);
@@ -805,6 +809,7 @@ public class RequirementTableView extends Tab implements IToolbarGroupProvider,
 			btnEdit.setEnabled(false);
 		} else {
 			btnEdit.setEnabled(true);
+			textFilterInfo.setText("");
 		}
 	}
 	
